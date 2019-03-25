@@ -16,6 +16,6 @@ public class AppTest
     public void shouldAnswerWithTrue()
     {
         assertTrue( true );
-        System.out.println("User e mail aggiornata");
+        System.out.println("User e mail aggiornata2");
     }
 }
