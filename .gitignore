@@ -30,3 +30,4 @@ hs_err_pid*
 !resources/
 !src/
 !README.MD
+!derivables/
