@@ -11,48 +11,48 @@ public class Cell {
     public Cell() {
     }
 
-    /**
-     * 
-     */
-   // private enum color;
+    public CellColor getColor() {
+        return color;
+    }
 
-    /**
-     * 
-     */
+    public Cell(CellColor color, Cell adjNorth, Cell adjSouth, Cell adjEast, Cell adjWest) {
+        this.color = color;
+        this.adjNorth = adjNorth;
+        this.adjSouth = adjSouth;
+        this.adjEast = adjEast;
+        this.adjWest = adjWest;
+    }
+
+
+    private CellColor color;
+
     private AmmoCard ammoPlaced;
 
-    /**
-     * 
-     */
     private Cell adjNorth;
-
-    /**
-     * 
-     */
     private Cell adjSouth;
-
-    /**
-     * 
-     */
     private Cell adjEast;
-
-    /**
-     * 
-     */
     private Cell adjWest;
 
 
+    public void setAdjNorth(Cell adjNorth) {
+        this.adjNorth = adjNorth;
+    }
 
+    public void setAdjSouth(Cell adjSouth) {
+        this.adjSouth = adjSouth;
+    }
 
+    public void setAdjEast(Cell adjEast) {
+        this.adjEast = adjEast;
+    }
 
+    public void setAdjWest(Cell adjWest) {
+        this.adjWest = adjWest;
+    }
 
-    /**
-     * @return
-     */
-   /* public enum getColor() {
-        // TODO implement here
-        return null;
-    }*/
+    public void setColor(CellColor color) {
+        this.color = color;
+    }
 
     /**
      * @return
@@ -71,40 +71,30 @@ public class Cell {
     }
 
     /**
-     * @return
+     * @return North adjacent Cell of current Cell instance
      */
     public Cell getNorth() {
-        // TODO implement here
-        return null;
+        return this.adjNorth;
     }
 
     /**
-     * @return
+     * @return South adjacent Cell of current Cell instance
      */
     public Cell getSouth() {
-        // TODO implement here
-        return null;
+        return this.adjSouth;
     }
 
     /**
-     * @return
+     * @return East adjacent Cell of current Cell instance
      */
     public Cell getEast() {
-        // TODO implement here
-        return null;
+        return this.adjEast;
     }
 
     /**
-     * @return
+     * @return West adjacent Cell of current Cell instance
      */
     public Cell getWest() {
-        // TODO implement here
-        return null;
+        return this.adjWest;
     }
-
-    /**
-     * @return
-     */
-
-
 }
