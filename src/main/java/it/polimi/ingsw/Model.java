@@ -19,15 +19,15 @@ public class Model {
     private CurrentGame game;
 
 
-
     /**
-     * @param mapType 
-     * @param skulls 
-     * @param players 
+     *
+     * @param mapType
+     * @param skulls
+     * @param players
      * @return
      */
     public Boolean Initialize(int mapType, int skulls, List<String> players) {
-        // TODO implement here
+
         return null;
     }
 
