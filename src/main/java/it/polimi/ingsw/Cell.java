@@ -14,7 +14,7 @@ public class Cell {
     /**
      * 
      */
-   // private enum color;
+    private CellColor color;
 
     /**
      * 
@@ -42,11 +42,30 @@ public class Cell {
     private Cell adjWest;
 
 
+    public void setAdjNorth(Cell adjNorth) {
+        this.adjNorth = adjNorth;
+    }
+
+    public void setAdjSouth(Cell adjSouth) {
+        this.adjSouth = adjSouth;
+    }
+
+    public void setAdjEast(Cell adjEast) {
+        this.adjEast = adjEast;
+    }
+
+    public void setAdjWest(Cell adjWest) {
+        this.adjWest = adjWest;
+    }
+
+
+    public void setColor(CellColor color) {
+        this.color = color;
+    }
 
 
 
-
-    /**
+/**
      * @return
      */
    /* public enum getColor() {
