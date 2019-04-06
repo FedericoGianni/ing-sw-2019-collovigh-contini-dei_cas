@@ -11,6 +11,10 @@ public class Cell {
     public Cell() {
     }
 
+    public CellColor getColor() {
+        return color;
+    }
+
     public Cell(CellColor color, Cell adjNorth, Cell adjSouth, Cell adjEast, Cell adjWest) {
         this.color = color;
         this.adjNorth = adjNorth;

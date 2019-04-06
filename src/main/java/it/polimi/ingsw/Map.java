@@ -1,7 +1,5 @@
 package it.polimi.ingsw;
 
-import java.util.List;
-
 import static it.polimi.ingsw.CellColor.*;
 
 /**
@@ -10,7 +8,7 @@ import static it.polimi.ingsw.CellColor.*;
 public class Map {
 
     /**
-     * Default constructor, set as private to decide construction strategy at runtime
+     * Default constructor
      * mapType is set at 2 because this type if valid for every number of players
      */
     public Map() {
@@ -24,12 +22,31 @@ public class Map {
 
     private int mapType;
 
+    public Cell[][] getMatrix() {
+        return matrix.clone();
+    }
+
+    /**
+     *
+     * @param row int between 0 and 2 representing index of row in the matrix
+     * @param col int between 0 and 3 representing index of column in the matrix
+     * @return the Cell placed in row and col inside the matrix representing the Map
+     */
+    public Cell getCell(int row, int col){
+        return this.matrix[row][col];
+    }
+
+    /**
+     *
+     * @return actual type of Map: 1, 2, 3
+     */
     public int getMapType() {
         return mapType;
     }
+
     /**
      *
-     * @param mapType
+     * @param mapType integer representing the map type which can be chosen at the creation of the Map
      * @return a Map created based on the current playing map type
      */
     public Map getMap(int mapType){
@@ -135,42 +152,4 @@ public class Map {
 
         }
     }
-
-
-    /**
-     * @param cell
-     * @return
-     */
-    public List<Weapon> getPlacedWeapons(SpawnCell cell) {
-        // TODO implement here
-        return null;
-    }
-
-    /**
-     * @return
-     */
-    public Map getIstance() {
-
-        return singleton;
-
-    }
-
-    /**
-     * @param cell
-     * @return
-     */
-   /* public Pair cellToCoord(Cell cell) {
-        // TODO implement here
-        return null;
-    }*/
-
-    /**
-     * @param cell
-     * @return
-     */
-    /*public Cell coordToCell(Pair cell) {
-        // TODO implement here
-        return null;
-    }*/
-
 }
