@@ -97,10 +97,10 @@ public class Map {
 
                 (this.matrix[0][0]) = new Cell();
                 (this.matrix[0][1]) = new Cell();
-                (this.matrix[0][2]) = new Cell();
+                (this.matrix[0][2]) = new SpawnCell();
                 (this.matrix[0][3]) = null;
 
-                (this.matrix[1][0]) = new Cell();
+                (this.matrix[1][0]) = new SpawnCell();
                 (this.matrix[1][1]) = new Cell();
                 (this.matrix[1][2]) = new Cell();
                 (this.matrix[1][3]) = new Cell();
@@ -108,7 +108,7 @@ public class Map {
                 (this.matrix[2][0]) = null;
                 (this.matrix[2][1]) = new Cell();
                 (this.matrix[2][2]) = new Cell();
-                (this.matrix[2][3]) = new Cell();
+                (this.matrix[2][3]) = new SpawnCell();
 
                 (this.matrix[0][0]).setAdjNorth(null);
                 (this.matrix[0][0]).setAdjSouth(this.matrix[1][0]);
@@ -126,7 +126,7 @@ public class Map {
                 (this.matrix[0][2]).setAdjSouth(this.matrix[1][2]);
                 (this.matrix[0][2]).setAdjEast(this.matrix[0][3]);
                 (this.matrix[0][2]).setAdjWest(this.matrix[0][1]);
-                (this.matrix[0][2]).setColor(BLUE);
+                (this.matrix[0][2]).setColor(YELLOW);
 
                 (this.matrix[1][0]).setAdjNorth(this.matrix[0][0]);
                 (this.matrix[1][0]).setAdjSouth(null);
@@ -178,10 +178,10 @@ public class Map {
 
                 (this.matrix[0][0]) = new Cell();
                 (this.matrix[0][1]) = new Cell();
-                (this.matrix[0][2]) = new Cell();
+                (this.matrix[0][2]) = new SpawnCell();
                 (this.matrix[0][3]) = new Cell();
 
-                (this.matrix[1][0]) = new Cell();
+                (this.matrix[1][0]) = new SpawnCell();
                 (this.matrix[1][1]) = new Cell();
                 (this.matrix[1][2]) = new Cell();
                 (this.matrix[1][3]) = new Cell();
@@ -189,7 +189,7 @@ public class Map {
                 (this.matrix[2][0]) = null;
                 (this.matrix[2][1]) = new Cell();
                 (this.matrix[2][2]) = new Cell();
-                (this.matrix[2][3]) = new Cell();
+                (this.matrix[2][3]) = new SpawnCell();
 
                 (this.matrix[0][0]).setAdjNorth(null);
                 (this.matrix[0][0]).setAdjSouth(this.matrix[1][0]);
