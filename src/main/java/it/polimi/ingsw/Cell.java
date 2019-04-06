@@ -11,6 +11,14 @@ public class Cell {
     public Cell() {
     }
 
+    public Cell(CellColor color, Cell adjNorth, Cell adjSouth, Cell adjEast, Cell adjWest) {
+        this.color = color;
+        this.adjNorth = adjNorth;
+        this.adjSouth = adjSouth;
+        this.adjEast = adjEast;
+        this.adjWest = adjWest;
+    }
+
     /**
      * 
      */
