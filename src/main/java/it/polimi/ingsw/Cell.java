@@ -23,34 +23,14 @@ public class Cell {
         this.adjWest = adjWest;
     }
 
-    /**
-     * 
-     */
+
     private CellColor color;
 
-    /**
-     * 
-     */
     private AmmoCard ammoPlaced;
 
-    /**
-     * 
-     */
     private Cell adjNorth;
-
-    /**
-     * 
-     */
     private Cell adjSouth;
-
-    /**
-     * 
-     */
     private Cell adjEast;
-
-    /**
-     * 
-     */
     private Cell adjWest;
 
 
@@ -70,20 +50,9 @@ public class Cell {
         this.adjWest = adjWest;
     }
 
-
     public void setColor(CellColor color) {
         this.color = color;
     }
-
-
-
-/**
-     * @return
-     */
-   /* public enum getColor() {
-        // TODO implement here
-        return null;
-    }*/
 
     /**
      * @return
@@ -102,40 +71,30 @@ public class Cell {
     }
 
     /**
-     * @return
+     * @return North adjacent Cell of current Cell instance
      */
     public Cell getNorth() {
-        // TODO implement here
-        return null;
+        return this.adjNorth;
     }
 
     /**
-     * @return
+     * @return South adjacent Cell of current Cell instance
      */
     public Cell getSouth() {
-        // TODO implement here
-        return null;
+        return this.adjSouth;
     }
 
     /**
-     * @return
+     * @return East adjacent Cell of current Cell instance
      */
     public Cell getEast() {
-        // TODO implement here
-        return null;
+        return this.adjEast;
     }
 
     /**
-     * @return
+     * @return West adjacent Cell of current Cell instance
      */
     public Cell getWest() {
-        // TODO implement here
-        return null;
+        return this.adjWest;
     }
-
-    /**
-     * @return
-     */
-
-
 }
