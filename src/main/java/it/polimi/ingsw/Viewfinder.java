@@ -10,14 +10,16 @@ public class Viewfinder extends PowerUp {
     /**
      * Default constructor
      */
-    public Viewfinder() {
+    public Viewfinder(Color color) {
+
+        super(color);
     }
 
     /**
-     * 
+     * need to be implemented
      */
     public void use() {
-        // TODO implement here
+
     }
 
 }

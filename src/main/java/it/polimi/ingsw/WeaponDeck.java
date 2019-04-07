@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * 
  */
-public class WeaponDeck implements Deck {
+public class WeaponDeck implements Deck <Weapon> {
 
     /**
      * Default constructor
@@ -23,8 +23,10 @@ public class WeaponDeck implements Deck {
     /**
      * 
      */
-    public void getRandomCard() {
+    public Weapon getRandomCard() {
         // TODO implement here
+
+        return null;
     }
 
 }
