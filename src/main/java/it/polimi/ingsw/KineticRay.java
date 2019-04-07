@@ -6,17 +6,27 @@ package it.polimi.ingsw;
 public class KineticRay extends PowerUp {
 
     /**
-     * Default constructor
+     *
      */
-    public KineticRay() {
+    public KineticRay(Color color) {
+
+        super(color);
     }
 
     /**
-     * @param p 
-     * @param push
+     * need to be implemented
+     * this class perform a check to see if the cell distance is under 2 and then moves the player
+     *
+     * @param p is the player to move
+     * @param dest is the destination the player is required to be moved to
      */
-    public void use(Player p, int push) {
-        // TODO implement here
+    public void use(Player p, Cell dest) {
+
+        Cell previousPos = p.getCurrentPosition();
+
+
+
+
     }
 
 }

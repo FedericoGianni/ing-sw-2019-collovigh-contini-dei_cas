@@ -3,13 +3,13 @@ package it.polimi.ingsw;
 import java.util.*;
 
 /**
- * 
+ * This class is an interface that will be implemented by AmmoDeck and PowerUpDeck
  */
-public interface Deck {
+public interface Deck<T> {
 
     /**
-     * 
+     * this method is meant to draw a card from the deck casually, meaning that the decks will never be shuffled
      */
-    public void getRandomCard();
+    public T getRandomCard();
 
 }

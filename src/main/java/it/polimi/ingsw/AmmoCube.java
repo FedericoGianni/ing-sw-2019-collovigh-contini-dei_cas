@@ -1,28 +1,35 @@
 package it.polimi.ingsw;
 
+
 /**
- * 
+ * this class represents the single cube that the game use for representing ammo
+ * it has only one attribute that specify the color of it
  */
 public class AmmoCube {
 
+    private Color color;
+
     /**
-     * Default constructor
+     *
+     * @param color set the color of the cube
      */
-    public AmmoCube() {
+    public AmmoCube(Color color) {
+
+        this.color = color;
+
+
     }
 
-    /**
-     * 
-     */
-    //private enum color;
-
 
     /**
-     * @return
+     *
+     * since this class is not dynamic it just need the get method
+     *
+     * @return the color of the cube
      */
-    public AmmoCube genRandCube() {
-        // TODO implement here
-        return null;
+    public Color getColor() {
+
+
+        return color;
     }
-
 }
