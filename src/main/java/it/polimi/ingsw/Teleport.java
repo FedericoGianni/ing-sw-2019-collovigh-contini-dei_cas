@@ -16,7 +16,7 @@ public class Teleport extends PowerUp {
     }
 
     /**
-     * to be implemented
+     *
      * @param cell cell in which the player will be teleported
      */
     public void use(Cell cell, Player player) throws CardNotPossessedException {

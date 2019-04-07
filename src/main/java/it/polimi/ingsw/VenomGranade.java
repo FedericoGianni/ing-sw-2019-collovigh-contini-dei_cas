@@ -22,7 +22,7 @@ public class VenomGranade extends PowerUp {
      */
     public void use(Player p) {
 
-        // ho bisogno di getInstance su map
+        // ho bisogno di getInstance su map TBD
 
 
     }
