@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.util.List;
+
 /**
  * 
  */
@@ -41,11 +43,22 @@ public class Cell {
      */
     private Cell adjWest;
 
+    int color; //like color areas,the rooms of the map
+    private List<Player> playersHere;
 
+    public List<Player> getPlayers()
+    {
+        return this.playersHere;
+    }
 
+    public void setPlayersHere(Player p) {
+        this.playersHere.add(p);
+    }
 
-
-
+    public void playerMoves(Player p)
+    {
+        this.playersHere.remove(p);
+    }
     /**
      * @return
      */
@@ -53,7 +66,14 @@ public class Cell {
         // TODO implement here
         return null;
     }*/
-
+    public int getColor()
+    {
+        return this.color;
+    }
+    public void setColor(int n)
+    {
+        this.color=n;
+    }
     /**
      * @return
      */

@@ -36,7 +36,7 @@ public class Player {
     /**
      * 
      */
-    private List<PowerUp> currentPowerUp;
+    private List<PowerUp> currentPowerUps;
 
     /**
      * 
@@ -78,96 +78,155 @@ public class Player {
      * @return
      */
     public Cell getCurrentPosition() {
-        // TODO implement here
-        return null;
+
+        return this.currentPosition;
     }
 
     /**
      * @param c
      */
     public void setPlayerPos(Cell c) {
-        // TODO implement here
+        this.currentPosition=c;
     }
 
     /**
      * @return
      */
-    public int getPlayerId() {
-        // TODO implement here
-        return 0;
+    public int getPlayerId(Player p) {
+        return p.id;
     }
 
     /**
      * @return
      */
-    public String getPlayerName() {
-        // TODO implement here
-        return "";
+    public String getPlayerName(Player p) {
+        return p.name;
     }
 
     /**
      * @return
      */
-    public List<Weapon> getWeapon() {
-        // TODO implement here
-        return null;
+    public List<Weapon> getWeapon(Player p) {
+        return p.currentWeapons;
     }
 
     /**
      * @param w
      */
     public void addWeapon(Weapon w) {
-        // TODO implement here
+        // the controller package chacks that a player mustn't have more than 3 weapons
+        this.currentWeapons.add(w);
     }
 
     /**
      * @param w
      */
     public void delWeapon(Weapon w) {
-        // TODO implement here
+        this.currentWeapons.remove(w);
     }
 
     /**
      * @return
      */
-    public List<PowerUp> getPowerUps() {
-        // TODO implement here
-        return null;
+    public List<PowerUp> getPowerUps(Player p) {
+
+        return p.currentPowerUps;
     }
 
     /**
      * @return
      */
-    public Boolean hasMaxPowerUp() {
-        // TODO implement here
-        return null;
+    public Boolean hasMaxPowerUp(Player p) {
+        if(p.currentPowerUps.size()==3)
+            return true;
+        return false;
+    }
+
+    public Boolean hasMaxWeapons(Player p) {
+        if(p.currentWeapons.size()==3)
+            return true;
+        return false;
     }
 
     /**
      * @param p
      */
     public void addPowerUp(PowerUp p) {
-        // TODO implement here
+        this.currentPowerUps.add(p);
     }
 
     /**
      * @param p
      */
     public void delPowerUp(PowerUp p) {
-        // TODO implement here
+        this.currentPowerUps.remove(p);
     }
 
     /**
      * @return
      */
     public List<Player> canTarget() {
-        // TODO implement here
         return null;
-    }
+    }//requires weapon implemntation
+    //occhio a cambi stanza e a cambio numero di giocatori
+    public List<Player> canSee() {//necessaries other players, otherwise you don't know where tehey are
+                Cell c=this.getCurrentPosition();
+                List<Player> visibili;
+                visibili=c.getPlayers();
+                visibili.remove(this);//with these instructions i'm sure to take the players that are in the current cell
 
+                if(c.getNorth() !=null)
+                {
+                   visibili.addAll(c.getPlayers());
+                   visibili=runner(visibili,c.getNorth());
+                }
+            if(c.getEast() !=null)
+            {
+                visibili.addAll(c.getPlayers());
+                visibili=runner(visibili,c.getEast());
+            }
+            if(c.getWest() !=null)
+            {
+                visibili.addAll(c.getPlayers());
+                visibili=runner(visibili,c.getWest());
+            }
+            if(c.getSouth() !=null)
+            {
+                visibili.addAll(c.getPlayers());
+                visibili=runner(visibili,c.getSouth());
+            }
+
+
+                return visibili;//handle a nullPointerExcpetion if you can't see any other player
+    }
     /**
      * @return
      */
+
+    public List<Player> runner(List<Player> visibili,Cell c)
+    {
+        if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor())//if the color is different you change the room, so you can't see other players
+        {
+            visibili.addAll(c.getPlayers());
+            visibili=runner(visibili,c.getNorth());
+        }
+        if(c.getEast() !=null && c.getEast().getColor()==c.getColor())
+        {
+            visibili.addAll(c.getPlayers());
+            visibili=runner(visibili,c.getEast());
+        }
+        if(c.getWest() !=null && c.getWest().getColor()==c.getColor())
+        {
+            visibili.addAll(c.getPlayers());
+            visibili=runner(visibili,c.getWest());
+        }
+        if(c.getSouth() !=null && c.getSouth().getColor()==c.getColor())
+        {
+            visibili.addAll(c.getPlayers());
+            visibili=runner(visibili,c.getSouth());
+        }
+        return visibili;
+    }
     public List<Player> canBeTargetedBy() {
         // TODO implement here
         return null;
@@ -213,10 +272,17 @@ public class Player {
     }
 
     /**
-     * @param death
+     * @param
      */
-    public void incrDeaths( Boolean death) {
-        // TODO implement here
+    public void setDeath()
+    {
+        this.deaths=deaths++;
+    }
+    public void incrDeaths( Boolean death) {//---- senses?
+        if(death==true)
+        {
+            setDeath();
+        }
     }
 
     /**
