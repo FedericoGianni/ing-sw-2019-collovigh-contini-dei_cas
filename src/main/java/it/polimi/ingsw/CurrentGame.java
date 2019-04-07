@@ -4,8 +4,13 @@ import java.util.*;
 import java.util.Map;
 
 /**
- * 
+ *
+ * This is the main class, and it stores every information regarding the current game.
+ * It stores a list of the current Players and their stats like damage taken, weapons, etc. and the actual state of the map like
+ * the map type, which depends on the number of players and the actual position of the players in the map.
+ *
  */
+
 public class CurrentGame {
 
     private CurrentGame(List<Player> players, Map currentMap, PowerUpDeck powerUpDeck, WeaponDeck weaponDeck, boolean frenzyRound, Player frenzyStarter, Player firstPlayer, PowerUpDeck thrashPowerUpDeck) {
@@ -47,27 +52,24 @@ public class CurrentGame {
     }
 
     /**
-     * @return
+     * @return a randomly picked PowerUp from the current powerUp deck
      */
     public PowerUp drawPowerUp() {
-        // TODO implement here
-        return null;
+        return powerUpDeck.getRandomCard();
     }
 
     /**
-     * @return
+     * @return a random weapon from the weaponDeck
      */
     public Weapon drawWeapon() {
-        // TODO implement here
-        return null;
+        return weaponDeck.getRandomCard();
     }
 
     /**
-     * @return
+     * @return true if frenzy round is active, otherwise return false
      */
     public Boolean isFrenzy() {
-        // TODO implement here
-        return null;
+        return frenzyRound;
     }
 
     /**
@@ -82,24 +84,23 @@ public class CurrentGame {
      * @return
      */
     public Player idToPlayer(int id) {
-        // TODO implement here
+        //TODO implement here
         return null;
     }
 
     /**
-     * @param p 
-     * @return
+     * @param p player passed as parameter
+     * @return an integer representing the unique id of Player p
      */
     public int playerToId(Player p) {
         return p.getPlayerId();
     }
 
     /**
-     * @return
+     * @return a list which contains current players
      */
     public List<Player> getPlayers() {
-        // TODO implement here
-        return null;
+        return players;
     }
 
     /**
@@ -110,11 +111,10 @@ public class CurrentGame {
     }
 
     /**
-     * @return
+     * @return current round number
      */
     public int getRoundNumber() {
-        // TODO implement here
-        return 0;
+        return roundNumber;
     }
 
     /**
@@ -142,7 +142,7 @@ public class CurrentGame {
      * @param p
      */
     public void discardPowerUp(PowerUp p) {
-        powerUpDeck
+        //Todo implement here
     }
 
 }
