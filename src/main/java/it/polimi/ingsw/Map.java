@@ -117,16 +117,16 @@ public class Map {
                 (this.matrix[0][0]).setColor(BLUE);
 
                 (this.matrix[0][1]).setAdjNorth(null);
-                (this.matrix[0][1]).setAdjSouth(this.matrix[1][1]);
+                (this.matrix[0][1]).setAdjSouth(null);
                 (this.matrix[0][1]).setAdjEast(this.matrix[0][2]);
                 (this.matrix[0][1]).setAdjWest(this.matrix[0][0]);
                 (this.matrix[0][1]).setColor(BLUE);
 
                 (this.matrix[0][2]).setAdjNorth(null);
                 (this.matrix[0][2]).setAdjSouth(this.matrix[1][2]);
-                (this.matrix[0][2]).setAdjEast(this.matrix[0][3]);
+                (this.matrix[0][2]).setAdjEast(null);
                 (this.matrix[0][2]).setAdjWest(this.matrix[0][1]);
-                (this.matrix[0][2]).setColor(YELLOW);
+                (this.matrix[0][2]).setColor(BLUE);
 
                 (this.matrix[1][0]).setAdjNorth(this.matrix[0][0]);
                 (this.matrix[1][0]).setAdjSouth(null);
@@ -134,14 +134,14 @@ public class Map {
                 (this.matrix[1][0]).setAdjWest(null);
                 (this.matrix[1][0]).setColor(RED);
 
-                (this.matrix[1][1]).setAdjNorth(this.matrix[0][1]);
+                (this.matrix[1][1]).setAdjNorth(null);
                 (this.matrix[1][1]).setAdjSouth(this.matrix[2][1]);
                 (this.matrix[1][1]).setAdjEast(this.matrix[1][2]);
                 (this.matrix[1][1]).setAdjWest(this.matrix[1][0]);
                 (this.matrix[1][1]).setColor(RED);
 
                 (this.matrix[1][2]).setAdjNorth(this.matrix[0][2]);
-                (this.matrix[1][2]).setAdjSouth(this.matrix[2][2]);
+                (this.matrix[1][2]).setAdjSouth(null);
                 (this.matrix[1][2]).setAdjEast(this.matrix[1][3]);
                 (this.matrix[1][2]).setAdjWest(this.matrix[1][1]);
                 (this.matrix[1][2]).setColor(PURPLE);
@@ -157,10 +157,10 @@ public class Map {
                 (this.matrix[2][1]).setAdjNorth(this.matrix[1][1]);
                 (this.matrix[2][1]).setAdjSouth(null);
                 (this.matrix[2][1]).setAdjEast(this.matrix[2][2]);
-                (this.matrix[2][1]).setAdjWest(this.matrix[2][0]);
+                (this.matrix[2][1]).setAdjWest(null);
                 (this.matrix[2][1]).setColor(WHITE);
 
-                (this.matrix[2][2]).setAdjNorth(this.matrix[1][2]);
+                (this.matrix[2][2]).setAdjNorth(null);
                 (this.matrix[2][2]).setAdjSouth(null);
                 (this.matrix[2][2]).setAdjEast(this.matrix[2][3]);
                 (this.matrix[2][2]).setAdjWest(this.matrix[2][1]);
@@ -198,7 +198,7 @@ public class Map {
                 (this.matrix[0][0]).setColor(BLUE);
 
                 (this.matrix[0][1]).setAdjNorth(null);
-                (this.matrix[0][1]).setAdjSouth(this.matrix[1][1]);
+                (this.matrix[0][1]).setAdjSouth(null);
                 (this.matrix[0][1]).setAdjEast(this.matrix[0][2]);
                 (this.matrix[0][1]).setAdjWest(this.matrix[0][0]);
                 (this.matrix[0][1]).setColor(BLUE);
@@ -221,16 +221,16 @@ public class Map {
                 (this.matrix[1][0]).setAdjWest(null);
                 (this.matrix[1][0]).setColor(RED);
 
-                (this.matrix[1][1]).setAdjNorth(this.matrix[0][1]);
+                (this.matrix[1][1]).setAdjNorth(null);
                 (this.matrix[1][1]).setAdjSouth(this.matrix[2][1]);
-                (this.matrix[1][1]).setAdjEast(this.matrix[1][2]);
+                (this.matrix[1][1]).setAdjEast(null);
                 (this.matrix[1][1]).setAdjWest(this.matrix[1][0]);
                 (this.matrix[1][1]).setColor(RED);
 
                 (this.matrix[1][2]).setAdjNorth(this.matrix[0][2]);
                 (this.matrix[1][2]).setAdjSouth(this.matrix[2][2]);
                 (this.matrix[1][2]).setAdjEast(this.matrix[1][3]);
-                (this.matrix[1][2]).setAdjWest(this.matrix[1][1]);
+                (this.matrix[1][2]).setAdjWest(null);
                 (this.matrix[1][2]).setColor(YELLOW);
 
                 (this.matrix[1][3]).setAdjNorth(this.matrix[0][3]);
@@ -301,21 +301,21 @@ public class Map {
                 (this.matrix[0][3]).setColor(GREEN);
 
                 (this.matrix[1][0]).setAdjNorth(this.matrix[0][0]);
-                (this.matrix[1][0]).setAdjSouth(null);
-                (this.matrix[1][0]).setAdjEast(this.matrix[1][1]);
+                (this.matrix[1][0]).setAdjSouth(this.matrix[2][0]);
+                (this.matrix[1][0]).setAdjEast(null);
                 (this.matrix[1][0]).setAdjWest(null);
                 (this.matrix[1][0]).setColor(RED);
 
                 (this.matrix[1][1]).setAdjNorth(this.matrix[0][1]);
                 (this.matrix[1][1]).setAdjSouth(this.matrix[2][1]);
-                (this.matrix[1][1]).setAdjEast(this.matrix[1][2]);
-                (this.matrix[1][1]).setAdjWest(this.matrix[1][0]);
+                (this.matrix[1][1]).setAdjEast(null);
+                (this.matrix[1][1]).setAdjWest(null);
                 (this.matrix[1][1]).setColor(PURPLE);
 
                 (this.matrix[1][2]).setAdjNorth(this.matrix[0][2]);
                 (this.matrix[1][2]).setAdjSouth(this.matrix[2][2]);
                 (this.matrix[1][2]).setAdjEast(this.matrix[1][3]);
-                (this.matrix[1][2]).setAdjWest(this.matrix[1][1]);
+                (this.matrix[1][2]).setAdjWest(null);
                 (this.matrix[1][2]).setColor(YELLOW);
 
                 (this.matrix[1][3]).setAdjNorth(this.matrix[0][3]);

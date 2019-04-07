@@ -93,7 +93,7 @@ class MapTest {
         assert(m.getCell(0, 0).getWest() == null);
 
         assert(m.getCell(0, 1).getNorth() == null);
-        assert(m.getCell(0,1).getSouth() == m.getCell(1, 1));
+        assert(m.getCell(0,1).getSouth() == null);
         assert(m.getCell(0, 1).getEast() == m.getCell(0, 2));
         assert(m.getCell(0, 1).getWest() == m.getCell(0,0));
 
