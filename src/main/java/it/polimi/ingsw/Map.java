@@ -263,10 +263,10 @@ public class Map {
 
                 (this.matrix[0][0]) = new Cell();
                 (this.matrix[0][1]) = new Cell();
-                (this.matrix[0][2]) = new Cell();
+                (this.matrix[0][2]) = new SpawnCell();
                 (this.matrix[0][3]) = new Cell();
 
-                (this.matrix[1][0]) = new Cell();
+                (this.matrix[1][0]) = new SpawnCell();
                 (this.matrix[1][1]) = new Cell();
                 (this.matrix[1][2]) = new Cell();
                 (this.matrix[1][3]) = new Cell();
@@ -274,7 +274,7 @@ public class Map {
                 (this.matrix[2][0]) = new Cell();
                 (this.matrix[2][1]) = new Cell();
                 (this.matrix[2][2]) = new Cell();
-                (this.matrix[2][3]) = new Cell();
+                (this.matrix[2][3]) = new SpawnCell();
 
                 (this.matrix[0][0]).setAdjNorth(null);
                 (this.matrix[0][0]).setAdjSouth(this.matrix[1][0]);
@@ -352,4 +352,5 @@ public class Map {
 
         }
     }
+
 }
