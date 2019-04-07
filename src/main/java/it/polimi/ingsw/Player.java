@@ -163,7 +163,7 @@ public class Player {
     }
 
     /**
-     * @return
+     * @return a list of the players the current player can see
      */
     public List<Player> canTarget() {
         return null;
@@ -200,9 +200,9 @@ public class Player {
                 return visibili;//handle a nullPointerExcpetion if you can't see any other player
     }
     /**
-     * @return
+     * @return a sub list
      */
-
+//useful differentiate because the first check can change the color, after the first one thc eoclor must be all the same
     public List<Player> runner(List<Player> visibili,Cell c)
     {
         if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor())//if the color is different you change the room, so you can't see other players

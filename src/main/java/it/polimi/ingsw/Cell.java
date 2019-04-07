@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.util.List;
+
 /**
  * 
  */
@@ -32,7 +34,7 @@ public class Cell {
     private Cell adjSouth;
     private Cell adjEast;
     private Cell adjWest;
-
+    private List<Player> playersHere;
 
     public void setAdjNorth(Cell adjNorth) {
         this.adjNorth = adjNorth;
@@ -54,6 +56,18 @@ public class Cell {
         this.color = color;
     }
 
+    public List<Player> getPlayers()
+    {
+        return this.playersHere;
+    }
+    public void addPlayerHere(Player p)
+    {
+        this.playersHere.add(p);
+    }
+    public void removePlayerFromHere(Player p)
+    {
+        this.playersHere.remove(p);
+    }
     /**
      * @return
      */
