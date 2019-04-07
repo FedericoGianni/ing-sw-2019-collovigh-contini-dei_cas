@@ -1,36 +1,30 @@
 package it.polimi.ingsw;
 
 /**
- * 
+ *  Abstract Class for PowerUps
  */
 public abstract class PowerUp {
 
+    private Color color;
+
     /**
-     * Default constructor
+     *
+     * @param color of the card and of the cube that will be obtained if sold
      */
-    public PowerUp() {
+    public PowerUp(Color color) {
+
+        this.color = color;
     }
 
-    /**
-     * 
-     */
-   // private enum color;
-
 
     /**
-     * @return
+     * @return an AmmoCube of the color of the card
      */
     public AmmoCube sell() {
-        // TODO implement here
-        return null;
+
+        return new AmmoCube(this.color);
     }
 
-    /**
-     * @return
-     */
-    public Boolean canBeUsedNow() {
-        // TODO implement here
-        return null;
-    }
+
 
 }
