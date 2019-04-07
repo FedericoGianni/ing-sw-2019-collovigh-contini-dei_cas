@@ -85,9 +85,11 @@ public class FireMode {
     /**
      * @return
      */
-    public Boolean canBeUsed() {
-        // TODO implement here
-        return null;
+    public Boolean canBeUsed(Weapon w) {
+        if (w.isLoaded()==true)
+                return true;
+
+        return false;
     }
 
     /**
