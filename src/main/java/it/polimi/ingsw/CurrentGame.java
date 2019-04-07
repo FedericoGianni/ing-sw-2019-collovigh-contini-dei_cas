@@ -93,7 +93,7 @@ public class CurrentGame {
      * @return an integer representing the unique id of Player p
      */
     public int playerToId(Player p) {
-        return p.getPlayerId();
+        return p.getPlayerId(p);
     }
 
     /**
@@ -124,12 +124,7 @@ public class CurrentGame {
         roundNumber = r;
     }
 
-    /**
-     * @return the id of current active Player
-     */
-    public int getCurrentPlayer() {
-        return this.currentPlayer.getPlayerId();
-    }
+
 
     /**
      * @param playerId
