@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import customsexceptions.NullSingletonException;
+
 import static it.polimi.ingsw.CellColor.*;
 
 /**
@@ -18,7 +20,7 @@ public class Map {
 
     private Cell[][] matrix;
 
-    private Map singleton = null;
+    private static Map singleton = null;
 
     private int mapType;
 
@@ -43,6 +45,20 @@ public class Map {
     public int getMapType() {
         return mapType;
     }
+
+    /**
+     *
+     * @return the only instance of Map class
+     * @throws NullSingletonException if singleton hasn't been created yet
+     */
+    public static Map getInstance() throws NullSingletonException{
+        if(singleton == null){
+            throw new NullSingletonException();
+        }
+
+        return singleton;
+    }
+
 
     /**
      *

@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import customsexceptions.NullSingletonException;
+
 import java.util.List;
 
 
@@ -13,7 +15,7 @@ import java.util.List;
 
 public class CurrentGame {
 
-    public CurrentGame(List<Player> players, Map currentMap) {
+    private CurrentGame(List<Player> players, Map currentMap) {
         this.players = players;
         this.currentMap = currentMap;
         this.roundNumber = 0;
@@ -23,7 +25,7 @@ public class CurrentGame {
     }
 
 
-    private static CurrentGame singleton;
+    private static CurrentGame singleton = null;
     private List<Player> players;
     private Map currentMap;
     private int roundNumber;
@@ -37,17 +39,35 @@ public class CurrentGame {
      * @return CurrentGame. only one instance of CurrentGame can exist at one time, if the actual instance is set to null
      * it creates a new instance of this Class, if it already exists it just return current instance
      */
-    public CurrentGame getIstance(List<Player> players, Map currentMap) {
-        if(singleton == null)
-            singleton = new CurrentGame(players, currentMap);
+    public static CurrentGame getInstance() throws NullSingletonException{
+            if (singleton == null) {
+                throw new NullSingletonException();
+            }
+            return singleton;
+    }
+
+    public static CurrentGame generateInstance(List<Player> players, Map currentMap){
+        singleton = new CurrentGame(players, currentMap);
         return singleton;
     }
 
     /**
-     * @return a randomly picked PowerUp from the current powerUp deck
+     * @return a randomly picked PowerUp from the current powerUp deck if this is empty it sets the trash one as the good one
      */
     public PowerUp drawPowerUp() {
-        return powerUpDeck.getRandomCard();
+
+        PowerUp powerUp = powerUpDeck.getRandomCard();
+
+        if (powerUp == null){
+
+            this.powerUpDeck = this.thrashPowerUpDeck;
+
+            this.thrashPowerUpDeck = new PowerUpDeck();
+
+            powerUp = powerUpDeck.getRandomCard();
+        }
+
+        return powerUp;
     }
 
     /**
@@ -57,22 +77,36 @@ public class CurrentGame {
         return weaponDeck.getRandomCard();
     }
 
-
     /**
-     * @param id 
-     * @return
+     * This method is a util method that will be used to translate the player ID in the pointer to that player
+     *
+     * will be called this way: CurrentGame.idToPlayer() so that it can be used also in other classes easily
+     *
+     * @param id is the identifier of the player which is individual for each player and can not be changed during the game
+     * @return a pointer to the aforementioned player
      */
-    public Player idToPlayer(int id) {
-        //TODO implement here
-        return null;
+    public static Player idToPlayer(int id) {
+            try {
+                List<Player> list = CurrentGame.getInstance().getPlayers();
+                return list.get(id);
+            }catch(NullSingletonException e){
+                e.printStackTrace();
+                return null;
+            }
     }
 
     /**
      * @param p player passed as parameter
      * @return an integer representing the unique id of Player p
      */
-    public int playerToId(Player p) {
-        return p.getPlayerId();
+    public static int playerToId(Player p) {
+        try{
+            return CurrentGame.getInstance().getPlayers().indexOf(p);
+        }catch(NullSingletonException e){
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 
     /**
@@ -107,7 +141,7 @@ public class CurrentGame {
      * @param p
      */
     public void discardPowerUp(PowerUp p) {
-        powerUpDeck.reinsert(p);
+        thrashPowerUpDeck.reinsert(p);
     }
 
 }

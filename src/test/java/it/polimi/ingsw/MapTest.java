@@ -1,21 +1,25 @@
 package it.polimi.ingsw;
 
+import customsexceptions.NullSingletonException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MapTest {
+
+
+    @Test
+    void agetInstance() {
+        assertThrows(NullSingletonException.class, () -> {
+            Map.getInstance();
+        });
+    }
 
     @Test
     void getMapTypeShouldReturnActualMapType() {
         Map m = new Map();
         assertEquals(1, m.getMap(1).getMapType());
-
-        m = new Map();
-        assertEquals(2, m.getMap(2).getMapType());
-
-        m = new Map();
-        assertEquals(3, m.getMap(3).getMapType());
     }
 
     @Test
@@ -39,7 +43,7 @@ class MapTest {
         assert(m.getCell(2, 2).getColor() == CellColor.WHITE);
         assert(m.getCell(2, 3).getColor() == CellColor.YELLOW);
 
-        //Now changin to MapType 2 to check if colors are different as it should be
+        //Now changing to MapType 2 to check if colors are different as it should be
         m = new Map();
         m.getMap(2);
         m.generateCells(2);

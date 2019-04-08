@@ -95,9 +95,13 @@ public class PowerUpDeck implements Deck<PowerUp> {
      */
     @Override
     public synchronized PowerUp getRandomCard() {
+        if (this.powerUpList == null){ throw new NullPointerException();}
 
-        if (this.powerUpList == null){ return null;}
         else{
+
+            if(this.powerUpList.isEmpty()){
+                return null;
+            }
 
             random = new Random();
             int i = random.nextInt(this.powerUpList.size());
