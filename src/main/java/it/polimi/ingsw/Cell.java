@@ -1,5 +1,6 @@
 package it.polimi.ingsw;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,7 @@ public class Cell {
         this.adjSouth = adjSouth;
         this.adjEast = adjEast;
         this.adjWest = adjWest;
+        this.playersHere=null;
     }
 
 
@@ -34,7 +36,7 @@ public class Cell {
     private Cell adjSouth;
     private Cell adjEast;
     private Cell adjWest;
-    private List<Player> playersHere;
+    private List<Player> playersHere=new ArrayList<Player>();
 
     public void setAdjNorth(Cell adjNorth) {
         this.adjNorth = adjNorth;
@@ -111,4 +113,5 @@ public class Cell {
     public Cell getWest() {
         return this.adjWest;
     }
+
 }
