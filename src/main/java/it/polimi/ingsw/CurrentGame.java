@@ -1,7 +1,7 @@
 package it.polimi.ingsw;
 
-import java.util.*;
-import java.util.Map;
+import java.util.List;
+
 
 /**
  *
@@ -13,30 +13,22 @@ import java.util.Map;
 
 public class CurrentGame {
 
-    private CurrentGame(List<Player> players, Map currentMap, PowerUpDeck powerUpDeck, WeaponDeck weaponDeck, boolean frenzyRound, Player frenzyStarter, Player firstPlayer, PowerUpDeck thrashPowerUpDeck) {
+    public CurrentGame(List<Player> players, Map currentMap) {
         this.players = players;
         this.currentMap = currentMap;
         this.roundNumber = 0;
-        this.currentPlayer = firstPlayer;
-        this.powerUpDeck =  powerUpDeck;
-        this.weaponDeck = weaponDeck;
-        this.frenzyRound = frenzyRound;
-        this.frenzyStarter = frenzyStarter;
-        this.firstPlayer = firstPlayer;
-        this.thrashPowerUpDeck = thrashPowerUpDeck;
+        this.powerUpDeck =  PowerUpDeck.populatedDeck();
+        this.weaponDeck = new WeaponDeck();
+        this.thrashPowerUpDeck = new PowerUpDeck();
     }
 
 
     private static CurrentGame singleton;
     private List<Player> players;
-    private java.util.Map currentMap;
+    private Map currentMap;
     private int roundNumber;
-    private Player currentPlayer;
     private PowerUpDeck powerUpDeck;
     private WeaponDeck weaponDeck;
-    private boolean frenzyRound;
-    private Player frenzyStarter;
-    private Player firstPlayer;
     private PowerUpDeck thrashPowerUpDeck;
 
 
@@ -45,9 +37,9 @@ public class CurrentGame {
      * @return CurrentGame. only one instance of CurrentGame can exist at one time, if the actual instance is set to null
      * it creates a new instance of this Class, if it already exists it just return current instance
      */
-    public CurrentGame getIstance(List<Player> players, Map currentMap, PowerUpDeck powerUpDeck, WeaponDeck weaponDeck, boolean frenzyRound, Player frenzyStarter, Player firstPlayer, PowerUpDeck thrashPowerUpDeck) {
+    public CurrentGame getIstance(List<Player> players, Map currentMap) {
         if(singleton == null)
-            singleton = new CurrentGame(players, currentMap, powerUpDeck, weaponDeck, frenzyRound, frenzyStarter, firstPlayer, thrashPowerUpDeck);
+            singleton = new CurrentGame(players, currentMap);
         return singleton;
     }
 
@@ -65,19 +57,6 @@ public class CurrentGame {
         return weaponDeck.getRandomCard();
     }
 
-    /**
-     * @return true if frenzy round is active, otherwise return false
-     */
-    public Boolean isFrenzy() {
-        return frenzyRound;
-    }
-
-    /**
-     * @param playerId
-     */
-    public void activateFrenzy(int playerId) {
-        // TODO implement here
-    }
 
     /**
      * @param id 
@@ -125,24 +104,10 @@ public class CurrentGame {
     }
 
     /**
-     * @return the id of current active Player
-     */
-    public int getCurrentPlayer() {
-        return this.currentPlayer.getPlayerId();
-    }
-
-    /**
-     * @param playerId
-     */
-    public void setCurrentPlayer(int playerId) {
-        currentPlayer = idToPlayer(playerId);
-    }
-
-    /**
      * @param p
      */
     public void discardPowerUp(PowerUp p) {
-        //Todo implement here
+        powerUpDeck.reinsert(p);
     }
 
 }

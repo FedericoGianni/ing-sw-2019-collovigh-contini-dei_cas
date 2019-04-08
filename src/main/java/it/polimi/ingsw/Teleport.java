@@ -2,8 +2,6 @@ package it.polimi.ingsw;
 
 import customsexceptions.CardNotPossessedException;
 
-import java.util.*;
-
 /**
  * 
  */
@@ -23,7 +21,7 @@ public class Teleport extends PowerUp {
      */
     public void use(Cell cell, Player player) throws CardNotPossessedException {
 
-        if(!player.getPowerUps().contains(this)){ throw new CardNotPossessedException();}
+        if(!player.getPowerUps(player).contains(this)){ throw new CardNotPossessedException();}
         else{
 
             player.setPlayerPos(cell);

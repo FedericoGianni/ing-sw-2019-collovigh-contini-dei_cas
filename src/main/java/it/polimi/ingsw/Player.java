@@ -92,8 +92,8 @@ public class Player {
     /**
      * @return
      */
-    public int getPlayerId(Player p) {
-        return p.id;
+    public int getPlayerId() {
+        return this.id;
     }
 
     /**
