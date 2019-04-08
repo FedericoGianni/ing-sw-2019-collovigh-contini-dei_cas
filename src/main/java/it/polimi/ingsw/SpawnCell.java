@@ -11,9 +11,10 @@ public class SpawnCell extends Cell {
      * Default constructor
      */
     public SpawnCell() {
+        this.visit=false;
     }
 
-
+    private boolean visit;
 
     /**
      * 

@@ -12,6 +12,7 @@ public class Cell {
      * Default constructor
      */
     public Cell() {
+        this.visit=false;
     }
 
     public CellColor getColor() {
@@ -25,13 +26,14 @@ public class Cell {
         this.adjEast = adjEast;
         this.adjWest = adjWest;
         this.playersHere=null;
+        this.visit=false;
     }
 
 
     private CellColor color;
 
     private AmmoCard ammoPlaced;
-
+    private boolean visit;
     private Cell adjNorth;
     private Cell adjSouth;
     private Cell adjEast;
@@ -112,6 +114,17 @@ public class Cell {
      */
     public Cell getWest() {
         return this.adjWest;
+    }
+
+    public void setVisited(){
+        this.visit=true;
+    }
+    public boolean alreadyVisited(){
+        return this.visit;
+    }
+    public void unvisit()
+    {
+        this.visit=false;
     }
 
 }

@@ -10,16 +10,9 @@ class MapTest {
 
 
     @Test
-    void agetInstance() {
-        assertThrows(NullSingletonException.class, () -> {
-            Map.getInstance();
-        });
-    }
-
-    @Test
     void getMapTypeShouldReturnActualMapType() {
         Map m = new Map();
-        assertEquals(1, m.getMap(1).getMapType());
+        assertEquals(2, m.getMap(2).getMapType());
     }
 
     @Test
