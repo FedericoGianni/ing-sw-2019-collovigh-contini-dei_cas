@@ -1,10 +1,10 @@
 package it.polimi.ingsw;
 
-import customsexceptions.NullSingletonException;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MapTest {
 
@@ -28,7 +28,7 @@ class MapTest {
 
         assert(m.getCell(1, 0).getColor() == CellColor.RED);
         assert(m.getCell(1, 1).getColor() == CellColor.RED);
-        assert(m.getCell(1, 2).getColor() == CellColor.PURPLE);
+        assert(m.getCell(1, 2).getColor() == CellColor.RED);
         assert(m.getCell(1, 3).getColor() == CellColor.YELLOW);
 
         assert(m.getCell(2, 0) == null);
@@ -112,4 +112,14 @@ class MapTest {
         assert(m.getCell(0,3).getWest() == m.getCell(0,2));
     }
 
+    @Test
+    void cellToCoord() {
+        Map m = new Map();
+        m.getMap(1);
+        m.generateCells(1);
+
+        assertEquals(m.cellToCoord(m.getCell(0,0)), new Point(0,0));
+        assertEquals(m.cellToCoord(m.getCell(1,2)), new Point(1,2));
+        assertEquals(null, m.cellToCoord(m.getCell(2,0)));
+    }
 }
