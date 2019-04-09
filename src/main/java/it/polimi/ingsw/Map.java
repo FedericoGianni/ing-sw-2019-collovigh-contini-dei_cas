@@ -160,7 +160,8 @@ public class Map {
                 (this.matrix[1][2]).setAdjSouth(null);
                 (this.matrix[1][2]).setAdjEast(this.matrix[1][3]);
                 (this.matrix[1][2]).setAdjWest(this.matrix[1][1]);
-                (this.matrix[1][2]).setColor(PURPLE);
+                //this cell is actually purple but in the same room as the Red ones, so we treat it just like a red one
+                (this.matrix[1][2]).setColor(RED);
 
                 (this.matrix[1][3]).setAdjNorth(null);
                 (this.matrix[1][3]).setAdjSouth(this.matrix[2][3]);
