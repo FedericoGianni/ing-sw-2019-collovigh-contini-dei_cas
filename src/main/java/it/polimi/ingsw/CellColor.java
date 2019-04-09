@@ -6,7 +6,7 @@ public enum CellColor {
     RED,
     YELLOW,
     PURPLE,
-    WHITE,
+    GREY,
     GREEN
 
 }

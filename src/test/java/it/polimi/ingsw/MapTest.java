@@ -32,8 +32,8 @@ class MapTest {
         assert(m.getCell(1, 3).getColor() == CellColor.YELLOW);
 
         assert(m.getCell(2, 0) == null);
-        assert(m.getCell(2, 1).getColor() == CellColor.WHITE);
-        assert(m.getCell(2, 2).getColor() == CellColor.WHITE);
+        assert(m.getCell(2, 1).getColor() == CellColor.GREY);
+        assert(m.getCell(2, 2).getColor() == CellColor.GREY);
         assert(m.getCell(2, 3).getColor() == CellColor.YELLOW);
 
         //Now changing to MapType 2 to check if colors are different as it should be
@@ -52,7 +52,7 @@ class MapTest {
         assert(m.getCell(1, 3).getColor() == CellColor.YELLOW);
 
         assert(m.getCell(2, 0) == null);
-        assert(m.getCell(2, 1).getColor() == CellColor.WHITE);
+        assert(m.getCell(2, 1).getColor() == CellColor.GREY);
         assert(m.getCell(2, 2).getColor() == CellColor.YELLOW);
         assert(m.getCell(2, 3).getColor() == CellColor.YELLOW);
 
@@ -71,8 +71,8 @@ class MapTest {
         assert(m.getCell(1, 2).getColor() == CellColor.YELLOW);
         assert(m.getCell(1, 3).getColor() == CellColor.YELLOW);
 
-        assert(m.getCell(2, 0).getColor() == CellColor.WHITE);
-        assert(m.getCell(2, 1).getColor() == CellColor.WHITE);
+        assert(m.getCell(2, 0).getColor() == CellColor.GREY);
+        assert(m.getCell(2, 1).getColor() == CellColor.GREY);
         assert(m.getCell(2, 2).getColor() == CellColor.YELLOW);
         assert(m.getCell(2, 3).getColor() == CellColor.YELLOW);
 

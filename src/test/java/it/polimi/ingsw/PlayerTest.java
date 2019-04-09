@@ -19,7 +19,7 @@ class PlayerTest {
 
     @Test
     void canSee() {
-        Map map=new Map();//geerate the map
+        Map map = new Map();//geerate the map
         map.getMap(2);
         map.generateCells(2);//map type 2 gerata
         Player p1=new Player("Shooter",map.getCell(1,3));//genrate a player in a position

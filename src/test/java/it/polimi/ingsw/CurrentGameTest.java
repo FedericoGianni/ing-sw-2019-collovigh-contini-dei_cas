@@ -1,20 +1,14 @@
 package it.polimi.ingsw;
 
-import customsexceptions.NullSingletonException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CurrentGameTest {
-
-
-    @Test
-    void agetInstance(){
-        assertThrows(NullSingletonException.class, () -> {CurrentGame.getInstance();});
-    }
 
     @Test
     void generateInstance() {
@@ -30,7 +24,7 @@ class CurrentGameTest {
         m.getMap(1);
         m.generateCells(1);
 
-        CurrentGame c = CurrentGame.generateInstance(players, m);
+        CurrentGame c = new CurrentGame(players, m);
 
         assert(c.getPlayers().equals(players));
         assert(c.getMap().equals(m));
@@ -50,7 +44,7 @@ class CurrentGameTest {
         m.getMap(1);
         m.generateCells(1);
 
-        CurrentGame c = CurrentGame.generateInstance(players, m);
+        CurrentGame c = new CurrentGame(players, m);
         PowerUp teleport = new Teleport(Color.YELLOW);
         PowerUp venom = new VenomGranade(Color.YELLOW);
         PowerUp viewF = new Viewfinder(Color.YELLOW);
@@ -89,9 +83,9 @@ class CurrentGameTest {
         m.getMap(1);
         m.generateCells(1);
 
-        CurrentGame c = CurrentGame.generateInstance(players, m);
+        CurrentGame c = new CurrentGame(players, m);
         for (int id = 0; id < 3; id++) {
-            assertEquals(players.get(id), CurrentGame.idToPlayer(id));
+            assertEquals(players.get(id), c.idToPlayer(id));
         }
 
     }
@@ -110,7 +104,7 @@ class CurrentGameTest {
         m.getMap(1);
         m.generateCells(1);
 
-        CurrentGame c = CurrentGame.generateInstance(players, m);
+        CurrentGame c = new CurrentGame(players, m);
         assertEquals(players.indexOf(p1), c.playerToId(p1));
     }
 
@@ -129,7 +123,7 @@ class CurrentGameTest {
         m.getMap(1);
         m.generateCells(1);
 
-        CurrentGame c = CurrentGame.generateInstance(players, m);
+        CurrentGame c = new CurrentGame(players, m);
         assertEquals(c.getPlayers() , players);
     }
 }
