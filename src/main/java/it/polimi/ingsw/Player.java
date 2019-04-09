@@ -3,7 +3,7 @@ package it.polimi.ingsw;
 import java.util.*;
 
 /**
- * 
+ *
  */
 public class Player {
 
@@ -21,62 +21,62 @@ public class Player {
     }
 
     /**
-     * 
+     *
      */
     private String name;
 
     /**
-     * 
+     *
      */
     private int id;
 
     /**
-     * 
+     *
      */
     private List<Weapon> currentWeapons;
 
     /**
-     * 
+     *
      */
     private Cell currentPosition;
 
     /**
-     * 
+     *
      */
     private List<PowerUp> currentPowerUps;
 
     /**
-     * 
+     *
      */
     private List<Integer> dmgTaken;
 
     /**
-     * 
+     *
      */
     private boolean adrAct1;
 
     /**
-     * 
+     *
      */
     private boolean adrAct2;
 
     /**
-     * 
+     *
      */
     private int deaths;
 
     /**
-     * 
+     *
      */
     private int[] marks = new int[3];
 
     /**
-     * 
+     *
      */
     private int score;
 
     /**
-     * 
+     *
      */
     private List<AmmoCube> Ammo;
 
@@ -176,40 +176,48 @@ public class Player {
 
 
     public List<Player> canSee() {
-                Cell c=this.getCurrentPosition();
-                List<Player> visibili=new ArrayList<>();
-                visibili=c.getPlayers();
-        //System.out.println(c.getNorth().getPlayers().get(0).getPlayerName());
-                visibili.remove(this);//with these instructions i'm sure to take the players that are in the current cell
+        Cell c=this.getCurrentPosition();
+        List<Player> visibili;
+        visibili=c.getPlayers();
+        visibili.remove(this);//with these instructions i'm sure to take the players that are in the current cell
 
 
-            if(c.getNorth() !=null)
-            {
-                if(c.getPlayers()!=null)
-                    visibili.addAll(c.getPlayers());
-                visibili=runner(visibili,c.getNorth());
-            }
-            if(c.getEast() !=null)
-            {
-                if(c.getPlayers()!=null)
-                    visibili.addAll(c.getPlayers());
-                visibili=runner(visibili,c.getEast());
-            }
-            if(c.getWest() !=null)
-            {
-                if(c.getPlayers()!=null)
-                    visibili.addAll(c.getPlayers());
-                visibili=runner(visibili,c.getWest());
-            }
-            if(c.getSouth() !=null)
-            {
-                if(c.getPlayers()!=null)
-                    visibili.addAll(c.getPlayers());
-                visibili=runner(visibili,c.getSouth());
-            }
+        if(c.getNorth() !=null)
+        {
+            c=c.getNorth();
+            if(c.getPlayers()!=null)
+                visibili.addAll(c.getPlayers());
+            c.setVisited();
+            visibili=runner(visibili,c);
+        }
+        if(c.getEast() !=null && c.alreadyVisited()==false)
+        {
+            c=c.getEast();
+            if(c.getPlayers()!=null)
+                visibili.addAll(c.getPlayers());
+            c.setVisited();
+            visibili=runner(visibili,c);
+        }
+        if(c.getWest() !=null && c.alreadyVisited()==false)
+        {
+            c=c.getWest();
+            if(c.getPlayers()!=null)
+                visibili.addAll(c.getPlayers());
+            c.setVisited();
+            visibili=runner(visibili,c);
+        }
+        if(c.getSouth() !=null && c.alreadyVisited()==false)
+        {
+            c=c.getSouth();
+            if(c.getPlayers()!=null)
+                visibili.addAll(c.getPlayers());
+            c.setVisited();
+            visibili=runner(visibili,c);
+        }
 
 
-            return visibili;//handle a nullPointerExcpetion if you can't see any other player
+        return visibili;//handle a nullPointerExcpetion if you can't see any other player
+        //call a map.setUnvisited
     }
     /**
      * @return a list of the players the current player can see
@@ -218,29 +226,37 @@ public class Player {
 //useful differentiate because the first check can change the color, after the first one thc eoclor must be all the same
     public List<Player> runner(List<Player> visibili,Cell c)
     {
-        if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor())//if the color is different you change the room, so you can't see other players
+        if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor()&& c.alreadyVisited()==false)//if the color is different you change the room, so you can't see other players
         {
+            c=c.getNorth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
-            visibili=runner(visibili,c.getNorth());
+            c.setVisited();
+            visibili=runner(visibili,c);
         }
-        if(c.getEast() !=null && c.getEast().getColor()==c.getColor())
+        if(c.getEast() !=null && c.getEast().getColor()==c.getColor()&& c.alreadyVisited()==false)
         {
+            c=c.getEast();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
-            visibili=runner(visibili,c.getEast());
+            c.setVisited();
+            visibili=runner(visibili,c);
         }
-        if(c.getWest() !=null && c.getWest().getColor()==c.getColor())
+        if(c.getWest() !=null && c.getWest().getColor()==c.getColor()&& c.alreadyVisited()==false)
         {
+            c=c.getWest();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
-            visibili=runner(visibili,c.getWest());
+            c.setVisited();
+            visibili=runner(visibili,c);
         }
-        if(c.getSouth() !=null && c.getSouth().getColor()==c.getColor())
+        if(c.getSouth() !=null && c.getSouth().getColor()==c.getColor()&& c.alreadyVisited()==false)
         {
+            c=c.getSouth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
-            visibili=runner(visibili,c.getSouth());
+            c.setVisited();
+            visibili=runner(visibili,c);
         }
         return visibili;
     }
@@ -308,7 +324,7 @@ public class Player {
     }
 
     /**
-     * @param fromPlayerId 
+     * @param fromPlayerId
      * @param value
      */
     public void setDmg(int fromPlayerId, int value) {
@@ -316,7 +332,7 @@ public class Player {
     }
 
     /**
-     * @param fromPlayerId 
+     * @param fromPlayerId
      * @param value
      */
     public void setMarks(int fromPlayerId, int value) {

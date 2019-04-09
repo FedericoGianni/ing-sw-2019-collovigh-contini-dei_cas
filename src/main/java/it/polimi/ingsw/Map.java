@@ -369,5 +369,20 @@ public class Map {
 
         }
     }
+    void setUnvisited()//always call after a search for set the cells unvisited
+    {
+        int cont=0;
+        int r=0;
+        int c=0;
+        for(r=0;r<3;r++)
+        {
+            for(c=0;c<4;c++)
+            {
+                if(getCell(r,c)!=null)
+                    getCell(r,c).unvisit();
+            }
+        }
+
+    }
 
 }
