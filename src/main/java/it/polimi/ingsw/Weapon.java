@@ -7,59 +7,80 @@ import java.util.*;
  */
 public class Weapon {
 
+    private String name;
+    private boolean isLoaded;
+    private List<AmmoCube> cost;
+    private List<MacroEffect> effects;
+
     /**
-     * Default constructor
+     * Constructor,
+     *
+     * isLoaded is set on true because Weapons are loaded when bought
+     * effects are not filled in the creator
      */
-    public Weapon() {
+    public Weapon(String name, List<AmmoCube> cost) {
+
+        this.name = name;
+        this.isLoaded = true;
+        this.cost = cost;
+        effects = new ArrayList<>();
     }
 
-    /**
-     * 
-     */
-    private boolean isLoaded;
 
     /**
-     * 
-     */
-    private List<AmmoCube> cost;
-
-    /**
-     * 
-     */
-    private List<FireMode> fireModes;
-
-
-
-
-    /**
-     * @return
+     * @return Boolean for if the weapon is loaded
      */
     public Boolean isLoaded() {
-        // TODO implement here
-        return null;
+
+        return this.isLoaded;
     }
 
     /**
-     * @return
+     * @return true only if the player has enough ammo for reloading the Weapon
      */
     public Boolean canBeReloaded() {
-        // TODO implement here
-        return null;
+
+        //TODO
+        return false;
     }
 
     /**
-     * 
+     *  reload the weapon
      */
     public void reload() {
         // TODO implement here
     }
 
     /**
-     * @return
+     * @return the cost of buying this Weapon so the cost of recharge without the first cube
      */
     public List<AmmoCube> getCost() {
-        // TODO implement here
-        return null;
+
+        return cost.subList(1,cost.size());
     }
 
+    /**
+     *
+     * @return the name of the Weapon
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     *
+     * @return the list of macro-effects
+     */
+    public List<MacroEffect> getEffects() {
+        return effects;
+    }
+
+    /**
+     *
+     * @param macroEffect is the effect that will be added to the Weapon
+     */
+    public void addMacroEffect(MacroEffect macroEffect){
+
+        this.effects.add(macroEffect);
+    }
 }
