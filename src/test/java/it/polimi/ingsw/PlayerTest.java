@@ -10,14 +10,6 @@ import static junit.framework.TestCase.assertTrue;
 class PlayerTest {
 
     @Test
-    void hasMaxPowerUp() {
-    }
-
-    @Test
-    void hasMaxWeapons() {
-    }
-
-    @Test
     void canSee() {
         Map map = new Map();//geerate the map
         map.getMap(2);
@@ -43,11 +35,4 @@ class PlayerTest {
 
     }
 
-    @Test
-    void runner() {
-    }
-
-    @Test
-    void incrDeaths() {
-    }
 }
