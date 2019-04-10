@@ -32,18 +32,35 @@ class AmmoCardTest {
     @Test
     void getPowerUp() {
 
+        for (int w = 0; w < 100; w++) {
+
+
+            int i = 0;
+            int CARD_NUMBER = 36;
+            int cardTested = CARD_NUMBER * 10;
+            int tolerance = 30;
+
+
+            for (int k = 0; k < (cardTested); k++) {
+
+
+                    Boolean temp = AmmoCard.generateRandCard().getPowerUp();
+
+
+                if (temp) i++;
+
+
+            }
+
+            System.out.println(i);
+            System.out.println((cardTested/2) - i);
+
+            assertTrue(Math.abs((cardTested/2) - i) <= tolerance);
+
+        }
+
         
     }
 
-    @Test
-    void getAmmoCube1() {
-    }
 
-    @Test
-    void getAmmoCube2() {
-    }
-
-    @Test
-    void getAmmoCube3() {
-    }
 }

@@ -56,7 +56,7 @@ class PowerUpDeckTest {
     void getRandomCard() {
 
         // to be fair this test can possibly fail, because since the cards are drawn casually there is a chance that two set of card picked casually result to be the same set,
-        // tho is quite rare ( 1/24!)
+        // tho it is quite rare ( 1/24!)
 
         PowerUpDeck deck = PowerUpDeck.populatedDeck();
 
