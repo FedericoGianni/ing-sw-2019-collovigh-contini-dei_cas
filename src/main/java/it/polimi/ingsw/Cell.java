@@ -127,7 +127,7 @@ public class Cell {
      * generated randomly every time a Player wants to check what Ammo is placed inside this Cell
      */
     public AmmoCard getAmmoPlaced() {
-        
+
         return ammoPlaced;
     }
 
