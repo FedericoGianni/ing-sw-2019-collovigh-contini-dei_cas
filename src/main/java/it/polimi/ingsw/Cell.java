@@ -6,14 +6,13 @@ import java.util.List;
 /**
  * 
  */
-public class Cell {
+public abstract class Cell {
 
     /**
      * Default constructor
      */
     public Cell() {
         this.visit=false;
-        ammoPlaced = AmmoCard.generateRandCard();
     }
 
 
@@ -25,12 +24,9 @@ public class Cell {
         this.adjWest = adjWest;
         this.playersHere=null;
         this.visit=false;
-        ammoPlaced = AmmoCard.generateRandCard();
     }
 
     private CellColor color;
-
-    private AmmoCard ammoPlaced;
     private boolean visit;
     private Cell adjNorth;
     private Cell adjSouth;
@@ -91,56 +87,74 @@ public class Cell {
         return this.adjWest;
     }
 
+    /**
+     *
+     * @return
+     */
+    public List<Weapon> getWeapons(){
+        return null;
+    }
 
+    /**
+     *
+     * @return null since this is the abstract class and SpawnCell doesn't have Ammo inside
+     * the method is instead overrided in AmmoCell method so that it returns the Ammo placed
+     */
+    public AmmoCard getAmmoPlaced(){
+        return null;
+    }
+
+    /**
+     *
+     * @return ull since this is the abstract class and SpawnCell doesn't have Ammo inside
+     * the method is instead overrided in AmmoCell method so that it returns the Ammo placed to be
+     * taken by the player who calls this method
+     */
+    public AmmoCard pickAmmoPlaced(){
+        return null;
+    }
+
+    /**
+     *
+     * @return a list of Players who are currently inside this Cell
+     */
     public List<Player> getPlayers()
     {
         return this.playersHere;
     }
 
+    /**
+     *
+     * @param p Player to be added inside this cell
+     */
     public void addPlayerHere(Player p)
     {
         this.playersHere.add(p);
     }
 
+    /**
+     *
+     * @param p Player to be removed from this cell
+     */
     public void removePlayerFromHere(Player p)
     {
         this.playersHere.remove(p);
     }
 
-
-    public void setVisited(){
+    public void setVisited() {
         this.visit=true;
     }
 
-    public boolean alreadyVisited(){
+    public boolean alreadyVisited() {
         return this.visit;
     }
 
-    public void unvisit()
-    {
+    public void unvisit() {
         this.visit=false;
     }
 
-    /**
-     * @return a randomly generated Ammo Card, based on the probability of the real on-board game deck
-     * the ammoPlaced is generated randomly inside the creator so that the ammo is the same for all players and is not
-     * generated randomly every time a Player wants to check what Ammo is placed inside this Cell
-     */
-    public AmmoCard getAmmoPlaced() {
 
-        return ammoPlaced;
-    }
 
-    /**
-     * @return the Ammo picked up by Player inside this Cell, also it generates a new PowerUp to be placed inside Cell
-     */
-    public AmmoCard pickAmmoPlaced() {
-
-        AmmoCard tempAmmo = ammoPlaced;
-        ammoPlaced = AmmoCard.generateRandCard();
-
-        return tempAmmo;
-    }
 
 
 }

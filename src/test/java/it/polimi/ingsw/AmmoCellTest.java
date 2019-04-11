@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CellTest {
+class AmmoCellTest {
 
     @Test
     void getColor() {
@@ -23,7 +23,7 @@ class CellTest {
 
         AmmoCard card = AmmoCard.generateRandCard();
 
-        assert(m.getCell(0, 0).getAmmoPlaced() != null);
+        assert (m.getCell(0, 0).getAmmoPlaced() != null);
         assertEquals(m.getCell(0, 1).getAmmoPlaced().getClass(), card.getClass());
     }
 
@@ -35,9 +35,9 @@ class CellTest {
 
         AmmoCard c1;
         AmmoCard c2;
-        m.getCell(0,0 ).pickAmmoPlaced();
+        m.getCell(0, 0).pickAmmoPlaced();
 
-        c1 = m.getCell(0,0).pickAmmoPlaced();
+        c1 = m.getCell(0, 0).pickAmmoPlaced();
         c2 = m.getCell(0, 0).pickAmmoPlaced();
 
         //Note that there's a chance that the method that generate a random PowerUp returns a randomly generated

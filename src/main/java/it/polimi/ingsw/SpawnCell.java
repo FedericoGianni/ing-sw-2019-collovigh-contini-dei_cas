@@ -1,6 +1,6 @@
 package it.polimi.ingsw;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 
@@ -14,6 +14,9 @@ public class SpawnCell extends Cell {
         this.visit=false;
     }
 
+    /**
+     * attribute useful for canSee method, which need to check if the cell has already been visited or not
+     */
     private boolean visit;
 
     /**
@@ -22,12 +25,13 @@ public class SpawnCell extends Cell {
     private List<Weapon> weapons;
 
     /**
-     * @return
+     * @return a list of Weapons who are avaiable for sell inside this SpawnCell
      */
+    @Override
     public List<Weapon> getWeapons() {
-        // TODO implement here
-        return null;
+        return weapons;
     }
+
 
     /**
      * @param w 

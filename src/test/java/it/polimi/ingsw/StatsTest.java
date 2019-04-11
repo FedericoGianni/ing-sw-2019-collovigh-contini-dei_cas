@@ -15,7 +15,7 @@ class StatsTest {
     @Test
     void setMarks() {
 
-        Cell cell = new Cell();
+        Cell cell = new AmmoCell();
         Stats stats = new Stats(cell);
 
         List<Integer> list = new ArrayList<>();
@@ -46,7 +46,7 @@ class StatsTest {
     @Test
     void getMarks(){
 
-        Cell cell = new Cell();
+        Cell cell = new AmmoCell();
         Stats stats = new Stats(cell);
 
         List<Integer> list = stats.getMarks();
@@ -68,7 +68,7 @@ class StatsTest {
     @Test
     void addMarks() {
 
-        Cell cell = new Cell();
+        Cell cell = new AmmoCell();
         Stats stats = new Stats(cell);
 
         for (int i = 0; i < 10; i++) {
@@ -88,7 +88,7 @@ class StatsTest {
     @Test
     void setDmgTaken() {
 
-        Cell cell = new Cell();
+        Cell cell = new AmmoCell();
         Stats stats = new Stats(cell);
 
         List<Integer> list = new ArrayList<>();
@@ -126,7 +126,7 @@ class StatsTest {
     @Test
     void getDmgTaken(){
 
-        Cell cell = new Cell();
+        Cell cell = new AmmoCell();
         Stats stats = new Stats(cell);
 
         List<Integer> list = stats.getDmgTaken();
@@ -155,7 +155,7 @@ class StatsTest {
 
         int maxDmg = 12;
 
-        Cell cell = new Cell();
+        Cell cell = new AmmoCell();
         Stats stats = new Stats(cell);
 
         assertThrows(DeadPlayerException.class, () -> {

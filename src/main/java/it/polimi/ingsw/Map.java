@@ -24,8 +24,6 @@ public class Map {
 
     private Cell[][] matrix;
 
-    //private static Map singleton = null;
-
     private int mapType;
 
     public Cell[][] getMatrix() {
@@ -124,19 +122,19 @@ public class Map {
 
             case 1:
 
-                (this.matrix[0][0]) = new Cell();
-                (this.matrix[0][1]) = new Cell();
+                (this.matrix[0][0]) = new AmmoCell();
+                (this.matrix[0][1]) = new AmmoCell();
                 (this.matrix[0][2]) = new SpawnCell();
                 (this.matrix[0][3]) = null;
 
                 (this.matrix[1][0]) = new SpawnCell();
-                (this.matrix[1][1]) = new Cell();
-                (this.matrix[1][2]) = new Cell();
-                (this.matrix[1][3]) = new Cell();
+                (this.matrix[1][1]) = new AmmoCell();
+                (this.matrix[1][2]) = new AmmoCell();
+                (this.matrix[1][3]) = new AmmoCell();
 
                 (this.matrix[2][0]) = null;
-                (this.matrix[2][1]) = new Cell();
-                (this.matrix[2][2]) = new Cell();
+                (this.matrix[2][1]) = new AmmoCell();
+                (this.matrix[2][2]) = new AmmoCell();
                 (this.matrix[2][3]) = new SpawnCell();
 
                 (this.matrix[0][0]).setAdjNorth(null);
@@ -206,19 +204,19 @@ public class Map {
 
             case 2:
 
-                (this.matrix[0][0]) = new Cell();
-                (this.matrix[0][1]) = new Cell();
+                (this.matrix[0][0]) = new AmmoCell();
+                (this.matrix[0][1]) = new AmmoCell();
                 (this.matrix[0][2]) = new SpawnCell();
-                (this.matrix[0][3]) = new Cell();
+                (this.matrix[0][3]) = new AmmoCell();
 
                 (this.matrix[1][0]) = new SpawnCell();
-                (this.matrix[1][1]) = new Cell();
-                (this.matrix[1][2]) = new Cell();
-                (this.matrix[1][3]) = new Cell();
+                (this.matrix[1][1]) = new AmmoCell();
+                (this.matrix[1][2]) = new AmmoCell();
+                (this.matrix[1][3]) = new AmmoCell();
 
                 (this.matrix[2][0]) = null;
-                (this.matrix[2][1]) = new Cell();
-                (this.matrix[2][2]) = new Cell();
+                (this.matrix[2][1]) = new AmmoCell();
+                (this.matrix[2][2]) = new AmmoCell();
                 (this.matrix[2][3]) = new SpawnCell();
 
                 (this.matrix[0][0]).setAdjNorth(null);
@@ -291,19 +289,19 @@ public class Map {
 
             case 3:
 
-                (this.matrix[0][0]) = new Cell();
-                (this.matrix[0][1]) = new Cell();
+                (this.matrix[0][0]) = new AmmoCell();
+                (this.matrix[0][1]) = new AmmoCell();
                 (this.matrix[0][2]) = new SpawnCell();
-                (this.matrix[0][3]) = new Cell();
+                (this.matrix[0][3]) = new AmmoCell();
 
                 (this.matrix[1][0]) = new SpawnCell();
-                (this.matrix[1][1]) = new Cell();
-                (this.matrix[1][2]) = new Cell();
-                (this.matrix[1][3]) = new Cell();
+                (this.matrix[1][1]) = new AmmoCell();
+                (this.matrix[1][2]) = new AmmoCell();
+                (this.matrix[1][3]) = new AmmoCell();
 
-                (this.matrix[2][0]) = new Cell();
-                (this.matrix[2][1]) = new Cell();
-                (this.matrix[2][2]) = new Cell();
+                (this.matrix[2][0]) = new AmmoCell();
+                (this.matrix[2][1]) = new AmmoCell();
+                (this.matrix[2][2]) = new AmmoCell();
                 (this.matrix[2][3]) = new SpawnCell();
 
                 (this.matrix[0][0]).setAdjNorth(null);
