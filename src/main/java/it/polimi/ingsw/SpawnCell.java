@@ -1,5 +1,6 @@
 package it.polimi.ingsw;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +13,20 @@ public class SpawnCell extends Cell {
      */
     public SpawnCell() {
         this.visit=false;
+    }
+
+    /**
+     * This constructor is used to return a copy of the SpawnCell passed as a parameter
+     * @param clone SpawnCell to be cloned
+     */
+    public SpawnCell(AmmoCell clone){
+        super(clone);
+        this.weapons = new ArrayList<Weapon>();
+
+        for(Weapon w : clone.getWeapons()){
+            this.weapons.add(w);
+        }
+
     }
 
     /**

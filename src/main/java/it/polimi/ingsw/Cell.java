@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ *
  */
 public abstract class Cell {
 
@@ -15,15 +15,36 @@ public abstract class Cell {
         this.visit=false;
     }
 
-
+    /**
+     * This constructor can be used to initialize the Cell passing some parameters
+     * @param color Cell color
+     * @param adjNorth a Cell adjacent to the north of the Cell which is going to be constructed, null if there are none
+     * @param adjSouth a Cell adjacent to the south of the Cell which is going to be constructed, null if there are none
+     * @param adjEast a Cell adjacent to the east of the Cell which is going to be constructed, null if there are none
+     * @param adjWest a Cell adjacent to the west of the Cell which is going to be constructed, null if there are none
+     */
     public Cell(CellColor color, Cell adjNorth, Cell adjSouth, Cell adjEast, Cell adjWest) {
         this.color = color;
         this.adjNorth = adjNorth;
         this.adjSouth = adjSouth;
         this.adjEast = adjEast;
         this.adjWest = adjWest;
-        this.playersHere=null;
-        this.visit=false;
+        this.playersHere = null;
+        this.visit = false;
+    }
+
+    /**
+     * This constructor is used to return a copy of the Cell passed as a parameter
+     * @param clone Cell to be cloned
+     */
+    public Cell(Cell clone){
+        this.color = clone.color;
+        this.adjNorth = clone.adjNorth;
+        this.adjSouth = clone.adjSouth;
+        this.adjEast = clone.adjEast;
+        this.adjWest = clone.adjWest;
+        this.playersHere = clone.playersHere;
+        this.visit = clone.visit;
     }
 
     private CellColor color;

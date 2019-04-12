@@ -18,6 +18,10 @@ public class PowerUpDeck implements Deck<PowerUp> {
         this.powerUpList = new ArrayList<>();
     }
 
+    public PowerUpDeck(PowerUpDeck clone){
+        this.powerUpList = new ArrayList<>(clone.powerUpList);
+    }
+
     /**
      *
      * this function is thought to be called jut once at the beginning of the game

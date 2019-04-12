@@ -26,6 +26,17 @@ public class Weapon {
         effects = new ArrayList<>();
     }
 
+    public Weapon(Weapon clone){
+        this.name = clone.name;
+        this.isLoaded = clone.isLoaded;
+        this.cost = clone.cost;
+        this.effects = new ArrayList<>();
+
+        for(MacroEffect e : clone.effects){
+            this.effects.add(e);
+        }
+    }
+
 
     /**
      * @return Boolean for if the weapon is loaded

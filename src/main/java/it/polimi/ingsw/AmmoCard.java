@@ -23,6 +23,21 @@ public class AmmoCard {
 
     private static Random random;  //don't know why but SonarLint want it to be here even though it have no reason to be
 
+    /**
+     *This constructor is used to create a copy of the AmmoCard passed as a parameter
+     * @param clone AmmoCard to be copied
+     */
+    public AmmoCard(AmmoCard clone){
+        if(this.powerUp = false){
+            this.ammoCube1 = clone.ammoCube1;
+            this.ammoCube2 = clone.ammoCube2;
+            this.ammoCube3 = clone.ammoCube3;
+        }else{
+            this.ammoCube1 = clone.ammoCube1;
+            this.ammoCube2 = clone.ammoCube2;
+            this.powerUp = clone.getPowerUp();
+        }
+    }
 
     /**
      *

@@ -22,6 +22,15 @@ public class Map {
         this.matrix = new Cell[MAP_R][MAP_C];
     }
 
+    /**
+     * This constructor is used to create a c
+     * @param clone
+     */
+    public Map(Map clone){
+        this.mapType = clone.mapType;
+        this.matrix = clone.matrix;
+    }
+
     private Cell[][] matrix;
 
     private int mapType;

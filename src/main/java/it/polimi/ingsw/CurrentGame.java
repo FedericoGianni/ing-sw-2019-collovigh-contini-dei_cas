@@ -1,5 +1,6 @@
 package it.polimi.ingsw;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,6 +21,22 @@ public class CurrentGame {
         this.powerUpDeck =  PowerUpDeck.populatedDeck();
         this.weaponDeck = new WeaponDeck();
         this.thrashPowerUpDeck = new PowerUpDeck();
+    }
+
+    /**
+     * This constructor is used to create a copy of the CurrentGame instance passed as parameter
+     * @param clone CurrentGame instance to be copied
+     */
+    public CurrentGame(CurrentGame clone){
+        this.players = new ArrayList<Player>();
+        for(Player p : clone.players){
+            this.players.add(p);
+        }
+        this.currentMap = clone.currentMap;
+        this.roundNumber = clone.roundNumber;
+        this.powerUpDeck =  new PowerUpDeck(clone.powerUpDeck);
+        this.weaponDeck = new WeaponDeck(clone.weaponDeck);
+        this.thrashPowerUpDeck = new PowerUpDeck(clone.thrashPowerUpDeck);
     }
 
     private List<Player> players;

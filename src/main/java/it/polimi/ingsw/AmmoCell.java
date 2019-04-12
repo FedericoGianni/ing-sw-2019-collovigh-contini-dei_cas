@@ -13,6 +13,14 @@ public class AmmoCell extends Cell {
         ammoPlaced = AmmoCard.generateRandCard();
     }
 
+    /**
+     * This constructor is used to return a copy of the AmmoCell passed as a parameter
+     * @param clone AmmoCell to be cloned
+     */
+    public AmmoCell(AmmoCell clone){
+        super(clone);
+        this.ammoPlaced = new AmmoCard(clone.ammoPlaced);
+    }
 
     private AmmoCard ammoPlaced;
 
