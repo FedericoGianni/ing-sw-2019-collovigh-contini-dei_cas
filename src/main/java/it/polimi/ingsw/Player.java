@@ -17,7 +17,7 @@ public class Player {
     public Player(String nome,Cell posizione){//just for test purpouse
         this.name=nome;
         this.setPlayerPos(posizione);
-
+        posizione.addPlayerHere(this);
     }
 
     /**
