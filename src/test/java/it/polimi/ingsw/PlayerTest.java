@@ -35,7 +35,7 @@ class PlayerTest {
 
     }
 
-    @Test //second test, more complex
+    @Test // second test, more features
     void canSee2() {
         Map map = new Map();//geerate the map
         map.getMap(2);
