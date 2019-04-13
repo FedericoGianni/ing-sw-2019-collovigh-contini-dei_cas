@@ -22,7 +22,7 @@ public class KineticRay extends PowerUp {
      */
     public void use(Player p, Cell dest) {
 
-        Cell previousPos = p.getCurrentPosition();
+
 
 
 

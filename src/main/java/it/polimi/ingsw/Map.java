@@ -31,7 +31,7 @@ public class Map {
         this.matrix = clone.matrix;
     }
 
-    private Cell[][] matrix;
+    private final Cell[][] matrix;
 
     private int mapType;
 

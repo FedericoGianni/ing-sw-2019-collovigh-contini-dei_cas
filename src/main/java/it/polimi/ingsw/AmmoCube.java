@@ -7,7 +7,7 @@ package it.polimi.ingsw;
  */
 public class AmmoCube {
 
-    private Color color;
+    private final Color color;
 
     /**
      *
@@ -31,5 +31,10 @@ public class AmmoCube {
 
 
         return color;
+    }
+
+    @Override
+    public String toString() {
+        return "Color = " + color;
     }
 }

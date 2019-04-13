@@ -5,7 +5,7 @@ package it.polimi.ingsw;
  */
 public abstract class PowerUp {
 
-    private Color color;
+    private final Color color;
 
     /**
      *
@@ -24,7 +24,5 @@ public abstract class PowerUp {
 
         return new AmmoCube(this.color);
     }
-
-
 
 }

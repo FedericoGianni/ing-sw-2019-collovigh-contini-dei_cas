@@ -1,173 +1,172 @@
 package it.polimi.ingsw;
 
+import customsexceptions.DeadPlayerException;
+
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- *
+ * This Class represents the Player
  */
 public class Player {
 
     /**
      * Default constructor
      */
-    public Player() {
+    public Player(){
 
+        super();
+    }
+
+    /**
+     * Real constructor
+     * @param name is a string with the name chosen by the player is also the login identifier
+     * @param id is a numeric identifier that also represents the place in the turn
+     * @param color is the color of the character chosen by the player
+     */
+    public Player(String name, int id, PlayerColor color) {
+
+        this.name = name;
+        this.id = id;
+        this.color = color;
+
+        this.stats = new Stats(null);
+        this.currentPowerUps = new PowerUpBag();
+        this.ammo = new AmmoBag();
 
     }
-    public Player(String nome,Cell posizione){//just for test purpouse
+
+
+
+    /**
+     * IDK
+     */
+    public Player(String nome,Cell posizione){//just for test purpose
         this.name=nome;
         this.setPlayerPos(posizione);
         posizione.addPlayerHere(this);
     }
 
-    /**
-     *
-     */
-    private String name;
 
-    /**
-     *
-     */
+    private  String name;
     private int id;
+    private PlayerColor color;
+    private Stats stats;
+    private PowerUpBag currentPowerUps;
+    private AmmoBag ammo;
 
-    /**
-     *
-     */
-    private List<Weapon> currentWeapons;
 
-    /**
-     *
-     */
-    private Cell currentPosition;
-
-    /**
-     *
-     */
-    private List<PowerUp> currentPowerUps;
-
-    /**
-     *
-     */
-    private List<Integer> dmgTaken;
-
-    /**
-     *
-     */
-    private boolean adrAct1;
-
-    /**
-     *
-     */
-    private boolean adrAct2;
-
-    /**
-     *
-     */
-    private int deaths;
-
-    /**
-     *
-     */
-    private int[] marks = new int[3];
-
-    /**
-     *
-     */
-    private int score;
-
-    /**
-     *
-     */
-    private List<AmmoCube> Ammo;
 
 
     /**
-     * @return
+     * @return the current position of the player
      */
     public Cell getCurrentPosition() {
 
-        return this.currentPosition;
+        return this.stats.getCurrentPosition();
     }
 
     /**
-     * @param c
+     * @param c set the player's position in the map
      */
     public void setPlayerPos(Cell c) {
-        this.currentPosition=c;
+
+        this.stats.setCurrentPosition(c);
     }
 
     /**
-     * @return
+     * @return the player's identifier
      */
     public int getPlayerId() {
         return this.id;
     }
 
     /**
-     * @return
+     * @return the player's name
      */
     public String getPlayerName() {
         return this.name;
     }
 
     /**
-     * @return
+     * @return the player's weapon list
      */
     public List<Weapon> getWeapon(Player p) {
-        return p.currentWeapons;
+
+        return null;  //TODO
     }
 
     /**
-     * @param w
+     * @param w is the weapon to add
      */
     public void addWeapon(Weapon w) {
-        // the controller package chacks that a player mustn't have more than 3 weapons
-        this.currentWeapons.add(w);
+        // TODO
+
     }
 
     /**
-     * @param w
+     * @param w is the weapon to delete
      */
     public void delWeapon(Weapon w) {
-        this.currentWeapons.remove(w);
+
+        //TODO
     }
 
     /**
-     * @return
+     * @return the player's powerUp list
      */
-    public List<PowerUp> getPowerUps(Player p) {
+    public List<PowerUp> getPowerUps() {
 
-        return p.currentPowerUps;
+        return this.currentPowerUps.getList();
     }
 
     /**
-     * @return
+     * This action will delete one powerUp from Player's inventory and add it's value to the AmmoBag
+     *
+     * IMPORTANT NOTE: this method will NOT add the power up to the trash power up deck
+     *
+     * @param powerUp is the power up that needs to be turn into AmmoCubes
+     */
+    public void sellPowerUp(PowerUp powerUp){
+
+       this.ammo.addItem(this.currentPowerUps.sellItem(powerUp));
+
+    }
+
+    /**
+     * @return true if the player has already 3 powerUps
      */
     public Boolean hasMaxPowerUp(Player p) {
-        if(p.currentPowerUps.size()==3)
-            return true;
-        return false;
-    }
-
-    public Boolean hasMaxWeapons(Player p) {
-        if(p.currentWeapons.size()==3)
+        if(p.currentPowerUps.getList().size()==3)
             return true;
         return false;
     }
 
     /**
+     *
      * @param p
+     * @return
+     */
+    public Boolean hasMaxWeapons(Player p) {
+       // if(p.currentWeapons.size()==3)
+        //    return true;
+
+        //TODO
+
+        return false;
+    }
+
+    /**
+     * This method adds a power up to the player's inventory
+     *
+     * @param p is the powerUp to add
      */
     public void addPowerUp(PowerUp p) {
-        this.currentPowerUps.add(p);
+
+        this.currentPowerUps.addItem(p);
     }
 
-    /**
-     * @param p
-     */
-    public void delPowerUp(PowerUp p) {
-        this.currentPowerUps.remove(p);
-    }
+
 
 
     public List<Player> canTarget() {
@@ -271,79 +270,91 @@ public class Player {
     }
 
     /**
-     * @param c
+     * @param c is the ammo cube to add
      */
     public void addCube(AmmoCube c) {
-        // TODO implement here
+        this.ammo.addItem(c);
     }
 
     /**
-     * @return
+     *
+     * @return the list of ammo cubes
      */
-    public int blueCubes() {
-        // TODO implement here
-        return 0;
+    public List<AmmoCube> getAmmo(){
+
+        return this.ammo.getList();
     }
 
     /**
-     * @return
+     * This function will subtract an ammo cube of the given
+     * @param color and
+     * @return it
      */
-    public int yellowCubes() {
-        // TODO implement here
-        return 0;
+    public AmmoCube pay(Color color){
+
+        return this.ammo.getItem(this.ammo.getList().stream()
+                .filter( ammoCube -> ammoCube.getColor()==color)
+                .collect(Collectors.toList())
+                .get(0)
+        );
+
+        
     }
 
     /**
-     * @return
-     */
-    public int redCubes() {
-        // TODO implement here
-        return 0;
-    }
-
-    /**
-     * @return
+     * @return the deaths count of the player
      */
     public int numDeaths() {
-        // TODO implement here
-        return 0;
+
+        return this.stats.getDeaths();
     }
 
     /**
-     * @param
+     *
+     * this function is meant to be used only in Game recovery (EG: load a saved game)
+     * @param deaths the deaths count of the player
      */
-    public void setDeath()
-    {
-        this.deaths=deaths++;
+    public void setDeath(int deaths) {
+
+        this.stats.setDeaths(deaths);
     }
-    public void incrDeaths( Boolean death) {//---- senses?
-        if(death==true)
-        {
-            setDeath();
+
+
+    /**
+     * increase the deaths count by 1
+     */
+    public void incrDeaths( ) {
+
+        this.stats.addDeath();
+    }
+
+    /**
+     * @param fromPlayerId is the id of the player who made the damage
+     * @param value is the value of the damage
+     */
+    public void addDmg(int fromPlayerId, int value) throws DeadPlayerException {
+
+        this.stats.addDmgTaken(value, fromPlayerId);
+    }
+
+    /**
+     * @param fromPlayerId is the id of the player who gave the marks
+     * @param value is the number of marks
+     */
+    public void addMarks(int fromPlayerId, int value) {
+
+        for (int i = 0; i < value ; i++) {
+
+            this.stats.addMarks(fromPlayerId);
         }
     }
 
     /**
-     * @param fromPlayerId
-     * @param value
-     */
-    public void setDmg(int fromPlayerId, int value) {
-        // TODO implement here
-    }
-
-    /**
-     * @param fromPlayerId
-     * @param value
-     */
-    public void setMarks(int fromPlayerId, int value) {
-        // TODO implement here
-    }
-
-    /**
-     * @param value
+     * @param value is the score to be added
      */
     public void addScore(int value) {
-        // TODO implement here
+
+        this.stats.addScore(value);
     }
 
 }

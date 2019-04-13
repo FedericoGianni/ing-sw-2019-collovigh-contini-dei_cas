@@ -6,7 +6,6 @@ import customsexceptions.OverMaxDmgException;
 import customsexceptions.OverMaxMarkException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Stats {
@@ -16,7 +15,13 @@ public class Stats {
 
     private int score;
     private int deaths;
+    /**
+     * this is an arrayList which contains max MAX_MARKS Integer each one representing the id of the offending player
+     */
     private List<Integer> marks = new ArrayList<>();
+    /**
+     * this is an ArrayList which contains max MAX_DMG Integer (Overkill) each one representing the id of the offending player
+     */
     private List<Integer> dmgTaken = new ArrayList<>();
     private Cell currentPosition;
 
@@ -58,7 +63,7 @@ public class Stats {
 
     /**
      *
-     * @return how many times the player died
+     * @return the deaths count of the player
      */
     public int getDeaths() {
         return deaths;
@@ -67,7 +72,7 @@ public class Stats {
     /**
      *
      * this function is meant to be used only in Game recovery (EG: load a saved game)
-     * @param deaths sets the player deaths
+     * @param deaths the deaths count of the player
      */
     public void setDeaths(int deaths) {
         this.deaths = deaths;
@@ -171,6 +176,7 @@ public class Stats {
 
 
         if (dmgTaken.size()>= MAX_DMG - 1){
+            this.addDeath();
             throw new DeadPlayerException();
         }
     }
