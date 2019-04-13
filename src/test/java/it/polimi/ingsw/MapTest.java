@@ -1,5 +1,6 @@
 package it.polimi.ingsw;
 
+import customsexceptions.InvalidMapTypeException;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -79,7 +80,7 @@ class MapTest {
     }
 
     @Test
-    void getAdjShouldReturnRightCell(){
+    void getAdjShouldReturnRightCell() {
         Map m = new Map();
         m.getMap(1);
         m.generateCells(1);

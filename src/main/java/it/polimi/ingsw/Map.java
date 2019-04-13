@@ -83,38 +83,37 @@ public class Map {
      * @param mapType integer representing the map type which can be chosen at the creation of the Map
      * @return a Map created based on the current playing map type
      */
-    public Map getMap(int mapType){
+    public Map getMap(int mapType) {
 
         Map m = null;
 
         switch(mapType) {
 
             case 1:
-
-                if(m == null) {
                     m = new Map();
                     m.mapType = 1;
                     m.generateCells(1);
-                }
+
                 break;
 
             case 2:
-
-                if(m == null) {
                     m = new Map();
                     m.mapType = 2;
                     m.generateCells(2);
-                }
+
                 break;
 
             case 3:
-
-                if(m == null){
                     m = new Map();
                     m.mapType = 3;
                     m.generateCells(3);
-                }
+
                 break;
+
+            default:
+
+                break;
+
         }
 
         return m;
@@ -387,29 +386,27 @@ public class Map {
 
                 break;
 
+            default:
+
+                break;
         }
     }
 
     /**
      * Method useful for canSee method inside, which records if canSee algorithm has already visited this Cell
      */
-    void setUnvisited()
-    {
+    void setUnvisited() {
+
     //always call after a search for set the cells unvisited
-        int cont=0;
-        int r=0;
-        int c=0;
-        for(r=0;r<3;r++)
-        {
-            for(c=0;c<4;c++)
-            {
-                if(getCell(r,c)!=null)
+        int cont = 0;
+        int r = 0;
+        int c = 0;
+        for(r = 0; r < MAP_R; r++) {
+            for(c = 0; c < MAP_C; c++) {
+                if(getCell(r,c) != null)
                     getCell(r,c).unvisit();
             }
         }
-
     }
-
-
 
 }

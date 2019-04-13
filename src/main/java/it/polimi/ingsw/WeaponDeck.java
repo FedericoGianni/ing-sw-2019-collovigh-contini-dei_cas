@@ -18,7 +18,7 @@ public class WeaponDeck implements Deck <Weapon> {
      * @param clone WeaponDeck instance to be copied
      */
     public WeaponDeck(WeaponDeck clone){
-        this.weaponDeck = new ArrayList<Weapon>();
+        this.weaponDeck = new ArrayList<>();
         for(Weapon w : clone.weaponDeck){
             this.weaponDeck.add(w);
         }

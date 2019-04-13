@@ -43,7 +43,7 @@ public class Player {
      */
     public Player(String nome,Cell posizione){//just for test purpose
         this.name=nome;
-        this.setPlayerPos(posizione);
+        this.stats = new Stats(posizione);
         posizione.addPlayerHere(this);
     }
 
@@ -71,7 +71,7 @@ public class Player {
      */
     public void setPlayerPos(Cell c) {
 
-        this.stats.setCurrentPosition(c);
+         this.stats.setCurrentPosition(c);
     }
 
     /**
@@ -139,6 +139,7 @@ public class Player {
     public Boolean hasMaxPowerUp(Player p) {
         if(p.currentPowerUps.getList().size()==3)
             return true;
+
         return false;
     }
 
@@ -189,7 +190,7 @@ public class Player {
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getEast() !=null && c.alreadyVisited()==false)
+        if(c.getEast() !=null && !c.alreadyVisited())
         {
             c=c.getEast();
             if(c.getPlayers()!=null)
@@ -197,7 +198,7 @@ public class Player {
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getWest() !=null && c.alreadyVisited()==false)
+        if(c.getWest() !=null && !c.alreadyVisited())
         {
             c=c.getWest();
             if(c.getPlayers()!=null)
@@ -205,7 +206,7 @@ public class Player {
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getSouth() !=null && c.alreadyVisited()==false)
+        if(c.getSouth() !=null && !c.alreadyVisited())
         {
             c=c.getSouth();
             if(c.getPlayers()!=null)
@@ -225,7 +226,7 @@ public class Player {
 //useful differentiate because the first check can change the color, after the first one thc eoclor must be all the same
     public List<Player> runner(List<Player> visibili,Cell c)
     {
-        if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor()&& c.alreadyVisited()==false)//if the color is different you change the room, so you can't see other players
+        if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor() && !c.alreadyVisited())//if the color is different you change the room, so you can't see other players
         {
             c=c.getNorth();
             if(c.getPlayers()!=null)
@@ -233,7 +234,7 @@ public class Player {
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getEast() !=null && c.getEast().getColor()==c.getColor()&& c.alreadyVisited()==false)
+        if(c.getEast() !=null && c.getEast().getColor()==c.getColor() && !c.alreadyVisited())
         {
             c=c.getEast();
             if(c.getPlayers()!=null)
@@ -241,7 +242,7 @@ public class Player {
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getWest() !=null && c.getWest().getColor()==c.getColor()&& c.alreadyVisited()==false)
+        if(c.getWest() !=null && c.getWest().getColor()==c.getColor() && !c.alreadyVisited())
         {
             c=c.getWest();
             if(c.getPlayers()!=null)
@@ -249,7 +250,7 @@ public class Player {
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getSouth() !=null && c.getSouth().getColor()==c.getColor()&& c.alreadyVisited()==false)
+        if(c.getSouth() !=null && c.getSouth().getColor()==c.getColor() && !c.alreadyVisited())
         {
             c=c.getSouth();
             if(c.getPlayers()!=null)

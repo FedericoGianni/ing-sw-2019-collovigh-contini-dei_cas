@@ -53,7 +53,7 @@ public abstract class Cell {
     private Cell adjSouth;
     private Cell adjEast;
     private Cell adjWest;
-    private List<Player> playersHere=new ArrayList<Player>();
+    private List<Player> playersHere=new ArrayList<>();
 
 
     public CellColor getColor() {

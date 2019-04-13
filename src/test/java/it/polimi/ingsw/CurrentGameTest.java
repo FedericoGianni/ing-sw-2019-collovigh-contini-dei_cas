@@ -12,6 +12,7 @@ class CurrentGameTest {
 
     @Test
     void generateInstance() {
+
         List<Player> players = new ArrayList<>();
         Player p1 = new Player();
         Player p2 = new Player();

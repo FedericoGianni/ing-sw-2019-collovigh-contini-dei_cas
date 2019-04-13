@@ -21,7 +21,7 @@ public class SpawnCell extends Cell {
      */
     public SpawnCell(AmmoCell clone){
         super(clone);
-        this.weapons = new ArrayList<Weapon>();
+        this.weapons = new ArrayList<>();
 
         for(Weapon w : clone.getWeapons()){
             this.weapons.add(w);

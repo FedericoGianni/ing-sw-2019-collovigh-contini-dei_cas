@@ -28,7 +28,7 @@ public class CurrentGame {
      * @param clone CurrentGame instance to be copied
      */
     public CurrentGame(CurrentGame clone){
-        this.players = new ArrayList<Player>();
+        this.players = new ArrayList<>();
         for(Player p : clone.players){
             this.players.add(p);
         }

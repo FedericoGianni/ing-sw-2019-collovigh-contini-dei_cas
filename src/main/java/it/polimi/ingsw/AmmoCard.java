@@ -28,7 +28,7 @@ public class AmmoCard {
      * @param clone AmmoCard to be copied
      */
     public AmmoCard(AmmoCard clone){
-        if(this.powerUp = false){
+        if(!this.powerUp){
             this.ammoCube1 = clone.ammoCube1;
             this.ammoCube2 = clone.ammoCube2;
             this.ammoCube3 = clone.ammoCube3;
