@@ -9,7 +9,7 @@ class AmmoCellTest {
     @Test
     void getColor() {
         Map m = new Map();
-        m.getMap(1);
+        m.genMap(1);
         m.generateCells(1);
 
         assertEquals(m.getCell(0, 0).getColor(), CellColor.BLUE);
@@ -18,7 +18,7 @@ class AmmoCellTest {
     @Test
     void getAmmoPlaced() {
         Map m = new Map();
-        m.getMap(1);
+        m.genMap(1);
         m.generateCells(1);
 
         AmmoCard card = AmmoCard.generateRandCard();
@@ -30,7 +30,7 @@ class AmmoCellTest {
     @Test
     void pickAmmoPlaced() {
         Map m = new Map();
-        m.getMap(1);
+        m.genMap(1);
         m.generateCells(1);
 
         AmmoCard c1;

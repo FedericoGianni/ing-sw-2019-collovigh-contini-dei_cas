@@ -95,17 +95,17 @@ public class CurrentGame {
     }
 
     /**
-     * @return a list which contains current players
+     * @return a list which contains a copy of current players
      */
     public List<Player> getPlayers() {
-        return players;
+        return new ArrayList<>(this.players);
     }
 
     /**
-     * @return the actual Map
+     * @return a copy of the actual Map
      */
     public Map getMap() {
-        return currentMap;
+        return new Map(currentMap);
     }
 
     /**

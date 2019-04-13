@@ -2,7 +2,7 @@ package it.polimi.ingsw;
 
 import customsexceptions.DeadPlayerException;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -65,6 +65,7 @@ public class Player {
 
         return this.stats.getCurrentPosition();
     }
+
 
     /**
      * @param c set the player's position in the map

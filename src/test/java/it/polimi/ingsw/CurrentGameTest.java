@@ -22,13 +22,12 @@ class CurrentGameTest {
         players.add(p3);
 
         Map m = new Map();
-        m.getMap(1);
+        m.genMap(1);
         m.generateCells(1);
 
         CurrentGame c = new CurrentGame(players, m);
 
         assert(c.getPlayers().equals(players));
-        assert(c.getMap().equals(m));
     }
 
     @Test
@@ -42,7 +41,7 @@ class CurrentGameTest {
         players.add(p3);
 
         Map m = new Map();
-        m.getMap(1);
+        m.genMap(1);
         m.generateCells(1);
 
         CurrentGame c = new CurrentGame(players, m);
@@ -81,7 +80,7 @@ class CurrentGameTest {
         players.add(p3);
 
         Map m = new Map();
-        m.getMap(1);
+        m.genMap(1);
         m.generateCells(1);
 
         CurrentGame c = new CurrentGame(players, m);
@@ -102,7 +101,7 @@ class CurrentGameTest {
         players.add(p3);
 
         Map m = new Map();
-        m.getMap(1);
+        m.genMap(1);
         m.generateCells(1);
 
         CurrentGame c = new CurrentGame(players, m);
@@ -121,7 +120,7 @@ class CurrentGameTest {
         players.add(p3);
 
         Map m = new Map();
-        m.getMap(1);
+        m.genMap(1);
         m.generateCells(1);
 
         CurrentGame c = new CurrentGame(players, m);

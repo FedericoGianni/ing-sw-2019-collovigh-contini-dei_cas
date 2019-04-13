@@ -14,7 +14,7 @@ class PlayerTest {
 
         //generate the map (type 2)
         Map map = new Map();
-        map.getMap(2);
+        map.genMap(2);
         map.generateCells(2);
 
         //generate a player with a name and its starting position
@@ -41,7 +41,7 @@ class PlayerTest {
 
         //generate the map (type 2)
         Map map = new Map();
-        map.getMap(2);
+        map.genMap(2);
         map.generateCells(2);
 
         //generate players in a fixed position

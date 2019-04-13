@@ -1,8 +1,11 @@
 package it.polimi.ingsw;
 
+import customsexceptions.PlayerNotSeeableException;
+
 import java.awt.*;
 
 import static it.polimi.ingsw.CellColor.*;
+import static java.lang.Math.abs;
 
 /**
  * Class representing the board game Map. It can be of 3 different types depending on the number of players.
@@ -68,6 +71,14 @@ public class Map {
         return null;
     }
 
+    /**
+     *
+     * @return a copy of the actual map
+     */
+    public Map getMap(){
+        return new Map(this);
+    }
+
 
 
     /**
@@ -83,30 +94,30 @@ public class Map {
      * @param mapType integer representing the map type which can be chosen at the creation of the Map
      * @return a Map created based on the current playing map type
      */
-    public Map getMap(int mapType) {
+    public Map genMap(int mapType) {
 
         Map m = null;
 
         switch(mapType) {
 
             case 1:
-                    m = new Map();
-                    m.mapType = 1;
-                    m.generateCells(1);
+                m = new Map();
+                m.mapType = 1;
+                m.generateCells(1);
 
                 break;
 
             case 2:
-                    m = new Map();
-                    m.mapType = 2;
-                    m.generateCells(2);
+                m = new Map();
+                m.mapType = 2;
+                m.generateCells(2);
 
                 break;
 
             case 3:
-                    m = new Map();
-                    m.mapType = 3;
-                    m.generateCells(3);
+                m = new Map();
+                m.mapType = 3;
+                m.generateCells(3);
 
                 break;
 
@@ -407,6 +418,22 @@ public class Map {
                     getCell(r,c).unvisit();
             }
         }
+    }
+
+
+    int getShootingDist(Player p1, Player p2, Map map)  throws PlayerNotSeeableException{
+
+            if (p1.canSee().contains(p2)) {
+                Point d1, d2;
+                d1 = map.cellToCoord(p1.getCurrentPosition());
+                d2 = map.cellToCoord(p2.getCurrentPosition());
+
+                return abs(d1.x - d2.x) + abs(d1.y - d2.y);
+
+            }
+
+            throw new PlayerNotSeeableException();
+
     }
 
 }
