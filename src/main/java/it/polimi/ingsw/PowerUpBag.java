@@ -18,6 +18,17 @@ public class PowerUpBag  implements Bag<PowerUp>{
     }
 
     /**
+     * Returns a copy of the PowerUpBag, passed as a parameter
+     * @param clone PowerUpBag to be cloned
+     */
+    public PowerUpBag(PowerUpBag clone){
+        this.powerUps =  new ArrayList<>();
+        for(PowerUp p : clone.getList()){
+            this.powerUps.add(p);
+        }
+    }
+
+    /**
      *
      * @return a copy of the PowerUp list
      */

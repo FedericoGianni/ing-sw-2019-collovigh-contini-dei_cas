@@ -14,10 +14,9 @@ public class Model {
     }
 
     /**
-     * 
+     *
      */
     private CurrentGame game;
-
 
     /**
      *

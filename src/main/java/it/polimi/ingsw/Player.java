@@ -45,6 +45,8 @@ public class Player {
         this.name=nome;
         this.stats = new Stats(posizione);
         posizione.addPlayerHere(this);
+        this.currentPowerUps = new PowerUpBag();
+        this.ammo = new AmmoBag();
     }
 
 
@@ -114,6 +116,14 @@ public class Player {
     }
 
     /**
+     *
+     * @return  currentPlayer PowerUpBag
+     */
+    public PowerUpBag getPowerUpBag(){
+        return currentPowerUps;
+    }
+
+    /**
      * @return the player's powerUp list
      */
     public List<PowerUp> getPowerUps() {
@@ -175,6 +185,14 @@ public class Player {
         return null;
     }//requires weapon implemntation
 
+
+    public Stats getStats() {
+        return stats;
+    }
+
+    public PowerUpBag getCurrentPowerUps() {
+        return currentPowerUps;
+    }
 
     public List<Player> canSee() {
         Cell c=this.getCurrentPosition();

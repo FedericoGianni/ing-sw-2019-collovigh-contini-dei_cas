@@ -162,17 +162,24 @@ public abstract class Cell {
         this.playersHere.remove(p);
     }
 
+
     public void setVisited() {
         this.visit=true;
-    }
-
-    public boolean alreadyVisited() {
-        return this.visit;
     }
 
     public void unvisit() {
         this.visit=false;
     }
+
+    /**
+     * Method useful for canSee method inside Player class
+     * @return true if the Cell has been already visited by the canSee algorithm, false otherwise
+     */
+    public boolean alreadyVisited() {
+        return this.visit;
+    }
+
+
 
 
 
