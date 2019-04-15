@@ -4,7 +4,8 @@ public class MoveTarget extends MicroEffect {
 
     private int cellNumber;//the target can be moved before or after shooting with some kind of effects
 
-    public MoveTarget(){
+    public MoveTarget(int n){
+        this.cellNumber=n;
 
     }
 

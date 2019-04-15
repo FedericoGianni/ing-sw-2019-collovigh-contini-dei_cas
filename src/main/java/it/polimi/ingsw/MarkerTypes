@@ -1,0 +1,18 @@
+[
+  {
+    "Marker": {
+      "markers": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true"
+    }
+  },
+  {
+    "Marker": {
+      "markers": "1",
+      "playerNum": "100",
+      "seeAbleTargetNeeded": "true"
+    }
+  }
+
+
+]

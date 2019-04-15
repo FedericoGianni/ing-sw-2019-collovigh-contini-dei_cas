@@ -3,8 +3,8 @@ package it.polimi.ingsw;
 public class MoveShooter extends MicroEffect {
 
     private int cellNumber;//the shooter can move before or after shooting with some weapons
-
-    public MoveShooter(){
+    public MoveShooter(int n){
+        this.cellNumber=n;
 
     }
 

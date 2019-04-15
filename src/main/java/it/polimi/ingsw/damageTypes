@@ -1,0 +1,28 @@
+[
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "true"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "10",
+      "playerNum": "10",
+      "seeAbleTargetNeeded": "false",
+      "melee": "false"
+    }
+  }
+
+
+]

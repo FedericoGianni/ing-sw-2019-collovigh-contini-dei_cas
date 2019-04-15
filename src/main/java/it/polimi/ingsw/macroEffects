@@ -1,0 +1,30 @@
+[
+  {
+    "MacroEffect": {
+      "name": "Lanciatore di accuse",
+      "MicroEff": [
+        {
+          "type": "11"
+        },
+        {
+          "type" : "22"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name":"Para culata",
+      "MicroEff": [
+        {
+          "type": "21"
+        },
+        {
+          "type" : "12"
+        }
+      ]
+    }
+  }
+
+
+]
