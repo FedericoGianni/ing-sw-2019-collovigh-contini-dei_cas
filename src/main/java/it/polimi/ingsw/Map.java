@@ -75,7 +75,7 @@ public class Map {
      *
      * @return a copy of the actual map
      */
-    public Map getMap(){
+    public Map getMapClone(){
         return new Map(this);
     }
 

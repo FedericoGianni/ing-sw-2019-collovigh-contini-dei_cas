@@ -90,6 +90,7 @@ class PowerUpBagTest {
     @Test
     void hasItemShouldReturnTrue() {
 
+
         Map m = new Map();
         m.genMap(2);
         m.generateCells(2);

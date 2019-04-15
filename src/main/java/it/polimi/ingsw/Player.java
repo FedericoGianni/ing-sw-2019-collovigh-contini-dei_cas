@@ -178,8 +178,9 @@ public class Player {
         this.currentPowerUps.addItem(p);
     }
 
-
-
+    public PlayerColor getColor() {
+        return color;
+    }
 
     public List<Player> canTarget() {
         return null;

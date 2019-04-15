@@ -135,9 +135,9 @@ class MapTest {
         Player p2 = new Player("Visible", map.getCell(0, 3));
         Player p3 = new Player("NotVisible", map.getCell(0, 0));
         try {
-            assertEquals(1, map.getShootingDist(p1, p2, map.getMap()));
+            assertEquals(1, map.getShootingDist(p1, p2, map.getMapClone()));
             assertThrows(PlayerNotSeeableException.class,
-                    () -> map.getShootingDist(p1, p3, map.getMap()));
+                    () -> map.getShootingDist(p1, p3, map.getMapClone()));
         } catch (PlayerNotSeeableException e) {
             e.printStackTrace();
         }
@@ -158,11 +158,11 @@ class MapTest {
         Player p5 = new Player("VisibleMeleeRange", map.getCell(1,3));
 
         try{
-            assertEquals(1, map.getShootingDist(p1, p2, map.getMap()));
-            assertEquals(0, map.getShootingDist(p1, p5, map.getMap()));
-            assertEquals(3, map.getShootingDist(p1, p4, map.getMap()));
+            assertEquals(1, map.getShootingDist(p1, p2, map.getMapClone()));
+            assertEquals(0, map.getShootingDist(p1, p5, map.getMapClone()));
+            assertEquals(3, map.getShootingDist(p1, p4, map.getMapClone()));
             assertThrows(PlayerNotSeeableException.class,
-                    () -> map.getShootingDist(p1, p3, map.getMap()));
+                    () -> map.getShootingDist(p1, p3, map.getMapClone()));
 
         } catch (PlayerNotSeeableException e){
             e.printStackTrace();

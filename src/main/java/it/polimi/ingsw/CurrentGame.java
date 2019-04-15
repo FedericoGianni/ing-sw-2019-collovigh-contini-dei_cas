@@ -45,6 +45,7 @@ public class CurrentGame {
     private PowerUpDeck powerUpDeck;
     private WeaponDeck weaponDeck;
     private PowerUpDeck thrashPowerUpDeck;
+    private List<Integer> killShotTrack;
 
     /**
      * @return a randomly picked PowerUp from the current powerUp deck if this is empty it sets the trash one as the good one
@@ -101,11 +102,19 @@ public class CurrentGame {
         return new ArrayList<>(this.players);
     }
 
+    public List<Integer> getKillShotTrack() {
+        return killShotTrack;
+    }
+
+    public void setKillShotTrack(List<Integer> killShotTrack) {
+        this.killShotTrack = killShotTrack;
+    }
+
     /**
-     * @return a copy of the actual Map
+     * @return the actual Map
      */
     public Map getMap() {
-        return new Map(currentMap);
+        return this.currentMap;
     }
 
     /**
