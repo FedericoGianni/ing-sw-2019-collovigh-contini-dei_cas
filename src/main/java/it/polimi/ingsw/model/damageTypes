@@ -4,7 +4,21 @@
       "damage": "2",
       "playerNum": "1",
       "seeAbleTargetNeeded": "true",
-      "melee": "false"
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "2",
+      "seeAbleTargetNeeded": "true",
+      "melee": "true",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
     }
   },
   {
@@ -12,17 +26,279 @@
       "damage": "1",
       "playerNum": "1",
       "seeAbleTargetNeeded": "true",
-      "melee": "true"
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "true"
+
     }
   },
   {
     "Damage": {
-      "damage": "10",
-      "playerNum": "10",
+      "damage": "1",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"true",
+      "distMin": "0",
+      "alreadyTargeted": "true"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "true"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "3",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "2",
+      "alreadyTargeted": "false"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "100",
+      "seeAbleTargetNeeded": "true",
+      "melee": "true",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "100",
+      "seeAbleTargetNeeded": "true",
+      "melee": "true",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+
+    }
+  },
+  {
+  "Damage": {
+    "damage": "3",
+    "playerNum": "1",
+    "seeAbleTargetNeeded": "false",
+    "melee": "true",
+    "differentPlayer":"false",
+    "distMin": "20",
+    "alreadyTargeted": "false"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "3",
+      "playerNum": "1",
       "seeAbleTargetNeeded": "false",
-      "melee": "false"
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "100",
+      "alreadyTargeted": "false"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "1",
+      "alreadyTargeted": "true"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "100",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "1",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "100",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "true"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "true",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "true",
+      "differentPlayer":"true",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "3",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "true",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "false",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "1000",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "false",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "1000",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "false",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "1000",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "30",
+      "seeAbleTargetNeeded": "false",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "1000",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "100",
+      "seeAbleTargetNeeded": "false",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "1000",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "false",
+      "melee": "true",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+    }
+  },
+  {
+    "Damage": {
+      "damage": "3",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "false",
+      "melee": "true",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
     }
   }
+
 
 
 ]

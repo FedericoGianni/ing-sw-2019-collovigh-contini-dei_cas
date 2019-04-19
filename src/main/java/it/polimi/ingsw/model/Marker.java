@@ -15,12 +15,17 @@ public class Marker extends MicroEffect {
     private int playerNum;//some effects can give markers to more than 1 player
     private boolean seeAbleTargetNeeded; //some effects can target unSeeable players or need to see players
     private int markers;//the number of markers given
+    private boolean differenPlayer;
     private static ArrayList markersArray=new ArrayList<>();//this array stataicaly contains all the marker types
+    // the player number is 100 you need to trget every player in the traget's square( check hellion
+    // if player number is 1000 io need can target up to the number /1000
 
-    public Marker(int a,int b,boolean c) {
-        this.playerNum=a;
+
+    public Marker(int a,int b,boolean c,boolean dp) {
+        this.markers=a;
         this.playerNum=b;
         this.seeAbleTargetNeeded=c;
+        this.differenPlayer=dp;
 
     }
 
@@ -32,6 +37,13 @@ public class Marker extends MicroEffect {
         markersArray = mA;
     }
 
+    public boolean isDifferenPlayer() {
+        return differenPlayer;
+    }
+
+    public void setDifferenPlayer(boolean differenPlayer) {
+        this.differenPlayer = differenPlayer;
+    }
 
     public void setMarkers(int m)
     {
@@ -106,7 +118,11 @@ public class Marker extends MicroEffect {
         String stn = (String) mObject.get("seeAbleTargetNeeded");
         //System.out.println(stn);
 
-        Marker dd=new Marker(Integer.parseInt(t),Integer.parseInt(d),Boolean.parseBoolean(stn));
+        //Get seeAble
+        String dp = (String) mObject.get("differentPlayer");
+        //System.out.println(stn);
+
+        Marker dd=new Marker(Integer.parseInt(t),Integer.parseInt(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(dp));
         mrks.add(dd);
         return mrks;
 

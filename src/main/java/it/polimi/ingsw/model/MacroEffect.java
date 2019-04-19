@@ -10,7 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MacroEffect {
+public class MacroEffect {//----evetually add an attribute std or not if the weapon is one of the enlighted
 
     private String name;
 

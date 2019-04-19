@@ -1,18 +1,51 @@
 [
   {
     "Marker": {
-      "markers": "2",
+      "markers": "1",
       "playerNum": "1",
-      "seeAbleTargetNeeded": "true"
+      "seeAbleTargetNeeded": "true",
+      "differentPlayer": "true"
     }
   },
   {
     "Marker": {
       "markers": "1",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "differentPlayer": "false"
+    }
+  },
+  {
+  "Marker": {
+    "markers": "1",
+    "playerNum": "100",
+    "seeAbleTargetNeeded": "true",
+    "differentPlayer": "false"
+    }
+  },
+  {
+    "Marker": {
+      "markers": "2",
       "playerNum": "100",
-      "seeAbleTargetNeeded": "true"
+      "seeAbleTargetNeeded": "true",
+      "differentPlayer": "false"
+    }
+  },
+  {
+    "Marker": {
+      "markers": "1",
+      "playerNum": "3000",
+      "seeAbleTargetNeeded": "true",
+      "differentPlayer": "false"
+    }
+  },
+  {
+    "Marker": {
+      "markers": "2",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "false",
+      "differentPlayer": "false"
     }
   }
-
 
 ]
