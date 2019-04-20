@@ -5,12 +5,12 @@ import customsexceptions.CardNotPossessedException;
 /**
  * 
  */
-public class Teleport extends PowerUp {
+public class Teleporter extends PowerUp {
 
     /**
      * Default constructor
      */
-    public Teleport(Color color) {
+    public Teleporter(Color color) {
 
         super(color);
     }

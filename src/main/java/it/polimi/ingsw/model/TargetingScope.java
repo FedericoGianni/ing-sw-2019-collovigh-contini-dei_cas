@@ -3,26 +3,20 @@ package it.polimi.ingsw.model;
 /**
  * 
  */
-public class VenomGranade extends PowerUp {
+public class TargetingScope extends PowerUp {
 
     /**
      * Default constructor
      */
-    public VenomGranade(Color color) {
+    public TargetingScope(Color color) {
 
         super(color);
     }
 
     /**
-     *
-     * @param p
+     * need to be implemented
      */
-    public void use(Player p) {
-
-
-
-
-
+    public void use() {
 
     }
 

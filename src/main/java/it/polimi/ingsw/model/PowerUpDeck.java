@@ -36,7 +36,7 @@ public class PowerUpDeck implements Deck<PowerUp> {
 
                     for (int i = 0; i <2 ; i++) {
 
-                        deck.reinsert(new KineticRay(color));
+                        deck.reinsert(new Newton(color));
 
                     }
                 });
@@ -46,7 +46,7 @@ public class PowerUpDeck implements Deck<PowerUp> {
 
                     for (int i = 0; i <2 ; i++) {
 
-                        deck.reinsert(new Viewfinder(color));
+                        deck.reinsert(new TargetingScope(color));
 
                     }
                 });
@@ -56,7 +56,7 @@ public class PowerUpDeck implements Deck<PowerUp> {
 
                     for (int i = 0; i <2 ; i++) {
 
-                        deck.reinsert(new Teleport(color));
+                        deck.reinsert(new Teleporter(color));
 
                     }
                 });
@@ -66,7 +66,7 @@ public class PowerUpDeck implements Deck<PowerUp> {
 
                     for (int i = 0; i <2 ; i++) {
 
-                        deck.reinsert(new VenomGranade(color));
+                        deck.reinsert(new TagbackGrenade(color));
 
                     }
                 });

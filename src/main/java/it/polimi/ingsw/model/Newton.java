@@ -3,12 +3,12 @@ package it.polimi.ingsw.model;
 /**
  * 
  */
-public class KineticRay extends PowerUp {
+public class Newton extends PowerUp {
 
     /**
      *
      */
-    public KineticRay(Color color) {
+    public Newton(Color color) {
 
         super(color);
     }

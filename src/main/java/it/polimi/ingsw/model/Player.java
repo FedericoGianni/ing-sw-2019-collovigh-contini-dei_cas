@@ -134,8 +134,6 @@ public class Player {
     /**
      * This action will delete one powerUp from Player's inventory and add it's value to the AmmoBag
      *
-     * IMPORTANT NOTE: this method will NOT add the power up to the trash power up deck
-     *
      * @param powerUp is the power up that needs to be turn into AmmoCubes
      */
     public void sellPowerUp(PowerUp powerUp){

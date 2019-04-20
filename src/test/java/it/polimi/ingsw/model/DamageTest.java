@@ -1,4 +1,4 @@
-package it.polimi.ingsw.modelTest;
+package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.Damage;
 import org.junit.jupiter.api.Test;

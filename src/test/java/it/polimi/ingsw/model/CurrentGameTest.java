@@ -1,4 +1,4 @@
-package it.polimi.ingsw.modelTest;
+package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
@@ -46,10 +46,10 @@ class CurrentGameTest {
         m.generateCells(1);
 
         CurrentGame c = new CurrentGame(players, m);
-        PowerUp teleport = new Teleport(Color.YELLOW);
-        PowerUp venom = new VenomGranade(Color.YELLOW);
-        PowerUp viewF = new Viewfinder(Color.YELLOW);
-        PowerUp kinetic = new KineticRay(Color.YELLOW);
+        PowerUp teleport = new Teleporter(Color.YELLOW);
+        PowerUp venom = new TagbackGrenade(Color.YELLOW);
+        PowerUp viewF = new TargetingScope(Color.YELLOW);
+        PowerUp kinetic = new Newton(Color.YELLOW);
         c.discardPowerUp(teleport);
 
         for (int i = 0; i < 24; i++) {

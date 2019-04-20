@@ -1,4 +1,4 @@
-package it.polimi.ingsw.modelTest;
+package it.polimi.ingsw.model;
 
 import customsexceptions.PlayerNotSeeableException;
 import it.polimi.ingsw.model.CellColor;

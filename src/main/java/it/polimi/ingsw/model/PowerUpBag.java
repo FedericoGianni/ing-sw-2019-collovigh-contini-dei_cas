@@ -68,7 +68,7 @@ public class PowerUpBag  implements Bag<PowerUp>{
     }
 
     /**
-     *
+     * this function will automatically thrash the powerUp
      * @param item is the item to convert in AmmoCubes
      * @return the AmmoCube the PowerUp value
      */
@@ -77,6 +77,8 @@ public class PowerUpBag  implements Bag<PowerUp>{
         AmmoCube cube = item.sell();
 
         this.powerUps.remove(item);
+
+        Model.getGame().discardPowerUp(item);
 
         return cube;
     }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.modelTest;
+package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
@@ -32,10 +32,10 @@ class PowerUpDeckTest {
         List<PowerUp> list1 = new ArrayList<>();
         List<PowerUp> list2 = new ArrayList<>();
 
-        list1.add(new KineticRay(Color.BLUE));
-        list1.add(new VenomGranade(Color.RED));
-        list1.add(new Viewfinder(Color.YELLOW));
-        list1.add(new Teleport(Color.BLUE));
+        list1.add(new Newton(Color.BLUE));
+        list1.add(new TagbackGrenade(Color.RED));
+        list1.add(new TargetingScope(Color.YELLOW));
+        list1.add(new Teleporter(Color.BLUE));
 
         for(PowerUp powerUp : list1){
 
