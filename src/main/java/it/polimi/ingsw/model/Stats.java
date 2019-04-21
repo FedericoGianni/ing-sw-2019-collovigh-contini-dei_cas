@@ -87,7 +87,7 @@ public class Stats {
 
     /**
      *
-     * @return the number of marks
+     * @return a copy of the marks'list
      */
     public List<Integer> getMarks() {
         return new ArrayList<>(this.marks);

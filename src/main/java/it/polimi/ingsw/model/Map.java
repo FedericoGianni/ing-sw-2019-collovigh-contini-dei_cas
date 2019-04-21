@@ -436,4 +436,26 @@ public class Map {
 
     }
 
+    /**
+     *
+     * @param cell is the cell we want to see if exist
+     * @return null if asked cell is null or if the cell is not in the matrix
+     */
+    public boolean hasCell(Cell cell){
+
+        if (cell == null){ return false;}
+
+        for (int i = 0; i < MAP_R; i++) {
+            for (int j = 0; j < MAP_C; j++) {
+
+                if (cell == matrix[i][j])
+                    return true;
+                
+            }
+            
+        }
+
+        return false;
+    }
+
 }

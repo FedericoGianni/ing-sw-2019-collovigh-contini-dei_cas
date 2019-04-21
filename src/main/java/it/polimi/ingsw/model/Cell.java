@@ -179,10 +179,10 @@ public abstract class Cell {
         return this.visit;
     }
 
+    @Override
+    public String toString() {
 
 
-
-
-
-
+        return this.getClass().toString() + Model.getMap().cellToCoord(this);
+    }
 }

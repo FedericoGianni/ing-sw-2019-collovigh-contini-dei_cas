@@ -369,6 +369,25 @@ public class Player {
     }
 
     /**
+     *
+     * @return a copy of the marks' list
+     */
+    public List<Integer> getMarks(){
+
+        return this.getStats().getMarks();
+    }
+
+    /**
+     *
+     * @return a copy of the damage list
+     */
+    public List<Integer> getDmg(){
+
+        return this.getStats().getDmgTaken();
+    }
+
+
+    /**
      * @param value is the score to be added
      */
     public void addScore(int value) {
