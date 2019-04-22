@@ -19,12 +19,24 @@ public class Teleporter extends PowerUp {
      *
      * @param cell cell in which the player will be teleported
      */
-    public void use(Cell cell, Player player) throws CardNotPossessedException {
+    public void use(Cell cell) throws CardNotPossessedException {
 
-        if(!player.getPowerUps().contains(this)){ throw new CardNotPossessedException();}
+        Boolean b = false;
+        Player p = null;
+
+        for (Player player: Model.getGame().getPlayers()){
+
+            if (player.getPowerUpBag().hasItem(this)) {
+                b = true;
+                p=player;
+            }
+
+        }
+
+        if(!b){ throw new CardNotPossessedException();}
         else{
 
-            player.setPlayerPos(cell);
+            p.setPlayerPos(cell);
         }
 
 

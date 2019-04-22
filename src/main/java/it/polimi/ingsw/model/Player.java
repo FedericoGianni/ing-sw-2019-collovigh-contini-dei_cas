@@ -94,7 +94,7 @@ public class Player {
     /**
      * @return the player's weapon list
      */
-    public List<Weapon> getWeapon(Player p) {
+    public List<Weapon> getWeapon() {
 
         return null;  //TODO
     }
@@ -146,10 +146,8 @@ public class Player {
      * @return true if the player has already 3 powerUps
      */
     public Boolean hasMaxPowerUp(Player p) {
-        if(p.currentPowerUps.getList().size()==3)
-            return true;
 
-        return false;
+        return (p.currentPowerUps.getList().size()==3);
     }
 
     /**
@@ -157,10 +155,7 @@ public class Player {
      * @param p
      * @return
      */
-    public Boolean hasMaxWeapons(Player p) {
-       // if(p.currentWeapons.size()==3)
-        //    return true;
-
+    public Boolean hasMaxWeapons() {
         //TODO
 
         return false;
@@ -187,10 +182,6 @@ public class Player {
 
     public Stats getStats() {
         return stats;
-    }
-
-    public PowerUpBag getCurrentPowerUps() {
-        return currentPowerUps;
     }
 
     public List<Player> canSee() {

@@ -76,9 +76,9 @@ public class PowerUpBag  implements Bag<PowerUp>{
 
         AmmoCube cube = item.sell();
 
-        this.powerUps.remove(item);
-
         Model.getGame().discardPowerUp(item);
+
+        this.powerUps.remove(item);
 
         return cube;
     }

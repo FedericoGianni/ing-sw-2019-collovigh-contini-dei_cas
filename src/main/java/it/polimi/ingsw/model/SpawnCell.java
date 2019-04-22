@@ -19,7 +19,7 @@ public class SpawnCell extends Cell {
      * This constructor is used to return a copy of the SpawnCell passed as a parameter
      * @param clone SpawnCell to be cloned
      */
-    public SpawnCell(AmmoCell clone){
+    public SpawnCell(SpawnCell clone){
         super(clone);
         this.weapons = new ArrayList<>();
 
@@ -42,7 +42,6 @@ public class SpawnCell extends Cell {
     /**
      * @return a list of Weapons who are avaiable for sell inside this SpawnCell
      */
-    @Override
     public List<Weapon> getWeapons() {
         return weapons;
     }

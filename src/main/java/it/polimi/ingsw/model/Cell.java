@@ -110,14 +110,6 @@ public abstract class Cell {
 
     /**
      *
-     * @return
-     */
-    public List<Weapon> getWeapons(){
-        return null;
-    }
-
-    /**
-     *
      * @return null since this is the abstract class and SpawnCell doesn't have Ammo inside
      * the method is instead overrided in AmmoCell method so that it returns the Ammo placed
      */

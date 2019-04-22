@@ -3,6 +3,9 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static it.polimi.ingsw.model.PowerUpDeck.populatedDeck;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,16 +25,17 @@ class PowerUpBagTest {
         PowerUp c3 = d.getRandomCard();
         PowerUp c4 = d.getRandomCard();
 
-        p.getCurrentPowerUps().addItem(c1);
-        assertTrue(c1.equals(p.getCurrentPowerUps().getList().get(0)));
-        p.getCurrentPowerUps().addItem(c2);
-        assertTrue(c2.equals(p.getCurrentPowerUps().getList().get(1)));
-        p.getCurrentPowerUps().addItem(c3);
-        assertTrue(c3.equals(p.getCurrentPowerUps().getList().get(2)));
+        p.getPowerUpBag().addItem(c1);
+        assertTrue(c1.equals(p.getPowerUpBag().getList().get(0)));
+        p.getPowerUpBag().addItem(c2);
+        assertTrue(c2.equals(p.getPowerUpBag().getList().get(1)));
+        p.getPowerUpBag().addItem(c3);
+        assertTrue(c3.equals(p.getPowerUpBag().getList().get(2)));
+
         //max powerUp bag size == 3. it shouldn't let add a 4th item to the PowerUp bag
-        p.getCurrentPowerUps().addItem(c4);
+        p.getPowerUpBag().addItem(c4);
         assertThrows(IndexOutOfBoundsException.class,
-                () -> p.getCurrentPowerUps().getList().get(3));
+                () -> p.getPowerUpBag().getList().get(3));
     }
 
     @Test
@@ -49,43 +53,57 @@ class PowerUpBagTest {
         PowerUp c3 = d.getRandomCard();
         PowerUp c4 = d.getRandomCard();
 
-        p.getCurrentPowerUps().addItem(c1);
-        assertTrue(c1.equals(p.getCurrentPowerUps().getList().get(0)));
-        p.getCurrentPowerUps().addItem(c2);
-        assertTrue(c2.equals(p.getCurrentPowerUps().getList().get(1)));
-        p.getCurrentPowerUps().addItem(c3);
-        assertTrue(c3.equals(p.getCurrentPowerUps().getList().get(2)));
+        p.getPowerUpBag().addItem(c1);
+        assertTrue(c1.equals(p.getPowerUpBag().getList().get(0)));
+        p.getPowerUpBag().addItem(c2);
+        assertTrue(c2.equals(p.getPowerUpBag().getList().get(1)));
+        p.getPowerUpBag().addItem(c3);
+        assertTrue(c3.equals(p.getPowerUpBag().getList().get(2)));
 
         p.getPowerUpBag().getItem(c3);
         assertTrue(p.getPowerUpBag().getList().size() == 2);
-        assertTrue(c1.equals(p.getCurrentPowerUps().getList().get(0)));
-        assertTrue(c2.equals(p.getCurrentPowerUps().getList().get(1)));
+        assertTrue(c1.equals(p.getPowerUpBag().getList().get(0)));
+        assertTrue(c2.equals(p.getPowerUpBag().getList().get(1)));
 
     }
 
     @Test
     void sellItemShouldReturnAmmoCube() {
 
-        Map m = new Map();
-        m.genMap(2);
-        m.generateCells(2);
+        List<String> names = new ArrayList<>();
 
-        Player p = new Player("test", m.getCell(0,2));
+        names.add("Frank");
+        names.add("Alex");
 
-        PowerUpDeck d = populatedDeck();
+        List<PlayerColor> colors = new ArrayList<>();
+
+        colors.add(PlayerColor.YELLOW);
+        colors.add(PlayerColor.PURPLE);
+
+        Model kat = new Model(names,colors,2);
+
+        Player p = Model.getPlayer(0);
+
+        PowerUpDeck d = PowerUpDeck.populatedDeck();
         PowerUp c1 = d.getRandomCard();
 
-        assert(p.getCurrentPowerUps().getList().size() == 0);
-        p.getCurrentPowerUps().addItem(c1);
-        assert(p.getCurrentPowerUps().getList().size() == 1);
+        assertEquals(0,p.getPowerUpBag().getList().size());
+        p.getPowerUpBag().addItem(c1);
+        assertEquals(1,p.getPowerUpBag().getList().size());
+
+        System.out.println(p.getPowerUpBag().getList());
 
         AmmoCube a = new AmmoCube(Color.RED);
 
-        assertEquals(p.getPowerUpBag().sellItem(c1).getClass(), a.getClass());
+        assertTrue(p.getPowerUpBag().hasItem(c1));
         //sellItem should remove PowerUp from Player's PowerUpBag
-        p.getPowerUpBag().sellItem(c1);
-        assert(p.getCurrentPowerUps().getList().size() == 0);
-        assert(!p.getCurrentPowerUps().hasItem(c1));
+
+        p.sellPowerUp(c1);
+
+        assertEquals(0,p.getPowerUpBag().getList().size());
+        assertTrue(!p.getPowerUpBag().hasItem(c1));
+
+        assertEquals(1,p.getAmmo().size());
     }
 
     @Test
@@ -101,7 +119,7 @@ class PowerUpBagTest {
         PowerUpDeck d = populatedDeck();
         PowerUp c1 = d.getRandomCard();
 
-        p.getCurrentPowerUps().addItem(c1);
+        p.getPowerUpBag().addItem(c1);
         assertTrue(p.getPowerUpBag().hasItem(c1));
 
     }
