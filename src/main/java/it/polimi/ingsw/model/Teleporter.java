@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import customsexceptions.CardNotPossessedException;
+import customsexceptions.CellNonExistentException;
 
 /**
  * 
@@ -19,7 +20,7 @@ public class Teleporter extends PowerUp {
      *
      * @param cell cell in which the player will be teleported
      */
-    public void use(Cell cell) throws CardNotPossessedException {
+    public void use(Cell cell) throws CardNotPossessedException, CellNonExistentException {
 
         Boolean b = false;
         Player p = null;
@@ -36,7 +37,9 @@ public class Teleporter extends PowerUp {
         if(!b){ throw new CardNotPossessedException();}
         else{
 
-            p.setPlayerPos(cell);
+            if (cell == null) {throw new CellNonExistentException();}
+
+            else p.setPlayerPos(cell);
         }
 
 

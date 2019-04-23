@@ -36,6 +36,19 @@ class TeleporterTest {
 
         });
 
+        Model.getPlayer(0).addPowerUp(test);
+
+        try{
+
+            test.use(cell);
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
+        assertEquals(cell,Model.getPlayer(0).getCurrentPosition());
+
 
 
 
