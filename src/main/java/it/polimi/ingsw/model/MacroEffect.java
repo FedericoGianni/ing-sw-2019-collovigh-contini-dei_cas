@@ -13,13 +13,13 @@ import java.util.ArrayList;
 public class MacroEffect {//----evetually add an attribute std or not if the weapon is one of the enlighted
 
     private String name;
-
+    private boolean standerd;//if true is a vector of microeffects otherwise is a class of specialweapons
     private ArrayList<MicroEffect> microEffects;
     private static ArrayList<MacroEffect> macroEffects=new ArrayList<>();
     /**
      *
      */
-    public MacroEffect(String n,ArrayList <MicroEffect> ef) {
+    public MacroEffect (String n,ArrayList <MicroEffect> ef) {
         microEffects=new ArrayList<>();
         this.microEffects.addAll(ef);
         this.name=n;
@@ -112,15 +112,10 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
         {
             type=type-21;
             microF.add(Marker.getMarkersArray().get(type));//same with the marker
-        }else if(type<41)//player mover effect type
+        }else
         {
             type=type-31;
-            MoveShooter ms=new MoveShooter(type);//type now has the number of cells inside
-            microF.add(ms);
-        }else{//target mover effect type
-            type=type-41;
-            MoveTarget mt=new MoveTarget(type);//type now has the number of cells inside
-            microF.add(mt);
+            microF.add(Mover.getMoversArray().get(type));
         }
 
 

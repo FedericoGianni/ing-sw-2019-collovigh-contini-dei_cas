@@ -33,8 +33,8 @@ public class Marker extends MicroEffect {
         return markersArray;
     }
 
-    public static void setMarkersArray(ArrayList mA) {
-        markersArray = mA;
+    public static void insertMarkerType(Marker mA) {
+        markersArray.add(mA);
     }
 
     public boolean isDifferenPlayer() {
@@ -77,8 +77,7 @@ public class Marker extends MicroEffect {
     {
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
-        ArrayList<Marker> mrks=new ArrayList<>();
-        try (FileReader reader = new FileReader("C:\\Users\\bl4ck\\IdeaProjects\\ing-sw-2019-collovigh-contini-dei_cas\\src\\main\\java\\it\\polimi\\ingsw\\MarkerTypes"))
+        try (FileReader reader = new FileReader("C:\\Users\\bl4ck\\IdeaProjects\\ing-sw-2019-collovigh-contini-dei_cas\\src\\main\\java\\it\\polimi\\ingsw\\model\\MarkerTypes"))
         {
             //Read JSON file
             Object obj = jsonParser.parse(reader);
@@ -88,7 +87,7 @@ public class Marker extends MicroEffect {
 
 
             for (int i = 0; i < markerTypes.size(); i++) {
-                mrks =  parseMarkerObject((JSONObject)markerTypes.get(i), mrks);
+                  parseMarkerObject((JSONObject)markerTypes.get(i));
             }
 
         } catch (FileNotFoundException e) {
@@ -98,10 +97,10 @@ public class Marker extends MicroEffect {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        markersArray=mrks;
+
     }
 
-    private static ArrayList <Marker> parseMarkerObject(JSONObject markers,ArrayList<Marker> mrks)
+    private static void parseMarkerObject(JSONObject markers)
     {
         //Get employee object within list
         JSONObject mObject = (JSONObject) markers.get("Marker");//Choose the class  to read--not really, something similar
@@ -123,8 +122,7 @@ public class Marker extends MicroEffect {
         //System.out.println(stn);
 
         Marker dd=new Marker(Integer.parseInt(t),Integer.parseInt(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(dp));
-        mrks.add(dd);
-        return mrks;
+        Marker.insertMarkerType(dd);
 
     }
 

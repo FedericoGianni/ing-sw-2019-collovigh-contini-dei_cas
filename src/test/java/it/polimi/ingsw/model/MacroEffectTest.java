@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.Damage;
-import it.polimi.ingsw.model.MacroEffect;
 import it.polimi.ingsw.model.Marker;
 import org.junit.jupiter.api.Test;
 
