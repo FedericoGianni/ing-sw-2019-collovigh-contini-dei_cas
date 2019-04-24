@@ -62,10 +62,10 @@ public class Damage extends MicroEffect {
     //if the distance is 1000 is like 1 , no more no less
     //if the minimum distance is 100 is an unseeblePlayer by default, you have to target an unseeable player(check heatseeker)
     //only the damage tag have the distance inside
-    private static ArrayList <Damage> damages;
+    private static ArrayList <Damage> damages=new ArrayList<>();
 
-    public static void setDamagesList(ArrayList<Damage> damage) {
-        damages = damage;
+    public static void insertDamage(Damage dm) {
+        damages.add(dm);
     }
 
     public static ArrayList <Damage> getDamagesList()
@@ -126,16 +126,14 @@ public class Damage extends MicroEffect {
     {
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
-        ArrayList<Damage> dmgTypes=new ArrayList<>();
-        try (FileReader reader = new FileReader("C:\\Users\\bl4ck\\IdeaProjects\\ing-sw-2019-collovigh-contini-dei_cas\\src\\main\\java\\it\\polimi\\ingsw\\damageTypes"))
+        try (FileReader reader = new FileReader("C:\\Users\\bl4ck\\IdeaProjects\\ing-sw-2019-collovigh-contini-dei_cas\\src\\main\\java\\it\\polimi\\ingsw\\model\\damageTypes"))
         {
             //Read JSON file
             Object obj = jsonParser.parse(reader);
-
             JSONArray damageTypes = (JSONArray) obj;
 
                 for (int i = 0; i < damageTypes.size(); i++) {
-                    dmgTypes = parseDamageObject((JSONObject)damageTypes.get(i), dmgTypes);
+                     parseDamageObject((JSONObject)damageTypes.get(i));
                 }
             //for each Json input object
 
@@ -146,10 +144,10 @@ public class Damage extends MicroEffect {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        damages=dmgTypes;
+
     }
 
-    private static ArrayList<Damage> parseDamageObject(JSONObject damages,ArrayList <Damage> dmgTypes)
+    private static void parseDamageObject(JSONObject damages)
     {
         //Get employee object within list
         JSONObject employeeObject = (JSONObject) damages.get("Damage");//Choose the class
@@ -182,8 +180,7 @@ public class Damage extends MicroEffect {
         String alTarg= (String) employeeObject.get("alreadyTargeted");
         //System.out.println(melee);
         Damage dd=new Damage(Integer.parseInt(t),Integer.parseInt(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(melee),Boolean.parseBoolean(diffP),Integer.parseInt(dist),Boolean.parseBoolean(alTarg));
-        dmgTypes.add(dd);
-        return dmgTypes;
+        Damage.insertDamage(dd);
 
     }
 

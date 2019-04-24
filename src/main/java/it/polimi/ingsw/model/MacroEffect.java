@@ -13,18 +13,18 @@ import java.util.ArrayList;
 public class MacroEffect {//----evetually add an attribute std or not if the weapon is one of the enlighted
 
     private String name;
-
+    private boolean standerd;//if true is a vector of microeffects otherwise is a class of specialweapons
     private ArrayList<MicroEffect> microEffects;
     private static ArrayList<MacroEffect> macroEffects=new ArrayList<>();
     /**
      *
      */
-    public MacroEffect(String n,ArrayList <MicroEffect> ef) {
+    public MacroEffect (String n,ArrayList <MicroEffect> ef) {
         microEffects=new ArrayList<>();
         this.microEffects.addAll(ef);
         this.name=n;
     }
-
+    //MISSING: ammocost of macreffects
     public String getName() {
         return name;
     }
@@ -48,7 +48,7 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
     {
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
-        try (FileReader reader = new FileReader("C:\\Users\\bl4ck\\IdeaProjects\\ing-sw-2019-collovigh-contini-dei_cas\\src\\main\\java\\it\\polimi\\ingsw\\macroEffects"))
+        try (FileReader reader = new FileReader("C:\\Users\\bl4ck\\IdeaProjects\\ing-sw-2019-collovigh-contini-dei_cas\\src\\main\\java\\it\\polimi\\ingsw\\model\\macroEffects"))
         {//change to relative files paths
             //Read JSON file
             Object obj = jsonParser.parse(reader);
@@ -103,24 +103,19 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
     {
         //maybe you need the object or something like that??
         //System.out.println(type);
-        if(type<21)//damage type effect
+        if(type<201)//damage type effect from 100 to 200
         {
-            type=type-11;
+            type=type-101;
             microF.add(Damage.getDamagesList().get(type));//add the damage effect to the current microeffects list that will create the macroeffect
         }
-        else if(type<31)//marker effect type
+        else if(type<301)//marker effect type from 200 to 300
         {
-            type=type-21;
+            type=type-201;
             microF.add(Marker.getMarkersArray().get(type));//same with the marker
-        }else if(type<41)//player mover effect type
+        }else//movements from 300 to the ifinity and beyond
         {
-            type=type-31;
-            MoveShooter ms=new MoveShooter(type);//type now has the number of cells inside
-            microF.add(ms);
-        }else{//target mover effect type
-            type=type-41;
-            MoveTarget mt=new MoveTarget(type);//type now has the number of cells inside
-            microF.add(mt);
+            type=type-301;
+            microF.add(Mover.getMoversArray().get(type));
         }
 
 

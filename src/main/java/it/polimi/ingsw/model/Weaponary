@@ -1,0 +1,298 @@
+[
+  {
+    "Weapon": {
+      "name": "LOCK RIFLE",
+      "cost": [
+        {
+          "ammoC": "BLUE"
+        },
+        {
+          "ammoC" : "BLUE"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "0"
+        },
+        {
+          "num": "1"
+        }
+
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "MACHINE GUN",
+      "cost": [
+        {
+          "ammoC": "BLUE"
+        },
+        {
+          "ammoC" : "RED"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "2"
+        },
+        {
+          "num": "3"
+        },
+        {
+          "num": "4"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "PLASMA GUN",
+      "cost": [
+        {
+          "ammoC": "BLUE"
+        },
+        {
+          "ammoC" : "YELLOW"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "31"
+        },
+        {
+          "num": "5"
+        },
+        {
+          "num": "6"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "WHISPERER",
+      "cost": [
+        {
+          "ammoC": "BLUE"
+        },
+        {
+          "ammoC" : "BLUE"
+        },
+        {
+          "ammoC" : "YELLOW"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "7"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "ELECTROSHYTE",
+      "cost": [
+        {
+          "ammoC": "BLUE"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "8"
+        },
+        {
+          "num": "9"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "TRACTOR BEAM",
+      "cost": [
+        {
+          "ammoC": "BLUE"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "10"
+        },
+        {
+          "num": "11"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "HEAT SEEKER",
+      "cost": [
+        {
+          "ammoC": "RED"
+        },
+        {
+          "ammoC": "RED"
+        },
+        {
+          "ammoC": "YELLOW"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "12"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "GRENADE LAUNCHER",
+      "cost": [
+        {
+          "ammoC": "RED"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "15"
+        },
+        {
+          "num": "16"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "ROCKET LAUNCHER",
+      "cost": [
+        {
+          "ammoC": "RED"
+        },
+        {
+          "ammoC": "RED"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "17"
+        },
+        {
+          "num": "18"
+        },
+        {
+          "num": "19"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "CYBERBLADE",
+      "cost": [
+        {
+          "ammoC": "YELLOW"
+        },
+        {
+          "ammoC": "RED"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "20"
+        },
+        {
+          "num": "21"
+        },
+        {
+          "num": "22"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "ZX-2",
+      "cost": [
+        {
+          "ammoC": "YELLOW"
+        },
+        {
+          "ammoC": "RED"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "23"
+        },
+        {
+          "num": "24"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "SHOTGUN",
+      "cost": [
+        {
+          "ammoC": "YELLOW"
+        },
+        {
+          "ammoC": "YELLOW"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "25"
+        },
+        {
+          "num": "26"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "SHOCKWAVE",
+      "cost": [
+        {
+          "ammoC": "YELLOW"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "27"
+        },
+        {
+          "num": "28"
+        }
+      ]
+    }
+  },
+  {
+    "Weapon": {
+      "name": "SLEDEGEHAMMER",
+      "cost": [
+        {
+          "ammoC": "YELLOW"
+        }
+      ],
+      "macroEffects": [
+        {
+          "num": "29"
+        },
+        {
+          "num": "30"
+        }
+      ]
+    }
+  }
+
+
+
+
+]
