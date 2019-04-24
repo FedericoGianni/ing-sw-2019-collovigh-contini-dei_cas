@@ -126,7 +126,7 @@
           "type": "109"
         },
         {
-          "type" : "308"
+          "type" : "307"
         }
       ]
     }
@@ -341,6 +341,16 @@
         },
         {
           "type" : "305"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic effect",
+      "MicroEff": [
+        {
+          "type": "111"
         }
       ]
     }
