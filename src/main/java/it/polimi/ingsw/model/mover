@@ -26,7 +26,7 @@
       "afterShooting": "true",
       "facoltative": "true",
       "toCell": "false",
-      "target":"false"
+      "target":"true"
     }
   },
   {
@@ -58,5 +58,16 @@
       "toCell": "false",
       "target":"true"
     }
+  },
+  {
+    "Mover": {
+      "cellNumber": "2",
+      "beforeShooting": "true",
+      "afterShooting": "false",
+      "facoltative": "true",
+      "toCell": "false",
+      "target":"true"
+    }
   }
+
 ]

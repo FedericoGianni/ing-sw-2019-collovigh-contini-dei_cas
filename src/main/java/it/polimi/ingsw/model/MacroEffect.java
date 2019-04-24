@@ -103,18 +103,18 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
     {
         //maybe you need the object or something like that??
         //System.out.println(type);
-        if(type<21)//damage type effect
+        if(type<201)//damage type effect from 100 to 200
         {
-            type=type-11;
+            type=type-100;
             microF.add(Damage.getDamagesList().get(type));//add the damage effect to the current microeffects list that will create the macroeffect
         }
-        else if(type<31)//marker effect type
+        else if(type<301)//marker effect type from 200 to 300
         {
-            type=type-21;
+            type=type-200;
             microF.add(Marker.getMarkersArray().get(type));//same with the marker
-        }else
+        }else//movements from 300 to the ifinity and beyond
         {
-            type=type-31;
+            type=type-300;
             microF.add(Mover.getMoversArray().get(type));
         }
 

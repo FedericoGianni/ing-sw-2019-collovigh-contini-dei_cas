@@ -1,30 +1,349 @@
 [
   {
     "MacroEffect": {
-      "name": "Lanciatore di accuse",
+      "name": "basic effect",
       "MicroEff": [
         {
-          "type": "11"
+          "type": "111"
         },
         {
-          "type" : "22"
+          "type" : "201"
         }
       ]
     }
   },
   {
     "MacroEffect": {
-      "name":"Para culata",
+      "name":"with second lock",
       "MicroEff": [
         {
-          "type": "21"
+          "type": "202"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic effect",
+      "MicroEff": [
+        {
+          "type": "102"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "with focus shot",
+      "MicroEff": [
+        {
+          "type": "103"
+        }
+      ]
+    }
+  },
+  {
+  "MacroEffect": {
+    "name": "with turret tripod",
+    "MicroEff": [
+      {
+        "type": "104"
+      }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "with phase glide",
+      "MicroEff": [
+        {
+          "type": "301"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "with charged shot",
+      "MicroEff": [
+        {
+          "type": "105"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "effect",
+      "MicroEff": [
+        {
+          "type": "106"
         },
         {
-          "type" : "12"
+          "type" : "202"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic mode",
+      "MicroEff": [
+        {
+          "type": "107"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "in reaper mode",
+      "MicroEff": [
+        {
+          "type": "108"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic mode",
+      "MicroEff": [
+        {
+          "type": "302"
+        },
+        {
+          "type" : "201"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "in punisher mode",
+      "MicroEff": [
+        {
+          "type": "109"
+        },
+        {
+          "type" : "308"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "effect",
+      "MicroEff": [
+        {
+          "type": "110"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic mode",
+      "MicroEff": [
+        {
+          "type": "111"
+        },
+        {
+          "type" : "203"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "in nano-tracer mode",
+      "MicroEff": [
+        {
+          "type": "111"
+        },
+        {
+          "type" : "204"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic effect",
+      "MicroEff": [
+        {
+          "type": "112"
+        },
+        {
+          "type" : "303"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "with extra grenade",
+      "MicroEff": [
+        {
+          "type": "113"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic effect",
+      "MicroEff": [
+        {
+          "type": "114"
+        },
+        {
+          "type" : "303"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "with rocket jump",
+      "MicroEff": [
+        {
+          "type": "301"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "with fragmenting warhead",
+      "MicroEff": [
+        {
+          "type": "115"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic effect",
+      "MicroEff": [
+        {
+          "type": "116"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "with shadowstep",
+      "MicroEff": [
+        {
+          "type": "304"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "with slice and dice",
+      "MicroEff": [
+        {
+          "type": "117"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic mode",
+      "MicroEff": [
+        {
+          "type": "118"
+        },
+        {
+          "type" : "205"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "in nano-tracer mode",
+      "MicroEff": [
+        {
+          "type": "205"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic mode",
+      "MicroEff": [
+        {
+          "type": "119"
+        },
+        {
+          "type" : "303"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "in long barrel mode",
+      "MicroEff": [
+        {
+          "type": "120"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "basic mode",
+      "MicroEff": [
+        {
+          "type": "121"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "in tsunami mode",
+      "MicroEff": [
+        {
+          "type": "122"
+        },
+        {
+          "type" : "204"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "in tsunami mode",
+      "MicroEff": [
+        {
+          "type": "123"
+        }
+      ]
+    }
+  },
+  {
+    "MacroEffect": {
+      "name": "in pulverize mode",
+      "MicroEff": [
+        {
+          "type": "124"
+        },
+        {
+          "type" : "305"
         }
       ]
     }
   }
-
 
 ]
