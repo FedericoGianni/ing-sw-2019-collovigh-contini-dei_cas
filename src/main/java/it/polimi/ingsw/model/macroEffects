@@ -19,6 +19,11 @@
         {
           "type": "202"
         }
+      ],
+      "cost": [
+        {
+          "ammoC": "RED"
+        }
       ]
     }
   },
@@ -39,6 +44,11 @@
         {
           "type": "103"
         }
+      ],
+      "cost": [
+        {
+          "ammoC": "YELLOW"
+        }
       ]
     }
   },
@@ -49,7 +59,12 @@
       {
         "type": "104"
       }
-      ]
+      ],
+    "cost": [
+      {
+        "ammoC": "BLUE"
+      }
+    ]
     }
   },
   {
@@ -69,7 +84,13 @@
         {
           "type": "105"
         }
-      ]
+      ],
+
+        "cost": [
+          {
+            "ammoC": "BLUE"
+          }
+        ]
     }
   },
   {
@@ -92,7 +113,13 @@
         {
           "type": "107"
         }
-      ]
+      ],
+
+        "cost": [
+          {
+            "ammoC": "YELLOW"
+          }
+        ]
     }
   },
   {
@@ -101,6 +128,12 @@
       "MicroEff": [
         {
           "type": "108"
+        }
+      ],
+      "cost": [
+        {
+          "ammoC": "BLUE",
+          "ammoC": "RED"
         }
       ]
     }
@@ -127,6 +160,12 @@
         },
         {
           "type" : "307"
+        }
+      ],
+      "cost": [
+        {
+          "ammoC": "RED",
+          "ammoC": "YELLOW"
         }
       ]
     }
@@ -164,6 +203,11 @@
         {
           "type" : "204"
         }
+      ],
+      "cost": [
+        {
+          "ammoC": "RED"
+        }
       ]
     }
   },
@@ -186,6 +230,10 @@
       "MicroEff": [
         {
           "type": "113"
+        }
+      ],"cost": [
+        {
+          "ammoC": "RED"
         }
       ]
     }
@@ -210,6 +258,10 @@
         {
           "type": "301"
         }
+      ],"cost": [
+        {
+          "ammoC": "BLUE"
+        }
       ]
     }
   },
@@ -219,6 +271,10 @@
       "MicroEff": [
         {
           "type": "115"
+        }
+      ],"cost": [
+        {
+          "ammoC": "YELLOW"
         }
       ]
     }
@@ -250,6 +306,11 @@
         {
           "type": "117"
         }
+      ],
+      "cost": [
+        {
+          "ammoC": "YELLOW"
+        }
       ]
     }
   },
@@ -268,7 +329,7 @@
   },
   {
     "MacroEffect": {
-      "name": "in nano-tracer mode",
+      "name": "in SCANNER mode",
       "MicroEff": [
         {
           "type": "205"
@@ -285,6 +346,11 @@
         },
         {
           "type" : "303"
+        }
+      ],
+      "cost": [
+        {
+          "ammoC": "YELLOW"
         }
       ]
     }
@@ -319,12 +385,17 @@
         {
           "type" : "204"
         }
+      ],
+      "cost": [
+        {
+          "ammoC": "YELLOW"
+        }
       ]
     }
   },
   {
     "MacroEffect": {
-      "name": "in tsunami mode",
+      "name": "basic mode",
       "MicroEff": [
         {
           "type": "123"
@@ -342,6 +413,11 @@
         {
           "type" : "305"
         }
+      ],
+      "cost": [
+        {
+          "ammoC": "RED"
+        }
       ]
     }
   },
@@ -351,6 +427,11 @@
       "MicroEff": [
         {
           "type": "111"
+        }
+      ],
+      "cost": [
+        {
+          "ammoC": "YELLOW"
         }
       ]
     }

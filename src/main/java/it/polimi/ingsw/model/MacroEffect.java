@@ -16,16 +16,26 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
     private String name;
     private boolean standerd;//if true is a vector of microeffects otherwise is a class of specialweapons
     private ArrayList<MicroEffect> microEffects;
+    private ArrayList<AmmoCube> effectCost;
     private static ArrayList<MacroEffect> macroEffects=new ArrayList<>();
     /**
      *
      */
+    public MacroEffect (String n,ArrayList <MicroEffect> ef,ArrayList<AmmoCube>a) {
+        microEffects=new ArrayList<>();
+        effectCost=new ArrayList<>();
+        this.microEffects.addAll(ef);
+        this.name=n;
+        effectCost.addAll(a);
+    }
+
     public MacroEffect (String n,ArrayList <MicroEffect> ef) {
         microEffects=new ArrayList<>();
+        effectCost=new ArrayList<>();//is empty means no cost
         this.microEffects.addAll(ef);
         this.name=n;
     }
-    //MISSING: ammocost of macreffects
+
     public String getName() {
         return name;
     }
@@ -83,10 +93,6 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
 
         JSONArray types = (JSONArray) employeeObject.get("MicroEff");//iterate the MicroEffects codification
         ArrayList <MicroEffect>microF=new ArrayList<>();
-
-
-
-
         for (int i = 0; i < types.size(); i++) {//read Every Effect type and differenciate it
            JSONObject type=(JSONObject)types.get(i);
             int typeEncoded=Integer.parseInt((String)type.get("type"));
@@ -94,9 +100,25 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
             //here changes microF
         }
 
+        //ITERATE THE AMMOCOST OF THE MACROEFFECTS
+        types = (JSONArray) employeeObject.get("cost");//iterate the MicroEffects codification
+        ArrayList <AmmoCube> fc=new ArrayList<>();
+        if(types!=null && types.size()!=0)
+        {for (int i = 0; i < types.size(); i++) {//read Every Effect type and differenciate it
+            JSONObject type=(JSONObject)types.get(i);
+            String typeEncoded=(String)type.get("ammoC");
+            fc.add(ammoAnalizer(typeEncoded));//method that can decodify the microevfect code---see documentation
 
-        MacroEffect mf=new MacroEffect(n,microF);//create the macro effect by the list of micro Effects
-        macroEffects.add(mf);
+        }
+            MacroEffect mf=new MacroEffect(n,microF,fc);//create the macro effect by the list of micro Effects
+            macroEffects.add(mf);
+        }else{
+            fc=null;//this means the effect doesn't have cost
+            MacroEffect mf=new MacroEffect(n,microF);//create the macro effect by the list of micro Effects ad empty AmmoCubes
+            macroEffects.add(mf);
+        }
+
+
 
 
     }
@@ -119,9 +141,21 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
             type=type-301;
             microF.add(Mover.getMoversArray().get(type));
         }
-
-
         return microF;
+    }
+
+    private static AmmoCube ammoAnalizer(String color)
+    {
+        if(color=="RED")
+        {
+            return new AmmoCube(Color.RED);
+        }else if(color=="BLUE")
+        {
+            return new AmmoCube(Color.BLUE);
+        }else{
+            return new AmmoCube(Color.YELLOW);
+        }
+
     }
 
     /**
