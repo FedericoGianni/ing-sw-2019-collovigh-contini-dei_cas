@@ -14,6 +14,7 @@ public class SocketServer implements Runnable {
 
     private static final int DEFAULT_SOCKET_PORT = 22222;
     public static final int DEFAULT_MAX_CLIENTS = 5;
+    
     private ServerSocket serverSocket;
     ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(DEFAULT_MAX_CLIENTS);
 

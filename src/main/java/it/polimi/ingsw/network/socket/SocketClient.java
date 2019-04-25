@@ -4,8 +4,10 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * This class represent the Client that sends String messages to the SocketServer
+ */
 public class SocketClient implements Closeable {
-
 
     private String ip;
     private int port;
@@ -55,25 +57,25 @@ public class SocketClient implements Closeable {
         String host = tokens[0];
         int port = Integer.parseInt(tokens[1]);
 
-        SocketClient2 socketClient2 = new SocketClient2(host, port);
+        SocketClient socketClient = new SocketClient(host, port);
         Scanner fromKeyboard = new Scanner(System.in);
 
         try{
-            socketClient2.startClient();
+            socketClient.startClient();
             String msg = null;
 
             do {
                 System.out.println(">>> ");
                 String toSend = fromKeyboard.nextLine();
-                socketClient2.send(toSend);
-                msg = socketClient2.receive();
+                socketClient.send(toSend);
+                msg = socketClient.receive();
                 System.out.println(msg);
             } while (msg != null);
         } catch(IOException e) {
             e.getMessage();
         } finally {
             try {
-                socketClient2.close();
+                socketClient.close();
             } catch(IOException e) {
                 e.getMessage();
             }

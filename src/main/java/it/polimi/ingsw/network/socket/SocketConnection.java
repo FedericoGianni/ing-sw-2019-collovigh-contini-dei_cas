@@ -7,6 +7,11 @@ import java.io.*;
 import java.net.Socket;
 import java.util.logging.Logger;
 
+/**
+ * This class represent the single connection between clients and server.
+ * Every time that a new client connects to the server a new socketConnection thread is started
+ * to handle the single connection separately
+ */
 public class SocketConnection implements Runnable, Closeable {
 
     private Socket socket;
@@ -19,46 +24,38 @@ public class SocketConnection implements Runnable, Closeable {
 
     public void run() {
 
-        InputStream is = null;
-        OutputStream os = null;
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
 
         try {
 
-            is = socket.getInputStream();
-            os = socket.getOutputStream();
+            inputStream = socket.getInputStream();
+            outputStream = socket.getOutputStream();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(is));
-            PrintWriter out = new PrintWriter(os);
+            BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+            PrintWriter out = new PrintWriter(outputStream);
 
             String msg;
 
             do {
                 msg = in.readLine();
 
-                /*trying to add Server response messages
-                Scanner input = new Scanner(System.in);
-                out.println("[Server] " + input.nextLine());
-                out.flush();
-                 */
-
-                if (msg != null && !msg.startsWith("quit")) {
+                if (msg != null && !msg.startsWith("disconnect")) {
                     System.out.println("<<< " + socket.getRemoteSocketAddress() + ": " + msg);
                     out.println("[Server] Received message: >>> " + msg);
                     processMessage(msg);
-                    // when you call flush you really send what
-                    // you added to the buffer with println.
                     out.flush();
                 }
-            } while (msg != null && !msg.startsWith("quit"));
+            } while (msg != null && !msg.startsWith("disconnect"));
 
         } catch(IOException e){
             e.getMessage();
         } finally {
-            if (is != null && os != null) {
+            if (inputStream != null && outputStream != null) {
                 try {
-                    is.close();
-                    os.close();
-                    Logger.getLogger("infoLogger").info("SocketClient2 " + socket.getRemoteSocketAddress() + " closing connection.");
+                    inputStream.close();
+                    outputStream.close();
+                    Logger.getLogger("infoLogger").info("SocketClient " + socket.getRemoteSocketAddress() + " closing connection.");
                 } catch(IOException e){
                     e.getMessage();
                 }
@@ -85,18 +82,18 @@ public class SocketConnection implements Runnable, Closeable {
 
     public void handleLogin(){
 
-        InputStream is = null;
-        OutputStream os = null;
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
 
         try {
-            is = socket.getInputStream();
-            os = socket.getOutputStream();
+            inputStream = socket.getInputStream();
+            outputStream = socket.getOutputStream();
         } catch(IOException e){
             e.getMessage();
         }
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(is));
-        PrintWriter out = new PrintWriter(os);
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+        PrintWriter out = new PrintWriter(outputStream);
         String playerName = null;
         String playerColor = null;
         boolean loginCheck = false;
