@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * 
  */
-public class WeaponDeck implements Deck <Weapon> {
+public class WeaponDeck implements Deck <NormalWeapon> {
 
     /**
      * Default constructor
@@ -18,23 +18,23 @@ public class WeaponDeck implements Deck <Weapon> {
      * @param clone WeaponDeck instance to be copied
      */
     public WeaponDeck(WeaponDeck clone){
-        this.weaponDeck = new ArrayList<>();
-        for(Weapon w : clone.weaponDeck){
-            this.weaponDeck.add(w);
+        this.normalWeaponDeck = new ArrayList<>();
+        for(NormalWeapon w : clone.normalWeaponDeck){
+            this.normalWeaponDeck.add(w);
         }
     }
 
     /**
      * 
      */
-    private List<Weapon> weaponDeck;
+    private List<NormalWeapon> normalWeaponDeck;
 
 
 
     /**
      * 
      */
-    public Weapon getRandomCard() {
+    public NormalWeapon getRandomCard() {
         // TODO implement here
 
         return null;

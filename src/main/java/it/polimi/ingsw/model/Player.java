@@ -94,7 +94,7 @@ public class Player {
     /**
      * @return the player's weapon list
      */
-    public List<Weapon> getWeapon() {
+    public List<NormalWeapon> getWeapon() {
 
         return null;  //TODO
     }
@@ -102,7 +102,7 @@ public class Player {
     /**
      * @param w is the weapon to add
      */
-    public void addWeapon(Weapon w) {
+    public void addWeapon(NormalWeapon w) {
         // TODO
 
     }
@@ -110,7 +110,7 @@ public class Player {
     /**
      * @param w is the weapon to delete
      */
-    public void delWeapon(Weapon w) {
+    public void delWeapon(NormalWeapon w) {
 
         //TODO
     }

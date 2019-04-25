@@ -102,6 +102,10 @@ public class Marker extends MicroEffect {
 
     }
 
+    /**
+     * create a Marker and adds it to the static list
+     * @param markers
+     */
     private static void parseMarkerObject(JSONObject markers)
     {
         //Get employee object within list

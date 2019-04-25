@@ -20,9 +20,9 @@ public class Mover extends MicroEffect {
     private boolean toCell;//you have to move to a specified cell if this flag is true
     private boolean target;//set true if you need to move the target not the shooter
     private static ArrayList <Mover> weaponMov=new ArrayList<>();
-    /**
-    if something moves before shooting pay attention, you need to calculate if you can shoot him after the move
-     **/
+
+    //if something moves before shooting pay attention, you need to calculate if you can shoot him after the move
+
 
     public Mover(int n,boolean a,boolean b,boolean c,boolean d,boolean e){
         this.cellNumber=n;
@@ -124,7 +124,7 @@ public class Mover extends MicroEffect {
 
             JSONArray damageTypes = (JSONArray) obj;
 
-            for (int i = 0; i < damageTypes.size(); i++) {parseDamageObject((JSONObject)damageTypes.get(i)); }
+            for (int i = 0; i < damageTypes.size(); i++) {parseMoverObject((JSONObject)damageTypes.get(i)); }
             //for each Json input object
 
         } catch (FileNotFoundException e) {
@@ -137,7 +137,11 @@ public class Mover extends MicroEffect {
 
     }
 
-    private static void parseDamageObject(JSONObject damages)
+    /**
+     * creates a Mover and adds it t the list
+     * @param damages
+     */
+    private static void parseMoverObject(JSONObject damages)
     {
         //Get employee object within list
         JSONObject employeeObject = (JSONObject) damages.get("Mover");//Choose the class

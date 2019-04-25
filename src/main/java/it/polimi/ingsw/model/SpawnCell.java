@@ -21,10 +21,10 @@ public class SpawnCell extends Cell {
      */
     public SpawnCell(SpawnCell clone){
         super(clone);
-        this.weapons = new ArrayList<>();
+        this.normalWeapons = new ArrayList<>();
 
-        for(Weapon w : clone.getWeapons()){
-            this.weapons.add(w);
+        for(NormalWeapon w : clone.getNormalWeapons()){
+            this.normalWeapons.add(w);
         }
 
     }
@@ -37,13 +37,13 @@ public class SpawnCell extends Cell {
     /**
      * 
      */
-    private List<Weapon> weapons;
+    private List<NormalWeapon> normalWeapons;
 
     /**
      * @return a list of Weapons who are avaiable for sell inside this SpawnCell
      */
-    public List<Weapon> getWeapons() {
-        return weapons;
+    public List<NormalWeapon> getNormalWeapons() {
+        return normalWeapons;
     }
 
 
@@ -51,7 +51,7 @@ public class SpawnCell extends Cell {
      * @param w 
      * @return
      */
-    public Boolean buy(Weapon w) {
+    public Boolean buy(NormalWeapon w) {
         // TODO implement here
         return null;
     }
