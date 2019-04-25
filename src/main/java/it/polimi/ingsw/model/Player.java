@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.CardNotPossessedException;
 import customsexceptions.DeadPlayerException;
 
 import java.util.List;
@@ -56,8 +57,8 @@ public class Player {
     private PlayerColor color;
     private Stats stats;
     private PowerUpBag currentPowerUps;
-    private WeaponBag currentWeapons;
     private AmmoBag ammo;
+    private WeaponBag currentWeapons;
 
 
 
@@ -94,27 +95,28 @@ public class Player {
     }
 
     /**
-     * @return the player's weapon list
+     * @return  a COPY of player's weapon list ( copy of the list but actual elements)
      */
-    public List<Weapon> getWeapon() {
+    public List<Weapon> getWeapons() {
 
-        return null;  //TODO
+        return this.currentWeapons.getList();
     }
 
     /**
      * @param w is the weapon to add
      */
     public void addWeapon(Weapon w) {
-        // TODO
+
+        this.currentWeapons.addItem(w);
 
     }
 
     /**
      * @param w is the weapon to delete
      */
-    public void delWeapon(Weapon w) {
+    public void delWeapon(Weapon w) throws CardNotPossessedException {
 
-        //TODO
+        this.currentWeapons.getItem(w);
     }
 
     /**
@@ -154,13 +156,11 @@ public class Player {
 
     /**
      *
-     * @param p
-     * @return
+     * @return true if the player has already 3 weapons
      */
     public Boolean hasMaxWeapons() {
-        //TODO
 
-        return false;
+        return (this.currentWeapons.getList().size()>=3);
     }
 
     /**
@@ -302,7 +302,7 @@ public class Player {
      * @param color and
      * @return it
      */
-    public AmmoCube pay(Color color){
+    public AmmoCube pay(Color color) throws CardNotPossessedException{
 
         return this.ammo.getItem(this.ammo.getList().stream()
                 .filter( ammoCube -> ammoCube.getColor()==color)

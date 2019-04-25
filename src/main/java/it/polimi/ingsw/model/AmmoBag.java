@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model;
 
 import customsexceptions.CardNotPossessedException;
-import it.polimi.ingsw.model.AmmoCube;
-import it.polimi.ingsw.model.Bag;
 
 import java.util.ArrayList;
 import java.util.Comparator;
