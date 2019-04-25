@@ -180,4 +180,52 @@ class AmmoBagTest {
 
 
     }
+
+    @Test
+    void getAmount() {
+
+        //0->red,1->blue,->yellow
+
+        AmmoBag bag= new AmmoBag();
+
+        List<AmmoCube> list = new ArrayList<>();
+        list.add(new AmmoCube(Color.YELLOW));
+        list.add(new AmmoCube(Color.RED));
+        list.add(new AmmoCube(Color.YELLOW));
+        list.add(new AmmoCube(Color.RED));
+        list.add(new AmmoCube(Color.BLUE));
+        list.add(new AmmoCube(Color.YELLOW));
+        list.add(new AmmoCube(Color.RED));
+        list.add(new AmmoCube(Color.BLUE));
+        list.add(new AmmoCube(Color.BLUE));
+
+        for (AmmoCube a: list){
+
+            bag.addItem(a);
+        }
+
+        List<AmmoCube>list1 = bag.getList().stream()
+                .filter(ammoCube ->
+                        ammoCube.getColor() == Color.RED
+                ).collect(Collectors.toList());
+
+        assertEquals(list1.size(),bag.getAmount()[0]);
+
+        list1 = bag.getList().stream()
+                .filter(ammoCube ->
+                        ammoCube.getColor() == Color.BLUE
+                ).collect(Collectors.toList());
+
+        assertEquals(list1.size(),bag.getAmount()[1]);
+
+        list1 = bag.getList().stream()
+                .filter(ammoCube ->
+                        ammoCube.getColor() == Color.YELLOW
+                ).collect(Collectors.toList());
+
+        assertEquals(list1.size(),bag.getAmount()[2]);
+
+
+
+    }
 }
