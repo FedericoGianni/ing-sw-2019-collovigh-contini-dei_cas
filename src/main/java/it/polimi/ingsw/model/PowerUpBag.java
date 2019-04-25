@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.CardNotPossessedException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,16 +57,18 @@ public class PowerUpBag  implements Bag<PowerUp>{
     /**
      *
      * @param item is the pointer of the powerUp to "use" note that it will be removed from the list
-     * @return
+     * @return the ONLY pointer to the PowerUp
      */
     @Override
-    public PowerUp getItem(PowerUp item) {
+    public PowerUp getItem(PowerUp item) throws CardNotPossessedException {
 
-        PowerUp temp = item;
+        if (!this.powerUps.contains(item)) throw new CardNotPossessedException();
 
-        this.powerUps.remove(item);
+        else {
+            this.powerUps.remove(item);
 
-        return temp;
+            return item;
+        }
     }
 
     /**

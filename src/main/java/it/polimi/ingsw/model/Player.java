@@ -33,6 +33,7 @@ public class Player {
         this.stats = new Stats(null);
         this.currentPowerUps = new PowerUpBag();
         this.ammo = new AmmoBag();
+        this.currentWeapons = new WeaponBag();
 
     }
 
@@ -55,6 +56,7 @@ public class Player {
     private PlayerColor color;
     private Stats stats;
     private PowerUpBag currentPowerUps;
+    private WeaponBag currentWeapons;
     private AmmoBag ammo;
 
 

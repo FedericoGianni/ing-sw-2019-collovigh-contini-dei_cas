@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.AmmoCube;
 import it.polimi.ingsw.model.Bag;
 
@@ -63,14 +64,16 @@ public class AmmoBag implements Bag<AmmoCube> {
      * Than the method will sort again the list
      */
     @Override
-    public AmmoCube getItem(AmmoCube item) {
+    public AmmoCube getItem(AmmoCube item) throws CardNotPossessedException {
 
-        if (this.ammoCubes.isEmpty()) return null;
-        if (!this.ammoCubes.contains(item)) return null;
+        if (this.ammoCubes.isEmpty()) throw new CardNotPossessedException();
+        if (!this.ammoCubes.contains(item)) throw new CardNotPossessedException();
 
-        this.ammoCubes.remove(item);
-        this.ammoCubes.sort(Comparator.comparing(AmmoCube::getColor));
-        return item;
+        else {
+            this.ammoCubes.remove(item);
+            this.ammoCubes.sort(Comparator.comparing(AmmoCube::getColor));
+            return item;
+        }
     }
 
     /**

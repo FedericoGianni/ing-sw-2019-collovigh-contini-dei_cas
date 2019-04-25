@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.CardNotPossessedException;
+
 import java.util.List;
 
 public interface Bag <T> {
@@ -8,7 +10,7 @@ public interface Bag <T> {
 
      void addItem(T item);
 
-     T getItem( T item);
+     T getItem( T item) throws CardNotPossessedException;
 
      Boolean hasItem( T item);
 
