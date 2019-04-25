@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.WeaponNotLoadedException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -146,7 +147,7 @@ public class NormalWeapon extends Weapon{
      *
      * @return a random weapon
      */
-    public NormalWeapon getWeapon()//get a random weapon from the weapon List
+    public NormalWeapon getRandWeapon()//get a random weapon from the weapon List
     {
         Random rand=new Random();
         int casuale=rand.nextInt(NormalWeapon.getNormalWeapons().size());//the random number can't exceed the List bounds
@@ -248,5 +249,27 @@ public class NormalWeapon extends Weapon{
     {
         mf.add(MacroEffect.getMacroEffects().get(typeEncoded));
         return mf;
+    }
+
+    /**
+     *
+     * @param target
+     * @param shooter not necessary if we do weaponBag
+     * @param mE
+     * @throws WeaponNotLoadedException
+     */
+    public void shoot(Player target,Player shooter,ArrayList<MacroEffect> mE)throws WeaponNotLoadedException
+    {
+        try{
+            if(this.isLoaded==false)
+            {
+                throw new WeaponNotLoadedException();//weapon not loaded zac
+            }
+            //qui continua
+
+
+        }catch(WeaponNotLoadedException e){e.printStackTrace();}
+
+
     }
 }
