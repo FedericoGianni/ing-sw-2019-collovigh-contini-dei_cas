@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -20,12 +21,9 @@ public class SpawnCell extends Cell {
      */
     public SpawnCell() {
         this.visit=false;
-        for (int i = 0; i < 3; i++) {
-
-            weapons.add(Model.getGame().drawWeapon());
-            
-        }
+        this.weapons = new ArrayList<>();
     }
+
 
     /**
      * This constructor is used to return a copy of the SpawnCell passed as a parameter
@@ -39,20 +37,36 @@ public class SpawnCell extends Cell {
 
 
     /**
-     * @return a list of Weapons who are avaiable for sell inside this SpawnCell
+     * this method populate the weapon list in the spawnPoint
+     */
+    public void populateWeapon(){
+
+        for (int i = 0; i < (3-weapons.size()); i++) {
+
+            this.weapons.add(Model.getGame().drawWeapon());
+        }
+
+    }
+
+
+    /**
+     * @return a list of Weapons who are available for sell inside this SpawnCell
      */
     public List<Weapon> getWeapons() {
+        if (this.weapons.isEmpty()) this.populateWeapon();
         return weapons;
     }
 
 
     /**
-     * @param w 
-     * @return
+     * @param w is the weapon that will be bought
+     * @param cash is the ammoBag of the player who wants to buy it
+     * @return true if the operation succeeded
      */
-    public Boolean buy(Weapon w) {
-        // TODO implement here
-        return null;
+    public Boolean buy(Weapon w, AmmoBag cash) {
+
+        //TODO
+        return false;
     }
 
 }

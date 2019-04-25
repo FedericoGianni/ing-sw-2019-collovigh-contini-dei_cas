@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import customsexceptions.CardNotPossessedException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +13,6 @@ public class AmmoBag implements Bag<AmmoCube> {
      * this is an ArrayList of AmmoCubes sorted by color
      */
     private List<AmmoCube> ammoCubes;
-
     private static final int MAX_FOR_COLOR = 3;
 
     /**
@@ -25,6 +23,7 @@ public class AmmoBag implements Bag<AmmoCube> {
         this.ammoCubes = new ArrayList<>();
     }
 
+
     /**
      *
      * @return a copy of the list of AmmoCubes
@@ -33,6 +32,7 @@ public class AmmoBag implements Bag<AmmoCube> {
     public List<AmmoCube> getList() {
         return new ArrayList<>(this.ammoCubes);
     }
+
 
     /**
      * This function will add an element to the list (only if the list has less than MAX_FOR_COLOR ammo cubes) and sort it
@@ -56,6 +56,7 @@ public class AmmoBag implements Bag<AmmoCube> {
 
     }
 
+
     /**
      *
      * @return the number of ammos of each type, 0->red,1->blue,->yellow
@@ -78,6 +79,7 @@ public class AmmoBag implements Bag<AmmoCube> {
         return ammo;
     }
 
+
     /**
      *
      * @param item is the AmmoCube that will be given as
@@ -97,6 +99,7 @@ public class AmmoBag implements Bag<AmmoCube> {
         }
     }
 
+
     /**
      * This method checks if the
      * @param item is held by the player and
@@ -107,28 +110,4 @@ public class AmmoBag implements Bag<AmmoCube> {
 
         return this.ammoCubes.contains(item);
     }
-
-    /**
-     *
-     * @return the number of ammoCubes of each type, 0->red,1->blue,->yellow
-     */
-    public int[] getAmount()
-    {
-        int []ammo=new int[3];
-        for(int i=0;i<this.ammoCubes.size();i++)
-        {
-            if(this.ammoCubes.get(i).getColor()==Color.RED)
-            {
-                ammo[0]++;
-            }else if(this.ammoCubes.get(i).getColor()==Color.BLUE)
-            {
-                ammo[1]++;
-            }else{
-                ammo[2]++;
-            }
-        }
-        return ammo;
-    }
-
-
 }

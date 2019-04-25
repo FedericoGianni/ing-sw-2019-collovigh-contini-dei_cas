@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
 
@@ -60,10 +61,15 @@ class PowerUpBagTest {
         p.getPowerUpBag().addItem(c3);
         assertTrue(c3.equals(p.getPowerUpBag().getList().get(2)));
 
-        p.getPowerUpBag().getItem(c3);
-        assertTrue(p.getPowerUpBag().getList().size() == 2);
-        assertTrue(c1.equals(p.getPowerUpBag().getList().get(0)));
-        assertTrue(c2.equals(p.getPowerUpBag().getList().get(1)));
+        try {
+            p.getPowerUpBag().getItem(c3);
+            assertTrue(p.getPowerUpBag().getList().size() == 2);
+            assertTrue(c1.equals(p.getPowerUpBag().getList().get(0)));
+            assertTrue(c2.equals(p.getPowerUpBag().getList().get(1)));
+        }catch(CardNotPossessedException e){
+
+            e.printStackTrace();
+        }
 
     }
 

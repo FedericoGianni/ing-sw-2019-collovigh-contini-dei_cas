@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.util.ArrayList;
+
 public abstract class Weapon {
     boolean isLoaded;
 

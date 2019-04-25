@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.AmmoBag;
 import it.polimi.ingsw.model.AmmoCube;
 import it.polimi.ingsw.model.Color;
@@ -123,14 +124,26 @@ class AmmoBagTest {
 
         for (int i = 0; i < bag.getList().size(); i++) {
 
-            AmmoCube ammoCube = bag.getItem(bag.getList().get(i));
+            try {
 
-            assertTrue(list.contains(ammoCube));
+                AmmoCube ammoCube = bag.getItem(bag.getList().get(i));
+
+                assertTrue(list.contains(ammoCube));
+
+            }catch (CardNotPossessedException e){
+                e.printStackTrace();
+            }
+
+
 
         }
 
-        assertNull(bag.getItem(new AmmoCube(Color.YELLOW)));
+        assertThrows(CardNotPossessedException.class,
+                () -> {
 
+                    bag.getItem(new AmmoCube(Color.YELLOW));
+
+                });
 
     }
 

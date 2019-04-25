@@ -69,7 +69,7 @@ public class CurrentGame {
     /**
      * @return a random weapon from the weaponDeck
      */
-    public NormalWeapon drawWeapon() {
+    public Weapon drawWeapon() {
         return weaponDeck.getRandomCard();
     }
 

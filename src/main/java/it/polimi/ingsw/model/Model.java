@@ -14,15 +14,17 @@ public class Model {
     public Model(List<String> playerNames, List<PlayerColor> playerColors, int mapType) {
 
         Map map = new Map();
-        map.genMap(mapType);
-        map.generateCells(mapType);
 
         List<Player> playerList = new ArrayList<>();
         for (int i = 0; i < playerNames.size(); i++) {
             playerList.add(new Player(playerNames.get(i), i, playerColors.get(i)));
         }
 
-        this.game = new CurrentGame(playerList, map);
+        game = new CurrentGame(playerList, map);
+
+
+        map.genMap(mapType);
+        map.generateCells(mapType);
     }
 
     private static CurrentGame game;
