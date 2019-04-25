@@ -84,4 +84,28 @@ public class AmmoBag implements Bag<AmmoCube> {
 
         return this.ammoCubes.contains(item);
     }
+
+    /**
+     *
+     * @return the number of ammoCubes of each type, 0->red,1->blue,->yellow
+     */
+    public int[] getAmount()
+    {
+        int []ammo=new int[3];
+        for(int i=0;i<this.ammoCubes.size();i++)
+        {
+            if(this.ammoCubes.get(i).getColor()==Color.RED)
+            {
+                ammo[0]++;
+            }else if(this.ammoCubes.get(i).getColor()==Color.BLUE)
+            {
+                ammo[1]++;
+            }else{
+                ammo[2]++;
+            }
+        }
+        return ammo;
+    }
+
+
 }

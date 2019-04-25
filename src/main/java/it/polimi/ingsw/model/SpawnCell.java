@@ -8,11 +8,23 @@ import java.util.List;
  */
 public class SpawnCell extends Cell {
 
+
+    /**
+     * attribute useful for canSee method, which need to check if the cell has already been visited or not
+     */
+    private boolean visit;
+    private List<Weapon> weapons;
+
     /**
      * Default constructor
      */
     public SpawnCell() {
         this.visit=false;
+        for (int i = 0; i < 3; i++) {
+
+            weapons.add(Model.getGame().drawWeapon());
+            
+        }
     }
 
     /**
@@ -21,23 +33,10 @@ public class SpawnCell extends Cell {
      */
     public SpawnCell(SpawnCell clone){
         super(clone);
-        this.weapons = new ArrayList<>();
-
-        for(Weapon w : clone.getWeapons()){
-            this.weapons.add(w);
-        }
+        this.weapons = new ArrayList<>(clone.weapons);
 
     }
 
-    /**
-     * attribute useful for canSee method, which need to check if the cell has already been visited or not
-     */
-    private boolean visit;
-
-    /**
-     * 
-     */
-    private List<Weapon> weapons;
 
     /**
      * @return a list of Weapons who are avaiable for sell inside this SpawnCell
