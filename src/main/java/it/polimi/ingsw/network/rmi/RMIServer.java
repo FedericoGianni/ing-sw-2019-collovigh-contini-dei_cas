@@ -1,8 +1,12 @@
 package it.polimi.ingsw.network.rmi;
 
-import it.polimi.ingsw.network.Server;
+import java.util.logging.Logger;
 
-public class RMIServer implements Server {
+public class RMIServer implements Runnable {
 
+    @Override
+    public void run() {
+        Logger.getLogger("infoLogger").info("Starting RMIServer");
+    }
 
 }

@@ -67,7 +67,7 @@ class CurrentGameTest {
 
     @Test
     void drawWeapon() {
-        //TODO need to test it after Weapon implementation
+        //TODO need to test it after NormalWeapon implementation
     }
 
     @Test

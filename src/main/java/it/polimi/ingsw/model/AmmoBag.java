@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import customsexceptions.CardNotPossessedException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +54,28 @@ public class AmmoBag implements Bag<AmmoCube> {
             this.ammoCubes.sort(Comparator.comparing(AmmoCube::getColor));
         }
 
+    }
+
+    /**
+     *
+     * @return the number of ammos of each type, 0->red,1->blue,->yellow
+     */
+    public int[] getAmount()
+    {
+        int []ammo=new int[3];
+        for(int i=0;i<this.ammoCubes.size();i++)
+        {
+            if(this.ammoCubes.get(i).getColor()==Color.RED)
+            {
+                ammo[0]++;
+            }else if(this.ammoCubes.get(i).getColor()==Color.BLUE)
+            {
+                ammo[1]++;
+            }else{
+                ammo[2]++;
+            }
+        }
+        return ammo;
     }
 
     /**

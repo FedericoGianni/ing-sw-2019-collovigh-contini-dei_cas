@@ -82,6 +82,10 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
 
     }
 
+    /**
+     * read the JSON file and add the macroeffetcs to the static list
+     * @param micros
+     */
     private static void parseDamageObject(JSONObject micros)
     {
         //Get  object within list
@@ -123,6 +127,12 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
 
     }
 
+    /**
+     * reads n microeffects and create the microeeffects array, one array for every macroeffect
+     * @param microF
+     * @param type
+     * @return a micro effects array
+     */
     private static ArrayList<MicroEffect> differenciator(ArrayList<MicroEffect>microF,int type)
     {
         //maybe you need the object or something like that??
@@ -144,6 +154,11 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
         return microF;
     }
 
+    /**
+     * directly converts the ammo into the enum type
+     * @param color
+     * @return an AmmoCube
+     */
     private static AmmoCube ammoAnalizer(String color)
     {
         if(color=="RED")

@@ -16,6 +16,10 @@ public class Damage extends MicroEffect {
     private int playerNum;//some effects can deal damage to more than 1 player
     private boolean seeAbleTargetNeeded; //some effects can target unSeeable players
 
+    /**
+     *
+     * getters and setters
+     */
     public int getDamage() {
         return damage;
     }
@@ -24,9 +28,11 @@ public class Damage extends MicroEffect {
         return melee;
     }
 
+
     public void setMelee(boolean melee) {
         this.melee = melee;
     }
+
 
     public boolean isDifferentPlayer() {
         return differentPlayer;
@@ -149,6 +155,10 @@ public class Damage extends MicroEffect {
 
     }
 
+    /**
+     * reads the JSON and create a Damage object with the values
+     * @param damages
+     */
     private static void parseDamageObject(JSONObject damages)
     {
         //Get employee object within list
