@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 public abstract class Weapon {
     private boolean isLoaded;
-    private boolean special;
     /**
      * @return Boolean if the weapon is loaded
      */
@@ -27,10 +26,10 @@ public abstract class Weapon {
 
     /**
      * every weapon type need to say if it can be reloaded
-     * @param aB
-     * @return
+     *
+     * @return true if the weapon can be reloaded
      */
-    public abstract boolean canBeReloaded(AmmoBag aB);
+    public abstract boolean canBeReloaded();
 
     public final Player isPossessedBy(){
 
@@ -41,20 +40,10 @@ public abstract class Weapon {
         return (list.isEmpty()) ? null : list.get(0);
     }
 
-    public abstract void shoot(Player target, Player shooter, ArrayList<MacroEffect> mE)throws WeaponNotLoadedException;
-    public final boolean isSpecial()
-    {
-        return this.special;
-    }
-    public final void setSpecial()
-    {
-        this.special=true;
-    }
 
-    public final void setNormal()
-    {
-        this.special=false;
-    }
+    public abstract void shoot(Player target,ArrayList<MacroEffect> effects)throws WeaponNotLoadedException;//may need to be changed
+    public abstract boolean isSpecial();
+
 
     /**
      *

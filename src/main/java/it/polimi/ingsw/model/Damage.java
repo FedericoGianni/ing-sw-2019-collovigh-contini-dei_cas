@@ -86,7 +86,6 @@ public class Damage extends MicroEffect {
         this.differentPlayer=diff;
         this.distMin=dm;
         this.alreadyTargetd=at;
-        this.isDamage();
     }
 
 
@@ -205,4 +204,8 @@ public class Damage extends MicroEffect {
         return null;
     }
 
+    public int type()
+    {
+        return 1;
+    }
 }

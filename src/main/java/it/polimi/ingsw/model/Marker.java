@@ -27,7 +27,6 @@ public class Marker extends MicroEffect {
         this.playerNum=b;
         this.seeAbleTargetNeeded=c;
         this.differenPlayer=dp;
-        this.isMarker();
     }
 
     public static ArrayList<Marker> getMarkersArray() {
@@ -143,5 +142,10 @@ public class Marker extends MicroEffect {
     @Override
     public MicroEffect copy() {
         return null;
+    }
+
+    @Override
+    public int type() {
+        return 2;
     }
 }

@@ -31,7 +31,6 @@ public class Mover extends MicroEffect {
         this.facoltative=c;
         this.toCell=d;
         this.target=e;
-        this.isMover();
     }
 
     @Override
@@ -42,6 +41,11 @@ public class Mover extends MicroEffect {
     @Override
     public MicroEffect copy() {
         return null;
+    }
+
+    @Override
+    public int type() {
+        return 3;
     }
 
     public int getMoves()

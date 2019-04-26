@@ -79,7 +79,10 @@ public class NormalWeapon extends Weapon{
         }
     }
 
-
+    public boolean isSpecial()
+    {
+        return false;
+    }
 
     /**
      * @return true only if the player has enough ammo for reloading the NormalWeapon and if it's not reloaded
