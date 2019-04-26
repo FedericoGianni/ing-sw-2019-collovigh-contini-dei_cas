@@ -15,6 +15,18 @@ public class Damage extends MicroEffect {
     private int damage;//how much damage you can do
     private int playerNum;//some effects can deal damage to more than 1 player
     private boolean seeAbleTargetNeeded; //some effects can target unSeeable players
+    private boolean melee;//some weapons can deal damage to players only in your current cell
+    private boolean differentPlayer;//in secondary effects sometimes you need to target different players from the first
+    private boolean alreadyTargetd;//sometimes in secondary effects you have to choose between already targeted players of the first effect
+    private int distMin;//some effects require a minimum distance, calculated by moves
+    //particuarities: if both differentPlayer and alreadyTargeted are true you can choose to apply one or both effects(check machineGun III)
+    // the player number is 100 you need to trget every player in the traget's square(check electroshyte-melee-  and grande launcher)
+    //player num is 10 you must target the number/10 every one from different cell
+    //if the minimum distance is over 10 it means maximum distance, like 20 is at maximun distnce of 2 (20/10-> 2)(check tractor beam)
+    //if the distance is 1000 is like 1 , no more no less
+    //if the minimum distance is 100 is an unseeblePlayer by default, you have to target an unseeable player(check heatseeker)
+    //only the damage tag have the distance inside
+    private static ArrayList <Damage> damages=new ArrayList<>();
 
     /**
      *
@@ -57,20 +69,6 @@ public class Damage extends MicroEffect {
     public void setDistMin(int distMin) {
         this.distMin = distMin;
     }
-
-    private boolean melee;//some weapons can deal damage to players only in your current cell
-    private boolean differentPlayer;//in secondary effects sometimes you need to target different players from the first
-    private boolean alreadyTargetd;//sometimes in secondary effects you have to choose between already targeted players of the first effect
-    private int distMin;//some effects require a minimum distance, calculated by moves
-    //particuarities: if both differentPlayer and alreadyTargeted are true you can choose to apply one or both effects(check machineGun III)
-    // the player number is 100 you need to trget every player in the traget's square(check electroshyte-melee-  and grande launcher)
-    //player num is 10 you must target the number/10 every one from different cell
-    //if the minimum distance is over 10 it means maximum distance, like 20 is at maximun distnce of 2 (20/10-> 2)(check tractor beam)
-    //if the distance is 1000 is like 1 , no more no less
-    //if the minimum distance is 100 is an unseeblePlayer by default, you have to target an unseeable player(check heatseeker)
-    //only the damage tag have the distance inside
-    private static ArrayList <Damage> damages=new ArrayList<>();
-
     public static void insertDamage(Damage dm) {
         damages.add(dm);
     }
@@ -88,6 +86,7 @@ public class Damage extends MicroEffect {
         this.differentPlayer=diff;
         this.distMin=dm;
         this.alreadyTargetd=at;
+        this.isDamage();
     }
 
 

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.CardNotPossessedException;
+import customsexceptions.NotEnoughAmmoException;
 import customsexceptions.WeaponNotLoadedException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -82,29 +84,10 @@ public class NormalWeapon extends Weapon{
     /**
      * @return true only if the player has enough ammo for reloading the NormalWeapon and if it's not reloaded
      */
-    public boolean canBeReloaded(AmmoBag aB) {
-        if(this.isLoaded==false)
+    public boolean canBeReloaded() {
+        if(this.isLoaded==false && canPay(this.getCost(),isPossessedBy().getAmmoBag()))
         {
-            int []ammo=aB.getAmount();
-            int []ammoC=new int[3];
-            for(int i=0;i<this.cost.size();i++)
-            {
-                if(this.cost.get(i).getColor()==Color.RED)
-                {
-                    ammoC[0]++;
-                }else if(this.cost.get(i).getColor()==Color.BLUE)
-                {
-                    ammoC[1]++;
-                }else{
-                    ammoC[2]++;
-                }
-            }
-            if(ammo[0]-ammoC[0]>=0&&ammo[1]-ammoC[1]>=0&&ammo[2]-ammoC[2]>=0)//ammo i Have - ammo Cost for each type il >=0 then i can reload
-            {
-                return true;
-            }else{
-                return false;
-            }
+           return true;
         }else
         {return false;}
     }
@@ -243,22 +226,37 @@ public class NormalWeapon extends Weapon{
     /**
      *
      * @param target
-     * @param shooter not necessary if we do weaponBag
      * @param mE
      * @throws WeaponNotLoadedException
      */
-    public void shoot(Player target,Player shooter,ArrayList<MacroEffect> mE)throws WeaponNotLoadedException
+    public void shoot(Player target,ArrayList<MacroEffect> mE)throws WeaponNotLoadedException
     {
         try{
             if(this.isLoaded==false)
             {
                 throw new WeaponNotLoadedException();//weapon not loaded zac
             }
-            //qui continua
+            for(MacroEffect item : mE){
+                if(canPay(mE.get(mE.indexOf(item)).getEffectCost(),this.isPossessedBy().getAmmoBag())==true)
+                {
+                    for (AmmoCube ammo : mE.get(mE.indexOf(item)).getEffectCost())
+                    {
+                        this.isPossessedBy().pay(ammo.getColor());//takes the player's ammo
+                    }
 
+                    shooter();
+                }
+                else{
+                    throw new NotEnoughAmmoException();
+                }
+
+            }
 
         }catch(WeaponNotLoadedException e){e.printStackTrace();}
+        catch (CardNotPossessedException e) { e.printStackTrace(); }
+        catch(NotEnoughAmmoException e){ e.printStackTrace();}
 
         this.isLoaded=false;//the weapon is no longer loaded
     }
+
 }

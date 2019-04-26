@@ -31,7 +31,7 @@ public class Mover extends MicroEffect {
         this.facoltative=c;
         this.toCell=d;
         this.target=e;
-
+        this.isMover();
     }
 
     @Override

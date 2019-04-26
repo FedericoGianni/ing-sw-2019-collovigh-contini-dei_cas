@@ -4,7 +4,7 @@ package it.polimi.ingsw.model;
  * //TODO
  */
 public abstract class MicroEffect {
-
+    private int type;
     /**
      *
      */
@@ -26,6 +26,19 @@ public abstract class MicroEffect {
      * @return a clone of this object (but sonar does not let me use the clone name)
      */
     public abstract MicroEffect copy();
-
-
+    public int getType(){
+        return this.type;
+    }
+    public void isDamage()
+    {
+        this.type=1;
+    }
+    public void isMarker()
+    {
+        this.type=2;
+    }
+    public void isMover()
+    {
+        this.type=3;
+    }
 }

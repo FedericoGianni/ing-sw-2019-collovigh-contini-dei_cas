@@ -14,8 +14,26 @@ import java.util.ArrayList;
 public class MacroEffect {//----evetually add an attribute std or not if the weapon is one of the enlighted
 
     private String name;
-    private boolean standerd;//if true is a vector of microeffects otherwise is a class of specialweapons
     private ArrayList<MicroEffect> microEffects;
+
+
+
+    public ArrayList<MicroEffect> getMicroEffects() {
+        return microEffects;
+    }
+
+    public void setMicroEffects(ArrayList<MicroEffect> microEffects) {
+        this.microEffects = microEffects;
+    }
+
+    public ArrayList<AmmoCube> getEffectCost() {
+        return effectCost;
+    }
+
+    public void setEffectCost(ArrayList<AmmoCube> effectCost) {
+        this.effectCost = effectCost;
+    }
+
     private ArrayList<AmmoCube> effectCost;
     private static ArrayList<MacroEffect> macroEffects=new ArrayList<>();
     /**

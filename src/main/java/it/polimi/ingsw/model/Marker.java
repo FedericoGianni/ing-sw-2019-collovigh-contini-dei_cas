@@ -27,7 +27,7 @@ public class Marker extends MicroEffect {
         this.playerNum=b;
         this.seeAbleTargetNeeded=c;
         this.differenPlayer=dp;
-
+        this.isMarker();
     }
 
     public static ArrayList<Marker> getMarkersArray() {

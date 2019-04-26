@@ -87,6 +87,7 @@ public class Player {
         return this.id;
     }
 
+
     /**
      * @return the player's name
      */
@@ -302,6 +303,14 @@ public class Player {
         return this.ammo.getList();
     }
 
+    /**
+     *
+     * @return the AmmoBag
+     */
+    public AmmoBag getAmmoBag()
+    {
+        return this.ammo;
+    }
     /**
      * This function will subtract an ammo cube of the given
      * @param color and
