@@ -186,6 +186,11 @@ public class Player {
         return stats;
     }
 
+    public WeaponBag getCurrentWeapons(){
+
+        return currentWeapons;
+    }
+
     public List<Player> canSee() {
         Cell c=this.getCurrentPosition();
         List<Player> visibili;

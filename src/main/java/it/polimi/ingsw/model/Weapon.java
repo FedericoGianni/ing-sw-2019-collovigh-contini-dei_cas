@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public abstract class Weapon {
     boolean isLoaded;
 
@@ -25,6 +28,16 @@ public abstract class Weapon {
      * @return
      */
     public abstract boolean canBeReloaded(AmmoBag aB);
+
+    public Player isPossessedBy(){
+
+        List<Player> list = Model.getGame().getPlayers().stream()
+                .filter(player -> player.getCurrentWeapons().hasItem(this))
+                .collect(Collectors.toList());
+
+        return (list.isEmpty()) ? null : list.get(0);
+    }
+
 
 
 }
