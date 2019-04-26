@@ -63,9 +63,9 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
         try (FileReader reader = new FileReader(path))
         {//change to relative files paths
             //Read JSON file
-            Object obj = jsonParser.parse(reader);
+            Object ob = jsonParser.parse(reader);
 
-            JSONArray macros = (JSONArray) obj;
+            JSONArray macros = (JSONArray) ob;
 
             for (int i = 0; i < macros.size(); i++) {
                  parseDamageObject((JSONObject)macros.get(i));

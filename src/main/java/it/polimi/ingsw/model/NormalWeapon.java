@@ -143,18 +143,7 @@ public class NormalWeapon extends Weapon{
         this.effects.add(macroEffect);
     }
 
-    /**
-     *
-     * @return a random weapon
-     */
-    public NormalWeapon getRandWeapon()//get a random weapon from the weapon List
-    {
-        Random rand=new Random();
-        int casuale=rand.nextInt(NormalWeapon.getNormalWeapons().size());//the random number can't exceed the List bounds
-        NormalWeapon rnd= NormalWeapon.getNormalWeapons().get(casuale);//returns a random weapon from the list
-        NormalWeapon.getNormalWeapons().remove(rnd);//you can't retake a weapon
-        return rnd;
-    }
+
 
     /**
      * creates the static weaponsList
@@ -270,6 +259,6 @@ public class NormalWeapon extends Weapon{
 
         }catch(WeaponNotLoadedException e){e.printStackTrace();}
 
-
+        this.isLoaded=false;//the weapon is no longer loaded
     }
 }
