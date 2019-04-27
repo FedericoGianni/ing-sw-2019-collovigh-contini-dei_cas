@@ -20,11 +20,11 @@ public class Damage extends MicroEffect {
     private boolean alreadyTargetd;//sometimes in secondary effects you have to choose between already targeted players of the first effect
     private int distMin;//some effects require a minimum distance, calculated by moves
     //particuarities: if both differentPlayer and alreadyTargeted are true you can choose to apply one or both effects(check machineGun III)
-    // the player number is 100 you need to trget every player in the traget's square(check electroshyte-melee-  and grande launcher)
+    // the player number is 100 you need to target every player in the target's square(check electroshyte-melee-  and grenade launcher)
     //player num is 10 you must target the number/10 every one from different cell
-    //if the minimum distance is over 10 it means maximum distance, like 20 is at maximun distnce of 2 (20/10-> 2)(check tractor beam)
+    //if the minimum distance is over 10 it means maximum distance, like 20 is at maximun distance of 2 (20/10-> 2)(check tractor beam)
     //if the distance is 1000 is like 1 , no more no less
-    //if the minimum distance is 100 is an unseeblePlayer by default, you have to target an unseeable player(check heatseeker)
+    //if the minimum distance is 100 is an unseeble Player by default, you have to target an unseeable player(check heatseeker)
     //only the damage tag have the distance inside
     private static ArrayList <Damage> damages=new ArrayList<>();
 
@@ -33,12 +33,10 @@ public class Damage extends MicroEffect {
      * getters and setters
      */
     public int getDamage() {
-        return damage;
+        return this.damage;
     }
 
-    public boolean isMelee() {
-        return melee;
-    }
+
 
 
     public void setMelee(boolean melee) {
@@ -46,7 +44,7 @@ public class Damage extends MicroEffect {
     }
 
 
-    public boolean isDifferentPlayer() {
+    public boolean isDifferentPlayerNeeded() {
         return differentPlayer;
     }
 
@@ -54,7 +52,7 @@ public class Damage extends MicroEffect {
         this.differentPlayer = differentPlayer;
     }
 
-    public boolean isAlreadyTargetd() {
+    public boolean isAlreadyTargetdNeeded() {
         return alreadyTargetd;
     }
 
@@ -87,7 +85,16 @@ public class Damage extends MicroEffect {
         this.distMin=dm;
         this.alreadyTargetd=at;
     }
-
+    public Damage(Damage d)
+    {
+        this.damage=d.getDamage();
+        this.playerNum=d.getPlayerNum();
+        this.seeAbleTargetNeeded=isSeeAbleTargetNeeded();
+        this.melee=d.isMeleeNeeded();
+        this.differentPlayer=d.isDifferentPlayerNeeded();
+        this.distMin=d.getDistMin();
+        this.alreadyTargetd=d.isAlreadyTargetdNeeded();
+    }
 
 
     public int getDamages()
@@ -102,7 +109,10 @@ public class Damage extends MicroEffect {
         return playerNum;
     }
 
-
+    public boolean isMeleeNeeded()
+    {
+        return this.melee;
+    }
     public void setPlayerNum(int playerNum) {
         this.playerNum = playerNum;
     }
@@ -200,8 +210,8 @@ public class Damage extends MicroEffect {
     }
 
     @Override
-    public MicroEffect copy() {
-        return null;
+    public Damage copy() {
+        return this;
     }
 
     public int type()

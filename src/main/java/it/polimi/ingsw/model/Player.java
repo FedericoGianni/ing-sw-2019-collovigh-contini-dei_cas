@@ -49,6 +49,7 @@ public class Player {
         posizione.addPlayerHere(this);
         this.currentPowerUps = new PowerUpBag();
         this.ammo = new AmmoBag();
+        this.currentWeapons = new WeaponBag();
     }
 
 
@@ -323,9 +324,10 @@ public class Player {
                 .collect(Collectors.toList())
                 .get(0)
         );
-
-        
     }
+
+    public Weapon buy(Weapon w)
+    {return null;}
 
     /**
      * @return the deaths count of the player

@@ -20,7 +20,7 @@ public abstract class MicroEffect {
     public abstract void applyOn(Player player);
 
     /**
-     * This method is set abstract because it will have different implementation in each subclass, but we wanted to make sure that each of them has it
+     * This method is set abstract because it will have different implementation in each subclass, but we wanted to make sure that each of them has their
      *
      * @return a clone of this object (but sonar does not let me use the clone name)
      */

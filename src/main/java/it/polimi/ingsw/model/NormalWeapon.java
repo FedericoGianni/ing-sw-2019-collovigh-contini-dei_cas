@@ -18,15 +18,15 @@ public class NormalWeapon extends Weapon{
 
     private String name;
     private boolean isLoaded;
-    private List<AmmoCube> cost;
-    private List<MacroEffect> effects;
+    private ArrayList<AmmoCube> cost;
+    private ArrayList<MacroEffect> effects;
     private static ArrayList<NormalWeapon> normalWeapons =new ArrayList<>();
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setCost(List<AmmoCube> cost) {
+    public void setCost(ArrayList<AmmoCube> cost) {
         this.cost = cost;
     }
     /**
@@ -59,7 +59,7 @@ public class NormalWeapon extends Weapon{
      * effects are not filled in the creator
      */
 
-    public NormalWeapon(String name, List<AmmoCube> cost, List<MacroEffect>l) {
+    public NormalWeapon(String name, ArrayList<AmmoCube> cost, ArrayList<MacroEffect>l) {
 
         this.name = name;
         this.isLoaded = true;
@@ -116,7 +116,7 @@ public class NormalWeapon extends Weapon{
      *
      * @return the list of macro-effects
      */
-    public List<MacroEffect> getEffects() {
+    public ArrayList<MacroEffect> getEffects() {
         return effects;
     }
 
@@ -239,22 +239,43 @@ public class NormalWeapon extends Weapon{
             {
                 throw new WeaponNotLoadedException();//weapon not loaded zac
             }
-            for(MacroEffect item : mE){
-                if(canPay(mE.get(mE.indexOf(item)).getEffectCost(),this.isPossessedBy().getAmmoBag())==true)
+            for(MacroEffect item : mE)//iterate macroeffects
+            {
+                if(this.isPossessedBy().getAmmoBag()==null)
                 {
+                    System.out.println("a");
+                }
+                if(mE.get(mE.indexOf(item)).getEffectCost()==null){
+                    System.out.println("b");
+                }
+                if(mE.get(mE.indexOf(item)).getEffectCost()!=null)
+                {if(canPay(mE.get(mE.indexOf(item)).getEffectCost(),this.isPossessedBy().getAmmoBag())==true)
+                    {
                     for (AmmoCube ammo : mE.get(mE.indexOf(item)).getEffectCost())
                     {
                         this.isPossessedBy().pay(ammo.getColor());//takes the player's ammo
                     }
 
-                    shooter();
-                }
-                else{
-                    throw new NotEnoughAmmoException();
+                    }else{throw new NotEnoughAmmoException();}}
+                //here i can shoot for real
+                for(MicroEffect micro: item.getMicroEffects())//iteratemicroeffects
+                {
+                    switch (micro.type())
+                    {
+                        case 1:
+                            {
+                                Damage d=new Damage((Damage)micro.copy());
+                                System.out.println(" Shoot Damage");
+                            }
+
+
+                        case 2:{System.out.println("shoot Marker");}
+                        case 3:{System.out.println("shoot Mover");}
+                    }
                 }
 
             }
-
+            this.isLoaded=false;//the weapon need to be reloaded
         }catch(WeaponNotLoadedException e){e.printStackTrace();}
         catch (CardNotPossessedException e) { e.printStackTrace(); }
         catch(NotEnoughAmmoException e){ e.printStackTrace();}

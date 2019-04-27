@@ -52,7 +52,7 @@ public abstract class Weapon {
      * @return true if the player can pay something in ammo
      */
 
-    public final boolean canPay(List<AmmoCube> cost,AmmoBag possessed)
+    public static final boolean canPay(List<AmmoCube> cost,AmmoBag possessed)
     {
         int []ammo=possessed.getAmount();
         int[]ammoC=new int[3];
@@ -75,4 +75,6 @@ public abstract class Weapon {
             return false;
         }
     }
+
+
 }
