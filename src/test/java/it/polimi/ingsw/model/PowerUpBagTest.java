@@ -115,18 +115,31 @@ class PowerUpBagTest {
     @Test
     void hasItemShouldReturnTrue() {
 
-
-        Map m = new Map();
-        m.genMap(2);
-        m.generateCells(2);
-
-        Player p = new Player("test", m.getCell(0,2));
+        Player p = new Player("Mark",0,PlayerColor.BLUE);
 
         PowerUpDeck d = populatedDeck();
         PowerUp c1 = d.getRandomCard();
 
         p.getPowerUpBag().addItem(c1);
         assertTrue(p.getPowerUpBag().hasItem(c1));
+
+    }
+
+    @Test
+    void cloneCreatorShouldBeEqual(){
+
+        Player p = new Player("Mark",0,PlayerColor.YELLOW);
+
+        PowerUpDeck d = populatedDeck();
+        PowerUp c1 = d.getRandomCard();
+
+        p.getPowerUpBag().addItem(c1);
+
+        PowerUpBag copy = new PowerUpBag(p.getPowerUpBag());
+
+        assertEquals(p.getPowerUpBag().getList(),copy.getList());
+
+
 
     }
 }

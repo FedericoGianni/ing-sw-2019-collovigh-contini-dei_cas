@@ -21,9 +21,7 @@ class MapTest {
 
     @Test
     void generateCellsShouldGenerateRightCellColor() {
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(1);
 
         assert (m.getCell(0, 0).getColor() == CellColor.BLUE);
         assert (m.getCell(0, 1).getColor() == CellColor.BLUE);

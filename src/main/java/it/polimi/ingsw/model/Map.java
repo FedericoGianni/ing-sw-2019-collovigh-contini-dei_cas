@@ -94,7 +94,7 @@ public class Map {
      * @param mapType integer representing the map type which can be chosen at the creation of the Map
      * @return a Map created based on the current playing map type
      */
-    public Map genMap(int mapType) {
+    public static Map genMap(int mapType) {
 
         Map m = null;
 
