@@ -12,15 +12,7 @@ import java.util.stream.Collectors;
 public class Player {
 
     /**
-     * Default constructor
-     */
-    public Player(){
-
-        super();
-    }
-
-    /**
-     * Real constructor
+     * Constructor
      * @param name is a string with the name chosen by the player is also the login identifier
      * @param id is a numeric identifier that also represents the place in the turn
      * @param color is the color of the character chosen by the player
@@ -37,21 +29,6 @@ public class Player {
         this.currentWeapons = new WeaponBag();
 
     }
-
-
-
-    /**
-     * IDK
-     */
-    public Player(String nome,Cell posizione){//just for test purpose
-        this.name=nome;
-        this.stats = new Stats(posizione);
-        posizione.addPlayerHere(this);
-        this.currentPowerUps = new PowerUpBag();
-        this.ammo = new AmmoBag();
-        this.currentWeapons = new WeaponBag();
-    }
-
 
     private  String name;
     private int id;
@@ -79,6 +56,7 @@ public class Player {
     public void setPlayerPos(Cell c) {
 
          this.stats.setCurrentPosition(c);
+         c.addPlayerHere(this);
     }
 
     /**

@@ -15,7 +15,7 @@ class PowerUpBagTest {
     void addItemShoudAddItemToPowerUpBag() {
         Map m = Map.genMap(2);
 
-        Player p = new Player("test", m.getCell(0,2));
+        Player p = new Player("test", 0, PlayerColor.BLUE);
 
         PowerUpDeck d = populatedDeck();
         PowerUp c1 = d.getRandomCard();
@@ -41,7 +41,7 @@ class PowerUpBagTest {
 
         Map m = Map.genMap(2);
 
-        Player p = new Player("test", m.getCell(0,2));
+        Player p = new Player("test", 1, PlayerColor.BLUE);
 
         PowerUpDeck d = populatedDeck();
         PowerUp c1 = d.getRandomCard();

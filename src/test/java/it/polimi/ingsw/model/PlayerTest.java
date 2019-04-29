@@ -16,9 +16,17 @@ class PlayerTest {
         Map map = Map.genMap(2);
 
         //generate a player with a name and its starting position
-        Player p1 = new Player("Shooter",map.getCell(1,3));
-        Player p2 = new Player("Visible",map.getCell(0,3));
-        Player p3 = new Player("NotVisible",map.getCell(0,0));
+        //Player p1 = new Player("Shooter",map.getCell(1,3));
+        Player p1 = new Player("Shooter", 0, PlayerColor.PURPLE);
+        p1.setPlayerPos(map.getCell(1,3));
+
+        //Player p2 = new Player("Visible",map.getCell(0,3));
+        Player p2 = new Player("Visible", 1, PlayerColor.BLUE);
+        p2.setPlayerPos(map.getCell(0,3));
+
+        //Player p3 = new Player("NotVisible",map.getCell(0,0));
+        Player p3 = new Player("NotVisible", 2, PlayerColor.GREEN);
+        p3.setPlayerPos(map.getCell(0,0));
 
         List<Player> visibles=new ArrayList<>();
 
@@ -41,11 +49,20 @@ class PlayerTest {
         Map map = Map.genMap(2);
 
         //generate players in a fixed position
-        Player p1=new Player("Shooter",map.getCell(1,3));
-        Player p2=new Player("Visible",map.getCell(0,3));
-        Player p3=new Player("NotVisible",map.getCell(0,0));
-        Player p4=new Player("Visible2",map.getCell(0,3));
-        Player p5=new Player("VisibleMeleeRange",map.getCell(1,3));//will be the first seen beacuse the players are ordinated in distance
+        Player p1=new Player("Shooter", 0, PlayerColor.BLUE);
+        p1.setPlayerPos(map.getCell(1,3));
+
+        Player p2=new Player("Visible", 1, PlayerColor.PURPLE);
+        p2.setPlayerPos(map.getCell(0,3));
+
+        Player p3=new Player("NotVisible", 2, PlayerColor.YELLOW);
+        p3.setPlayerPos(map.getCell(0,0));
+
+        Player p4=new Player("Visible2",3, PlayerColor.GREEN);
+        p4.setPlayerPos(map.getCell(0,3));
+
+        Player p5=new Player("VisibleMeleeRange", 4, PlayerColor.GREY);//will be the first seen beacuse the players are ordinated in distance
+        p5.setPlayerPos(map.getCell(1,3));
         //now there are 3 visible players, 2 in the same cell on the north of the current player and
         //another in his cell
 

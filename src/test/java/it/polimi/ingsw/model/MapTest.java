@@ -120,9 +120,15 @@ class MapTest {
 
         Map map = Map.genMap(2);
 
-        Player p1 = new Player("Shooter", map.getCell(1, 3));
-        Player p2 = new Player("Visible", map.getCell(0, 3));
-        Player p3 = new Player("NotVisible", map.getCell(0, 0));
+        Player p1 = new Player("Shooter", 0, PlayerColor.GREY);
+        p1.setPlayerPos(map.getCell(1, 3));
+
+        Player p2 = new Player("Visible", 1, PlayerColor.GREEN);
+        p2.setPlayerPos(map.getCell(0, 3));
+
+        Player p3 = new Player("NotVisible", 2, PlayerColor.YELLOW);
+        p3.setPlayerPos(map.getCell(0, 0));
+
         try {
             assertEquals(1, map.getShootingDist(p1, p2, map.getMapClone()));
             assertThrows(PlayerNotSeeableException.class,
@@ -138,11 +144,20 @@ class MapTest {
 
         Map map = Map.genMap(2);
 
-        Player p1 = new Player("Shooter", map.getCell(1,3));
-        Player p2 = new Player("Visible", map.getCell(0,3));
-        Player p3 = new Player("NotVisible", map.getCell(0,0));
-        Player p4 = new Player("Visible2", map.getCell(2,1));
-        Player p5 = new Player("VisibleMeleeRange", map.getCell(1,3));
+        Player p1=new Player("Shooter", 0, PlayerColor.BLUE);
+        p1.setPlayerPos(map.getCell(1,3));
+
+        Player p2=new Player("Visible", 1, PlayerColor.PURPLE);
+        p2.setPlayerPos(map.getCell(0,3));
+
+        Player p3=new Player("NotVisible", 2, PlayerColor.YELLOW);
+        p3.setPlayerPos(map.getCell(0,0));
+
+        Player p4=new Player("Visible2",3, PlayerColor.GREEN);
+        p4.setPlayerPos(map.getCell(2,1));
+
+        Player p5=new Player("VisibleMeleeRange", 4, PlayerColor.GREY);//will be the first seen beacuse the players are ordinated in distance
+        p5.setPlayerPos(map.getCell(1,3));
 
         try{
             assertEquals(1, map.getShootingDist(p1, p2, map.getMapClone()));

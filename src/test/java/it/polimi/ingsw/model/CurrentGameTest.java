@@ -14,9 +14,9 @@ class CurrentGameTest {
     void generateInstance() {
 
         List<Player> players = new ArrayList<>();
-        Player p1 = new Player();
-        Player p2 = new Player();
-        Player p3 = new Player();
+        Player p1 = new Player("test1", 0, PlayerColor.YELLOW);
+        Player p2 = new Player("test2", 1, PlayerColor.BLUE);
+        Player p3 = new Player("test3", 2, PlayerColor.PURPLE);
         players.add(p1);
         players.add(p2);
         players.add(p3);
@@ -31,9 +31,9 @@ class CurrentGameTest {
     @Test
     void drawPowerUp() {
         List<Player> players = new ArrayList<>();
-        Player p1 = new Player();
-        Player p2 = new Player();
-        Player p3 = new Player();
+        Player p1 = new Player("test1", 0, PlayerColor.YELLOW);
+        Player p2 = new Player("test2", 1, PlayerColor.BLUE);
+        Player p3 = new Player("test3", 2, PlayerColor.PURPLE);
         players.add(p1);
         players.add(p2);
         players.add(p3);
@@ -68,9 +68,9 @@ class CurrentGameTest {
     @Test
     void idToPlayer() {
         List<Player> players = new ArrayList<>();
-        Player p1 = new Player();
-        Player p2 = new Player();
-        Player p3 = new Player();
+        Player p1 = new Player("test1", 0, PlayerColor.YELLOW);
+        Player p2 = new Player("test2", 1, PlayerColor.BLUE);
+        Player p3 = new Player("test3", 2, PlayerColor.PURPLE);
         players.add(p1);
         players.add(p2);
         players.add(p3);
@@ -87,9 +87,9 @@ class CurrentGameTest {
     @Test
     void playerToId() {
         List<Player> players = new ArrayList<>();
-        Player p1 = new Player();
-        Player p2 = new Player();
-        Player p3 = new Player();
+        Player p1 = new Player("test1", 0, PlayerColor.YELLOW);
+        Player p2 = new Player("test2", 1, PlayerColor.BLUE);
+        Player p3 = new Player("test3", 2, PlayerColor.PURPLE);
         players.add(p1);
         players.add(p2);
         players.add(p3);
@@ -104,9 +104,9 @@ class CurrentGameTest {
     void getPlayers() {
 
         List<Player> players = new ArrayList<>();
-        Player p1 = new Player();
-        Player p2 = new Player();
-        Player p3 = new Player();
+        Player p1 = new Player("test1", 0, PlayerColor.YELLOW);
+        Player p2 = new Player("test2", 1, PlayerColor.BLUE);
+        Player p3 = new Player("test3", 2, PlayerColor.PURPLE);
         players.add(p1);
         players.add(p2);
         players.add(p3);
