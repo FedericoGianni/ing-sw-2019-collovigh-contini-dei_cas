@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import customsexceptions.CardNotPossessedException;
-import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -14,9 +13,7 @@ class PowerUpBagTest {
 
     @Test
     void addItemShoudAddItemToPowerUpBag() {
-        Map m = new Map();
-        m.genMap(2);
-        m.generateCells(2);
+        Map m = Map.genMap(2);
 
         Player p = new Player("test", m.getCell(0,2));
 
@@ -42,9 +39,7 @@ class PowerUpBagTest {
     @Test
     void getItemShouldRemovePowerUpFromPowerUpBag() {
 
-        Map m = new Map();
-        m.genMap(2);
-        m.generateCells(2);
+        Map m = Map.genMap(2);
 
         Player p = new Player("test", m.getCell(0,2));
 

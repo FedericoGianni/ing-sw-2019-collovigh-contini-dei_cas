@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -22,9 +21,7 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p3);
 
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(1);
 
         CurrentGame c = new CurrentGame(players, m);
 
@@ -41,9 +38,7 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p3);
 
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(1);
 
         CurrentGame c = new CurrentGame(players, m);
         PowerUp teleport = new Teleporter(Color.YELLOW);
@@ -80,9 +75,7 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p3);
 
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(1);
 
         CurrentGame c = new CurrentGame(players, m);
         for (int id = 0; id < 3; id++) {
@@ -101,9 +94,7 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p3);
 
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(1);
 
         CurrentGame c = new CurrentGame(players, m);
         assertEquals(players.indexOf(p1), c.playerToId(p1));
@@ -120,9 +111,7 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p3);
 
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(1);
 
         CurrentGame c = new CurrentGame(players, m);
         assertEquals(c.getPlayers() , players);

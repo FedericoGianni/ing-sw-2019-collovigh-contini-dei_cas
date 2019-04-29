@@ -1,28 +1,22 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.AmmoCard;
-import it.polimi.ingsw.model.CellColor;
-import it.polimi.ingsw.model.Map;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class AmmoCellTest {
 
     @Test
     void getColor() {
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(2);
 
         assertEquals(m.getCell(0, 0).getColor(), CellColor.BLUE);
     }
 
     @Test
     void getAmmoPlaced() {
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(2);
 
         AmmoCard card = AmmoCard.generateRandCard();
 
@@ -32,9 +26,7 @@ class AmmoCellTest {
 
     @Test
     void pickAmmoPlaced() {
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(1);
 
         AmmoCard c1;
         AmmoCard c2;

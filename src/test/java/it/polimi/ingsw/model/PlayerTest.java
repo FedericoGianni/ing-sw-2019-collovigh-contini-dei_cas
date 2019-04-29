@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.Map;
-import it.polimi.ingsw.model.Player;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,9 +13,7 @@ class PlayerTest {
     void canSee() {
 
         //generate the map (type 2)
-        Map map = new Map();
-        map.genMap(2);
-        map.generateCells(2);
+        Map map = Map.genMap(2);
 
         //generate a player with a name and its starting position
         Player p1 = new Player("Shooter",map.getCell(1,3));
@@ -42,9 +38,7 @@ class PlayerTest {
     void canSee2() {
 
         //generate the map (type 2)
-        Map map = new Map();
-        map.genMap(2);
-        map.generateCells(2);
+        Map map = Map.genMap(2);
 
         //generate players in a fixed position
         Player p1=new Player("Shooter",map.getCell(1,3));

@@ -13,7 +13,7 @@ public class Model {
      */
     public Model(List<String> playerNames, List<PlayerColor> playerColors, int mapType) {
 
-        Map map = new Map();
+        Map map = Map.genMap(mapType);
 
         List<Player> playerList = new ArrayList<>();
         for (int i = 0; i < playerNames.size(); i++) {
@@ -22,9 +22,6 @@ public class Model {
 
         game = new CurrentGame(playerList, map);
 
-
-        map.genMap(mapType);
-        map.generateCells(mapType);
     }
 
     private static CurrentGame game;

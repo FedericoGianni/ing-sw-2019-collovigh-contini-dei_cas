@@ -1,14 +1,12 @@
 package it.polimi.ingsw.model;
 
 import customsexceptions.PlayerNotSeeableException;
-import it.polimi.ingsw.model.CellColor;
-import it.polimi.ingsw.model.Map;
-import it.polimi.ingsw.model.Player;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MapTest {
 
@@ -39,9 +37,7 @@ class MapTest {
         assert (m.getCell(2, 3).getColor() == CellColor.YELLOW);
 
         //Now changing to MapType 2 to check if colors are different as it should be
-        m = new Map();
-        m.genMap(2);
-        m.generateCells(2);
+        m = Map.genMap(2);
 
         assert (m.getCell(0, 0).getColor() == CellColor.BLUE);
         assert (m.getCell(0, 1).getColor() == CellColor.BLUE);
@@ -59,9 +55,7 @@ class MapTest {
         assert (m.getCell(2, 3).getColor() == CellColor.YELLOW);
 
         //Now changing mapType to 3 to check if colors change as they should
-        m = new Map();
-        m.genMap(3);
-        m.generateCells(3);
+        m = Map.genMap(3);
 
         assert (m.getCell(0, 0).getColor() == CellColor.RED);
         assert (m.getCell(0, 1).getColor() == CellColor.BLUE);
@@ -82,9 +76,7 @@ class MapTest {
 
     @Test
     void getAdjShouldReturnRightCell() {
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(1);
 
         assert (m.getCell(0, 0).getNorth() == null);
         assert (m.getCell(0, 0).getSouth() == m.getCell(1, 0));
@@ -116,9 +108,7 @@ class MapTest {
 
     @Test
     void cellToCoord() {
-        Map m = new Map();
-        m.genMap(1);
-        m.generateCells(1);
+        Map m = Map.genMap(1);
 
         assertEquals(m.cellToCoord(m.getCell(0, 0)), new Point(0, 0));
         assertEquals(m.cellToCoord(m.getCell(1, 2)), new Point(1, 2));
@@ -128,9 +118,7 @@ class MapTest {
     @Test
     void getShootingDistShouldReturnRightDist() {
 
-        Map map = new Map();
-        map.genMap(2);
-        map.generateCells(2);
+        Map map = Map.genMap(2);
 
         Player p1 = new Player("Shooter", map.getCell(1, 3));
         Player p2 = new Player("Visible", map.getCell(0, 3));
@@ -148,9 +136,7 @@ class MapTest {
     void getShootingDistShouldReturnRightDist2() {
         //testing player with different positions
 
-        Map map = new Map();
-        map.genMap(2);
-        map.generateCells(2);
+        Map map = Map.genMap(2);
 
         Player p1 = new Player("Shooter", map.getCell(1,3));
         Player p2 = new Player("Visible", map.getCell(0,3));
