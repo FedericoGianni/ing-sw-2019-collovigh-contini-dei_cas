@@ -33,8 +33,6 @@ class AmmoBagTest {
 
         list.sort(Comparator.comparing(AmmoCube::getColor));
 
-        System.out.println(list);
-
         assertEquals(list, bag.getList());
     }
 
@@ -68,17 +66,12 @@ class AmmoBagTest {
 
         list.sort(Comparator.comparing(AmmoCube::getColor));
 
-        System.out.println(list);
-        System.out.println(bag.getList());
-
         assertNotEquals(list, bag.getList());
 
         List<AmmoCube>list1 = bag.getList().stream()
                 .filter(ammoCube ->
                         ammoCube.getColor() == Color.BLUE
                 ).collect(Collectors.toList());
-
-        System.out.println(list1);
 
         assertTrue(list1.size() <= 3);
 

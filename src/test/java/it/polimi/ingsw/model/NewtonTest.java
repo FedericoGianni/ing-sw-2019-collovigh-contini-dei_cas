@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import customsexceptions.CellNonExistentException;
+import customsexceptions.PlayerNonExistentException;
+import customsexceptions.PlayerNotSeeableException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -35,9 +37,6 @@ class NewtonTest {
             test.use(Model.getPlayer(0), Directions.NORTH, 2);
             assertEquals(Model.getMap().getCell(0,0),Model.getPlayer(0).getCurrentPosition());
 
-            System.out.println("Expected: 0,0");
-            System.out.println("Found: " + Model.getMap().cellToCoord(Model.getPlayer(0).getCurrentPosition()));
-
 
         }catch (Exception e){
 
@@ -50,9 +49,6 @@ class NewtonTest {
 
             test.use(Model.getPlayer(0), Directions.SOUTH,1);
             assertEquals(Model.getMap().getCell(1,0),Model.getPlayer(0).getCurrentPosition());
-
-            System.out.println("Expected: 1,0");
-            System.out.println("Found: " + Model.getMap().cellToCoord(Model.getPlayer(0).getCurrentPosition()));
 
 
         }catch (Exception e){
@@ -67,9 +63,6 @@ class NewtonTest {
             test.use(Model.getPlayer(0), Directions.WEST,2);
             assertEquals(Model.getMap().getCell(0,0),Model.getPlayer(0).getCurrentPosition());
 
-            System.out.println("Expected: 0,0");
-            System.out.println("Found: " + Model.getMap().cellToCoord(Model.getPlayer(0).getCurrentPosition()));
-
 
         }catch (Exception e){
 
@@ -83,9 +76,6 @@ class NewtonTest {
             test.use(Model.getPlayer(0), Directions.EAST,2);
             assertEquals(Model.getMap().getCell(0,2),Model.getPlayer(0).getCurrentPosition());
 
-            System.out.println("Expected: 0,2");
-            System.out.println("Found: " + Model.getMap().cellToCoord(Model.getPlayer(0).getCurrentPosition()));
-
 
         }catch (Exception e){
 
@@ -98,6 +88,13 @@ class NewtonTest {
 
         assertThrows(CellNonExistentException.class,() -> {
             test.use(Model.getPlayer(0), Directions.SOUTH,2);
+        });
+
+        Player err = new Player("Cheater",99,PlayerColor.BLUE);
+
+        assertThrows(PlayerNonExistentException.class,() ->{
+
+            test.use(err,Directions.SOUTH,2);
         });
 
     }

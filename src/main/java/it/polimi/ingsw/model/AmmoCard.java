@@ -15,29 +15,15 @@ import java.util.*;
 public class AmmoCard {
 
 
-    private AmmoCube ammoCube1;
-    private AmmoCube ammoCube2;
-    private AmmoCube ammoCube3;
+    private final AmmoCube ammoCube1;
+    private final AmmoCube ammoCube2;
+    private final AmmoCube ammoCube3;
 
-    private Boolean powerUp;
+    private final Boolean powerUp;
 
     private static Random random;  //don't know why but SonarLint want it to be here even though it have no reason to be
 
-    /**
-     *This constructor is used to create a copy of the AmmoCard passed as a parameter
-     * @param clone AmmoCard to be copied
-     */
-    public AmmoCard(AmmoCard clone){
-        if(!this.powerUp){
-            this.ammoCube1 = clone.ammoCube1;
-            this.ammoCube2 = clone.ammoCube2;
-            this.ammoCube3 = clone.ammoCube3;
-        }else{
-            this.ammoCube1 = clone.ammoCube1;
-            this.ammoCube2 = clone.ammoCube2;
-            this.powerUp = clone.getPowerUp();
-        }
-    }
+
 
     /**
      *
@@ -115,12 +101,6 @@ public class AmmoCard {
             return genRandGroup0();
 
         }
-        else if(k==3){
-
-            return genRandGroup1();
-
-
-        }
         else if (k>3 && k<6){
 
             return genRandGroup2();
@@ -128,7 +108,8 @@ public class AmmoCard {
 
         }
 
-        return null;
+        //if k==3
+        return genRandGroup1();
     }
 
 
@@ -147,7 +128,6 @@ public class AmmoCard {
     private static AmmoCard genRandGroup0(){
 
         random = new Random();
-
         int j = random.nextInt(6);
 
         if (j==0){
@@ -170,12 +150,12 @@ public class AmmoCard {
 
             return new AmmoCard(Color.BLUE,Color.YELLOW,Color.YELLOW);
         }
-        else if (j==5){
 
-            return new AmmoCard(Color.RED,Color.BLUE,Color.BLUE);
-        }
+        // else if j==5
 
-        return null;
+        return new AmmoCard(Color.RED,Color.BLUE,Color.BLUE);
+
+
     }
 
     /**
@@ -232,12 +212,11 @@ public class AmmoCard {
 
             return new AmmoCard(Color.YELLOW,Color.BLUE);
         }
-        else if (j == 2){
 
-            return new AmmoCard(Color.RED,Color.BLUE);
-        }
+        // if j == 2
 
-        return null;
+        return new AmmoCard(Color.RED,Color.BLUE);
+
     }
 
 

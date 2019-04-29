@@ -25,4 +25,7 @@ public abstract class PowerUp {
         return new AmmoCube(this.color);
     }
 
+    public Color getColor() {
+        return color;
+    }
 }

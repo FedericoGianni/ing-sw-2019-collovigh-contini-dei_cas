@@ -8,7 +8,7 @@ import java.util.*;
 public class PowerUpDeck implements Deck<PowerUp> {
 
     private List<PowerUp> powerUpList;
-    Random random;
+    private Random random;
 
     /**
      * Constructor: it just initialize the list as a CopyOnWriteArrayList

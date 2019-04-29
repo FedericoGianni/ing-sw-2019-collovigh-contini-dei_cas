@@ -18,8 +18,9 @@ public class AmmoCell extends Cell {
      * @param clone AmmoCell to be cloned
      */
     public AmmoCell(AmmoCell clone){
+
         super(clone);
-        this.ammoPlaced = new AmmoCard(clone.ammoPlaced);
+        this.ammoPlaced = clone.ammoPlaced;
     }
 
     private AmmoCard ammoPlaced;

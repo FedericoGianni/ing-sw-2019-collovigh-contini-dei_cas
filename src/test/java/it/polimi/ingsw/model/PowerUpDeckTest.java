@@ -4,6 +4,8 @@ import it.polimi.ingsw.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,6 +83,47 @@ class PowerUpDeckTest {
 
 
         assertNotEquals(list1,list2);
+
+
+    }
+
+    @Test
+    void cloneCreatorShouldBeEqual(){
+
+        PowerUpDeck deck = PowerUpDeck.populatedDeck();
+
+        List<PowerUp> list1 = new ArrayList<>();
+        List<PowerUp> list2 = new ArrayList<>();
+
+
+        for (int i = 0; i < 10; i++) {
+
+            list1.add(deck.getRandomCard());
+
+        }
+
+        PowerUpDeck copy = new PowerUpDeck(deck);
+
+        list1 = new ArrayList<>();
+
+        for (int i = 0; i < 14; i++) {
+
+            list1.add(deck.getRandomCard());
+            
+        }
+
+        for (int i = 0; i < 14; i++) {
+
+            list2.add(copy.getRandomCard());
+
+        }
+
+        Collections.sort(list1, Comparator.comparing(PowerUp::toString));
+
+        Collections.sort(list2, Comparator.comparing(PowerUp::toString));
+
+        assertEquals(list1,list2);
+
 
 
     }

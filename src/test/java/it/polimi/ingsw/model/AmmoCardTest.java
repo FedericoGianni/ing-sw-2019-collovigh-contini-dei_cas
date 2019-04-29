@@ -30,6 +30,7 @@ class AmmoCardTest {
         }
     }
 
+    /*
     @Test
     void getPowerUp() {
 
@@ -62,6 +63,9 @@ class AmmoCardTest {
 
         
     }
+     */
+
+    
 
 
 }
