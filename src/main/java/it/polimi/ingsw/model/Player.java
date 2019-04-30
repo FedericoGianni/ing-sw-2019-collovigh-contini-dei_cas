@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import customsexceptions.CardNotPossessedException;
 import customsexceptions.DeadPlayerException;
+import customsexceptions.OverKilledPlayerException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -338,7 +339,7 @@ public class Player {
      * @param fromPlayerId is the id of the player who made the damage
      * @param value is the value of the damage
      */
-    public void addDmg(int fromPlayerId, int value) throws DeadPlayerException {
+    public void addDmg(int fromPlayerId, int value) throws DeadPlayerException, OverKilledPlayerException {
 
         this.stats.addDmgTaken(value, fromPlayerId);
     }

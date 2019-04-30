@@ -3,9 +3,7 @@ package it.polimi.ingsw.model;
 import customsexceptions.DeadPlayerException;
 import customsexceptions.OverMaxDmgException;
 import customsexceptions.OverMaxMarkException;
-import it.polimi.ingsw.model.AmmoCell;
-import it.polimi.ingsw.model.Cell;
-import it.polimi.ingsw.model.Stats;
+import customsexceptions.OverKilledPlayerException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -169,15 +167,23 @@ class StatsTest {
             }
         });
 
-        Stats stats1 = new Stats(cell);
+
 
 
         assertThrows(DeadPlayerException.class, () -> {
-            for (int i = 0; i < (maxDmg + 5); i++) {
 
-                stats1.addDmgTaken(1,0);
+            Stats stats1 = new Stats(cell);
 
-            }
+                stats1.addDmgTaken(11,0);
+        });
+
+        assertThrows(OverKilledPlayerException.class, () -> {
+
+            Stats stats3 = new Stats(cell);
+
+            stats3.addDmgTaken(15,0);
+
+
         });
 
         Stats stats2 = new Stats(cell);
@@ -185,14 +191,14 @@ class StatsTest {
         try{
 
             stats2.addDmgTaken((maxDmg-2)/2 -1,0);
-        }catch(DeadPlayerException e){
+        }catch(Exception e){
             e.printStackTrace();
         }
 
         try{
 
             stats2.addDmgTaken((maxDmg-2)/2 +1,1);
-        }catch(DeadPlayerException e){
+        }catch(Exception e){
             e.printStackTrace();
         }
 
@@ -208,6 +214,32 @@ class StatsTest {
             assertEquals(stats2.getDmgTaken().get(i),1);
 
         }
+
+
+
+
+    }
+
+    @Test
+    void checkException(){
+
+        int maxDmg = 12;
+
+        Cell cell = new AmmoCell();
+        Stats stats = new Stats(cell);
+
+        try{
+
+            stats.addDmgTaken(11,0);
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+
+
+
 
     }
 }

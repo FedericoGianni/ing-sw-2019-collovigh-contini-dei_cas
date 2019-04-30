@@ -4,7 +4,7 @@ package it.polimi.ingsw.model;
 import customsexceptions.DeadPlayerException;
 import customsexceptions.OverMaxDmgException;
 import customsexceptions.OverMaxMarkException;
-import customsexceptions.OverkilledPlayerException;
+import customsexceptions.OverKilledPlayerException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,7 +150,7 @@ public class Stats {
      * @param playerId is the id of the player who gave them
      * @throws DeadPlayerException if player died
      */
-    public void addDmgTaken(int dmg, int playerId) throws DeadPlayerException, OverkilledPlayerException {
+    public void addDmgTaken(int dmg, int playerId) throws DeadPlayerException, OverKilledPlayerException {
 
         for (int i = 0; i < MAX_MARKS; i++) {
 
@@ -176,13 +176,15 @@ public class Stats {
 
 
 
-        if (dmgTaken.size()>= MAX_DMG - 1){  // if player has more than MAX_DMG -1 (simply dead)
+        if (dmgTaken.size() == MAX_DMG){  // if player gets Overkilled
+
             this.addDeath();
 
-            if (dmgTaken.size() == MAX_DMG){  // if player gets Overkilled
+            throw new OverKilledPlayerException();
+        }
 
-                throw new OverkilledPlayerException();
-            }
+        if ((dmgTaken.size()>= MAX_DMG - 1)&&(dmgTaken.size()<MAX_DMG)){  // if player has more than MAX_DMG -1 (simply dead)
+            this.addDeath();
             throw new DeadPlayerException();
         }
     }
