@@ -421,20 +421,7 @@ public class Map {
     }
 
 
-    public int getShootingDist(Player p1, Player p2, Map map)  throws PlayerNotSeeableException{
 
-            if (p1.canSee().contains(p2)) {
-                Point d1, d2;
-                d1 = map.cellToCoord(p1.getCurrentPosition());
-                d2 = map.cellToCoord(p2.getCurrentPosition());
-
-                return abs(d1.x - d2.x) + abs(d1.y - d2.y);
-
-            }
-
-            throw new PlayerNotSeeableException();
-
-    }
 
     public static int getDist(Player p1,Player p2)
     {

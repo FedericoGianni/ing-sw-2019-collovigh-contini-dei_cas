@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
-import customsexceptions.PlayerInDifferentCellException;
-import customsexceptions.PlayerInSameCellException;
+import customsexceptions.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,7 +18,7 @@ public class Damage extends MicroEffect {
     private boolean seeAbleTargetNeeded; //some effects can target unSeeable players
     private boolean melee;//some weapons can deal damage to players only in your current cell
     private boolean differentPlayer;//in secondary effects sometimes you need to target different players from the first
-    private boolean alreadyTargetd;//sometimes in secondary effects you have to choose between already targeted players of the first effect
+    private boolean alreadyTargeted;//sometimes in secondary effects you have to choose between already targeted players of the first effect
     private int distMin;//some effects require a minimum distance, calculated by moves
     //particuarities: if both differentPlayer and alreadyTargeted are true you can choose to apply one or both effects(check machineGun III)
     // the player number is 100 you need to target every player in the target's square(check electroshyte-melee-  and grenade launcher)
@@ -54,12 +53,12 @@ public class Damage extends MicroEffect {
         this.differentPlayer = differentPlayer;
     }
 
-    public boolean isAlreadyTargetdNeeded() {
-        return alreadyTargetd;
+    public boolean isAlreadyTargetedNeeded() {
+        return alreadyTargeted;
     }
 
     public void setAlreadyTargetd(boolean alreadyTargetd) {
-        this.alreadyTargetd = alreadyTargetd;
+        this.alreadyTargeted = alreadyTargetd;
     }
 
     public int getDistMin() {
@@ -85,7 +84,7 @@ public class Damage extends MicroEffect {
         this.melee=d;
         this.differentPlayer=diff;
         this.distMin=dm;
-        this.alreadyTargetd=at;
+        this.alreadyTargeted=at;
     }
     public Damage(Damage d)
     {
@@ -95,7 +94,7 @@ public class Damage extends MicroEffect {
         this.melee=d.isMeleeNeeded();
         this.differentPlayer=d.isDifferentPlayerNeeded();
         this.distMin=d.getDistMin();
-        this.alreadyTargetd=d.isAlreadyTargetdNeeded();
+        this.alreadyTargeted=d.isAlreadyTargetedNeeded();
     }
 
 
@@ -217,12 +216,27 @@ public class Damage extends MicroEffect {
     }
 
 
-    public void microEffectApplicator(ArrayList<Player> playerList,Weapon w) {
-        if(playerNum==100)
+    public void microEffectApplicator(ArrayList<Player> playerList,Weapon w)throws OverKilledPlayerException,DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException,UncorrectTargetDistance,SeeAblePlayerException{//w.isPossesedBy.getPlayer mi dice il giocatore che spara
+        if(alreadyTargeted==true && differentPlayer==false)
+        {
+            w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);//playerId=0 bcz only one player the same as the first shot
+            return;
+        }
+        else if(alreadyTargeted==true && differentPlayer==true){//MG-3 you must shoot the previous target then you can target whatever you want
+
+            w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);
+            playerList.remove(w.getFirstTarget());//shot the previous target
+            for(int i=0;i<=playerList.size();i++)//if there are you can shot other targets now
+            {
+                Model.getPlayer(i).addDmg(w.isPossessedBy().getPlayerId(),damage);
+            }
+            return;
+        }
+         if(playerNum==100)
         {
             for(Player item : playerList)//check taht everyone is in different cells
             {
-                try{sameCellCheck(item,playerList);}catch(PlayerInDifferentCellException e){e.printStackTrace();}
+                sameCellCheck(item,playerList);
             }
             for(Player item:playerList)
             {
@@ -232,7 +246,7 @@ public class Damage extends MicroEffect {
         {
             for(Player item : playerList)//check that everyone is in a different cell
             {
-                try{differentCellsCheck(item,playerList);}catch(PlayerInSameCellException e){e.printStackTrace();}
+                differentCellsCheck(item,playerList);
             }
             for(Player item:playerList)
             {
@@ -246,26 +260,34 @@ public class Damage extends MicroEffect {
                 distance(item,w.isPossessedBy());
             }
 
-        }
+        }w.setFirstTarget(playerList.get(0));//it can be useful if you need to reshot the shame player otherwise it doesn't count nothing
 
     }
 
-    private void distance(Player target,Player shooter)//distance, called for every player
+    private void distance(Player target,Player shooter) throws UncorrectTargetDistance, SeeAblePlayerException, OverKilledPlayerException, DeadPlayerException//distance, called for every player
     {
         if(distMin<10)
         {
-            if(Map.getDist(target,shooter)<10){
-                //bo
-            }else{/*eccezione*/ }
+            if(Map.getDist(target,shooter)>=distMin){//--------wait
+                target.addDmg(shooter.getPlayerId(),damage);
+            }else{throw new UncorrectTargetDistance();}
 
         }else if(distMin>=10 && distMin <100)
         {
             //distMin/10 is the maximun distance
-        }else if(distMin==100)
+            if(Map.getDist(target,shooter)<=(distMin/100)){
+                target.addDmg(shooter.getPlayerId(),damage);
+            }else{throw new UncorrectTargetDistance();}
+        }else if(distMin==100)//if the shooter can't see the target
         {
-            //an unseeable player
+            if(!shooter.canSee().contains(target)){
+                target.addDmg(shooter.getPlayerId(),damage);
+            }else{throw new SeeAblePlayerException();}
         }else{
             //a player that is exactly distMin/1000 away
+            if(Map.getDist(target,shooter)==(distMin/1000)){
+                target.addDmg(shooter.getPlayerId(),damage);
+            }else{throw new UncorrectTargetDistance();}
         }
     }
 

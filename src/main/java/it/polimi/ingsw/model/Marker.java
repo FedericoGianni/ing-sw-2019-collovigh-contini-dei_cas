@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -142,6 +143,11 @@ public class Marker extends MicroEffect {
     @Override
     public Marker copy() {
         return this;
+    }
+
+    @Override
+    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException {
+
     }
 
 

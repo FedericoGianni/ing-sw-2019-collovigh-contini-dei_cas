@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.CardNotPossessedException;
-import customsexceptions.NotEnoughAmmoException;
-import customsexceptions.WeaponNotLoadedException;
+import customsexceptions.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,6 +19,9 @@ public class NormalWeapon extends Weapon{
     private ArrayList<AmmoCube> cost;
     private ArrayList<MacroEffect> effects;
     private static ArrayList<NormalWeapon> normalWeapons =new ArrayList<>();
+
+
+
 
     public void setName(String name) {
         this.name = name;
@@ -234,7 +235,7 @@ public class NormalWeapon extends Weapon{
      * @param mE
      * @throws WeaponNotLoadedException
      */
-    public void shoot(ArrayList<Player> target,ArrayList<MacroEffect> mE)throws WeaponNotLoadedException//neeed a player list !
+    public void shoot(ArrayList<Player> target,ArrayList<MacroEffect> mE)throws WeaponNotLoadedException,OverKilledPlayerException,DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException,UncorrectTargetDistance,SeeAblePlayerException//neeed a player list !
     {
         try{
             if(this.isLoaded==false)
@@ -263,6 +264,11 @@ public class NormalWeapon extends Weapon{
         }catch(WeaponNotLoadedException e){e.printStackTrace();}
         catch (CardNotPossessedException e) { e.printStackTrace(); }
         catch(NotEnoughAmmoException e){ e.printStackTrace();}
+        catch (OverKilledPlayerException e) {
+            e.printStackTrace();
+        } catch (DeadPlayerException e) {
+            e.printStackTrace();
+        }
 
         this.isLoaded=false;//the weapon is no longer loaded
     }

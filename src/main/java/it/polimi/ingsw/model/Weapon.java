@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.WeaponNotLoadedException;
+import customsexceptions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,14 @@ public abstract class Weapon {
      * @return true if the weapon can be reloaded
      */
     public abstract boolean canBeReloaded();
+    private Player firstTarget;
+    public Player getFirstTarget() {
+        return firstTarget;
+    }
+
+    public void setFirstTarget(Player firstTarget) {
+        this.firstTarget = firstTarget;
+    }
 
     public final Player isPossessedBy(){
 
@@ -41,7 +49,7 @@ public abstract class Weapon {
     }
 
 
-    public abstract void shoot(ArrayList <Player> target,ArrayList<MacroEffect> effects)throws WeaponNotLoadedException;//may need to be changed
+    public abstract void shoot(ArrayList <Player> target,ArrayList<MacroEffect> effects)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException;//may need to be changed
     public abstract boolean isSpecial();
 
 
