@@ -30,7 +30,7 @@ public abstract class MicroEffect {
      */
     public abstract MicroEffect copy();
 
-
+    public abstract void print();
     /**
      * @param playerList
      * apply the microEffect consequences

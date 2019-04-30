@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.WeaponNotLoadedException;
+import customsexceptions.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -18,16 +18,7 @@ class NormalWeaponTest {
         MacroEffect.effectCreator();
         NormalWeapon.weaponsCreator();
         assertNotNull(NormalWeapon.getNormalWeapons());
-        /*for(int i = 0; i< NormalWeapon.getNormalWeapons().size(); i++)
-        {
-            System.out.println(NormalWeapon.getNormalWeapons().get(i).getName());
-            for(int j = 0; j< NormalWeapon.getNormalWeapons().get(i).getEffects().size(); j++)
-            {
-                System.out.println(NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getName());
-                System.out.println(NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getEffectCost());
-            }
 
-        }*/
     }
 
     @Test
@@ -43,14 +34,34 @@ class NormalWeaponTest {
         Model m=new Model(names,pc,2);
 
         Player shooter= Model.getGame().getPlayers().get(0);
-        Player target=Model.getGame().getPlayers().get(1);
+        Player target1=Model.getGame().getPlayers().get(1);
+
+        shooter.setPlayerPos(Model.getMap().getCell(0,3));
+        target1.setPlayerPos(Model.getMap().getCell(1,3));
+
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        ArrayList targets=new ArrayList();
+        targets.add(target1);
         shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
         try{
-            ArrayList <MacroEffect>mEf=new ArrayList<MacroEffect>();
+            ArrayList <MacroEffect>mEf=new ArrayList<>();
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
-            shooter.getWeapons().get(0).shoot(target,mEf);}
-        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+            shooter.getWeapons().get(0).shoot(targets,mEf);
+            //System.out.println(target1.getStats().getDmgTaken());
+        }
+        catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (DeadPlayerException e) {
+            e.printStackTrace();
+        } catch (UncorrectTargetDistance uncorrectTargetDistance) {
+            uncorrectTargetDistance.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (OverKilledPlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -66,15 +77,32 @@ class NormalWeaponTest {
         Model m=new Model(names,pc,2);
 
         Player shooter= Model.getGame().getPlayers().get(0);
-        Player target=Model.getGame().getPlayers().get(1);
+        Player target1=Model.getGame().getPlayers().get(1);
+        shooter.setPlayerPos(Model.getMap().getCell(0,3));
+        target1.setPlayerPos(Model.getMap().getCell(1,3));
+
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
         shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
+        ArrayList targets=new ArrayList();
+        targets.add(target1);
         try{
             ArrayList <MacroEffect>mEf=new ArrayList<>();
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(1));//costs 1 red AmmoCube
-            shooter.getWeapons().get(0).shoot(target,mEf);}
-        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+            shooter.getWeapons().get(0).shoot(targets,mEf);}
+        catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (DeadPlayerException e) {
+            e.printStackTrace();
+        } catch (UncorrectTargetDistance uncorrectTargetDistance) {
+            uncorrectTargetDistance.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (OverKilledPlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -90,15 +118,34 @@ class NormalWeaponTest {
         Model m=new Model(names,pc,2);
 
         Player shooter= Model.getGame().getPlayers().get(0);
-        Player target=Model.getGame().getPlayers().get(1);
+        Player target1=Model.getGame().getPlayers().get(1);
+        shooter.setPlayerPos(Model.getMap().getCell(0,3));
+        target1.setPlayerPos(Model.getMap().getCell(1,3));
+
         shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));//one only for evitating null Pointer
         shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
+        ArrayList targets=new ArrayList();
+        targets.add(target1);
         try{
             ArrayList <MacroEffect>mEf=new ArrayList<>();
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(1));//costs 1 red AmmoCube
-            shooter.getWeapons().get(0).shoot(target,mEf);}
-        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+            shooter.getWeapons().get(0).shoot(targets,mEf);
+
+        }
+        catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (DeadPlayerException e) {
+            e.printStackTrace();
+        } catch (UncorrectTargetDistance uncorrectTargetDistance) {
+            uncorrectTargetDistance.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (OverKilledPlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -146,8 +146,13 @@ public class Marker extends MicroEffect {
     }
 
     @Override
-    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException {
+    public void print() {
+        System.out.println("marker");
+    }
 
+    @Override
+    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException {
+        System.out.println("Marker microeffect");
     }
 
 

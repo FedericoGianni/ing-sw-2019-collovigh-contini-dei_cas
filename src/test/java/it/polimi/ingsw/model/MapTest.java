@@ -4,6 +4,7 @@ import customsexceptions.PlayerNotSeeableException;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -118,57 +119,29 @@ class MapTest {
     @Test
     void getShootingDistShouldReturnRightDist() {
 
-        Map map = Map.genMap(2);
 
-        Player p1 = new Player("Shooter", 0, PlayerColor.GREY);
-        p1.setPlayerPos(map.getCell(1, 3));
 
-        Player p2 = new Player("Visible", 1, PlayerColor.GREEN);
-        p2.setPlayerPos(map.getCell(0, 3));
+        ArrayList<String> pn=new ArrayList();
+        pn.add("shooter");
+        pn.add("visible");
+        pn.add("unvisible");
 
-        Player p3 = new Player("NotVisible", 2, PlayerColor.YELLOW);
-        p3.setPlayerPos(map.getCell(0, 0));
+        ArrayList <PlayerColor> c=new ArrayList();
+        c.add(PlayerColor.GREY);
+        c.add(PlayerColor.GREEN);
+        c.add(PlayerColor.YELLOW);
+        Model m =new Model(pn,c,2);
 
-        try {
-            assertEquals(1, map.getShootingDist(p1, p2, map.getMapClone()));
-            assertThrows(PlayerNotSeeableException.class,
-                    () -> map.getShootingDist(p1, p3, map.getMapClone()));
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        }
-    }
+        Player p1=Model.getPlayer(0);
+        Player p2=Model.getPlayer(1);
+        Player p3=Model.getPlayer(2);
+        p1.setPlayerPos(Model.getMap().getCell(1, 3));
+        p2.setPlayerPos(Model.getMap().getCell(0, 3));
+        p3.setPlayerPos(Model.getMap().getCell(0, 0));
 
-    @Test
-    void getShootingDistShouldReturnRightDist2() {
-        //testing player with different positions
+            assertEquals(1, Model.getMap().getDist(p1, p2));
 
-        Map map = Map.genMap(2);
 
-        Player p1=new Player("Shooter", 0, PlayerColor.BLUE);
-        p1.setPlayerPos(map.getCell(1,3));
-
-        Player p2=new Player("Visible", 1, PlayerColor.PURPLE);
-        p2.setPlayerPos(map.getCell(0,3));
-
-        Player p3=new Player("NotVisible", 2, PlayerColor.YELLOW);
-        p3.setPlayerPos(map.getCell(0,0));
-
-        Player p4=new Player("Visible2",3, PlayerColor.GREEN);
-        p4.setPlayerPos(map.getCell(2,1));
-
-        Player p5=new Player("VisibleMeleeRange", 4, PlayerColor.GREY);//will be the first seen beacuse the players are ordinated in distance
-        p5.setPlayerPos(map.getCell(1,3));
-
-        try{
-            assertEquals(1, map.getShootingDist(p1, p2, map.getMapClone()));
-            assertEquals(0, map.getShootingDist(p1, p5, map.getMapClone()));
-            assertEquals(3, map.getShootingDist(p1, p4, map.getMapClone()));
-            assertThrows(PlayerNotSeeableException.class,
-                    () -> map.getShootingDist(p1, p3, map.getMapClone()));
-
-        } catch (PlayerNotSeeableException e){
-            e.printStackTrace();
-        }
     }
 
 

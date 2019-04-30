@@ -273,4 +273,18 @@ public class NormalWeapon extends Weapon{
         this.isLoaded=false;//the weapon is no longer loaded
     }
 
+    public void printAllWeapons()
+    {
+        for(int i = 0; i< NormalWeapon.getNormalWeapons().size(); i++)
+        {
+            System.out.println(NormalWeapon.getNormalWeapons().get(i).getName());
+            for(int j = 0; j< NormalWeapon.getNormalWeapons().get(i).getEffects().size(); j++)
+            {
+                System.out.println(NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getName());
+                for(int h=0;h<NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().size();h++)
+                    NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().get(h).print();
+            }
+
+        }
+    }
 }

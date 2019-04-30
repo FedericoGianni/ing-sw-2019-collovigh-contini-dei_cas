@@ -45,8 +45,18 @@ public class Mover extends MicroEffect {
     }
 
     @Override
-    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException {
+    public void print() {
+       System.out.println("cellNumber: "+cellNumber);
+        System.out.println(beforeShootig);
 
+        System.out.println(afterShooting);
+
+
+    }
+
+    @Override
+    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException {
+    System.out.println("Mover micreffect");
     }
 
 

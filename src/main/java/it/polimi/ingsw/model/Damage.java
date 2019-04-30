@@ -202,7 +202,6 @@ public class Damage extends MicroEffect {
         //System.out.println(melee);
         Damage dd=new Damage(Integer.parseInt(t),Integer.parseInt(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(melee),Boolean.parseBoolean(diffP),Integer.parseInt(dist),Boolean.parseBoolean(alTarg));
         Damage.insertDamage(dd);
-
     }
 
     @Override
@@ -307,5 +306,14 @@ public class Damage extends MicroEffect {
             if(p.getCurrentPosition()!=item.getCurrentPosition())
                 throw new PlayerInDifferentCellException();
         }
+    }
+
+    public void print()
+    {
+        System.out.println("damage: "+damage);
+        System.out.println("seeAbletargetneededd: "+seeAbleTargetNeeded);
+        System.out.println("alreadyTargetd: "+alreadyTargeted);
+        System.out.println("Different player:" +differentPlayer);
+        System.out.println("Minimun distance required:"+distMin);
     }
 }
