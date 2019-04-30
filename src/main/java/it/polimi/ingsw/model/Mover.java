@@ -39,14 +39,10 @@ public class Mover extends MicroEffect {
     }
 
     @Override
-    public MicroEffect copy() {
-        return null;
+    public Mover copy() {
+        return this;
     }
 
-    @Override
-    public int type() {
-        return 3;
-    }
 
     public int getMoves()
     {

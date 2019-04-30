@@ -140,12 +140,9 @@ public class Marker extends MicroEffect {
     }
 
     @Override
-    public MicroEffect copy() {
-        return null;
+    public Marker copy() {
+        return this;
     }
 
-    @Override
-    public int type() {
-        return 2;
-    }
+
 }

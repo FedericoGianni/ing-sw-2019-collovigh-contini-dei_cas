@@ -179,16 +179,15 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
      */
     private static AmmoCube ammoAnalizer(String color)
     {
-        if(color=="RED")
+        if(color.equals("RED"))
         {
             return new AmmoCube(Color.RED);
-        }else if(color=="BLUE")
+        }else if(color.equals("BLUE"))
         {
             return new AmmoCube(Color.BLUE);
         }else{
             return new AmmoCube(Color.YELLOW);
         }
-
     }
 
     /**

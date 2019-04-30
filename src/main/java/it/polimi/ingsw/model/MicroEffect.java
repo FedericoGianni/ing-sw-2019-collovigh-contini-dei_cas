@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.util.ArrayList;
+
 /**
  * //TODO
  */
@@ -25,5 +27,11 @@ public abstract class MicroEffect {
      * @return a clone of this object (but sonar does not let me use the clone name)
      */
     public abstract MicroEffect copy();
-    public abstract int type();
+
+
+    /**
+     * @param playerList
+     * apply the microEffect consequences
+     */
+    public abstract void microEffectApplicator(ArrayList<Player> playerList,Weapon w);
 }

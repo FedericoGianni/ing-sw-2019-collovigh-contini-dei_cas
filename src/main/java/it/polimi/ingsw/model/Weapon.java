@@ -41,7 +41,7 @@ public abstract class Weapon {
     }
 
 
-    public abstract void shoot(Player target,ArrayList<MacroEffect> effects)throws WeaponNotLoadedException;//may need to be changed
+    public abstract void shoot(ArrayList <Player> target,ArrayList<MacroEffect> effects)throws WeaponNotLoadedException;//may need to be changed
     public abstract boolean isSpecial();
 
 
@@ -51,7 +51,6 @@ public abstract class Weapon {
      * @param possessed
      * @return true if the player can pay something in ammo
      */
-
     public static final boolean canPay(List<AmmoCube> cost,AmmoBag possessed)
     {
         int []ammo=possessed.getAmount();

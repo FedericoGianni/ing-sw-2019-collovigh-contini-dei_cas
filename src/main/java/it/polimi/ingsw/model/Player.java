@@ -383,4 +383,10 @@ public class Player {
         this.stats.addScore(value);
     }
 
+    public int distance(Player shooter,Player target)
+    {
+        // TODO implementation here
+        return 0;
+    }
+
 }

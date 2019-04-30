@@ -1,4 +1,6 @@
 package it.polimi.ingsw.model;
+import customsexceptions.PlayerInDifferentCellException;
+import customsexceptions.PlayerInSameCellException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -214,8 +216,74 @@ public class Damage extends MicroEffect {
         return this;
     }
 
-    public int type()
+
+    public void microEffectApplicator(ArrayList<Player> playerList,Weapon w) {
+        if(playerNum==100)
+        {
+            for(Player item : playerList)//check taht everyone is in different cells
+            {
+                try{sameCellCheck(item,playerList);}catch(PlayerInDifferentCellException e){e.printStackTrace();}
+            }
+            for(Player item:playerList)
+            {
+                distance(item,w.isPossessedBy());
+            }
+        }else if(playerNum>=10 && playerNum <100)
+        {
+            for(Player item : playerList)//check that everyone is in a different cell
+            {
+                try{differentCellsCheck(item,playerList);}catch(PlayerInSameCellException e){e.printStackTrace();}
+            }
+            for(Player item:playerList)
+            {
+                distance(item,w.isPossessedBy());
+            }
+
+        }
+        else {
+            for(Player item : playerList)
+            {
+                distance(item,w.isPossessedBy());
+            }
+
+        }
+
+    }
+
+    private void distance(Player target,Player shooter)//distance, called for every player
     {
-        return 1;
+        if(distMin<10)
+        {
+            if(Map.getDist(target,shooter)<10){
+                //bo
+            }else{/*eccezione*/ }
+
+        }else if(distMin>=10 && distMin <100)
+        {
+            //distMin/10 is the maximun distance
+        }else if(distMin==100)
+        {
+            //an unseeable player
+        }else{
+            //a player that is exactly distMin/1000 away
+        }
+    }
+
+    private void differentCellsCheck(Player p,ArrayList<Player> playerList) throws PlayerInSameCellException
+    {
+        for(Player item:playerList)
+        {
+            if(p.getCurrentPosition()==item.getCurrentPosition())
+                throw new PlayerInSameCellException();
+        }
+    }
+
+    private void sameCellCheck(Player p,ArrayList<Player> playerList) throws PlayerInDifferentCellException
+    {
+        for(Player item:playerList)
+        {
+            if(p.getCurrentPosition()!=item.getCurrentPosition())
+                throw new PlayerInDifferentCellException();
+        }
     }
 }

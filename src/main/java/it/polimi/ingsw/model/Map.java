@@ -436,6 +436,17 @@ public class Map {
 
     }
 
+    public static int getDist(Player p1,Player p2)
+    {
+        Map map=Model.getMap();
+        Point d1, d2;
+        d1 = map.cellToCoord(p1.getCurrentPosition());
+        d2 = map.cellToCoord(p2.getCurrentPosition());
+
+        return abs(d1.x - d2.x) + abs(d1.y - d2.y);
+
+    }
+
     /**
      *
      * @param cell is the cell we want to see if exist
