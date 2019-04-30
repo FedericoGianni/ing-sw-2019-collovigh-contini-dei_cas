@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -15,6 +17,9 @@ import java.util.List;
 public class CurrentGame {
 
     public CurrentGame(List<Player> players, Map currentMap) {
+
+        Collections.sort(players, Comparator.comparing(Player::getPlayerId));
+
         this.players = players;
         this.currentMap = currentMap;
         this.roundNumber = 0;

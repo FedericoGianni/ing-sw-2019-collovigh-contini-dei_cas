@@ -5,6 +5,8 @@ package it.polimi.ingsw.model;
  */
 public class AmmoCell extends Cell {
 
+    private AmmoCard ammoPlaced;
+
     /**
      * Default constructor
      */
@@ -22,8 +24,6 @@ public class AmmoCell extends Cell {
         super(clone);
         this.ammoPlaced = clone.ammoPlaced;
     }
-
-    private AmmoCard ammoPlaced;
 
 
     /**

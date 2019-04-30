@@ -38,7 +38,15 @@ class AmmoCubeTest {
         }
 
 
+    }
 
+    @Test
+    void toString1() {
+
+        AmmoCube cube1 = new AmmoCube(Color.BLUE);
+        AmmoCube cube2 = new AmmoCube(Color.BLUE);
+
+        assertEquals(cube1.toString(),cube2.toString());
 
     }
 }

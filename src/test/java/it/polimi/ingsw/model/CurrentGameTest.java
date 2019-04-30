@@ -90,14 +90,14 @@ class CurrentGameTest {
         Player p1 = new Player("test1", 0, PlayerColor.YELLOW);
         Player p2 = new Player("test2", 1, PlayerColor.BLUE);
         Player p3 = new Player("test3", 2, PlayerColor.PURPLE);
-        players.add(p1);
-        players.add(p2);
         players.add(p3);
+        players.add(p2);
+        players.add(p1);
 
         Map m = Map.genMap(1);
 
         CurrentGame c = new CurrentGame(players, m);
-        assertEquals(players.indexOf(p1), c.playerToId(p1));
+        assertEquals(p1.getPlayerId(), c.playerToId(p1));
     }
 
     @Test
