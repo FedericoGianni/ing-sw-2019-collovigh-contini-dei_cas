@@ -35,5 +35,5 @@ public abstract class MicroEffect {
      * @param playerList
      * apply the microEffect consequences
      */
-    public abstract void microEffectApplicator(ArrayList<Player> playerList,Weapon w)throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException;
+    public abstract void microEffectApplicator(ArrayList<Player> playerList,Weapon w)throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException,FrenzyActivatedException;
 }

@@ -1,4 +1,7 @@
 package it.polimi.ingsw.network;
 
-public interface Client {
+public abstract class Client {
+
+    private int gameId;
+    private int playerId;
 }

@@ -1,13 +1,11 @@
 package it.polimi.ingsw.model;
 
 
-import customsexceptions.DeadPlayerException;
-import customsexceptions.OverMaxDmgException;
-import customsexceptions.OverMaxMarkException;
-import customsexceptions.OverKilledPlayerException;
+import customsexceptions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Stats {
 
@@ -82,8 +80,14 @@ public class Stats {
     /**
      * this function increase the death count by one
      */
-    public void addDeath(){
+    public void addDeath(Boolean overkill) throws FrenzyActivatedException {
+
         this.deaths++;
+
+        Player me = Model.getGame().getPlayers().stream().filter(p -> p.getStats().equals(this)).collect(Collectors.toList()).get(0);
+
+
+        Model.getGame().addDeath(me.getPlayerId(),overkill);
     }
 
     /**
@@ -150,7 +154,7 @@ public class Stats {
      * @param playerId is the id of the player who gave them
      * @throws DeadPlayerException if player died
      */
-    public void addDmgTaken(int dmg, int playerId) throws DeadPlayerException, OverKilledPlayerException {
+    public void addDmgTaken(int dmg, int playerId) throws DeadPlayerException, OverKilledPlayerException, FrenzyActivatedException {
 
         for (int i = 0; i < MAX_MARKS; i++) {
 
@@ -178,13 +182,13 @@ public class Stats {
 
         if (dmgTaken.size() == MAX_DMG){  // if player gets Overkilled
 
-            this.addDeath();
+            this.addDeath(true);
 
             throw new OverKilledPlayerException();
         }
 
         if ((dmgTaken.size()>= MAX_DMG - 1)&&(dmgTaken.size()<MAX_DMG)){  // if player has more than MAX_DMG -1 (simply dead)
-            this.addDeath();
+            this.addDeath(false);
             throw new DeadPlayerException();
         }
     }

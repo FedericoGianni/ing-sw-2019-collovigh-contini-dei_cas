@@ -235,7 +235,7 @@ public class NormalWeapon extends Weapon{
      * @param mE
      * @throws WeaponNotLoadedException
      */
-    public void shoot(ArrayList<Player> target,ArrayList<MacroEffect> mE)throws WeaponNotLoadedException,OverKilledPlayerException,DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException,UncorrectTargetDistance,SeeAblePlayerException//neeed a player list !
+    public void shoot(ArrayList<Player> target,ArrayList<MacroEffect> mE)throws WeaponNotLoadedException,OverKilledPlayerException,DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException,UncorrectTargetDistance,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
     {
         try{
             if(this.isLoaded==false)

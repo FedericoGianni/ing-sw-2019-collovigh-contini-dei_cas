@@ -22,7 +22,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void shoot() {//one shot, one effect, one target, free effect---the most basic possible
+    void shoot() throws FrenzyActivatedException{//one shot, one effect, one target, free effect---the most basic possible
         weaponsCreator();
 
         List<String>  names=new ArrayList<String>();
@@ -65,7 +65,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void shoot2() {//now two effects ,you also need to pay and the player can, if it can't the notEnoughAmmoException sclera
+    void shoot2() throws FrenzyActivatedException{//now two effects ,you also need to pay and the player can, if it can't the notEnoughAmmoException sclera
         weaponsCreator();
 
         List<String>  names=new ArrayList<>();
@@ -106,7 +106,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void shoot3() {//same as the shoot2 test but launches the notEnoughAmmoException
+    void shoot3() throws FrenzyActivatedException{//same as the shoot2 test but launches the notEnoughAmmoException
         weaponsCreator();
 
         List<String>  names=new ArrayList<>();

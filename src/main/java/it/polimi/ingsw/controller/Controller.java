@@ -1,9 +1,11 @@
 package it.polimi.ingsw.controller;
 
 
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.PlayerColor;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class represent the Controller and invokes actions which modify the Model directly
@@ -11,31 +13,69 @@ import java.util.*;
  */
 public class Controller {
 
-    /**
-     * Default constructor
-     */
-    public Controller() {
-        players = new ArrayList<>();
-        playercolors = new ArrayList<>();
-    }
-
 
     private int gameId;
-    private List<String> players;
-    private List<PlayerColor> playercolors;
-    private int actionCounter;
     private int roundNumber;
-    private Boolean frenzy;
-    private int RoundPhase;
+    private Boolean frenzy = false;
+    private int roundPhase;
     private int frenzyStarter;
+    private final List<ClientController> players;
+    private final Model game;
+
 
     /**
-     * @param plist list of player's names
-     * @param clist list of player's colors
+     *  Constructor
+     * @param nameList is a list of player's names
+     * @param playerColors is a list of player's Color
+     * @param gameId is the id of the game
      */
-    public void initGame(List<String> plist, List<PlayerColor> clist) {
-        // TODO implement here
+    public Controller(List<String> nameList, List<PlayerColor>playerColors,int gameId) {
+
+
+        int mapType = this.chooseMap(nameList.size());
+        this.game = new Model(nameList,playerColors,mapType);
+
+        players = new ArrayList<>();
+
+        for (int i = 0; i < nameList.size(); i++) {
+
+            players.add(new ClientController(i,this));
+            
+        }
+
+        this.roundNumber = 0;
+        this.roundPhase = 0;
+        this.gameId = gameId;
+
     }
+
+
+
+    /**
+     *
+     * @param playerNumber is the number of player
+     * @return
+     */
+    private int chooseMap(int playerNumber){
+
+        Random rand = new Random();
+
+        switch (playerNumber) {
+
+            case 3:
+                return 1 + rand.nextInt(2);
+
+            case 4:
+                return 1 + rand.nextInt(3);
+
+            case 5:
+                return 2 + rand.nextInt(2);
+
+            default:
+                return -1;
+        }
+    }
+
 
     /**
      *
@@ -43,53 +83,22 @@ public class Controller {
      * @return an integer representing the position of the player in the array of Players, -1 if not present
      */
     public int findPlayerByName(String name) {
-        for(int i=0; i < players.size(); i++) {
-            if(name.equals(players.get(i))) {
-                return i;
-            }
-        }
-        return -1;
+
+        List<String>nameList = game.getGame()
+                .getPlayers()
+                .stream()
+                .map(player -> player.getPlayerName())
+                .collect(Collectors.toList());
+
+        return  nameList
+                .indexOf(nameList
+                .stream()
+                .filter(n -> n == name)
+                .collect(Collectors.toList())
+                .get(0));
     }
 
-    /**
-     *
-     * @param name chosen by the user at login
-     * @return true if the name hasn't already been taken, false otherwise
-     */
-    public boolean isNameUnused(String name){
-        int res = findPlayerByName(name);
-        if(res == -1){
-            return true;
-        }
 
-        return false;
-    }
-
-    /**
-     *
-     * @param playerColor chosen by the user at login
-     * @return true if the PlayerColor hasn't already been taken, false otherwise
-     */
-    public boolean isColorUnused(String playerColor){
-
-        for(PlayerColor p : playercolors){
-            if (PlayerColor.valueOf(playerColor.toUpperCase()).equals(p)){
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     *
-     * @param name
-     * @param playerColor
-     */
-    public void addPlayerToWaitingRoom(String name, PlayerColor playerColor){
-        players.add(name);
-        playercolors.add(playerColor);
-    }
 
     /**
      * @return ID of the current playing Player

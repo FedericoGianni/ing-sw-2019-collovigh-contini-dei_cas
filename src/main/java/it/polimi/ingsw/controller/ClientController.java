@@ -5,15 +5,17 @@ import it.polimi.ingsw.model.PlayerColor;
 public class ClientController {
 
     private int gameId;
-    private int myPlayerId;
-    private PlayerColor myColor;
+    private final int myPlayerId;
     private int roundNumber;
-    /**
-     * this field is meant to describe the position in the single turn
-     */
-    private int sync;
-    private int actionCount;
     private Boolean frenzy;
-    private int frenzyStarter;
+    private final Controller controller;
+
+    public ClientController(int myPlayerId, Controller controller) {
+        this.myPlayerId = myPlayerId;
+        this.controller = controller;
+    }
+
+
+
 
 }

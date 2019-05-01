@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.FrenzyActivatedException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +17,16 @@ import java.util.List;
  */
 
 public class CurrentGame {
+
+    private static final int KILL_SHOT_TRACK = 8;
+    private List<Player> players;
+    private Map currentMap;
+    private int roundNumber;
+    private PowerUpDeck powerUpDeck;
+    private WeaponDeck weaponDeck;
+    private PowerUpDeck thrashPowerUpDeck;
+    private List<Skull> killShotTrack;
+
 
     public CurrentGame(List<Player> players, Map currentMap) {
 
@@ -44,13 +56,7 @@ public class CurrentGame {
         this.thrashPowerUpDeck = new PowerUpDeck(clone.thrashPowerUpDeck);
     }
 
-    private List<Player> players;
-    private Map currentMap;
-    private int roundNumber;
-    private PowerUpDeck powerUpDeck;
-    private WeaponDeck weaponDeck;
-    private PowerUpDeck thrashPowerUpDeck;
-    private List<Integer> killShotTrack;
+
 
     /**
      * @return a randomly picked PowerUp from the current powerUp deck if this is empty it sets the trash one as the good one
@@ -107,12 +113,25 @@ public class CurrentGame {
         return new ArrayList<>(this.players);
     }
 
-    public List<Integer> getKillShotTrack() {
+    public List<Skull> getKillShotTrack() {
         return killShotTrack;
     }
 
-    public void setKillShotTrack(List<Integer> killShotTrack) {
+    public void setKillShotTrack(List<Skull> killShotTrack) {
         this.killShotTrack = killShotTrack;
+    }
+
+    /**
+     *
+     * @param playerId
+     * @param overkill
+     * @throws FrenzyActivatedException
+     */
+    public void addDeath(int playerId, Boolean overkill) throws FrenzyActivatedException{
+
+        this.killShotTrack.add(new Skull(playerId,(overkill ? 2 : 1)));
+
+        if (this.killShotTrack.size() >= KILL_SHOT_TRACK) throw new FrenzyActivatedException();
     }
 
     /**
