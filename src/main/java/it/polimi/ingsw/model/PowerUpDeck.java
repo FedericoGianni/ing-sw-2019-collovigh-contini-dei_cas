@@ -121,4 +121,9 @@ public class PowerUpDeck implements Deck<PowerUp> {
         }
 
     }
+
+    @Override
+    public int getSize() {
+        return this.powerUpList.size();
+    }
 }

@@ -92,6 +92,8 @@ class PowerUpDeckTest {
 
         PowerUpDeck deck = PowerUpDeck.populatedDeck();
 
+        int size = deck.getSize();
+
         List<PowerUp> list1 = new ArrayList<>();
         List<PowerUp> list2 = new ArrayList<>();
 
@@ -106,13 +108,13 @@ class PowerUpDeckTest {
 
         list1 = new ArrayList<>();
 
-        for (int i = 0; i < 14; i++) {
+        for (int i = 0; i < (size - 10); i++) {
 
             list1.add(deck.getRandomCard());
             
         }
 
-        for (int i = 0; i < 14; i++) {
+        for (int i = 0; i < (size - 10); i++) {
 
             list2.add(copy.getRandomCard());
 

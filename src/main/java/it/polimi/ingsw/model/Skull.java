@@ -17,10 +17,4 @@ public class Skull {
     public int getAmount() {
         return overkill ? 2 : 1;
     }
-
-    public Skull(Skull copy){
-
-        this.overkill = copy.overkill;
-        this.playerId = copy.playerId;
-    }
 }

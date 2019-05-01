@@ -12,4 +12,6 @@ public interface Deck<T> {
      */
     public T getRandomCard();
 
+    public int getSize();
+
 }

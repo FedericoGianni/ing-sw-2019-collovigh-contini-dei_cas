@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.*;
+
 import java.util.*;
 
 /**
@@ -14,7 +16,7 @@ public class WeaponDeck implements Deck <Weapon> {
     /**
      * Default constructor
      */
-    public WeaponDeck() {
+    private WeaponDeck() {
 
         this.weaponList = new ArrayList<>();
     }
@@ -35,7 +37,18 @@ public class WeaponDeck implements Deck <Weapon> {
 
         //TODO
 
-        return null;
+        WeaponDeck deck = new WeaponDeck();
+
+        //Only for test purposes
+
+        deck.weaponList.add(new NormalWeapon("James Gunn",null,null) );
+        deck.weaponList.add(new NormalWeapon("James Rifle",null,null) );
+        deck.weaponList.add(new NormalWeapon("James Bazooka",null,null) );
+
+        //end of part for test
+
+
+        return deck;
     }
 
 
@@ -64,6 +77,11 @@ public class WeaponDeck implements Deck <Weapon> {
 
 
         }
+    }
+
+    @Override
+    public int getSize() {
+        return this.weaponList.size();
     }
 
 }
