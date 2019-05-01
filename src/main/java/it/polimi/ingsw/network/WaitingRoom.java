@@ -7,10 +7,14 @@ import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class WaitingRoom {
 
-    public static final int TIMER = 30;
+    private static final int TIMER = 30;
+    private static int timerCount = TIMER;
+
     private List<String> players;
     private List<PlayerColor> colors;
     private Boolean active;
@@ -113,6 +117,40 @@ public class WaitingRoom {
         //TODO
     }
 
+    /**
+     *
+     * @return the current value of timerCount which is decreased by startTimer() method
+     */
+    public static int getTimerCount() {
+        return timerCount;
+    }
+
+    /**
+     * This method will start a thread which runs a timer, decrementing a counter every second until it reaches 0
+     */
+    public void startTimer(){
+
+        final TimerTask timerTask = new TimerTask() {
+
+            @Override
+            public void run() {
+                System.out.println("[DEBUG] WaitingRoomTimer counter: " + timerCount);
+                timerCount--;
+                if(timerCount == 0) {
+                    System.out.println("[DEBUG] Timer has expired!");
+                    //chiama initGame o gestire timer scaduto
+                    //initGame();
+
+                    //termina l'esecuzione del thread
+                    this.cancel();
+                }
+            }
+        };
+
+        Timer timer = new Timer("WaitingRoomTimer");
+        timer.scheduleAtFixedRate(timerTask, 30, 1000);
+
+    }
 
 
 }
