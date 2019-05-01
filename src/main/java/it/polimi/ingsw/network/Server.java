@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.socket.SocketServer;
 
@@ -30,7 +31,13 @@ public class Server  {
 
     public Server() {
         //controller = null
-        waitingRoom = new WaitingRoom();
+        try {
+            waitingRoom = new WaitingRoom(-1);  // NOTE: this need to be changed: this can only create a new game but load a saved one
+
+        }catch (GameNonExistentException e){
+
+            e.printStackTrace();
+        }
         try{
             ip_address = Inet4Address.getLocalHost().getHostAddress();
             Logger.getLogger("infoLogging").info("Server is up and running on ip " + ip_address);

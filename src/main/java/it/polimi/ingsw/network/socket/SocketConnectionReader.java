@@ -2,6 +2,8 @@ package it.polimi.ingsw.network.socket;
 
 import it.polimi.ingsw.model.PlayerColor;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
+import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,8 +72,16 @@ public class SocketConnectionReader extends Thread {
 
             case "login" :
                 new Thread (() -> {
-                    Server.getWaitingRoom().addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()));
+                    try {
+                        Server.getWaitingRoom().addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()));
+
+                    }catch (NameAlreadyTakenException e){       //NOTE: temporary solution by D, just to make it compile
+                        socketConnectionWriter.send("login\tWRONG_NAME");
+                    }catch (ColorAlreadyTakenException e){
+                        socketConnectionWriter.send("login\tWRONG_COLOR");
+                    }
                     socketConnectionWriter.send("login\tOK");
+
                 }).start();
                 break;
 

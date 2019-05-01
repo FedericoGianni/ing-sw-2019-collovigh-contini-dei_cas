@@ -12,17 +12,14 @@ class GamesTest {
 
         Games games = new Games();
 
+        int size = games.size();
+
         games.addGame();
         games.addGame();
 
-        try {
-            System.out.println(games.getSavePath(0));
-            System.out.println(games.getSavePath(1));
-        }catch(GameNonExistentException e){
+        assertEquals(size + 2, games.size());
 
-            e.printStackTrace();
-        }
-
+        games.clear();
 
     }
 

@@ -36,6 +36,7 @@ public class WaitingRoom {
         if (gameId == -1) {
             this.colors = new ArrayList<>();
             this.players = new ArrayList<>();
+            activeGame = games.addGame();
         }else{
             if (!games.contains(gameId)) throw new GameNonExistentException();
             // need to catch all saved games and start the correspondent one

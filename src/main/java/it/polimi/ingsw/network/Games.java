@@ -2,7 +2,6 @@ package it.polimi.ingsw.network;
 
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 
 import java.io.*;
@@ -34,10 +33,7 @@ public class Games {
 
 
 
-        }catch (JsonSyntaxException e){
-
-            //this.hashMap = new HashMap<>();
-        }catch (FileNotFoundException e){
+        }catch (Exception e){
             e.printStackTrace();
         }
 
@@ -70,12 +66,35 @@ public class Games {
     /**
      * add a new game to the hashmap and saves
      */
-    public void addGame(){
+    public int addGame(){
 
         int gameId = hashMap.size() - 1; // the size is 1 by default
 
         hashMap.putIfAbsent(gameId,genSavePath(gameId));
 
+        this.save();
+
+        return gameId;
+    }
+
+    /**
+     *
+     * @param gameid is the id of the game to remove from the map
+     */
+    public void closeGame(int gameid){
+
+        hashMap.remove(gameid);
+        this.save();
+
+    }
+
+    /**
+     * This method deletes all of the games from the map
+     */
+    public void clear(){
+
+        hashMap.clear();
+        hashMap.putIfAbsent(-1,"InitPath");
         this.save();
     }
 
@@ -126,4 +145,5 @@ public class Games {
     public Boolean isEmpty(){
         return (hashMap.size() == 1);
     }
+
 }
