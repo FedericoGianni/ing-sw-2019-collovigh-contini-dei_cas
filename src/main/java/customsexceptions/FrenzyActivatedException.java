@@ -1,4 +1,20 @@
 package customsexceptions;
 
-public class FrenzyActivatedException extends Exception {
+public class FrenzyActivatedException extends Exception implements DeathExceptions{
+
+    private final int playerId;
+
+    public FrenzyActivatedException(int playerId) {
+
+        super();
+        this.playerId = playerId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getPlayerId() {
+        return this.playerId;
+    }
 }

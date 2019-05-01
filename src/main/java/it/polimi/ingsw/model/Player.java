@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import customsexceptions.CardNotPossessedException;
 import customsexceptions.DeadPlayerException;
-import customsexceptions.FrenzyActivatedException;
 import customsexceptions.OverKilledPlayerException;
 
 import java.util.List;
@@ -331,18 +330,27 @@ public class Player {
     /**
      * increase the deaths count by 1
      */
-    public void incrDeaths( Boolean overkill) throws FrenzyActivatedException{
+    public void incrDeaths() {
 
-        this.stats.addDeath(overkill);
+        this.stats.addDeath();
     }
 
     /**
      * @param fromPlayerId is the id of the player who made the damage
      * @param value is the value of the damage
      */
-    public void addDmg(int fromPlayerId, int value) throws DeadPlayerException, OverKilledPlayerException, FrenzyActivatedException {
+    public void addDmg(int fromPlayerId, int value) throws DeadPlayerException,OverKilledPlayerException{
 
         this.stats.addDmgTaken(value, fromPlayerId);
+    }
+
+    /**
+     * This method will reset the HP of the player, will be called by controller after the point count
+     */
+    public void resetDmg(){
+
+        stats.resetDmg();
+
     }
 
     /**
@@ -389,5 +397,7 @@ public class Player {
         // TODO implementation here
         return 0;
     }
+
+
 
 }

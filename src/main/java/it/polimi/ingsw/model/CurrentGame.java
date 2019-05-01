@@ -121,19 +121,36 @@ public class CurrentGame {
     public void setKillShotTrack(List<Skull> killShotTrack) {
         this.killShotTrack = killShotTrack;
     }
+    
+    /**
+     * This method is used with multiple kills in one turn
+     * @param killerId is the id of the player who shoot
+     * @param overkill is a list of Boolean that are true if the player gets overkilled
+     * @throws FrenzyActivatedException if the killShotTrack is empty
+     */
+    public void addkills(int killerId, List<Boolean> overkill) throws FrenzyActivatedException{
+
+        for (Boolean b: overkill){
+            this.killShotTrack.add(new Skull(killerId,b));
+        }
+
+        if (this.killShotTrack.size() >= KILL_SHOT_TRACK) throw new FrenzyActivatedException(killerId);
+    }
 
     /**
-     *
-     * @param playerId
-     * @param overkill
-     * @throws FrenzyActivatedException
+     * This method is used with multiple kills in one turn
+     * @param killerId is the id of the player who shoot
+     * @param overkill is a list of Boolean that are true if the player gets overkilled
+     * @throws FrenzyActivatedException if the killShotTrack is empty
      */
-    public void addDeath(int playerId, Boolean overkill) throws FrenzyActivatedException{
+    public void addkills(int killerId, Boolean overkill) throws FrenzyActivatedException{
 
-        this.killShotTrack.add(new Skull(playerId,(overkill ? 2 : 1)));
+        this.killShotTrack.add(new Skull(killerId,overkill));
 
-        if (this.killShotTrack.size() >= KILL_SHOT_TRACK) throw new FrenzyActivatedException();
+        if (this.killShotTrack.size() >= KILL_SHOT_TRACK) throw new FrenzyActivatedException(killerId);
     }
+
+
 
     /**
      * @return the actual Map

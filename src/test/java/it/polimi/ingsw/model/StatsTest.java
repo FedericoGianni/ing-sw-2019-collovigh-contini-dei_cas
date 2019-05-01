@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.DeadPlayerException;
-import customsexceptions.OverMaxDmgException;
-import customsexceptions.OverMaxMarkException;
-import customsexceptions.OverKilledPlayerException;
+import customsexceptions.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -158,47 +155,13 @@ class StatsTest {
 
         List<String> players = new ArrayList<>();
         players.add("Agent");
-        players.add("Agent47");
-        players.add("Agent2");
-        players.add("Agent3");
 
         List<PlayerColor> colors = new ArrayList<>();
         colors.add(PlayerColor.BLUE);
-        colors.add(PlayerColor.BLUE);
-        colors.add(PlayerColor.PURPLE);
-        colors.add(PlayerColor.YELLOW);
 
         Model model = new Model(players,colors,1);
 
-        Stats stats = Model.getPlayer(0).getStats();
-
-        assertThrows(DeadPlayerException.class, () -> {
-
-            for (int i = 0; i < (maxDmg -1); i++) {
-
-                stats.addDmgTaken(1,0);
-
-            }
-        });
-
-
-        assertThrows(DeadPlayerException.class, () -> {
-
-            Stats stats1 = Model.getPlayer(1).getStats();
-
-                stats1.addDmgTaken(11,0);
-        });
-
-        assertThrows(OverKilledPlayerException.class, () -> {
-
-            Stats stats3 = Model.getPlayer(2).getStats();
-
-            stats3.addDmgTaken(15,0);
-
-
-        });
-
-        Stats stats2 = Model.getPlayer(3).getStats();
+        Stats stats2 = Model.getPlayer(0).getStats();
 
         try{
 
@@ -228,30 +191,109 @@ class StatsTest {
         }
 
 
+    }
 
+    @Test
+    void shouldThrowDeadPlayerException(){
+
+        int maxDmg = 12;
+
+        List<String> players = new ArrayList<>();
+        players.add("Agent");
+        players.add("Agent47");
+
+        List<PlayerColor> colors = new ArrayList<>();
+        colors.add(PlayerColor.BLUE);
+        colors.add(PlayerColor.BLUE);
+
+        Model model = new Model(players,colors,1);
+
+        assertThrows(DeadPlayerException.class, () -> {
+
+            Stats stats = Model.getPlayer(0).getStats();
+
+            for (int i = 0; i < (maxDmg -1); i++) {
+
+                stats.addDmgTaken(1,0);
+
+            }
+        });
+
+        assertThrows(DeadPlayerException.class, () -> {
+
+            Stats stats1 = Model.getPlayer(1).getStats();
+
+            stats1.addDmgTaken(11,0);
+        });
 
     }
 
     @Test
-    void checkException(){
+    void shouldThrowOverKilledPlayerException(){
 
         int maxDmg = 12;
 
-        Cell cell = new AmmoCell();
-        Stats stats = new Stats(cell);
+        List<String> players = new ArrayList<>();
+        players.add("Agent");
+        players.add("Agent47");
 
-        try{
+        List<PlayerColor> colors = new ArrayList<>();
+        colors.add(PlayerColor.BLUE);
+        colors.add(PlayerColor.BLUE);
 
-            stats.addDmgTaken(11,0);
+        Model model = new Model(players,colors,1);
 
+        assertThrows(OverKilledPlayerException.class, () -> {
 
-        }catch(Exception e){
+            Stats stats1 = Model.getPlayer(1).getStats();
+
+            stats1.addDmgTaken(maxDmg,0);
+        });
+
+        assertThrows(OverKilledPlayerException.class, () -> {
+
+            Stats stats1 = Model.getPlayer(1).getStats();
+
+            stats1.addDmgTaken(maxDmg +5,0);
+        });
+
+    }
+
+    @Test
+    void shouldAddMarksToDamage(){
+
+        int maxDmg = 12;
+        int maxMarks = 3;
+
+        List<String> players = new ArrayList<>();
+        players.add("Agent47");
+        players.add("Agent");
+
+        List<PlayerColor> colors = new ArrayList<>();
+        colors.add(PlayerColor.BLUE);
+        colors.add(PlayerColor.BLUE);
+
+        Model model = new Model(players,colors,1);
+
+        Stats stats = Model.getPlayer(0).getStats();
+
+        for (int i = 0; i < maxMarks +2; i++) {
+            stats.addMarks(1);
+        }
+        // max marks that can be added are maxMarks
+
+        try {
+            stats.addDmgTaken(4, 1);
+        }catch (Exception e){
 
             e.printStackTrace();
         }
 
-
-
+        assertEquals(3 + 4,stats.getDmgTaken().size());
 
     }
+
+
+
+
 }

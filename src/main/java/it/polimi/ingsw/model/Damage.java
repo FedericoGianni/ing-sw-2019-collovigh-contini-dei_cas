@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 import customsexceptions.*;
+import customsexceptions.DeadPlayerException;
+import customsexceptions.FrenzyActivatedException;
+import customsexceptions.OverKilledPlayerException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -215,7 +218,7 @@ public class Damage extends MicroEffect {
     }
 
 
-    public void microEffectApplicator(ArrayList<Player> playerList,Weapon w)throws OverKilledPlayerException,DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException,UncorrectTargetDistance,SeeAblePlayerException,FrenzyActivatedException{//w.isPossesedBy.getPlayer mi dice il giocatore che spara
+    public void microEffectApplicator(ArrayList<Player> playerList,Weapon w)throws OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException,UncorrectTargetDistance,SeeAblePlayerException, FrenzyActivatedException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
         if(alreadyTargeted==true && differentPlayer==false)
         {
             w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);//playerId=0 bcz only one player the same as the first shot

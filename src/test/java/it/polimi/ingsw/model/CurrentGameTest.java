@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import customsexceptions.FrenzyActivatedException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -115,5 +116,66 @@ class CurrentGameTest {
 
         CurrentGame c = new CurrentGame(players, m);
         assertEquals(c.getPlayers() , players);
+    }
+
+    @Test
+    void addDeath() {
+
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("Agent",0,PlayerColor.BLUE));
+        players.add(new Player("Agent47",1, PlayerColor.YELLOW));
+
+        CurrentGame currentGame = new CurrentGame(players,null);
+
+        assertEquals(0,currentGame.getKillShotTrack().size());
+
+        try {
+
+            currentGame.addkills(0, true);
+
+        }catch (FrenzyActivatedException e){
+            e.printStackTrace();
+        }
+
+        assertEquals(0,currentGame.getKillShotTrack().get(0).getKillerId());
+        assertEquals(2,currentGame.getKillShotTrack().get(0).getAmount());
+
+
+
+    }
+
+    @Test
+    void shouldThrowFrenzyActivatedException(){
+
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("Agent",0,PlayerColor.BLUE));
+        players.add(new Player("Agent47",1, PlayerColor.YELLOW));
+
+        CurrentGame currentGame = new CurrentGame(players,null);
+
+        List<Boolean> list = new ArrayList<>();
+
+        try{
+
+
+
+            for (int i = 0; i < 10; i++) {
+
+                list.add(false);
+
+            }
+
+            currentGame.addkills(0, list);
+
+
+
+        }catch (FrenzyActivatedException e){
+
+            assertEquals(0,e.getPlayerId());
+
+            assertEquals(list.size(),currentGame.getKillShotTrack().size());
+        }
+
+
     }
 }

@@ -3,19 +3,19 @@ package it.polimi.ingsw.model;
 public class Skull {
 
     private final int playerId;
-    private final int overkill;
+    private final Boolean overkill;
 
-    public Skull(int playerId, int overkill) {
-        this.playerId = playerId;
+    public Skull(int killerId, Boolean overkill) {
+        this.playerId = killerId;
         this.overkill = overkill;
     }
 
-    public int getPlayerId() {
+    public int getKillerId() {
         return playerId;
     }
 
-    public int getOverkill() {
-        return overkill;
+    public int getAmount() {
+        return overkill ? 2 : 1;
     }
 
     public Skull(Skull copy){

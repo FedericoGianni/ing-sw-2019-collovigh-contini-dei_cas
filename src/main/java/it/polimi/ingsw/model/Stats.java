@@ -2,8 +2,11 @@ package it.polimi.ingsw.model;
 
 
 import customsexceptions.*;
+import customsexceptions.DeadPlayerException;
+import customsexceptions.OverKilledPlayerException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,16 +81,23 @@ public class Stats {
     }
 
     /**
-     * this function increase the death count by one
+     * this function increase the death count by one,
+     * NOTE: it will not add the death to the KillShotTrack bc there is no way to know who shoot
      */
-    public void addDeath(Boolean overkill) throws FrenzyActivatedException {
+    public void addDeath(){
 
         this.deaths++;
+    }
 
-        Player me = Model.getGame().getPlayers().stream().filter(p -> p.getStats().equals(this)).collect(Collectors.toList()).get(0);
+    public int getPlayerId(){
 
-
-        Model.getGame().addDeath(me.getPlayerId(),overkill);
+        return Model.getGame()
+                .getPlayers()
+                .stream()
+                .filter(p -> p.getStats().equals(this))
+                .collect(Collectors.toList())
+                .get(0)
+                .getPlayerId();
     }
 
     /**
@@ -154,18 +164,20 @@ public class Stats {
      * @param playerId is the id of the player who gave them
      * @throws DeadPlayerException if player died
      */
-    public void addDmgTaken(int dmg, int playerId) throws DeadPlayerException, OverKilledPlayerException, FrenzyActivatedException {
+    public void addDmgTaken(int dmg, int playerId) throws DeadPlayerException, OverKilledPlayerException{
 
-        for (int i = 0; i < MAX_MARKS; i++) {
 
-            if (marks.indexOf(playerId) != -1) {
+        if (marks.indexOf(playerId) != -1) {
 
-                dmg++;
-                marks.remove(playerId);
+            dmg = dmg + this.marks
+                    .stream()
+                    .filter(x -> x == playerId)
+                    .collect(Collectors.toList())
+                    .size();
 
-            }
+
+            marks.removeAll(Collections.singleton(playerId));
         }
-
 
         if (this.dmgTaken.size() < MAX_DMG ){
 
@@ -182,14 +194,14 @@ public class Stats {
 
         if (dmgTaken.size() == MAX_DMG){  // if player gets Overkilled
 
-            this.addDeath(true);
+            this.addDeath();
 
-            throw new OverKilledPlayerException();
+            throw new OverKilledPlayerException(this.getPlayerId());
         }
 
         if ((dmgTaken.size()>= MAX_DMG - 1)&&(dmgTaken.size()<MAX_DMG)){  // if player has more than MAX_DMG -1 (simply dead)
-            this.addDeath(false);
-            throw new DeadPlayerException();
+            this.addDeath();
+            throw new DeadPlayerException(this.getPlayerId());
         }
     }
 
@@ -207,5 +219,10 @@ public class Stats {
      */
     public void setCurrentPosition(Cell currentPosition) {
         this.currentPosition = currentPosition;
+    }
+
+    public void resetDmg(){
+
+        this.dmgTaken = new ArrayList<>();
     }
 }

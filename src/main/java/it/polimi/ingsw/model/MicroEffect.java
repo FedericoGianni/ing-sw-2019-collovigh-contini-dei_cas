@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model;
 
 import customsexceptions.*;
+import customsexceptions.DeadPlayerException;
+import customsexceptions.FrenzyActivatedException;
+import customsexceptions.OverKilledPlayerException;
 
 import java.util.ArrayList;
 
@@ -35,5 +38,5 @@ public abstract class MicroEffect {
      * @param playerList
      * apply the microEffect consequences
      */
-    public abstract void microEffectApplicator(ArrayList<Player> playerList,Weapon w)throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException,FrenzyActivatedException;
+    public abstract void microEffectApplicator(ArrayList<Player> playerList,Weapon w)throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException, FrenzyActivatedException;
 }
