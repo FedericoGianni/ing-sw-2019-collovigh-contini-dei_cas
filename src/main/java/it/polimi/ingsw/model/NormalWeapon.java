@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model;
 
 import customsexceptions.*;
+import customsexceptions.DeadPlayerException;
+import customsexceptions.FrenzyActivatedException;
+import customsexceptions.OverKilledPlayerException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -235,7 +238,7 @@ public class NormalWeapon extends Weapon{
      * @param mE
      * @throws WeaponNotLoadedException
      */
-    public void shoot(ArrayList<Player> target,ArrayList<MacroEffect> mE)throws WeaponNotLoadedException,OverKilledPlayerException,DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException,UncorrectTargetDistance,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
+    public void shoot(ArrayList<Player> target,ArrayList<MacroEffect> mE)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException,UncorrectTargetDistance,SeeAblePlayerException, FrenzyActivatedException//neeed a player list !
     {
         try{
             if(this.isLoaded==false)

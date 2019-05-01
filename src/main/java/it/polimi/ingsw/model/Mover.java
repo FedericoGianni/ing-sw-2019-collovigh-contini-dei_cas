@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import customsexceptions.*;
+import customsexceptions.DeadPlayerException;
+import customsexceptions.OverKilledPlayerException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

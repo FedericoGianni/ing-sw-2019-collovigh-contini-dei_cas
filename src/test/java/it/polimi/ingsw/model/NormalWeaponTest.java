@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model;
 
 import customsexceptions.*;
+import customsexceptions.DeadPlayerException;
+import customsexceptions.FrenzyActivatedException;
+import customsexceptions.OverKilledPlayerException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -22,7 +25,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void shoot() throws FrenzyActivatedException{//one shot, one effect, one target, free effect---the most basic possible
+    void shoot() throws FrenzyActivatedException {//one shot, one effect, one target, free effect---the most basic possible
         weaponsCreator();
 
         List<String>  names=new ArrayList<String>();
