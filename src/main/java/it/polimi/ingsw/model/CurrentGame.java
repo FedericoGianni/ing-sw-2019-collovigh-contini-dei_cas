@@ -38,6 +38,7 @@ public class CurrentGame {
         this.powerUpDeck =  PowerUpDeck.populatedDeck();
         this.weaponDeck = WeaponDeck.populatedDeck();
         this.thrashPowerUpDeck = new PowerUpDeck();
+        this.killShotTrack = new ArrayList<>();
     }
 
     /**

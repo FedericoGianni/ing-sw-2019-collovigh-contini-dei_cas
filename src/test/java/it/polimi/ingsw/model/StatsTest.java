@@ -156,37 +156,49 @@ class StatsTest {
 
         int maxDmg = 12;
 
-        Cell cell = new AmmoCell();
-        Stats stats = new Stats(cell);
+        List<String> players = new ArrayList<>();
+        players.add("Agent");
+        players.add("Agent47");
+        players.add("Agent2");
+        players.add("Agent3");
+
+        List<PlayerColor> colors = new ArrayList<>();
+        colors.add(PlayerColor.BLUE);
+        colors.add(PlayerColor.BLUE);
+        colors.add(PlayerColor.PURPLE);
+        colors.add(PlayerColor.YELLOW);
+
+        Model model = new Model(players,colors,1);
+
+        Stats stats = Model.getPlayer(0).getStats();
 
         assertThrows(DeadPlayerException.class, () -> {
+
             for (int i = 0; i < (maxDmg -1); i++) {
 
                 stats.addDmgTaken(1,0);
-                
+
             }
         });
 
 
-
-
         assertThrows(DeadPlayerException.class, () -> {
 
-            Stats stats1 = new Stats(cell);
+            Stats stats1 = Model.getPlayer(1).getStats();
 
                 stats1.addDmgTaken(11,0);
         });
 
         assertThrows(OverKilledPlayerException.class, () -> {
 
-            Stats stats3 = new Stats(cell);
+            Stats stats3 = Model.getPlayer(2).getStats();
 
             stats3.addDmgTaken(15,0);
 
 
         });
 
-        Stats stats2 = new Stats(cell);
+        Stats stats2 = Model.getPlayer(3).getStats();
 
         try{
 
