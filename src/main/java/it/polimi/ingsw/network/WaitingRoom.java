@@ -100,6 +100,14 @@ public class WaitingRoom {
     }
 
     /**
+     *
+     * @return the current value of timerCount which is decreased by startTimer() method
+     */
+    public static int getTimerCount() {
+        return timerCount;
+    }
+
+    /**
      * This method will start a thread which runs a timer, decrementing a counter every second until it reaches 0
      */
     public void startTimer(){
