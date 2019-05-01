@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.network.WaitingRoom;
+import it.polimi.ingsw.network.Server;
 
 import java.util.logging.Logger;
 
@@ -11,10 +10,8 @@ public class GameManager {
 
         Logger LOGGER = Logger.getLogger("infoLogging");
 
-        //Controller controller = new Controller();
-        //Server server = new Server(controller);
-        //WaitingRoom waitingRoom = new WaitingRoom();
-        //waitingRoom.startTimer();
+        Server server = new Server();
+
 
     }
 
