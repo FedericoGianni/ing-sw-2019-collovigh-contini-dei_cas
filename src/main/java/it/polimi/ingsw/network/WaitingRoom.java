@@ -13,6 +13,9 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This Class represents the Lobby for the player to log in before the game starts
+ */
 public class WaitingRoom {
 
     private static final Logger LOGGER = Logger.getLogger( WaitingRoom.class.getName() );
@@ -25,6 +28,7 @@ public class WaitingRoom {
     private Boolean active;
     private int activeGame;
     private Games games;
+    private int mapType = 0;
 
 
     /**
@@ -60,14 +64,17 @@ public class WaitingRoom {
 
     /**
      * This method starts a new Game
-     * @return
+     * if the players specified a map that will be taken or it will be generated casually
+     * @return the new Controller
      */
     public synchronized Controller initGame(){
 
         this.games.addGame();
         this.active = false;
 
-        return new Controller(this.players,this.colors,this.activeGame);
+        if (this.mapType == 0) return new Controller(this.players,this.colors,this.activeGame);
+
+        return new Controller(this.players,this.colors,this.activeGame,this.mapType);
     }
 
     /**
@@ -169,5 +176,14 @@ public class WaitingRoom {
 
     }
 
+    public int getMapType() {
+        return mapType;
+    }
 
+    public synchronized void setMapType(int mapType) {
+
+        if ((this.mapType == 0) && (mapType != 0)) {
+            this.mapType = mapType;
+        }
+    }
 }

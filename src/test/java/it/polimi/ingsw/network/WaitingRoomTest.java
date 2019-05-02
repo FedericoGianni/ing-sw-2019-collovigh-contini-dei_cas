@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.model.PlayerColor;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import org.junit.jupiter.api.Test;
 
@@ -32,5 +33,54 @@ class WaitingRoomTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    void isActive() {
+
+        try {
+
+            WaitingRoom room = new WaitingRoom(-1);
+
+            assertTrue(room.isActive());
+
+
+            // need to test when it stops to be active
+
+
+        }catch(GameNonExistentException e){
+
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void addPlayer() {
+
+        try {
+
+            WaitingRoom room = new WaitingRoom(-1);
+
+            room.addPlayer("Frank", PlayerColor.BLUE);
+
+
+
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void isNameAlreadyTaken() {
+    }
+
+    @Test
+    void isColorAlreadyTaken() {
+    }
+
+    @Test
+    void removePlayer() {
     }
 }

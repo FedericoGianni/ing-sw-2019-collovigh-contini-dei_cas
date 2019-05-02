@@ -32,7 +32,7 @@ public class Controller {
     public Controller(List<String> nameList, List<PlayerColor>playerColors,int gameId) {
 
 
-        int mapType = this.chooseMap(nameList.size());
+        int mapType= this.chooseMap(nameList.size());
         this.game = new Model(nameList,playerColors,mapType);
 
         players = new ArrayList<>();
@@ -49,12 +49,38 @@ public class Controller {
 
     }
 
+    /**
+     *  OverLoaded Constructor that takes choosen mapType
+     * @param nameList is a list of player's names
+     * @param playerColors is a list of player's Color
+     * @param gameId is the id of the game
+     * @param mapType is the mapType
+     */
+    public Controller(List<String> nameList, List<PlayerColor>playerColors,int gameId, int mapType) {
+
+
+        this.game = new Model(nameList,playerColors,mapType);
+
+        players = new ArrayList<>();
+
+        for (int i = 0; i < nameList.size(); i++) {
+
+            players.add(new ClientController(i,this));
+
+        }
+
+        this.roundNumber = 0;
+        this.roundPhase = 0;
+        this.gameId = gameId;
+
+    }
+
 
 
     /**
      *
      * @param playerNumber is the number of player
-     * @return
+     * @return a random int representing a random MapType
      */
     private int chooseMap(int playerNumber){
 
