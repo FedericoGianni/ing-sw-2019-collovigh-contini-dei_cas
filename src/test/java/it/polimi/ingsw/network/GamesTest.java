@@ -114,6 +114,8 @@ class GamesTest {
 
         assertEquals(size,games.size());
 
+        games.clear();
+
     }
 
     @Test
