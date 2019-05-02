@@ -4,11 +4,18 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Logger;
 
+/**
+ * This class will start a SocketClient which starts another thread, SocketClientReader, which keep listening to
+ * messages from SocketConnectionWriter. SocketClientReader thread also starts a SocketClientWriter thread, that is
+ * used to send message from client to server.
+ */
 public class SocketClient implements Runnable {
 
     private SocketClientReader scr;
     private SocketClientWriter scw;
 
+
+    private boolean active = true;
     private String ip;
     private int port;
     private Socket socket;
@@ -42,13 +49,10 @@ public class SocketClient implements Runnable {
             setSocket(s);
 
             scr = new SocketClientReader(socket);
-            scw = new SocketClientWriter(socket);
             scr.start();
             Logger.getLogger("infoLogging").info("Succesfuly started socketClientReader");
-            scw.start();
-            Logger.getLogger("infoLogging").info("Succesfuly started socketClientWriter.");
 
-            while(true){
+            while(active){
                 //don't close this since it keeps socket open
             }
 

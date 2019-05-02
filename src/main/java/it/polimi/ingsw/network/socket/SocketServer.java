@@ -15,7 +15,7 @@ public class SocketServer extends Thread {
             }
         } catch (
                 IOException e) {
-            System.out.println("RemoteServer exception " + e.getMessage());
+            System.out.println("Server exception " + e.getMessage());
         }
     }
 }

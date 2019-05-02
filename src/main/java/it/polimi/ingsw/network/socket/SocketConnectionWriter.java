@@ -10,7 +10,7 @@ public class SocketConnectionWriter extends Thread {
     private Socket socket;
     private PrintWriter output;
 
-    private SocketConnectionWriter(Socket socket){
+    SocketConnectionWriter(Socket socket){
         this.socket = socket;
     }
 
@@ -19,6 +19,8 @@ public class SocketConnectionWriter extends Thread {
 
         try {
             output = new PrintWriter(socket.getOutputStream(), true);
+            new Thread(new SocketPing(this)).start();
+
 
         } catch (IOException e) {
             e.getMessage();

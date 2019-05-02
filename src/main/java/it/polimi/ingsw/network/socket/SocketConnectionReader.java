@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 public class SocketConnectionReader extends Thread {
 
     private Socket socket;
-    private SocketClientWriter socketConnectionWriter;
+    private SocketConnectionWriter socketConnectionWriter;
 
     BufferedReader input;
 
@@ -22,7 +22,7 @@ public class SocketConnectionReader extends Thread {
         this.socket = socket;
     }
 
-    public SocketClientWriter getSocketConnectionWriter() {
+    public SocketConnectionWriter getSocketConnectionWriter() {
         return socketConnectionWriter;
     }
 
@@ -34,7 +34,7 @@ public class SocketConnectionReader extends Thread {
                 input = new BufferedReader(
                         new InputStreamReader(socket.getInputStream()));
 
-                socketConnectionWriter = new SocketClientWriter(socket);
+                socketConnectionWriter = new SocketConnectionWriter(socket);
                 socketConnectionWriter.start();
 
                 while(true) {
@@ -76,14 +76,21 @@ public class SocketConnectionReader extends Thread {
                         Server.getWaitingRoom().addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()));
 
                     }catch (NameAlreadyTakenException e){       //NOTE: temporary solution by D, just to make it compile
-                        socketConnectionWriter.send("login\tWRONG_NAME");
+                        socketConnectionWriter.send("login\tNAME ALREADY TAKEN");
                     }catch (ColorAlreadyTakenException e){
-                        socketConnectionWriter.send("login\tWRONG_COLOR");
+                        socketConnectionWriter.send("login\tCOLOR ALREADY TAKEN");
                     }
                     socketConnectionWriter.send("login\tOK");
 
                 }).start();
                 break;
+
+            case "pong" :
+                new Thread (() -> {
+                    Logger.getLogger("infoLogging").info("Client reply to ping: " + commands[1]);
+                }).start();
+                break;
+
 
             default :
                 new Thread (() -> {
