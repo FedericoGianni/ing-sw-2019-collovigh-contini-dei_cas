@@ -68,6 +68,8 @@ public class Server  {
         return controller;
     }
 
+
+
     public static WaitingRoom getWaitingRoom() {
         return waitingRoom;
     }

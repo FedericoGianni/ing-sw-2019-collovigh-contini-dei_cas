@@ -6,14 +6,19 @@ import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * this class bounds the gameId to the save path
+ * this class bounds the gameId to it's own save path
  */
 public class Games {
 
-    private HashMap<Integer,String> hashMap;
+    private static final Logger LOGGER = Logger.getLogger( Games.class.getName() );
+
     private final String savePath = new File("src/main/java/it/polimi/ingsw/savegames").getAbsolutePath();
+    private HashMap<Integer,String> hashMap;
+
 
 
     /**
@@ -31,7 +36,7 @@ public class Games {
             // load the HashMap
             hashMap = gson.fromJson(br,HashMap.class);
 
-
+            LOGGER.log(Level.FINE," [OK] games list loaded");
 
         }catch (Exception e){
             e.printStackTrace();
@@ -55,6 +60,8 @@ public class Games {
             writer.flush();
             writer.close();
 
+            LOGGER.log(Level.FINE," [OK] game list saved w/ {0} effective games",hashMap.size() -1);
+
         }catch(IOException e){
 
             e.printStackTrace();
@@ -72,16 +79,22 @@ public class Games {
 
         hashMap.putIfAbsent(gameId,genSavePath(gameId));
 
+        LOGGER.log(Level.FINE," [OK] added game w/ id: {0}", gameId);
+
         this.save();
 
         return gameId;
+
+
     }
 
     /**
      *
      * @param gameid is the id of the game to remove from the map
      */
-    public void closeGame(int gameid){
+    public void closeGame(int gameid) throws GameNonExistentException{
+
+        if (!hashMap.containsKey(gameid)) throw  new GameNonExistentException();
 
         hashMap.remove(gameid);
         this.save();

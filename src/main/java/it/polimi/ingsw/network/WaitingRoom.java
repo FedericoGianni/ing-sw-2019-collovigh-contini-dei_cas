@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.PlayerColor;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
@@ -9,8 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class WaitingRoom {
+
+    private static final Logger LOGGER = Logger.getLogger( WaitingRoom.class.getName() );
 
     private static final int TIMER = 30;
     private static int timerCount = TIMER;
@@ -37,9 +42,14 @@ public class WaitingRoom {
             this.colors = new ArrayList<>();
             this.players = new ArrayList<>();
             activeGame = games.addGame();
+
+            LOGGER.log(Level.FINE,"[OK] Started Waiting Room for new Game");
         }else{
             if (!games.contains(gameId)) throw new GameNonExistentException();
+            activeGame = gameId;
             // need to catch all saved games and start the correspondent one
+
+            LOGGER.log(Level.FINE, "[OK] Started Waiting Room for saved game w/ id: {0}", gameId);
         }
     }
 
@@ -48,10 +58,16 @@ public class WaitingRoom {
         return this.active;
     }
 
-    public synchronized void initGame(){
+    /**
+     * This method starts a new Game
+     * @return
+     */
+    public synchronized Controller initGame(){
 
         this.games.addGame();
         this.active = false;
+
+        return new Controller(this.players,this.colors,this.activeGame);
     }
 
     /**
