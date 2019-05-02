@@ -9,6 +9,11 @@ public class SocketClientReader extends Thread {
 
     private BufferedReader in;
     private Socket socket;
+    private SocketClientWriter scw;
+
+    public SocketClientWriter getScw() {
+        return scw;
+    }
 
     SocketClientReader(Socket socket){
         this.socket = socket;
@@ -21,6 +26,8 @@ public class SocketClientReader extends Thread {
 
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
+            scw = new SocketClientWriter(socket);
+            scw.start();
 
             while(true) {
                 String msg = receive();
@@ -53,6 +60,13 @@ public class SocketClientReader extends Thread {
             case "login" :
                 new Thread (() -> {
                     System.out.println("[Server] login reply: " + commands[1]);
+                }).start();
+                break;
+
+            case "ping" :
+                new Thread (() -> {
+                    //System.out.println("[DEBUG] Ricevuta ping request dal server.");
+                    scw.send("pong\t" + scw.getName());
                 }).start();
                 break;
 
