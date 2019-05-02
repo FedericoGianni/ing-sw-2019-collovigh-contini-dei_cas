@@ -10,6 +10,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class GamesTest {
 
     @Test
+    void isEmpty() {
+
+        Games games = new Games();
+
+        games.addGame();
+        games.addGame();
+
+        games.clear();
+
+        assertTrue(games.isEmpty());
+    }
+
+    @Test
     void addGame() {
 
         Games games = new Games();
@@ -29,7 +42,7 @@ class GamesTest {
     void getSavePath() {
 
         Games games = new Games();
-        String savePath = new File("src/main/java/it/polimi/ingsw/savegames").getAbsolutePath();
+        String savePath = "src/main/java/it/polimi/ingsw/savegames";
 
         int gameId = games.addGame();
 
@@ -118,18 +131,5 @@ class GamesTest {
 
     }
 
-    @Test
-    void isEmpty() {
 
-        Games games = new Games();
-
-        assertTrue(games.isEmpty());
-
-        games.addGame();
-        games.addGame();
-
-        games.clear();
-
-        assertTrue(games.isEmpty());
-    }
 }

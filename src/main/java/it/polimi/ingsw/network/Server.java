@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class Server  {
 
     /**
-     * IP Address of the Server
+     * IP Address of the RemoteServer
      */
     private static String ip_address;
 
@@ -25,12 +25,16 @@ public class Server  {
     private static WaitingRoom waitingRoom;
 
     /**
-     * Number of clients connected to the main Server, both RMI or socket
+     * Number of clients connected to the main RemoteServer, both RMI or socket
      */
     private static int clientsNum = 0;
 
+    public static void setController(Controller controller) {
+        Server.controller = controller;
+    }
+
     public Server() {
-        //controller = null
+        //controller = WaitingRoom.getController();
         try {
             waitingRoom = new WaitingRoom(-1);  // NOTE: this need to be changed: this can only create a new game but load a saved one
 
@@ -40,7 +44,7 @@ public class Server  {
         }
         try{
             ip_address = Inet4Address.getLocalHost().getHostAddress();
-            Logger.getLogger("infoLogging").info("Server is up and running on ip " + ip_address);
+            Logger.getLogger("infoLogging").info("RemoteServer is up and running on ip " + ip_address);
         } catch(UnknownHostException e){
             e.getMessage();
         }
@@ -48,8 +52,8 @@ public class Server  {
         Thread socketHandler = new Thread(new SocketServer());
         socketHandler.start();
 
-        Thread rmiHandler = new Thread(new RMIServer());
-        rmiHandler.start();
+        //Thread rmiHandler = new Thread(new RMIServer());
+        //rmiHandler.start();
     }
 
     public static int getClientsNum() {

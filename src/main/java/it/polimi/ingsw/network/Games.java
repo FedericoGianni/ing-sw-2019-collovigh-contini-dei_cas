@@ -14,9 +14,9 @@ import java.util.logging.Logger;
  */
 public class Games {
 
-    private static final Logger LOGGER = Logger.getLogger( Games.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
 
-    private final String savePath = new File("src/main/java/it/polimi/ingsw/savegames").getAbsolutePath();
+    private final String savePath = "src/main/java/it/polimi/ingsw/savegames";
     private HashMap<Integer,String> hashMap;
 
 
@@ -31,7 +31,7 @@ public class Games {
 
         try{
 
-            BufferedReader br = new BufferedReader( new FileReader(savePath + "/games.json"));
+            BufferedReader br = new BufferedReader( new FileReader( new File(savePath + "/games.json").getAbsolutePath()));
 
             // load the HashMap
             hashMap = gson.fromJson(br,HashMap.class);

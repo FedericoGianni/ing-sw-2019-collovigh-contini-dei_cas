@@ -58,7 +58,7 @@ public class SocketClientReader extends Thread {
 
             default:
                 new Thread(() -> {
-                    System.out.println("[Server] Unknown command received from Server ");
+                    System.out.println("[Server] Unknown command received from RemoteServer ");
                 }).start();
         }
     }

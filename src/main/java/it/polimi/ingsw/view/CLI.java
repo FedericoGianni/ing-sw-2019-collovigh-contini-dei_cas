@@ -27,6 +27,8 @@ public class CLI implements UserInterface {
         System.out.println("Enter player name: ");
         playerName = scanner.nextLine();
 
+
+
         //socketClientWriter.send("check" + "\t" + playerName);
 
         System.out.println("Choose a player color (GREEN, GREY, PURPLE, BLUE,YELLOW): ");
@@ -43,6 +45,10 @@ public class CLI implements UserInterface {
             }
 
         }while(!validColorChoice);
+
+        System.out.println("PlayerName:  " + playerName);
+
+        System.out.println("PlayerColor: " + playerColor);
 
         socketClientWriter.send("login" + "\t" + playerName + "\t" + playerColor);
     }

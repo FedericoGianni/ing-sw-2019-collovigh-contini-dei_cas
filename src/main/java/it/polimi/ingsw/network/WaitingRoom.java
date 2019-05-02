@@ -67,14 +67,14 @@ public class WaitingRoom {
      * if the players specified a map that will be taken or it will be generated casually
      * @return the new Controller
      */
-    public synchronized Controller initGame(){
+    public synchronized void initGame(){
 
         this.games.addGame();
         this.active = false;
 
-        if (this.mapType == 0) return new Controller(this.players,this.colors,this.activeGame);
+        if (this.mapType == 0) Server.setController( new Controller(this.players,this.colors,this.activeGame));
 
-        return new Controller(this.players,this.colors,this.activeGame,this.mapType);
+        else  Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType));
     }
 
     /**
