@@ -7,11 +7,11 @@ import java.rmi.RemoteException;
 
 public interface ToServer extends Remote {
 
-    int joinGame(String name, PlayerColor color);
+    int joinGame(String name, PlayerColor color) throws RemoteException;
 
-    void voteMapType(int mapType);
+    void voteMapType(int mapType) throws RemoteException;
 
-    Boolean ping();
+    Boolean ping() throws RemoteException;
 
 
 }

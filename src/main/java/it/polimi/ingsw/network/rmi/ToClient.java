@@ -3,12 +3,13 @@ package it.polimi.ingsw.network.rmi;
 import it.polimi.ingsw.model.PlayerColor;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 public interface ToClient extends Remote {
 
-    void NameAlreadyTaken(String name);
+    void NameAlreadyTaken(String name) throws RemoteException;
 
-    void ColorAlreadyTaken(PlayerColor color);
+    void ColorAlreadyTaken(PlayerColor color) throws RemoteException;
 
-    Boolean ping();
+    Boolean ping() throws RemoteException;
 }

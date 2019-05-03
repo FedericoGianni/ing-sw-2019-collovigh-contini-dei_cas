@@ -12,18 +12,46 @@ import java.util.logging.Logger;
 public class RMIClient extends Client {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static final String REMOTE_OBJECT_NAME = "rmi_server";
-    private static final String LOCAL_OBJECT_NAME = "rmi_client";
+    private static Level level = Level.FINE;
 
+    //attributes relative to client -> server flow
+    private static final String REMOTE_OBJECT_NAME = "rmi_server";
     private Registry remoteRegistry;
+    private String serverIp;
+
+    //attributes relative to server -> client flow
+    private static final String LOCAL_OBJECT_NAME = "rmi_client";
     private Registry localRegistry;
-    private String host;
 
 
     public RMIClient() {
 
-        this.createRemoteObject();
+        super();
 
+    }
+
+    private void createRemoteObject(){
+
+        try {
+
+            ToClientImpl skeleton = new ToClientImpl(this);
+
+            LocateRegistry.createRegistry(2021);
+
+            localRegistry = LocateRegistry.getRegistry(2021);
+
+            LOGGER.log(level, "[RMI-Client]created registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), "2021"});
+
+            localRegistry.bind(LOCAL_OBJECT_NAME, skeleton); // binding the string localName to hte instance in the registry
+
+            LOGGER.log(level, "[RMI-Client]Bound rmi client to registry");
+
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+        }
     }
 
     @Override
@@ -31,12 +59,12 @@ public class RMIClient extends Client {
 
         try {
 
-            host = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
 
-            remoteRegistry = LocateRegistry.getRegistry(host,2020);
-            LOGGER.log(Level.FINE,"[RMI] registry located by client");
+            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
+            LOGGER.log(level,"[RMI-Client] registry located by client");
 
-            ToServerImpl server = (ToServerImpl) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+            ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
 
             int playerId = server.joinGame(name,color);
 
@@ -58,12 +86,12 @@ public class RMIClient extends Client {
 
         try {
 
-            host = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
 
-            remoteRegistry = LocateRegistry.getRegistry(host,2020);
-            LOGGER.log(Level.FINE,"[RMI] registry located by client");
+            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
+            LOGGER.log(level,"[RMI-Client] registry located by client");
 
-            ToServerImpl server = (ToServerImpl) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+            ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
 
             server.voteMapType(mapType);
 
@@ -74,25 +102,17 @@ public class RMIClient extends Client {
 
     }
 
-    private void createRemoteObject(){
+
+
+    public void shutDown(){
 
         try {
 
-            ToClientImpl Skeleton = new ToClientImpl(this);
-
-            LocateRegistry.createRegistry(2020);
-
-            LOGGER.log(Level.FINE, "created registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), "2020"});
-
-            localRegistry = LocateRegistry.getRegistry(2020);
-
-            localRegistry.bind(LOCAL_OBJECT_NAME, Skeleton); // binding the string localName to hte instance in the registry
-
+            localRegistry.unbind(LOCAL_OBJECT_NAME);
 
         }catch (Exception e){
 
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
-
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
     }
 

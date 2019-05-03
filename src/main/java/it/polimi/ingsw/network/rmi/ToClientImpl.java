@@ -18,18 +18,20 @@ public class ToClientImpl implements ToClient {
     }
 
     @Override
-    public void NameAlreadyTaken(String name) {
+    public void NameAlreadyTaken(String name) throws RemoteException{
 
 
     }
 
     @Override
-    public void ColorAlreadyTaken(PlayerColor color) {
+    public void ColorAlreadyTaken(PlayerColor color) throws RemoteException{
 
     }
 
     @Override
-    public Boolean ping() {
+    public Boolean ping() throws RemoteException {
         return true;
     }
+
+
 }

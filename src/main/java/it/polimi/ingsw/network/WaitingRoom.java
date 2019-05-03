@@ -186,4 +186,13 @@ public class WaitingRoom {
             this.mapType = mapType;
         }
     }
+
+    public int size(){
+
+        return this.players.size();
+    }
+
+    public Games getGames() {
+        return games;
+    }
 }
