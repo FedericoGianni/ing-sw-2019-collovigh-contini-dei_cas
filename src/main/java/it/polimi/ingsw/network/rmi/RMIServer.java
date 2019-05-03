@@ -66,27 +66,7 @@ public class RMIServer {
         }
     }
 
-    public int joinGame(String name, PlayerColor color){
 
-        try {
-
-            LOGGER.log(level,"[RMI-Server] adding new player w/ name: {0}", name);
-
-            return Server.getWaitingRoom().addPlayer(name, color);
-
-        }catch (NameAlreadyTakenException e){
-            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with name: " +e.getName() + "but name was already used", e);
-        }catch (ColorAlreadyTakenException e){
-            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with color: " +e.getColor() + "but color was already used", e);
-        }
-
-        return -1;
-    }
-
-    public void voteMap(int mapId){
-
-        Server.getWaitingRoom().setMapType(mapId);
-    }
 
     public void shutDown(){
 
