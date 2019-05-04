@@ -33,5 +33,11 @@ public class ToClientImpl implements ToClient {
         return true;
     }
 
+    @Override
+    public int getPid() throws RemoteException {
+
+        return client.getPlayerId();
+    }
+
 
 }

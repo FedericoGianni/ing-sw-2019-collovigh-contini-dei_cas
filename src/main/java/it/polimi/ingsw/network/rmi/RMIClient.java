@@ -34,7 +34,10 @@ public class RMIClient extends Client {
 
     }
 
-    private synchronized static void createRegistry(){
+    /**
+     * this method creates a new Rmi registry on port 2021 if thi was not already created
+     */
+    private static synchronized void createRegistry(){
 
         try{
 
@@ -51,6 +54,9 @@ public class RMIClient extends Client {
         }
     }
 
+    /**
+     * this method create a new instance of toServerImpl and bind it to the local rmi registry
+     */
     private void createRemoteObject(){
 
         try {
@@ -82,6 +88,12 @@ public class RMIClient extends Client {
         }
     }
 
+    /**
+     *
+     * @param name is the name chosen for the login
+     * @param color is the color chosen for the player
+     * @return the playerId of the player
+     */
     @Override
     public int joinGame(String name, PlayerColor color) {
 
@@ -103,12 +115,16 @@ public class RMIClient extends Client {
 
         }catch(Exception e){
 
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
 
         return -1;
     }
 
+    /**
+     *
+     * @param mapType is the map the player wants to choose
+     */
     @Override
     public void voteMap(int mapType) {
 
@@ -125,7 +141,7 @@ public class RMIClient extends Client {
 
         }catch(Exception e){
 
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
 
     }

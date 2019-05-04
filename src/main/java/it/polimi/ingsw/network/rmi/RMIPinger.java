@@ -1,53 +1,55 @@
 package it.polimi.ingsw.network.rmi;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import it.polimi.ingsw.network.networkexceptions.LostClientException;
+
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RMIPinger implements Runnable{
 
-    private final String remoteName;
-    private final static int waitTime = 1000;
-    private static String host;
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.FINE;
+
+    private static final int WAIT_TIME = 1000;
+    private final ToClient target;
 
 
-    private Registry remote;
+    public RMIPinger(ToClient client) {
 
-    public RMIPinger(String name) {
-
-        this.remoteName = name;
-
-        try {
-
-            remote = LocateRegistry.getRegistry(host, 2020);
-
-        }catch (Exception e){
-
-            e.printStackTrace();
-        }
-
+        this.target = client;
     }
 
+    /**
+     * this method is an infinite loop that check if the specified client is still connected
+     */
     @Override
     public void run() {
 
         try {
 
-            remote = LocateRegistry.getRegistry(host, 2020);
+            int pId = target.getPid();
 
-            ToClientImpl client = (ToClientImpl) remote.lookup(remoteName);
+
             Boolean b;
             do{
 
-                Thread.sleep(waitTime);
+                Thread.sleep(WAIT_TIME);
 
-                b = client.ping();
+
+
+                LOGGER.log(level, "pinged client w/ id: {0}", pId);
+
+                b = target.ping();
 
             }while (b);
 
+            LOGGER.log(Level.WARNING, "lost client w/ id: {0}", pId);
+
+            throw new LostClientException(pId);
+
         }catch (Exception e){
 
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
 
     }

@@ -1,15 +1,10 @@
 package it.polimi.ingsw.network.rmi;
 
 
-import it.polimi.ingsw.model.PlayerColor;
-import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +26,7 @@ public class RMIServer {
     //attributes relative to server -> client flow
     private static List<ToClient> remoteClients = new ArrayList<>();
     private static Registry remote;
-    private String host;
+    private static String host;
 
 
     public RMIServer() {
@@ -45,7 +40,7 @@ public class RMIServer {
     /**
      * this method creates a new Rmi registry on port 2020 if thi was not already created
      */
-    private synchronized static void createRegistry(){
+    private static synchronized void createRegistry(){
 
         try{
 
@@ -101,11 +96,13 @@ public class RMIServer {
     /**
      * this method updates the list of names bound to ToClient objects
      */
-    public void updateClientList(){
+    public static void updateClientList(){
 
         try {
 
-            remote = LocateRegistry.getRegistry(2021);
+            host = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+
+            remote = LocateRegistry.getRegistry(host,2021);
 
             remoteClients.clear();
 
@@ -135,11 +132,13 @@ public class RMIServer {
     /**
      * Unbinds all the clients previously bound
      */
-    public void resetClients(){
+    public static void resetClients(){
 
         try {
 
-            remote = LocateRegistry.getRegistry(2021);
+            host = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+
+            remote = LocateRegistry.getRegistry(host,2021);
 
             List<String> oldNames = Arrays.asList(remote.list());
 
@@ -152,6 +151,20 @@ public class RMIServer {
 
             LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
+    }
+
+    /**
+     * this methods starts one thread of RMIPinger for each client connected and start it
+     */
+    public void pingAll(){
+
+        for (ToClient client:remoteClients){
+
+            new RMIPinger(client).run();
+
+        }
+
+        
     }
 
 
