@@ -1,12 +1,20 @@
 package it.polimi.ingsw.network.rmi;
 
 import it.polimi.ingsw.model.PlayerColor;
+import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
+import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ToServerImpl implements ToServer{
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.FINE;
 
     private final RMIServer server;
 
@@ -20,13 +28,27 @@ public class ToServerImpl implements ToServer{
     @Override
     public int joinGame(String name, PlayerColor color) throws RemoteException {
 
-        return server.joinGame(name,color);
+        try {
+
+            LOGGER.log(level,"[RMI-Server] adding new player w/ name: {0}", name);
+
+            return Server.getWaitingRoom().addPlayer(name, color);
+
+        }catch (NameAlreadyTakenException e){
+            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with name: " +e.getName() + "but name was already used", e);
+        }catch (ColorAlreadyTakenException e){
+            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with color: " +e.getColor() + "but color was already used", e);
+        }
+
+        return -1;
     }
 
     @Override
     public void voteMapType(int mapType) throws RemoteException {
 
-        server.voteMap(mapType);
+        Server.getWaitingRoom().setMapType(mapType);
+
+        LOGGER.log(level, "A player voted for map: {0} ", mapType );
 
     }
 
