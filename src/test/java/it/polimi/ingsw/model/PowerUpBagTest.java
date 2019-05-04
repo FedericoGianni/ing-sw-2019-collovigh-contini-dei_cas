@@ -1,12 +1,19 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.model.ammo.AmmoCube;
+import it.polimi.ingsw.model.map.Map;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.PowerUpBag;
+import it.polimi.ingsw.model.powerup.PowerUp;
+import it.polimi.ingsw.model.powerup.PowerUpDeck;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static it.polimi.ingsw.model.PowerUpDeck.populatedDeck;
+import static it.polimi.ingsw.model.powerup.PowerUpDeck.populatedDeck;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PowerUpBagTest {

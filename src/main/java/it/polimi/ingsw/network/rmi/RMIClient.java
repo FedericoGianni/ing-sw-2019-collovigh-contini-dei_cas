@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.rmi;
 
-import it.polimi.ingsw.model.PlayerColor;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
 
 import java.net.Inet4Address;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class RMIClient extends Client {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.FINE;
+    private static Level level = Level.INFO;
 
     //attributes relative to client -> server flow
     private static final String REMOTE_OBJECT_NAME = "rmi_server";

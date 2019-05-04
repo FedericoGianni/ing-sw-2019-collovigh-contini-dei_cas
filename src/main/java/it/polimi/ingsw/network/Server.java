@@ -2,11 +2,11 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
-import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.socket.SocketServer;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 
@@ -22,27 +22,29 @@ public class Server  {
      */
     private static Controller controller;
 
+    /**
+     * Reference to the WaitingRoom, which gathers user before game starts
+     */
     private static WaitingRoom waitingRoom;
 
     /**
      * Number of clients connected to the main RemoteServer, both RMI or socket
      */
-    private static int clientsNum = 0;
+    private static AtomicInteger clientsNum;
 
-    public static void setController(Controller controller) {
-        Server.controller = controller;
-    }
 
     public Server() {
         //controller = WaitingRoom.getController();
         try {
             waitingRoom = new WaitingRoom(-1);  // NOTE: this need to be changed: this can only create a new game but load a saved one
 
-        }catch (GameNonExistentException e){
+            //clientsNum initialization (done this way since it is of type AtomicInteger to avoid problems with multi-threading
+            //clientsNum.set(0);
 
+        }catch (GameNonExistentException e){
             e.printStackTrace();
         }
-        try{
+        try {
             ip_address = Inet4Address.getLocalHost().getHostAddress();
             Logger.getLogger("infoLogging").info("RemoteServer is up and running on ip " + ip_address);
         } catch(UnknownHostException e){
@@ -56,12 +58,8 @@ public class Server  {
         //rmiHandler.start();
     }
 
-    public static int getClientsNum() {
+    public static AtomicInteger getClientsNum() {
         return clientsNum;
-    }
-
-    public static void setClientsNum(int c) {
-        clientsNum = c;
     }
 
     public static String getIp_address() {
@@ -72,7 +70,9 @@ public class Server  {
         return controller;
     }
 
-
+    public static void setController(Controller controller) {
+        Server.controller = controller;
+    }
 
     public static WaitingRoom getWaitingRoom() {
         return waitingRoom;

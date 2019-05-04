@@ -2,7 +2,6 @@ package it.polimi.ingsw.network.rmi;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.logging.Level;
 
 public class RMIPinger implements Runnable{
 

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.model.weapons.WeaponDeck;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

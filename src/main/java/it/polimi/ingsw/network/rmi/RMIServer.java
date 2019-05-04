@@ -1,11 +1,6 @@
 package it.polimi.ingsw.network.rmi;
 
 
-import it.polimi.ingsw.model.PlayerColor;
-import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
-
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -41,7 +36,6 @@ public class RMIServer {
         try {
 
             skeleton = new ToServerImpl(this);
-
 
             LocateRegistry.createRegistry(2020);
 

@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.AmmoCube;
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.ammo.AmmoCube;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;

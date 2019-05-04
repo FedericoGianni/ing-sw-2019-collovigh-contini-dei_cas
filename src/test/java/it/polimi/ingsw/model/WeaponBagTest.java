@@ -1,6 +1,11 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.model.ammo.AmmoCube;
+import it.polimi.ingsw.model.weapons.MacroEffect;
+import it.polimi.ingsw.model.weapons.NormalWeapon;
+import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.model.weapons.WeaponBag;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -16,7 +16,7 @@ public class Games {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
 
-    private final String savePath = "src/main/java/it/polimi/ingsw/savegames";
+    private final String savePath = "resources/json/savegames";
     private HashMap<Integer,String> hashMap;
 
 

@@ -46,9 +46,8 @@ public class CLI implements UserInterface {
 
         }while(!validColorChoice);
 
-        System.out.println("PlayerName:  " + playerName);
-
-        System.out.println("PlayerColor: " + playerColor);
+        System.out.println("[DEBUG] PlayerName:  " + playerName);
+        System.out.println("[DEBUG] PlayerColor: " + playerColor);
 
         socketClientWriter.send("login" + "\t" + playerName + "\t" + playerColor);
 
