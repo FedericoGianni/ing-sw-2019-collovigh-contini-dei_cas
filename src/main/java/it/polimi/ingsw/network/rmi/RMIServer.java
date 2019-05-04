@@ -112,6 +112,8 @@ public class RMIServer {
 
             remoteClients.put(playerId,(ToClient) remote.lookup(name));
 
+            LOGGER.log(Level.INFO, "Registered client with name: {0}", name);
+
 
         }catch (Exception e){
 
@@ -139,25 +141,13 @@ public class RMIServer {
 
             // for each registered address
 
-            for (String address : remoteClientAddress) {
+            for (ToClient client : remoteClients.values()) {
 
-                // connect to the remote registry
 
-                remote = LocateRegistry.getRegistry(address, 2021);
-
-                //  load all the bounded names registered on the given register
-
-                List<String> oldNames = Arrays.asList(remote.list());
-
-                //for each string registered unbound all the names
-
-                for (String name : oldNames) {
-
-                    remote.unbind(name);
-                }
 
             }
 
+            remoteClients.clear();
 
         }catch (Exception e){
 

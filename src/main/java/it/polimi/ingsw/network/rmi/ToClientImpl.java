@@ -51,5 +51,10 @@ public class ToClientImpl implements ToClient {
         return client.getPlayerId();
     }
 
+    @Override
+    public void resetClientRegistry() throws RemoteException {
+        RMIClient.resetClientRegistry();
+    }
+
 
 }

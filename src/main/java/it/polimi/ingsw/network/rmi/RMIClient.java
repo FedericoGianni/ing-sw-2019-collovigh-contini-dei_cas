@@ -6,13 +6,15 @@ import it.polimi.ingsw.network.Client;
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RMIClient extends Client {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.INFO;
+    private static Level level = Level.FINE;
 
     //attributes relative to client -> server flow
     private static final String REMOTE_OBJECT_NAME = "rmi_server";
@@ -185,6 +187,32 @@ public class RMIClient extends Client {
         }
 
 
+    }
+
+    public static void resetClientRegistry(){
+
+        try {
+
+
+            // connect to the remote registry
+
+            Registry remote = LocateRegistry.getRegistry( 2021);
+
+            //  load all the bounded names registered on the given register
+
+            List<String> oldNames = Arrays.asList(remote.list());
+
+            //for each string registered unbound all the names
+
+            for (String name : oldNames) {
+
+                remote.unbind(name);
+            }
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+        }
     }
 
 

@@ -33,4 +33,6 @@ public interface ToClient extends Remote {
      * @throws RemoteException
      */
     int getPid() throws RemoteException;
+
+    void resetClientRegistry() throws RemoteException;
 }

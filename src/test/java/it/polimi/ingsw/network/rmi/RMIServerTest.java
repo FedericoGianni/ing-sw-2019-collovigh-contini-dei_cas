@@ -26,7 +26,10 @@ class RMIServerTest {
         server.resetClients();
 
         RMIClient client2 = new RMIClient();
+        client2.setPlayerId(0);
+
         RMIClient client3 = new RMIClient();
+        client3.setPlayerId(1);
 
         client2.reconnect();
         client3.reconnect();
