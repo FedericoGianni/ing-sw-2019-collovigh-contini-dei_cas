@@ -17,22 +17,34 @@ public class ToClientImpl implements ToClient {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void NameAlreadyTaken(String name) throws RemoteException{
 
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void ColorAlreadyTaken(PlayerColor color) throws RemoteException{
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean ping() throws RemoteException {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getPid() throws RemoteException {
 

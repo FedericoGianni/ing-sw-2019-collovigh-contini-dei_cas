@@ -6,10 +6,10 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class RMIServer {
 
@@ -23,14 +23,14 @@ public class RMIServer {
     private ToServerImpl skeleton;
 
     //attributes relative to server -> client flow
-    private static List<ToClient> remoteClients = new ArrayList<>();
-    private static Registry remote;
-    private static String host;
+    private static List<String> remoteClientAddress = new ArrayList<>();
+    private static HashMap<Integer,ToClient> remoteClients = new HashMap<>();
+    private Registry remote;
 
 
     public RMIServer() {
 
-        RMIServer.createRegistry();
+        this.createRegistry();
 
         this.createRemoteObject();
 
@@ -39,13 +39,13 @@ public class RMIServer {
     /**
      * this method creates a new Rmi registry on port 2020 if thi was not already created
      */
-    private static synchronized void createRegistry(){
+    private synchronized void createRegistry(){
 
         try{
 
             if (!registryCreated ) {
 
-                Registry local = LocateRegistry.createRegistry(2020);
+                local = LocateRegistry.createRegistry(2020);
 
                 LOGGER.log(level, "[RMI-Server]created registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), "2020"});
 
@@ -93,24 +93,24 @@ public class RMIServer {
     }
 
     /**
-     * this method updates the list of names bound to ToClient objects
+     * This method will add the address of a new client remote registry to the server
+     * @param address is the ip address of a new client
      */
-    public static void updateClientList(){
+    public void addClient(String address, int playerId, String name){
 
-        try {
+        try{
 
-            host = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+            // add the client rmi registry address to the server
 
-            remote = LocateRegistry.getRegistry(host,2021);
+            remoteClientAddress.add(address);
 
-            remoteClients.clear();
+            // connect to the remote registry
 
-            List<String> n = Arrays.stream(remote.list()).sorted().collect(Collectors.toList());
+            remote = LocateRegistry.getRegistry(address, 2021);
 
-            for (String name: n){
+            // load the specified ToClient object and puts it in the map
 
-                remoteClients.add((ToClient) remote.lookup(name));
-            }
+            remoteClients.put(playerId,(ToClient) remote.lookup(name));
 
 
         }catch (Exception e){
@@ -118,6 +118,7 @@ public class RMIServer {
             LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
     }
+
 
     /**
      *
@@ -129,22 +130,34 @@ public class RMIServer {
     }
 
     /**
-     * Unbinds all the clients previously bound
+     * Unbinds all the clients previously bound if the client rmi registry is local
+     * function for test uses only
      */
-    public static void resetClients(){
+    public void resetClients(){
 
         try {
 
-            host = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+            // for each registered address
 
-            remote = LocateRegistry.getRegistry(host,2021);
+            for (String address : remoteClientAddress) {
 
-            List<String> oldNames = Arrays.asList(remote.list());
+                // connect to the remote registry
 
-            for (String name : oldNames){
+                remote = LocateRegistry.getRegistry(address, 2021);
 
-                remote.unbind(name);
+                //  load all the bounded names registered on the given register
+
+                List<String> oldNames = Arrays.asList(remote.list());
+
+                //for each string registered unbound all the names
+
+                for (String name : oldNames) {
+
+                    remote.unbind(name);
+                }
+
             }
+
 
         }catch (Exception e){
 
@@ -157,7 +170,7 @@ public class RMIServer {
      */
     public void pingAll(){
 
-        for (ToClient client:remoteClients){
+        for (ToClient client:remoteClients.values()){
 
             new RMIPinger(client).run();
 

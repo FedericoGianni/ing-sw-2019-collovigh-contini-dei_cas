@@ -1,7 +1,9 @@
 package it.polimi.ingsw.network.rmi;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import it.polimi.ingsw.network.networkexceptions.LostClientException;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class RMIPinger implements Runnable{
 

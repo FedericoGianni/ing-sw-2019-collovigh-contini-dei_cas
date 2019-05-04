@@ -23,6 +23,11 @@ public abstract class Client {
     public abstract void voteMap(int mapType);
 
     /**
+     * this method will reconnect the player to the server
+     */
+    public abstract void reconnect();
+
+    /**
      *
      * @return the current GameId
      */

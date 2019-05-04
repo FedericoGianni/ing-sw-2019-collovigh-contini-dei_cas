@@ -22,7 +22,6 @@ public class RMIClient extends Client {
     //attributes relative to server -> client flow
     private static Boolean registryCreated = false;
     private String localName;
-    private Registry localRegistry;
 
 
 
@@ -63,16 +62,18 @@ public class RMIClient extends Client {
 
             ToClientImpl skeleton = new ToClientImpl(this);
 
-            localRegistry = LocateRegistry.getRegistry(2021);
+            Registry localRegistry = LocateRegistry.getRegistry(2021);
 
-            LOGGER.log(level, "[RMI-Client]created registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), "2021"});
+            LOGGER.log(level, "[RMI-Client]located registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), "2021"});
 
 
-            //creation of client name for binding
+            //creation of client name for binding if only one client for each pc all will be 0
 
             int id = localRegistry.list().length;
 
             localName = "rmi_client" + id;
+
+            LOGGER.log(level,"created new client with name: {0}", localName);
 
             //binding name to implementation in registry
 
@@ -101,12 +102,24 @@ public class RMIClient extends Client {
 
             serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
 
+            // locate the server registry
+
             remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
             LOGGER.log(level,"[RMI-Client] registry located by client");
 
+            //load the ToServer object from the registry
+
             ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
 
+            // register the ip of the client rmiRegistry to the server
+
+            server.registerMe(Inet4Address.getLocalHost().getHostAddress(),getPlayerId(),localName);
+
+            // join the game and store the pid
+
             int playerId = server.joinGame(name,color);
+
+            //set the pid parameter of the class
 
             this.setPlayerId(playerId);
 
@@ -143,6 +156,34 @@ public class RMIClient extends Client {
 
             LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
+
+    }
+
+    @Override
+    public void reconnect() {
+
+        try{
+
+
+            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+
+            // locate the server registry
+
+            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
+
+            //load the ToServer object from the registry
+
+            ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+
+            // register the ip of the client rmiRegistry to the server
+
+            server.registerMe(Inet4Address.getLocalHost().getHostAddress(),getPlayerId(),localName);
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+        }
+
 
     }
 

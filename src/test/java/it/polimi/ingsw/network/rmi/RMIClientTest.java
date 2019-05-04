@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.rmi;
 
-import it.polimi.ingsw.model.PlayerColor;
+
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.Test;
 

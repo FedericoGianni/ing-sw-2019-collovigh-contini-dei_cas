@@ -4,6 +4,12 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import org.junit.jupiter.api.Test;
 
+import java.net.Inet4Address;
+import java.rmi.registry.LocateRegistry;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RMIServerTest {
@@ -16,12 +22,14 @@ class RMIServerTest {
         RMIClient client1 = new RMIClient();
 
         RMIServer server = new RMIServer();
+
         server.resetClients();
 
         RMIClient client2 = new RMIClient();
         RMIClient client3 = new RMIClient();
 
-        server.updateClientList();
+        client2.reconnect();
+        client3.reconnect();
 
         assertEquals(2,server.getClientNumber());
 
