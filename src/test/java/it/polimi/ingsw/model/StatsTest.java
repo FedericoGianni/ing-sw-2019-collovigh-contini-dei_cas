@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.customsexceptions.*;
+import it.polimi.ingsw.model.map.AmmoCell;
+import it.polimi.ingsw.model.map.Cell;
+import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.Stats;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.PlayerColor;
-
 public class ClientController {
 
     private int gameId;

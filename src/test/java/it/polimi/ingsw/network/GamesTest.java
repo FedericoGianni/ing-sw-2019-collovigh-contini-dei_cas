@@ -3,8 +3,6 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class GamesTest {
@@ -42,7 +40,7 @@ class GamesTest {
     void getSavePath() {
 
         Games games = new Games();
-        String savePath = "src/main/java/it/polimi/ingsw/savegames";
+        String savePath = "resources/json/savegames";
 
         int gameId = games.addGame();
 

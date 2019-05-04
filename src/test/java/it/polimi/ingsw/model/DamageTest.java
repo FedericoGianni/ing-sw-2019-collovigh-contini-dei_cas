@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.Damage;
+import it.polimi.ingsw.model.weapons.Damage;
 import org.junit.jupiter.api.Test;
 
 class DamageTest {

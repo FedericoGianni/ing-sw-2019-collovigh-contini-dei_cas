@@ -2,7 +2,7 @@ package it.polimi.ingsw.controller;
 
 
 import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.model.PlayerColor;
+import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.util.*;
 import java.util.stream.Collectors;

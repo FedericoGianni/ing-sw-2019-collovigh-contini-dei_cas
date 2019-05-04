@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network.rmi;
 
 
-
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -164,7 +163,7 @@ public class RMIServer {
 
         }
 
-        
+
     }
 
 

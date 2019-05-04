@@ -59,28 +59,23 @@ public class SocketClientReader extends Thread {
 
             case "login" :
                 new Thread (() -> {
-                    System.out.println("[Server] login reply: " + commands[1]);
+                    System.out.println("[DEBUG] [Server] login reply: " + commands[1]);
                     if(!(commands[1].equals("OK")))
                         RunClient.getCli().retryLogin();
                 }).start();
                 break;
 
-            case "retryLogin" :
-                new Thread (() -> {
-
-                }).start();
-                break;
-
             case "ping" :
                 new Thread (() -> {
-                    //System.out.println("[DEBUG] Ricevuta ping request dal server.");
+                    System.out.println("[DEBUG] Ricevuta ping request dal server.");
                     scw.send("pong\t" + scw.getName());
                 }).start();
                 break;
 
             default:
+                //this should never happen
                 new Thread(() -> {
-                    System.out.println("[Server] Unknown command received from RemoteServer ");
+                    System.out.println("[DEBUG] [Server] Unknown command received from Server.");
                 }).start();
         }
     }

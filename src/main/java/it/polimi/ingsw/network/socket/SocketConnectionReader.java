@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.socket;
 
-import it.polimi.ingsw.model.PlayerColor;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
@@ -95,8 +95,9 @@ public class SocketConnectionReader extends Thread {
 
 
             default :
+                //this should never happen
                 new Thread (() -> {
-                    Logger.getLogger("infoLogging").warning("Unknown command received from client");
+                    Logger.getLogger("infoLogging").warning("[DEBUG] Unknown command received from client.");
                 }).start();
                 break;
 

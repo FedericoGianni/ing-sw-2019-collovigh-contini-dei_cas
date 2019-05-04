@@ -2,6 +2,10 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.customsexceptions.CellNonExistentException;
 import it.polimi.ingsw.customsexceptions.PlayerNonExistentException;
+import it.polimi.ingsw.model.map.Directions;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.powerup.Newton;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

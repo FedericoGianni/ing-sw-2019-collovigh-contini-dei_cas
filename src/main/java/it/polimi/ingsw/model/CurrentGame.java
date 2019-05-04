@@ -1,6 +1,13 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
+import it.polimi.ingsw.model.map.Map;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.Skull;
+import it.polimi.ingsw.model.powerup.PowerUp;
+import it.polimi.ingsw.model.powerup.PowerUpDeck;
+import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.model.weapons.WeaponDeck;
 
 import java.util.ArrayList;
 import java.util.Collections;
