@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.*;
-import customsexceptions.DeadPlayerException;
-import customsexceptions.FrenzyActivatedException;
-import customsexceptions.OverKilledPlayerException;
+import it.polimi.ingsw.customsexceptions.*;
+import it.polimi.ingsw.customsexceptions.DeadPlayerException;
+import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
+import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.*;
+import it.polimi.ingsw.customsexceptions.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.PlayerNotSeeableException;
-
 import java.awt.*;
 
 import static it.polimi.ingsw.model.CellColor.*;

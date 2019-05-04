@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.CellNonExistentException;
-import customsexceptions.PlayerNonExistentException;
-import customsexceptions.PlayerNotSeeableException;
+import it.polimi.ingsw.customsexceptions.CellNonExistentException;
+import it.polimi.ingsw.customsexceptions.PlayerNonExistentException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

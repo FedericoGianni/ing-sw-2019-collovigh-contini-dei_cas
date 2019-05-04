@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.*;
-
 import java.util.*;
 
 /**

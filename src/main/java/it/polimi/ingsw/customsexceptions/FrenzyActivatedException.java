@@ -1,4 +1,4 @@
-package customsexceptions;
+package it.polimi.ingsw.customsexceptions;
 
 public class FrenzyActivatedException extends Exception implements DeathExceptions{
 

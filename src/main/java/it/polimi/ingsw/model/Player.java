@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.CardNotPossessedException;
-import customsexceptions.DeadPlayerException;
-import customsexceptions.OverKilledPlayerException;
+import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.customsexceptions.DeadPlayerException;
+import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 
 import java.util.List;
 import java.util.stream.Collectors;

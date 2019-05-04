@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.FrenzyActivatedException;
+import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

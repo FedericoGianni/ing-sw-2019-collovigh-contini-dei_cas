@@ -6,12 +6,16 @@ import java.util.logging.Level;
 
 public class RMIPinger implements Runnable{
 
-    private static final String REMOTENAME = "rmi_client";
+    private final String remoteName;
+    private final static int waitTime = 1000;
     private static String host;
+
 
     private Registry remote;
 
-    public RMIPinger() {
+    public RMIPinger(String name) {
+
+        this.remoteName = name;
 
         try {
 
@@ -31,9 +35,11 @@ public class RMIPinger implements Runnable{
 
             remote = LocateRegistry.getRegistry(host, 2020);
 
-            ToClientImpl client = (ToClientImpl) remote.lookup(REMOTENAME);
+            ToClientImpl client = (ToClientImpl) remote.lookup(remoteName);
             Boolean b;
             do{
+
+                Thread.sleep(waitTime);
 
                 b = client.ping();
 

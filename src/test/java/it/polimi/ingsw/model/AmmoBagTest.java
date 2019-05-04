@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.CardNotPossessedException;
-import it.polimi.ingsw.model.AmmoBag;
-import it.polimi.ingsw.model.AmmoCube;
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

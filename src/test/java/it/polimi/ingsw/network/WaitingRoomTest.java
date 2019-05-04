@@ -15,6 +15,8 @@ class WaitingRoomTest {
         try {
             WaitingRoom w = new WaitingRoom(-1);
 
+            w.getGames().clear();
+
             w.startTimer();
             assertEquals(TIMER, w.getTimerCount());
 
@@ -45,6 +47,9 @@ class WaitingRoomTest {
 
             // need to test when it stops to be active
 
+
+            room.getGames().clear();
+
         }catch(GameNonExistentException e){
 
             e.printStackTrace();
@@ -61,23 +66,12 @@ class WaitingRoomTest {
             room.addPlayer("Frank", PlayerColor.BLUE);
 
 
+            room.getGames().clear();
 
 
         }catch(Exception e){
 
             e.printStackTrace();
         }
-    }
-
-    @Test
-    void isNameAlreadyTaken() {
-    }
-
-    @Test
-    void isColorAlreadyTaken() {
-    }
-
-    @Test
-    void removePlayer() {
     }
 }

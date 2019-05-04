@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.FrenzyActivatedException;
+import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
 
 import java.util.ArrayList;
 import java.util.Collections;

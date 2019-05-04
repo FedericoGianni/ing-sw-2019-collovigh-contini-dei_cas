@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 
 import java.util.List;
 

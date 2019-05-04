@@ -10,30 +10,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RMIServerTest {
 
+
     @Test
-    void joinGame() {
+    void updateClientList() {
+
+        RMIClient client = new RMIClient();
+        RMIClient client1 = new RMIClient();
 
         RMIServer server = new RMIServer();
-        RMIClient client = new RMIClient();
-        Server mainServer = new Server();
+        server.resetClients();
 
-        int a = client.joinGame("Alfred", PlayerColor.YELLOW);
+        RMIClient client2 = new RMIClient();
+        RMIClient client3 = new RMIClient();
 
-        assertEquals(1, Server.getWaitingRoom().size() );
+        server.updateClientList();
 
-        assertTrue(Server.getWaitingRoom().isNameAlreadyTaken("Alfred"));
+        assertEquals(2,server.getClientNumber());
 
-
-
-        //test for function voteMap()
-
-        client.voteMap(1);
-
-        assertEquals(1,Server.getWaitingRoom().getMapType());
-
-        Server.getWaitingRoom().getGames().clear();
 
     }
-
-
 }

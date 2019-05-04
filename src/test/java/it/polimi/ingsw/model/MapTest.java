@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.PlayerNotSeeableException;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;

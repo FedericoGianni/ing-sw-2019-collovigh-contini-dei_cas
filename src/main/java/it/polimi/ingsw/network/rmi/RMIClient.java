@@ -20,14 +20,35 @@ public class RMIClient extends Client {
     private String serverIp;
 
     //attributes relative to server -> client flow
-    private static final String LOCAL_OBJECT_NAME = "rmi_client";
+    private static Boolean registryCreated = false;
+    private String localName;
     private Registry localRegistry;
+
 
 
     public RMIClient() {
 
+        RMIClient.createRegistry();
+
         createRemoteObject();
 
+    }
+
+    private synchronized static void createRegistry(){
+
+        try{
+
+            if (!registryCreated){
+
+                LocateRegistry.createRegistry(2021);
+
+                registryCreated = true;
+            }
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+        }
     }
 
     private void createRemoteObject(){
@@ -36,13 +57,20 @@ public class RMIClient extends Client {
 
             ToClientImpl skeleton = new ToClientImpl(this);
 
-            LocateRegistry.createRegistry(2021);
-
             localRegistry = LocateRegistry.getRegistry(2021);
 
             LOGGER.log(level, "[RMI-Client]created registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), "2021"});
 
-            localRegistry.bind(LOCAL_OBJECT_NAME, skeleton); // binding the string localName to hte instance in the registry
+
+            //creation of client name for binding
+
+            int id = localRegistry.list().length;
+
+            localName = "rmi_client" + id;
+
+            //binding name to implementation in registry
+
+            localRegistry.rebind(localName, skeleton); // binding the string localName to hte instance in the registry
 
             LOGGER.log(level, "[RMI-Client]Bound rmi client to registry");
 
@@ -100,20 +128,6 @@ public class RMIClient extends Client {
             e.printStackTrace();
         }
 
-    }
-
-
-
-    public void shutDown(){
-
-        try {
-
-            localRegistry.unbind(LOCAL_OBJECT_NAME);
-
-        }catch (Exception e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(),e);
-        }
     }
 
 

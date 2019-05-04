@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
-import customsexceptions.CellNonExistentException;
-import customsexceptions.PlayerNonExistentException;
+import it.polimi.ingsw.customsexceptions.CellNonExistentException;
+import it.polimi.ingsw.customsexceptions.PlayerNonExistentException;
 
 import java.awt.*;
 
