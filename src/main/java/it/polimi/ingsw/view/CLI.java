@@ -51,6 +51,7 @@ public class CLI implements UserInterface {
         System.out.println("PlayerColor: " + playerColor);
 
         socketClientWriter.send("login" + "\t" + playerName + "\t" + playerColor);
+
     }
 
     public static void show(String s){
@@ -61,6 +62,7 @@ public class CLI implements UserInterface {
 
     @Override
     public void retryLogin() {
-
+        System.out.println("Login failed. Retry ");
+        login();
     }
 }

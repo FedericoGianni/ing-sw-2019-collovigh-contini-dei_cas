@@ -41,12 +41,9 @@ class WaitingRoomTest {
         try {
 
             WaitingRoom room = new WaitingRoom(-1);
-
             assertTrue(room.isActive());
 
-
             // need to test when it stops to be active
-
 
         }catch(GameNonExistentException e){
 

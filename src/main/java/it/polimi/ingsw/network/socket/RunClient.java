@@ -9,6 +9,12 @@ import java.net.Inet4Address;
 
 public class RunClient {
 
+    public static CLI cli;
+
+    public static CLI getCli() {
+        return cli;
+    }
+
     public static void main(String args[]) {
 
         try {
@@ -16,7 +22,7 @@ public class RunClient {
             Thread t = new Thread(sc);
             t.start();
 
-            CLI cli = new CLI(sc);
+            cli = new CLI(sc);
             cli.login();
 
         }catch(Exception e){

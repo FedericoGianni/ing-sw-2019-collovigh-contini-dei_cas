@@ -73,14 +73,16 @@ public class SocketConnectionReader extends Thread {
             case "login" :
                 new Thread (() -> {
                     try {
-                        Server.getWaitingRoom().addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()));
+                        int id = Server.getWaitingRoom().addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()));
+                        if(id >= 0){
+                            socketConnectionWriter.send("login\tOK");
+                        }
 
                     }catch (NameAlreadyTakenException e){       //NOTE: temporary solution by D, just to make it compile
-                        socketConnectionWriter.send("login\tNAME ALREADY TAKEN");
+                        socketConnectionWriter.send("login\tNAME_ALREADY_TAKEN");
                     }catch (ColorAlreadyTakenException e){
-                        socketConnectionWriter.send("login\tCOLOR ALREADY TAKEN");
+                        socketConnectionWriter.send("login\tCOLOR_ALREADY_TAKEN");
                     }
-                    socketConnectionWriter.send("login\tOK");
 
                 }).start();
                 break;

@@ -60,6 +60,14 @@ public class SocketClientReader extends Thread {
             case "login" :
                 new Thread (() -> {
                     System.out.println("[Server] login reply: " + commands[1]);
+                    if(!(commands[1].equals("OK")))
+                        RunClient.getCli().retryLogin();
+                }).start();
+                break;
+
+            case "retryLogin" :
+                new Thread (() -> {
+
                 }).start();
                 break;
 
