@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 /**
  * This class implements a thread which will send every [DEFAULT_PING_INTERVAL] ms a string "ping" to the client to
  * check if it is still connected to the SocketServer. The client on his side reads the string "ping" and acts
- * accordingly to the function linked in the SocketClientReader processMessage(String msg) function
+ * accordingly to the function linked in the SocketClientReader handleMsg(String msg) function
  */
 public class SocketPing implements Runnable {
 
@@ -48,7 +48,7 @@ public class SocketPing implements Runnable {
         while (active)
             try {
                 Thread.sleep(DEFAULT_PING_INTERVAL);
-                scw.send("ping\t" + scw.getId());
+                scw.send("ping\f" + scw.getId());
                 Logger.getLogger("infoLogging").info("Sending ping message to client.");
             } catch (InterruptedException e) {
                 //this.interrupt();

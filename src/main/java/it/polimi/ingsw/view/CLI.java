@@ -49,7 +49,7 @@ public class CLI implements UserInterface {
         System.out.println("[DEBUG] PlayerName:  " + playerName);
         System.out.println("[DEBUG] PlayerColor: " + playerColor);
 
-        socketClientWriter.send("login" + "\t" + playerName + "\t" + playerColor);
+        socketClientWriter.send("login" + "\f" + playerName + "\f" + playerColor);
 
     }
 

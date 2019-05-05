@@ -12,8 +12,6 @@ import java.util.logging.Logger;
 public class SocketClient implements Runnable {
 
     private SocketClientReader scr;
-    private SocketClientWriter scw;
-
 
     private boolean active = true;
     private String ip;
@@ -29,8 +27,8 @@ public class SocketClient implements Runnable {
         return scr;
     }
 
-    public SocketClientWriter getScw() {
-        return scw;
+    public SocketClientWriter getScw(){
+        return getScr().getScw();
     }
 
     public Socket getSocket() {

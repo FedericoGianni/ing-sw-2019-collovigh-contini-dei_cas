@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.logging.Logger;
 
+/**
+ * This thread, started by the main Server, handles a SocketServer that keep listening for connection on the
+ * specified port, and open a new socket stream for every client.
+ */
 public class SocketServer extends Thread {
 
     @Override
