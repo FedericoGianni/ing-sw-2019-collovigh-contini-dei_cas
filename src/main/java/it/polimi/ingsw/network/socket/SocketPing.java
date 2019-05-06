@@ -1,6 +1,9 @@
 package it.polimi.ingsw.network.socket;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.util.logging.Level.INFO;
 
 /**
  * This class implements a thread which will send every [DEFAULT_PING_INTERVAL] ms a string "ping" to the client to
@@ -8,6 +11,10 @@ import java.util.logging.Logger;
  * accordingly to the function linked in the SocketClientReader handleMsg(String msg) function
  */
 public class SocketPing implements Runnable {
+
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = INFO;
 
     /**
      * The thread will send a "ping" string every DEFAULT_PING_INTERVAL millisecond
@@ -49,7 +56,7 @@ public class SocketPing implements Runnable {
             try {
                 Thread.sleep(DEFAULT_PING_INTERVAL);
                 scw.send("ping\f" + scw.getId());
-                Logger.getLogger("infoLogging").info("Sending ping message to client.");
+                LOGGER.log(INFO, "Sending ping message to client.");
             } catch (InterruptedException e) {
                 //this.interrupt();
             }

@@ -3,8 +3,13 @@ package it.polimi.ingsw.network.socket;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SocketClientWriter extends Thread {
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.INFO;
 
     /**
      * Reference to the socket stream, passed as a parameter to the constructor

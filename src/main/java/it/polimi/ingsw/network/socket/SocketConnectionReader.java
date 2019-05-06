@@ -11,7 +11,11 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
 
 /**
  * This class handles the socket input stream server-side. A new SocketConnectionReader thread is started for every
@@ -22,6 +26,10 @@ import java.util.logging.Logger;
  * function parameters and execute the function in another thread.
  */
 public class SocketConnectionReader extends Thread {
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+
+    private static Level level = INFO;
 
     /**
      * Reference to the socket to be handled, which is passed as a parameter to the constructor
@@ -73,7 +81,7 @@ public class SocketConnectionReader extends Thread {
      */
     @Override
         public void run() {
-            Logger.getLogger("infoLogger").info("Received Client Connection");
+            LOGGER.log(INFO, "Received client connection.");
 
             try {
                 input = new BufferedReader(
@@ -127,14 +135,14 @@ public class SocketConnectionReader extends Thread {
         FunctionInterface function = headersMap.get(message[0]);
 
         if (function == null)
-            Logger.getLogger("infoLogging").warning("[DEBUG] [SERVER] ERRORE nella lettura della funzione dalla hashmap!");
+            LOGGER.log(WARNING,  "[DEBUG] [SERVER] ERRORE nella lettura della funzione dalla hashmap!");
         else
             try {
                 new Thread (() -> {
                     function.execute();
                 }).start();
             } catch(NumberFormatException e) {
-                Logger.getLogger("infoLogging").warning("[DEBUG] [SERVER] ERRORE nel formato del messaggio socket ricevuto! ");
+               LOGGER.log(WARNING, "[DEBUG] [SERVER] ERRORE nel formato del messaggio socket ricevuto!");
             }
     }
 
@@ -143,6 +151,7 @@ public class SocketConnectionReader extends Thread {
      * Initialize the Map by binding a String to its related function
      * @throws NumberFormatException
      */
+
     private void populateHeadersMap() throws NumberFormatException {
 
         headersMap = new HashMap<>();
@@ -164,7 +173,7 @@ public class SocketConnectionReader extends Thread {
 
         //ping
         headersMap.put("pong", () -> {
-            Logger.getLogger("infoLogging").info("Client reply to ping: " + commands[1]);
+            LOGGER.log(INFO, "Client reply to ping: " + commands[1]);
         });
     }
 

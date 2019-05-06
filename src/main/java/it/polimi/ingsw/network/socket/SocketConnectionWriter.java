@@ -3,9 +3,15 @@ package it.polimi.ingsw.network.socket;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.logging.Level.INFO;
+
 public class SocketConnectionWriter extends Thread {
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = INFO;
 
     /**
      * Reference to the socket representing the communication stream, passed as a parameter to the constructor
@@ -38,7 +44,7 @@ public class SocketConnectionWriter extends Thread {
 
         } catch (IOException e) {
             e.getMessage();
-            Logger.getLogger("infoLogging").info("[DEBUG] Started SocketConnectionWriter " + this.getName());
+            LOGGER.log(INFO, "[DEBUG] Started SocketConnectionWriter " + this.getName());
 
         }
     }

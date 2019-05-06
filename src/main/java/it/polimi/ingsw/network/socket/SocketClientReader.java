@@ -6,7 +6,10 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.util.logging.Level.WARNING;
 
 /**
  * This class handles the socket input stream client-side, allowing to have an async bidirectional communication
@@ -18,6 +21,9 @@ import java.util.logging.Logger;
  * on the same socket in another separate thread.
  */
 public class SocketClientReader extends Thread {
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.INFO;
 
     /**
      * Attribute representing a BufferedReader to manage input stream from socket
@@ -121,14 +127,14 @@ public class SocketClientReader extends Thread {
         FunctionInterface function = headersMap.get(message[0]);
         if (function == null)
             //errore
-            Logger.getLogger("infoLogging").warning("[DEBUG] [CLIENT] ERRORE nella lettura della funzione dalla hashmap!");
+            LOGGER.log(WARNING, "[DEBUG] [CLIENT] ERRORE nella lettura della funzione dalla hashmap!");
         else
             try {
                 new Thread(() -> {
                     function.execute();
                 }).start();
             } catch (NumberFormatException e) {
-                Logger.getLogger("infoLogging").warning("[DEBUG] [CLIENT] ERRORE nel formato del messaggio socket ricevuto! ");
+                LOGGER.log(WARNING, "[DEBUG] [CLIENT] ERRORE nel formato del messaggio socket ricevuto! ");
             }
     }
 

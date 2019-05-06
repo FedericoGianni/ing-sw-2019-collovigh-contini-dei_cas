@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +24,11 @@ public class WaitingRoom {
     private static final int TIMER = 30;
     private static int timerCount = TIMER;
 
-    private List<String> players;
+    public static final int DEFAULT_MIN_PLAYERS = 3;
+    public static final int DEFAULT_MAX_PLAYERS = 5;
+
+    //private List<String> players;
+    private CopyOnWriteArrayList<String> players;
     private List<PlayerColor> colors;
     private Boolean active;
     private int activeGame;
@@ -44,7 +49,7 @@ public class WaitingRoom {
         // -1 = new game
         if (gameId == -1) {
             this.colors = new ArrayList<>();
-            this.players = new ArrayList<>();
+            this.players = new CopyOnWriteArrayList<>();
             activeGame = games.addGame();
 
             LOGGER.log(Level.FINE,"[OK] Started Waiting Room for new Game");
@@ -101,6 +106,10 @@ public class WaitingRoom {
         players.add(name);
 
         colors.add(playerColor);
+
+        if(players.size() >= DEFAULT_MIN_PLAYERS){
+            startTimer();
+        }
 
         return players.indexOf(name);
 
@@ -163,8 +172,8 @@ public class WaitingRoom {
                 if(timerCount == 0) {
                     System.out.println("[DEBUG] Timer has expired!");
                     //chiama initGame o gestire timer scaduto
+                    System.out.println("[DEBUG] AVVIO DELLA PARTITA IN CORSO...");
                     //initGame();
-
                     //termina l'esecuzione del thread
                     this.cancel();
                 }
