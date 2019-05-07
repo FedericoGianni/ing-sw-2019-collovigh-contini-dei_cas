@@ -38,7 +38,7 @@ public abstract class Weapon {
      * @return true if the weapon can be reloaded
      */
     public abstract boolean canBeReloaded();
-    private Player firstTarget;
+    private Player firstTarget;//first target of every shot , useful for checking  if we need to retarget players or similar
     public Player getFirstTarget() {
         return firstTarget;
     }

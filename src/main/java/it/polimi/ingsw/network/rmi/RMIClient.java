@@ -102,7 +102,7 @@ public class RMIClient extends Client {
 
         try {
 
-            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full network
 
             // locate the server registry
 
@@ -145,7 +145,7 @@ public class RMIClient extends Client {
 
         try {
 
-            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full network
 
             remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
             LOGGER.log(level,"[RMI-Client] registry located by client");
@@ -167,7 +167,7 @@ public class RMIClient extends Client {
         try{
 
 
-            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full Network
+            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full network
 
             // locate the server registry
 
