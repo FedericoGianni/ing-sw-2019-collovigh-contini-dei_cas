@@ -203,12 +203,19 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
         this.microEffects.add(microEffect.copy());
     }
 
+    public boolean moveBeforShooting()
+    {
+        boolean moveb4;
+        if(microEffects.size()!=3) return false;
+        if(microEffects.get(2).moveBefore()==true)
+            return true;
+        return false;
+    }
+
     /**
      *
      * @param player is the player on who we want to apply this macro-effect
      */
-
-
     public void applyOn(Player player){
 
         //TODO

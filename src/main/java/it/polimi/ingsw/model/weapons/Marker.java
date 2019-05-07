@@ -218,6 +218,11 @@ public class Marker extends MicroEffect {
         }
     }
 
+    @Override
+    public boolean moveBefore() {
+        return false;
+    }
+
     /**
      *
      * @param p

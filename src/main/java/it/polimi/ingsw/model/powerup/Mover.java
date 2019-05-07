@@ -20,10 +20,10 @@ import java.util.ArrayList;
 public class Mover extends MicroEffect {
 
     private int cellNumber;//number of cells up to cellNumber
-    private boolean beforeShootig;//if true you need to move before shooting
-    private boolean afterShooting;//if true you can use after shooting the effect
+    private boolean beforeShooting;//if true you need to move before shooting--- done at WeaponLevel
+    private boolean afterShooting;//if true you can use after shooting the effect---unuseful i think
     private boolean facoltative;//sometimes you don't have to move, you can choose
-    private boolean toCell;//you have to move to a specified cell if this flag is true
+    private boolean toCell;//you have to move to a specified cell if this flag is true--must change to a Cell type or to a point type
     private boolean target;//set true if you need to move the target not the shooter
     private static ArrayList <Mover> weaponMov=new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class Mover extends MicroEffect {
 
     public Mover(int n,boolean a,boolean b,boolean c,boolean d,boolean e){
         this.cellNumber=n;
-        this.beforeShootig=a;
+        this.beforeShooting=a;
         this.afterShooting=b;
         this.facoltative=c;
         this.toCell=d;
@@ -52,7 +52,7 @@ public class Mover extends MicroEffect {
     @Override
     public void print() {
        System.out.println("cellNumber: "+cellNumber);
-        System.out.println(beforeShootig);
+        System.out.println(beforeShooting);
 
         System.out.println(afterShooting);
 
@@ -61,7 +61,24 @@ public class Mover extends MicroEffect {
 
     @Override
     public void microEffectApplicator(ArrayList<Player> playerList, Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException {
-    System.out.println("Mover micreffect");
+
+        if(facoltative==true)
+        {
+            if(playerList==null) return;//you can do nothing
+        }
+        else if(target==true)//you move the target
+        {
+            //move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+        }
+        else if(target==false)//the shooter is moved
+        {
+            //move to cell, then check if the distance is correft if the distane is needed ancd if you ca move there for real
+        }
+    }
+
+    @Override
+    public boolean moveBefore() {
+        return beforeShooting;
     }
 
 
@@ -82,12 +99,12 @@ public class Mover extends MicroEffect {
         this.cellNumber = cellNumber;
     }
 
-    public boolean isBeforeShootig() {
-        return beforeShootig;
+    public boolean isBeforeShooting() {
+        return beforeShooting;
     }
 
-    public void setBeforeShootig(boolean beforeShootig) {
-        this.beforeShootig = beforeShootig;
+    public void setBeforeShooting(boolean beforeShootig) {
+        this.beforeShooting = beforeShootig;
     }
 
     public boolean isAfterShooting() {

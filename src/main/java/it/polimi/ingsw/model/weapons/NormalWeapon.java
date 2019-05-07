@@ -274,6 +274,10 @@ public class NormalWeapon extends Weapon{
             e.printStackTrace();
         } catch (DeadPlayerException e) {
             e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
         }
 
         this.isLoaded=false;//the weapon is no longer loaded
@@ -283,12 +287,18 @@ public class NormalWeapon extends Weapon{
     {
         for(int i = 0; i< NormalWeapon.getNormalWeapons().size(); i++)
         {
-            System.out.println(NormalWeapon.getNormalWeapons().get(i).getName());
+            //System.out.println(NormalWeapon.getNormalWeapons().get(i).getName());
             for(int j = 0; j< NormalWeapon.getNormalWeapons().get(i).getEffects().size(); j++)
             {
-                System.out.println(NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getName());
-                for(int h=0;h<NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().size();h++)
-                    NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().get(h).print();
+                //System.out.println(NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getName());
+                if(NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).moveBeforShooting())
+                {   NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().get(2);//you need to move before everything
+                    for(int h=0;h<NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().size()-1;h++)
+                    NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().get(h).print();}
+                else{//shoot and other things then move
+                    for(int h=0;h<NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().size()-1;h++)
+                        NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().get(h).print();
+                }
             }
 
         }

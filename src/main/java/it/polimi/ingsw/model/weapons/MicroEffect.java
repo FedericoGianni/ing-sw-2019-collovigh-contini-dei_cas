@@ -40,4 +40,5 @@ public abstract class MicroEffect {
      * apply the microEffect consequences
      */
     public abstract void microEffectApplicator(ArrayList<Player> playerList,Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException, FrenzyActivatedException, DifferentPlayerNeededException, NotCorrectPlayerNumberException;
+    public abstract boolean moveBefore();
 }

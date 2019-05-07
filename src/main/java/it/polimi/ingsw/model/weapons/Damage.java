@@ -275,6 +275,11 @@ public class Damage extends MicroEffect {
 
     }
 
+    @Override
+    public boolean moveBefore() {
+        return false;
+    }
+
     private void distance(Player target,Player shooter) throws UncorrectTargetDistance, SeeAblePlayerException, OverKilledPlayerException, DeadPlayerException, FrenzyActivatedException//distance, called for every player
     {
         if(distMin<10)
