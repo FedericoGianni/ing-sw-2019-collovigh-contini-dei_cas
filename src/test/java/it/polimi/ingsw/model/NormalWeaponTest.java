@@ -77,7 +77,7 @@ class NormalWeaponTest {
 
     @Test
     void shoot2() throws FrenzyActivatedException{//now two effects ,you also need to pay and the player can, if it can't the notEnoughAmmoException sclera
-        weaponsCreator();
+        weaponsCreator();// 2 damages and 1 mark
 
         List<String>  names=new ArrayList<>();
         names.add("shooter");

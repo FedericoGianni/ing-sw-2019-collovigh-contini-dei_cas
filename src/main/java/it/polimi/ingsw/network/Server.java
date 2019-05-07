@@ -84,7 +84,7 @@ public class Server  {
 
     /**
      *
-     * @return a static reference to the controller, used to call Controller methods inside Network methods
+     * @return a static reference to the controller, used to call Controller methods inside network methods
      */
     public static Controller getController() {
         return controller;

@@ -18,7 +18,7 @@ public class RunClient {
     public static void main(String args[]) {
 
         try {
-            SocketClient sc = new SocketClient(Inet4Address.getLocalHost().getHostAddress(), 22222);
+            SocketClient sc = new SocketClient("192.168.1.5", 22222);
             Thread t = new Thread(sc);
             t.start();
 
