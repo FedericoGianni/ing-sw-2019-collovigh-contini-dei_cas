@@ -22,12 +22,18 @@ public class SocketServer extends Thread {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = INFO;
 
+    private int port;
+
+    public SocketServer(int port){
+        this.port = port;
+    }
+
     private int clientsNum = 0;
 
     @Override
     public void run() {
         LOGGER.log(INFO, "Starting SocketServer");
-        try (ServerSocket serverSocket = new ServerSocket(22222)) {
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (WaitingRoom.getTimerCount() > 0 && clientsNum <= DEFAULT_MAX_CLIENTS) {
                 //TODO need to check the clientsNum part
                 new SocketConnectionReader(serverSocket.accept()).start();

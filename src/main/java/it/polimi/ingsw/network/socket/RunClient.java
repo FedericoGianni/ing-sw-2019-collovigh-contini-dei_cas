@@ -5,8 +5,6 @@ package it.polimi.ingsw.network.socket;
 
 import it.polimi.ingsw.view.CLI;
 
-import java.net.Inet4Address;
-
 public class RunClient {
 
     public static CLI cli;
@@ -18,7 +16,7 @@ public class RunClient {
     public static void main(String args[]) {
 
         try {
-            SocketClient sc = new SocketClient(Inet4Address.getLocalHost().getHostAddress(), 22222);
+            SocketClient sc = new SocketClient(args[0], Integer.parseInt(args[1]));
             Thread t = new Thread(sc);
             t.start();
 

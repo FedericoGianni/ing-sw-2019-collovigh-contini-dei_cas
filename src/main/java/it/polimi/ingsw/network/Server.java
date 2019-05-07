@@ -15,9 +15,14 @@ import java.util.logging.Logger;
 public class Server  {
 
     /**
-     * IP Address of the RemoteServer
+     * IP Address of the Server
      */
     private static String ip_address;
+
+    /**
+     * Port of the Server
+     */
+    private static int port;
 
     /**
      * Reference to controller
@@ -39,7 +44,8 @@ public class Server  {
      * Initialize the main Server by first creating a WaitingRoom, then getting its local host address and assigning it to
      * the attribute ip_address and finally starting the two type of Server.
      */
-    public Server() {
+    public Server(int port) {
+        this.port = port;
         //controller = WaitingRoom.getController();
         try {
             waitingRoom = new WaitingRoom(-1);  // NOTE: this need to be changed: this can only create a new game but load a saved one
@@ -58,7 +64,7 @@ public class Server  {
             e.getMessage();
         }
 
-        Thread socketHandler = new Thread(new SocketServer());
+        Thread socketHandler = new Thread(new SocketServer(port));
         socketHandler.start();
 
         //TODO start RMI Server

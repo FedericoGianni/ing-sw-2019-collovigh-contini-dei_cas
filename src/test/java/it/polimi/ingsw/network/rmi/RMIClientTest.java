@@ -11,12 +11,12 @@ class RMIClientTest {
 
     @Test
     void joinGame() {
-
+        int port = 22222;
 
         RMIServer server = new RMIServer();
         RMIClient client = new RMIClient();
 
-        Server mainServer = new Server();
+        Server mainServer = new Server(port);
 
         int a = client.joinGame("Alfred", PlayerColor.YELLOW);
 
@@ -28,10 +28,12 @@ class RMIClientTest {
     @Test
     void voteMap() {
 
+        int port = 22222;
+
         RMIServer server = new RMIServer();
         RMIClient client = new RMIClient();
 
-        Server mainServer = new Server();
+        Server mainServer = new Server(port);
 
 
         client.voteMap(1);
