@@ -1,13 +1,12 @@
 package it.polimi.ingsw.network.rmi;
 
 
+import it.polimi.ingsw.network.Server;
+
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,8 +22,8 @@ public class RMIServer {
     private ToServerImpl skeleton;
 
     //attributes relative to server -> client flow
-    private static List<String> remoteClientAddress = new ArrayList<>();
-    private static HashMap<Integer,ToClient> remoteClients = new HashMap<>();
+    private static ConcurrentHashMap<Integer,String> remoteClientAddress = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Integer,ToClient> remoteClients = new ConcurrentHashMap<>();
     private Registry remote;
 
 
@@ -102,7 +101,7 @@ public class RMIServer {
 
             // add the client rmi registry address to the server
 
-            remoteClientAddress.add(address);
+            remoteClientAddress.put(playerId,address);
 
             // connect to the remote registry
 
@@ -114,11 +113,32 @@ public class RMIServer {
 
             LOGGER.log(Level.INFO, "Registered client with name: {0}", name);
 
+            //starts a thread that pings that client
+
+            new RMIPinger((ToClient) remote.lookup(name)).run();
+
 
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
+    }
+
+
+    public static void removeClient(int playerId){
+
+        // remove the correspondent entry from the address map
+
+        remoteClientAddress.remove(playerId);
+
+        // remove the correspondent entry from the clients map
+
+        remoteClients.remove(playerId);
+
+        // call the method on the main server
+
+        Server.removePlayer(playerId);
+
     }
 
 
@@ -137,35 +157,7 @@ public class RMIServer {
      */
     public void resetClients(){
 
-        try {
-
-            // for each registered address
-
-            for (ToClient client : remoteClients.values()) {
-
-
-
-            }
-
-            remoteClients.clear();
-
-        }catch (Exception e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
-        }
-    }
-
-    /**
-     * this methods starts one thread of RMIPinger for each client connected and start it
-     */
-    public void pingAll(){
-
-        for (ToClient client:remoteClients.values()){
-
-            new RMIPinger(client).run();
-
-        }
-
+        remoteClients.clear();
 
     }
 

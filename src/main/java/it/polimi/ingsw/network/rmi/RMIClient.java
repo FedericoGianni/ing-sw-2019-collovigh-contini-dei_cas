@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.rmi;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;
@@ -19,7 +20,7 @@ public class RMIClient extends Client {
     //attributes relative to client -> server flow
     private static final String REMOTE_OBJECT_NAME = "rmi_server";
     private Registry remoteRegistry;
-    private String serverIp;
+    private final String serverIp;
 
     //attributes relative to server -> client flow
     private static Boolean registryCreated = false;
@@ -27,9 +28,11 @@ public class RMIClient extends Client {
 
 
 
-    public RMIClient() {
+    public RMIClient(String serverIp) {
 
-        RMIClient.createRegistry();
+        this.serverIp = serverIp;
+
+        createRegistry();
 
         createRemoteObject();
 
@@ -38,15 +41,15 @@ public class RMIClient extends Client {
     /**
      * this method creates a new Rmi registry on port 2021 if thi was not already created
      */
-    private static synchronized void createRegistry(){
+    private synchronized void createRegistry(){
 
         try{
 
-            if (!registryCreated){
+            if (!RMIClient.registryCreated){
 
                 LocateRegistry.createRegistry(2021);
 
-                registryCreated = true;
+                RMIClient.registryCreated = true;
             }
 
         }catch (Exception e){
@@ -102,8 +105,6 @@ public class RMIClient extends Client {
 
         try {
 
-            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full network
-
             // locate the server registry
 
             remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
@@ -145,8 +146,6 @@ public class RMIClient extends Client {
 
         try {
 
-            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full network
-
             remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
             LOGGER.log(level,"[RMI-Client] registry located by client");
 
@@ -164,14 +163,48 @@ public class RMIClient extends Client {
     @Override
     public void reconnect() {
 
-        try{
+        if (getPlayerId() != -1) {
+
+            try {
+
+                // locate the server registry
+
+                remoteRegistry = LocateRegistry.getRegistry(serverIp, 2020);
+
+                //load the ToServer object from the registry
+
+                ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+
+                // register the ip of the client rmiRegistry to the server
+
+                server.registerMe(Inet4Address.getLocalHost().getHostAddress(), getPlayerId(), localName);
+
+                server.reconnect(getPlayerId());
+
+            } catch (Exception e) {
+
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
+            }
+
+        }
 
 
-            serverIp = Inet4Address.getLocalHost().getHostAddress();  // to remove when full network
+    }
+
+    /**
+     * this method will reconnect the player to the server if the client was shut down
+     *
+     * @param name is the name chosen
+     * @return the player id
+     */
+    @Override
+    public int reconnect(String name) {
+
+        try {
 
             // locate the server registry
 
-            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
+            remoteRegistry = LocateRegistry.getRegistry(serverIp, 2020);
 
             //load the ToServer object from the registry
 
@@ -179,14 +212,17 @@ public class RMIClient extends Client {
 
             // register the ip of the client rmiRegistry to the server
 
-            server.registerMe(Inet4Address.getLocalHost().getHostAddress(),getPlayerId(),localName);
+            server.registerMe(Inet4Address.getLocalHost().getHostAddress(), getPlayerId(), localName);
 
-        }catch (Exception e){
+            return server.reconnect(name);
+
+
+        } catch (Exception e) {
 
             LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
 
-
+        return -1;
     }
 
     public static void resetClientRegistry(){

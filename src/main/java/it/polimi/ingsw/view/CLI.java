@@ -14,7 +14,7 @@ public class CLI implements UserInterface {
 
     public CLI(SocketClient s) {
         this.socketClientReader = s.getScr();
-        this.socketClientWriter = this.socketClientReader.getScw();
+        this.socketClientWriter = s.getScw();
     }
 
     @Override

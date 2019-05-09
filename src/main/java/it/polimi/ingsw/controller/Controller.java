@@ -116,12 +116,19 @@ public class Controller {
                 .map(player -> player.getPlayerName())
                 .collect(Collectors.toList());
 
-        return  nameList
-                .indexOf(nameList
-                .stream()
-                .filter(n -> n == name)
-                .collect(Collectors.toList())
-                .get(0));
+        try {
+
+            return nameList
+                    .indexOf(nameList
+                            .stream()
+                            .filter(n -> n == name)
+                            .collect(Collectors.toList())
+                            .get(0));
+
+        }catch (NullPointerException e){
+
+            return -1;
+        }
     }
 
 
@@ -169,5 +176,18 @@ public class Controller {
     public void startNewRound(int playerId) {
         // TODO need to be implemented
     }
+
+    public String getPlayerName(int playerId){
+
+        try {
+
+            return Model.getPlayer(playerId).getPlayerName();
+
+        }catch (NullPointerException e){
+
+            return null;
+        }
+    }
+
 
 }

@@ -67,6 +67,10 @@ public class SocketClientReader extends Thread {
         this.socket = socket;
     }
 
+    public void setScw(SocketClientWriter scw) {
+        this.scw = scw;
+    }
+
     /**
      * Initialize the SocketClientReader, creates a new SocketClientWriter thread and runs it, populate the
      * headersMap containing a link between String headers and functions, and finally enters an infinite loop
@@ -80,8 +84,8 @@ public class SocketClientReader extends Thread {
 
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
-            scw = new SocketClientWriter(socket);
-            scw.start();
+            //scw = new SocketClientWriter(socket);
+            //scw.start();
 
             populateHeadersMap();
 

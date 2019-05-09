@@ -8,6 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,27 +35,34 @@ public class SocketServer extends Thread {
         socketClients = new ArrayList<>();
     }
 
-    private int clientsNum = 0;
+    private static ConcurrentHashMap<Integer,SocketIdentifier> clients = new ConcurrentHashMap<>();
 
     @Override
     public void run() {
         LOGGER.log(INFO, "Starting SocketServer");
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            while (WaitingRoom.getTimerCount() > 0 && clientsNum <= DEFAULT_MAX_CLIENTS) {
+            while (WaitingRoom.getTimerCount() > 0 && clients.size() <= DEFAULT_MAX_CLIENTS) {
                 //TODO need to check the clientsNum part
                 Socket socket = serverSocket.accept();
                 new SocketConnectionReader(socket).start();
                 socketClients.add(socket);
                 System.out.println("[DEBUG] aggiunto client alla lista di connessinoi.");
                 for(Socket s : socketClients) {
-                    System.out.println(s.toString());
+                    System.out.println("inet address: " + s.getInetAddress());
+                    System.out.println("local add: " + s.getLocalAddress());
+                    System.out.println(s.getPort());
                 }
 
-                clientsNum = Server.getClientsNum().addAndGet(1);
+                clients.put(clients.size(), new SocketIdentifier(socket.getInetAddress().toString(), socket.getPort()));
             }
         } catch (
                 IOException e) {
             System.out.println("Server exception " + e.getMessage());
         }
+    }
+
+
+    public static ConcurrentHashMap<Integer, SocketIdentifier> getClients() {
+        return clients;
     }
 }

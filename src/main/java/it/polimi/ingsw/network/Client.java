@@ -4,8 +4,8 @@ import it.polimi.ingsw.model.player.PlayerColor;
 
 public abstract class Client {
 
-    private int gameId;
-    private int playerId;
+    private int gameId = -1;
+    private int playerId = -1;
 
 
     /**
@@ -23,9 +23,16 @@ public abstract class Client {
     public abstract void voteMap(int mapType);
 
     /**
-     * this method will reconnect the player to the server
+     * this method will reconnect the player to the server if the client still run
      */
     public abstract void reconnect();
+
+    /**
+     * this method will reconnect the player to the server if the client was shut down
+     * @param name is the name chosen
+     * @return the player id or -1 if something went wrong
+     */
+    public abstract int reconnect(String name);
 
     /**
      *

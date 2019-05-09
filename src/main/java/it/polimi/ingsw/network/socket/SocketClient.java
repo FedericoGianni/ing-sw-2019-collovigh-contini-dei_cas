@@ -22,6 +22,8 @@ public class SocketClient implements Runnable {
      */
     private SocketClientReader scr;
 
+    private SocketClientWriter scw;
+
     /**
      * If set to false, stops the while loop
      */
@@ -65,7 +67,7 @@ public class SocketClient implements Runnable {
      * @return a reference to the SocketClientWriter which is started inside SocketClientReader method
      */
     public SocketClientWriter getScw(){
-        return getScr().getScw();
+        return scw;
     }
 
     /**
@@ -99,7 +101,10 @@ public class SocketClient implements Runnable {
 
             scr = new SocketClientReader(socket);
             scr.start();
+            scw = new SocketClientWriter(socket);
+            scw.start();
             LOGGER.log(INFO, "Succesfuly started socketClientReader");
+            scr.setScw(scw);
 
             while(active){
                 //don't close this since it keeps socket open

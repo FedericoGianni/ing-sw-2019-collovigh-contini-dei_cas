@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 /**
@@ -14,12 +15,12 @@ public class SocketPing implements Runnable {
 
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = INFO;
+    private static Level level = FINE;
 
     /**
      * The thread will send a "ping" string every DEFAULT_PING_INTERVAL millisecond
      */
-    public static final int DEFAULT_PING_INTERVAL = 1000;
+    public static final int DEFAULT_PING_INTERVAL = 10000;
 
     /**
      * this flag can be set to false to stop the server ping requests, as the while loop continues until active is true

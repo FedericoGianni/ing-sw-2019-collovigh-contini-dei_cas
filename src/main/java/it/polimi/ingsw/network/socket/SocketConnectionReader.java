@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
+import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
@@ -165,7 +167,28 @@ public class SocketConnectionReader extends Thread {
         // login username
         headersMap.put("login", () -> {
             try {
-                int id = Server.getWaitingRoom().addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()));
+
+                String address = socket.getInetAddress().toString();
+                int port = socket.getPort();
+
+                int key = -3;
+
+                SocketIdentifier s = SocketServer
+                        .getClients()
+                        .values()
+                        .stream()
+                        .filter( c -> c.getAddress().equals(address) && c.getPort() == port)
+                        .collect(Collectors.toList())
+                        .get(0);
+
+                for (int i = 0; i < SocketServer.getClients().size(); i++) {
+
+                    if (SocketServer.getClients().get(i) == s) key = i;
+                    
+                }
+
+
+                int id = Server.addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()), key );
                 if(id >= 0){
                     socketConnectionWriter.send("login\fOK");
                 }
@@ -174,6 +197,8 @@ public class SocketConnectionReader extends Thread {
                 socketConnectionWriter.send("login\fNAME_ALREADY_TAKEN");
             }catch (ColorAlreadyTakenException e){
                 socketConnectionWriter.send("login\fCOLOR_ALREADY_TAKEN");
+            }catch (OverMaxPlayerException e){
+                socketConnectionWriter.send("login\fMAX_PLAYER_REACHED");
             }
         });
 

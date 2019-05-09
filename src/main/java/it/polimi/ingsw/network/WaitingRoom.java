@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
+import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,9 @@ public class WaitingRoom {
     private static final int TIMER = 30;
     private static int timerCount = TIMER;
 
-    public static final int DEFAULT_MIN_PLAYERS = 3;
-    public static final int DEFAULT_MAX_PLAYERS = 5;
+    private static final int DEFAULT_MIN_PLAYERS = 3;
+    private static final int DEFAULT_MAX_PLAYERS = 5;
 
-    //private List<String> players;
     private CopyOnWriteArrayList<String> players;
     private List<PlayerColor> colors;
     private Boolean active;
@@ -50,7 +50,7 @@ public class WaitingRoom {
         if (gameId == -1) {
             this.colors = new ArrayList<>();
             this.players = new CopyOnWriteArrayList<>();
-            activeGame = games.addGame();
+
 
             LOGGER.log(Level.FINE,"[OK] Started Waiting Room for new Game");
         }else{
@@ -74,7 +74,7 @@ public class WaitingRoom {
      */
     public synchronized void initGame(){
 
-        this.games.addGame();
+        activeGame = games.addGame();
         this.active = false;
 
         if (this.mapType == 0) Server.setController( new Controller(this.players,this.colors,this.activeGame));
@@ -90,7 +90,7 @@ public class WaitingRoom {
      * @throws NameAlreadyTakenException if the name is already taken
      * @throws ColorAlreadyTakenException of the color is already taken
      */
-    public synchronized int addPlayer(String name, PlayerColor playerColor) throws NameAlreadyTakenException,ColorAlreadyTakenException{
+    public synchronized int addPlayer(String name, PlayerColor playerColor) throws NameAlreadyTakenException,ColorAlreadyTakenException,OverMaxPlayerException{
 
         if (isNameAlreadyTaken(name)) {
 
@@ -102,16 +102,19 @@ public class WaitingRoom {
             throw new ColorAlreadyTakenException(playerColor);
         }
 
+        if (players.size() < DEFAULT_MAX_PLAYERS) {
 
-        players.add(name);
+            players.add(name);
 
-        colors.add(playerColor);
+            colors.add(playerColor);
 
-        if(players.size() >= DEFAULT_MIN_PLAYERS){
-            startTimer();
-        }
+            if (players.size() >= DEFAULT_MIN_PLAYERS) {
+                startTimer();
+            }
 
-        return players.indexOf(name);
+            return players.indexOf(name);
+
+        }else throw new OverMaxPlayerException();
 
     }
 
@@ -169,7 +172,7 @@ public class WaitingRoom {
             public void run() {
                 System.out.println("[DEBUG] WaitingRoomTimer counter: " + timerCount);
                 timerCount--;
-                if(timerCount == 0) {
+                if((timerCount == 0) || ( players.size() == DEFAULT_MAX_PLAYERS )) {
                     System.out.println("[DEBUG] Timer has expired!");
                     //chiama initGame o gestire timer scaduto
                     System.out.println("[DEBUG] AVVIO DELLA PARTITA IN CORSO...");
@@ -185,7 +188,7 @@ public class WaitingRoom {
 
     }
 
-    public int getMapType() {
+    public synchronized int getMapType() {
         return mapType;
     }
 

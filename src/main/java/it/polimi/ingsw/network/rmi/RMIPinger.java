@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.rmi;
 
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.networkexceptions.LostClientException;
 
 import java.util.logging.Level;
@@ -12,6 +13,8 @@ public class RMIPinger implements Runnable{
 
     private static final int WAIT_TIME = 1000;
     private final ToClient target;
+
+    private int pId;
 
 
     public RMIPinger(ToClient client) {
@@ -27,7 +30,7 @@ public class RMIPinger implements Runnable{
 
         try {
 
-            int pId = target.getPid();
+            pId = target.getPid();
 
 
             Boolean b;
@@ -47,6 +50,9 @@ public class RMIPinger implements Runnable{
 
             throw new LostClientException(pId);
 
+        }catch (LostClientException e){
+
+            RMIServer.removeClient(pId);
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, e.getMessage(), e);
