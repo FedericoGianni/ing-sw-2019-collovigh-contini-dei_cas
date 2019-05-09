@@ -23,12 +23,26 @@ public class SocketConnectionWriter extends Thread {
      */
     private PrintWriter output;
 
+    private final Object lock = new Object();
+
     /**
      * Constructor
      * @param socket reference to the stream to be initialized with
      */
     SocketConnectionWriter(Socket socket){
         this.socket = socket;
+    }
+
+    public void signal() {
+        synchronized (lock) {
+            lock.notify();
+        }
+    }
+
+    public void await() throws InterruptedException {
+        synchronized (lock) {
+            lock.wait();
+        }
     }
 
     /**
@@ -40,6 +54,8 @@ public class SocketConnectionWriter extends Thread {
         try {
             output = new PrintWriter(socket.getOutputStream(), true);
             new Thread(new SocketPing(this)).start();
+
+            this.signal();
 
 
         } catch (IOException e) {

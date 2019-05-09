@@ -5,6 +5,9 @@ import it.polimi.ingsw.network.WaitingRoom;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,10 +25,13 @@ public class SocketServer extends Thread {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = INFO;
 
+    private List<Socket> socketClients;
+
     private int port;
 
     public SocketServer(int port){
         this.port = port;
+        socketClients = new ArrayList<>();
     }
 
     private int clientsNum = 0;
@@ -36,7 +42,14 @@ public class SocketServer extends Thread {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (WaitingRoom.getTimerCount() > 0 && clientsNum <= DEFAULT_MAX_CLIENTS) {
                 //TODO need to check the clientsNum part
-                new SocketConnectionReader(serverSocket.accept()).start();
+                Socket socket = serverSocket.accept();
+                new SocketConnectionReader(socket).start();
+                socketClients.add(socket);
+                System.out.println("[DEBUG] aggiunto client alla lista di connessinoi.");
+                for(Socket s : socketClients) {
+                    System.out.println(s.toString());
+                }
+
                 clientsNum = Server.getClientsNum().addAndGet(1);
             }
         } catch (
