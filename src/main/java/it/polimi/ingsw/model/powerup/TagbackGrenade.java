@@ -18,6 +18,7 @@ public class TagbackGrenade extends PowerUp {
     public TagbackGrenade(Color color) {
 
         super(color);
+        this.setType(PowerUpType.TAG_BACK_GRENADE);
     }
 
     /**

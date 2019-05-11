@@ -18,6 +18,7 @@ public class Teleporter extends PowerUp {
     public Teleporter(Color color) {
 
         super(color);
+        this.setType(PowerUpType.TELEPORTER);
     }
 
     /**

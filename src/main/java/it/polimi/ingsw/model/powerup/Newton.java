@@ -23,6 +23,8 @@ public class Newton extends PowerUp {
     public Newton(Color color) {
 
         super(color);
+
+        this.setType(PowerUpType.NEWTON);
     }
 
     /**

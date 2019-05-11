@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.model.weapons.WeaponBag;
+import it.polimi.ingsw.view.virtualView.Observer;
+import it.polimi.ingsw.view.virtualView.Observers;
+import it.polimi.ingsw.view.virtualView.StatsObserver;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +34,8 @@ public class Player {
         this.color = color;
 
         this.stats = new Stats(null);
+        this.stats.addObserver(Observers.getStatsObserver(id));
+
         this.currentPowerUps = new PowerUpBag();
         this.ammo = new AmmoBag();
         this.currentWeapons = new WeaponBag();

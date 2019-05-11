@@ -5,14 +5,16 @@ import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.map.Cell;
+import it.polimi.ingsw.view.cacheModel.CachedStats;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Stats {
+public class Stats extends Subject {
 
     private static final int MAX_DMG = 12;
     private static final int MAX_MARKS = 3;
@@ -53,7 +55,9 @@ public class Stats {
      * @param score set the score
      */
     public void setScore(int score) {
+
         this.score = score;
+        updateAll(new CachedStats(this));
     }
 
     /**
@@ -63,6 +67,7 @@ public class Stats {
     public void addScore(int score){
 
         this.score = this.score + score ;
+        updateAll(new CachedStats(this));
     }
 
     /**
@@ -79,7 +84,9 @@ public class Stats {
      * @param deaths the deaths count of the player
      */
     public void setDeaths(int deaths) {
+
         this.deaths = deaths;
+        updateAll(new CachedStats(this));
     }
 
     /**
@@ -89,6 +96,7 @@ public class Stats {
     public void addDeath(){
 
         this.deaths++;
+        updateAll(new CachedStats(this));
     }
 
     public int getPlayerId(){
@@ -119,6 +127,7 @@ public class Stats {
 
         if (marks.size() <= MAX_MARKS) {
             this.marks = new ArrayList<>(marks);
+            updateAll(new CachedStats(this));
         }
         else {
             throw new OverMaxMarkException();
@@ -134,6 +143,7 @@ public class Stats {
 
         if (this.marks.size()<MAX_MARKS){
             this.marks.add(playerId);
+            updateAll(new CachedStats(this));
         }
 
     }
@@ -155,6 +165,7 @@ public class Stats {
 
         if (dmgTaken.size() <= MAX_DMG) {
             this.dmgTaken = new ArrayList<>(dmgTaken);
+            updateAll(new CachedStats(this));
         }
         else throw new OverMaxDmgException();
 
@@ -179,6 +190,7 @@ public class Stats {
 
 
             marks.removeAll(Collections.singleton(playerId));
+            updateAll(new CachedStats(this));
         }
 
         if (this.dmgTaken.size() < MAX_DMG ){
@@ -190,6 +202,8 @@ public class Stats {
                     this.dmgTaken.add(playerId);
                 }
             }
+
+            updateAll(new CachedStats(this));
         }
 
 
@@ -207,6 +221,12 @@ public class Stats {
         }
     }
 
+    public void resetDmg(){
+
+        this.dmgTaken = new ArrayList<>();
+        updateAll(new CachedStats(this));
+    }
+
     /**
      *
      * @return current position of the player
@@ -221,10 +241,8 @@ public class Stats {
      */
     public void setCurrentPosition(Cell currentPosition) {
         this.currentPosition = currentPosition;
+        updateAll(new CachedStats(this));
     }
 
-    public void resetDmg(){
 
-        this.dmgTaken = new ArrayList<>();
-    }
 }

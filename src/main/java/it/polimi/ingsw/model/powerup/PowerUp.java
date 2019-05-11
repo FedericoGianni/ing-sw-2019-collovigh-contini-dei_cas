@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.Color;
 public abstract class PowerUp {
 
     private final Color color;
+    private PowerUpType type;
 
     /**
      *
@@ -30,5 +31,13 @@ public abstract class PowerUp {
 
     public Color getColor() {
         return color;
+    }
+
+    public PowerUpType getType() {
+        return type;
+    }
+
+    public void setType(PowerUpType type) {
+        this.type = type;
     }
 }

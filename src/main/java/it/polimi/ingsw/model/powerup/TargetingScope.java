@@ -13,6 +13,7 @@ public class TargetingScope extends PowerUp {
     public TargetingScope(Color color) {
 
         super(color);
+        this.setType(PowerUpType.TARGETING_SCOPE);
     }
 
     /**

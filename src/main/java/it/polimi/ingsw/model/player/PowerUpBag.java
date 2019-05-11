@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.powerup.PowerUp;
@@ -8,7 +9,7 @@ import it.polimi.ingsw.model.powerup.PowerUp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PowerUpBag  implements Bag<PowerUp>{
+public class PowerUpBag  extends Subject implements Bag<PowerUp> {
 
     private static final int MAX_POWER_UPS = 3;
 
