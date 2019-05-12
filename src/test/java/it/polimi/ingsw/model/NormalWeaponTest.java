@@ -64,8 +64,8 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (DeadPlayerException e) {
             e.printStackTrace();
-        } catch (UncorrectTargetDistance uncorrectTargetDistance) {
-            uncorrectTargetDistance.printStackTrace();
+        } catch (UncorrectTargetDistanceException uncorrectTargetDistanceException) {
+            uncorrectTargetDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
             e.printStackTrace();
         } catch (OverKilledPlayerException e) {
@@ -105,8 +105,8 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (DeadPlayerException e) {
             e.printStackTrace();
-        } catch (UncorrectTargetDistance uncorrectTargetDistance) {
-            uncorrectTargetDistance.printStackTrace();
+        } catch (UncorrectTargetDistanceException uncorrectTargetDistanceException) {
+            uncorrectTargetDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
             e.printStackTrace();
         } catch (OverKilledPlayerException e) {
@@ -148,8 +148,8 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (DeadPlayerException e) {
             e.printStackTrace();
-        } catch (UncorrectTargetDistance uncorrectTargetDistance) {
-            uncorrectTargetDistance.printStackTrace();
+        } catch (UncorrectTargetDistanceException uncorrectTargetDistanceException) {
+            uncorrectTargetDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
             e.printStackTrace();
         } catch (OverKilledPlayerException e) {

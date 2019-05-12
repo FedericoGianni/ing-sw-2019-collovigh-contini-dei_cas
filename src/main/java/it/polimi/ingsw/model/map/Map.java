@@ -421,9 +421,12 @@ public class Map {
         }
     }
 
-
-
-
+    /**
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
     public static int getDist(Player p1, Player p2)
     {
         Map map= Model.getMap();
@@ -434,6 +437,24 @@ public class Map {
         return abs(d1.x - d2.x) + abs(d1.y - d2.y);
 
     }
+
+    /**
+     *
+     * @param c1
+     * @param c2
+     * @return
+     */
+    public static int getDist(Cell c1, Cell c2)
+    {
+        Map map= Model.getMap();
+        Point d1, d2;
+        d1 = map.cellToCoord(c1);
+        d2 = map.cellToCoord(c2);
+
+        return abs(d1.x - d2.x) + abs(d1.y - d2.y);
+
+    }
+
 
     /**
      *

@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.powerup;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
+import it.polimi.ingsw.model.map.Cell;
+import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.MicroEffect;
 import it.polimi.ingsw.model.weapons.Weapon;
@@ -59,8 +61,8 @@ public class Mover extends MicroEffect {
 
     }
 
-    @Override
-    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException {
+
+    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistanceException, SeeAblePlayerException {
 
         if(facoltative==true)
         {
@@ -68,11 +70,33 @@ public class Mover extends MicroEffect {
         }
         else if(target==true)//you move the target
         {
-            //move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+            if(toCell==true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+            {
+                playerList.get(0).setPlayerPos(c);
+            }else {
+                if(Map.getDist(c, playerList.get(0).getCurrentPosition())==cellNumber)//check if the distace is correct
+                {
+                    playerList.get(0).setPlayerPos(c);
+                }
+                else{
+                    throw new UncorrectTargetDistanceException();
+                }
+            }
         }
         else if(target==false)//the shooter is moved
         {
-            //move to cell, then check if the distance is correft if the distane is needed ancd if you ca move there for real
+            if(toCell==true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+            {
+                w.isPossessedBy().setPlayerPos(c);
+            }else {
+                if(Map.getDist(c, w.isPossessedBy().getCurrentPosition())==cellNumber)//check if the distace is correct
+                {
+                   w.isPossessedBy().setPlayerPos(c);
+                }
+                else{
+                    throw new UncorrectTargetDistanceException();
+                }
+            }
         }
     }
 

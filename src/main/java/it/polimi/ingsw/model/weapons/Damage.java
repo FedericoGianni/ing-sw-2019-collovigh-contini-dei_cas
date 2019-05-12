@@ -4,6 +4,7 @@ import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import org.json.simple.JSONArray;
@@ -221,7 +222,7 @@ public class Damage extends MicroEffect {
     }
 
 
-    public void microEffectApplicator(ArrayList<Player> playerList,Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException, FrenzyActivatedException, NotCorrectPlayerNumberException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
+    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistanceException, SeeAblePlayerException, FrenzyActivatedException, NotCorrectPlayerNumberException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
         if(alreadyTargeted==true && differentPlayer==false)
         {
             w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);//playerId=0 bcz only one player the same as the first shot
@@ -280,20 +281,20 @@ public class Damage extends MicroEffect {
         return false;
     }
 
-    private void distance(Player target,Player shooter) throws UncorrectTargetDistance, SeeAblePlayerException, OverKilledPlayerException, DeadPlayerException, FrenzyActivatedException//distance, called for every player
+    private void distance(Player target,Player shooter) throws UncorrectTargetDistanceException, SeeAblePlayerException, OverKilledPlayerException, DeadPlayerException, FrenzyActivatedException//distance, called for every player
     {
         if(distMin<10)
         {
             if(Map.getDist(target,shooter)>=distMin){//--------wait
                 target.addDmg(shooter.getPlayerId(),damage);
-            }else{throw new UncorrectTargetDistance();}
+            }else{throw new UncorrectTargetDistanceException();}
 
         }else if(distMin>=10 && distMin <100)
         {
             //distMin/10 is the maximun distance
             if(Map.getDist(target,shooter)<=(distMin/100)){
                 target.addDmg(shooter.getPlayerId(),damage);
-            }else{throw new UncorrectTargetDistance();}
+            }else{throw new UncorrectTargetDistanceException();}
         }else if(distMin==100)//if the shooter can't see the target
         {
             if(!shooter.canSee().contains(target)){
@@ -303,7 +304,7 @@ public class Damage extends MicroEffect {
             //a player that is exactly distMin/1000 away
             if(Map.getDist(target,shooter)==(distMin/1000)){
                 target.addDmg(shooter.getPlayerId(),damage);
-            }else{throw new UncorrectTargetDistance();}
+            }else{throw new UncorrectTargetDistanceException();}
         }
     }
 

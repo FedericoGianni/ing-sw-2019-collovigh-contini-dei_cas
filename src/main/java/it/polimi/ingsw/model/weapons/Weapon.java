@@ -57,7 +57,7 @@ public abstract class Weapon {
     }
 
 
-    public abstract void shoot(ArrayList <Player> target,ArrayList<MacroEffect> effects)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
+    public abstract void shoot(ArrayList <Player> target,ArrayList<MacroEffect> effects)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
     public abstract boolean isSpecial();
 
 
