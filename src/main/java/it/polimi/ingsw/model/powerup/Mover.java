@@ -83,7 +83,7 @@ public class Mover extends MicroEffect {
                 }
             }
         }
-        else if(target==false)//the shooter is moved
+        else//the shooter is moved
         {
             if(toCell==true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
             {
