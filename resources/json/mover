@@ -6,7 +6,8 @@
       "afterShooting": "true",
       "facoltative": "false",
       "toCell": "null",
-      "target":"false"
+      "target":"false",
+      "mycell": "false"
     }
   },
   {
@@ -16,7 +17,8 @@
       "afterShooting": "false",
       "facoltative": "true",
       "toCell": "false",
-      "target":"false"
+      "target":"true",
+      "mycell": "false"
     }
   },
   {
@@ -26,7 +28,8 @@
       "afterShooting": "true",
       "facoltative": "true",
       "toCell": "false",
-      "target":"true"
+      "target":"true",
+      "mycell": "false"
     }
   },
   {
@@ -36,7 +39,8 @@
       "afterShooting": "true",
       "facoltative": "false",
       "toCell": "false",
-      "target":"false"
+      "target":"false",
+      "mycell": "false"
     }
   },
   {
@@ -46,7 +50,8 @@
       "afterShooting": "false",
       "facoltative": "false",
       "toCell": "true",
-      "target":"false"
+      "target":"false",
+      "mycell": "false"
     }
   },
   {
@@ -56,7 +61,8 @@
       "afterShooting": "true",
       "facoltative": "true",
       "toCell": "false",
-      "target":"true"
+      "target":"true",
+      "mycell": "false"
     }
   },
   {
@@ -66,7 +72,8 @@
       "afterShooting": "false",
       "facoltative": "true",
       "toCell": "false",
-      "target":"true"
+      "target":"true",
+      "mycell": "true"
     }
   }
 

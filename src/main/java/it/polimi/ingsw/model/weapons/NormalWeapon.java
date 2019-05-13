@@ -6,6 +6,7 @@ import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -26,6 +27,18 @@ public class NormalWeapon extends Weapon{
     private ArrayList<MacroEffect> effects;
     private static ArrayList<NormalWeapon> normalWeapons =new ArrayList<>();
 
+    public boolean isMoveBefore() {
+        return moveBefore;
+    }
+
+    public void enableMoveBefore() {
+        this.moveBefore =true;
+    }
+    public void disableMoveBefore() {
+        this.moveBefore =false;
+    }
+
+    private boolean moveBefore;
 
 
 
@@ -239,10 +252,19 @@ public class NormalWeapon extends Weapon{
      *
      * @param target
      * @param mE
+     * @param c
      * @throws WeaponNotLoadedException
+     * @throws OverKilledPlayerException
+     * @throws DeadPlayerException
+     * @throws PlayerInSameCellException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     * @throws FrenzyActivatedException
      */
-    public void shoot(ArrayList<Player> target, ArrayList<MacroEffect> mE)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException,UncorrectTargetDistance,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
+    public void shoot(ArrayList<Player> target, ArrayList<MacroEffect> mE, Cell c)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
     {
+        int i=1;
         try{
             if(this.isLoaded==false)
             {
@@ -261,11 +283,23 @@ public class NormalWeapon extends Weapon{
 
                     }else{throw new NotEnoughAmmoException();}}
                 //here i can shoot for real
+
                 for(MicroEffect micro: item.getMicroEffects())//iterates microEffects
                 {
-                    micro.microEffectApplicator(target,this);//the method that applies the effects
+
+                    if(micro.moveBefore()==true && moveBefore)//if i need to move before shooting
+                    {
+                        micro.microEffectApplicator(target,this,null);
+                        item.getMicroEffects().remove(micro);
+
+                    }
                 }
 
+                for(MicroEffect micro: item.getMicroEffects())//iterates microEffects
+                {
+                    micro.microEffectApplicator(target,this,null);//the method that applies the effects
+                }
+                i++;
             }
         }catch(WeaponNotLoadedException e){e.printStackTrace();}
         catch (CardNotPossessedException e) { e.printStackTrace(); }

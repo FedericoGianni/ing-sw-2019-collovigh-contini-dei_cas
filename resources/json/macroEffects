@@ -146,7 +146,7 @@
           "type": "302"
         },
         {
-          "type" : "201"
+          "type" : "128"
         }
       ]
     }
@@ -156,10 +156,10 @@
       "name": "in punisher mode",
       "MicroEff": [
         {
-          "type": "109"
+          "type" : "307"
         },
         {
-          "type" : "307"
+          "type": "109"
         }
       ],
       "cost": [

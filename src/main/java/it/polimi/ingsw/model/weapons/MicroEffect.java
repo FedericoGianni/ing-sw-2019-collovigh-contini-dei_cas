@@ -4,6 +4,7 @@ import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
+import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 
 import java.util.ArrayList;
@@ -35,10 +36,22 @@ public abstract class MicroEffect {
     public abstract MicroEffect copy();
 
     public abstract void print();
+
     /**
+     *
      * @param playerList
-     * apply the microEffect consequences
+     * @param w
+     * @param c requires cell where to move in case you move, is null if you use a non mover microeffect
+     * @throws OverKilledPlayerException
+     * @throws DeadPlayerException
+     * @throws PlayerInSameCellException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     * @throws FrenzyActivatedException
+     * @throws DifferentPlayerNeededException
+     * @throws NotCorrectPlayerNumberException
      */
-    public abstract void microEffectApplicator(ArrayList<Player> playerList,Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException, FrenzyActivatedException, DifferentPlayerNeededException, NotCorrectPlayerNumberException;
+    public abstract void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, DifferentPlayerNeededException, NotCorrectPlayerNumberException;
     public abstract boolean moveBefore();
 }

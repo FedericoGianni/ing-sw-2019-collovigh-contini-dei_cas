@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.powerup;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
+import it.polimi.ingsw.model.map.Cell;
+import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.MicroEffect;
 import it.polimi.ingsw.model.weapons.Weapon;
@@ -25,18 +27,20 @@ public class Mover extends MicroEffect {
     private boolean facoltative;//sometimes you don't have to move, you can choose
     private boolean toCell;//you have to move to a specified cell if this flag is true--must change to a Cell type or to a point type
     private boolean target;//set true if you need to move the target not the shooter
+    private boolean myCell;//set true if i need to move other players to my cell
     private static ArrayList <Mover> weaponMov=new ArrayList<>();
 
     //if something moves before shooting pay attention, you need to calculate if you can shoot him after the move
 
 
-    public Mover(int n,boolean a,boolean b,boolean c,boolean d,boolean e){
+    public Mover(int n,boolean a,boolean b,boolean c,boolean d,boolean e,boolean f){
         this.cellNumber=n;
         this.beforeShooting=a;
         this.afterShooting=b;
         this.facoltative=c;
         this.toCell=d;
         this.target=e;
+        this.myCell=f;
     }
 
     @Override
@@ -52,29 +56,94 @@ public class Mover extends MicroEffect {
     @Override
     public void print() {
        System.out.println("cellNumber: "+cellNumber);
-        System.out.println(beforeShooting);
+        System.out.println("beforeShooting"+beforeShooting);
 
-        System.out.println(afterShooting);
+        System.out.println("afterShooting"+afterShooting);
+        System.out.println("facoltative: "+facoltative);
+        System.out.println("target: "+target);
+        System.out.println("myCell: "+myCell);
 
 
     }
 
-    @Override
-    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException {
+
+    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException {
 
         if(facoltative==true)
         {
-            if(playerList==null) return;//you can do nothing
+            if(playerList==null) {;return; }//you can do nothing
         }
-        else if(target==true)//you move the target
+        if(target==true)//you move the target
         {
-            //move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+            if(myCell==true)//tractor beam
+            {
+                if(playerList.size()>1)//tractor beam peculiarities--max 2 targets, in this case is another
+                {
+                    playerList.get(1).setPlayerPos(w.isPossessedBy().getCurrentPosition());
+                }else{//case same target
+                    playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
+                }
+            }
+            else if(toCell==true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+            {
+                playerList.get(0).setPlayerPos(c);
+            }
+            else{ if(c==null)c=playerList.get(0).getCurrentPosition();//may not be enough
+                if(toCell)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+                {
+                    playerList.get(0).setPlayerPos(c);
+                }else {
+                    if(cellNumber>10)//exactly that distance
+                    {
+                        if(Map.getDist(c, playerList.get(0).getCurrentPosition())==cellNumber)//check if the distace is correct
+                        {
+                            playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
+                        }
+                        else{
+                            throw new UncorrectDistanceException();
+                        }
+                    }
+                    else{//cell number is max
+                        if(Map.getDist(c, playerList.get(0).getCurrentPosition())<=cellNumber)//check if the distace is correct
+                        {
+                            playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
+                        }
+                        else{
+                            throw new UncorrectDistanceException();
+                        }
+                    }
+
+                }
+            }
         }
-        else if(target==false)//the shooter is moved
-        {
-            //move to cell, then check if the distance is correft if the distane is needed ancd if you ca move there for real
+        else//the shooter is moved
+            if(toCell==true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+            {
+                w.isPossessedBy().setPlayerPos(c);
+            }else {
+                if(cellNumber>10)//exactly that distance
+                {
+                    if(Map.getDist(c, w.isPossessedBy().getCurrentPosition())==cellNumber)//check if the distace is correct
+                    {
+                        w.isPossessedBy().setPlayerPos(c);
+                    }
+                    else{
+                        throw new UncorrectDistanceException();
+                    }
+                }
+                else{//cell number is max
+                    if(Map.getDist(c, w.isPossessedBy().getCurrentPosition())<=cellNumber)//check if the distace is correct
+                    {
+                        w.isPossessedBy().setPlayerPos(c);
+                    }
+                    else{
+                        throw new UncorrectDistanceException();
+                    }
+                }
+
+            }
         }
-    }
+
 
     @Override
     public boolean moveBefore() {
@@ -208,8 +277,12 @@ public class Mover extends MicroEffect {
         String dist = (String) employeeObject.get("target");
         //System.out.println(melee);
 
+        //Get melee
+        String my = (String) employeeObject.get("mycell");
+        //System.out.println(melee);
 
-        Mover dd=new Mover(Integer.parseInt(t),Boolean.parseBoolean(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(melee),Boolean.parseBoolean(diffP),Boolean.parseBoolean(dist));
+
+        Mover dd=new Mover(Integer.parseInt(t),Boolean.parseBoolean(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(melee),Boolean.parseBoolean(diffP),Boolean.parseBoolean(dist),Boolean.parseBoolean(my));
         Mover.insertWeaponMov(dd);
 
     }

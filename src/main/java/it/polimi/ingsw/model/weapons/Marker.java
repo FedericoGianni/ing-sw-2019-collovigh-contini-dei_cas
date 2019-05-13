@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.weapons;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
+import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -161,13 +162,13 @@ public class Marker extends MicroEffect {
      * @throws DeadPlayerException
      * @throws PlayerInSameCellException
      * @throws PlayerInDifferentCellException
-     * @throws UncorrectTargetDistance
+     * @throws UncorrectDistanceException
      * @throws SeeAblePlayerException
      * @throws DifferentPlayerNeededException
      * @throws NotCorrectPlayerNumberException
      */
     @Override
-    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistance, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException {
+    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException {
         if (differentPlayer==true)//only one case
         {
             if(w.getFirstTarget()!=playerList.get(0))//weapons that requires precedent players always have one target
