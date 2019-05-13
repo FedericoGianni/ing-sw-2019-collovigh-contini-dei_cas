@@ -1,28 +1,28 @@
-#Hard Deadline 14/05/2019
-#Communication
+# Hard Deadline 14/05/2019  
+# Communication
 
-###Introduction
+### Introduction
 For the Communication protocol design we have chosen to have an async bidirectional connection between the clients and server, so that
 a client can send information to the server and the server can send information to the client without a specific sequence.
 That way evey time the model, which is inside the server, is updated, it updates a virtual view (server side). The virtual view then passes the informations
 throught newtork to udpate the real view that are local to every client.
 
-####RMI
+#### RMI
 For the RMI flow:
-#####LOGIN:
+##### LOGIN:
 the clients login and registers itself by calling a function with the IP address and the bounded name as a parameter
-#####TURN:
+##### TURN:
 the server has a map bounding the playerId to the correspondent client and calls the functions on the current one
-#####UPDATES:
+##### UPDATES:
 updates are sent like socket with Json objects passed as parameters
 
-####Socket
+#### Socket
 Both client and server can send to each other a string formatted in this output: "header\fparam1\fparam2". The string is then sent and desirialized by the receiver.
 The receiver splits the String every time it encounters the special character '\f' produces an array of Strings, and look for the function associated to the header. The other parameters are used as parameters to call that function. The list of possible function is stored in a HashMap, one inside client and one inside server. the function called by the clients are then binded to a function invocation inside the controller, which is accessible by a static attribute inside the server.
 The socket which connect a single client to the socket server is handled with 4 threads, 2 for each stream of client and server: 2 for input stream and ouput stream for client, and the other 2 for the server. That way a thread for each side can be kept on listening for incoming messages and process them by calling the function associated to that thread inside the HashMap, both sides. The other thread is instead used to send messages to the output stream of the socket. This way both client and server are always listening for incoming messages and can send messages, working in an asyncronus way.
 Here we designed the list of messages which will be sent by client and server in the game flow, following the cronological order of the game phases.
 
-#####Login phase
+##### Login phase
      ┌──────┐                    ┌──────┐
      │Client│                    │Server│
      └──┬───┘                    └──┬───┘
@@ -56,7 +56,7 @@ In the first phase the client is asked to choose a name and a color to join the 
 After at least 3 clients has been connected, the Waiting Room starts a timer. When it expires the game begins with the number of player who have correctly done the login procedure before the timer end.
 If the login has been completed succesfully then the server reply back to the client with a "login\fok" string. If not, it can send back to the client a few messages, like "login\fNAME_ALREADY_TAKEN" or "login\fCOLOR_ALREADY_TAKEN". When those reply messages are read by the client, it invokes a method to retry the login.
 
-#####ping-pong protocol focus:
+##### ping-pong protocol focus:
 runs in a separate thread handled by the server, which sends to every client a ping message every XX milliseconds. The client receives the ping message,
 looks for a function associated with that string inside its HashMap of function, find the one associated with that header and executes it, replying back to the server
 a pong message, to acknowledge the server that it is stil online.
@@ -78,7 +78,7 @@ This protocol is useful to handle player disconnections.
 
 
 
-#####Reconnect a player after disconnect
+##### Reconnect a player after disconnect
      ┌──────┐               ┌──────┐
      │Client│               │Server│
      └──┬───┘               └──┬───┘
@@ -96,7 +96,7 @@ This protocol is useful to handle player disconnections.
 This phase is used to reconnect a player after it has disconnected from the server. The client send a String which contains his name and the server reply back
 with ok and the id of the player if the reconnect procedure has been performed succesfully, otherwise it send a !ok parameter in the reply.
 
-####Start Game
+#### Start Game
      ┌──────┐           ┌──────┐
      │Server│           │Client│
      └──┬───┘           └──┬───┘
@@ -111,7 +111,7 @@ with ok and the id of the player if the reconnect procedure has been performed s
 
 When the Waiting Room timer expires (if there are 3 clients connected) or 5 clients have succesfully completed the login phase, the Server will send to every connected client a String which informs that the game is started, followed by the ID of every player.    
 
-#####Client receives JSON representing info which has to be saved locally in the simplified model
+##### Client receives JSON representing info which has to be saved locally in the simplified model
      ┌──────┐           ┌──────┐
      │Server│           │Client│
      └──┬───┘           └──┬───┘
@@ -133,11 +133,11 @@ Here's an example of how a json file containing information about the model woul
 populate its simplifed model class accordingly to the data.
 {"score":10,"deaths":2,"marks":[0],"dmgTaken":[0,0,1],"currentPosition":{"x":1,"y":1}}
 
-####TURN
+#### TURN
 The turn is divided in 6 phases. The server informs the current player that his turn has started by sending a String "yourTurn\fphase0". That function will then
 invoke a method of the user interface class to display a console asking the player what he wants to do.
 
-#####phase 0 pickPowerUp to determin spawn point place
+##### phase 0 pickPowerUp to determin spawn point place
      ┌──────┐                                                          ┌──────┐
      │Server│                                                          │Client│
      └──┬───┘                                                          └──┬───┘
@@ -153,7 +153,7 @@ invoke a method of the user interface class to display a console asking the play
      │Server│                                                          │Client│
      └──────┘                                                          └──────┘
 
-#####phase1 If client wants to use pickPowerUp
+##### phase1 If client wants to use pickPowerUp
      ┌──────┐                                                 ┌──────┐
      │Server│                                                 │Client│
      └──┬───┘                                                 └──┬───┘
@@ -174,7 +174,7 @@ having a header string for every different action. That way the server will rece
 (there will still be some validation inside the client) reply back ok, otherwise it will reply with !ok, invoking a method inside the user interface to let
 him redo the action (there will be a time limit for every turn).
 
-#####phase2 [ACTIONS] possible actions coded into a JSON file.
+##### phase2 [ACTIONS] possible actions coded into a JSON file.
      ┌──────┐                 ┌──────┐
      │Server│                 │Client│
      └──┬───┘                 └──┬───┘
@@ -196,7 +196,7 @@ him redo the action (there will be a time limit for every turn).
 here's some example of how a json file containing an action would be:
 {"type":"MOVE","moves":["n","n","w"],"finalPos":{"x":2,"y":2}}
 
-#####phase3
+##### phase3
 same as phase1, but if the previous action was shoot, the target can use takeback granade and the shooter can continue
 with the phase3 of his turn, in which he decide if use or not a powerup.
 
@@ -233,7 +233,7 @@ At the same time the shooted player will receive a string message that informs t
      │Server│          │Client│
      └──────┘          └──────┘
 
-#####phase4
+##### phase4
 
      ┌──────┐                 ┌──────┐
      │Server│                 │Client│
@@ -253,7 +253,7 @@ At the same time the shooted player will receive a string message that informs t
      │Server│                 │Client│
      └──────┘                 └──────┘
 
-#####phase5
+##### phase5
 
      ┌──────┐                                                 ┌──────┐
      │Server│                                                 │Client│
@@ -287,7 +287,7 @@ At the same time the shooted player will receive a string message that informs t
      │Server│          │Client│
      └──────┘          └──────┘
 
-#####phase6 RELOAD up to 3 times (max 3 weapons)
+##### phase6 RELOAD up to 3 times (max 3 weapons)
 uso reload\f!ok used also to end the player's turn
 
      ┌──────┐                            ┌──────┐
@@ -307,7 +307,7 @@ uso reload\f!ok used also to end the player's turn
 
 
 Alternative. have 6 encoding string which represent the different actions which can be done by that player.
-#####Movement
+##### Movement
 
      ┌──────┐          ┌──────┐
      │Client│          │Server│
