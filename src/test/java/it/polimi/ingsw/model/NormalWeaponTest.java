@@ -17,7 +17,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertNotNull;
+import static org.testng.AssertJUnit.assertEquals;
 
 class NormalWeaponTest {
 
@@ -57,15 +59,15 @@ class NormalWeaponTest {
         try{
             ArrayList <MacroEffect>mEf=new ArrayList<>();
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
-            shooter.getWeapons().get(0).shoot(targets,mEf);
+            shooter.getWeapons().get(0).shoot(targets,mEf,null);
             //System.out.println(target1.getStats().getDmgTaken());
         }
         catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
             e.printStackTrace();
         } catch (DeadPlayerException e) {
             e.printStackTrace();
-        } catch (UncorrectTargetDistanceException uncorrectTargetDistanceException) {
-            uncorrectTargetDistanceException.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
             e.printStackTrace();
         } catch (OverKilledPlayerException e) {
@@ -100,13 +102,13 @@ class NormalWeaponTest {
             ArrayList <MacroEffect>mEf=new ArrayList<>();
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(1));//costs 1 red AmmoCube
-            shooter.getWeapons().get(0).shoot(targets,mEf);}
+            shooter.getWeapons().get(0).shoot(targets,mEf,null);}
         catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
             e.printStackTrace();
         } catch (DeadPlayerException e) {
             e.printStackTrace();
-        } catch (UncorrectTargetDistanceException uncorrectTargetDistanceException) {
-            uncorrectTargetDistanceException.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
             e.printStackTrace();
         } catch (OverKilledPlayerException e) {
@@ -141,15 +143,19 @@ class NormalWeaponTest {
             ArrayList <MacroEffect>mEf=new ArrayList<>();
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(1));//costs 1 red AmmoCube
-            shooter.getWeapons().get(0).shoot(targets,mEf);
+
+
+
+
+            shooter.getWeapons().get(0).shoot(targets,mEf,null);
 
         }
         catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
             e.printStackTrace();
         } catch (DeadPlayerException e) {
             e.printStackTrace();
-        } catch (UncorrectTargetDistanceException uncorrectTargetDistanceException) {
-            uncorrectTargetDistanceException.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
             e.printStackTrace();
         } catch (OverKilledPlayerException e) {
@@ -159,4 +165,52 @@ class NormalWeaponTest {
         }
     }
 
+    @Test
+    void shoot4() throws FrenzyActivatedException{//Shoot, 2 effects and mover effect taht moves the target in the shooter cell
+        weaponsCreator();
+
+        List<String>  names=new ArrayList<>();
+        names.add("shooter");
+        names.add("target");
+        List<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.PURPLE);
+        Model m=new Model(names,pc,2);
+
+        Player shooter= Model.getGame().getPlayers().get(0);
+        Player target1=Model.getGame().getPlayers().get(1);
+        shooter.setPlayerPos(Model.getMap().getCell(0,3));
+
+        target1.setPlayerPos(Model.getMap().getCell(1,3));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
+        shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
+        ArrayList targets=new ArrayList();
+        targets.add(target1);
+        try{
+
+
+            ArrayList <MacroEffect>mEf=new ArrayList<>();
+            mEf.add(NormalWeapon.getNormalWeapons().get(5).getEffects().get(0));//tractor beam
+            mEf.add(NormalWeapon.getNormalWeapons().get(5).getEffects().get(1));//costs 1 red and 1 yellow AmmoCube
+            NormalWeapon.getNormalWeapons().get(5).enableMoveBefore();
+
+
+            shooter.getWeapons().get(0).shoot(targets,mEf,target1.getCurrentPosition());
+            assertEquals(shooter.getCurrentPosition(),target1.getCurrentPosition());
+        }
+        catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (DeadPlayerException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (OverKilledPlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        }
+    }
 }

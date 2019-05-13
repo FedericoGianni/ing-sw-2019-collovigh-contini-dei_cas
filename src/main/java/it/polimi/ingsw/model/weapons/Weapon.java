@@ -7,6 +7,7 @@ import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.player.Player;
 
@@ -57,7 +58,7 @@ public abstract class Weapon {
     }
 
 
-    public abstract void shoot(ArrayList <Player> target,ArrayList<MacroEffect> effects)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
+    public abstract void shoot(ArrayList <Player> target, ArrayList<MacroEffect> effects, Cell c)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
     public abstract boolean isSpecial();
 
 

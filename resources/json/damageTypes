@@ -308,6 +308,17 @@
       "distMin": "0",
       "alreadyTargeted": "false"
     }
+  },
+  {
+    "Damage": {
+      "damage": "1",
+      "playerNum": "1",
+      "seeAbleTargetNeeded": "true",
+      "melee": "false",
+      "differentPlayer":"false",
+      "distMin": "0",
+      "alreadyTargeted": "false"
+    }
   }
 
 

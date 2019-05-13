@@ -162,13 +162,13 @@ public class Marker extends MicroEffect {
      * @throws DeadPlayerException
      * @throws PlayerInSameCellException
      * @throws PlayerInDifferentCellException
-     * @throws UncorrectTargetDistanceException
+     * @throws UncorrectDistanceException
      * @throws SeeAblePlayerException
      * @throws DifferentPlayerNeededException
      * @throws NotCorrectPlayerNumberException
      */
     @Override
-    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectTargetDistanceException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException {
+    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException {
         if (differentPlayer==true)//only one case
         {
             if(w.getFirstTarget()!=playerList.get(0))//weapons that requires precedent players always have one target
