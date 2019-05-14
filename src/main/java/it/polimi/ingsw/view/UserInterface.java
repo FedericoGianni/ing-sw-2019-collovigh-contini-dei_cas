@@ -2,9 +2,11 @@ package it.polimi.ingsw.view;
 
 public interface UserInterface {
 
-    public void login();
+    void login();
 
-    public void retryLogin();
+    void retryLogin();
+
+    void startPhase0();
 
 
 }

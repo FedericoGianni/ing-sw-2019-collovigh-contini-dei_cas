@@ -22,4 +22,13 @@ public class CachedPowerUp implements Serializable {
     public PowerUpType getType() {
         return type;
     }
+
+
+    @Override
+    public String toString() {
+        return "PowerUp{" +
+                "color=" + color +
+                ", type=" + type +
+                '}';
+    }
 }

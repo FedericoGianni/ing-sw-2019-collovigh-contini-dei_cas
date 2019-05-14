@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.cacheModel.CachedPowerUp;
 
 public abstract class Client {
 
@@ -57,4 +58,11 @@ public abstract class Client {
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
     }
+
+
+    // start game logic things
+
+
+
+    public abstract void spawn(CachedPowerUp powerUp);
 }

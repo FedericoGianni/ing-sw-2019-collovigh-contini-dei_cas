@@ -1,17 +1,32 @@
 package it.polimi.ingsw.view.virtualView;
 
-import it.polimi.ingsw.view.UserInterface;
 
-public class VirtualView implements UserInterface {
+import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.network.ToView;
+import it.polimi.ingsw.view.ViewInterface;
+import it.polimi.ingsw.view.cacheModel.CachedPowerUp;
+
+public class VirtualView implements ViewInterface {
 
     private int playerId;
+    private ToView view;
+    private Controller controller;
 
-    @Override
-    public void login() {
+    public VirtualView(int playerId, Controller controller) {
+        this.playerId = playerId;
+        this.controller = controller;
+        // search in the HashMap with the clients binding the correspondent ToView implementation and stores it here
     }
 
     @Override
-    public void retryLogin() {
+    public void startPhase0() {
+
     }
 
+    @Override
+    public void spawn(CachedPowerUp powerUp) {
+
+        controller.spawn(powerUp.getType(),powerUp.getColor());
+
+    }
 }

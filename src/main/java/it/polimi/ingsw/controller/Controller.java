@@ -173,9 +173,22 @@ public class Controller {
             //so that the next invocation will handle next phase
             //the last phase will increment roundNumber
             case SPAWN:
-                //TODO
-                //if currentPlayer already has 0 powerups in hand -> draw 2
-                //if currentPlayer already has more thean 0 -> draw only 1
+
+                if (Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().isEmpty()){
+
+                    //if currentPlayer already has 0 powerups in hand -> draw 2
+
+                    drawPowerUp();
+                    drawPowerUp();
+                }else {
+
+                    //if currentPlayer already has more thean 0 -> draw only 1
+
+                    drawPowerUp();
+                }
+
+                //players.get(getCurrentPlayer()).startPhase0();
+
                 break;
 
             case POWERUP1:

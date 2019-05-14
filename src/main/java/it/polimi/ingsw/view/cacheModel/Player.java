@@ -1,26 +1,25 @@
 package it.polimi.ingsw.view.cacheModel;
 
+import it.polimi.ingsw.model.player.PlayerColor;
+
 public class Player {
 
-    private int playerId;
-    private String name;
+    private final int playerId;
+    private final PlayerColor playerColor;
+    private final String name;
     private CachedStats stats;
     private CachedPowerUpBag powerUpBag;
     private CachedAmmoBag ammoBag;
 
-    public Player(int playerId, String name) {
+    public Player(int playerId, String name, PlayerColor color) {
         this.playerId = playerId;
         this.name = name;
+        this.playerColor = color;
     }
 
-    public void getUpdate(PlayerAttributes attributes){
+    public void getUpdate(){
 
-        this.stats = (attributes.getStats() == null)? this.stats : attributes.getStats();
-
-        this.powerUpBag = (attributes.getPowerUpBag() == null)? this.powerUpBag : attributes.getPowerUpBag();
-
-        this.ammoBag = (attributes.getAmmoBag() == null)? this.ammoBag : attributes.getAmmoBag();
-    }
+        }
 
     public CachedStats getStats() {
         return stats;
