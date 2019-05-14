@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.cacheModel;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.model.map.AmmoCell;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.Stats;
@@ -10,7 +9,7 @@ import it.polimi.ingsw.view.actions.Move;
 
 import java.awt.*;
 import java.io.FileWriter;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JsonExampleMaker {

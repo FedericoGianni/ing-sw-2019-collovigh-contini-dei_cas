@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
+
 /**
  * This class represent the Controller and invokes actions which modify the Model directly
  *
@@ -17,9 +19,8 @@ public class Controller {
     private int gameId;
     private int roundNumber;
     private Boolean frenzy = false;
-    private int roundPhase;
+    private TurnPhase turnPhase;
     private int frenzyStarter;
-    private final List<ClientController> players;
     private final Model game;
 
 
@@ -34,17 +35,8 @@ public class Controller {
 
         int mapType= this.chooseMap(nameList.size());
         this.game = new Model(nameList,playerColors,mapType);
-
-        players = new ArrayList<>();
-
-        for (int i = 0; i < nameList.size(); i++) {
-
-            players.add(new ClientController(i,this));
-            
-        }
-
         this.roundNumber = 0;
-        this.roundPhase = 0;
+        this.turnPhase = SPAWN;
         this.gameId = gameId;
 
     }
@@ -61,16 +53,8 @@ public class Controller {
 
         this.game = new Model(nameList,playerColors,mapType);
 
-        players = new ArrayList<>();
-
-        for (int i = 0; i < nameList.size(); i++) {
-
-            players.add(new ClientController(i,this));
-
-        }
-
         this.roundNumber = 0;
-        this.roundPhase = 0;
+        this.turnPhase = SPAWN;
         this.gameId = gameId;
 
     }
@@ -131,52 +115,6 @@ public class Controller {
         }
     }
 
-
-
-    /**
-     * @return ID of the current playing Player
-     */
-    public int getCurrentPlayer() {
-        // TODO need to be implemented
-        return 0;
-    }
-
-    /**
-     * @param Action
-     *
-    public void action(Action action) {
-        // TODO implement here
-    }*/
-
-    /**
-     *
-     */
-    public void endOfTurn() {
-        // TODO need to be implemented
-    }
-
-    /**
-     * @return
-     */
-    public Boolean isKillShotTrackEmpty() {
-        // TODO need to be implemented
-        return null;
-    }
-
-    /**
-     *
-     */
-    public void turnPointsCalculator() {
-        // TODO need to be implemented
-    }
-
-    /**
-     * @param playerId
-     */
-    public void startNewRound(int playerId) {
-        // TODO need to be implemented
-    }
-
     public String getPlayerName(int playerId){
 
         try {
@@ -187,6 +125,10 @@ public class Controller {
 
             return null;
         }
+    }
+
+    public void turn(){
+
     }
 
 

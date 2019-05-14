@@ -76,6 +76,13 @@
             <artifactId>jetty-util</artifactId>
             <version>6.1.25</version>
         </dependency>
+        <!--JAVA FX-->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+        <!--end of JAVA FX-->
     </dependencies>
 
     <build>
@@ -120,6 +127,17 @@
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
+                <!--JAVA FX-->
+                <plugin>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-maven-plugin</artifactId>
+                    <version>0.0.1</version>
+                    <configuration>
+                        <mainClass>org.openjfx.App</mainClass>
+                    </configuration>
+                </plugin>
+                <!--end of JAVA FX-->
+
             </plugins>
         </pluginManagement>
     </build>
