@@ -3,15 +3,14 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.model.weapons.WeaponBag;
-import it.polimi.ingsw.view.virtualView.Observer;
 import it.polimi.ingsw.view.virtualView.Observers;
-import it.polimi.ingsw.view.virtualView.StatsObserver;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -408,6 +407,13 @@ public class Player {
     {
         // TODO implementation here
         return 0;
+    }
+
+    /**
+     * Draw a PowerUp from model and assign it to the player who called this function
+     */
+    public void drawPowerUp() {
+        this.getPowerUpBag().addItem( Model.getGame().drawPowerUp());
     }
 
 

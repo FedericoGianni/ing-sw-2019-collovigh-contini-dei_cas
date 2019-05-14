@@ -1,13 +1,16 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.powerup.PowerUp;
+import it.polimi.ingsw.model.powerup.PowerUpType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PowerUpBag  extends Subject implements Bag<PowerUp> {
 
@@ -96,5 +99,12 @@ public class PowerUpBag  extends Subject implements Bag<PowerUp> {
 
 
         return this.powerUps.contains(item);
+    }
+
+    public PowerUp findItem(PowerUpType ptype, Color color){
+        return powerUps.stream()
+                .filter(x -> x.getColor().equals(color) && x.getType().equals(ptype))
+                .collect(Collectors.toList())
+                .get(0);
     }
 }

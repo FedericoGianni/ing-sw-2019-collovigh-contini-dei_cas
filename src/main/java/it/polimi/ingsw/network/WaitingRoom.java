@@ -77,9 +77,13 @@ public class WaitingRoom {
         activeGame = games.addGame();
         this.active = false;
 
-        if (this.mapType == 0) Server.setController( new Controller(this.players,this.colors,this.activeGame));
-
-        else  Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType));
+        if(this.mapType == 0) {
+            Server.setController(new Controller(this.players, this.colors, this.activeGame));
+            //TODO start controller
+        } else{
+            Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType));
+            //TODO start controller
+        }
     }
 
     /**

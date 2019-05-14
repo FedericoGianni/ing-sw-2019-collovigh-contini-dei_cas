@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.map;
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 
@@ -476,6 +477,28 @@ public class Map {
         }
 
         return false;
+    }
+
+    /**
+     *
+     * @param c spawn cell color
+     * @return Spawn cell of the given color
+     */
+    public Cell getSpawnCell(Color c){
+
+        switch (c){
+
+            case RED:
+                return getCell(1, 0);
+
+            case BLUE:
+                return getCell(0, 2);
+
+            case YELLOW:
+                return getCell(2,3);
+        }
+
+        return null;
     }
 
 }

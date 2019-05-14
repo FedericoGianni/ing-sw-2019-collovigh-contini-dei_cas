@@ -1,13 +1,18 @@
 package it.polimi.ingsw.controller;
 
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.powerup.PowerUpType;
+import it.polimi.ingsw.view.virtualView.VirtualView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
+import static it.polimi.ingsw.controller.TurnPhase.*;
 
 /**
  * This class represent the Controller and invokes actions which modify the Model directly
@@ -17,32 +22,48 @@ public class Controller {
 
 
     private int gameId;
-    private int roundNumber;
+
+    private int roundNumber = 0;
+
     private Boolean frenzy = false;
-    private TurnPhase turnPhase;
+
+    private Boolean hasSomeoneDied = false;
+
+    //used for Takeback granade (check if it is necessary)
+    private List<Integer> shotPlayerThisTurn;
+
+    private TurnPhase turnPhase = SPAWN;
+
     private int frenzyStarter;
-    private final Model game;
+
+    private final Model model;
+
+    private List<VirtualView> players;
+
+
 
 
     /**
-     *  Constructor
+     * Constructor
      * @param nameList is a list of player's names
      * @param playerColors is a list of player's Color
      * @param gameId is the id of the game
      */
-    public Controller(List<String> nameList, List<PlayerColor>playerColors,int gameId) {
+    public Controller(List<String> nameList, List<PlayerColor>playerColors, int gameId) {
 
 
         int mapType= this.chooseMap(nameList.size());
-        this.game = new Model(nameList,playerColors,mapType);
+        this.model = new Model(nameList,playerColors,mapType);
         this.roundNumber = 0;
         this.turnPhase = SPAWN;
         this.gameId = gameId;
+        this.players = new ArrayList<>();
+
 
     }
 
     /**
-     *  OverLoaded Constructor that takes choosen mapType
+     * OverLoaded Constructor that takes choosen mapType
      * @param nameList is a list of player's names
      * @param playerColors is a list of player's Color
      * @param gameId is the id of the game
@@ -51,12 +72,18 @@ public class Controller {
     public Controller(List<String> nameList, List<PlayerColor>playerColors,int gameId, int mapType) {
 
 
-        this.game = new Model(nameList,playerColors,mapType);
+        this.model = new Model(nameList,playerColors,mapType);
 
         this.roundNumber = 0;
         this.turnPhase = SPAWN;
         this.gameId = gameId;
+        this.players = new ArrayList<>();
 
+    }
+
+
+    public Model getModel() {
+        return model;
     }
 
 
@@ -94,7 +121,7 @@ public class Controller {
      */
     public int findPlayerByName(String name) {
 
-        List<String>nameList = game.getGame()
+        List<String>nameList = model.getGame()
                 .getPlayers()
                 .stream()
                 .map(player -> player.getPlayerName())
@@ -105,7 +132,7 @@ public class Controller {
             return nameList
                     .indexOf(nameList
                             .stream()
-                            .filter(n -> n == name)
+                            .filter(n -> n.equals(name))
                             .collect(Collectors.toList())
                             .get(0));
 
@@ -127,9 +154,88 @@ public class Controller {
         }
     }
 
-    public void turn(){
+    /**
+     *
+     * @return and integer representing the id index of the virtualView representing the current playing player
+     */
+    private int getCurrentPlayer(){
+        return roundNumber % players.size();
+    }
+
+    public void handleTurnPhase(){
+        switch(turnPhase){
+            //TODO implement a switch case to handle a single turn phase, it is called repeteadly
+            //once the vwiev has done the action the controller sets the next turnPhase to the next turnphase
+            //so that the next invocation will handle next phase
+            //the last phase will increment roundNumber
+            case SPAWN:
+                //TODO
+                //if currentPlayer already has 0 powerups in hand -> draw 2
+                //if currentPlayer already has more thean 0 -> draw only 1
+                break;
+
+            case POWERUP1:
+                //TODO
+                if(!(Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().size() > 0)){
+                    turnPhase = ACTION1;
+                }else{
+                    //TODO handle phase 1 (need virtualview)
+                    //VirtualView.startPhase1();
+                }
+                break;
+
+            case ACTION1:
+                //TODO
+                break;
+
+        }
+    }
+
+    private void drawPowerUp(){
+        Model.getPlayer(getCurrentPlayer()).drawPowerUp();
+    }
+
+    private void discardPowerUp(PowerUpType type, Color color){
+        Model.getPlayer(getCurrentPlayer()).getPowerUpBag()
+                .sellItem(Model.getPlayer(getCurrentPlayer()).getPowerUpBag().findItem(type, color));
 
     }
+
+    public void spawn(PowerUpType type, Color color){
+        discardPowerUp(type, color);
+        Model.getPlayer(getCurrentPlayer()).setPlayerPos(Model.getMap().getSpawnCell(color));
+        turnPhase = POWERUP1;
+    }
+
+    public void useNewton(){
+        //TODO
+    }
+
+    public void useTeleport(){
+        //TODO
+    }
+
+    public void useGranade(){
+        //TODO
+    }
+
+    public void useTargetingScope(){
+        //TODO
+    }
+
+    public void endPowerUpPhase(){
+        //check if it's correct -> should increment the current enum phase to the next one
+        turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
+    }
+
+    //TODO check if it's possible to handle actions in only one class or split in single actions
+    public void doAction(){
+
+        turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
+    }
+
+
+
 
 
 }
