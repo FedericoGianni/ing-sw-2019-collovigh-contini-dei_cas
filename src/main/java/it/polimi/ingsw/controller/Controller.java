@@ -154,6 +154,10 @@ public class Controller {
         }
     }
 
+    public TurnPhase getTurnPhase() {
+        return turnPhase;
+    }
+
     /**
      *
      * @return and integer representing the id index of the virtualView representing the current playing player
@@ -177,7 +181,7 @@ public class Controller {
             case POWERUP1:
                 //TODO
                 if(!(Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().size() > 0)){
-                    turnPhase = ACTION1;
+                    incrementPhase();
                 }else{
                     //TODO handle phase 1 (need virtualview)
                     //VirtualView.startPhase1();
@@ -188,6 +192,21 @@ public class Controller {
                 //TODO
                 break;
 
+            case POWERUP2:
+                //TODO
+                break;
+
+            case ACTION2:
+                //TODO
+                break;
+
+            case POWERUP3:
+                //TODO
+                break;
+
+            case RELOAD:
+                //TODO
+                break;
         }
     }
 
@@ -204,7 +223,7 @@ public class Controller {
     public void spawn(PowerUpType type, Color color){
         discardPowerUp(type, color);
         Model.getPlayer(getCurrentPlayer()).setPlayerPos(Model.getMap().getSpawnCell(color));
-        turnPhase = POWERUP1;
+        incrementPhase();
     }
 
     public void useNewton(){
@@ -225,13 +244,16 @@ public class Controller {
 
     public void endPowerUpPhase(){
         //check if it's correct -> should increment the current enum phase to the next one
+        incrementPhase();
+    }
+
+    public void incrementPhase(){
         turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
     }
 
-    //TODO check if it's possible to handle actions in only one class or split in single actions
+    //TODO check if it's possible to handle actions in only one class or split in single actions methods
     public void doAction(){
-
-        turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
+        incrementPhase();
     }
 
 
