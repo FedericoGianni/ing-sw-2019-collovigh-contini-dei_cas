@@ -71,21 +71,24 @@ public class Mover extends MicroEffect {
 
         if(facoltative==true)
         {
-            if(playerList==null) {;return; }//you can do nothing
+            if(playerList==null) {return; }//you can do nothing
         }
         if(target==true)//you move the target
         {
-            if(myCell==true)//tractor beam
-            {
-                if(playerList.size()>1)//tractor beam peculiarities--max 2 targets, in this case is another
+            if(myCell==true)//tractor beam second
+            {      //here the geometrical distance is correct
+                if(playerList.size()>1 && Map.getDist(w.isPossessedBy().getCurrentPosition(),c)<cellNumber)//tractor beam peculiarities--max 2 targets, in this case is another
                 {
                     playerList.get(1).setPlayerPos(w.isPossessedBy().getCurrentPosition());
-                }else{//case same target
+                }else if(Map.getDist(w.isPossessedBy().getCurrentPosition(),c)<cellNumber){//case same target
                     playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
+                }else{
+                    throw new UncorrectDistanceException();
                 }
             }
             else if(toCell==true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
             {
+
                 playerList.get(0).setPlayerPos(c);
             }
             else{ if(c==null)c=playerList.get(0).getCurrentPosition();//may not be enough

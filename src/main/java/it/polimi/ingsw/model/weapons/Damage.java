@@ -228,7 +228,7 @@ public class Damage extends MicroEffect {
             w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);//playerId=0 bcz only one player the same as the first shot
             return;
         }
-        else if(alreadyTargeted==true && differentPlayer==true){//MG-3 you must shoot the previous target then you can target whatever you want
+        else if(alreadyTargeted && differentPlayer){//MG-3 you must shoot the previous target then you can target whatever you want
 
             w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);
             playerList.remove(w.getFirstTarget());//shot the previous target

@@ -192,30 +192,30 @@ public class Player {
 
         if(c.getNorth() !=null)
         {
-            System.out.println("nord");
+
             c=c.getNorth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getEast() !=null && !c.alreadyVisited())
-        {System.out.println("est");
+        if(c.getEast() !=null && !c.getEast().alreadyVisited())//devo fare !c.getEast().alreadyvisitd
+        {
             c=c.getEast();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getWest() !=null && !c.alreadyVisited())
-        {System.out.println("ovest");
+        if(c.getWest() !=null && !c.getWest().alreadyVisited())
+        {
             c=c.getWest();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getSouth() !=null && !c.alreadyVisited())
+        if(c.getSouth() !=null && !c.getSouth().alreadyVisited())
         {System.out.println("sud");
             c=c.getSouth();
             if(c.getPlayers()!=null)
@@ -234,32 +234,32 @@ public class Player {
 //useful differentiate because the first check can change the color, after the first one thc eoclor must be all the same
     public List<Player> runner(List<Player> visibili,Cell c)
     {
-        if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor() && !c.alreadyVisited())//if the color is different you change the room, so you can't see other players
-        {System.out.println("nord");
+        if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor() && !c.getNorth().alreadyVisited())//if the color is different you change the room, so you can't see other players
+        {
             c=c.getNorth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getEast() !=null && c.getEast().getColor()==c.getColor() && !c.alreadyVisited())
-        {System.out.println("sud");
+        if(c.getEast() !=null && c.getEast().getColor()==c.getColor() && !c.getEast().alreadyVisited())
+        {
             c=c.getEast();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getWest() !=null && c.getWest().getColor()==c.getColor() && !c.alreadyVisited())
-        {System.out.println("est");
+        if(c.getWest() !=null && c.getWest().getColor()==c.getColor() && !c.getWest().alreadyVisited())
+        {
             c=c.getWest();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
             c.setVisited();
             visibili=runner(visibili,c);
         }
-        if(c.getSouth() !=null && c.getSouth().getColor()==c.getColor() && !c.alreadyVisited())
-        {System.out.println("ovesto");
+        if(c.getSouth() !=null && c.getSouth().getColor()==c.getColor() && !c.getSouth().alreadyVisited())
+        {
             c=c.getSouth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());

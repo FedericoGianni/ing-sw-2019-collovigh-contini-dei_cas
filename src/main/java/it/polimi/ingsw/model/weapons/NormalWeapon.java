@@ -304,8 +304,8 @@ public class NormalWeapon extends Weapon{
                     micro.microEffectApplicator(targetLists.get(macroCont),this,null);//the method that applies the effects
 
                 }
-
-            }macroCont++;
+                macroCont++;
+            }
         }catch(WeaponNotLoadedException e){e.printStackTrace();}
         catch (CardNotPossessedException e) { e.printStackTrace(); }
         catch(NotEnoughAmmoException e){ e.printStackTrace();}
