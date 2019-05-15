@@ -428,7 +428,7 @@ public class Map {
      * @param p2
      * @return
      */
-    public static int getDist(Player p1, Player p2)
+    public static int getDist(Player p1, Player p2)//geometrical dstance, the distance in squares, like tractor beam I effect, we need a real method for distances
     {
         Map map= Model.getMap();
         Point d1, d2;
@@ -445,7 +445,7 @@ public class Map {
      * @param c2
      * @return
      */
-    public static int getDist(Cell c1, Cell c2)
+    public static int getDist(Cell c1, Cell c2)//geometrical dstance, the distance in squares, like tractor beam I effect, we need a real method for distances
     {
         Map map= Model.getMap();
         Point d1, d2;
