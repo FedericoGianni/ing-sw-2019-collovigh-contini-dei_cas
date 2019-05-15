@@ -36,7 +36,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void shoot() throws FrenzyActivatedException {//one shot, one effect, one target, free effect---the most basic possible
+    void shoot1() throws FrenzyActivatedException {//one shot, one effect, one target, free effect---the most basic possible
         weaponsCreator();
 
         ArrayList<String> playerNames=new ArrayList<>();
