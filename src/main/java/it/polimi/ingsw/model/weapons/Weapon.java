@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Weapon {
+    public Weapon(){}
     private boolean isLoaded;
     /**
      * @return Boolean if the weapon is loaded
@@ -28,13 +29,16 @@ public abstract class Weapon {
     /**
      * reloads the weapon
      */
-    public final void reload()
-    {
-        this.isLoaded=true;
+    public final void reload() throws NotAbleToReloadException {
+        if(this.canBeReloaded())
+            this.isLoaded=true;
+        else{
+            throw new NotAbleToReloadException();
+        }
     }
 
     /**
-     * every weapon type need to say if it can be reloaded
+     * every weapon type need to say if it can be reloaded in its own way
      *
      * @return true if the weapon can be reloaded
      */
@@ -43,7 +47,6 @@ public abstract class Weapon {
     public Player getFirstTarget() {
         return firstTarget;
     }
-
     public void setFirstTarget(Player firstTarget) {
         this.firstTarget = firstTarget;
     }
@@ -57,10 +60,21 @@ public abstract class Weapon {
         return (list.isEmpty()) ? null : list.get(0);
     }
 
-
-    public abstract void shoot(ArrayList <Player> target, ArrayList<MacroEffect> effects, Cell c)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
-    public abstract boolean isSpecial();
-
+    /**
+     *
+     * @param targetLists
+     * @param effects
+     * @param c
+     * @throws WeaponNotLoadedException
+     * @throws OverKilledPlayerException
+     * @throws DeadPlayerException
+     * @throws PlayerInSameCellException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     * @throws FrenzyActivatedException
+     */
+    public abstract void shoot(ArrayList<ArrayList<Player>> targetLists, ArrayList<MacroEffect> effects, Cell c)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
 
     /**
      *
@@ -68,7 +82,7 @@ public abstract class Weapon {
      * @param possessed
      * @return true if the player can pay something in ammo
      */
-    public static final boolean canPay(List<AmmoCube> cost, AmmoBag possessed)
+    public final boolean canPay(List<AmmoCube> cost, AmmoBag possessed)
     {
         int []ammo=possessed.getAmount();
         int[]ammoC=new int[3];
@@ -91,6 +105,8 @@ public abstract class Weapon {
             return false;
         }
     }
+
+    public abstract void print();
 
 
 }

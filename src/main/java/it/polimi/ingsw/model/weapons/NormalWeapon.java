@@ -250,7 +250,7 @@ public class NormalWeapon extends Weapon{
 
     /**
      *
-     * @param target
+     * @param targetLists
      * @param mE
      * @param c
      * @throws WeaponNotLoadedException
@@ -262,14 +262,16 @@ public class NormalWeapon extends Weapon{
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public void shoot(ArrayList<Player> target, ArrayList<MacroEffect> mE, Cell c)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
+    public void shoot(ArrayList<ArrayList<Player>>targetLists, ArrayList<MacroEffect> mE, Cell c)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
     {
-        int i=1;
+        ArrayList<ArrayList<String>> mainArrayList = new ArrayList<ArrayList<String>>();
+
         try{
             if(this.isLoaded==false)
             {
                 throw new WeaponNotLoadedException();//weapon not loaded zac
             }
+            int macroCont=0;
             for(MacroEffect item : mE)//iterate macroeffects
             {
                 if(mE.get(mE.indexOf(item)).getEffectCost()!=null)//if the effect costs 0
@@ -284,23 +286,26 @@ public class NormalWeapon extends Weapon{
                     }else{throw new NotEnoughAmmoException();}}
                 //here i can shoot for real
 
+
+
                 for(MicroEffect micro: item.getMicroEffects())//iterates microEffects
                 {
 
                     if(micro.moveBefore()==true && moveBefore)//if i need to move before shooting
                     {
-                        micro.microEffectApplicator(target,this,null);
+                        micro.microEffectApplicator(targetLists.get(macroCont),this,null);
                         item.getMicroEffects().remove(micro);
-
+                        macroCont++;
                     }
                 }
 
                 for(MicroEffect micro: item.getMicroEffects())//iterates microEffects
                 {
-                    micro.microEffectApplicator(target,this,null);//the method that applies the effects
+                    micro.microEffectApplicator(targetLists.get(macroCont),this,null);//the method that applies the effects
+
                 }
-                i++;
-            }
+
+            }macroCont++;
         }catch(WeaponNotLoadedException e){e.printStackTrace();}
         catch (CardNotPossessedException e) { e.printStackTrace(); }
         catch(NotEnoughAmmoException e){ e.printStackTrace();}
@@ -317,24 +322,22 @@ public class NormalWeapon extends Weapon{
         this.isLoaded=false;//the weapon is no longer loaded
     }
 
-    public void printAllWeapons()
+    public void print()
     {
-        for(int i = 0; i< NormalWeapon.getNormalWeapons().size(); i++)
-        {
-            //System.out.println(NormalWeapon.getNormalWeapons().get(i).getName());
-            for(int j = 0; j< NormalWeapon.getNormalWeapons().get(i).getEffects().size(); j++)
+
+            System.out.println(this.getName());
+            for(int j = 0; j< this.getEffects().size(); j++)
             {
-                //System.out.println(NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getName());
-                if(NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).moveBeforShooting())
-                {   NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().get(2);//you need to move before everything
-                    for(int h=0;h<NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().size()-1;h++)
-                    NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().get(h).print();}
+                System.out.println(this.getEffects().get(j).getName());
+                if(this.getEffects().get(j).moveBeforShooting())
+                {  this.getEffects().get(j).getMicroEffects().get(2);//you need to move before everything
+                    for(int h=0;h<this.getEffects().get(j).getMicroEffects().size()-1;h++)
+                    this.getEffects().get(j).getMicroEffects().get(h).print();}
                 else{//shoot and other things then move
-                    for(int h=0;h<NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().size()-1;h++)
-                        NormalWeapon.getNormalWeapons().get(i).getEffects().get(j).getMicroEffects().get(h).print();
+                    for(int h=0;h<this.getEffects().get(j).getMicroEffects().size()-1;h++)
+                        this.getEffects().get(j).getMicroEffects().get(h).print();
                 }
             }
-
-        }
     }
+
 }

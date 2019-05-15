@@ -167,6 +167,7 @@ public abstract class Cell {
         this.visit=false;
     }
 
+
     /**
      * Method useful for canSee method inside Player class
      * @return true if the Cell has been already visited by the canSee algorithm, false otherwise

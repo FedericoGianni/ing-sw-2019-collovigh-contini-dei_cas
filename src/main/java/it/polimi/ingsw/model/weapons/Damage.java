@@ -265,6 +265,7 @@ public class Damage extends MicroEffect {
         }
         else {
             if(playerList.size()!=playerNum){
+                System.out.println(playerList.size()+" !!"+playerNum);
              throw new NotCorrectPlayerNumberException();
             }
             for(Player item : playerList)

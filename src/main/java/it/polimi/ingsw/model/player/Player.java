@@ -192,6 +192,7 @@ public class Player {
 
         if(c.getNorth() !=null)
         {
+            System.out.println("nord");
             c=c.getNorth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
@@ -199,7 +200,7 @@ public class Player {
             visibili=runner(visibili,c);
         }
         if(c.getEast() !=null && !c.alreadyVisited())
-        {
+        {System.out.println("est");
             c=c.getEast();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
@@ -207,7 +208,7 @@ public class Player {
             visibili=runner(visibili,c);
         }
         if(c.getWest() !=null && !c.alreadyVisited())
-        {
+        {System.out.println("ovest");
             c=c.getWest();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
@@ -215,17 +216,16 @@ public class Player {
             visibili=runner(visibili,c);
         }
         if(c.getSouth() !=null && !c.alreadyVisited())
-        {
+        {System.out.println("sud");
             c=c.getSouth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
             c.setVisited();
             visibili=runner(visibili,c);
         }
-
-
+        Model.getMap().setUnvisited();
         return visibili;//handle a nullPointerExcpetion if you can't see any other player
-        //call a map.setUnvisited
+
     }
     /**
      * @return a list of the players the current player can see
@@ -235,7 +235,7 @@ public class Player {
     public List<Player> runner(List<Player> visibili,Cell c)
     {
         if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor() && !c.alreadyVisited())//if the color is different you change the room, so you can't see other players
-        {
+        {System.out.println("nord");
             c=c.getNorth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
@@ -243,7 +243,7 @@ public class Player {
             visibili=runner(visibili,c);
         }
         if(c.getEast() !=null && c.getEast().getColor()==c.getColor() && !c.alreadyVisited())
-        {
+        {System.out.println("sud");
             c=c.getEast();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
@@ -251,7 +251,7 @@ public class Player {
             visibili=runner(visibili,c);
         }
         if(c.getWest() !=null && c.getWest().getColor()==c.getColor() && !c.alreadyVisited())
-        {
+        {System.out.println("est");
             c=c.getWest();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());
@@ -259,7 +259,7 @@ public class Player {
             visibili=runner(visibili,c);
         }
         if(c.getSouth() !=null && c.getSouth().getColor()==c.getColor() && !c.alreadyVisited())
-        {
+        {System.out.println("ovesto");
             c=c.getSouth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());

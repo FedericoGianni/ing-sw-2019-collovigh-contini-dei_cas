@@ -19,6 +19,8 @@ public class WeaponDeck implements Deck<Weapon> {
     private WeaponDeck() {
 
         this.weaponList = new ArrayList<>();
+        weaponList.addAll(NormalWeapon.getNormalWeapons());
+        //then add special weapons
     }
 
 
@@ -33,21 +35,8 @@ public class WeaponDeck implements Deck<Weapon> {
      * this function is thought to be called jut once at the beginning of the game
      *@return a new instance of a WeaponDeck which is full
      */
-    public static WeaponDeck populatedDeck(){
-
-        //TODO
-
+    public static WeaponDeck populateDeck(){
         WeaponDeck deck = new WeaponDeck();
-
-        //Only for test purposes
-
-        deck.weaponList.add(new NormalWeapon("James Gunn",null,null) );
-        deck.weaponList.add(new NormalWeapon("James Rifle",null,null) );
-        deck.weaponList.add(new NormalWeapon("James Bazooka",null,null) );
-
-        //end of part for test
-
-
         return deck;
     }
 
@@ -74,8 +63,6 @@ public class WeaponDeck implements Deck<Weapon> {
             this.weaponList.remove(i);
 
             return weapon;
-
-
         }
     }
 

@@ -38,28 +38,37 @@ class NormalWeaponTest {
     void shoot() throws FrenzyActivatedException {//one shot, one effect, one target, free effect---the most basic possible
         weaponsCreator();
 
-        List<String>  names=new ArrayList<String>();
-        names.add("shooter");
-        names.add("target");
-        List<PlayerColor> pc=new ArrayList<PlayerColor>();
-        pc.add(PlayerColor.BLUE);
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target");
+        ArrayList<PlayerColor> pc=new ArrayList<>();
         pc.add(PlayerColor.PURPLE);
-        Model m=new Model(names,pc,2);
+        pc.add(PlayerColor.BLUE);
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2);
 
-        Player shooter= Model.getGame().getPlayers().get(0);
-        Player target1=Model.getGame().getPlayers().get(1);
 
-        shooter.setPlayerPos(Model.getMap().getCell(0,3));
-        target1.setPlayerPos(Model.getMap().getCell(1,3));
+        //generate a player with a name and its starting position
+        //Player p1 = new Player("Shooter",map.getCell(1,3));
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(1,3));
+
+        //Player p2 = new Player("Visible",map.getCell(0,3));
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(0,3));
+
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         ArrayList targets=new ArrayList();
         targets.add(target1);
+        ArrayList<ArrayList<Player>>targetsLists=new ArrayList<>();
+        targetsLists.add(targets);
         shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
+
         try{
             ArrayList <MacroEffect>mEf=new ArrayList<>();
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
-            shooter.getWeapons().get(0).shoot(targets,mEf,null);
+            shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
             //System.out.println(target1.getStats().getDmgTaken());
         }
         catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
@@ -81,29 +90,50 @@ class NormalWeaponTest {
     void shoot2() throws FrenzyActivatedException{//now two effects ,you also need to pay and the player can, if it can't the notEnoughAmmoException sclera
         weaponsCreator();// 2 damages and 1 mark
 
-        List<String>  names=new ArrayList<>();
-        names.add("shooter");
-        names.add("target");
-        List<PlayerColor> pc=new ArrayList<>();
-        pc.add(PlayerColor.BLUE);
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target1");
+        playerNames.add("target2");
+        ArrayList<PlayerColor> pc=new ArrayList<>();
         pc.add(PlayerColor.PURPLE);
-        Model m=new Model(names,pc,2);
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.GREEN);
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2);
 
-        Player shooter= Model.getGame().getPlayers().get(0);
-        Player target1=Model.getGame().getPlayers().get(1);
+
+        //generate a player with a name and its starting position
+        Player shooter = Model.getPlayer(0);
         shooter.setPlayerPos(Model.getMap().getCell(0,3));
+
+        Player target1 = Model.getPlayer(1);
         target1.setPlayerPos(Model.getMap().getCell(1,3));
+
+        Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(1,0));
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
         shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
-        ArrayList targets=new ArrayList();
-        targets.add(target1);
+        ArrayList targets0=new ArrayList();
+        ArrayList targets1=new ArrayList();
+        ArrayList<ArrayList<Player>> targetLists = new ArrayList<>();
+        targets0.add(target1);
+        targets1.add(target2);
+        targetLists.add(targets0);
+        targetLists.add(targets1);
+        Model.getMap().setUnvisited();
+        System.out.println(shooter.canSee().get(0).getPlayerName());
+        System.out.println(shooter.canSee().get(1).getPlayerName());//------------canSee smatta, perchè??
+
+
         try{
             ArrayList <MacroEffect>mEf=new ArrayList<>();
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(1));//costs 1 red AmmoCube
-            shooter.getWeapons().get(0).shoot(targets,mEf,null);}
-        catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
+            shooter.getWeapons().get(0).shoot(targetLists,mEf,null);}
+
+        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+        catch (PlayerInSameCellException e) {
             e.printStackTrace();
         } catch (DeadPlayerException e) {
             e.printStackTrace();

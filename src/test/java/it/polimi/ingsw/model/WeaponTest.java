@@ -39,4 +39,9 @@ class WeaponTest {
         assertEquals(Model.getPlayer(0).getAmmoBag(),w.isPossessedBy().getAmmoBag());
 
     }
+    @Test
+    void printWeaponList()
+    {
+
+    }
 }

@@ -408,7 +408,7 @@ public class Map {
     /**
      * Method useful for canSee method inside, which records if canSee algorithm has already visited this Cell
      */
-    void setUnvisited() {
+    public void setUnvisited() {
 
     //always call after a search for set the cells unvisited
         int cont = 0;
@@ -500,5 +500,7 @@ public class Map {
 
         return null;
     }
+
+
 
 }

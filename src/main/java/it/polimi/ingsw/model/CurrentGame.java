@@ -43,7 +43,7 @@ public class CurrentGame {
         this.currentMap = currentMap;
         this.roundNumber = 0;
         this.powerUpDeck =  PowerUpDeck.populatedDeck();
-        this.weaponDeck = WeaponDeck.populatedDeck();
+        this.weaponDeck = WeaponDeck.populateDeck();
         this.thrashPowerUpDeck = new PowerUpDeck();
         this.killShotTrack = new ArrayList<>();
     }
