@@ -5,6 +5,7 @@ import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.ammo.AmmoCube;
+import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.Mover;
@@ -174,16 +175,15 @@ class NormalWeaponTest {
         shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));//one only for evitating null Pointer
         shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
         ArrayList targets=new ArrayList();
+        ArrayList<ArrayList <Player>>targetsLists=new ArrayList<>();
         targets.add(target1);
+        targetsLists.add(targets);
         try{
             ArrayList <MacroEffect>mEf=new ArrayList<>();
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
             mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(1));//costs 1 red AmmoCube
 
-
-
-
-            shooter.getWeapons().get(0).shoot(targets,mEf,null);
+            shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
 
         }
         catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
@@ -223,11 +223,21 @@ class NormalWeaponTest {
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
-        shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
-        ArrayList targets=new ArrayList();
+
+        shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not actually how it works but easy
+
+        //adding targets to the targets lists
+        ArrayList targets1=new ArrayList();
+        ArrayList targets2=new ArrayList();
         ArrayList<ArrayList<Player>>targetsLists=new ArrayList<>();
-        targets.add(target1);
-        targetsLists.add(targets);
+        targets1.add(target1);
+        targets2.add(target1);
+        targetsLists.add(targets1);
+        targetsLists.add(targets2);
+        ArrayList<Cell> cells=new ArrayList<>();
+        //first traget don't move
+        cells.add(null);
+        cells.add(shooter.getCurrentPosition());
         try{
 
 
@@ -236,9 +246,9 @@ class NormalWeaponTest {
             mEf.add(NormalWeapon.getNormalWeapons().get(5).getEffects().get(1));//costs 1 red and 1 yellow AmmoCube--move it to my cell then 3dmg
             NormalWeapon.getNormalWeapons().get(5).enableMoveBefore();
 
-
-            shooter.getWeapons().get(0).shoot(targetsLists,mEf,target1.getCurrentPosition());
+            shooter.getWeapons().get(0).shoot(targetsLists,mEf,cells);
             assertEquals(shooter.getCurrentPosition(),target1.getCurrentPosition());
+
         }
         catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
             e.printStackTrace();

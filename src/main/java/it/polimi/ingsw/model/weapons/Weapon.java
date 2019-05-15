@@ -64,7 +64,7 @@ public abstract class Weapon {
      *
      * @param targetLists
      * @param effects
-     * @param c
+     * @param cells
      * @throws WeaponNotLoadedException
      * @throws OverKilledPlayerException
      * @throws DeadPlayerException
@@ -74,7 +74,7 @@ public abstract class Weapon {
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public abstract void shoot(ArrayList<ArrayList<Player>> targetLists, ArrayList<MacroEffect> effects, Cell c)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
+    public abstract void shoot(ArrayList<ArrayList<Player>> targetLists, ArrayList<MacroEffect> effects, ArrayList<Cell> cells)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
 
     /**
      *

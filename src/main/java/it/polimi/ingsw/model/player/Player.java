@@ -216,7 +216,7 @@ public class Player {
             visibili=runner(visibili,c);
         }
         if(c.getSouth() !=null && !c.getSouth().alreadyVisited())
-        {System.out.println("sud");
+        {
             c=c.getSouth();
             if(c.getPlayers()!=null)
                 visibili.addAll(c.getPlayers());

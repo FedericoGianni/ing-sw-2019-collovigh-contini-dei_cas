@@ -252,7 +252,7 @@ public class NormalWeapon extends Weapon{
      *
      * @param targetLists
      * @param mE
-     * @param c
+     * @param cells
      * @throws WeaponNotLoadedException
      * @throws OverKilledPlayerException
      * @throws DeadPlayerException
@@ -262,7 +262,7 @@ public class NormalWeapon extends Weapon{
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public void shoot(ArrayList<ArrayList<Player>>targetLists, ArrayList<MacroEffect> mE, Cell c)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
+    public void shoot(ArrayList<ArrayList<Player>>targetLists, ArrayList<MacroEffect> mE, ArrayList<Cell> cells)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
     {
         ArrayList<ArrayList<String>> mainArrayList = new ArrayList<ArrayList<String>>();
 
@@ -293,16 +293,20 @@ public class NormalWeapon extends Weapon{
 
                     if(micro.moveBefore()==true && moveBefore)//if i need to move before shooting
                     {
-                        micro.microEffectApplicator(targetLists.get(macroCont),this,null);
+                        micro.microEffectApplicator(targetLists.get(macroCont),this,cells.get(macroCont));//contatore appostio forse perchè sposta gli ordini??
                         item.getMicroEffects().remove(micro);
-                        macroCont++;
+
                     }
+
                 }
 
                 for(MicroEffect micro: item.getMicroEffects())//iterates microEffects
                 {
-                    micro.microEffectApplicator(targetLists.get(macroCont),this,null);//the method that applies the effects
-
+                    if(cells!=null)//if you also have mover effects
+                    {micro.microEffectApplicator(targetLists.get(macroCont),this,cells.get(macroCont));}//the method that applies the effects
+                    else{
+                        micro.microEffectApplicator(targetLists.get(macroCont),this,null);
+                    }
                 }
                 macroCont++;
             }
