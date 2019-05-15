@@ -1,11 +1,11 @@
-package it.polimi.ingsw.view.cacheModel;
+package it.polimi.ingsw.view.updates;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class InitialUpdate implements Serializable {
+public class InitialUpdate implements Serializable, Update{
 
     private final List<String> names;
     private final List<PlayerColor> colors;

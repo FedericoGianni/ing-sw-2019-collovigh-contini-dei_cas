@@ -4,7 +4,8 @@ package it.polimi.ingsw.view.virtualView;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.ViewInterface;
-import it.polimi.ingsw.view.cacheModel.CachedPowerUp;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 public class VirtualView implements ViewInterface {
 
@@ -29,4 +30,11 @@ public class VirtualView implements ViewInterface {
         controller.spawn(powerUp.getType(),powerUp.getColor());
 
     }
+
+    @Override
+    public void sendUpdates(UpdateClass update) {
+
+    }
+
+
 }

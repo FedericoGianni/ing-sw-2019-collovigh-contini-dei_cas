@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.view.cacheModel.CachedPowerUp;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 public abstract class Client {
 

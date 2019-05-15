@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.PowerUpDeck;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.model.weapons.WeaponDeck;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedGame;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,12 +24,11 @@ import java.util.List;
  *
  */
 
-public class CurrentGame {
+public class CurrentGame extends Subject{
 
     private static final int KILL_SHOT_TRACK = 8;
     private List<Player> players;
     private Map currentMap;
-    private int roundNumber;
     private PowerUpDeck powerUpDeck;
     private WeaponDeck weaponDeck;
     private PowerUpDeck thrashPowerUpDeck;
@@ -41,7 +41,6 @@ public class CurrentGame {
 
         this.players = players;
         this.currentMap = currentMap;
-        this.roundNumber = 0;
         this.powerUpDeck =  PowerUpDeck.populatedDeck();
         this.weaponDeck = WeaponDeck.populateDeck();
         this.thrashPowerUpDeck = new PowerUpDeck();
@@ -58,7 +57,6 @@ public class CurrentGame {
             this.players.add(p);
         }
         this.currentMap = clone.currentMap;
-        this.roundNumber = clone.roundNumber;
         this.powerUpDeck =  new PowerUpDeck(clone.powerUpDeck);
         this.weaponDeck = new WeaponDeck(clone.weaponDeck);
         this.thrashPowerUpDeck = new PowerUpDeck(clone.thrashPowerUpDeck);
@@ -139,6 +137,9 @@ public class CurrentGame {
 
         for (Boolean b: overkill){
             this.killShotTrack.add(new Skull(killerId,b));
+
+            updateAll(new CachedGame(this));
+
         }
 
         if (this.killShotTrack.size() >= KILL_SHOT_TRACK) throw new FrenzyActivatedException(killerId);
@@ -154,6 +155,8 @@ public class CurrentGame {
 
         this.killShotTrack.add(new Skull(killerId,overkill));
 
+        updateAll(new CachedGame(this));
+
         if (this.killShotTrack.size() >= KILL_SHOT_TRACK) throw new FrenzyActivatedException(killerId);
     }
 
@@ -164,20 +167,6 @@ public class CurrentGame {
      */
     public Map getMap() {
         return this.currentMap;
-    }
-
-    /**
-     * @return current round number
-     */
-    public int getRoundNumber() {
-        return roundNumber;
-    }
-
-    /**
-     * @param r represent the round number to be set
-     */
-    public void setRoundNumber(int r) {
-        roundNumber = r;
     }
 
     /**

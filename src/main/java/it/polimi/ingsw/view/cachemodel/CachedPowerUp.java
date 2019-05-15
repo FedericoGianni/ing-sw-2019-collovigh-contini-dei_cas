@@ -1,7 +1,8 @@
-package it.polimi.ingsw.view.cacheModel;
+package it.polimi.ingsw.view.cachemodel;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.powerup.*;
+import it.polimi.ingsw.view.updates.Update;
 
 import java.io.Serializable;
 

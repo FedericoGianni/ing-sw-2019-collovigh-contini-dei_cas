@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
+import it.polimi.ingsw.view.virtualView.Observer;
+import it.polimi.ingsw.view.virtualView.Observers;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 import java.util.ArrayList;
@@ -29,7 +31,8 @@ public class Controller {
 
     private Boolean hasSomeoneDied = false;
 
-    //used for Takeback granade (check if it is necessary)
+    //used for TagBackGrenade (check if it is necessary)
+
     private List<Integer> shotPlayerThisTurn;
 
     private TurnPhase turnPhase = SPAWN;
@@ -39,6 +42,8 @@ public class Controller {
     private final Model model;
 
     private List<VirtualView> players;
+
+    private final Observers observers;
 
 
 
@@ -55,9 +60,9 @@ public class Controller {
         int mapType= this.chooseMap(nameList.size());
         this.model = new Model(nameList,playerColors,mapType);
         this.roundNumber = 0;
-        this.turnPhase = SPAWN;
         this.gameId = gameId;
         this.players = new ArrayList<>();
+        this.observers = new Observers(nameList.size());
 
 
     }
@@ -75,9 +80,9 @@ public class Controller {
         this.model = new Model(nameList,playerColors,mapType);
 
         this.roundNumber = 0;
-        this.turnPhase = SPAWN;
         this.gameId = gameId;
         this.players = new ArrayList<>();
+        this.observers = new Observers(nameList.size());
 
     }
 

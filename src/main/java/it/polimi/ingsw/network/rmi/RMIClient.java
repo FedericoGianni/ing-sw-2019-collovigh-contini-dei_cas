@@ -2,8 +2,7 @@ package it.polimi.ingsw.network.rmi;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
-import it.polimi.ingsw.view.cacheModel.CachedPowerUp;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;

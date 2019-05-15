@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Move implements Serializable {
+public class Move implements Serializable, JsonAction {
 
 
     private final ActionTypes type = ActionTypes.MOVE;
@@ -19,5 +19,10 @@ public class Move implements Serializable {
     public Move(Point finalPos, List<String> moves) {
         this.finalPos = finalPos;
         this.moves = moves;
+    }
+
+    @Override
+    public ActionTypes getType() {
+        return this.type;
     }
 }

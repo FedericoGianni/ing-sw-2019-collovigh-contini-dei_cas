@@ -1,13 +1,14 @@
-package it.polimi.ingsw.view.cacheModel;
+package it.polimi.ingsw.view.cachemodel.sendables;
 
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Stats;
+import it.polimi.ingsw.view.updates.Update;
 
 import java.awt.*;
 import java.io.Serializable;
 import java.util.List;
 
-public class CachedStats implements Serializable {
+public class CachedStats implements Serializable, Update {
 
     private final int score;
     private final int deaths;

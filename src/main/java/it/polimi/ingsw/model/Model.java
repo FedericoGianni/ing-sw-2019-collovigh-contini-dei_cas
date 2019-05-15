@@ -12,10 +12,14 @@ import java.util.List;
  */
 public class Model {
 
+    private static CurrentGame game;
+
     /**
      * Default constructor
      */
     public Model(List<String> playerNames, List<PlayerColor> playerColors, int mapType) {
+
+
 
         Map map = Map.genMap(mapType);
 
@@ -28,8 +32,6 @@ public class Model {
 
     }
 
-    private static CurrentGame game;
-
     public static CurrentGame getGame() {
         return game;
     }
@@ -38,7 +40,5 @@ public class Model {
         return getGame().getMap();
     }
 
-    public static Player getPlayer(int playerId){
-        return getGame().getPlayers().get(playerId);
-    }
+    public static Player getPlayer(int playerId){ return getGame().getPlayers().get(playerId);}
 }

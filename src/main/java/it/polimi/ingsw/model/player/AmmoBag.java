@@ -1,15 +1,17 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoBag;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AmmoBag implements Bag<AmmoCube> {
+public class AmmoBag extends Subject implements Bag<AmmoCube> {
 
     /**
      * this is an ArrayList of AmmoCubes sorted by color
@@ -54,7 +56,10 @@ public class AmmoBag implements Bag<AmmoCube> {
             this.ammoCubes.add(item);
 
             this.ammoCubes.sort(Comparator.comparing(AmmoCube::getColor));
+
+            this.updateAll(new CachedAmmoBag(this));
         }
+
 
     }
 

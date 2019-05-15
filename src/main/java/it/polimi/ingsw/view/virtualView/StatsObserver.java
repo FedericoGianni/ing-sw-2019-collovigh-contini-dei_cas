@@ -1,22 +1,24 @@
 package it.polimi.ingsw.view.virtualView;
 
-import it.polimi.ingsw.view.cacheModel.CachedStats;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 
 public class StatsObserver implements Observer {
 
 
     private CachedStats stats;
 
-    public StatsObserver(int playerId) {
+    public StatsObserver() {
 
     }
 
     @Override
     public void update(Object object) {
 
-        CachedStats stats = (CachedStats) object;
+        this.stats = (CachedStats) object;
 
-        this.stats = stats;
+        //send updates to client
 
     }
+
+
 }

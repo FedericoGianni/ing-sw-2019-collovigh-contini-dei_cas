@@ -1,11 +1,10 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.network.socket.SocketClient;
 import it.polimi.ingsw.network.socket.SocketClientReader;
 import it.polimi.ingsw.network.socket.SocketClientWriter;
-import it.polimi.ingsw.view.cacheModel.CacheModel;
-import it.polimi.ingsw.view.cacheModel.CachedPowerUp;
+import it.polimi.ingsw.view.cachemodel.CacheModel;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.util.List;
 import java.util.Scanner;

@@ -7,7 +7,7 @@ import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.view.cacheModel.CachedStats;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 
 import java.util.ArrayList;
 import java.util.Collections;

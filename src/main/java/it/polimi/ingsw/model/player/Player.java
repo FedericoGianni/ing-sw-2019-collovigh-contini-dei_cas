@@ -36,7 +36,11 @@ public class Player {
         this.stats.addObserver(Observers.getStatsObserver(id));
 
         this.currentPowerUps = new PowerUpBag();
+        this.currentPowerUps.addObserver(Observers.getPowerUpBagObserver(id));
+
         this.ammo = new AmmoBag();
+        this.ammo.addObserver(Observers.getAmmoBagObserver(id));
+
         this.currentWeapons = new WeaponBag();
 
     }

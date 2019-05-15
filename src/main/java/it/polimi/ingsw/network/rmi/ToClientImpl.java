@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.rmi;
 
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.view.cacheModel.CachedPowerUp;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
