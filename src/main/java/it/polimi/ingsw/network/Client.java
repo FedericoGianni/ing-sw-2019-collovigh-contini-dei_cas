@@ -21,19 +21,20 @@ public abstract class Client {
      *
      * @param mapType is the map the player wants to choose
      */
-    public abstract void voteMap(int mapType);
+    //public abstract void voteMap(int mapType);
+
 
     /**
      * this method will reconnect the player to the server if the client still run
      */
-    public abstract void reconnect();
+    //public abstract void reconnect();
 
     /**
      * this method will reconnect the player to the server if the client was shut down
      * @param name is the name chosen
      * @return the player id or -1 if something went wrong
      */
-    public abstract int reconnect(String name);
+    //public abstract int reconnect(String name);
 
     /**
      *

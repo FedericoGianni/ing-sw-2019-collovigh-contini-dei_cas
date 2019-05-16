@@ -142,7 +142,6 @@ public class RMIClient extends Client {
      *
      * @param mapType is the map the player wants to choose
      */
-    @Override
     public void voteMap(int mapType) {
 
         try {
@@ -161,7 +160,6 @@ public class RMIClient extends Client {
 
     }
 
-    @Override
     public void reconnect() {
 
         if (getPlayerId() != -1) {
@@ -198,7 +196,7 @@ public class RMIClient extends Client {
      * @param name is the name chosen
      * @return the player id
      */
-    @Override
+
     public int reconnect(String name) {
 
         try {

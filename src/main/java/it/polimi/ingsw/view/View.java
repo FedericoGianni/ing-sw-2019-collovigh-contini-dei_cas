@@ -13,7 +13,6 @@ public class View implements ViewInterface {
     private CacheModel cacheModel = null;
 
     public View(UserInterface userInterface) {
-
         this.userInterface = userInterface;
     }
 
@@ -27,9 +26,7 @@ public class View implements ViewInterface {
 
     @Override
     public void startPhase0() {
-
        userInterface.startPhase0();
-
     }
 
     @Override

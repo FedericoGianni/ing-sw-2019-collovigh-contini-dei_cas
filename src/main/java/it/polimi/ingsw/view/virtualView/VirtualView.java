@@ -21,7 +21,7 @@ public class VirtualView implements ViewInterface {
 
     @Override
     public void startPhase0() {
-
+        //TODO start the same method inside the real view passing throught network
     }
 
     @Override

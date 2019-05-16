@@ -160,7 +160,7 @@ public class SocketClientReader extends Thread {
         //ping
         headersMap.put("ping", () -> {
             System.out.println("[DEBUG] Ricevuta ping request dal server.");
-            scw.send("pong\f" + scw.getName());
+            scw.send("pong\f" + scw.getPlayerId());
         });
 
 

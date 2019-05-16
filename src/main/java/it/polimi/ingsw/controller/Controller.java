@@ -18,7 +18,10 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
 
 /**
- * This class represent the Controller and invokes actions which modify the Model directly
+ *
+ * This class represent the Controller and invokes actions which modify the Model directly.
+ * The Controller initialize the model inside its constructor, and then handles every turn
+ * with its main method handleTurnPhase(). this method changes basing on the TurnPhase.
  *
  */
 public class Controller {
@@ -35,7 +38,6 @@ public class Controller {
     private Boolean hasSomeoneDied = false;
 
     //used for TagBackGrenade (check if it is necessary)
-
     private List<Integer> shotPlayerThisTurn;
 
     private TurnPhase turnPhase = SPAWN;
@@ -192,8 +194,8 @@ public class Controller {
         switch(turnPhase){
             //TODO implement a switch case to handle a single turn phase, it is called repeteadly
             //once the vwiev has done the action the controller sets the next turnPhase to the next turnphase
-            //so that the next invocation will handle next phase
-            //the last phase will increment roundNumber
+            //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
+            //the last phase (ACTION) will increment roundNumber
             case SPAWN:
 
                 if (Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().isEmpty()){
@@ -216,7 +218,7 @@ public class Controller {
                 break;
 
             case POWERUP1:
-                //TODO
+                //TODO phase handling the first powerUp phase
                 if(!(Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().size() > 0)){
                     incrementPhase();
                 }else{
@@ -226,26 +228,37 @@ public class Controller {
                 break;
 
             case ACTION1:
-                //TODO
+                //TODO handle first action
+                incrementPhase();
                 break;
 
             case POWERUP2:
-                //TODO
+                //TODO handle second powerup
+                incrementPhase();
                 break;
 
             case ACTION2:
-                //TODO
+                //TODO handle second action
+                incrementPhase();
                 break;
 
             case POWERUP3:
-                //TODO
+                //TODO hanlde 3rd powerup
+                incrementPhase();
                 break;
 
             case RELOAD:
-                //TODO
+                //TODO handle last turn phase. reload and increment round number
+                //check if it's ok to increment roundNumber here
+                roundNumber++;
+                incrementPhase();
                 break;
         }
     }
+
+    /*
+     *Here there should be atomic functions which will be used by the main handlePhase() method
+     */
 
     private void drawPowerUp(){
         Model.getPlayer(getCurrentPlayer()).drawPowerUp();

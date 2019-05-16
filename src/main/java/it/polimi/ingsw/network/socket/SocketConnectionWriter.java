@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.socket;
 
+import it.polimi.ingsw.network.ToView;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -8,7 +10,7 @@ import java.util.logging.Logger;
 
 import static java.util.logging.Level.INFO;
 
-public class SocketConnectionWriter extends Thread {
+public class SocketConnectionWriter extends Thread implements ToView {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = INFO;
@@ -72,5 +74,11 @@ public class SocketConnectionWriter extends Thread {
     public void send(String message) {
         output.println(message);
         output.flush();
+    }
+
+    @Override
+    public void startPhase0() {
+        LOGGER.info("Sending startPhase0 string to connected client");
+        send("startPhase0");
     }
 }

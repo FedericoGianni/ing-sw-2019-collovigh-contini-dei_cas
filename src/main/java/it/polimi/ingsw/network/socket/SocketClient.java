@@ -102,7 +102,7 @@ public class SocketClient implements Runnable {
             scr = new SocketClientReader(socket);
             scr.start();
             scw = new SocketClientWriter(socket);
-            scw.start();
+            scw.run();
             LOGGER.log(INFO, "Succesfuly started socketClientReader");
             scr.setScw(scw);
 

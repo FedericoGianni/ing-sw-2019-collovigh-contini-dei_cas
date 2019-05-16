@@ -1,12 +1,16 @@
 package it.polimi.ingsw.network.socket;
 
+import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SocketClientWriter extends Thread {
+public class SocketClientWriter extends Client implements Runnable {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
@@ -50,5 +54,18 @@ public class SocketClientWriter extends Thread {
     public void send(String message) {
         output.println(message);
         output.flush();
+    }
+
+    @Override
+    public int joinGame(String name, PlayerColor color) {
+        send("login\f" + name + "\f" + color);
+        //TODO check how to handle return type with socket?
+        return -1; //temporary solution
+    }
+
+    @Override
+    public void spawn(CachedPowerUp powerUp) {
+        //TODO string to send PowerUp chosen by the player to discard at SPAWN phase
+        //send();
     }
 }
