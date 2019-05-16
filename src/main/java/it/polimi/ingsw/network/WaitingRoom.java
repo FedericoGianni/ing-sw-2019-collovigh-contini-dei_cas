@@ -20,13 +20,13 @@ import java.util.logging.Logger;
  */
 public class WaitingRoom {
 
-    private static final Logger LOGGER = Logger.getLogger( WaitingRoom.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
 
     private static final int TIMER = 30;
     private static int timerCount = TIMER;
 
-    private static final int DEFAULT_MIN_PLAYERS = 3;
-    private static final int DEFAULT_MAX_PLAYERS = 5;
+    private static final int DEFAULT_MIN_PLAYERS = 2;
+    private static final int DEFAULT_MAX_PLAYERS = 2;
 
     private CopyOnWriteArrayList<String> players;
     private List<PlayerColor> colors;
@@ -80,9 +80,11 @@ public class WaitingRoom {
         if(this.mapType == 0) {
             Server.setController(new Controller(this.players, this.colors, this.activeGame));
             //TODO start controller
+            Server.getController().handleTurnPhase();
         } else{
             Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType));
             //TODO start controller
+            Server.getController().handleTurnPhase();
         }
     }
 
@@ -180,7 +182,7 @@ public class WaitingRoom {
                     System.out.println("[DEBUG] Timer has expired!");
                     //chiama initGame o gestire timer scaduto
                     System.out.println("[DEBUG] AVVIO DELLA PARTITA IN CORSO...");
-                    //initGame();
+                    initGame();
                     //termina l'esecuzione del thread
                     this.cancel();
                 }

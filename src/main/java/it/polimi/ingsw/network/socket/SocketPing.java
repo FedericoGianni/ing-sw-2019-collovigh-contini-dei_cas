@@ -3,8 +3,7 @@ package it.polimi.ingsw.network.socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.*;
 
 /**
  * This class implements a thread which will send every [DEFAULT_PING_INTERVAL] ms a string "ping" to the client to
@@ -57,7 +56,7 @@ public class SocketPing implements Runnable {
             try {
                 Thread.sleep(DEFAULT_PING_INTERVAL);
                 scw.send("ping\f" + scw.getId());
-                LOGGER.log(INFO, "Sending ping message to client.");
+                LOGGER.log(FINE, "Sending ping message to client.");
             } catch (InterruptedException e) {
                 //this.interrupt();
             }

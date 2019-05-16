@@ -5,16 +5,17 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
-import it.polimi.ingsw.view.virtualView.Observer;
 import it.polimi.ingsw.view.virtualView.Observers;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.controller.TurnPhase.*;
+import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
 
 /**
  * This class represent the Controller and invokes actions which modify the Model directly
@@ -22,10 +23,12 @@ import static it.polimi.ingsw.controller.TurnPhase.*;
  */
 public class Controller {
 
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.FINE;
 
     private int gameId;
 
-    private int roundNumber = 0;
+    private int roundNumber;
 
     private Boolean frenzy = false;
 
@@ -64,6 +67,10 @@ public class Controller {
         this.players = new ArrayList<>();
         this.observers = new Observers(nameList.size());
 
+        for (int i = 0; i < nameList.size(); i++) {
+            players.add(new VirtualView(i, this));
+        }
+
 
     }
 
@@ -83,6 +90,11 @@ public class Controller {
         this.gameId = gameId;
         this.players = new ArrayList<>();
         this.observers = new Observers(nameList.size());
+
+
+        for (int i = 0; i < nameList.size(); i++) {
+            players.add(new VirtualView(i, this));
+        }
 
     }
 
@@ -168,6 +180,11 @@ public class Controller {
      * @return and integer representing the id index of the virtualView representing the current playing player
      */
     private int getCurrentPlayer(){
+
+        if(roundNumber == 0){
+            return 0;
+        }
+
         return roundNumber % players.size();
     }
 
@@ -182,17 +199,19 @@ public class Controller {
                 if (Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().isEmpty()){
 
                     //if currentPlayer already has 0 powerups in hand -> draw 2
-
+                    LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
                     drawPowerUp();
+                    LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
                     drawPowerUp();
                 }else {
 
                     //if currentPlayer already has more thean 0 -> draw only 1
-
+                    LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
                     drawPowerUp();
                 }
 
-                //players.get(getCurrentPlayer()).startPhase0();
+                LOGGER.info("[CONTROLLER]" + getCurrentPlayer());
+                players.get(getCurrentPlayer()).startPhase0();
 
                 break;
 
@@ -267,6 +286,7 @@ public class Controller {
 
     public void incrementPhase(){
         turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
+        handleTurnPhase();
     }
 
     //TODO check if it's possible to handle actions in only one class or split in single actions methods
