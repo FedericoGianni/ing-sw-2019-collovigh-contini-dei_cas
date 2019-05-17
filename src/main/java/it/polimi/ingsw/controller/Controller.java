@@ -1,10 +1,17 @@
 package it.polimi.ingsw.controller;
 
 
+import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.customsexceptions.CellNonExistentException;
+import it.polimi.ingsw.customsexceptions.PlayerNonExistentException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.map.Cell;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUpType;
+import it.polimi.ingsw.model.powerup.Teleporter;
 import it.polimi.ingsw.view.virtualView.Observers;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
@@ -16,6 +23,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
+import static it.polimi.ingsw.model.powerup.PowerUpType.NEWTON;
+import static it.polimi.ingsw.model.powerup.PowerUpType.TELEPORTER;
 
 /**
  *
@@ -194,8 +203,7 @@ public class Controller {
 
     public void handleTurnPhase(){
         switch(turnPhase){
-            //TODO implement a switch case to handle a single turn phase, it is called repeteadly
-            //once the vwiev has done the action the controller sets the next turnPhase to the next turnphase
+            //once the virtual wiev has done the action the controller sets the next turnPhase to the next turnphase
             //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
             //the last phase (ACTION) will increment roundNumber
             case SPAWN:
@@ -222,38 +230,40 @@ public class Controller {
                 break;
 
             case POWERUP1:
-                //TODO phase handling the first powerUp phase
+                //if current player hasn't got any PowerUp in hand -> skip this phase
                 if(!(Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().size() > 0)){
                     incrementPhase();
                 }else{
-                    //TODO handle phase 1 (need virtualview)
-                    //VirtualView.startPhase1();
+                    players.get(getCurrentPlayer()).startPhase1();
                 }
                 break;
 
             case ACTION1:
                 //TODO handle first action
-                incrementPhase();
+                players.get(getCurrentPlayer()).startAction1();
+
                 break;
 
             case POWERUP2:
                 //TODO handle second powerup
-                incrementPhase();
+
                 break;
 
             case ACTION2:
                 //TODO handle second action
-                incrementPhase();
+
                 break;
 
             case POWERUP3:
                 //TODO hanlde 3rd powerup
-                incrementPhase();
+
                 break;
 
             case RELOAD:
                 //TODO handle last turn phase. reload and increment round number
                 //check if it's ok to increment roundNumber here
+
+                //this 2 commands should be called by reload method, not here
                 roundNumber++;
                 incrementPhase();
                 break;
@@ -283,20 +293,44 @@ public class Controller {
         LOGGER.info("[CONTROLLER] new Phase: " + getTurnPhase());
     }
 
-    public void useNewton(){
-        //TODO
+    public void useNewton(Color color, int playerID, Directions d, int amount){
+        //TODO check if exception logic is viable
+        LOGGER.info("[CONTROLLER] player id: " + getCurrentPlayer() + "calling useNewton");
+
+        try {
+            Newton n = (Newton) Model.getPlayer(getCurrentPlayer()).getPowerUpBag().findItem(NEWTON, color);
+            n.use(Model.getPlayer(playerID), d, amount);
+        } catch(PlayerNonExistentException e){
+            //can be validated inside client so that he can send only existent players
+        } catch(CellNonExistentException e){
+            //same as before
+        }
     }
 
-    public void useTeleport(){
-        //TODO
-    }
+    public void useTeleport(Color color, int r, int c){
+        //TODO check if exception logic is viable
+        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useTeleport");
+        Cell cell = Model.getMap().getCell(r,c);
+        Teleporter t = (Teleporter) Model.getPlayer(getCurrentPlayer()).getPowerUpBag().findItem(TELEPORTER, color);
+        try {
+            t.use(cell);
+        } catch(CardNotPossessedException e){
+            //this shouldn't happen since the client can only send PowerUps that has in hand
+        } catch (CellNonExistentException e){
+            //this shouldn't happen too since the client can only send Cell which exists?
+            //TODO check for SameCellException? -> or it is a valid action?
+        }
+     }
 
     public void useGranade(){
+        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useGranade");
         //TODO
     }
 
     public void useTargetingScope(){
         //TODO
+        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useTargetingScope");
+
     }
 
     public void endPowerUpPhase(){

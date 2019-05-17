@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.network.socket.SocketClient;
 import it.polimi.ingsw.network.socket.SocketClientReader;
 import it.polimi.ingsw.network.socket.SocketClientWriter;
@@ -112,5 +113,114 @@ public class CLI implements UserInterface {
 
         view.spawn(powerUps.get(read));
 
+    }
+
+    @Override
+    public void startPhase1(){
+        System.out.println("[DEBUG] startPhase1");
+
+
+        List<CachedPowerUp> powerUps;
+        Boolean validChoice = false;
+        int read;
+
+        do{
+
+            powerUps = CacheModel
+                    .getCachedPlayers()
+                    .get(view.getPlayerId())
+                    .getPowerUpBag()
+                    .getPowerUpList();
+
+            System.out.println("Hai questi PowerUp:");
+
+            for (int i = 0; i < powerUps.size(); i++) {
+                System.out.println( i + powerUps.get(i).toString());
+            }
+
+            System.out.println("Scegli un powerUp da usare: ");
+            read = scanner.nextInt();
+
+            if (read >= 0 && read < powerUps.size()) validChoice = true;
+
+        }while(!validChoice);
+
+
+        int player;
+        String direction;
+        int r,c;
+
+        switch (powerUps.get(1).getType()){
+
+            case NEWTON:
+                do {
+                    System.out.println("Su quale giocatore vuoi usare Newton? >>> ");
+                    player = scanner.nextInt();
+
+                    if(player >= 0 && player <= CacheModel.getCachedPlayers().size())
+                        validChoice = true;
+                    else
+                        System.out.println("Scelta non valida. Riprova.");
+                }while(!validChoice);
+
+                do{
+                    System.out.println("In quale direzione vuoi spostare il player selezionato? (Nord, Sud, Ovest, Est) >>> ");
+                    direction = scanner.next().toUpperCase();
+
+                    if(direction.equals("NORD") || direction.equals("SUD")
+                            || direction.equals("EST") || direction.equals("OVEST"))
+                        validChoice = true;
+                    else
+                        System.out.println("Scelta non valida. Riprova.");
+                }while(!validChoice);
+                //TODO check amount parameter what's for and why user should choose it?
+                view.useNewton(powerUps.get(read).getColor(), player, Directions.valueOf(direction), 0);
+                break;
+
+            case TELEPORTER:
+                do{
+                    System.out.println("Su quale giocatore vuoi usare Teleporter? >>> ");
+                    player = scanner.nextInt();
+
+                    if(player >= 0 && player <= CacheModel.getCachedPlayers().size())
+                        validChoice = true;
+                    else
+                        System.out.println("Scelta non valida. Riprova.");
+
+                }while(!validChoice);
+
+                do{
+                    System.out.println("In quale cella vuoi spostare il giocatore selezionato? >>> ");
+                    //TODO when the cachedModel will have Map find a better method to get this cell
+                    //this way you have to check locally if r,c is ok for every different type of map
+                    System.out.println("riga >>> (0,1,2)");
+                    r = scanner.nextInt();
+                    System.out.println("colonna >>> (0,1,2,3)");
+                    c = scanner.nextInt();
+
+                    if(r >= 0 && r <= 2 && c >= 0 && c <= 3){
+                        validChoice = true;
+                    } else {
+                        System.out.println("Cella non valida. Riprova.");
+                    }
+
+                }while(!validChoice);
+
+                view.useTeleport(powerUps.get(read).getColor(), r,c);
+                break;
+
+            case TAG_BACK_GRENADE:
+                break;
+
+            case TARGETING_SCOPE:
+                break;
+
+        }
+
+    }
+
+    @Override
+    public void startAction1() {
+        //TODO first action handling
     }
 }

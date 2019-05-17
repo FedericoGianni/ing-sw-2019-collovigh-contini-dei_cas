@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -32,6 +34,31 @@ public class View implements ViewInterface {
     @Override
     public void spawn(CachedPowerUp powerUp) {
         //TODO starts this method inside the virtual view passing throught network
+    }
+
+    @Override
+    public void useNewton(Color color, int playerId, Directions directions, int amount) {
+        //TODO starts this method inside the virtual view passing thorught network
+    }
+
+    @Override
+    public void useTeleport(Color color, int r, int c) {
+        //TODO starts this method inside the virtual view passing throught newtork
+    }
+
+    @Override
+    public void useMarker(Color color, int playerId) {
+        //TODO starts this method inside the virtual view passing thorought netowrk
+    }
+
+    @Override
+    public void startPhase1() {
+        userInterface.startPhase1();
+    }
+
+    @Override
+    public void startAction1() {
+        userInterface.startAction1();
     }
 
     @Override

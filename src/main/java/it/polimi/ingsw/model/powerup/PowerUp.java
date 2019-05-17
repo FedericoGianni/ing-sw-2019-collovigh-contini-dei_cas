@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.powerup;
 
-import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.ammo.AmmoCube;
 
 /**
  *  Abstract Class for PowerUps
@@ -40,4 +40,5 @@ public abstract class PowerUp {
     public void setType(PowerUpType type) {
         this.type = type;
     }
+
 }

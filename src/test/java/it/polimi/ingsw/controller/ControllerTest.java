@@ -9,7 +9,7 @@ import java.util.List;
 class ControllerTest {
 
     @Test
-    void nextPhase() {
+    void firstPhase() {
         List<String> playerList = new ArrayList<String>();
         playerList.add("Frank");
         playerList.add("Tim");
@@ -19,9 +19,5 @@ class ControllerTest {
         Controller c = new Controller(playerList, playerColor, 0);
 
         assert(c.getTurnPhase().equals(TurnPhase.SPAWN));
-        c.incrementPhase();
-        assert(c.getTurnPhase().equals(TurnPhase.POWERUP1));
-        c.incrementPhase();
-        assert(c.getTurnPhase().equals(TurnPhase.ACTION1));
     }
 }

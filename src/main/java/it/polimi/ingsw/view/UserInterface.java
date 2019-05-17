@@ -8,5 +8,9 @@ public interface UserInterface {
 
     void startPhase0();
 
+    void startPhase1();
+
+    void startAction1();
+
 
 }
