@@ -193,6 +193,7 @@ public class SocketConnectionReader extends Thread {
                     socketConnectionWriter.send("login\fOK");
                 }
 
+
             }catch (NameAlreadyTakenException e){       //NOTE: temporary solution by D, just to make it compile
                 socketConnectionWriter.send("login\fNAME_ALREADY_TAKEN");
             }catch (ColorAlreadyTakenException e){

@@ -154,13 +154,19 @@ public class SocketClientReader extends Thread {
         headersMap.put("login", () -> {
             System.out.println("[DEBUG] [Server] login reply: " + commands[1]);
             if(!(commands[1].equals("OK")))
-                RunClient.getCli().retryLogin();
+                RunClient.getUi().retryLogin();
         });
 
         //ping
         headersMap.put("ping", () -> {
             System.out.println("[DEBUG] Ricevuta ping request dal server.");
             scw.send("pong\f" + scw.getPlayerId());
+        });
+
+        //startPhase0
+        headersMap.put("startPhase0", () -> {
+            System.out.println("[DEBUG] Ricevuto startPhase0 dal server");
+            RunClient.getUi().startPhase0();
         });
 
 

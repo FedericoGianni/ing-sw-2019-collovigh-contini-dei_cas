@@ -72,8 +72,10 @@ public class Controller {
         for (int i = 0; i < nameList.size(); i++) {
             players.add(new VirtualView(i, this));
         }
+    }
 
-
+    public VirtualView getVirtualView(int id) {
+        return players.get(id);
     }
 
     /**
@@ -205,6 +207,7 @@ public class Controller {
                     drawPowerUp();
                     LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
                     drawPowerUp();
+
                 }else {
 
                     //if currentPlayer already has more thean 0 -> draw only 1
@@ -212,8 +215,9 @@ public class Controller {
                     drawPowerUp();
                 }
 
-                LOGGER.info("[CONTROLLER]" + getCurrentPlayer());
+                LOGGER.info("[CONTROLLER] calling startPhase0 for virtual view id: " + getCurrentPlayer());
                 players.get(getCurrentPlayer()).startPhase0();
+                //increment phase should be done by the virtual view, who calls the function spawn
 
                 break;
 
@@ -271,9 +275,12 @@ public class Controller {
     }
 
     public void spawn(PowerUpType type, Color color){
+        LOGGER.info("[CONTROLLER] accessing Model to discard PowerUp for player: " + getCurrentPlayer());
         discardPowerUp(type, color);
         Model.getPlayer(getCurrentPlayer()).setPlayerPos(Model.getMap().getSpawnCell(color));
+        LOGGER.info("[CONTROLLER] incrementingGamePhase: " + getTurnPhase() );
         incrementPhase();
+        LOGGER.info("[CONTROLLER] new Phase: " + getTurnPhase());
     }
 
     public void useNewton(){

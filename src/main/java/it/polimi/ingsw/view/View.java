@@ -31,9 +31,7 @@ public class View implements ViewInterface {
 
     @Override
     public void spawn(CachedPowerUp powerUp) {
-
-
-
+        //TODO starts this method inside the virtual view passing throught network
     }
 
     @Override
