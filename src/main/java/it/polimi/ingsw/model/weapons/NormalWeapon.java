@@ -67,6 +67,19 @@ public class NormalWeapon extends Weapon{
         return normalWeapons;
     }
 
+    @Override
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
+    public void reload()throws NotAbleToReloadException
+    {
+        if(this.canBeReloaded())
+            this.isLoaded=true;
+        else{
+            throw new NotAbleToReloadException();
+        }
+    }
     public static void insertWeapon(NormalWeapon w) {
         NormalWeapon.normalWeapons.add(w);
     }

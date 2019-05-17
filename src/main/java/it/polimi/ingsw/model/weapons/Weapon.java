@@ -17,25 +17,15 @@ import java.util.stream.Collectors;
 
 public abstract class Weapon {
     public Weapon(){}
-    private boolean isLoaded;
     /**
      * @return Boolean if the weapon is loaded
      */
-    public final Boolean isLoaded() {
-
-        return this.isLoaded;
-    }
+    public abstract boolean isLoaded();
 
     /**
      * reloads the weapon
      */
-    public final void reload() throws NotAbleToReloadException {
-        if(this.canBeReloaded())
-            this.isLoaded=true;
-        else{
-            throw new NotAbleToReloadException();
-        }
-    }
+    public abstract void reload() throws NotAbleToReloadException ;
 
     /**
      * every weapon type need to say if it can be reloaded in its own way
