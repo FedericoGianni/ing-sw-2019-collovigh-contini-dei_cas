@@ -2,5 +2,12 @@ package it.polimi.ingsw.network;
 
 public interface ToView {
 
-    void startPhase0(); // calls the same method on view Class
+    // calls the same method on view Class
+    void startSpawn();
+
+    void startPowerUp();
+
+    void startAction();
+
+    void startReload();
 }

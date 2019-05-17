@@ -163,12 +163,29 @@ public class SocketClientReader extends Thread {
             scw.send("pong\f" + scw.getPlayerId());
         });
 
-        //startPhase0
-        headersMap.put("startPhase0", () -> {
-            System.out.println("[DEBUG] Ricevuto startPhase0 dal server");
-            RunClient.getUi().startPhase0();
+        //startSpawn
+        headersMap.put("startSpawn", () -> {
+            System.out.println("[DEBUG] Ricevuto startSpawn dal server");
+            RunClient.getUi().startSpawn();
         });
 
+        //startPowerUp
+        headersMap.put("startPowerUp", () -> {
+            System.out.println("[DEBUG] Ricevuto startPowerUp dal server");
+            RunClient.getUi().startPowerUp();
+        });
+
+        //startAction
+        headersMap.put("startAction", () -> {
+            System.out.println("[DEBUG] Ricevuto startAction dal server");
+            RunClient.getUi().startAction();
+        });
+
+        //reload
+        headersMap.put("startReload", () -> {
+            System.out.println("[DEBUG] Ricevuto startReload dal server");
+            RunClient.getUi().startReload();
+        });
 
     }
 

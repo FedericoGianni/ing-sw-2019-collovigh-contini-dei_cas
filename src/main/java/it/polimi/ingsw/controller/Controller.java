@@ -207,60 +207,33 @@ public class Controller {
             //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
             //the last phase (ACTION) will increment roundNumber
             case SPAWN:
-
-                if (Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().isEmpty()){
-
-                    //if currentPlayer already has 0 powerups in hand -> draw 2
-                    LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
-                    drawPowerUp();
-                    LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
-                    drawPowerUp();
-
-                }else {
-
-                    //if currentPlayer already has more thean 0 -> draw only 1
-                    LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
-                    drawPowerUp();
-                }
-
-                LOGGER.info("[CONTROLLER] calling startPhase0 for virtual view id: " + getCurrentPlayer());
-                players.get(getCurrentPlayer()).startPhase0();
+                handleSpawn();
                 //increment phase should be done by the virtual view, who calls the function spawn
-
                 break;
 
             case POWERUP1:
-                //if current player hasn't got any PowerUp in hand -> skip this phase
-                if(!(Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().size() > 0)){
-                    incrementPhase();
-                }else{
-                    players.get(getCurrentPlayer()).startPhase1();
-                }
+                handlePowerUp();
                 break;
 
             case ACTION1:
-                //TODO handle first action
-                players.get(getCurrentPlayer()).startAction1();
-
+                handleAction();
                 break;
 
             case POWERUP2:
-                //TODO handle second powerup
-
+                handlePowerUp();
                 break;
 
             case ACTION2:
-                //TODO handle second action
-
+                handleAction();
                 break;
 
             case POWERUP3:
-                //TODO hanlde 3rd powerup
-
+                handlePowerUp();
                 break;
 
             case RELOAD:
                 //TODO handle last turn phase. reload and increment round number
+                handleReload();
                 //check if it's ok to increment roundNumber here
 
                 //this 2 commands should be called by reload method, not here
@@ -268,6 +241,50 @@ public class Controller {
                 incrementPhase();
                 break;
         }
+    }
+
+    public void handleSpawn(){
+
+        if(Model.getPlayer(getCurrentPlayer()).getStats().getCurrentPosition() != null) {
+            //if player has already spawned it skips this phase
+            LOGGER.info("[CONTROLLER] skipping SPAWN phase for player: " +getCurrentPlayer());
+            incrementPhase();
+
+        } else if (Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().isEmpty()) {
+
+            //if currentPlayer already has 0 powerups in hand -> draw 2
+            LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
+            drawPowerUp();
+            LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
+            drawPowerUp();
+            LOGGER.info("[CONTROLLER] calling startPhase0 for virtual view id: " + getCurrentPlayer());
+            players.get(getCurrentPlayer()).startSpawn();
+
+        } else {
+
+            //if currentPlayer already has more thean 0 -> draw only 1
+            LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
+            drawPowerUp();
+            LOGGER.info("[CONTROLLER] calling startPhase0 for virtual view id: " + getCurrentPlayer());
+            players.get(getCurrentPlayer()).startSpawn();
+        }
+    }
+
+    public void handlePowerUp(){
+        //if current player hasn't got any PowerUp in hand -> skip this phase
+        if(Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().isEmpty()){
+            incrementPhase();
+        }else{
+            players.get(getCurrentPlayer()).startPowerUp();
+        }
+    }
+
+    public void handleAction(){
+        players.get(getCurrentPlayer()).startAction();
+    }
+
+    public void handleReload(){
+        players.get(getCurrentPlayer()).startReload();
     }
 
     /*

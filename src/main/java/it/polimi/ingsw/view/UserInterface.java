@@ -6,11 +6,13 @@ public interface UserInterface {
 
     void retryLogin();
 
-    void startPhase0();
+    void startSpawn();
 
-    void startPhase1();
+    void startPowerUp();
 
-    void startAction1();
+    void startAction();
+
+    void startReload();
 
 
 }

@@ -27,8 +27,13 @@ public class View implements ViewInterface {
     }
 
     @Override
-    public void startPhase0() {
-       userInterface.startPhase0();
+    public void startSpawn(){
+        userInterface.startSpawn();
+    }
+
+    @Override
+    public void startPowerUp() {
+       userInterface.startPowerUp();
     }
 
     @Override
@@ -52,20 +57,22 @@ public class View implements ViewInterface {
     }
 
     @Override
-    public void startPhase1() {
-        userInterface.startPhase1();
+    public void startAction() {
+        userInterface.startAction();
     }
 
     @Override
-    public void startAction1() {
-        userInterface.startAction1();
+    public void startReload() {
+        userInterface.startReload();
     }
 
+    //why view of client needs this?
     @Override
     public void sendUpdates(UpdateClass update) {
-
         CacheModel.update(update);
     }
+
+
 
 
 }

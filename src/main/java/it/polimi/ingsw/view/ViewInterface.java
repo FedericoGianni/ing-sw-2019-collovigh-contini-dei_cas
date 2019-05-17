@@ -9,16 +9,20 @@ public interface ViewInterface {
 
     void sendUpdates(UpdateClass update);
 
-    //PHASE0
-    void startPhase0();
+    //SPAWN
+    void startSpawn();
     void spawn(CachedPowerUp powerUp);
 
-    //PHASE1
-    void startPhase1();
+    //POWERUP
+    void startPowerUp();
     void useNewton(Color color, int playerId, Directions directions, int amount);
     void useTeleport(Color color, int r, int c);
     void useMarker(Color color, int playerId);
 
-    //ACTION1
-    void startAction1();
+    //ACTION
+    void startAction();
+
+    //RELOAD
+    void startReload();
+
 }

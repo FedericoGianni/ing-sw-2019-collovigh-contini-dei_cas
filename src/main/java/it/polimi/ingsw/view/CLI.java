@@ -76,10 +76,7 @@ public class CLI implements UserInterface {
     }
 
     @Override
-    public void startPhase0() {
-
-
-        System.out.println("[DEBUG] START PHASE 0 test");
+    public void startSpawn() {
 
         List<CachedPowerUp> powerUps;
 
@@ -98,7 +95,6 @@ public class CLI implements UserInterface {
             System.out.println("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
-
                 System.out.println( i + powerUps.get(i).toString());
 
             }
@@ -116,8 +112,8 @@ public class CLI implements UserInterface {
     }
 
     @Override
-    public void startPhase1(){
-        System.out.println("[DEBUG] startPhase1");
+    public void startPowerUp(){
+        System.out.println("[DEBUG] startPowerUp1");
 
 
         List<CachedPowerUp> powerUps;
@@ -220,7 +216,25 @@ public class CLI implements UserInterface {
     }
 
     @Override
-    public void startAction1() {
+    public void startAction() {
         //TODO first action handling
+    }
+
+    @Override
+    public void startReload() {
+        Boolean validChoice = false;
+        int read;
+
+
+        do{
+            System.out.println("Vuoi ricaricare? Le tue armi sono: ");
+            //TODO show weapons -> need cachedWeapons
+            System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
+            read = scanner.nextInt();
+
+            //TODO check if weapon index is ok
+            //if(read) validChoice = true;
+
+        }while(!validChoice);
     }
 }

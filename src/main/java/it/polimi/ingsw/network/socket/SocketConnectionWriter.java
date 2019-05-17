@@ -77,8 +77,26 @@ public class SocketConnectionWriter extends Thread implements ToView {
     }
 
     @Override
-    public void startPhase0() {
-        LOGGER.info("Sending startPhase0 string to connected client");
-        send("startPhase0");
+    public void startSpawn() {
+        LOGGER.info("Sending startSpawn string to connected client");
+        send("startSpawn");
+    }
+
+    @Override
+    public void startPowerUp() {
+        LOGGER.info("Sending startPowerUp string to connected client");
+        send("startPowerUp");
+    }
+
+    @Override
+    public void startAction() {
+        LOGGER.info("Sending startAction string to connected client");
+        send("startAction");
+    }
+
+    @Override
+    public void startReload() {
+        LOGGER.info("sending startReload string to connected client");
+        send("startReload");
     }
 }

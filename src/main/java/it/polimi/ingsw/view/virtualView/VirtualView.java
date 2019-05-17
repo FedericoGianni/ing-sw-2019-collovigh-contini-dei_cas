@@ -28,7 +28,7 @@ public class VirtualView implements ViewInterface {
     }
 
     @Override
-    public void startPhase0() {
+    public void startSpawn() {
         //TODO start the same method inside the real view passing throught network
         LOGGER.info("Virtual View id " + playerId + " received startPhase0 and forwarding it to the real view");
     }
@@ -39,9 +39,21 @@ public class VirtualView implements ViewInterface {
     }
 
     @Override
-    public void startPhase1(){
+    public void startPowerUp(){
         //TODO start the same method inside the real view passing througt network
-        LOGGER.info("Virtual View id " + playerId + " received startPhase1 and forwarding it to the real view");
+        LOGGER.info("Virtual View id " + playerId + " received startPowerUp and forwarding it to the real view");
+    }
+
+    @Override
+    public void startAction() {
+        //TODO start the same method inside the real view passing thorught network
+    }
+
+    @Override
+    public void startReload() {
+        //TODO start the same method inside the real view passing throught network
+        LOGGER.info("Virtual View id " + playerId + " received startReload and forwarding it to the real view");
+
     }
 
     @Override
@@ -60,11 +72,6 @@ public class VirtualView implements ViewInterface {
     @Override
     public void useMarker(Color color, int playerId) {
 
-    }
-
-    @Override
-    public void startAction1() {
-        //TODO start the same method inside the real view passing thorught network
     }
 
     @Override
