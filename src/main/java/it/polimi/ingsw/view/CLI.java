@@ -1,8 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.map.Directions;
-import it.polimi.ingsw.network.socket.SocketClient;
-import it.polimi.ingsw.network.socket.SocketClientWriter;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
@@ -14,11 +13,11 @@ public class CLI implements UserInterface {
     private final Scanner scanner = new Scanner(System.in);
     private final View view;
     //private SocketClientReader socketClientReader;
-    private SocketClientWriter socketClientWriter;
+    //private SocketClientWriter socketClientWriter;
 
-    public CLI(View view, SocketClient s) {
+    public CLI(View view) {
         this.view = view;
-        this.socketClientWriter = s.getScw();
+        //this.socketClientWriter = s.getScw();
     }
 
     /*
@@ -57,8 +56,8 @@ public class CLI implements UserInterface {
         System.out.println("[DEBUG] PlayerColor: " + playerColor);
 
 
-
-        socketClientWriter.send("login" + "\f" + playerName + "\f" + playerColor);
+        view.joinGame(playerName, PlayerColor.valueOf(playerColor.toUpperCase()));
+        //socketClientWriter.send("login" + "\f" + playerName + "\f" + playerColor);
 
     }
 
@@ -85,11 +84,16 @@ public class CLI implements UserInterface {
 
         do{
 
+            while(CacheModel.getCachedPlayers().size() <= 0) {
+                //wait for client to receive cachedModel info
+            }
+
             powerUps = CacheModel
                     .getCachedPlayers()
                     .get(view.getPlayerId())
                     .getPowerUpBag()
                     .getPowerUpList();
+
 
             System.out.println("Hai questi PowerUp:");
 

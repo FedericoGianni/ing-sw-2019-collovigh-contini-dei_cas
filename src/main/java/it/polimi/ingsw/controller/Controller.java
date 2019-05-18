@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.model.powerup.Teleporter;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.virtualView.Observers;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
@@ -79,7 +80,7 @@ public class Controller {
         this.observers = new Observers(nameList.size());
 
         for (int i = 0; i < nameList.size(); i++) {
-            players.add(new VirtualView(i, this));
+            players.add(new VirtualView(i, this, Server.getClient(i)));
         }
     }
 
@@ -106,7 +107,7 @@ public class Controller {
 
 
         for (int i = 0; i < nameList.size(); i++) {
-            players.add(new VirtualView(i, this));
+            players.add(new VirtualView(i, this, Server.getClient(i)));
         }
 
     }
@@ -331,7 +332,7 @@ public class Controller {
         Teleporter t = (Teleporter) Model.getPlayer(getCurrentPlayer()).getPowerUpBag().findItem(TELEPORTER, color);
         try {
             t.use(cell);
-        } catch(CardNotPossessedException e){
+        } catch (CardNotPossessedException e){
             //this shouldn't happen since the client can only send PowerUps that has in hand
         } catch (CellNonExistentException e){
             //this shouldn't happen too since the client can only send Cell which exists?
@@ -347,12 +348,25 @@ public class Controller {
     public void useTargetingScope(){
         //TODO
         LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useTargetingScope");
-
     }
 
-    public void endPowerUpPhase(){
-        //check if it's correct -> should increment the current enum phase to the next one
-        incrementPhase();
+    public void move(int r, int c){
+        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling move");
+        Cell cell = Model.getMap().getCell(r, c);
+        Model.getPlayer(getCurrentPlayer()).setPlayerPos(cell);
+    }
+
+    public void moveGrab(int r, int c){
+        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling moveGrab");
+        Cell cell = Model.getMap().getCell(r, c);
+        LOGGER.info("[CONTROLLER] accessing Model to set new position");
+        Model.getPlayer(getCurrentPlayer()).setPlayerPos(cell);
+        grab();
+    }
+
+    public void grab(){
+        LOGGER.info("[CONTROLLER] accessing Model to grab Ammo inside cell: " + Model.getPlayer(getCurrentPlayer()).getStats().getCurrentPosition());
+        Model.getPlayer(getCurrentPlayer()).pickAmmoHere();
     }
 
     public void incrementPhase(){

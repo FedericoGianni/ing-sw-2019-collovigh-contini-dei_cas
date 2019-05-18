@@ -40,7 +40,7 @@ public class Server  {
      */
     private static WaitingRoom waitingRoom;
 
-    private static ConcurrentHashMap<Integer,Integer> clients;
+    private static ConcurrentHashMap<Integer, ToView> clients;
 
     private static AtomicInteger clientsNum = new AtomicInteger(0);
 
@@ -75,18 +75,22 @@ public class Server  {
         this.rmiServer = new RMIServer();
     }
 
+    public static ToView getClient(int id) {
+        return clients.get(id);
+    }
+
     /**
      * this function is used to propagate the login and handle the clients registration in the main server
      *
      * @param name is the name chosen by the player
      * @param playerColor is the color chosen by the player
-     * @param connNum is the thread they use to communicate (-1 if rmi)
+     * @param toView is the thread they use to communicate (-1 if rmi)
      * @return the id of the player
      * @throws NameAlreadyTakenException
      * @throws ColorAlreadyTakenException
      * @throws OverMaxPlayerException
      */
-    public static int addPlayer(String name, PlayerColor playerColor, int connNum) throws NameAlreadyTakenException, ColorAlreadyTakenException, OverMaxPlayerException {
+    public static int addPlayer(String name, PlayerColor playerColor, ToView toView) throws NameAlreadyTakenException, ColorAlreadyTakenException, OverMaxPlayerException {
 
         if (waitingRoom.isActive()) {
 
@@ -94,9 +98,9 @@ public class Server  {
 
             System.out.println("[DEBUG] Added player w/ id: " + playerId +" and name: " + name + "and color : " + playerColor);
 
-            clients.put(playerId,connNum);
+            clients.put(playerId, toView);
 
-            System.out.println("[DEBUG] bounded player w/ id : " + playerId + "to connNum:" + connNum);
+            System.out.println("[DEBUG] bounded player w/ id : " + playerId + "toView: " + toView);
 
             return playerId;
         }
@@ -120,29 +124,14 @@ public class Server  {
 
     }
 
-    /**
-     *  this function is used to reconnect a player after the game was started w/ the id
-     * @param playerId is the id of the player that wants to reconnect
-     * @param threadNum is the thread they use to communicate (-1 if rmi)
-     */
-    public static void reconnect(int playerId, int threadNum) throws GameNonExistentException{
-
-        if (getWaitingRoom().isActive()) throw new GameNonExistentException();
-
-        if(getController().getPlayerName(playerId) != null ){
-
-            clients.put(playerId,threadNum);
-        }
-    }
-
 
     /**
      * this function is used to reconnect a player after the game was started w/ the name
      * @param name is the name of the player that wants to reconnect
-     * @param threadNum is the thread they use to communicate (-1 if rmi)
+     * @param toView
      * @return the playerId
      */
-    public static int reconnect(String name, int threadNum) throws GameNonExistentException{
+    public static int reconnect(String name, ToView toView) throws GameNonExistentException{
 
         if (getWaitingRoom().isActive()) throw new GameNonExistentException();
 
@@ -150,7 +139,7 @@ public class Server  {
 
         if ( playerId != -1){
 
-            clients.put(playerId,threadNum);
+            clients.put(playerId, toView);
 
             return playerId;
         }

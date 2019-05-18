@@ -1,9 +1,10 @@
-package it.polimi.ingsw.network.socket;
+package it.polimi.ingsw.network;
 
 //qua dovrò avviare il client da terminale passandogli gia come parametro ip del server porta cli/gui rmi/socket
 //inizio direttamente dalla schermata di login del giocatore
 
 import it.polimi.ingsw.network.rmi.RMIClient;
+import it.polimi.ingsw.network.socket.SocketClient;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
@@ -30,6 +31,12 @@ public class RunClient {
         return cli;
     }
 
+    public static View view;
+
+    public static View getView() {
+        return view;
+    }
+
     public static void main(String args[]) {
 
         try {
@@ -39,8 +46,8 @@ public class RunClient {
 
             ui = cli;
             sleep(2000);
-            View view = new View(cli);
-            cli = new CLI(view, sc);
+            view = new View(cli);
+            cli = new CLI(view);
             view.setVirtualView(sc.getScw());
             cli.login();
 

@@ -188,9 +188,9 @@ public class SocketConnectionReader extends Thread {
                 }
 
 
-                int id = Server.addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()), key );
+                int id = Server.addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()), socketConnectionWriter);
                 if(id >= 0){
-                    socketConnectionWriter.send("login\fOK");
+                    socketConnectionWriter.send("login\fOK\f"+id);
                 }
 
 

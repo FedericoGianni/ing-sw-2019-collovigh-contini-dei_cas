@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.socket;
 
+import it.polimi.ingsw.network.RunClient;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -155,6 +157,7 @@ public class SocketClientReader extends Thread {
             System.out.println("[DEBUG] [Server] login reply: " + commands[1]);
             if(!(commands[1].equals("OK")))
                 RunClient.getUi().retryLogin();
+            RunClient.getView().setPlayerId(Integer.parseInt(commands[2]));
         });
 
         //ping
@@ -166,7 +169,7 @@ public class SocketClientReader extends Thread {
         //startSpawn
         headersMap.put("startSpawn", () -> {
             System.out.println("[DEBUG] Ricevuto startSpawn dal server");
-            RunClient.getUi().startSpawn();
+            RunClient.getCli().startSpawn();
         });
 
         //startPowerUp

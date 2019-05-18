@@ -37,7 +37,7 @@ public class ToServerImpl implements ToServer{
 
             LOGGER.log(level,"[RMI-Server] adding new player w/ name: {0}", name);
 
-            return Server.addPlayer(name, color, -1);
+            return Server.addPlayer(name, color, null);
 
         }catch (NameAlreadyTakenException e){
             LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with name: " +e.getName() + "but name was already used", e);
@@ -88,7 +88,8 @@ public class ToServerImpl implements ToServer{
     @Override
     public int reconnect(String name) throws GameNonExistentException{
 
-        return Server.reconnect(name, -1);
+        //return Server.reconnect(name, null);
+        return -1;
     }
 
     /**
@@ -97,7 +98,8 @@ public class ToServerImpl implements ToServer{
     @Override
     public void reconnect(int playerId) throws GameNonExistentException {
 
-        Server.reconnect(playerId,-1);
+        //Server.reconnect(,null);
+        return;
 
     }
 

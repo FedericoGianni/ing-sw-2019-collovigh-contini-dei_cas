@@ -2,7 +2,9 @@ package it.polimi.ingsw.model.ammo;
 
 import it.polimi.ingsw.model.Color;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This class represents the AmmoCard that are placed on the Map,
@@ -245,6 +247,17 @@ public class AmmoCard {
      */
     public Color getAmmoCube2() {
         return ammoCube2.getColor();
+    }
+
+    public List<AmmoCube> getAmmoList(){
+        List<AmmoCube> l = new ArrayList<>();
+        l.add(ammoCube1);
+        l.add(ammoCube2);
+        if(!powerUp){
+            l.add(ammoCube3);
+        }
+
+        return l;
     }
 
     /**

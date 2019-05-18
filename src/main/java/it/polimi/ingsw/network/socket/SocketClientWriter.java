@@ -61,7 +61,6 @@ public class SocketClientWriter extends Client implements Runnable {
     @Override
     public int joinGame(String name, PlayerColor color) {
         send("login\f" + name + "\f" + color);
-        //TODO check how to handle return type with socket?
         return -1; //temporary solution
     }
 

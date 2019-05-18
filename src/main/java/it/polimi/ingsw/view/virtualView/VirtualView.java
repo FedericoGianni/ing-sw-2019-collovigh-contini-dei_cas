@@ -23,10 +23,11 @@ public class VirtualView implements ViewInterface {
 
     private boolean isConnected = true;
 
-    public VirtualView(int playerId, Controller controller) {
+    public VirtualView(int playerId, Controller controller, ToView toView) {
         this.playerId = playerId;
         this.controller = controller;
         // search in the HashMap with the clients binding the correspondent ToView implementation and stores it here
+        this.view = toView;
     }
 
     public void setView(ToView view) {
@@ -46,6 +47,7 @@ public class VirtualView implements ViewInterface {
     public void startSpawn() {
         //TODO start the same method inside the real view passing throught network
         LOGGER.info("Virtual View id " + playerId + " received startPhase0 and forwarding it to the real view");
+        view.startSpawn();
     }
 
     @Override

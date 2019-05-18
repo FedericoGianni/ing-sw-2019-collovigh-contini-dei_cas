@@ -2,6 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -28,6 +29,10 @@ public class View implements ViewInterface {
 
     public void setVirtualView(Client clientToVView) {
         this.clientToVView = clientToVView;
+    }
+
+    public void joinGame(String name, PlayerColor color) {
+        clientToVView.joinGame(name, color);
     }
 
     //methods started from virtual view -> view
