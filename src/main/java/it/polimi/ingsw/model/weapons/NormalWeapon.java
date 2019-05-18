@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.powerup.Mover;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -25,7 +26,7 @@ public class NormalWeapon extends Weapon{
     private boolean isLoaded;
     private ArrayList<AmmoCube> cost;
     private ArrayList<MacroEffect> effects;
-    private static ArrayList<NormalWeapon> normalWeapons =new ArrayList<>();
+
 
     public boolean isMoveBefore() {
         return moveBefore;
@@ -63,13 +64,22 @@ public class NormalWeapon extends Weapon{
         return bC;
     }
 
-    public static ArrayList<NormalWeapon> getNormalWeapons() {
-        return normalWeapons;
+
+
+    @Override
+    public boolean isLoaded() {
+        return isLoaded;
     }
 
-    public static void insertWeapon(NormalWeapon w) {
-        NormalWeapon.normalWeapons.add(w);
+    public void reload()throws NotAbleToReloadException
+    {
+        if(this.canBeReloaded())
+            this.isLoaded=true;
+        else{
+            throw new NotAbleToReloadException();
+        }
     }
+
 
 
     /**
@@ -156,8 +166,15 @@ public class NormalWeapon extends Weapon{
     /**
      * creates the static weaponsList
      */
-    public static void weaponsCreator()
+    public static  ArrayList<NormalWeapon>  weaponsCreator()
     {
+        //----------------microEffects ecc creator
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+
+        ArrayList<NormalWeapon> normalWeapons =new ArrayList<>();
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
         try (FileReader reader = new FileReader("resources/json/Weaponary"))
@@ -168,7 +185,7 @@ public class NormalWeapon extends Weapon{
             JSONArray wps = (JSONArray) obj;
 
             for (int i = 0; i < wps.size(); i++) {
-                parseWeaponObject((JSONObject)wps.get(i));
+                normalWeapons.add(parseWeaponObject((JSONObject)wps.get(i)));
             }
             //for each Json input object
 
@@ -179,13 +196,15 @@ public class NormalWeapon extends Weapon{
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        return normalWeapons;
     }
 
     /**
      * reads the JSON and creates a NormalWeapon object and adds it to the list
      * @param micros
      */
-    private static void parseWeaponObject(JSONObject micros)
+    private static NormalWeapon parseWeaponObject(JSONObject micros)
     {
         //Get  object within list
         JSONObject employeeObject = (JSONObject) micros.get("Weapon");//Choose the class
@@ -214,7 +233,7 @@ public class NormalWeapon extends Weapon{
 
 
         NormalWeapon w=new NormalWeapon(n,wpCost,mf);
-        normalWeapons.add(w);
+       return w;
     }
 
     /**
@@ -251,7 +270,6 @@ public class NormalWeapon extends Weapon{
     /**
      *
      * @param targetLists
-     * @param mE
      * @param cells
      * @throws WeaponNotLoadedException
      * @throws OverKilledPlayerException
@@ -262,23 +280,22 @@ public class NormalWeapon extends Weapon{
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public void shoot(ArrayList<ArrayList<Player>>targetLists, ArrayList<MacroEffect> mE, ArrayList<Cell> cells)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
+    public void shoot(ArrayList<ArrayList<Player>>targetLists, ArrayList<Integer> effect, ArrayList<Cell> cells)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
     {
-        ArrayList<ArrayList<String>> mainArrayList = new ArrayList<ArrayList<String>>();
-
         try{
-            if(this.isLoaded==false)
+            if(!this.isLoaded())//if actual weapon is not loaded
             {
-                throw new WeaponNotLoadedException();//weapon not loaded zac
+                throw new WeaponNotLoadedException();//weapon not loaded
             }
-            int macroCont=0;
-            for(MacroEffect item : mE)//iterate macroeffects
+
+            for(int macroCont=0;macroCont<effect.size();macroCont++)//iterate macroeffect
             {
-                if(mE.get(mE.indexOf(item)).getEffectCost()!=null)//if the effect costs 0
+                //System.out.println(this.getEffects().get(macroCont).getName());
+                if(this.getEffects().get(macroCont).getEffectCost()!=null)//if the effect costs 0 i don't need to pay
                 {
-                    if(canPay(mE.get(mE.indexOf(item)).getEffectCost(),this.isPossessedBy().getAmmoBag())==true)
+                    if(canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(),this.isPossessedBy().getAmmoBag())==true)
                     {
-                        for (AmmoCube ammo : mE.get(mE.indexOf(item)).getEffectCost())
+                        for (AmmoCube ammo : this.getEffects().get(effect.get(macroCont)).getEffectCost())
                         {
                             this.isPossessedBy().pay(ammo.getColor());//pays the effects cost
                         }
@@ -288,19 +305,19 @@ public class NormalWeapon extends Weapon{
 
 
 
-                for(MicroEffect micro: item.getMicroEffects())//iterates microEffects
+                for(MicroEffect micro: this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
                 {
 
                     if(micro.moveBefore()==true && moveBefore)//if i need to move before shooting
                     {
                         micro.microEffectApplicator(targetLists.get(macroCont),this,cells.get(macroCont));//contatore appostio forse perchè sposta gli ordini??
-                        item.getMicroEffects().remove(micro);
+                        this.getEffects().get(macroCont).getMicroEffects().remove(micro);
 
                     }
 
                 }
 
-                for(MicroEffect micro: item.getMicroEffects())//iterates microEffects
+                for(MicroEffect micro: this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
                 {
                     if(cells!=null)//if you also have mover effects
                     {micro.microEffectApplicator(targetLists.get(macroCont),this,cells.get(macroCont));}//the method that applies the effects
@@ -308,7 +325,6 @@ public class NormalWeapon extends Weapon{
                         micro.microEffectApplicator(targetLists.get(macroCont),this,null);
                     }
                 }
-                macroCont++;
             }
         }catch(WeaponNotLoadedException e){e.printStackTrace();}
         catch (CardNotPossessedException e) { e.printStackTrace(); }
@@ -323,7 +339,7 @@ public class NormalWeapon extends Weapon{
             e.printStackTrace();
         }
 
-        this.isLoaded=false;//the weapon is no longer loaded
+        this.isLoaded=false;
     }
 
     public void print()
@@ -333,6 +349,9 @@ public class NormalWeapon extends Weapon{
             for(int j = 0; j< this.getEffects().size(); j++)
             {
                 System.out.println(this.getEffects().get(j).getName());
+                System.out.print("Cost: ");
+                for(int h=0;h<this.getEffects().get(j).getEffectCost().size();h++)
+                        System.out.println(getEffects().get(j).getEffectCost().get(h));
                 if(this.getEffects().get(j).moveBeforShooting())
                 {  this.getEffects().get(j).getMicroEffects().get(2);//you need to move before everything
                     for(int h=0;h<this.getEffects().get(j).getMicroEffects().size()-1;h++)

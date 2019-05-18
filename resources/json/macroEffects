@@ -132,7 +132,9 @@
       ],
       "cost": [
         {
-          "ammoC": "BLUE",
+          "ammoC": "BLUE"
+        },
+        {
           "ammoC": "RED"
         }
       ]
@@ -164,7 +166,9 @@
       ],
       "cost": [
         {
-          "ammoC": "RED",
+          "ammoC": "RED"
+        },
+        {
           "ammoC": "YELLOW"
         }
       ]

@@ -53,7 +53,7 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
 
     public MacroEffect (String n,ArrayList <MicroEffect> ef) {
         microEffects=new ArrayList<>();
-        effectCost=new ArrayList<>();//is empty means no cost
+        effectCost=new ArrayList<>();//if empty means no cost
         this.microEffects.addAll(ef);
         this.name=n;
     }
@@ -133,7 +133,7 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
         {for (int i = 0; i < types.size(); i++) {//read Every Effect type and differenciate it
             JSONObject type=(JSONObject)types.get(i);
             String typeEncoded=(String)type.get("ammoC");
-            fc.add(ammoAnalizer(typeEncoded));//method that can decodify the microevfect code---see documentation
+            fc.add(ammoAnalizer(typeEncoded));//method that can decodify the microevfect code
 
         }
             MacroEffect mf=new MacroEffect(n,microF,fc);//create the macro effect by the list of micro Effects
@@ -157,8 +157,6 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
      */
     private static ArrayList<MicroEffect> differenciator(ArrayList<MicroEffect>microF,int type)
     {
-        //maybe you need the object or something like that??
-        //System.out.println(type);
         if(type<201)//damage type effect from 100 to 200
         {
             type=type-101;
@@ -205,7 +203,7 @@ public class MacroEffect {//----evetually add an attribute std or not if the wea
 
     public boolean moveBeforShooting()
     {
-        boolean moveb4;
+
         if(microEffects.size()!=3) return false;
         if(microEffects.get(2).moveBefore()==true)
             return true;

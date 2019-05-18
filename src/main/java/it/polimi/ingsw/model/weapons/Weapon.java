@@ -17,25 +17,15 @@ import java.util.stream.Collectors;
 
 public abstract class Weapon {
     public Weapon(){}
-    private boolean isLoaded;
     /**
      * @return Boolean if the weapon is loaded
      */
-    public final Boolean isLoaded() {
-
-        return this.isLoaded;
-    }
+    public abstract boolean isLoaded();
 
     /**
      * reloads the weapon
      */
-    public final void reload() throws NotAbleToReloadException {
-        if(this.canBeReloaded())
-            this.isLoaded=true;
-        else{
-            throw new NotAbleToReloadException();
-        }
-    }
+    public abstract void reload() throws NotAbleToReloadException ;
 
     /**
      * every weapon type need to say if it can be reloaded in its own way
@@ -74,7 +64,7 @@ public abstract class Weapon {
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public abstract void shoot(ArrayList<ArrayList<Player>> targetLists, ArrayList<MacroEffect> effects, ArrayList<Cell> cells)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
+    public abstract void shoot(ArrayList<ArrayList<Player>> targetLists, ArrayList<Integer> effects, ArrayList<Cell> cells)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
 
     /**
      *

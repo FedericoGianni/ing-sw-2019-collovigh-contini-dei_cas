@@ -19,7 +19,7 @@ public class WeaponDeck implements Deck<Weapon> {
     private WeaponDeck() {
 
         this.weaponList = new ArrayList<>();
-        weaponList.addAll(NormalWeapon.getNormalWeapons());
+        weaponList.addAll(NormalWeapon.weaponsCreator());//create and return all the normal weapons
         //then add special weapons
     }
 
@@ -37,9 +37,18 @@ public class WeaponDeck implements Deck<Weapon> {
      */
     public static WeaponDeck populateDeck(){
         WeaponDeck deck = new WeaponDeck();
+
         return deck;
     }
 
+    /**
+     * Useful only for test purposes to delete
+     * @return
+     */
+    public List <Weapon> getWeaponsList()
+    {
+        return this.weaponList;
+    }
 
     /**
      *
