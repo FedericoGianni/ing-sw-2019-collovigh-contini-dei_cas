@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.powerup.Mover;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -167,6 +168,12 @@ public class NormalWeapon extends Weapon{
      */
     public static  ArrayList<NormalWeapon>  weaponsCreator()
     {
+        //----------------microEffects ecc creator
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+
         ArrayList<NormalWeapon> normalWeapons =new ArrayList<>();
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
