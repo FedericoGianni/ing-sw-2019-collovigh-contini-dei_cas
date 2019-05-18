@@ -9,10 +9,7 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.Mover;
-import it.polimi.ingsw.model.weapons.Damage;
-import it.polimi.ingsw.model.weapons.MacroEffect;
-import it.polimi.ingsw.model.weapons.Marker;
-import it.polimi.ingsw.model.weapons.NormalWeapon;
+import it.polimi.ingsw.model.weapons.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -26,19 +23,30 @@ class NormalWeaponTest {
 
     @Test
     void weaponsCreator() {
+
+        //-----------------creates microEffects ecc
         Damage.populator();
         Marker.populator();
         Mover.populator();
         MacroEffect.effectCreator();
-        NormalWeapon.weaponsCreator();
-        assertNotNull(NormalWeapon.getNormalWeapons());
+        ArrayList <Weapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
+        //-------------------
+        assertNotNull(weapons);
 
     }
 
     @Test
     void shoot1() throws FrenzyActivatedException {//one shot, one effect, one target, free effect---the most basic possible
-        weaponsCreator();
+        //-----------------creates microEffects ecc
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
 
+        //--------------creates Players ecc
         ArrayList<String> playerNames=new ArrayList<>();
         playerNames.add("shooter");
         playerNames.add("target");
@@ -64,11 +72,11 @@ class NormalWeaponTest {
         targets.add(target1);
         ArrayList<ArrayList<Player>>targetsLists=new ArrayList<>();
         targetsLists.add(targets);
-        shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
+        shooter.addWeapon(weapons.get(0));//not how it works but easy
 
         try{
-            ArrayList <MacroEffect>mEf=new ArrayList<>();
-            mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
+            ArrayList <Integer>mEf=new ArrayList<>();
+            mEf.add(0);
             shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
             //System.out.println(target1.getStats().getDmgTaken());
         }
@@ -89,7 +97,14 @@ class NormalWeaponTest {
 
     @Test
     void shoot2() throws FrenzyActivatedException{//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
-        weaponsCreator();// 2 damages and 1 mark
+        // 2 damages and 1 mark
+        //-----------------creates microEffects ecc
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
 
         ArrayList<String> playerNames=new ArrayList<>();
         playerNames.add("shooter");
@@ -114,7 +129,7 @@ class NormalWeaponTest {
         target2.setPlayerPos(Model.getMap().getCell(1,3));
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
-        shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
+        shooter.addWeapon(weapons.get(0));//not how it works but easy
         ArrayList targets0=new ArrayList();
         ArrayList targets1=new ArrayList();
         ArrayList<ArrayList<Player>> targetLists = new ArrayList<>();
@@ -125,9 +140,10 @@ class NormalWeaponTest {
         Model.getMap().setUnvisited();
 
         try{
-            ArrayList <MacroEffect>mEf=new ArrayList<>();
-            mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
-            mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(1));//costs 1 red AmmoCube
+            ArrayList <Integer>mEf=new ArrayList<>();
+            mEf.add(0);
+            mEf.add(1);
+
 
             shooter.getWeapons().get(0).shoot(targetLists,mEf,null);
             System.out.println(target1.getPlayerName());
@@ -157,7 +173,13 @@ class NormalWeaponTest {
 
     @Test
     void shoot3() throws FrenzyActivatedException{//same as the shoot2 test but launches the notEnoughAmmoException
-        weaponsCreator();
+        //-----------------creates microEffects ecc
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
 
         List<String>  names=new ArrayList<>();
         names.add("shooter");
@@ -173,15 +195,15 @@ class NormalWeaponTest {
         target1.setPlayerPos(Model.getMap().getCell(1,3));
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));//one only for evitating null Pointer
-        shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not how it works but easy
+        shooter.addWeapon(weapons.get(0));//not how it works but easy
         ArrayList targets=new ArrayList();
         ArrayList<ArrayList <Player>>targetsLists=new ArrayList<>();
         targets.add(target1);
         targetsLists.add(targets);
         try{
-            ArrayList <MacroEffect>mEf=new ArrayList<>();
-            mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(0));
-            mEf.add(NormalWeapon.getNormalWeapons().get(0).getEffects().get(1));//costs 1 red AmmoCube
+            ArrayList <Integer> mEf=new ArrayList<>();
+            mEf.add(0);
+            mEf.add(1);//costs 1 red AmmoCube
 
             shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
 
@@ -203,7 +225,13 @@ class NormalWeaponTest {
 
     @Test
     void shoot4() throws FrenzyActivatedException{//Shoot, 2 effects and mover effect that moves the target in the shooter cell
-        weaponsCreator();
+        //-----------------creates microEffects ecc
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
         //login stuff
         List<String>  names=new ArrayList<>();
         names.add("shooter");
@@ -224,8 +252,7 @@ class NormalWeaponTest {
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
 
-        shooter.addWeapon(NormalWeapon.getNormalWeapons().get(0));//not actually how it works but easy
-
+        shooter.addWeapon(weapons.get(5));//not actually how it works but easy
         //adding targets to the targets lists
         ArrayList targets1=new ArrayList();
         ArrayList targets2=new ArrayList();
@@ -239,14 +266,16 @@ class NormalWeaponTest {
         cells.add(null);
         cells.add(shooter.getCurrentPosition());
         try{
-
-
-            ArrayList <MacroEffect>mEf=new ArrayList<>();
-            mEf.add(NormalWeapon.getNormalWeapons().get(5).getEffects().get(0));//tractor beam-- don't move(because you can see it) then 1 dmg
-            mEf.add(NormalWeapon.getNormalWeapons().get(5).getEffects().get(1));//costs 1 red and 1 yellow AmmoCube--move it to my cell then 3dmg
-            NormalWeapon.getNormalWeapons().get(5).enableMoveBefore();
+            ArrayList <Integer>mEf=new ArrayList<>();
+            mEf.add(0);//tractor beam-- don't move(because you can see it) then 1 dmg
+            mEf.add(1);//costs 1 red and 1 yellow AmmoCube--move it to my cell then 3dmg
+            weapons.get(5).enableMoveBefore();
 
             shooter.getWeapons().get(0).shoot(targetsLists,mEf,cells);
+
+            System.out.println(target1.getPlayerName());
+            System.out.println(target1.getStats().getDmgTaken());
+
             assertEquals(shooter.getCurrentPosition(),target1.getCurrentPosition());
 
         }
@@ -264,4 +293,6 @@ class NormalWeaponTest {
             e.printStackTrace();
         }
     }
+
 }
+

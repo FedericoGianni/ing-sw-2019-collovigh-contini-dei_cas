@@ -17,7 +17,8 @@ class MacroEffectTest {
         for(int i=0;i<MacroEffect.getMacroEffects().size();i++)//just for seeing something
         {
             System.out.println(MacroEffect.getMacroEffects().get(i).getName());
-            System.out.println(MacroEffect.getMacroEffects().get(i).getClass());
+            for(int j=0;j<MacroEffect.getMacroEffects().get(i).getEffectCost().size();j++)
+             System.out.println(MacroEffect.getMacroEffects().get(i).getEffectCost().get(j));
         }
 
     }
