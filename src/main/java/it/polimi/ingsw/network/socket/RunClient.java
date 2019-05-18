@@ -6,6 +6,7 @@ package it.polimi.ingsw.network.socket;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.UserInterface;
+import it.polimi.ingsw.view.View;
 
 import static java.lang.Thread.sleep;
 
@@ -38,7 +39,9 @@ public class RunClient {
 
             ui = cli;
             sleep(2000);
-            cli = new CLI(sc);
+            View view = new View(cli);
+            cli = new CLI(view, sc);
+            view.setVirtualView(sc.getScw());
             cli.login();
 
             //rmic = new RMIClient("localhost");

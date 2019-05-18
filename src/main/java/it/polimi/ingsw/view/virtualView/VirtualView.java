@@ -21,21 +21,31 @@ public class VirtualView implements ViewInterface {
     private ToView view;
     private Controller controller;
 
+    private boolean isConnected = true;
+
     public VirtualView(int playerId, Controller controller) {
         this.playerId = playerId;
         this.controller = controller;
         // search in the HashMap with the clients binding the correspondent ToView implementation and stores it here
     }
 
+    public void setView(ToView view) {
+        this.view = view;
+    }
+
+    public boolean isConnected() {
+        return isConnected;
+    }
+
+    public void setConnected(boolean connected) {
+        isConnected = connected;
+    }
+
+    //methods to forward to the corresponding view throught network
     @Override
     public void startSpawn() {
         //TODO start the same method inside the real view passing throught network
         LOGGER.info("Virtual View id " + playerId + " received startPhase0 and forwarding it to the real view");
-    }
-
-    @Override
-    public void spawn(CachedPowerUp powerUp) {
-        controller.spawn(powerUp.getType(),powerUp.getColor());
     }
 
     @Override
@@ -54,6 +64,12 @@ public class VirtualView implements ViewInterface {
         //TODO start the same method inside the real view passing throught network
         LOGGER.info("Virtual View id " + playerId + " received startReload and forwarding it to the real view");
 
+    }
+
+    //methods called by the view to the virtual view to call controller
+    @Override
+    public void spawn(CachedPowerUp powerUp) {
+        controller.spawn(powerUp.getType(),powerUp.getColor());
     }
 
     @Override

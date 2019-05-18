@@ -11,7 +11,7 @@ public class View implements ViewInterface {
 
     private UserInterface userInterface;
     private int playerId;
-    private Client virtualView;
+    private Client clientToVView;
     private CacheModel cacheModel = null;
 
     public View(UserInterface userInterface) {
@@ -26,6 +26,11 @@ public class View implements ViewInterface {
         this.playerId = playerId;
     }
 
+    public void setVirtualView(Client clientToVView) {
+        this.clientToVView = clientToVView;
+    }
+
+    //methods started from virtual view -> view
     @Override
     public void startSpawn(){
         userInterface.startSpawn();
@@ -37,26 +42,6 @@ public class View implements ViewInterface {
     }
 
     @Override
-    public void spawn(CachedPowerUp powerUp) {
-        //TODO starts this method inside the virtual view passing throught network
-    }
-
-    @Override
-    public void useNewton(Color color, int playerId, Directions directions, int amount) {
-        //TODO starts this method inside the virtual view passing thorught network
-    }
-
-    @Override
-    public void useTeleport(Color color, int r, int c) {
-        //TODO starts this method inside the virtual view passing throught newtork
-    }
-
-    @Override
-    public void useMarker(Color color, int playerId) {
-        //TODO starts this method inside the virtual view passing thorought netowrk
-    }
-
-    @Override
     public void startAction() {
         userInterface.startAction();
     }
@@ -65,6 +50,29 @@ public class View implements ViewInterface {
     public void startReload() {
         userInterface.startReload();
     }
+
+    //methods to be forwarded from view -> virtual view throught network
+    //use clientToView which is an abstract class implemented both by rmi/socket in the client->server flow
+    @Override
+    public void spawn(CachedPowerUp powerUp) {
+        clientToVView.spawn(powerUp);
+    }
+
+    @Override
+    public void useNewton(Color color, int playerId, Directions directions, int amount) {
+        clientToVView.useNewton(color, playerId, directions, amount);
+    }
+
+    @Override
+    public void useTeleport(Color color, int r, int c) {
+        clientToVView.useTeleport(color, r, c);
+    }
+
+    @Override
+    public void useMarker(Color color, int playerId) {
+        clientToVView.useMarker(color, playerId);
+    }
+
 
     //why view of client needs this?
     @Override

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
@@ -63,7 +65,11 @@ public abstract class Client {
 
     // start game logic things
 
-
-
+    //SPAWN
     public abstract void spawn(CachedPowerUp powerUp);
+
+    //POWERUP
+    public abstract void useNewton(Color color, int playerId, Directions directions, int amount);
+    public abstract void useTeleport(Color color, int r, int c);
+    public abstract void useMarker(Color color, int playerId);
 }

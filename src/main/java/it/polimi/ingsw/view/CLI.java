@@ -2,7 +2,6 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.network.socket.SocketClient;
-import it.polimi.ingsw.network.socket.SocketClientReader;
 import it.polimi.ingsw.network.socket.SocketClientWriter;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -14,18 +13,20 @@ public class CLI implements UserInterface {
 
     private final Scanner scanner = new Scanner(System.in);
     private final View view;
-    private SocketClientReader socketClientReader;
+    //private SocketClientReader socketClientReader;
     private SocketClientWriter socketClientWriter;
 
-    public CLI(View view) {
+    public CLI(View view, SocketClient s) {
         this.view = view;
+        this.socketClientWriter = s.getScw();
     }
 
+    /*
     public CLI(SocketClient s) {
         this.socketClientReader = s.getScr();
         this.socketClientWriter = s.getScw();
         this.view = null;
-    }
+    }*/
 
     @Override
     public void login() {
@@ -36,10 +37,6 @@ public class CLI implements UserInterface {
 
         System.out.println("Enter player name: ");
         playerName = scanner.nextLine();
-
-
-
-        //socketClientWriter.send("check" + "\t" + playerName);
 
         System.out.println("Choose a player color (GREEN, GREY, PURPLE, BLUE,YELLOW): ");
 
@@ -58,6 +55,8 @@ public class CLI implements UserInterface {
 
         System.out.println("[DEBUG] PlayerName:  " + playerName);
         System.out.println("[DEBUG] PlayerColor: " + playerColor);
+
+
 
         socketClientWriter.send("login" + "\f" + playerName + "\f" + playerColor);
 

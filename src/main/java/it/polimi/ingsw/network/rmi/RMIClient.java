@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.rmi;
 
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -256,5 +258,18 @@ public class RMIClient extends Client {
         }
     }
 
+    @Override
+    public void useNewton(Color color, int playerId, Directions directions, int amount) {
+        //TODO forward this function to view to handle useNewton function invocation
+    }
 
+    @Override
+    public void useTeleport(Color color, int r, int c) {
+        //TODO forward this function to view to handle useTeleport function invocation
+    }
+
+    @Override
+    public void useMarker(Color color, int playerId) {
+        //TODO forward this function to view to handle useMarker function invocation
+    }
 }
