@@ -73,15 +73,18 @@ public class SocketClientWriter extends Client implements Runnable {
     @Override
     public void useNewton(Color color, int playerId, Directions directions, int amount) {
         //TODO string to forward to SocketConnectionReader to handle useNewton function invocation
+        //send();
     }
 
     @Override
     public void useTeleport(Color color, int r, int c) {
         //TODO string to forward to SocketConnectionReader to handle useNewton function invocation
+        //send();
     }
 
     @Override
     public void useMarker(Color color, int playerId) {
         //TODO string to forward to SocketConnectionReader to handle useNewton function invocation
+        //send();
     }
 }

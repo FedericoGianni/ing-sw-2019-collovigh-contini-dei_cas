@@ -26,6 +26,7 @@ import java.util.List;
 
 public class CurrentGame extends Subject{
 
+    //TODO add the possibility to choose how many skull to place in the Kill_Shot_Track at game start
     private static final int KILL_SHOT_TRACK = 8;
     private List<Player> players;
     private Map currentMap;

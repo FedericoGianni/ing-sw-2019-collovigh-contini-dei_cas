@@ -350,10 +350,13 @@ public class Controller {
         LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useTargetingScope");
     }
 
+    //ACTIONS
+
     public void move(int r, int c){
         LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling move");
         Cell cell = Model.getMap().getCell(r, c);
         Model.getPlayer(getCurrentPlayer()).setPlayerPos(cell);
+        incrementPhase();
     }
 
     public void moveGrab(int r, int c){
@@ -362,25 +365,22 @@ public class Controller {
         LOGGER.info("[CONTROLLER] accessing Model to set new position");
         Model.getPlayer(getCurrentPlayer()).setPlayerPos(cell);
         grab();
+        incrementPhase();
     }
 
     public void grab(){
         LOGGER.info("[CONTROLLER] accessing Model to grab Ammo inside cell: " + Model.getPlayer(getCurrentPlayer()).getStats().getCurrentPosition());
         Model.getPlayer(getCurrentPlayer()).pickAmmoHere();
+        incrementPhase();
+    }
+
+    //TODO need to know CachedWeapon logic and MacroEffect logic
+    public void shoot(int weapon, int target){
+        incrementPhase();
     }
 
     public void incrementPhase(){
         turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
         handleTurnPhase();
     }
-
-    //TODO check if it's possible to handle actions in only one class or split in single actions methods
-    public void doAction(){
-        incrementPhase();
-    }
-
-
-
-
-
 }
