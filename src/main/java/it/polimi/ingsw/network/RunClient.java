@@ -13,30 +13,50 @@ import static java.lang.Thread.sleep;
 
 public class RunClient {
 
-    private static RMIClient rmic ;
+    private static RMIClient rmic ; // to be deleted
 
-    public static UserInterface ui;
+    public static UserInterface ui; // to be deleted
 
-    public static void setUi(UserInterface ui) {
-        RunClient.ui = ui;
-    }
+    public static CLI cli; // to be deleted
 
-    public static UserInterface getUi() {
-        return ui;
-    }
+    private static View view;
 
-    public static CLI cli;
 
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
     public static CLI getCli() {
         return cli;
     }
 
-    public static View view;
+    /**
+     * @deprecated
+     * @param ui
+     */
+    @Deprecated
+    public static void setUi(UserInterface ui) {
+        RunClient.ui = ui;
+    }
+
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
+    public static UserInterface getUi() {
+        return ui;
+    }
 
     public static View getView() {
         return view;
     }
 
+
+
+
+    /*
     public static void main(String args[]) {
 
         try {
@@ -59,6 +79,68 @@ public class RunClient {
 
             e.printStackTrace();
         }
+
+    }
+
+     */
+
+    /**
+     *
+     * @param args ->
+     *             arg1 = ip server
+     *             arg2 = socket port
+     *             arg3 = gui ( -gui for graphical interface or -cli for command line interface)
+     */
+
+    public static void main(String[] args) {
+
+        if (args.length == 3) {
+
+            startWithThree(args);
+
+
+        }else if (args.length == 2){
+
+            try {
+                SocketClient sc = new SocketClient(args[0], Integer.parseInt(args[1]));
+                Thread t = new Thread(sc);
+                t.start();
+
+                ui = cli;
+                sleep(2000);
+                view = new View(cli);
+                cli = new CLI(view);
+                view.setVirtualView(sc.getScw());
+                cli.login();
+
+                //rmic = new RMIClient("localhost");
+                //rmic.joinGame("a", PlayerColor.GREEN);
+
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+
+        }else {
+
+            System.out.println("[ERROR] this args config has still not been implemented ");
+        }
+
+
+    }
+
+    /**
+     * This function will start the client if the program is launched with three arguments
+     * 1-> server Ip
+     * 2-> server port for socket
+     * 3-> -cli for cli / -gui for gui
+     *
+     * @param args are the three args
+     */
+    private static void startWithThree(String[] args){
+
+        view = new View(args[0], Integer.parseInt(args[1]), args[2]);
 
     }
 }

@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.net.Inet4Address;
@@ -27,12 +28,14 @@ public class RMIClient extends Client {
     //attributes relative to server -> client flow
     private static Boolean registryCreated = false;
     private String localName;
+    private View view;
 
 
 
-    public RMIClient(String serverIp) {
+    public RMIClient(String serverIp, View view) {
 
         this.serverIp = serverIp;
+        this.view = view;
 
         createRegistry();
 

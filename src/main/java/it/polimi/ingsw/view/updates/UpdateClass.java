@@ -7,7 +7,7 @@ public abstract class UpdateClass implements Serializable {
 
     private final UpdateType type;
     private final Update update;
-    private final int playerId;
+    private final int playerId; //Player whom the stats belong
 
 
 

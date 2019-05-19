@@ -12,19 +12,17 @@ import java.util.List;
 
 public class CacheModel {
 
-    private static List<Player> players = new ArrayList<>();
-    private static int mapType;
-    private static CachedGame game = null;
+    private  List<Player> players = new ArrayList<>();
+    private  int mapType;
+    private  CachedGame game = null;
 
 
-    private CacheModel() {
+    public CacheModel() {
 
 
     }
 
-    private static void populateModel(InitialUpdate update) {
-
-        new CacheModel();
+    private void update(InitialUpdate update) {
 
         players = new ArrayList<>();
 
@@ -37,44 +35,32 @@ public class CacheModel {
         mapType = update.getMapType();
     }
 
-    public static List<Player> getCachedPlayers(){
 
-        return players;
-    }
-
-    public static int getMapType() {
-        return mapType;
-    }
-
-    public static CachedGame getGame() {
-        return game;
-    }
-
-    public static  void update(UpdateClass updateClass){
+    public void update(UpdateClass updateClass){
 
         switch (updateClass.getType()){
 
             case INITIAL:
 
-                populateModel((InitialUpdate) updateClass.getUpdate());
+                update((InitialUpdate) updateClass.getUpdate());
 
                 break;
 
             case STATS:
 
-                getCachedPlayers().get(updateClass.getPlayerId()).update((CachedStats) updateClass.getUpdate());
+                players.get(updateClass.getPlayerId()).update((CachedStats) updateClass.getUpdate());
 
                 break;
 
             case AMMO_BAG:
 
-                getCachedPlayers().get(updateClass.getPlayerId()).update((CachedAmmoBag) updateClass.getUpdate());
+                players.get(updateClass.getPlayerId()).update((CachedAmmoBag) updateClass.getUpdate());
 
                 break;
 
             case POWERUP_BAG:
 
-                getCachedPlayers().get(updateClass.getPlayerId()).update((CachedPowerUpBag) updateClass.getUpdate());
+                players.get(updateClass.getPlayerId()).update((CachedPowerUpBag) updateClass.getUpdate());
 
                 break;
 
@@ -86,7 +72,7 @@ public class CacheModel {
 
             case GAME:
 
-                game = (CachedGame) updateClass.getUpdate();
+                this.game = (CachedGame) updateClass.getUpdate();
 
                 break;
 
@@ -109,5 +95,20 @@ public class CacheModel {
 
 
         }
+    }
+
+    public List<Player> getCachedPlayers(){
+
+        return players;
+    }
+
+    public int getMapType() {
+
+        return mapType;
+    }
+
+    public CachedGame getGame() {
+
+        return game;
     }
 }
