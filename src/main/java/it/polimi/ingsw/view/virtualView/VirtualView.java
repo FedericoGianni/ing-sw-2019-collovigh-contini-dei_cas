@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class VirtualView implements ViewInterface {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.FINE;
+    private static Level level = Level.INFO;
 
     private int playerId;
     private ToView view;
@@ -106,6 +106,8 @@ public class VirtualView implements ViewInterface {
         // sends the updates to the net
 
         view.sendUpdate(update);
+
+        LOGGER.log(level, " send update to client: " + playerId + " update: "+ update.getType());
 
     }
 
