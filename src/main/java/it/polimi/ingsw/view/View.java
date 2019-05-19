@@ -8,6 +8,8 @@ import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
+import static java.lang.Thread.sleep;
+
 public class View implements ViewInterface {
 
     private UserInterface userInterface;
