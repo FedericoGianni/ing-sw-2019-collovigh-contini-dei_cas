@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.PowerUpType;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,8 @@ public class PowerUpBag  extends Subject implements Bag<PowerUp> {
         if (this.powerUps.size()<MAX_POWER_UPS){
 
             this.powerUps.add(item);
+
+            this.updateAll(new CachedPowerUpBag(this));
         }
 
     }
@@ -74,6 +77,8 @@ public class PowerUpBag  extends Subject implements Bag<PowerUp> {
         else {
             this.powerUps.remove(item);
 
+            updateAll(new CachedPowerUpBag(this));
+
             return item;
         }
     }
@@ -90,6 +95,8 @@ public class PowerUpBag  extends Subject implements Bag<PowerUp> {
         Model.getGame().discardPowerUp(item);
 
         this.powerUps.remove(item);
+
+        updateAll(new CachedPowerUpBag(this));
 
         return cube;
     }

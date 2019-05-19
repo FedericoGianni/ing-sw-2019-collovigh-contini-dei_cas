@@ -126,6 +126,7 @@ public class RMIClient extends Client {
             //set the pid parameter of the class
 
             this.setPlayerId(playerId);
+            this.getView().setPlayerId(playerId);
 
             // register the ip of the client rmiRegistry to the server
 

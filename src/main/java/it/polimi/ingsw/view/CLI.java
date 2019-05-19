@@ -145,7 +145,12 @@ public class CLI implements UserInterface {
         do{
 
             while(view.getCacheModel().getCachedPlayers().size() <= 0) {
-                //wait for client to receive cachedModel info
+                System.out.println("Waiting for InitialUpdate");
+            }
+
+            while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()){
+
+                System.out.println("Waiting for powerUp");
             }
 
             powerUps = view
@@ -159,12 +164,13 @@ public class CLI implements UserInterface {
             System.out.println("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
-                System.out.println( i + powerUps.get(i).toString());
+                System.out.println( i + " " + powerUps.get(i).toString());
 
             }
 
             System.out.println("scegli un powerUp da scartare: ");
             read = scanner.nextInt();
+            scanner.nextLine();
 
             if (read >= 0 && read < powerUps.size()) validChoice = true;
 

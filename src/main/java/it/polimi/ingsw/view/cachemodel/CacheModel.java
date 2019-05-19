@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.cachemodel;
 
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedGame;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
@@ -15,11 +16,10 @@ public class CacheModel {
     private  List<Player> players = new ArrayList<>();
     private  int mapType;
     private  CachedGame game = null;
+    private final View view;
 
-
-    public CacheModel() {
-
-
+    public CacheModel(View view) {
+        this.view = view;
     }
 
     private void update(InitialUpdate update) {
@@ -33,6 +33,8 @@ public class CacheModel {
         }
 
         mapType = update.getMapType();
+
+        view.getClientToVView().setGameId(update.getGameId());
     }
 
 

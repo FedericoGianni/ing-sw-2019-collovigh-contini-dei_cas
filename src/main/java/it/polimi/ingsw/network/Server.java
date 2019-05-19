@@ -144,6 +144,8 @@ public class Server  {
         }else {
 
             LOGGER.log(level, "Player {0} left the game", controller.getPlayerName(playerId));
+
+            //TODO: modify the virtual view class to make the player skip the turn
         }
 
     }

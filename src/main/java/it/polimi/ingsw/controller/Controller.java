@@ -13,6 +13,9 @@ import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.model.powerup.Teleporter;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.view.updates.InitialUpdate;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
@@ -83,6 +86,8 @@ public class Controller {
         for (int i = 0; i < nameList.size(); i++) {
             players.add(new VirtualView(i, this, Server.getClient(i)));
         }
+
+        sendInitialUpdate( nameList, playerColors, gameId, mapType);
     }
 
     /**
@@ -109,6 +114,7 @@ public class Controller {
             players.add(new VirtualView(i, this, Server.getClient(i)));
         }
 
+        sendInitialUpdate( nameList, playerColors, gameId, mapType);
     }
 
 
@@ -213,6 +219,17 @@ public class Controller {
 
 
     // Turn Management
+
+    private void sendInitialUpdate(List<String> nameList, List<PlayerColor>playerColors, int gameId, int mapType ){
+
+        InitialUpdate update = new InitialUpdate(nameList,playerColors, gameId, mapType);
+        UpdateClass updateClass = new UpdateClass(UpdateType.INITIAL,update,-1);
+
+        for (VirtualView v: players){
+
+            v.sendUpdates(updateClass);
+        }
+    }
 
     public void handleTurnPhase(){
         switch(turnPhase){

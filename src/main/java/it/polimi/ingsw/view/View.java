@@ -33,6 +33,7 @@ public class View implements ViewInterface {
     @Deprecated
     public View(UserInterface userInterface) {
         this.userInterface = userInterface;
+
     }
 
 
@@ -44,7 +45,7 @@ public class View implements ViewInterface {
      */
     public View(String serverIp, int port,  String ui) {
 
-        this.cacheModel = new CacheModel();
+        this.cacheModel = new CacheModel(this);
         this.serverIp = serverIp;
         this.port = port;
 
@@ -114,7 +115,9 @@ public class View implements ViewInterface {
         clientToVView.joinGame(name, color);
     }
 
-
+    public Client getClientToVView() {
+        return clientToVView;
+    }
 
     //methods started from virtual view -> view
 

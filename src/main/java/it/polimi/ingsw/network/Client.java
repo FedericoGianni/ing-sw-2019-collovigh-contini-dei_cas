@@ -48,7 +48,9 @@ public abstract class Client {
     }
 
     public void setGameId(int gameId) {
+
         this.gameId = gameId;
+
     }
 
     public void setPlayerId(int playerId) {
