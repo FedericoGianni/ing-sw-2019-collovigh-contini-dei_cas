@@ -134,6 +134,11 @@ public class WaitingRoom {
         return (players.contains(name));
     }
 
+    public String getName(int playerId){
+
+        return this.players.get(playerId);
+    }
+
     /**
      *
      * @param color is the color to check
@@ -152,11 +157,6 @@ public class WaitingRoom {
 
         players.remove(id);
         colors.remove(id);
-    }
-
-    public synchronized void reconnect(int playerId){
-
-        //TODO
     }
 
     /**
@@ -213,4 +213,6 @@ public class WaitingRoom {
     public Games getGames() {
         return games;
     }
+
+
 }

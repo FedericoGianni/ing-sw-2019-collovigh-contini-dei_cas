@@ -3,11 +3,17 @@ package it.polimi.ingsw.network.rmi;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ToClientImpl implements ToClient {
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.FINE;
 
     private final RMIClient client;
 
@@ -67,6 +73,15 @@ public class ToClientImpl implements ToClient {
     }
 
 
+    //Updates
+
+
+    @Override
+    public void sendUpdate(UpdateClass update) throws RemoteException {
+
+        client.getView().getCacheModel().update(update);
+    }
+
 
 
     // methods from ToView interface ( game handling)
@@ -77,6 +92,9 @@ public class ToClientImpl implements ToClient {
     @Override
     public void startSpawn() {
 
+        LOGGER.log(level, "[RMI-ToClient] received startSpawn()");
+        client.getView().startSpawn();
+
     }
 
     /**
@@ -84,6 +102,8 @@ public class ToClientImpl implements ToClient {
      */
     @Override
     public void startPowerUp() {
+
+        client.getView().startPowerUp();
 
     }
 
@@ -93,6 +113,8 @@ public class ToClientImpl implements ToClient {
     @Override
     public void startAction() {
 
+        client.getView().startAction();
+
     }
 
     /**
@@ -101,6 +123,8 @@ public class ToClientImpl implements ToClient {
     @Override
     public void startReload() {
 
+        client.getView().startReload();
+
     }
 
     /**
@@ -108,6 +132,8 @@ public class ToClientImpl implements ToClient {
      */
     @Override
     public void useGrenade() {
+
+        //TODO
 
     }
 }

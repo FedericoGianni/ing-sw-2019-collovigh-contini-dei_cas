@@ -4,11 +4,13 @@ package it.polimi.ingsw.view.virtualView;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.ViewInterface;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
+import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,33 +44,76 @@ public class VirtualView implements ViewInterface {
         isConnected = connected;
     }
 
+
     //methods to forward to the corresponding view throught network
+
+
     @Override
     public void startSpawn() {
-        //TODO start the same method inside the real view passing throught network
+
+        // refresh the ToClient reference
+
+        this.view = Server.getClient(playerId); // can change if player disconnect -> to be refreshed every method
+
         LOGGER.info("Virtual View id " + playerId + " received startPhase0 and forwarding it to the real view");
+
+        // calls the function on the ToClient interface
+
         view.startSpawn();
+
     }
 
     @Override
     public void startPowerUp(){
+
+        // refresh the ToClient reference
+
+        this.view = Server.getClient(playerId);
+
         //TODO start the same method inside the real view passing througt network
         LOGGER.info("Virtual View id " + playerId + " received startPowerUp and forwarding it to the real view");
     }
 
     @Override
     public void startAction() {
+
+        // refresh the ToClient reference
+
+        this.view = Server.getClient(playerId);
+
         //TODO start the same method inside the real view passing thorught network
     }
 
     @Override
     public void startReload() {
+
+        // refresh the ToClient reference
+
+        this.view = Server.getClient(playerId);
+
         //TODO start the same method inside the real view passing throught network
         LOGGER.info("Virtual View id " + playerId + " received startReload and forwarding it to the real view");
 
     }
 
+    @Override
+    public void sendUpdates(UpdateClass update) {
+
+        // refresh the ToClient reference
+
+        this.view = Server.getClient(playerId);
+
+        // sends the updates to the net
+
+        view.sendUpdate(update);
+
+    }
+
+
+
     //methods called by the view to the virtual view to call controller
+
+
     @Override
     public void spawn(CachedPowerUp powerUp) {
         controller.spawn(powerUp.getType(),powerUp.getColor());
@@ -92,9 +137,6 @@ public class VirtualView implements ViewInterface {
 
     }
 
-    @Override
-    public void sendUpdates(UpdateClass update) {
 
-    }
 
 }

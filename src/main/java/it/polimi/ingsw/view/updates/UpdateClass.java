@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.updates;
 
 import java.io.Serializable;
 
-public abstract class UpdateClass implements Serializable {
+public  class UpdateClass implements Serializable {
 
     private final UpdateType type;
     private final Update update;

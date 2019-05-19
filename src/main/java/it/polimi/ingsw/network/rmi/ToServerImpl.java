@@ -37,7 +37,7 @@ public class ToServerImpl implements ToServer{
 
             LOGGER.log(level,"[RMI-Server] adding new player w/ name: {0}", name);
 
-            return Server.addPlayer(name, color, null);
+            return Server.getWaitingRoom().addPlayer(name, color);
 
         }catch (NameAlreadyTakenException e){
             LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with name: " +e.getName() + "but name was already used", e);
@@ -92,27 +92,6 @@ public class ToServerImpl implements ToServer{
         return -1;
     }
 
-    /**
-     * @param playerId is the id of the player
-     */
-    @Override
-    public void reconnect(int playerId) throws GameNonExistentException {
-
-        //Server.reconnect(,null);
-        return;
-
-    }
 
 
-    public void unExport(){
-
-        try {
-
-            UnicastRemoteObject.unexportObject(this, true);
-
-        }catch (NoSuchObjectException e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
-        }
-    }
 }

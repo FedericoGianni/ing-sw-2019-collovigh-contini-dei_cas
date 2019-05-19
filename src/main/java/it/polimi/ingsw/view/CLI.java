@@ -140,6 +140,7 @@ public class CLI implements UserInterface {
         Boolean validChoice = false;
         int read;
 
+        System.out.println("SPAWN PHASE");
 
         do{
 

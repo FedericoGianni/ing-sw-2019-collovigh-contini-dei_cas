@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.socket;
 
 import it.polimi.ingsw.network.ToView;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -74,6 +75,11 @@ public class SocketConnectionWriter extends Thread implements ToView {
     public void send(String message) {
         output.println(message);
         output.flush();
+    }
+
+    @Override
+    public void sendUpdate(UpdateClass update) {
+        //TODO
     }
 
     @Override

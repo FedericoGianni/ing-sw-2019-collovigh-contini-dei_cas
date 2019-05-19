@@ -41,11 +41,5 @@ public interface ToServer extends Remote {
      */
     int reconnect(String name) throws RemoteException, GameNonExistentException;
 
-    /**
-     *
-     * @param playerId is the id of the player
-     */
-    void reconnect(int playerId)throws RemoteException, GameNonExistentException;
-
 
 }

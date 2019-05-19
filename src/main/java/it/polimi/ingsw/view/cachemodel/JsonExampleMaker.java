@@ -1,12 +1,21 @@
 package it.polimi.ingsw.view.cachemodel;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.PowerUpBag;
 import it.polimi.ingsw.model.player.Stats;
+import it.polimi.ingsw.model.powerup.Newton;
+import it.polimi.ingsw.model.powerup.PowerUp;
+import it.polimi.ingsw.model.powerup.TagbackGrenade;
 import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
+import it.polimi.ingsw.view.updates.Update;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.awt.*;
 import java.io.FileWriter;
@@ -17,9 +26,8 @@ public class JsonExampleMaker {
 
     public static void main(String[] args) {
 
-        writeStats();
+        writeUpdate();
 
-        writeMove();
 
     }
 
@@ -92,6 +100,37 @@ public class JsonExampleMaker {
 
 
             gson.toJson(move, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeUpdate(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            PowerUp powerUp1 = new Newton(Color.BLUE);
+            PowerUp powerUp2 = new TagbackGrenade(Color.RED);
+
+            PowerUpBag bag = new PowerUpBag();
+            bag.addItem(powerUp1);
+            bag.addItem(powerUp2);
+
+            Update cachedPowerUpBag = new CachedPowerUpBag(bag);
+
+            UpdateClass updateClass = new UpdateClass(UpdateType.POWERUP_BAG,cachedPowerUpBag,0);
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/update.json");
+
+
+            gson.toJson(updateClass, writer);
 
             writer.flush();
             writer.close();

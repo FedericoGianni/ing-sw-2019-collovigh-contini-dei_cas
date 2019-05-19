@@ -11,6 +11,8 @@ public abstract class Client {
     private int playerId = -1;
 
 
+    // Connection Handling
+
     /**
      *
      * @param name is the name chosen for the login
@@ -27,29 +29,20 @@ public abstract class Client {
 
 
     /**
-     * this method will reconnect the player to the server if the client still run
-     */
-    //public abstract void reconnect();
-
-    /**
      * this method will reconnect the player to the server if the client was shut down
      * @param name is the name chosen
      * @return the player id or -1 if something went wrong
      */
     //public abstract int reconnect(String name);
 
-    /**
-     *
-     * @return the current GameId
-     */
+
+    // Getter
+
     public int getGameId() {
+
         return gameId;
     }
 
-    /**
-     *
-     * @return the player Id in the current Game
-     */
     public int getPlayerId() {
         return playerId;
     }

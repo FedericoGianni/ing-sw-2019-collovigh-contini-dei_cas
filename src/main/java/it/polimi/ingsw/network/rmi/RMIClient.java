@@ -165,36 +165,6 @@ public class RMIClient extends Client {
 
     }
 
-    public void reconnect() {
-
-        if (getPlayerId() != -1) {
-
-            try {
-
-                // locate the server registry
-
-                remoteRegistry = LocateRegistry.getRegistry(serverIp, 2020);
-
-                //load the ToServer object from the registry
-
-                ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
-
-                // register the ip of the client rmiRegistry to the server
-
-                server.registerMe(Inet4Address.getLocalHost().getHostAddress(), getPlayerId(), localName);
-
-                server.reconnect(getPlayerId());
-
-            } catch (Exception e) {
-
-                LOGGER.log(Level.WARNING, e.getMessage(), e);
-            }
-
-        }
-
-
-    }
-
     /**
      * this method will reconnect the player to the server if the client was shut down
      *
@@ -229,36 +199,19 @@ public class RMIClient extends Client {
         return -1;
     }
 
+    public View getView() {
+        return view;
+    }
+
+
+
+
+    // game handling methods
+
     @Override
     public void spawn(CachedPowerUp powerUp) {
 
 
-    }
-
-    public static void resetClientRegistry(){
-
-        try {
-
-
-            // connect to the remote registry
-
-            Registry remote = LocateRegistry.getRegistry( 2021);
-
-            //  load all the bounded names registered on the given register
-
-            List<String> oldNames = Arrays.asList(remote.list());
-
-            //for each string registered unbound all the names
-
-            for (String name : oldNames) {
-
-                remote.unbind(name);
-            }
-
-        }catch (Exception e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
-        }
     }
 
     @Override

@@ -22,8 +22,7 @@ public class RMIServer {
     private ToServerImpl skeleton;
 
     //attributes relative to server -> client flow
-    private static ConcurrentHashMap<Integer,String> remoteClientAddress = new ConcurrentHashMap<>();
-    private static ConcurrentHashMap<Integer,ToClient> remoteClients = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Integer,ToViewImpl> remoteViews = new ConcurrentHashMap<>();
     private Registry remote;
 
 
@@ -99,19 +98,19 @@ public class RMIServer {
 
         try{
 
-            // add the client rmi registry address to the server
-
-            remoteClientAddress.put(playerId,address);
-
             // connect to the remote registry
 
             remote = LocateRegistry.getRegistry(address, 2021);
 
-            // load the specified ToClient object and puts it in the map
+            // creates a new ToViewImpl with client's ip address and ToClient and adds it to the hashmap
 
-            remoteClients.put(playerId,(ToClient) remote.lookup(name));
+            remoteViews.put(playerId,new ToViewImpl(address, name, (ToClient) remote.lookup(name)));
 
-            LOGGER.log(Level.INFO, "Registered client with name: {0}", name);
+            LOGGER.log(Level.INFO, "[RMI-Server] Registered client with name: {0}", name);
+
+            // adds the client to the map in the Server Hashmap
+
+            Server.addPlayer(playerId,remoteViews.get(playerId));
 
             //starts a thread that pings that client
 
@@ -127,13 +126,9 @@ public class RMIServer {
 
     public static void removeClient(int playerId){
 
-        // remove the correspondent entry from the address map
-
-        remoteClientAddress.remove(playerId);
-
         // remove the correspondent entry from the clients map
 
-        remoteClients.remove(playerId);
+        remoteViews.remove(playerId);
 
         // call the method on the main server
 
@@ -148,7 +143,7 @@ public class RMIServer {
      */
     public int getClientNumber(){
 
-        return remoteClients.size();
+        return remoteViews.size();
     }
 
     /**
@@ -157,7 +152,7 @@ public class RMIServer {
      */
     public void resetClients(){
 
-        remoteClients.clear();
+        remoteViews.clear();
 
     }
 

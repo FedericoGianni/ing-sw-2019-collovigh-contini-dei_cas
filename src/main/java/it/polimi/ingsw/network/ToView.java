@@ -1,8 +1,15 @@
 package it.polimi.ingsw.network;
 
-import java.rmi.Remote;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
-public interface ToView extends Remote {
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface ToView  {
+
+    // Update Logic
+
+    void sendUpdate(UpdateClass update);
 
     // calls the same method on view Class
 

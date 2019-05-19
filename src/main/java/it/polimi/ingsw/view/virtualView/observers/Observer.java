@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.virtualView;
+package it.polimi.ingsw.view.virtualView.observers;
 
 public interface Observer {
 
