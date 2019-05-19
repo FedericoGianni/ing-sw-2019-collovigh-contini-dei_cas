@@ -8,10 +8,9 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.net.Inet4Address;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +41,9 @@ public class RMIClient extends Client {
         createRemoteObject();
 
     }
+
+
+    // Utilities
 
     /**
      * this method creates a new Rmi registry on port 2021 if thi was not already created
@@ -99,6 +101,30 @@ public class RMIClient extends Client {
         }
     }
 
+    private ToServer getServer(){
+
+        try {
+
+            // locate the server registry
+
+            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
+            LOGGER.log(level,"[RMI-Client] registry located by client");
+
+            //load the ToServer object from the registry
+
+            return  (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+
+    // connection
+
     /**
      *
      * @param name is the name chosen for the login
@@ -110,14 +136,9 @@ public class RMIClient extends Client {
 
         try {
 
-            // locate the server registry
-
-            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
-            LOGGER.log(level,"[RMI-Client] registry located by client");
-
             //load the ToServer object from the registry
 
-            ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+            ToServer server = getServer();
 
             // join the game and store the pid
 
@@ -177,13 +198,9 @@ public class RMIClient extends Client {
 
         try {
 
-            // locate the server registry
-
-            remoteRegistry = LocateRegistry.getRegistry(serverIp, 2020);
-
             //load the ToServer object from the registry
 
-            ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+            ToServer server = getServer();
 
             // register the ip of the client rmiRegistry to the server
 
@@ -212,7 +229,19 @@ public class RMIClient extends Client {
     @Override
     public void spawn(CachedPowerUp powerUp) {
 
+        try {
 
+            //load the ToServer object from the registry
+
+            ToServer server = getServer();
+
+            //calls the method on the ToServer remote object
+
+            server.spawn(powerUp);
+
+        }catch (RemoteException e){
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
     }
 
     @Override

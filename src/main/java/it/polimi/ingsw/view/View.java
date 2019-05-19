@@ -11,9 +11,15 @@ import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static java.lang.Thread.sleep;
 
 public class View implements ViewInterface {
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.INFO;
 
     private UserInterface userInterface;
     private int playerId;
@@ -151,7 +157,10 @@ public class View implements ViewInterface {
 
     @Override
     public void spawn(CachedPowerUp powerUp) {
+
+        LOGGER.log(level, "[View] send spawn command to server with PowerUp: {0}", powerUp);
         clientToVView.spawn(powerUp);
+
     }
 
     @Override

@@ -1,11 +1,14 @@
 package it.polimi.ingsw.network.rmi;
 
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
@@ -19,6 +22,7 @@ public class ToServerImpl implements ToServer{
     private static Level level = Level.FINE;
 
     private final RMIServer server;
+    private int playerId;
 
     public ToServerImpl(RMIServer server) throws RemoteException{
 
@@ -37,7 +41,9 @@ public class ToServerImpl implements ToServer{
 
             LOGGER.log(level,"[RMI-Server] adding new player w/ name: {0}", name);
 
-            return Server.getWaitingRoom().addPlayer(name, color);
+            playerId = Server.getWaitingRoom().addPlayer(name, color);
+
+            return playerId;
 
         }catch (NameAlreadyTakenException e){
             LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with name: " +e.getName() + "but name was already used", e);
@@ -92,6 +98,29 @@ public class ToServerImpl implements ToServer{
         return -1;
     }
 
+    @Override
+    public void spawn(CachedPowerUp powerUp) {
+
+        Server
+                .getController()
+                .getVirtualView(playerId)
+                .spawn(powerUp);
+    }
+
+    @Override
+    public void useNewton(Color color, int playerId, Directions directions, int amount) {
+
+    }
+
+    @Override
+    public void useTeleport(Color color, int r, int c) {
+
+    }
+
+    @Override
+    public void useMarker(Color color, int playerId) {
+
+    }
 
 
 }
