@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.powerup.Mover;
+import it.polimi.ingsw.model.weapons.Mover;
 import org.junit.jupiter.api.Test;
 
 class MoverTest {

@@ -142,7 +142,7 @@ public class RMIClient extends Client {
 
             // join the game and store the pid
 
-            String localIp = Inet4Address.getLocalHost().getHostAddress();
+            String localIp = "192.168.1.2";
 
             int playerId = server.joinGame(localIp,localName,name,color);
 

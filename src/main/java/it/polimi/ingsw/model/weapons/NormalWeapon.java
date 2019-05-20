@@ -1,14 +1,10 @@
 package it.polimi.ingsw.model.weapons;
 
 import it.polimi.ingsw.customsexceptions.*;
-import it.polimi.ingsw.customsexceptions.DeadPlayerException;
-import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
-import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
-import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.powerup.Mover;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,7 +13,8 @@ import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class NormalWeapon extends Weapon{

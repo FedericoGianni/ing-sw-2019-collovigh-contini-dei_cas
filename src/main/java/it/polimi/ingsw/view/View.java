@@ -100,9 +100,9 @@ public class View implements ViewInterface {
         userInterface.login();
     }
 
-    public void retryLogin(){
+    public void retryLogin(String error){
 
-        userInterface.retryLogin();
+        userInterface.retryLogin(error);
     }
 
     public int getPlayerId() {

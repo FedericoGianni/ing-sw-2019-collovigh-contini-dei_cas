@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.powerup.Mover;
 import it.polimi.ingsw.model.weapons.Damage;
 import it.polimi.ingsw.model.weapons.MacroEffect;
 import it.polimi.ingsw.model.weapons.Marker;
+import it.polimi.ingsw.model.weapons.Mover;
 import org.junit.jupiter.api.Test;
 
 class MacroEffectTest {

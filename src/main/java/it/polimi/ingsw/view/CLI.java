@@ -12,6 +12,8 @@ public class CLI implements UserInterface {
 
     private final Scanner scanner = new Scanner(System.in);
     private final View view;
+    public static final String DEFAULT_NAME_ALREADY_TAKEN = "NAME_ALREADY_TAKEN";
+    public static final String DEFAULT_COLOR_ALREADY_TAKEN = "COLOR_ALREADY_TAKEN";
     //private SocketClientReader socketClientReader;
     //private SocketClientWriter socketClientWriter;
 
@@ -93,10 +95,10 @@ public class CLI implements UserInterface {
         String playerColor;
         boolean validColorChoice = false;
 
-        System.out.println("Enter player name: ");
+        System.out.println("Scegli un nome: ");
         playerName = scanner.nextLine();
 
-        System.out.println("Choose a player color (GREEN, GREY, PURPLE, BLUE,YELLOW): ");
+        System.out.println("Seleziona un colore (GREEN, GREY, PURPLE, BLUE,YELLOW): ");
 
         do {
             playerColor = scanner.nextLine();
@@ -111,8 +113,8 @@ public class CLI implements UserInterface {
 
         }while(!validColorChoice);
 
-        System.out.println("[DEBUG] PlayerName:  " + playerName);
-        System.out.println("[DEBUG] PlayerColor: " + playerColor);
+        //System.out.println("[DEBUG] PlayerName:  " + playerName);
+        //System.out.println("[DEBUG] PlayerColor: " + playerColor);
 
 
         view.joinGame(playerName, PlayerColor.valueOf(playerColor.toUpperCase()));
@@ -127,8 +129,16 @@ public class CLI implements UserInterface {
     }
 
     @Override
-    public void retryLogin() {
-        System.out.println("Login failed. Retry ");
+    public void retryLogin(String error) {
+        switch (error){
+            case DEFAULT_NAME_ALREADY_TAKEN:
+                System.out.println("Nome già preso.");
+                break;
+            case DEFAULT_COLOR_ALREADY_TAKEN:
+                System.out.println("Colore già preso.");
+                break;
+        }
+        System.out.println("Login fallito. Riprova");
         login();
     }
 
