@@ -1,12 +1,14 @@
 package it.polimi.ingsw.network.rmi;
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-public interface ToClient extends Remote {
+public interface ToClient extends  Remote {
 
     /**
      * This method notify the user that the name chosen is already taken
@@ -35,6 +37,7 @@ public interface ToClient extends Remote {
      */
     int getPid() throws RemoteException;
 
+
     /**
      *
      * @param gameId is the id of the game
@@ -42,28 +45,24 @@ public interface ToClient extends Remote {
      */
     void initGame(int gameId) throws RemoteException;
 
-    /**
-     *
-     * @param phaseNum is the phase number
-     *                 0 -> Spawn
-     *                 1 -> powerUp 1
-     *                 2 -> action 1
-     *                 3 -> powerUp 2
-     *                 4 -> action 2
-     *                 5 -> powerUp 3
-     *                 6 -> reload
-     * @throws RemoteException
-     */
-    void startPhase(int phaseNum) throws RemoteException;
+    //Updates
+
+    void sendUpdate(UpdateClass update) throws RemoteException;
 
 
-    /**
-     *
-     * @return the grenade that will be used or null if not
-     * @throws RemoteException
-     */
-    CachedPowerUp useGranade() throws RemoteException;
+    // Turn Handling
+
+    void startSpawn() throws RemoteException;
 
 
+    void startPowerUp() throws RemoteException;
 
+
+    void startAction() throws RemoteException;
+
+
+    void startReload()throws RemoteException;
+
+
+    void useGrenade()throws RemoteException;
 }

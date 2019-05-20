@@ -28,9 +28,12 @@ public class RMIPinger implements Runnable{
     @Override
     public void run() {
 
+        String message = "[RMI-PING] Player with unknown id never joined the game";
+
         try {
 
             pId = target.getPid();
+            message = "[RMI-PING] Player with Id: " + pId + " left the game";
 
 
             Boolean b;
@@ -53,9 +56,13 @@ public class RMIPinger implements Runnable{
         }catch (LostClientException e){
 
             RMIServer.removeClient(pId);
+            LOGGER.log(Level.WARNING, message);
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, e.getMessage(), e);
+            RMIServer.removeClient(pId);
+            LOGGER.log(Level.WARNING, message);
+
         }
 
     }

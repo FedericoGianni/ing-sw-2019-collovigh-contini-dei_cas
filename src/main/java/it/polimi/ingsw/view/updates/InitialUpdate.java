@@ -10,11 +10,13 @@ public class InitialUpdate implements Serializable, Update{
     private final List<String> names;
     private final List<PlayerColor> colors;
     private final int mapType;
+    private final int gameId;
 
-    public InitialUpdate(List<String> names, List<PlayerColor> colors, int mapType) {
+    public InitialUpdate(List<String> names, List<PlayerColor> colors,int gameId, int mapType) {
         this.names = names;
         this.colors = colors;
         this.mapType = mapType;
+        this.gameId = gameId;
     }
 
     public List<String> getNames() {
@@ -27,5 +29,9 @@ public class InitialUpdate implements Serializable, Update{
 
     public int getMapType() {
         return mapType;
+    }
+
+    public int getGameId() {
+        return gameId;
     }
 }

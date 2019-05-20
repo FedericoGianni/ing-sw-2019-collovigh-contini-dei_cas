@@ -13,12 +13,16 @@ import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * This class represent the main Server which is the common part shared by both Socket and RMI.
  */
 public class Server  {
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.FINE;
 
     /**
      * IP Address of the Server
@@ -75,10 +79,6 @@ public class Server  {
         this.rmiServer = new RMIServer();
     }
 
-    public static ToView getClient(int id) {
-        return clients.get(id);
-    }
-
     /**
      * this function is used to propagate the login and handle the clients registration in the main server
      *
@@ -108,6 +108,23 @@ public class Server  {
         return -1;
     }
 
+    /**
+     * This function is used to add players to the HashMap but without forwarding anything to the WaitingRoom
+     *
+     * Will be also used for reconnections
+     * @param playerId is the id of the player
+     * @param toView is the interface to reach him
+     */
+    public static void addPlayer(int playerId, ToView toView){
+
+        clients.put(playerId,toView);
+
+        String message = "[DEBUG] bounded player w/ id :" + playerId + "to View: " +toView;
+
+        LOGGER.log(level,message);
+
+    }
+
 
     /**
      * function that have to be called by the pingers if the client disconnects
@@ -117,34 +134,20 @@ public class Server  {
 
         clients.remove(playerId);
 
+
+
         if ((waitingRoom.isActive()) && (WaitingRoom.getTimerCount() > 1)){
 
+            LOGGER.log(level, "Player {0} left the game", waitingRoom.getName(playerId));
             waitingRoom.removePlayer(playerId);
+
+        }else {
+
+            LOGGER.log(level, "Player {0} left the game", controller.getPlayerName(playerId));
+
+            //TODO: modify the virtual view class to make the player skip the turn
         }
 
-    }
-
-
-    /**
-     * this function is used to reconnect a player after the game was started w/ the name
-     * @param name is the name of the player that wants to reconnect
-     * @param toView
-     * @return the playerId
-     */
-    public static int reconnect(String name, ToView toView) throws GameNonExistentException{
-
-        if (getWaitingRoom().isActive()) throw new GameNonExistentException();
-
-        int playerId = getController().findPlayerByName(name);
-
-        if ( playerId != -1){
-
-            clients.put(playerId, toView);
-
-            return playerId;
-        }
-
-        return -1;
     }
 
     /**
@@ -185,6 +188,10 @@ public class Server  {
      */
     public static WaitingRoom getWaitingRoom() {
         return waitingRoom;
+    }
+
+    public static ToView getClient(int id) {
+        return clients.get(id);
     }
 
 }

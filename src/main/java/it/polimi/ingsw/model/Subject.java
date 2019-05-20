@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.view.virtualView.Observer;
+import it.polimi.ingsw.view.virtualView.observers.Observer;
+import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,11 @@ public abstract class Subject {
 
     public void addObserver(Observer observer){
 
-        this.observers.add(observer);
+        if (Observers.isInitialized()) {
+
+            this.observers.add(observer);
+
+        }
     }
 
     public void removeObserver(Observer observer){
@@ -21,9 +26,14 @@ public abstract class Subject {
 
     public void updateAll(Object object){
 
-        for (Observer observer: observers){
+        if (Observers.isInitialized()) {
 
-            observer.update(object);
+
+            for (Observer observer : observers) {
+
+                observer.update(object);
+            }
+
         }
     }
 

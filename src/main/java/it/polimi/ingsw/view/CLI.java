@@ -2,7 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.view.cachemodel.CacheModel;
+import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.util.List;
@@ -15,6 +15,10 @@ public class CLI implements UserInterface {
     //private SocketClientReader socketClientReader;
     //private SocketClientWriter socketClientWriter;
 
+    /**
+     * Default constructor
+     * @param view is the view
+     */
     public CLI(View view) {
         this.view = view;
         //this.socketClientWriter = s.getScw();
@@ -26,6 +30,61 @@ public class CLI implements UserInterface {
         this.socketClientWriter = s.getScw();
         this.view = null;
     }*/
+
+
+
+    // start Ui methods
+
+    /**
+     * This function starts the ui and ask the user which protocol wants to use
+     */
+    @Override
+    public void startUI() {
+
+        int connectionType;
+
+        System.out.println("Ciao ! \n Benvenuto in ADRENALINA");
+
+        do {
+
+            System.out.println("Digita: \n 1 per connetterti al server con SOCKET \n 2 per farlo con RMI");
+
+            connectionType = scanner.nextInt();
+
+            scanner.nextLine();
+
+        }while (!(connectionType == 1 || connectionType == 2));
+
+        switch (connectionType){
+
+            case 1:
+                chooseNetProtocol(ProtocolType.SOCKET);
+                break;
+
+            case 2:
+                chooseNetProtocol(ProtocolType.RMI);
+                break;
+
+            default:
+
+                System.out.println("OPS: qualcosa è andato storto");
+                break;
+        }
+
+    }
+
+    /**
+     * @param type is the type of connection specified
+     */
+    private void chooseNetProtocol(ProtocolType type) {
+
+        view.createConnection(type);
+    }
+
+
+
+    // game initialization functions
+
 
     @Override
     public void login() {
@@ -42,9 +101,9 @@ public class CLI implements UserInterface {
         do {
             playerColor = scanner.nextLine();
 
-            if(playerColor.toUpperCase().equals("GREEN") || playerColor.toUpperCase().equals("GREY") ||
-                    playerColor.toUpperCase().equals("YELLOW") || playerColor.toUpperCase().equals("PURPLE") ||
-                    playerColor.toUpperCase().equals("BLUE")) {
+            if(playerColor.equalsIgnoreCase("GREEN") || playerColor.equalsIgnoreCase("GREY") ||
+                    playerColor.equalsIgnoreCase("YELLOW") || playerColor.equalsIgnoreCase("PURPLE") ||
+                    playerColor.equalsIgnoreCase("BLUE")) {
                 validColorChoice = true;
             } else {
                 System.out.println("Please enter a valid color choice: ");
@@ -62,9 +121,9 @@ public class CLI implements UserInterface {
     }
 
     public static void show(String s){
-        new Thread(() -> {
-            System.out.println(s);
-        }).start();
+        new Thread(() ->
+            System.out.println(s)
+        ).start();
     }
 
     @Override
@@ -81,14 +140,21 @@ public class CLI implements UserInterface {
         Boolean validChoice = false;
         int read;
 
+        System.out.println("SPAWN PHASE");
 
         do{
 
-            while(CacheModel.getCachedPlayers().size() <= 0) {
-                //wait for client to receive cachedModel info
+            while(view.getCacheModel().getCachedPlayers().size() <= 0) {
+                System.out.println("Waiting for InitialUpdate");
             }
 
-            powerUps = CacheModel
+            while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()){
+
+                System.out.println("Waiting for powerUp");
+            }
+
+            powerUps = view
+                    .getCacheModel()
                     .getCachedPlayers()
                     .get(view.getPlayerId())
                     .getPowerUpBag()
@@ -98,12 +164,13 @@ public class CLI implements UserInterface {
             System.out.println("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
-                System.out.println( i + powerUps.get(i).toString());
+                System.out.println( i + " " + powerUps.get(i).toString());
 
             }
 
             System.out.println("scegli un powerUp da scartare: ");
             read = scanner.nextInt();
+            scanner.nextLine();
 
             if (read >= 0 && read < powerUps.size()) validChoice = true;
 
@@ -125,7 +192,8 @@ public class CLI implements UserInterface {
 
         do{
 
-            powerUps = CacheModel
+            powerUps = view
+                    .getCacheModel()
                     .getCachedPlayers()
                     .get(view.getPlayerId())
                     .getPowerUpBag()
@@ -147,7 +215,8 @@ public class CLI implements UserInterface {
 
         int player;
         String direction;
-        int r,c;
+        int r;
+        int c;
 
         switch (powerUps.get(1).getType()){
 
@@ -156,7 +225,7 @@ public class CLI implements UserInterface {
                     System.out.println("Su quale giocatore vuoi usare Newton? >>> ");
                     player = scanner.nextInt();
 
-                    if(player >= 0 && player <= CacheModel.getCachedPlayers().size())
+                    if(player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
                         validChoice = true;
                     else
                         System.out.println("Scelta non valida. Riprova.");
@@ -181,7 +250,7 @@ public class CLI implements UserInterface {
                     System.out.println("Su quale giocatore vuoi usare Teleporter? >>> ");
                     player = scanner.nextInt();
 
-                    if(player >= 0 && player <= CacheModel.getCachedPlayers().size())
+                    if(player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
                         validChoice = true;
                     else
                         System.out.println("Scelta non valida. Riprova.");

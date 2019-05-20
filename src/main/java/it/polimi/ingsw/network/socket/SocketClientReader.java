@@ -174,7 +174,7 @@ public class SocketClientReader extends Thread {
         headersMap.put("login", () -> {
             System.out.println("[DEBUG] [Server] login reply: " + commands[1]);
             if(!(commands[1].equals("OK")))
-                RunClient.getUi().retryLogin();
+                RunClient.getView().retryLogin();
             RunClient.getView().setPlayerId(Integer.parseInt(commands[2]));
         });
 
@@ -187,25 +187,25 @@ public class SocketClientReader extends Thread {
         //startSpawn
         headersMap.put("startSpawn", () -> {
             System.out.println("[DEBUG] Ricevuto startSpawn dal server");
-            RunClient.getCli().startSpawn();
+            RunClient.getView().startSpawn();
         });
 
         //startPowerUp
         headersMap.put("startPowerUp", () -> {
             System.out.println("[DEBUG] Ricevuto startPowerUp dal server");
-            RunClient.getUi().startPowerUp();
+            RunClient.getView().startPowerUp();
         });
 
         //startAction
         headersMap.put("startAction", () -> {
             System.out.println("[DEBUG] Ricevuto startAction dal server");
-            RunClient.getUi().startAction();
+            RunClient.getView().startAction();
         });
 
         //reload
         headersMap.put("startReload", () -> {
             System.out.println("[DEBUG] Ricevuto startReload dal server");
-            RunClient.getUi().startReload();
+            RunClient.getView().startReload();
         });
 
     }

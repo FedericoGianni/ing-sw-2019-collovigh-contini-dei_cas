@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.map.AmmoCell;
 import it.polimi.ingsw.model.map.CellColor;

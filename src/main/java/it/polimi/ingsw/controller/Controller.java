@@ -13,7 +13,10 @@ import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.model.powerup.Teleporter;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.view.virtualView.Observers;
+import it.polimi.ingsw.view.updates.InitialUpdate;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.virtualView.observers.Observers;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 import java.util.ArrayList;
@@ -71,21 +74,20 @@ public class Controller {
      */
     public Controller(List<String> nameList, List<PlayerColor>playerColors, int gameId) {
 
+        this.observers = new Observers(this, nameList.size()); // needs to stay first
 
         int mapType= this.chooseMap(nameList.size());
         this.model = new Model(nameList,playerColors,mapType);
         this.roundNumber = 0;
         this.gameId = gameId;
         this.players = new ArrayList<>();
-        this.observers = new Observers(nameList.size());
+
 
         for (int i = 0; i < nameList.size(); i++) {
             players.add(new VirtualView(i, this, Server.getClient(i)));
         }
-    }
 
-    public VirtualView getVirtualView(int id) {
-        return players.get(id);
+        sendInitialUpdate( nameList, playerColors, gameId, mapType);
     }
 
     /**
@@ -98,23 +100,34 @@ public class Controller {
     public Controller(List<String> nameList, List<PlayerColor>playerColors,int gameId, int mapType) {
 
 
+        this.observers = new Observers(this, nameList.size()); // needs to stay first
+
         this.model = new Model(nameList,playerColors,mapType);
 
         this.roundNumber = 0;
         this.gameId = gameId;
         this.players = new ArrayList<>();
-        this.observers = new Observers(nameList.size());
+
 
 
         for (int i = 0; i < nameList.size(); i++) {
             players.add(new VirtualView(i, this, Server.getClient(i)));
         }
 
+        sendInitialUpdate( nameList, playerColors, gameId, mapType);
     }
 
 
     public Model getModel() {
         return model;
+    }
+
+    public VirtualView getVirtualView(int id) {
+        return players.get(id);
+    }
+
+    public List<VirtualView> getVirtualViews(){
+        return new ArrayList<>(players);
     }
 
 
@@ -144,6 +157,8 @@ public class Controller {
         }
     }
 
+
+    // management Methods
 
     /**
      *
@@ -200,6 +215,20 @@ public class Controller {
         }
 
         return roundNumber % players.size();
+    }
+
+
+    // Turn Management
+
+    private void sendInitialUpdate(List<String> nameList, List<PlayerColor>playerColors, int gameId, int mapType ){
+
+        InitialUpdate update = new InitialUpdate(nameList,playerColors, gameId, mapType);
+        UpdateClass updateClass = new UpdateClass(UpdateType.INITIAL,update,-1);
+
+        for (VirtualView v: players){
+
+            v.sendUpdates(updateClass);
+        }
     }
 
     public void handleTurnPhase(){

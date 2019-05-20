@@ -4,13 +4,13 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.net.Inet4Address;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,18 +27,23 @@ public class RMIClient extends Client {
     //attributes relative to server -> client flow
     private static Boolean registryCreated = false;
     private String localName;
+    private View view;
 
 
 
-    public RMIClient(String serverIp) {
+    public RMIClient(String serverIp, View view) {
 
         this.serverIp = serverIp;
+        this.view = view;
 
         createRegistry();
 
         createRemoteObject();
 
     }
+
+
+    // Utilities
 
     /**
      * this method creates a new Rmi registry on port 2021 if thi was not already created
@@ -96,6 +101,30 @@ public class RMIClient extends Client {
         }
     }
 
+    private ToServer getServer(){
+
+        try {
+
+            // locate the server registry
+
+            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
+            LOGGER.log(level,"[RMI-Client] registry located by client");
+
+            //load the ToServer object from the registry
+
+            return  (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+
+    // connection
+
     /**
      *
      * @param name is the name chosen for the login
@@ -107,14 +136,9 @@ public class RMIClient extends Client {
 
         try {
 
-            // locate the server registry
-
-            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
-            LOGGER.log(level,"[RMI-Client] registry located by client");
-
             //load the ToServer object from the registry
 
-            ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+            ToServer server = getServer();
 
             // join the game and store the pid
 
@@ -123,6 +147,7 @@ public class RMIClient extends Client {
             //set the pid parameter of the class
 
             this.setPlayerId(playerId);
+            this.getView().setPlayerId(playerId);
 
             // register the ip of the client rmiRegistry to the server
 
@@ -162,36 +187,6 @@ public class RMIClient extends Client {
 
     }
 
-    public void reconnect() {
-
-        if (getPlayerId() != -1) {
-
-            try {
-
-                // locate the server registry
-
-                remoteRegistry = LocateRegistry.getRegistry(serverIp, 2020);
-
-                //load the ToServer object from the registry
-
-                ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
-
-                // register the ip of the client rmiRegistry to the server
-
-                server.registerMe(Inet4Address.getLocalHost().getHostAddress(), getPlayerId(), localName);
-
-                server.reconnect(getPlayerId());
-
-            } catch (Exception e) {
-
-                LOGGER.log(Level.WARNING, e.getMessage(), e);
-            }
-
-        }
-
-
-    }
-
     /**
      * this method will reconnect the player to the server if the client was shut down
      *
@@ -203,13 +198,9 @@ public class RMIClient extends Client {
 
         try {
 
-            // locate the server registry
-
-            remoteRegistry = LocateRegistry.getRegistry(serverIp, 2020);
-
             //load the ToServer object from the registry
 
-            ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+            ToServer server = getServer();
 
             // register the ip of the client rmiRegistry to the server
 
@@ -226,35 +217,30 @@ public class RMIClient extends Client {
         return -1;
     }
 
+    public View getView() {
+        return view;
+    }
+
+
+
+
+    // game handling methods
+
     @Override
     public void spawn(CachedPowerUp powerUp) {
 
-
-    }
-
-    public static void resetClientRegistry(){
-
         try {
 
+            //load the ToServer object from the registry
 
-            // connect to the remote registry
+            ToServer server = getServer();
 
-            Registry remote = LocateRegistry.getRegistry( 2021);
+            //calls the method on the ToServer remote object
 
-            //  load all the bounded names registered on the given register
+            server.spawn(powerUp);
 
-            List<String> oldNames = Arrays.asList(remote.list());
-
-            //for each string registered unbound all the names
-
-            for (String name : oldNames) {
-
-                remote.unbind(name);
-            }
-
-        }catch (Exception e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
+        }catch (RemoteException e){
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
         }
     }
 
