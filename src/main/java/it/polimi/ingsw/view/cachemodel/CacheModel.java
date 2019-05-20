@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view.cachemodel;
 
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoBag;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedGame;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
+import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
+import it.polimi.ingsw.view.cachemodel.sendables.*;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
@@ -14,9 +12,9 @@ import java.util.List;
 public class CacheModel {
 
     private  List<Player> players = new ArrayList<>();
-    private  int mapType;
     private  CachedGame game = null;
     private final View view;
+    private CachedMap cachedMap;
 
     public CacheModel(View view) {
         this.view = view;
@@ -32,7 +30,7 @@ public class CacheModel {
 
         }
 
-        mapType = update.getMapType();
+        cachedMap = new CachedMap(update.getMapType());
 
         view.getClientToVView().setGameId(update.getGameId());
     }
@@ -80,13 +78,13 @@ public class CacheModel {
 
             case AMMO_CELL:
 
-                //TODO
+                this.cachedMap.update((CachedAmmoCell) updateClass.getUpdate());
 
                 break;
 
             case SPAWN_CELL:
 
-                //TODO
+                this.cachedMap.update((CachedSpawnCell) updateClass.getUpdate());
 
                 break;
 
@@ -106,7 +104,7 @@ public class CacheModel {
 
     public int getMapType() {
 
-        return mapType;
+        return cachedMap.getMapType();
     }
 
     public CachedGame getGame() {

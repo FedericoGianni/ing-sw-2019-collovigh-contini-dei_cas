@@ -8,7 +8,10 @@ public class Observers {
 
     private static HashMap<Integer, PlayerObserver> playerObservers = new HashMap<>();
     private static CurrentGameObserver gameObserver = new CurrentGameObserver();
+    private static SpawnCellObserver spawnCellObserver = new SpawnCellObserver();
+    private static AmmoCellObserver ammoCellObserver = new AmmoCellObserver();
     private final Controller controller;
+
 
 
     public Observers(Controller controller, int playerNum) {
@@ -21,6 +24,8 @@ public class Observers {
         }
 
         gameObserver.setObservers(this);
+        spawnCellObserver.setObservers(this);
+        ammoCellObserver.setObservers(this);
     }
 
     public static StatsObserver getStatsObserver(int playerId){
@@ -52,5 +57,13 @@ public class Observers {
 
         if (playerObservers.isEmpty()) return false;
         else return true;
+    }
+
+    public static SpawnCellObserver getSpawnCellObserver() {
+        return spawnCellObserver;
+    }
+
+    public static AmmoCellObserver getAmmoCellObserver() {
+        return ammoCellObserver;
     }
 }

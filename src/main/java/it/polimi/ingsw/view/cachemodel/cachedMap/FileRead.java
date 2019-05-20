@@ -1,11 +1,11 @@
-package it.polimi.ingsw.view.cachemodel.cachedMap;
+package it.polimi.ingsw.view.cachemodel.cachedmap;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
 
 import java.io.*;
 import java.util.Random;
 
-import static it.polimi.ingsw.view.cachemodel.cachedMap.AsciiColor.*;
+import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 
 class FileRead {
 

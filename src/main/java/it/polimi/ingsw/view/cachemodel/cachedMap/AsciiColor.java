@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.cachemodel.cachedMap;
+package it.polimi.ingsw.view.cachemodel.cachedmap;
 
 
 

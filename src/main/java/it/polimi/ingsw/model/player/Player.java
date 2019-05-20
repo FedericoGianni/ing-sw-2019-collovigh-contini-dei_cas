@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
+import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
@@ -40,7 +41,7 @@ public class Player {
         this.currentPowerUps = new PowerUpBag();
         if (Observers.isInitialized()) this.currentPowerUps.addObserver(Observers.getPowerUpBagObserver(id));
 
-        this.ammo = new AmmoBag();
+        this.ammo = new AmmoBag(this);
         if (Observers.isInitialized()) this.ammo.addObserver(Observers.getAmmoBagObserver(id));
 
         this.currentWeapons = new WeaponBag();
@@ -346,8 +347,11 @@ public class Player {
         );
     }
 
-    public Weapon buy(Weapon w)
-    {return null;}
+    public void buy(Weapon w) throws NotEnoughAmmoException{
+
+        this.currentWeapons.addItem(this.stats.getCurrentPosition().buy(w, this.ammo));
+
+    }
 
     /**
      * @return the deaths count of the player
@@ -446,6 +450,23 @@ public class Player {
         this.getPowerUpBag().addItem(Model.getGame().drawPowerUp());
     }
 
+    public Boolean canPay(List<AmmoCube> cost) {
+
+        List<Color> possessed = this
+                .ammo
+                .getList()
+                .stream()
+                .map(AmmoCube::getColor)
+                .collect(Collectors.toList());
+
+        List<Color> required = cost
+                .stream()
+                .map(AmmoCube::getColor)
+                .collect(Collectors.toList());
+
+
+        return possessed.containsAll(required);
+    }
 
 
 }
