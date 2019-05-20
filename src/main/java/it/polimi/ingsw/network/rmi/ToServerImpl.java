@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
@@ -11,7 +12,10 @@ import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.rmi.NoSuchObjectException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +28,8 @@ public class ToServerImpl implements ToServer{
     private final RMIServer server;
     private int playerId;
 
+    private Registry remote;
+
     public ToServerImpl(RMIServer server) throws RemoteException{
 
         this.server = server;
@@ -35,13 +41,27 @@ public class ToServerImpl implements ToServer{
      * {@inheritDoc}
      */
     @Override
-    public int joinGame(String name, PlayerColor color) throws RemoteException {
+    public int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException {
 
         try {
 
+            // connect to the remote registry
+
+            remote = LocateRegistry.getRegistry(address, 2021);
+
+            // create the Remote Object
+
+            ToClient client = (ToClient) remote.lookup(remoteName);
+
+            // register the client in the waitingRoom and gets the id
+
+            playerId = Server.addPlayer(name, color, new ToViewImpl(address, remoteName, client));
+
+            // Register the client in the Server Hashmap
+
             LOGGER.log(level,"[RMI-Server] adding new player w/ name: {0}", name);
 
-            playerId = Server.getWaitingRoom().addPlayer(name, color);
+
 
             return playerId;
 
@@ -51,6 +71,8 @@ public class ToServerImpl implements ToServer{
             LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with color: " +e.getColor() + "but color was already used", e);
         }catch (OverMaxPlayerException e){
             LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login but players were already max");
+        }catch (NotBoundException e){
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
 
         return -1;

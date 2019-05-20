@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class RMIServer {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.FINE;
+    private static Level level = Level.INFO;
 
     //attributes relative to client -> server flow
     private static Boolean registryCreated = false;
@@ -106,7 +106,8 @@ public class RMIServer {
 
             remoteViews.put(playerId,new ToViewImpl(address, name, (ToClient) remote.lookup(name)));
 
-            LOGGER.log(Level.INFO, "[RMI-Server] Registered client with name: {0}", name);
+            LOGGER.log(Level.INFO, "[RMI-Server] Registered client with name: {0} Toview: " + remoteViews.get(playerId).toString(), name);
+
 
             // adds the client to the map in the Server Hashmap
 

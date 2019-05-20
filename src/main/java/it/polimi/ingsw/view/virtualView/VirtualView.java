@@ -103,9 +103,13 @@ public class VirtualView implements ViewInterface {
 
         this.view = Server.getClient(playerId);
 
+        System.out.println("[VIRTUAL-VIEW] view = " + view);
+
+        System.out.println("[VIRTUAL-VIEW] update = " + update );
+
         // sends the updates to the net
 
-        view.sendUpdate(update);
+        this.view.sendUpdate(update);
 
         LOGGER.log(level, " send update to client: " + playerId + " update: "+ update.getType());
 

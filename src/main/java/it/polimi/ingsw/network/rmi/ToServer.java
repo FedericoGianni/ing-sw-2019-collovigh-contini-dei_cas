@@ -18,7 +18,7 @@ public interface ToServer extends Remote {
      * @return the player id or -1 if the login was unsuccessful
      * @throws RemoteException
      */
-    int joinGame(String name, PlayerColor color) throws RemoteException;
+    int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException;
 
     /**
      *
