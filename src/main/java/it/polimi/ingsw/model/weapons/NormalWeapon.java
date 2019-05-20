@@ -140,6 +140,7 @@ public class NormalWeapon extends Weapon{
      *
      * @return the name of the NormalWeapon
      */
+    @Override
     public String getName() {
         return name;
     }

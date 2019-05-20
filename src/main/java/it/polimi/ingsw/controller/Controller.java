@@ -403,7 +403,7 @@ public class Controller {
         incrementPhase();
     }
 
-    //TODO need to know CachedWeapon logic and MacroEffect logic
+    //TODO need to know Cached_Weapon logic and MacroEffect logic
     public void shoot(int weapon, int target){
         incrementPhase();
     }

@@ -13,18 +13,22 @@ import java.util.stream.Collectors;
 
 public class AmmoBag extends Subject implements Bag<AmmoCube> {
 
+    private static final int MAX_FOR_COLOR = 3;
+
     /**
      * this is an ArrayList of AmmoCubes sorted by color
      */
     private List<AmmoCube> ammoCubes;
-    private static final int MAX_FOR_COLOR = 3;
+    private final Player player;
+
 
     /**
      * Constructor
      */
-    public AmmoBag() {
+    public AmmoBag(Player player) {
 
         this.ammoCubes = new ArrayList<>();
+        this.player = player;
     }
 
 

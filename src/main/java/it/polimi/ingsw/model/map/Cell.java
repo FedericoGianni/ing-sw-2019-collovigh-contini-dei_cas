@@ -1,8 +1,12 @@
 package it.polimi.ingsw.model.map;
 
+import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
+import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.weapons.Weapon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +14,7 @@ import java.util.List;
 /**
  *
  */
-public abstract class Cell {
+public abstract class Cell extends Subject {
 
     /**
      * Default constructor
@@ -181,5 +185,10 @@ public abstract class Cell {
 
 
         return this.getClass().toString() + Model.getMap().cellToCoord(this);
+    }
+
+    public Weapon buy(Weapon w, AmmoBag cash) throws NotEnoughAmmoException {
+
+        return null;
     }
 }

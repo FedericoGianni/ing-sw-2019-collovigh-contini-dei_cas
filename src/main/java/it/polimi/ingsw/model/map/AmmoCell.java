@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.map;
 
 import it.polimi.ingsw.model.ammo.AmmoCard;
+import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 /**
  *
@@ -15,6 +16,10 @@ public class AmmoCell extends Cell {
     public AmmoCell() {
         super();
         ammoPlaced = AmmoCard.generateRandCard();
+
+        if (Observers.isInitialized()) this.addObserver(Observers.getAmmoCellObserver());
+
+        updateAll(this);
     }
 
     /**
@@ -47,6 +52,7 @@ public class AmmoCell extends Cell {
 
         AmmoCard tempAmmo = ammoPlaced;
         ammoPlaced = AmmoCard.generateRandCard();
+        updateAll(this);
 
         return tempAmmo;
     }
