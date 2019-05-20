@@ -14,8 +14,8 @@ public class PowerUpBagObserver implements Observer{
     public void update(Object object) {
 
         this.powerUpBag =(CachedPowerUpBag) object;
-
         // send updates to client
+
     }
 
 

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.network.socket;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.network.RunClient;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +28,9 @@ public class SocketClientReader extends Thread {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
+
+    Gson gson = new Gson();
+    UpdateClass update;
 
     /**
      * Attribute representing a BufferedReader to manage input stream from socket
@@ -119,6 +124,8 @@ public class SocketClientReader extends Thread {
     private String[] splitCommand(String msg) {
         if(msg == null){
             return null;
+        }else if(msg.startsWith("{")){
+            handleJson(msg);
         }
         return msg.split("\f");
     }
@@ -142,6 +149,17 @@ public class SocketClientReader extends Thread {
             } catch (NumberFormatException e) {
                 LOGGER.log(WARNING, "[DEBUG] [CLIENT] ERRORE nel formato del messaggio socket ricevuto! ");
             }
+    }
+
+    /**
+     * Handle the Json received from Server
+     * @param msg a String representing the Json received from the Server (SocketConnectionWriter)
+     */
+    public void handleJson(String msg){
+        LOGGER.info("[DEBUG] [CLIENT] Received Json. Calling handleJson method. ");
+        update = gson.fromJson(msg, UpdateClass.class);
+        LOGGER.info("[DEBUG] [CLIENT] Created Update class from Json received. ");
+        RunClient.getView().sendUpdates(update);
     }
 
     /**

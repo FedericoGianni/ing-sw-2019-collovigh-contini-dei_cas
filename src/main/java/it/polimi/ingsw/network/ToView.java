@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.view.updates.UpdateClass;
+
 public interface ToView {
 
     // calls the same method on view Class
@@ -10,4 +12,6 @@ public interface ToView {
     void startAction();
 
     void startReload();
+
+    void sendUpdates(UpdateClass update);
 }

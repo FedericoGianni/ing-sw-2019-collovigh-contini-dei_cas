@@ -94,7 +94,8 @@ public class VirtualView implements ViewInterface {
 
     @Override
     public void sendUpdates(UpdateClass update) {
-
+        LOGGER.info("[VIRTUAL VIEW] Calling sendUpdates method and forwarding it to the VIEW ");
+        view.sendUpdates(update);
     }
 
 

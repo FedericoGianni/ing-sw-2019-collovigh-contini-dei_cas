@@ -1,6 +1,8 @@
 package it.polimi.ingsw.network.socket;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.network.ToView;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +16,9 @@ public class SocketConnectionWriter extends Thread implements ToView {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = INFO;
+
+    Gson gson = new Gson();
+    UpdateClass update;
 
     /**
      * Reference to the socket representing the communication stream, passed as a parameter to the constructor
@@ -98,5 +103,11 @@ public class SocketConnectionWriter extends Thread implements ToView {
     public void startReload() {
         LOGGER.info("sending startReload string to connected client");
         send("startReload");
+    }
+
+    @Override
+    public void sendUpdates(UpdateClass update) {
+        LOGGER.info("sending update string to connected client");
+        send(gson.toJson(update));
     }
 }
