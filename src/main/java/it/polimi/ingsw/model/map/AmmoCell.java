@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.map;
 
 import it.polimi.ingsw.model.ammo.AmmoCard;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 /**
@@ -18,9 +17,9 @@ public class AmmoCell extends Cell {
         super();
         ammoPlaced = AmmoCard.generateRandCard();
 
-        this.addObserver(Observers.getAmmoCellObserver());
+        if (Observers.isInitialized()) this.addObserver(Observers.getAmmoCellObserver());
 
-        updateAll(new CachedAmmoCell(this));
+        updateAll(this);
     }
 
     /**
@@ -53,7 +52,7 @@ public class AmmoCell extends Cell {
 
         AmmoCard tempAmmo = ammoPlaced;
         ammoPlaced = AmmoCard.generateRandCard();
-        updateAll(new CachedAmmoCell(this));
+        updateAll(this);
 
         return tempAmmo;
     }

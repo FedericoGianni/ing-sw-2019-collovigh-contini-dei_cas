@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.map.AmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
@@ -16,7 +17,7 @@ public class AmmoCellObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.ammoCell = (CachedAmmoCell) object;
+        this.ammoCell = new CachedAmmoCell((AmmoCell) object);
 
         // encapsulate the update in the update Class
 

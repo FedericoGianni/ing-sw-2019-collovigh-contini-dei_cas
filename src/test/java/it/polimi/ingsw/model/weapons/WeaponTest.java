@@ -21,7 +21,7 @@ class WeaponTest {
         cost.add(new AmmoCube(Color.RED));
         cost.add(new AmmoCube(Color.RED));
 
-        AmmoBag bag = new AmmoBag();
+        AmmoBag bag = new AmmoBag(null);
         bag.addItem(new AmmoCube(Color.BLUE));
         bag.addItem(new AmmoCube(Color.BLUE));
         bag.addItem(new AmmoCube(Color.BLUE));

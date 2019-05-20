@@ -17,7 +17,7 @@ class AmmoBagTest {
     @Test
     void getList() {
 
-        AmmoBag bag= new AmmoBag();
+        AmmoBag bag= new AmmoBag(null);
 
         assertTrue(bag.getList().isEmpty());
 
@@ -38,7 +38,7 @@ class AmmoBagTest {
     @Test
     void addItem() {
 
-        AmmoBag bag= new AmmoBag();
+        AmmoBag bag= new AmmoBag(null);
 
         List<AmmoCube> list = new ArrayList<>();
         list.add(new AmmoCube(Color.YELLOW));
@@ -94,7 +94,7 @@ class AmmoBagTest {
     @Test
     void getItem() {
 
-        AmmoBag bag= new AmmoBag();
+        AmmoBag bag= new AmmoBag(null);
 
         List<AmmoCube> list = new ArrayList<>();
         list.add(new AmmoCube(Color.YELLOW));
@@ -142,7 +142,7 @@ class AmmoBagTest {
     @Test
     void hasItem() {
 
-        AmmoBag bag= new AmmoBag();
+        AmmoBag bag= new AmmoBag(null);
 
         List<AmmoCube> list = new ArrayList<>();
         list.add(new AmmoCube(Color.YELLOW));
@@ -178,7 +178,7 @@ class AmmoBagTest {
 
         //0->red,1->blue,->yellow
 
-        AmmoBag bag= new AmmoBag();
+        AmmoBag bag= new AmmoBag(null);
 
         List<AmmoCube> list = new ArrayList<>();
         list.add(new AmmoCube(Color.YELLOW));

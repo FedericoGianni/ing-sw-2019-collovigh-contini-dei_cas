@@ -34,7 +34,7 @@ public class SpawnCell extends Cell {
         this.weapons = new ArrayList<>();
 
         // add observer to the class
-        addObserver(Observers.getSpawnCellObserver());
+        if (Observers.isInitialized()) addObserver(Observers.getSpawnCellObserver());
     }
 
 
@@ -59,7 +59,7 @@ public class SpawnCell extends Cell {
             this.weapons.add(Model.getGame().drawWeapon());
         }
 
-        updateAll(new CachedSpawnCell(this));
+        updateAll(this);
 
     }
 
@@ -85,7 +85,7 @@ public class SpawnCell extends Cell {
             weapons.remove(w);
             this.populateWeapon();
 
-            updateAll(new CachedSpawnCell(this));
+            updateAll(this);
 
             return w;
 

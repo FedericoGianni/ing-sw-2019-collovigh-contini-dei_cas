@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
@@ -19,7 +20,7 @@ public class SpawnCellObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.spawnCell = (CachedSpawnCell) object;
+        this.spawnCell = new CachedSpawnCell((SpawnCell) object);
 
         // encapsulate the update in the update Class
 
