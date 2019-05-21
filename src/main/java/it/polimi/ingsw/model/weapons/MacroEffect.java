@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model.weapons;
 
-import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.powerup.Mover;
+import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

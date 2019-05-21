@@ -9,7 +9,7 @@ public interface UserInterface {
 
     void login();
 
-    void retryLogin();
+    void retryLogin(String error);
 
     void startSpawn();
 

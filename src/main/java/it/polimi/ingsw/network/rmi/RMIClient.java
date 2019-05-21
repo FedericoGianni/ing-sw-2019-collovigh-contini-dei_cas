@@ -142,7 +142,7 @@ public class RMIClient extends Client {
 
             // Get the ip of the local machine
 
-            String localIp = Inet4Address.getLocalHost().getHostAddress();
+            String localIp = "192.168.1.2";
 
             // join the game, register the ip of the client rmiRegistry to the server, and store the pid
 

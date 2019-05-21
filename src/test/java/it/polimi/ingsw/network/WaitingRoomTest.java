@@ -4,14 +4,15 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class WaitingRoomTest {
 
     @Test
     void startTimer() {
 
-        final int TIMER = 30;
+        final int TIMER = WaitingRoom.getTimerCount();
         try {
             WaitingRoom w = new WaitingRoom(-1);
 

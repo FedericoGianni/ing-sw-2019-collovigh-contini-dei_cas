@@ -118,4 +118,9 @@ public class SocketConnectionWriter extends Thread implements ToView {
         LOGGER.info("sending update string to connected client");
         send(gson.toJson(update));
     }
+
+    @Override
+    public void useGrenade() {
+        //TODO
+    }
 }

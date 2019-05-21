@@ -1,13 +1,9 @@
-package it.polimi.ingsw.model.powerup;
+package it.polimi.ingsw.model.weapons;
 
 import it.polimi.ingsw.customsexceptions.*;
-import it.polimi.ingsw.customsexceptions.DeadPlayerException;
-import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.weapons.MicroEffect;
-import it.polimi.ingsw.model.weapons.Weapon;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
