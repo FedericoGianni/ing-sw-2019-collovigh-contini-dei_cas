@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -25,7 +26,7 @@ public class SocketClientWriter extends Client implements Runnable {
     /**
      * PrintWriter to handle the output stream from socket
      */
-    private PrintWriter output;
+    private BufferedWriter output;
 
     /**
      * Constructor
@@ -42,7 +43,7 @@ public class SocketClientWriter extends Client implements Runnable {
     public void run(){
 
         try {
-            output = new PrintWriter(socket.getOutputStream(), true);
+            output = new BufferedWriter(new PrintWriter(socket.getOutputStream(), true));
 
         } catch(IOException e){
             e.getMessage();
@@ -54,8 +55,13 @@ public class SocketClientWriter extends Client implements Runnable {
      * @param message to be sent
      */
     public void send(String message) {
-        output.println(message);
-        output.flush();
+        try {
+            output.write(message);
+            //output.println(message);
+            output.flush();
+        }catch(IOException e){
+            e.getMessage();
+        }
     }
 
     @Override

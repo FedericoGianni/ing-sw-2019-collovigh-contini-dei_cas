@@ -91,8 +91,8 @@ public class SocketClientReader extends Thread {
 
             in = new BufferedReader(
                     new InputStreamReader(socket.getInputStream()));
-            //scw = new SocketClientWriter(socket);
-            //scw.start();
+            scw = new SocketClientWriter(socket);
+            scw.run();
 
             populateHeadersMap();
 

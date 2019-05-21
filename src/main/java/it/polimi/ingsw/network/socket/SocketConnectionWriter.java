@@ -4,13 +4,15 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
 
 public class SocketConnectionWriter extends Thread implements ToView {
 
@@ -28,7 +30,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
     /**
      * PrintWriter to manage the output stream from socket
      */
-    private PrintWriter output;
+    private BufferedWriter output;
 
     private final Object lock = new Object();
 
@@ -59,10 +61,11 @@ public class SocketConnectionWriter extends Thread implements ToView {
     public void run() {
 
         try {
-            output = new PrintWriter(socket.getOutputStream(), true);
-            new Thread(new SocketPing(this)).start();
+            //output = new PrintWriter(socket.getOutputStream(), true);
+            output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            new Thread(new SocketPing(output, this)).start();
 
-            this.signal();
+            //this.signal();
 
 
         } catch (IOException e) {
@@ -77,8 +80,20 @@ public class SocketConnectionWriter extends Thread implements ToView {
      * @param message to be sent
      */
     public void send(String message) {
-        output.println(message);
-        output.flush();
+        try {
+            output.write(message);
+            output.flush();
+        }catch (IOException e){
+            /*
+            disconnect();
+            try{
+                socket.close();
+            } catch (IOException e2){
+                LOGGER.log(WARNING, "ERROR trying to close socket stream");
+            }
+            this.interrupt();
+            */
+        }
     }
 
     @Override
@@ -114,5 +129,18 @@ public class SocketConnectionWriter extends Thread implements ToView {
     @Override
     public void useGrenade() {
         //TODO
+    }
+
+    public void disconnect(){
+        LOGGER.log(WARNING, "Disconneting virtual view linked to this connection.");
+        //TODO gestire la disconnessione nella lista di virtual view del controller
+        //Server.getController().getVirtualView(1).disconnect();
+        //closing socket stream
+        try{
+            System.out.println("[DEBUG] received disconnection from SocketPing. Calling socket.close()");
+            socket.close();
+        } catch (IOException e){
+            LOGGER.log(WARNING, "ERROR when trying to close socket stream");
+        }
     }
 }

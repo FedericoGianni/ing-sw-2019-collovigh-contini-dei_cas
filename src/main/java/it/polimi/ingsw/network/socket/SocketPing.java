@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.socket;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,11 +33,18 @@ public class SocketPing implements Runnable {
      */
     private SocketConnectionWriter scw;
 
+    BufferedWriter out;
+
     /**
      * Constructor
      * @param scw SocketConnectionWriter which represent the connection between SocketServer and one single client
      */
     SocketPing(SocketConnectionWriter scw){
+        this.scw = scw;
+    }
+
+    SocketPing(BufferedWriter out, SocketConnectionWriter scw){
+        this.out = out;
         this.scw = scw;
     }
 
@@ -55,10 +64,17 @@ public class SocketPing implements Runnable {
         while (active)
             try {
                 Thread.sleep(DEFAULT_PING_INTERVAL);
-                scw.send("ping\f" + scw.getId());
-                LOGGER.log(FINE, "Sending ping message to client.");
+                //scw.send("ping\f" + scw.getId());
+                //scw.send("ping\f" + scw.getId());
+                out.write("ping\f" + scw.getId());
+                out.flush();
+                LOGGER.log(INFO, "Sending ping message to client.");
             } catch (InterruptedException e) {
                 //this.interrupt();
+            } catch (IOException e){
+                LOGGER.log(WARNING, "SocketPing failed. Disconnecting unreachable client.");
+                scw.disconnect();
+                this.setActive(false);
             }
     }
 

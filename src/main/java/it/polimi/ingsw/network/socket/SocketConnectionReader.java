@@ -91,11 +91,11 @@ public class SocketConnectionReader extends Thread {
 
                 socketConnectionWriter = new SocketConnectionWriter(socket);
                 socketConnectionWriter.start();
-                try {
+                /*try {
                     socketConnectionWriter.await();
                 } catch(InterruptedException e){
                     e.getMessage();
-                }
+                }*/
 
 
                 populateHeadersMap();
