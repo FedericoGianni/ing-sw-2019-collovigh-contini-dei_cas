@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -81,6 +82,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
     public void send(String message) {
         try {
             output.write(message);
+            output.newLine();
             output.flush();
         }catch (IOException e){
             /*
@@ -131,11 +133,6 @@ public class SocketConnectionWriter extends Thread implements ToView {
     public void sendUpdate(UpdateClass update) {
         LOGGER.info("sending update string to connected client");
         send(gson.toJson(update));
-    }
-
-    @Override
-    public void useGrenade() {
-        //TODO
     }
 
     public void disconnect(){

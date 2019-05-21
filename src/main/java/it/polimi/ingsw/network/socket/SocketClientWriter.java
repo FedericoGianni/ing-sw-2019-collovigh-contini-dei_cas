@@ -57,7 +57,7 @@ public class SocketClientWriter extends Client implements Runnable {
     public void send(String message) {
         try {
             output.write(message);
-            //output.println(message);
+            output.newLine();
             output.flush();
         }catch(IOException e){
             e.getMessage();
