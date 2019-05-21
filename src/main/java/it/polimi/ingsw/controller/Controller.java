@@ -51,6 +51,7 @@ public class Controller {
     private Boolean hasSomeoneDied = false;
 
     //used for TagBackGrenade (check if it is necessary)
+
     private List<Integer> shotPlayerThisTurn;
 
     private TurnPhase turnPhase = SPAWN;
@@ -77,7 +78,6 @@ public class Controller {
         this.observers = new Observers(this, nameList.size()); // needs to stay first
 
         int mapType= this.chooseMap(nameList.size());
-        this.model = new Model(nameList,playerColors,mapType);
         this.roundNumber = 0;
         this.gameId = gameId;
         this.players = new ArrayList<>();
@@ -88,6 +88,9 @@ public class Controller {
         }
 
         sendInitialUpdate( nameList, playerColors, gameId, mapType);
+
+        this.model = new Model(nameList,playerColors,mapType);
+        System.out.println("creatore controller map " + Model.getMap().getCell(0,0));
     }
 
     /**
@@ -153,7 +156,7 @@ public class Controller {
                 return 2 + rand.nextInt(2);
 
             default:
-                return -1;
+                return 2;
         }
     }
 

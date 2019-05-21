@@ -93,11 +93,11 @@ public class Server  {
 
             int playerId =  waitingRoom.addPlayer(name,playerColor);
 
-            System.out.println("[DEBUG] Added player w/ id: " + playerId +" and name: " + name + "and color : " + playerColor);
+            System.out.println("[DEBUG] Added player w/ id: " + playerId +" and name: " + name + " and color : " + playerColor);
 
             clients.put(playerId, toView);
 
-            System.out.println("[DEBUG] bounded player w/ id : " + playerId + "toView: " + toView);
+            System.out.println("[DEBUG] bounded player w/ id : " + playerId + " and toView: " + toView);
 
             return playerId;
         }else {

@@ -127,18 +127,19 @@
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.0.0</version>
                 </plugin>
-                <!--JAVA FX-->
-                <plugin>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-maven-plugin</artifactId>
-                    <version>0.0.1</version>
-                    <configuration>
-                        <mainClass>org.openjfx.App</mainClass>
-                    </configuration>
-                </plugin>
-                <!--end of JAVA FX-->
-
             </plugins>
         </pluginManagement>
+        <plugins>
+            <!--JAVA FX-->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.1</version>
+                <configuration>
+                    <mainClass>it.polimi.ingsw.view.GUI.Helloworld</mainClass>
+                </configuration>
+            </plugin>
+            <!--end of JAVA FX-->
+        </plugins>
     </build>
 </project>

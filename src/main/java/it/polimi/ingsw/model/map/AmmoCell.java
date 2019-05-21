@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.map;
 import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  */
@@ -14,12 +17,17 @@ public class AmmoCell extends Cell {
      * Default constructor
      */
     public AmmoCell() {
+
         super();
+
+        // Place the AmmoCard
+
         ammoPlaced = AmmoCard.generateRandCard();
+
+        // Sets the Observer
 
         if (Observers.isInitialized()) this.addObserver(Observers.getAmmoCellObserver());
 
-        updateAll(this);
     }
 
     /**

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,6 @@ public class Model {
      */
     public Model(List<String> playerNames, List<PlayerColor> playerColors, int mapType) {
 
-
-
         Map map = Map.genMap(mapType);
 
         List<Player> playerList = new ArrayList<>();
@@ -29,6 +28,8 @@ public class Model {
         }
 
         game = new CurrentGame(playerList, map);
+
+        if (Observers.isInitialized()) map.updateObserver();
 
     }
 

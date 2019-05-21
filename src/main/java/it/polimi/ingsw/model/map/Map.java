@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.map;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.awt.*;
 
@@ -402,6 +403,15 @@ public class Map {
             default:
 
                 break;
+        }
+    }
+
+    public void updateObserver(){
+        for(Cell[] c : this.matrix){
+            for(Cell c2 : c){
+                if(c2 != null )
+                    c2.updateAll(c2);
+            }
         }
     }
 
