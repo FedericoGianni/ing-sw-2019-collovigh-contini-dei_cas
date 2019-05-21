@@ -6,6 +6,9 @@ import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedLobby;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +24,13 @@ import java.util.logging.Logger;
 public class WaitingRoom {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    public static final Level level = Level.INFO;
 
-    private static final int TIMER = 5;
+    private static final int TIMER = 20;
     private static int timerCount = TIMER;
 
-    private static final int DEFAULT_MIN_PLAYERS = 1;
-    private static final int DEFAULT_MAX_PLAYERS = 1;
+    private static final int DEFAULT_MIN_PLAYERS = 2;
+    private static final int DEFAULT_MAX_PLAYERS = 5;
 
     private CopyOnWriteArrayList<String> players;
     private List<PlayerColor> colors;
@@ -75,7 +79,6 @@ public class WaitingRoom {
     public synchronized void initGame(){
 
         activeGame = games.addGame();
-        this.active = false;
 
         if(this.mapType == 0) {
             Server.setController(new Controller(this.players, this.colors, this.activeGame));
@@ -86,6 +89,8 @@ public class WaitingRoom {
             //TODO start controller
             Server.getController().handleTurnPhase();
         }
+
+        this.active = false;
     }
 
     /**
@@ -113,6 +118,13 @@ public class WaitingRoom {
             players.add(name);
 
             colors.add(playerColor);
+
+            for (ToView client : Server.getClients().values()){
+
+                client.sendUpdate(new UpdateClass(UpdateType.LOBBY,new CachedLobby(players)));
+
+                LOGGER.log(level,"Sent LOBBY_UPDATE to client : {0}", client);
+            }
 
             if (players.size() >= DEFAULT_MIN_PLAYERS) {
 
@@ -160,6 +172,13 @@ public class WaitingRoom {
 
         players.remove(id);
         colors.remove(id);
+
+        for (ToView client : Server.getClients().values()){
+
+            client.sendUpdate(new UpdateClass(UpdateType.LOBBY,new CachedLobby(players)));
+
+            LOGGER.log(level,"Sent LOBBY_UPDATE to client : {0}", client);
+        }
     }
 
     /**
@@ -181,7 +200,7 @@ public class WaitingRoom {
             public void run() {
                 System.out.println("[DEBUG] WaitingRoomTimer counter: " + timerCount);
                 timerCount--;
-                if((timerCount == 0) || ( players.size() == DEFAULT_MAX_PLAYERS )) {
+                if((timerCount <= 0) || ( players.size() == DEFAULT_MAX_PLAYERS )) {
                     System.out.println("[DEBUG] Timer has expired!");
                     //chiama initGame o gestire timer scaduto
                     System.out.println("[DEBUG] AVVIO DELLA PARTITA IN CORSO...");

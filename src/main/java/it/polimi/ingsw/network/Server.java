@@ -8,10 +8,14 @@ import it.polimi.ingsw.network.socket.SocketServer;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * This class represent the main Server which is the common part shared by both Socket and RMI.
@@ -112,7 +116,7 @@ public class Server  {
      * This function is used to add players to the HashMap but without forwarding anything to the WaitingRoom
      *
      * Will be also used for reconnections
-     * @param playerId is the id of the player
+     * @param name is the name of the player
      * @param toView is the interface to reach him
      */
 
@@ -143,14 +147,30 @@ public class Server  {
 
         if ((waitingRoom.isActive()) && (WaitingRoom.getTimerCount() > 1)){
 
+            // LOG the disconnection
+
             LOGGER.log(level, "Player {0} left the game", waitingRoom.getName(playerId));
+
+            // remove the player from the waitingRoom
+
             waitingRoom.removePlayer(playerId);
 
         }else {
 
+            // wait to the the WaitingRoom to start the model
+
+            do{
+
+            }while (waitingRoom.isActive());
+
+            // sets the player to offline
+
+            controller.setPlayerOffline(playerId);
+
+            // LOG the player disconnection
+
             LOGGER.log(level, "Player {0} left the game", playerId);
 
-            //TODO: modify the virtual view class to make the player skip the turn
         }
 
     }
@@ -199,4 +219,7 @@ public class Server  {
         return clients.get(id);
     }
 
+    public static ConcurrentMap<Integer,ToView> getClients() {
+        return new ConcurrentHashMap<>(clients);
+    }
 }

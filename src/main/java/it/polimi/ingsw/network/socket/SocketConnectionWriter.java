@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.socket;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
@@ -137,8 +138,21 @@ public class SocketConnectionWriter extends Thread implements ToView {
 
     public void disconnect(){
         LOGGER.log(WARNING, "Disconneting virtual view linked to this connection.");
-        //TODO gestire la disconnessione nella lista di virtual view del controller
-        //Server.getController().getVirtualView(1).disconnect();
+
+        int playerId = -1 ;
+
+        for (int i = 0; i < Server.getClients().size() ; i++) {
+
+            if (Server.getClient(i).equals(this)){
+                playerId = i;
+            }
+
+        }
+
+
+        if (playerId > -1) Server.removePlayer(playerId);
+
+
         //closing socket stream
         try{
             System.out.println("[DEBUG] received disconnection from SocketPing. Calling socket.close()");

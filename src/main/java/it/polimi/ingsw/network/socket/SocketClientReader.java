@@ -2,7 +2,10 @@ package it.polimi.ingsw.network.socket;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.network.RunClient;
+import it.polimi.ingsw.view.cachemodel.sendables.*;
+import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +33,7 @@ public class SocketClientReader extends Thread {
     private static Level level = Level.INFO;
 
     Gson gson = new Gson();
-    UpdateClass update;
+    //UpdateClass update;
 
     /**
      * Attribute representing a BufferedReader to manage input stream from socket
@@ -98,7 +101,14 @@ public class SocketClientReader extends Thread {
 
             while(true) {
                 String msg = receive();
-                handleMsg(splitCommand(msg));
+
+                LOGGER.log(level,msg);
+
+                if(msg.startsWith("{")){
+                    handleJson(msg);
+                } else {
+                    handleMsg(splitCommand(msg));
+                }
             }
 
 
@@ -124,8 +134,6 @@ public class SocketClientReader extends Thread {
     private String[] splitCommand(String msg) {
         if(msg == null){
             return null;
-        }else if(msg.startsWith("{")){
-            handleJson(msg);
         }
         return msg.split("\f");
     }
@@ -156,10 +164,159 @@ public class SocketClientReader extends Thread {
      * @param msg a String representing the Json received from the Server (SocketConnectionWriter)
      */
     public void handleJson(String msg){
-        LOGGER.info("[DEBUG] [CLIENT] Received Json. Calling handleJson method. ");
-        update = gson.fromJson(msg, UpdateClass.class);
+
+        // get the type of the class contained in the UpdateClass
+
+        String type =msg.substring(9,12);
+
+        // LOG the update
+
+        LOGGER.log(level,"[DEBUG] [SOCKET-CLIENT-READER] Received Json {0} : Calling handleJson method. ", type);
+
+        // gets the json of the class contained (GSON can not detect the class)
+
+        String update = msg.substring(msg.indexOf("\"update\":") + 9 , msg.indexOf(",\"playerId\""));
+
+        // gets the playerId attribute
+
+        int playerId = Integer.parseInt(msg.substring(msg.lastIndexOf(':') + 1, msg.length() - 1));
+
+        // creates a new UpdateClass variable ( will be instantiated in the switch )
+
+        UpdateClass updateClass = null;
+
+        // creates a new Gson variable
+
+        gson = new Gson();
+
+        // switchCase on the type
+
+        switch (type){
+
+            case "INI" :
+
+                // gets the inner class from the "update" json string
+
+                InitialUpdate initialUpdate = gson.fromJson(update,InitialUpdate.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                updateClass = new UpdateClass(UpdateType.INITIAL,initialUpdate,playerId);
+
+                break;
+
+
+            case "POW" :
+
+                // gets the inner class from the "update" json string
+
+                CachedPowerUpBag cachedPowerUpBag = gson.fromJson(update,CachedPowerUpBag.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                updateClass = new UpdateClass(UpdateType.POWERUP_BAG, cachedPowerUpBag, playerId);
+
+                break;
+
+            case "STA":
+
+                // gets the inner class from the "update" json string
+
+                CachedStats cachedStats = gson.fromJson(update,CachedStats.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                updateClass = new UpdateClass(UpdateType.STATS, cachedStats, playerId);
+
+                break;
+
+            case "WEA":
+
+                //TODO need CachedPowerUpBag impl
+
+                // gets the inner class from the "update" json string
+
+                //CachedWeaponBag cachedWeaponBag = gson.fromJson(update,CachedWeaponBag.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                //updateClass = new UpdateClass(UpdateType.WEAPON_BAG, cachedWeaponBag, playerId);
+
+                break;
+
+            case "AMM":
+
+                // gets the inner class from the "update" json string
+
+                CachedAmmoBag cachedAmmoBag = gson.fromJson(update,CachedAmmoBag.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                updateClass = new UpdateClass(UpdateType.AMMO_BAG, cachedAmmoBag, playerId);
+
+                break;
+
+            case "GAM":
+
+                // gets the inner class from the "update" json string
+
+                CachedGame cachedGame = gson.fromJson(update,CachedGame.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                updateClass = new UpdateClass(UpdateType.GAME, cachedGame, playerId);
+
+                break;
+
+            case "SPA":
+
+                // gets the inner class from the "update" json string
+
+                CachedSpawnCell cachedSpawnCell = gson.fromJson(update,CachedSpawnCell.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                updateClass = new UpdateClass(UpdateType.SPAWN_CELL, cachedSpawnCell, playerId);
+
+                break;
+
+
+            case "CEL":
+
+                // gets the inner class from the "update" json string
+
+                CachedAmmoCell cachedAmmoCell = gson.fromJson(update,CachedAmmoCell.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                updateClass = new UpdateClass(UpdateType.CELL_AMMO, cachedAmmoCell, playerId);
+
+                break;
+
+            case "LOB":
+
+                // gets the inner class from the "update" json string
+
+                CachedLobby cachedLobby = gson.fromJson(update,CachedLobby.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                updateClass = new UpdateClass(UpdateType.LOBBY, cachedLobby, playerId);
+
+                break;
+
+            default:
+
+                break;
+
+        }
+
         LOGGER.info("[DEBUG] [CLIENT] Created Update class from Json received. ");
-        RunClient.getView().sendUpdates(update);
+
+        // Send the update to the view
+
+        RunClient.getView().sendUpdates(updateClass);
+
     }
 
     /**

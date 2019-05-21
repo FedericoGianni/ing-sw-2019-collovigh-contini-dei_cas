@@ -21,7 +21,7 @@ public class AmmoCellObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.AMMO_CELL, ammoCell);
+        UpdateClass updateClass = new UpdateClass(UpdateType.CELL_AMMO, ammoCell);
 
         // send the update to the Virtual View
 

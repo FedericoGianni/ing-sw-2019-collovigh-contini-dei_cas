@@ -40,6 +40,21 @@ public class CacheModel {
 
         switch (updateClass.getType()){
 
+            case LOBBY:
+
+                CachedLobby cachedLobby = (CachedLobby) updateClass.getUpdate();
+
+                for (String name: cachedLobby.getNames()){
+
+                    players = new ArrayList<>();
+
+                    players.add(new Player(cachedLobby.getNames().indexOf(name), name,null));
+
+                    System.out.println("Player connessi: \n" + cachedLobby.getNames());
+                }
+
+                break;
+
             case INITIAL:
 
                 update((InitialUpdate) updateClass.getUpdate());
@@ -76,7 +91,7 @@ public class CacheModel {
 
                 break;
 
-            case AMMO_CELL:
+            case CELL_AMMO:
 
                 this.cachedMap.update((CachedAmmoCell) updateClass.getUpdate());
 

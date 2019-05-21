@@ -30,6 +30,7 @@ public class Stats extends Subject {
      */
     private List<Integer> dmgTaken = new ArrayList<>();
     private Cell currentPosition;
+    private Boolean online = true;
 
     /**
      *
@@ -244,5 +245,12 @@ public class Stats extends Subject {
         updateAll(new CachedStats(this));
     }
 
+    public Boolean getOnline() {
+        return online;
+    }
 
+    public void setOnline(Boolean online) {
+        this.online = online;
+        updateAll(new CachedStats(this));
+    }
 }

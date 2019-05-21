@@ -8,7 +8,7 @@ public enum UpdateType {
     AMMO_BAG,
     GAME,
     SPAWN_CELL,
-    AMMO_CELL,
+    CELL_AMMO,
     INITIAL,
     LOBBY;
 }

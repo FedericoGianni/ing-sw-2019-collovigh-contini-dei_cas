@@ -26,7 +26,7 @@ public class JsonExampleMaker {
 
     public static void main(String[] args) {
 
-        writeUpdate();
+        writeCachedPowerUpBag();
 
 
     }
@@ -131,6 +131,64 @@ public class JsonExampleMaker {
 
 
             gson.toJson(updateClass, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeExample(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            PowerUp powerUp1 = new Newton(Color.BLUE);
+            PowerUp powerUp2 = new TagbackGrenade(Color.RED);
+
+            PowerUpBag bag = new PowerUpBag();
+            bag.addItem(powerUp1);
+            bag.addItem(powerUp2);
+
+            Object updateClass = new CachedPowerUpBag(bag);
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/example.json");
+
+
+            gson.toJson(updateClass, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeCachedPowerUpBag(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            PowerUp powerUp1 = new Newton(Color.BLUE);
+            PowerUp powerUp2 = new TagbackGrenade(Color.RED);
+
+            PowerUpBag bag = new PowerUpBag();
+            bag.addItem(powerUp1);
+            bag.addItem(powerUp2);
+
+            CachedPowerUpBag cbag = new CachedPowerUpBag(bag);
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/cachedPowerUpBag.json");
+
+
+            gson.toJson(cbag, writer);
 
             writer.flush();
             writer.close();
