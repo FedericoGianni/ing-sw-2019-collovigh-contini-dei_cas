@@ -115,15 +115,22 @@ public class Server  {
      * @param playerId is the id of the player
      * @param toView is the interface to reach him
      */
-    public static void addPlayer(int playerId, ToView toView){
+
+    public static int reconnect(String name, ToView toView){
+
+        int playerId = controller.findPlayerByName(name);
 
         clients.put(playerId,toView);
 
-        String message = "[DEBUG] bounded player w/ id :" + playerId + "to View: " +toView;
+        String message = "[DEBUG] reconnected player w/ id :" + playerId + "to View: " +toView;
 
         LOGGER.log(level,message);
 
+        return playerId;
+
     }
+
+
 
 
     /**

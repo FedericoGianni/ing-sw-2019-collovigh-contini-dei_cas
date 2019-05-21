@@ -90,53 +90,6 @@ public class RMIServer {
         }
     }
 
-    /**
-     * This method will add the address of a new client remote registry to the server
-     * @param address is the ip address of a new client
-     */
-    public void addClient(String address, int playerId, String name){
-
-        try{
-
-            // connect to the remote registry
-
-            remote = LocateRegistry.getRegistry(address, 2021);
-
-            // creates a new ToViewImpl with client's ip address and ToClient and adds it to the hashmap
-
-            remoteViews.put(playerId,new ToViewImpl(address, name, (ToClient) remote.lookup(name)));
-
-            LOGGER.log(Level.INFO, "[RMI-Server] Registered client with name: {0} Toview: " + remoteViews.get(playerId).toString(), name);
-
-
-            // adds the client to the map in the Server Hashmap
-
-            Server.addPlayer(playerId,remoteViews.get(playerId));
-
-            //starts a thread that pings that client
-
-            new RMIPinger((ToClient) remote.lookup(name)).run();
-
-
-        }catch (Exception e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
-        }
-    }
-
-
-    public static void removeClient(int playerId){
-
-        // remove the correspondent entry from the clients map
-
-        remoteViews.remove(playerId);
-
-        // call the method on the main server
-
-        Server.removePlayer(playerId);
-
-    }
-
 
     /**
      *

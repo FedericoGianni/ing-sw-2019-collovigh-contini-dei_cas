@@ -27,14 +27,6 @@ public interface ToServer extends Remote {
      */
     void voteMapType(int mapType) throws RemoteException;
 
-    /**
-     * This method will register the client address to the server making it reachable
-     * @param address is the id of the local registry
-     * @param playerId is the id of the player
-     * @throws RemoteException
-     */
-    void registerMe(String address, int playerId, String name) throws RemoteException;
-
     Boolean ping() throws RemoteException;
 
     /**
@@ -42,7 +34,7 @@ public interface ToServer extends Remote {
      * @param name is the name chosen
      * @return the id assigned to it
      */
-    int reconnect(String name) throws RemoteException, GameNonExistentException;
+    int reconnect(String name, String address, String remoteName) throws RemoteException, GameNonExistentException;
 
 
     //SPAWN

@@ -4,10 +4,7 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.GameAlreadyStartedException;
-import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
@@ -146,7 +143,7 @@ public class RMIClient extends Client {
 
             // Get the ip of the local machine
 
-            String localIp = "192.168.1.2";
+            String localIp = Inet4Address.getLocalHost().getHostAddress();
 
             // join the game, register the ip of the client rmiRegistry to the server, and store the pid
 
@@ -254,11 +251,19 @@ public class RMIClient extends Client {
 
             ToServer server = getServer();
 
+            // Get the ip of the local machine
+
+            String localIp = Inet4Address.getLocalHost().getHostAddress();
+
             // register the ip of the client rmiRegistry to the server
 
-            server.registerMe(Inet4Address.getLocalHost().getHostAddress(), getPlayerId(), localName);
 
-            return server.reconnect(name);
+            return server.reconnect(name, localIp, localName );
+
+
+        } catch (GameNonExistentException e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
 
 
         } catch (Exception e) {

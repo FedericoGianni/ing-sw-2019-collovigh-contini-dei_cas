@@ -119,7 +119,6 @@ public class CLI implements UserInterface {
                 break;
 
             default:
-                System.out.println("Wrong number ");
                 break;
 
         }
