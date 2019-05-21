@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -38,7 +37,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
      * Constructor
      * @param socket reference to the stream to be initialized with
      */
-    SocketConnectionWriter(Socket socket){
+    SocketConnectionWriter(Socket socket) {
         this.socket = socket;
     }
 
@@ -118,6 +117,14 @@ public class SocketConnectionWriter extends Thread implements ToView {
     public void startReload() {
         LOGGER.info("sending startReload string to connected client");
         send("startReload");
+    }
+
+    /**
+     * This method will be called on a player if he/she was shot in the previous phase and has grenades
+     */
+    @Override
+    public void useGrenade() {
+
     }
 
     @Override

@@ -2,9 +2,7 @@ package it.polimi.ingsw.network.socket;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.network.networkexceptions.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -200,6 +198,9 @@ public class SocketConnectionReader extends Thread {
                 socketConnectionWriter.send("login\fCOLOR_ALREADY_TAKEN");
             }catch (OverMaxPlayerException e){
                 socketConnectionWriter.send("login\fMAX_PLAYER_REACHED");
+            }catch (GameAlreadyStartedException e){
+                socketConnectionWriter.send("login\fGAME_ALREADY_STARTED");
+                //TODO fix (by D ) may not work
             }
         });
 

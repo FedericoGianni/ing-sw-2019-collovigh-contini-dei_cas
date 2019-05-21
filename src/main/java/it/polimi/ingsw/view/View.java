@@ -43,6 +43,10 @@ public class View implements ViewInterface {
     }
 
 
+    public UserInterface getUserInterface() {
+        return userInterface;
+    }
+
     /**
      *  new mode
      * @param serverIp ip of the server

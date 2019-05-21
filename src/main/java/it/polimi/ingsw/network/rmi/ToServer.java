@@ -3,7 +3,7 @@ package it.polimi.ingsw.network.rmi;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
+import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.rmi.Remote;
@@ -18,7 +18,7 @@ public interface ToServer extends Remote {
      * @return the player id or -1 if the login was unsuccessful
      * @throws RemoteException
      */
-    int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException;
+    int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException, NameAlreadyTakenException, ColorAlreadyTakenException, OverMaxPlayerException, GameAlreadyStartedException;
 
     /**
      *
@@ -27,14 +27,6 @@ public interface ToServer extends Remote {
      */
     void voteMapType(int mapType) throws RemoteException;
 
-    /**
-     * This method will register the client address to the server making it reachable
-     * @param address is the id of the local registry
-     * @param playerId is the id of the player
-     * @throws RemoteException
-     */
-    void registerMe(String address, int playerId, String name) throws RemoteException;
-
     Boolean ping() throws RemoteException;
 
     /**
@@ -42,7 +34,7 @@ public interface ToServer extends Remote {
      * @param name is the name chosen
      * @return the id assigned to it
      */
-    int reconnect(String name) throws RemoteException, GameNonExistentException;
+    int reconnect(String name, String address, String remoteName) throws RemoteException, GameNonExistentException;
 
 
     //SPAWN

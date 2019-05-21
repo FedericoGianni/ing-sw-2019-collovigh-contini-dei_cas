@@ -11,4 +11,10 @@ public class NameAlreadyTakenException extends Exception {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String getMessage() {
+
+        return "Attempted login with name: " + name + "but name was already used";
+    }
 }

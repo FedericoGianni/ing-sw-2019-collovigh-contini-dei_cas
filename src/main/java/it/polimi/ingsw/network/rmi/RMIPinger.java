@@ -51,16 +51,13 @@ public class RMIPinger implements Runnable{
 
             LOGGER.log(Level.WARNING, "lost client w/ id: {0}", pId);
 
-            throw new LostClientException(pId);
 
-        }catch (LostClientException e){
 
-            RMIServer.removeClient(pId);
-            LOGGER.log(Level.WARNING, message);
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, e.getMessage(), e);
-            RMIServer.removeClient(pId);
+
+            Server.removePlayer(pId);
             LOGGER.log(Level.WARNING, message);
 
         }

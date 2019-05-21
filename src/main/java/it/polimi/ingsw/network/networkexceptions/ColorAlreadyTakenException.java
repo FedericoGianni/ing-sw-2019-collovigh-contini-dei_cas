@@ -13,4 +13,9 @@ public class ColorAlreadyTakenException extends Exception{
     public PlayerColor getColor() {
         return color;
     }
+
+    @Override
+    public String getMessage() {
+        return "Attempted login with color: " + color + "but color was already used";
+    }
 }

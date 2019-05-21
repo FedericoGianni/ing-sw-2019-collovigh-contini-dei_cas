@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
@@ -140,9 +141,11 @@ public class RMIClient extends Client {
 
             ToServer server = getServer();
 
-            // join the game and store the pid
+            // Get the ip of the local machine
 
-            String localIp = "192.168.1.2";
+            String localIp = Inet4Address.getLocalHost().getHostAddress();
+
+            // join the game, register the ip of the client rmiRegistry to the server, and store the pid
 
             int playerId = server.joinGame(localIp,localName,name,color);
 
@@ -152,17 +155,60 @@ public class RMIClient extends Client {
             this.setPlayerId(playerId);
             this.getView().setPlayerId(playerId);
 
-            // register the ip of the client rmiRegistry to the server
-
-            //server.registerMe(Inet4Address.getLocalHost().getHostAddress(),getPlayerId(),localName);
-
+            //return the playerId
 
             return playerId;
 
 
+        }catch (NameAlreadyTakenException e){
+
+            // LOG the exception
+
+            LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login with name: " +e.getName() + "but name was already used", e);
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
+
+        }catch (ColorAlreadyTakenException e){
+
+            // LOG the exception
+
+            LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login with color: " +e.getColor() + "but color was already used", e);
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
+
+        }catch (OverMaxPlayerException e){
+
+            // LOG the exception
+
+            LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login but players were already max");
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
+
+        }catch (GameAlreadyStartedException e){
+
+            // LOG the exception
+
+            LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login but game was already started");
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
+
         }catch(Exception e){
 
+            // LOG the exception
+
             LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
         }
 
         return -1;
@@ -205,11 +251,19 @@ public class RMIClient extends Client {
 
             ToServer server = getServer();
 
+            // Get the ip of the local machine
+
+            String localIp = Inet4Address.getLocalHost().getHostAddress();
+
             // register the ip of the client rmiRegistry to the server
 
-            server.registerMe(Inet4Address.getLocalHost().getHostAddress(), getPlayerId(), localName);
 
-            return server.reconnect(name);
+            return server.reconnect(name, localIp, localName );
+
+
+        } catch (GameNonExistentException e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
 
 
         } catch (Exception e) {

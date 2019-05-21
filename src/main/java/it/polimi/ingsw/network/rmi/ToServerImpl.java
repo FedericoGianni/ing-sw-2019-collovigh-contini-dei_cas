@@ -5,10 +5,7 @@ import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
-import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
-import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.rmi.NoSuchObjectException;
@@ -41,7 +38,7 @@ public class ToServerImpl implements ToServer{
      * {@inheritDoc}
      */
     @Override
-    public int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException {
+    public int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException, NameAlreadyTakenException, ColorAlreadyTakenException, OverMaxPlayerException, GameAlreadyStartedException {
 
         try {
 
@@ -57,20 +54,13 @@ public class ToServerImpl implements ToServer{
 
             playerId = Server.addPlayer(name, color, new ToViewImpl(address, remoteName, client));
 
-            // Register the client in the Server Hashmap
 
             LOGGER.log(level,"[RMI-Server] adding new player w/ name: {0}", name);
 
-
+            // Return the id
 
             return playerId;
 
-        }catch (NameAlreadyTakenException e){
-            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with name: " +e.getName() + "but name was already used", e);
-        }catch (ColorAlreadyTakenException e){
-            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with color: " +e.getColor() + "but color was already used", e);
-        }catch (OverMaxPlayerException e){
-            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login but players were already max");
         }catch (NotBoundException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
@@ -94,17 +84,6 @@ public class ToServerImpl implements ToServer{
      * {@inheritDoc}
      */
     @Override
-    public void registerMe(String address, int playerId, String name) throws RemoteException {
-
-
-        server.addClient(address, playerId, name);
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public Boolean ping() throws RemoteException {
         return true;
     }
@@ -114,9 +93,32 @@ public class ToServerImpl implements ToServer{
      * @return the id assigned to it
      */
     @Override
-    public int reconnect(String name) throws GameNonExistentException{
+    public int reconnect(String name, String address, String remoteName) throws GameNonExistentException{
 
-        //return Server.reconnect(name, null);
+        try {
+
+            // connect to the remote registry
+
+            remote = LocateRegistry.getRegistry(address, 2021);
+
+            // create the Remote Object
+
+            ToClient client = (ToClient) remote.lookup(remoteName);
+
+            // register the client in the Server and gets the id
+
+            playerId = Server.reconnect(name, new ToViewImpl(address, remoteName, client));
+
+            // Return the id
+
+            return playerId;
+
+        }catch (RemoteException e){
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+        }catch (NotBoundException e){
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+        }
+
         return -1;
     }
 
@@ -131,6 +133,8 @@ public class ToServerImpl implements ToServer{
 
     @Override
     public void useNewton(Color color, int playerId, Directions directions, int amount) {
+
+        Server.getController().useNewton( color, playerId, directions, amount);
 
     }
 
