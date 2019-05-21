@@ -9,5 +9,6 @@ public enum UpdateType {
     GAME,
     SPAWN_CELL,
     AMMO_CELL,
-    INITIAL;
+    INITIAL,
+    LOBBY;
 }

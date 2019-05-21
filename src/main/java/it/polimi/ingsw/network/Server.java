@@ -141,8 +141,6 @@ public class Server  {
 
         clients.remove(playerId);
 
-
-
         if ((waitingRoom.isActive()) && (WaitingRoom.getTimerCount() > 1)){
 
             LOGGER.log(level, "Player {0} left the game", waitingRoom.getName(playerId));
@@ -150,7 +148,7 @@ public class Server  {
 
         }else {
 
-            LOGGER.log(level, "Player {0} left the game", controller.getPlayerName(playerId));
+            LOGGER.log(level, "Player {0} left the game", playerId);
 
             //TODO: modify the virtual view class to make the player skip the turn
         }

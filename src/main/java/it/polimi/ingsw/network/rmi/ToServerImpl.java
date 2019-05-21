@@ -54,6 +54,11 @@ public class ToServerImpl implements ToServer{
 
             playerId = Server.addPlayer(name, color, new ToViewImpl(address, remoteName, client));
 
+            // starts the pinger
+
+            new Thread(new RMIPinger(client)).start();
+
+            // LOG the action
 
             LOGGER.log(level,"[RMI-Server] adding new player w/ name: {0}", name);
 
@@ -108,6 +113,11 @@ public class ToServerImpl implements ToServer{
             // register the client in the Server and gets the id
 
             playerId = Server.reconnect(name, new ToViewImpl(address, remoteName, client));
+
+            // starts the pinger
+
+            RMIPinger pinger = new RMIPinger(client);
+            pinger.run();
 
             // Return the id
 
