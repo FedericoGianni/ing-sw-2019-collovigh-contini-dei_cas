@@ -176,6 +176,8 @@ public class CLI implements UserInterface {
             case DEFAULT_COLOR_ALREADY_TAKEN:
                 System.out.println("Colore già preso.");
                 break;
+            default:
+                System.out.println(" Qualcosa è andato storto");
         }
         System.out.println("Login fallito. Riprova");
         login();
@@ -271,69 +273,21 @@ public class CLI implements UserInterface {
 
         }while(!validChoice);
 
+        usePowerUp(powerUps.get(read));
 
-        int player;
-        String direction;
-        int r;
-        int c;
 
-        switch (powerUps.get(1).getType()){
+    }
+
+    private void usePowerUp(CachedPowerUp powerUp){
+
+        switch (powerUp.getType()){
 
             case NEWTON:
-                do {
-                    System.out.println("Su quale giocatore vuoi usare Newton? >>> ");
-                    player = scanner.nextInt();
-
-                    if(player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
-                        validChoice = true;
-                    else
-                        System.out.println("Scelta non valida. Riprova.");
-                }while(!validChoice);
-
-                do{
-                    System.out.println("In quale direzione vuoi spostare il player selezionato? (Nord, Sud, Ovest, Est) >>> ");
-                    direction = scanner.next().toUpperCase();
-
-                    if(direction.equals("NORD") || direction.equals("SUD")
-                            || direction.equals("EST") || direction.equals("OVEST"))
-                        validChoice = true;
-                    else
-                        System.out.println("Scelta non valida. Riprova.");
-                }while(!validChoice);
-                //TODO check amount parameter what's for and why user should choose it?
-                view.useNewton(powerUps.get(read).getColor(), player, Directions.valueOf(direction), 0);
+                useNewton(powerUp);
                 break;
 
             case TELEPORTER:
-                do{
-                    System.out.println("Su quale giocatore vuoi usare Teleporter? >>> ");
-                    player = scanner.nextInt();
-
-                    if(player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
-                        validChoice = true;
-                    else
-                        System.out.println("Scelta non valida. Riprova.");
-
-                }while(!validChoice);
-
-                do{
-                    System.out.println("In quale cella vuoi spostare il giocatore selezionato? >>> ");
-                    //TODO when the cachedModel will have Map find a better method to get this cell
-                    //this way you have to check locally if r,c is ok for every different type of map
-                    System.out.println("riga >>> (0,1,2)");
-                    r = scanner.nextInt();
-                    System.out.println("colonna >>> (0,1,2,3)");
-                    c = scanner.nextInt();
-
-                    if(r >= 0 && r <= 2 && c >= 0 && c <= 3){
-                        validChoice = true;
-                    } else {
-                        System.out.println("Cella non valida. Riprova.");
-                    }
-
-                }while(!validChoice);
-
-                view.useTeleport(powerUps.get(read).getColor(), r,c);
+                useTeleporter(powerUp);
                 break;
 
             case TAG_BACK_GRENADE:
@@ -342,7 +296,87 @@ public class CLI implements UserInterface {
             case TARGETING_SCOPE:
                 break;
 
+            default:
+                break;
+
         }
+
+    }
+
+    private void useNewton(CachedPowerUp newton){
+
+        String retryMessage = "Scelta non valida. Riprova.";
+
+        Boolean validChoice = false;
+        int player;
+        String direction;
+
+
+        do {
+            System.out.println("Su quale giocatore vuoi usare Newton? >>> ");
+            player = scanner.nextInt();
+
+            if(player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
+                validChoice = true;
+            else
+                System.out.println(retryMessage);
+        }while(!validChoice);
+
+        validChoice = false;
+
+        do{
+            System.out.println("In quale direzione vuoi spostare il player selezionato? (Nord, Sud, Ovest, Est) >>> ");
+            direction = scanner.next().toUpperCase();
+
+            if(direction.equals("NORD") || direction.equals("SUD")
+                    || direction.equals("EST") || direction.equals("OVEST"))
+                validChoice = true;
+            else
+                System.out.println(retryMessage);
+        }while(!validChoice);
+        //TODO check amount parameter what's for and why user should choose it?
+        view.useNewton(newton.getColor(), player, Directions.valueOf(direction), 0);
+    }
+
+    private void useTeleporter(CachedPowerUp teleporter){
+
+        int player;
+        Boolean validChoice = false;
+        int r;
+        int c;
+
+        do{
+            System.out.println("Su quale giocatore vuoi usare Teleporter? >>> ");
+            player = scanner.nextInt();
+
+            if(player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
+                validChoice = true;
+            else
+                System.out.println("Scelta non valida. Riprova.");
+
+        }while(!validChoice);
+
+        validChoice = false;
+
+        do{
+            System.out.println("In quale cella vuoi spostare il giocatore selezionato? >>> ");
+            //TODO when the cachedModel will have Map find a better method to get this cell
+            //this way you have to check locally if r,c is ok for every different type of map
+            System.out.println("riga >>> (0,1,2)");
+            r = scanner.nextInt();
+            System.out.println("colonna >>> (0,1,2,3)");
+            c = scanner.nextInt();
+
+            if(r >= 0 && r <= 2 && c >= 0 && c <= 3){
+                validChoice = true;
+            } else {
+                System.out.println("Cella non valida. Riprova.");
+            }
+
+        }while(!validChoice);
+
+        view.useTeleport(teleporter.getColor(), r,c);
+
 
     }
 
