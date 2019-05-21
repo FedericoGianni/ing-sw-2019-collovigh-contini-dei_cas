@@ -3,7 +3,7 @@ package it.polimi.ingsw.network.rmi;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
+import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.rmi.Remote;
@@ -18,7 +18,7 @@ public interface ToServer extends Remote {
      * @return the player id or -1 if the login was unsuccessful
      * @throws RemoteException
      */
-    int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException;
+    int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException, NameAlreadyTakenException, ColorAlreadyTakenException, OverMaxPlayerException, GameAlreadyStartedException;
 
     /**
      *

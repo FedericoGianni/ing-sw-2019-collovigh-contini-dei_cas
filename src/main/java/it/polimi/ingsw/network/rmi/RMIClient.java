@@ -4,6 +4,10 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
+import it.polimi.ingsw.network.networkexceptions.GameAlreadyStartedException;
+import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
+import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
@@ -159,9 +163,55 @@ public class RMIClient extends Client {
             return playerId;
 
 
+        }catch (NameAlreadyTakenException e){
+
+            // LOG the exception
+
+            LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login with name: " +e.getName() + "but name was already used", e);
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
+
+        }catch (ColorAlreadyTakenException e){
+
+            // LOG the exception
+
+            LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login with color: " +e.getColor() + "but color was already used", e);
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
+
+        }catch (OverMaxPlayerException e){
+
+            // LOG the exception
+
+            LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login but players were already max");
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
+
+        }catch (GameAlreadyStartedException e){
+
+            // LOG the exception
+
+            LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login but game was already started");
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
+
         }catch(Exception e){
 
+            // LOG the exception
+
             LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+            // Retry the login
+
+            view.getUserInterface().retryLogin(e);
         }
 
         return -1;

@@ -75,6 +75,7 @@ public class CLI implements UserInterface {
 
     }
 
+
     /**
      * @param type is the type of connection specified
      */
@@ -87,6 +88,43 @@ public class CLI implements UserInterface {
 
     // game initialization functions
 
+
+    @Override
+    public void gameSelection() {
+
+        int choice = -1;
+
+        do {
+
+            System.out.println("Digita: \n 1 -> Nuova Partita \n 2 -> Riconnessione a partita già iniziata \n 3 -> Load a saved Game");
+
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+        }while (!(choice == 1 || choice == 2 || choice == 3));
+
+
+        switch (choice){
+
+            case 1:
+                login();
+                break;
+
+            case 2:
+                // TODO reconnect
+                break;
+
+            case 3:
+                System.out.println("Still not implemented ;D");
+                break;
+
+            default:
+                System.out.println("Wrong number ");
+                break;
+
+        }
+
+    }
 
     @Override
     public void login() {
@@ -122,11 +160,12 @@ public class CLI implements UserInterface {
 
     }
 
-    public static void show(String s){
+    public  void show(String s){
         new Thread(() ->
             System.out.println(s)
         ).start();
     }
+
 
     @Override
     public void retryLogin(String error) {
@@ -140,6 +179,16 @@ public class CLI implements UserInterface {
         }
         System.out.println("Login fallito. Riprova");
         login();
+    }
+
+    @Override
+    public void retryLogin(Exception e) {
+
+        System.out.println(e.getMessage());
+
+        System.out.println("Login fallito. Riprova");
+        login();
+
     }
 
     @Override

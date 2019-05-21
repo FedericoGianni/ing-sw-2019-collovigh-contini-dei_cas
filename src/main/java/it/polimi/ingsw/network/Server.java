@@ -2,10 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
-import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.network.rmi.RMIServer;
 import it.polimi.ingsw.network.socket.SocketServer;
 
@@ -90,7 +87,7 @@ public class Server  {
      * @throws ColorAlreadyTakenException
      * @throws OverMaxPlayerException
      */
-    public static int addPlayer(String name, PlayerColor playerColor, ToView toView) throws NameAlreadyTakenException, ColorAlreadyTakenException, OverMaxPlayerException {
+    public static int addPlayer(String name, PlayerColor playerColor, ToView toView) throws NameAlreadyTakenException, ColorAlreadyTakenException, OverMaxPlayerException, GameAlreadyStartedException {
 
         if (waitingRoom.isActive()) {
 
@@ -103,9 +100,12 @@ public class Server  {
             System.out.println("[DEBUG] bounded player w/ id : " + playerId + "toView: " + toView);
 
             return playerId;
+        }else {
+
+            throw new GameAlreadyStartedException();
         }
 
-        return -1;
+
     }
 
     /**

@@ -34,9 +34,10 @@ public class SocketConnectionWriter extends Thread implements ToView {
 
     /**
      * Constructor
+     *
      * @param socket reference to the stream to be initialized with
      */
-    SocketConnectionWriter(Socket socket){
+    SocketConnectionWriter(Socket socket) {
         this.socket = socket;
     }
 
@@ -74,6 +75,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
 
     /**
      * Send a String to the specified socket output stream
+     *
      * @param message to be sent
      */
     public void send(String message) {
@@ -119,8 +121,4 @@ public class SocketConnectionWriter extends Thread implements ToView {
         send(gson.toJson(update));
     }
 
-    @Override
-    public void useGrenade() {
-        //TODO
-    }
 }

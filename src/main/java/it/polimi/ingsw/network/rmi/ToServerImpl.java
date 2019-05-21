@@ -5,10 +5,7 @@ import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
-import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
-import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.rmi.NoSuchObjectException;
@@ -41,7 +38,7 @@ public class ToServerImpl implements ToServer{
      * {@inheritDoc}
      */
     @Override
-    public int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException {
+    public int joinGame(String address, String remoteName, String name, PlayerColor color) throws RemoteException, NameAlreadyTakenException, ColorAlreadyTakenException, OverMaxPlayerException, GameAlreadyStartedException {
 
         try {
 
@@ -65,12 +62,6 @@ public class ToServerImpl implements ToServer{
 
             return playerId;
 
-        }catch (NameAlreadyTakenException e){
-            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with name: " +e.getName() + "but name was already used", e);
-        }catch (ColorAlreadyTakenException e){
-            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login with color: " +e.getColor() + "but color was already used", e);
-        }catch (OverMaxPlayerException e){
-            LOGGER.log(Level.WARNING,"[RMI-Server]Attempted login but players were already max");
         }catch (NotBoundException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
