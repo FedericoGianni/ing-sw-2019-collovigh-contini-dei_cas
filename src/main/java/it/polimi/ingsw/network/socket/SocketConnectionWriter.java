@@ -105,8 +105,16 @@ public class SocketConnectionWriter extends Thread implements ToView {
         send("startReload");
     }
 
+    /**
+     * This method will be called on a player if he/she was shot in the previous phase and has grenades
+     */
     @Override
-    public void sendUpdates(UpdateClass update) {
+    public void useGrenade() {
+
+    }
+
+    @Override
+    public void sendUpdate(UpdateClass update) {
         LOGGER.info("sending update string to connected client");
         send(gson.toJson(update));
     }

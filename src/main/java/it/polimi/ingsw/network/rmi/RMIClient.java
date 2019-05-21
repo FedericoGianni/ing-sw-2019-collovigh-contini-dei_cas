@@ -140,9 +140,11 @@ public class RMIClient extends Client {
 
             ToServer server = getServer();
 
-            // join the game and store the pid
+            // Get the ip of the local machine
 
             String localIp = Inet4Address.getLocalHost().getHostAddress();
+
+            // join the game, register the ip of the client rmiRegistry to the server, and store the pid
 
             int playerId = server.joinGame(localIp,localName,name,color);
 
@@ -152,10 +154,7 @@ public class RMIClient extends Client {
             this.setPlayerId(playerId);
             this.getView().setPlayerId(playerId);
 
-            // register the ip of the client rmiRegistry to the server
-
-            //server.registerMe(Inet4Address.getLocalHost().getHostAddress(),getPlayerId(),localName);
-
+            //return the playerId
 
             return playerId;
 
