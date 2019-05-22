@@ -31,6 +31,7 @@ public class Model {
 
         if (Observers.isInitialized()) map.updateObserver();
 
+        if (Observers.isInitialized()) map.initializeSpawnCell();
     }
 
     public static CurrentGame getGame() {

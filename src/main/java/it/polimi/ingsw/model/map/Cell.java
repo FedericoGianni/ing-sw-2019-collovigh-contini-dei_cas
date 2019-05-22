@@ -16,6 +16,15 @@ import java.util.List;
  */
 public abstract class Cell extends Subject {
 
+    private CellColor color;
+    private boolean visit;
+    private boolean isAmmoCell;
+    private Cell adjNorth;
+    private Cell adjSouth;
+    private Cell adjEast;
+    private Cell adjWest;
+    private List<Player> playersHere=new ArrayList<>();
+
     /**
      * Default constructor
      */
@@ -55,13 +64,7 @@ public abstract class Cell extends Subject {
         this.visit = clone.visit;
     }
 
-    private CellColor color;
-    private boolean visit;
-    private Cell adjNorth;
-    private Cell adjSouth;
-    private Cell adjEast;
-    private Cell adjWest;
-    private List<Player> playersHere=new ArrayList<>();
+
 
 
     public CellColor getColor() {
@@ -190,5 +193,14 @@ public abstract class Cell extends Subject {
     public Weapon buy(Weapon w, AmmoBag cash) throws NotEnoughAmmoException {
 
         return null;
+    }
+
+    public void setAmmoCell(boolean ammoCell) {
+        isAmmoCell = ammoCell;
+    }
+
+    public Boolean isAmmoCell(){
+
+        return isAmmoCell;
     }
 }

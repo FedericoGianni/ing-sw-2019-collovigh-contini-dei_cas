@@ -409,10 +409,27 @@ public class Map {
     public void updateObserver(){
         for(Cell[] c : this.matrix){
             for(Cell c2 : c){
-                if(c2 != null )
+                if(c2 != null && c2.isAmmoCell())
                     c2.updateAll(c2);
             }
         }
+    }
+
+    public void initializeSpawnCell(){
+
+        for(Cell[] c : this.matrix){
+            for(Cell c2 : c){
+                if(c2 != null && !c2.isAmmoCell()){
+
+                    SpawnCell cell = (SpawnCell) c2;
+
+                    cell.populateWeapon();
+                }
+
+
+            }
+        }
+
     }
 
     /**

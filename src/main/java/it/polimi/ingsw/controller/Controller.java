@@ -90,7 +90,8 @@ public class Controller {
         sendInitialUpdate( nameList, playerColors, gameId, mapType);
 
         this.model = new Model(nameList,playerColors,mapType);
-        System.out.println("creatore controller map " + Model.getMap().getCell(0,0));
+
+        LOGGER.log(level,"[CONTROLLER] Initialized Model with random MapType");
     }
 
     /**
@@ -118,6 +119,8 @@ public class Controller {
         }
 
         sendInitialUpdate( nameList, playerColors, gameId, mapType);
+
+        LOGGER.log(level,"[CONTROLLER] Initialized Model with chosen MapType");
     }
 
 

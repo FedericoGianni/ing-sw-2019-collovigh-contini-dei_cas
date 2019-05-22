@@ -20,6 +20,8 @@ public class AmmoCell extends Cell {
 
         super();
 
+        setAmmoCell(true);
+
         // Place the AmmoCard
 
         ammoPlaced = AmmoCard.generateRandCard();
