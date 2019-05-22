@@ -8,9 +8,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Gui extends Application implements UserInterface {
+
+    public static final float DEFAULT_MIN_WIDTH = 900;
+    public static final float DEFAULT_MIN_HEIGHT = 506;
 
     public Gui(){
         super();
@@ -28,12 +32,18 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
+        root.setId("pane");
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
+        scene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("style.css").toExternalForm());
+        Image img = new Image("/images/background_image.png");
 
+        stage.setMinWidth(DEFAULT_MIN_WIDTH);
+        stage.setMinHeight(DEFAULT_MIN_HEIGHT);
         stage.setTitle("Adrenalina");
         stage.setScene(scene);
         stage.show();
+
     }
 
     @Override
