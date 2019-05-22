@@ -1,13 +1,18 @@
 package it.polimi.ingsw.network.rmi;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.jsonconfig.Config;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.net.Inet4Address;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -45,6 +50,36 @@ public class RMIClient extends Client {
 
 
     // Utilities
+
+    private Config getConfig(){
+
+        Gson gson = new Gson();
+
+
+        try{
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader( new FileReader( new File("resources/json/startupConfig/config.json").getAbsolutePath()));
+
+            // load the Config File
+
+            Config config = gson.fromJson(br, Config.class);
+
+            // LOG the load
+
+            LOGGER.log(level,"[RMI-CLIENT] Config successfully loaded ");
+
+            // returns the class
+
+            return config;
+
+        }catch (Exception e){
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
+        }
+
+        return null;
+    }
 
     /**
      * this method creates a new Rmi registry on port 2021 if thi was not already created

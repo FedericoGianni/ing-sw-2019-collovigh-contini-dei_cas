@@ -29,8 +29,8 @@ public class WaitingRoom {
     private static final int TIMER = 50;
     private static int timerCount = TIMER;
 
-    private static final int DEFAULT_MIN_PLAYERS = 1;
-    private static final int DEFAULT_MAX_PLAYERS = 1;
+    private static final int DEFAULT_MIN_PLAYERS = 2;
+    private static final int DEFAULT_MAX_PLAYERS = 5;
 
     private CopyOnWriteArrayList<String> players;
     private List<PlayerColor> colors;
@@ -198,14 +198,26 @@ public class WaitingRoom {
 
             @Override
             public void run() {
-                System.out.println("[DEBUG] WaitingRoomTimer counter: " + timerCount);
-                timerCount--;
-                if((timerCount <= 0) || ( players.size() == DEFAULT_MAX_PLAYERS )) {
-                    System.out.println("[DEBUG] Timer has expired!");
-                    //chiama initGame o gestire timer scaduto
-                    System.out.println("[DEBUG] AVVIO DELLA PARTITA IN CORSO...");
-                    initGame();
-                    //termina l'esecuzione del thread
+
+                if (players.size() >= DEFAULT_MIN_PLAYERS) {
+
+                    System.out.println("[DEBUG] WaitingRoomTimer counter: " + timerCount);
+                    timerCount--;
+                    if ((timerCount <= 0) || (players.size() == DEFAULT_MAX_PLAYERS)) {
+                        System.out.println("[DEBUG] Timer has expired!");
+                        //chiama initGame o gestire timer scaduto
+                        System.out.println("[DEBUG] AVVIO DELLA PARTITA IN CORSO...");
+                        initGame();
+                        //termina l'esecuzione del thread
+                        this.cancel();
+                    }
+
+                }else {
+
+                    System.out.println("[WAITING-ROOM] Timer annullato ");
+
+                    timerCount = TIMER;
+
                     this.cancel();
                 }
             }

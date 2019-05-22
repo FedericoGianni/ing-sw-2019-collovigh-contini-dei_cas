@@ -1,8 +1,13 @@
 package it.polimi.ingsw.network.rmi;
 
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.jsonconfig.Config;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -32,6 +37,38 @@ public class RMIServer {
 
         this.createRemoteObject();
 
+    }
+
+
+    private Config getConfig(){
+
+        Gson gson = new Gson();
+
+
+        try{
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader( new FileReader( new File("resources/json/startupConfig/config.json").getAbsolutePath()));
+
+            // load the Config File
+
+            Config config = gson.fromJson(br, Config.class);
+
+            // LOG the load
+
+            LOGGER.log(level,"[RMI-SERVER] Config successfully loaded ");
+
+            // returns the class
+
+            return config;
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
+        }
+
+        return null;
     }
 
     /**
