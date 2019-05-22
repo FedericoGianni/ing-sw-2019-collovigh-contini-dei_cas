@@ -33,7 +33,7 @@ public class SocketClientReader extends Thread {
     private static Level level = Level.INFO;
 
     Gson gson = new Gson();
-    //UpdateClass update;
+    UpdateClass update;
 
     /**
      * Attribute representing a BufferedReader to manage input stream from socket
@@ -100,15 +100,18 @@ public class SocketClientReader extends Thread {
             populateHeadersMap();
 
             while(true) {
+
+                // Read the line received
+
                 String msg = receive();
 
-                LOGGER.log(level,msg);
+                // if the line starts with a '{' -> json
 
-                if(msg.startsWith("{")){
-                    handleJson(msg);
-                } else {
-                    handleMsg(splitCommand(msg));
-                }
+                if(msg.startsWith("{")) handleJson(msg);
+
+                // else will be handled by the HashMap
+
+                else handleMsg(splitCommand(msg));
             }
 
 
@@ -134,6 +137,8 @@ public class SocketClientReader extends Thread {
     private String[] splitCommand(String msg) {
         if(msg == null){
             return null;
+        }else if(msg.startsWith("{")){
+            handleJson(msg);
         }
         return msg.split("\f");
     }
@@ -163,19 +168,19 @@ public class SocketClientReader extends Thread {
      * Handle the Json received from Server
      * @param msg a String representing the Json received from the Server (SocketConnectionWriter)
      */
-    public void handleJson(String msg){
+    public void handleJson(String msg) {
 
         // get the type of the class contained in the UpdateClass
 
-        String type =msg.substring(9,12);
+        String type = msg.substring(9, 12);
 
         // LOG the update
 
-        LOGGER.log(level,"[DEBUG] [SOCKET-CLIENT-READER] Received Json {0} : Calling handleJson method. ", type);
+        LOGGER.log(level, "[DEBUG] [SOCKET-CLIENT-READER] Received Json {0} : Calling handleJson method. ", type);
 
         // gets the json of the class contained (GSON can not detect the class)
 
-        String update = msg.substring(msg.indexOf("\"update\":") + 9 , msg.indexOf(",\"playerId\""));
+        String update = msg.substring(msg.indexOf("\"update\":") + 9, msg.indexOf(",\"playerId\""));
 
         // gets the playerId attribute
 
@@ -191,26 +196,26 @@ public class SocketClientReader extends Thread {
 
         // switchCase on the type
 
-        switch (type){
+        switch (type) {
 
-            case "INI" :
+            case "INI":
 
                 // gets the inner class from the "update" json string
 
-                InitialUpdate initialUpdate = gson.fromJson(update,InitialUpdate.class);
+                InitialUpdate initialUpdate = gson.fromJson(update, InitialUpdate.class);
 
                 // creates a new UpdateClass from the obtained parameters
 
-                updateClass = new UpdateClass(UpdateType.INITIAL,initialUpdate,playerId);
+                updateClass = new UpdateClass(UpdateType.INITIAL, initialUpdate, playerId);
 
                 break;
 
 
-            case "POW" :
+            case "POW":
 
                 // gets the inner class from the "update" json string
 
-                CachedPowerUpBag cachedPowerUpBag = gson.fromJson(update,CachedPowerUpBag.class);
+                CachedPowerUpBag cachedPowerUpBag = gson.fromJson(update, CachedPowerUpBag.class);
 
                 // creates a new UpdateClass from the obtained parameters
 
@@ -222,7 +227,7 @@ public class SocketClientReader extends Thread {
 
                 // gets the inner class from the "update" json string
 
-                CachedStats cachedStats = gson.fromJson(update,CachedStats.class);
+                CachedStats cachedStats = gson.fromJson(update, CachedStats.class);
 
                 // creates a new UpdateClass from the obtained parameters
 
@@ -248,7 +253,7 @@ public class SocketClientReader extends Thread {
 
                 // gets the inner class from the "update" json string
 
-                CachedAmmoBag cachedAmmoBag = gson.fromJson(update,CachedAmmoBag.class);
+                CachedAmmoBag cachedAmmoBag = gson.fromJson(update, CachedAmmoBag.class);
 
                 // creates a new UpdateClass from the obtained parameters
 
@@ -260,7 +265,7 @@ public class SocketClientReader extends Thread {
 
                 // gets the inner class from the "update" json string
 
-                CachedGame cachedGame = gson.fromJson(update,CachedGame.class);
+                CachedGame cachedGame = gson.fromJson(update, CachedGame.class);
 
                 // creates a new UpdateClass from the obtained parameters
 
@@ -272,7 +277,7 @@ public class SocketClientReader extends Thread {
 
                 // gets the inner class from the "update" json string
 
-                CachedSpawnCell cachedSpawnCell = gson.fromJson(update,CachedSpawnCell.class);
+                CachedSpawnCell cachedSpawnCell = gson.fromJson(update, CachedSpawnCell.class);
 
                 // creates a new UpdateClass from the obtained parameters
 
@@ -285,7 +290,7 @@ public class SocketClientReader extends Thread {
 
                 // gets the inner class from the "update" json string
 
-                CachedAmmoCell cachedAmmoCell = gson.fromJson(update,CachedAmmoCell.class);
+                CachedAmmoCell cachedAmmoCell = gson.fromJson(update, CachedAmmoCell.class);
 
                 // creates a new UpdateClass from the obtained parameters
 
@@ -297,7 +302,7 @@ public class SocketClientReader extends Thread {
 
                 // gets the inner class from the "update" json string
 
-                CachedLobby cachedLobby = gson.fromJson(update,CachedLobby.class);
+                CachedLobby cachedLobby = gson.fromJson(update, CachedLobby.class);
 
                 // creates a new UpdateClass from the obtained parameters
 
@@ -311,13 +316,9 @@ public class SocketClientReader extends Thread {
 
         }
 
-        LOGGER.info("[DEBUG] [CLIENT] Created Update class from Json received. ");
-
-        // Send the update to the view
-
         RunClient.getView().sendUpdates(updateClass);
-
     }
+
 
     /**
      * Initialize the Map by binding a String to its related function

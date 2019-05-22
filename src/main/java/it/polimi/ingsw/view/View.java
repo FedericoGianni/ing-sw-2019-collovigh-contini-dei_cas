@@ -195,6 +195,12 @@ public class View implements ViewInterface {
     @Override
     public void sendUpdates(UpdateClass update) {
 
+        // LOG the update
+
+        LOGGER.log(level, "[VIEW] recived UpdateClass type: {0}", update.getType());
+
+        // forward it to the CacheModel
+
         cacheModel.update(update);
     }
 

@@ -8,8 +8,13 @@ import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CacheModel {
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.INFO;
 
     private  List<Player> players = new ArrayList<>();
     private  CachedGame game = null;
@@ -21,6 +26,8 @@ public class CacheModel {
     }
 
     private void update(InitialUpdate update) {
+
+        LOGGER.log(level, " [CACHE-MODEL] Received initial update with players: " + update.getNames());
 
         players = new ArrayList<>();
 

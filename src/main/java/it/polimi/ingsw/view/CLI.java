@@ -8,6 +8,8 @@ import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Thread.sleep;
+
 public class CLI implements UserInterface {
 
     private final Scanner scanner = new Scanner(System.in);
@@ -206,6 +208,12 @@ public class CLI implements UserInterface {
 
             while(view.getCacheModel().getCachedPlayers().size() <= 0) {
                 System.out.println("Waiting for InitialUpdate");
+
+                try {
+                    sleep(2000);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()){

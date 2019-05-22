@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.socket;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
+import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
 
@@ -9,7 +10,7 @@ public class TEST {
 
     public static void main(String[] args) {
 
-        String msg = "{\"type\":\"POWERUP_BAG\",\"update\":{\"powerUpList\":[{\"color\":\"BLUE\",\"type\":\"NEWTON\"},{\"color\":\"RED\",\"type\":\"TAG_BACK_GRENADE\"}]},\"playerId\":0}";
+        String msg = "{\"type\":\"INITIAL\",\"update\":{\"names\":[\"Alex\",\"Bob\"],\"colors\":[\"BLUE\",\"YELLOW\"],\"mapType\":0,\"gameId\":-1},\"playerId\":0}";
         handleJson(msg);
     }
 
@@ -37,20 +38,36 @@ public class TEST {
 
         // switchCase on the type
 
+        Gson gson;
+
         switch (type){
 
             case "POW" :
 
-                Gson gson = new Gson();
+                gson = new Gson();
 
                 CachedPowerUpBag cachedPowerUpBag = gson.fromJson(update,CachedPowerUpBag.class);
 
                 updateClass = new UpdateClass(UpdateType.POWERUP_BAG, cachedPowerUpBag, playerId);
 
+                break;
 
+            case "INI" :
+
+                gson = new Gson();
+
+                // gets the inner class from the "update" json string
+
+                InitialUpdate initialUpdate = gson.fromJson(update,InitialUpdate.class);
+
+                // creates a new UpdateClass from the obtained parameters
+
+                updateClass = new UpdateClass(UpdateType.INITIAL,initialUpdate,playerId);
+
+                break;
         }
 
-        System.out.println("UPDATE_CLASS: " + updateClass);
+        System.out.println("UPDATE_CLASS: " + updateClass + '\n' + updateClass.getType() );
         System.out.println("[DEBUG] [CLIENT] Created Update class from Json received. ");
         //RunClient.getView().sendUpdates(update);
     }

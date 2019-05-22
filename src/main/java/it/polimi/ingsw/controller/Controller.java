@@ -220,6 +220,16 @@ public class Controller {
         return roundNumber % players.size();
     }
 
+    public void setPlayerOnline(int playerId){
+
+        Model.getPlayer(playerId).getStats().setOnline(true);
+    }
+
+    public void setPlayerOffline(int playerId){
+
+        Model.getPlayer(playerId).getStats().setOnline(false);
+    }
+
 
     // Turn Management
 

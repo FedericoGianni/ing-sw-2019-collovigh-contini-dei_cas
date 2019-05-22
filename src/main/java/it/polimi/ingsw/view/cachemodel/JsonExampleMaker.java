@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.powerup.TagbackGrenade;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
+import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.Update;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
@@ -26,7 +27,8 @@ public class JsonExampleMaker {
 
     public static void main(String[] args) {
 
-        writeCachedPowerUpBag();
+        writeInitialUpdate();
+        writeInitialUpdateClass();
 
 
     }
@@ -110,7 +112,7 @@ public class JsonExampleMaker {
         }
     }
 
-    public static void writeUpdate(){
+    public static void writePowerUpBagUpdate(){
 
         Gson gson = new Gson();
 
@@ -131,6 +133,84 @@ public class JsonExampleMaker {
 
 
             gson.toJson(updateClass, writer);
+
+            writer.write('\n');
+
+            writer.write("Ciao");
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeInitialUpdateClass(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            List<String> names = new ArrayList<>();
+
+            names.add("Alex");
+            names.add("Bob");
+
+            List<PlayerColor> colors =new ArrayList<>();
+
+            colors.add(PlayerColor.BLUE);
+            colors.add(PlayerColor.YELLOW);
+
+            InitialUpdate initialUpdate = new InitialUpdate(names,colors,-1,0);
+
+            UpdateClass updateClass = new UpdateClass(UpdateType.INITIAL,initialUpdate,0);
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/initialUpdateClass.json");
+
+
+            gson.toJson(updateClass, writer);
+
+            writer.write('\n');
+
+            writer.write("Ciao");
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeInitialUpdate(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            List<String> names = new ArrayList<>();
+
+            names.add("Alex");
+            names.add("Bob");
+
+            List<PlayerColor> colors =new ArrayList<>();
+
+            colors.add(PlayerColor.BLUE);
+            colors.add(PlayerColor.YELLOW);
+
+            InitialUpdate initialUpdate = new InitialUpdate(names,colors,-1,0);
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/initialUpdate.json");
+
+
+            gson.toJson(initialUpdate, writer);
+
+            writer.write('\n');
+
+            writer.write("Ciao");
 
             writer.flush();
             writer.close();

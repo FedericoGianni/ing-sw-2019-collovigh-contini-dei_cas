@@ -12,6 +12,7 @@ public class CachedStats implements Serializable, Update {
 
     private final int score;
     private final int deaths;
+    private final Boolean online;
     private final List<Integer> marks;
     private final List<Integer> dmgTaken;
     private final Point currentPosition;
@@ -20,6 +21,7 @@ public class CachedStats implements Serializable, Update {
 
         this.score = stats.getScore();
         this.deaths = stats.getDeaths();
+        this.online = stats.getOnline();
         this.marks = stats.getMarks();
         this.dmgTaken = stats.getDmgTaken();
         this.currentPosition = Model.getMap().cellToCoord(stats.getCurrentPosition());
@@ -32,6 +34,8 @@ public class CachedStats implements Serializable, Update {
     public int getDeaths() {
         return deaths;
     }
+
+    public Boolean getOnline(){ return online; }
 
     public List<Integer> getMarks() {
         return marks;
