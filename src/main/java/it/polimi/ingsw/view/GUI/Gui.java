@@ -3,9 +3,11 @@ package it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class Gui extends Application implements UserInterface {
@@ -20,22 +22,18 @@ public class Gui extends Application implements UserInterface {
         this.view = view;
     }
 
-
+    @FXML
+    Button login;
 
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
 
-        Scene scene = new Scene(root, 300, 275);
+        Scene scene = new Scene(root, 800, 600);
 
-        stage.setTitle("FXML Welcome");
+        stage.setTitle("Adrenalina");
         stage.setScene(scene);
         stage.show();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     @Override
