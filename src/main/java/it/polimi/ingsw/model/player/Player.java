@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -209,7 +210,7 @@ public class Player {
             visibili=runner(visibili,c);
             c=d;
         }
-        if(c.getEast() !=null && !c.getEast().alreadyVisited() )//devo fare !c.getEast().alreadyvisitd
+        if(c.getEast() !=null && !c.getEast().alreadyVisited() )
         {
             c.setVisited();
             c=c.getEast();
@@ -244,7 +245,7 @@ public class Player {
      */
 
 //useful differentiate because the first check can change the color, after the first one thc eoclor must be all the same
-    public List<Player> runner(List<Player> visibili,Cell c)
+    private List<Player> runner(List<Player> visibili,Cell c)
     {
         if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor() && !c.getNorth().alreadyVisited())//if the color is different you change the room, so you can't see other players
         {
