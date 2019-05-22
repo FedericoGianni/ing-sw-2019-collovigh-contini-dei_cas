@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.cachemodel.sendables;
 import it.polimi.ingsw.model.player.PowerUpBag;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
-import it.polimi.ingsw.view.updates.Update;
+import it.polimi.ingsw.view.cachemodel.updates.Update;
 
 import java.io.Serializable;
 import java.util.ArrayList;

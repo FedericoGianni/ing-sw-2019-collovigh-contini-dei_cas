@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
-import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 
 public class StatsObserver implements Observer {
 

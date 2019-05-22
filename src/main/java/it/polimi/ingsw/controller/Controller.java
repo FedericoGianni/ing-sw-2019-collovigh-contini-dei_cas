@@ -13,9 +13,9 @@ import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.model.powerup.Teleporter;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.view.updates.InitialUpdate;
-import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 

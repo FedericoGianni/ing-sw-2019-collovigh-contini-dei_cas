@@ -65,37 +65,6 @@ public class RunClient {
         return view;
     }
 
-
-
-
-    /*
-    public static void main(String args[]) {
-
-        try {
-            SocketClient sc = new SocketClient(args[0], Integer.parseInt(args[1]));
-            Thread t = new Thread(sc);
-            t.start();
-
-            ui = cli;
-            sleep(2000);
-            view = new View(cli);
-            cli = new CLI(view);
-            view.setVirtualView(sc.getScw());
-            cli.login();
-
-            //rmic = new RMIClient("localhost");
-            //rmic.joinGame("a", PlayerColor.GREEN);
-
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-
-    }
-
-     */
-
     /**
      *
      * @param args ->

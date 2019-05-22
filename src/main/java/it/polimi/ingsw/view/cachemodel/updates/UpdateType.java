@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.updates;
+package it.polimi.ingsw.view.cachemodel.updates;
 
 public enum UpdateType {
 

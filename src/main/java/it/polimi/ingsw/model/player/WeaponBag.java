@@ -1,12 +1,15 @@
-package it.polimi.ingsw.model.weapons;
+package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.player.Bag;
+import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WeaponBag implements Bag<Weapon> {
+public class WeaponBag extends Subject implements Bag<Weapon> {
 
     private List<Weapon> weapons;
 
@@ -32,6 +35,8 @@ public class WeaponBag implements Bag<Weapon> {
 
         weapons.add(item);
 
+        updateAll(new CachedWeaponBag(this));
+
     }
 
     /**
@@ -44,8 +49,19 @@ public class WeaponBag implements Bag<Weapon> {
 
         if (!this.weapons.contains(item)) throw new CardNotPossessedException();
         else {
+
+            // Removes the weapon
+
             this.weapons.remove(item);
+
+            // updates the observer
+
+            updateAll(new CachedWeaponBag(this));
+
+            // return the weapon
+
             return item;
+
         }
     }
 

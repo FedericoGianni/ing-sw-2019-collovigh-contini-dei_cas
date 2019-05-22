@@ -1,29 +1,28 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
-import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoBag;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 
-public class AmmoBagObserver implements Observer {
+public class WeaponBagObserver implements Observer {
 
-    private CachedAmmoBag ammoBag;
+    private CachedWeaponBag cachedWeaponBag;
     private final PlayerObserver playerObserver;
 
-    public AmmoBagObserver(PlayerObserver up) {
-        this.playerObserver = up;
+    public WeaponBagObserver(PlayerObserver playerObserver) {
+        this.playerObserver = playerObserver;
     }
-
 
     @Override
     public void update(Object object) {
 
         // cast the Object in its dynamic type
 
-        this.ammoBag = (CachedAmmoBag) object;
+        this.cachedWeaponBag = (CachedWeaponBag) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.AMMO_BAG,ammoBag, playerObserver.getPlayerId());
+        UpdateClass updateClass = new UpdateClass(UpdateType.AMMO_BAG,cachedWeaponBag, playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 

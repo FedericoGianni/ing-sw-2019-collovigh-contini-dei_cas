@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.cachemodel.sendables;
 
-import it.polimi.ingsw.view.updates.Update;
+import it.polimi.ingsw.view.cachemodel.updates.Update;
 
 import java.io.Serializable;
 import java.util.List;

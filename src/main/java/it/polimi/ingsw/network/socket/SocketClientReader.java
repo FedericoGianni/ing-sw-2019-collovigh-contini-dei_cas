@@ -3,9 +3,9 @@ package it.polimi.ingsw.network.socket;
 import com.google.gson.Gson;
 import it.polimi.ingsw.network.RunClient;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
-import it.polimi.ingsw.view.updates.InitialUpdate;
-import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -237,15 +237,13 @@ public class SocketClientReader extends Thread {
 
             case "WEA":
 
-                //TODO need CachedPowerUpBag impl
-
                 // gets the inner class from the "update" json string
 
-                //CachedWeaponBag cachedWeaponBag = gson.fromJson(update,CachedWeaponBag.class);
+                CachedWeaponBag cachedWeaponBag = gson.fromJson(update,CachedWeaponBag.class);
 
                 // creates a new UpdateClass from the obtained parameters
 
-                //updateClass = new UpdateClass(UpdateType.WEAPON_BAG, cachedWeaponBag, playerId);
+                updateClass = new UpdateClass(UpdateType.WEAPON_BAG, cachedWeaponBag, playerId);
 
                 break;
 

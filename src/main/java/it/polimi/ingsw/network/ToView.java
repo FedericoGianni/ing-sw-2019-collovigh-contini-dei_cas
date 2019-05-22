@@ -1,9 +1,6 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.view.updates.UpdateClass;
-
-import java.rmi.Remote;
-import java.rmi.RemoteException;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 
 public interface ToView  {
 

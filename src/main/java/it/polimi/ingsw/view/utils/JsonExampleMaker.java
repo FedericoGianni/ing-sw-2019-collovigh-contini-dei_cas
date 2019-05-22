@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.cachemodel;
+package it.polimi.ingsw.view.utils;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
@@ -13,10 +13,10 @@ import it.polimi.ingsw.model.powerup.TagbackGrenade;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
-import it.polimi.ingsw.view.updates.InitialUpdate;
-import it.polimi.ingsw.view.updates.Update;
-import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
+import it.polimi.ingsw.view.cachemodel.updates.Update;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 
 import java.awt.*;
 import java.io.FileWriter;

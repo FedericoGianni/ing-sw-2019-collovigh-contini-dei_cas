@@ -11,8 +11,6 @@ import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
-import it.polimi.ingsw.model.weapons.WeaponBag;
-import it.polimi.ingsw.view.virtualView.observers.Observer;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.util.List;
@@ -45,6 +43,7 @@ public class Player {
         if (Observers.isInitialized()) this.ammo.addObserver(Observers.getAmmoBagObserver(id));
 
         this.currentWeapons = new WeaponBag();
+        if (Observers.isInitialized()) this.currentWeapons.addObserver(Observers.getWeaponBagObservers(id));
 
     }
 

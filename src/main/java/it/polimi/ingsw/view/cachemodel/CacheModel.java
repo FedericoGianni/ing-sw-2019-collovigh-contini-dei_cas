@@ -3,8 +3,8 @@ package it.polimi.ingsw.view.cachemodel;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
-import it.polimi.ingsw.view.updates.InitialUpdate;
-import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +88,7 @@ public class CacheModel {
 
             case WEAPON_BAG:
 
-                //TODO
+                players.get(updateClass.getPlayerId()).update((CachedWeaponBag) updateClass.getUpdate());
 
                 break;
 

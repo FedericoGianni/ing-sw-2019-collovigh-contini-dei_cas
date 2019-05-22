@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.updates;
+package it.polimi.ingsw.view.cachemodel.updates;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 

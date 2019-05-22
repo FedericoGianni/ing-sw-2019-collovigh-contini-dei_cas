@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.cachemodel.cachedmap;
 
-import it.polimi.ingsw.view.updates.Update;
+import it.polimi.ingsw.view.cachemodel.updates.Update;
 
 import java.awt.*;
 import java.io.Serializable;

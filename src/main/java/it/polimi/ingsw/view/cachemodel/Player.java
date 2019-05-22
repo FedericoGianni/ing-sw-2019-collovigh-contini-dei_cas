@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
 
 public class Player {
 
@@ -12,6 +13,7 @@ public class Player {
     private final String name;
     private CachedStats stats;
     private CachedPowerUpBag powerUpBag;
+    private CachedWeaponBag weaponbag;
     private CachedAmmoBag ammoBag;
 
     public Player(int playerId, String name, PlayerColor color) {
@@ -35,6 +37,11 @@ public class Player {
         this.ammoBag = ammoBag;
     }
 
+    public void update(CachedWeaponBag weaponbag){
+
+        this.weaponbag = weaponbag;
+    }
+
     public CachedStats getStats() {
         return stats;
     }
@@ -53,5 +60,9 @@ public class Player {
 
     public CachedAmmoBag getAmmoBag() {
         return ammoBag;
+    }
+
+    public CachedWeaponBag getWeaponbag() {
+        return weaponbag;
     }
 }

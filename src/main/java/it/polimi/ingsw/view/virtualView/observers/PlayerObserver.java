@@ -8,6 +8,7 @@ public class PlayerObserver {
     private StatsObserver statsObserver = null;
     private PowerUpBagObserver powerUpBagObserver = null;
     private AmmoBagObserver ammoBagObserver = null;
+    private WeaponBagObserver weaponBagObserver = null;
 
     public PlayerObserver(int playerId, Observers up) {
 
@@ -17,6 +18,7 @@ public class PlayerObserver {
         this.statsObserver = new StatsObserver(this);
         this.powerUpBagObserver = new PowerUpBagObserver(this);
         this.ammoBagObserver = new AmmoBagObserver(this);
+        this.weaponBagObserver = new WeaponBagObserver(this);
 
     }
 
@@ -41,5 +43,9 @@ public class PlayerObserver {
 
     public Observers getTopClass() {
         return up;
+    }
+
+    public WeaponBagObserver getWeaponBagObserver() {
+        return weaponBagObserver;
     }
 }

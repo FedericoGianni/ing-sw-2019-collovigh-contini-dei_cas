@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.cachemodel.sendables;
 
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Stats;
-import it.polimi.ingsw.view.updates.Update;
+import it.polimi.ingsw.view.cachemodel.updates.Update;
 
 import java.awt.*;
 import java.io.Serializable;

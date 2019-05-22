@@ -3,7 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
-import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 
 public interface ViewInterface {
 

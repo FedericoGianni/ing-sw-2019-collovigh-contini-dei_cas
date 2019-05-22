@@ -43,6 +43,11 @@ public class Observers {
         return playerObservers.get(playerId).getAmmoBagObserver();
     }
 
+    public static WeaponBagObserver getWeaponBagObservers(int playerId) {
+
+        return playerObservers.get(playerId).getWeaponBagObserver();
+    }
+
     public static CurrentGameObserver getGameObserver() {
         return gameObserver;
     }

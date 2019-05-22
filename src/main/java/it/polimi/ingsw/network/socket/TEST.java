@@ -2,9 +2,9 @@ package it.polimi.ingsw.network.socket;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
-import it.polimi.ingsw.view.updates.InitialUpdate;
-import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 
 public class TEST {
 
