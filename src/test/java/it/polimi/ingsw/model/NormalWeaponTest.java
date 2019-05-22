@@ -87,6 +87,12 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (PlayerInDifferentCellException e) {
             e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
         }
     }
 
@@ -139,7 +145,6 @@ class NormalWeaponTest {
             mEf.add(0);
             mEf.add(1);
 
-
             shooter.getWeapons().get(0).shoot(targetLists,mEf,null);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
@@ -162,6 +167,12 @@ class NormalWeaponTest {
         } catch (OverKilledPlayerException e) {
             e.printStackTrace();
         } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
             e.printStackTrace();
         }
     }
@@ -214,6 +225,12 @@ class NormalWeaponTest {
         } catch (OverKilledPlayerException e) {
             e.printStackTrace();
         } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
             e.printStackTrace();
         }
     }
@@ -285,6 +302,12 @@ class NormalWeaponTest {
         } catch (OverKilledPlayerException e) {
             e.printStackTrace();
         } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
             e.printStackTrace();
         }
     }

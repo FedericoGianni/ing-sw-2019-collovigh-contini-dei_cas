@@ -75,6 +75,8 @@ public class NormalWeapon extends Weapon{
         else{
             throw new NotAbleToReloadException();
         }
+        for(int i=0;i<this.getCost().size();i++)
+            isPossessedBy().getAmmoBag().getList().remove(this.getCost().get(i));
     }
 
 
@@ -278,7 +280,7 @@ public class NormalWeapon extends Weapon{
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public void shoot(ArrayList<ArrayList<Player>>targetLists, ArrayList<Integer> effect, ArrayList<Cell> cells)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException,PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException//neeed a player list !
+    public void shoot(ArrayList<ArrayList<Player>>targetLists, ArrayList<Integer> effect, ArrayList<Cell> cells)throws PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException
     {
         try{
             if(!this.isLoaded())//if actual weapon is not loaded

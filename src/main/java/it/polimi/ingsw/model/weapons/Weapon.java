@@ -16,6 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Weapon {
+
+    private Player firstTarget;//first target of every shot , useful for checking  if we need to retarget players or similar
+
+    /**
+     * Abstract class, no constructor
+     */
     public Weapon(){}
     /**
      * @return Boolean if the weapon is loaded
@@ -33,10 +39,9 @@ public abstract class Weapon {
      * @return true if the weapon can be reloaded
      */
     public abstract boolean canBeReloaded();
-    private Player firstTarget;//first target of every shot , useful for checking  if we need to retarget players or similar
     public Player getFirstTarget() {
         return firstTarget;
-    }
+    }//useful when you have to target  different target
     public void setFirstTarget(Player firstTarget) {
         this.firstTarget = firstTarget;
     }
@@ -51,7 +56,9 @@ public abstract class Weapon {
     }
 
     /**
-     *
+     * this method is the method that leads all weapons to the shooting action
+     * a list of itnegers who enumbers the effects (0 to 3) for every effects you have a list of targets
+     * cells because you may move a target with move microEffects
      * @param targetLists
      * @param effects
      * @param cells
@@ -64,10 +71,9 @@ public abstract class Weapon {
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public abstract void shoot(ArrayList<ArrayList<Player>> targetLists, ArrayList<Integer> effects, ArrayList<Cell> cells)throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException;//may need to be changed
+    public abstract void shoot(ArrayList<ArrayList<Player>> targetLists, ArrayList<Integer> effects, ArrayList<Cell> cells) throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException;//may need to be changed
 
     /**
-     *
      * @param cost
      * @param possessed
      * @return true if the player can pay something in ammo
@@ -89,11 +95,17 @@ public abstract class Weapon {
         return cash.containsAll(required);
     }
 
+    /**
+     * print some infos about weapons--useful for client infos screening
+     */
     public abstract void print();
 
+    /**
+     * name of the ammo
+     * @return
+     */
     public abstract String getName();
 
     public abstract List<AmmoCube> getCost();
-
 
 }
