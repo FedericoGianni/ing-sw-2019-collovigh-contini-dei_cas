@@ -1,0 +1,50 @@
+/* # -> se è un elemento unico.
+ * . -> se è da riusare per piu elementi
+ */
+#pane{
+    -fx-background-image: url("/images/background_image.png");
+    -fx-background-repeat: round;
+    -fx-background-size: 900 506;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+
+/*bottoni checkbox per RadioButton -> socket/rmi, blu/verde/giallo/grigio/viola */
+.radio-button .radio {
+    -fx-border-width: 1px;
+    -fx-border-color: #000;
+    -fx-background-color: white;
+    -fx-text-fill: white;
+    -fx-font-family: "ethnocentricRg-italic";
+    -fx-background-image: null;
+    -fx-border-radius: 15px;
+    -fx-padding: 4px;
+}
+
+.radio-button .radio:selected {
+    -fx-background-color: white;
+    -fx-background-image: null;
+}
+
+/*stile di tutti i bottoni*/
+.button{
+    -fx-border-width     : 1px   ;
+    -fx-border-color     : black  ;
+    -fx-background-color : orange;
+    -fx-background-image : null  ;
+    -fx-border-radius    : 1px  ;
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+}
+.button .button:selected{
+    -fx-background-color : yellow ;
+    -fx-background-image : null  ;
+}
+
+.colors{
+    -fx-font-style: italic;
+    -fx-font-family: "ethnocentricRg";
+    -fx-font-size: 12px;
+    -fx-background-color: white;
+    -fx-opacity: 0.8;
+}

@@ -10,14 +10,15 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<GridPane fx:controller="it.polimi.ingsw.view.GUI.Controller"
+<?import javafx.scene.text.Text?>
+<GridPane fx:id="pane" fx:controller="it.polimi.ingsw.view.GUI.GuiController"
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" gridLinesVisible="true">
 
     <padding>
         <Insets top = "80"></Insets>
     </padding>
 
-    <Label text="Scegli un tipo di connessione:" textFill="blanchedalmond" GridPane.columnIndex="0" GridPane.rowIndex="1">
+    <Label text="Scegli un tipo di connessione:" textFill="white" GridPane.columnIndex="0" GridPane.rowIndex="1">
         <font>
             <Font name="ethnocentricRg-italic" size="20"/>
         </font>
@@ -28,12 +29,12 @@
     </fx:define>
 
 
-    <VBox GridPane.rowIndex="2" GridPane.columnIndex="0">
-        <RadioButton text="socket" toggleGroup="$srmi" textFill="lightgrey"></RadioButton>
-        <RadioButton text="rmi"  toggleGroup="$srmi" textFill="lightgrey"></RadioButton>
+    <VBox GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="colors">
+        <RadioButton text="SOCKET" toggleGroup="$srmi" textFill="black" onAction="#chooseSocket"></RadioButton>
+        <RadioButton text="RMI"  toggleGroup="$srmi" textFill="black" onAction="#chooseRMI"></RadioButton>
     </VBox>
 
-        <Label text="Scegli un colore:" textFill="blanchedalmond" GridPane.columnIndex="0" GridPane.rowIndex="3">
+        <Label text="Scegli un colore:" textFill="white" GridPane.columnIndex="0" GridPane.rowIndex="3">
         <font>
             <Font name="ethnocentricRg-italic" size="20"/>
         </font>
@@ -44,15 +45,40 @@
         </ToggleGroup>
     </fx:define>
 
-    <VBox GridPane.rowIndex="4" GridPane.columnIndex="0">
-        <RadioButton text="blu" textFill="darkblue" toggleGroup="$color"></RadioButton>
-        <RadioButton text="verde" textFill="green" toggleGroup="$color"></RadioButton>
-        <RadioButton text="viola" textFill="purple" toggleGroup="$color"></RadioButton>
-        <RadioButton text="giallo" textFill="darkorange" toggleGroup="$color"></RadioButton>
-        <RadioButton text="grigio" textFill="darkgrey" toggleGroup="$color"></RadioButton>
+    <VBox GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="colors">
+        <RadioButton toggleGroup="$color">
+            <graphic>
+                <Label text="BLU" textFill="blue" styleClass="colors">
+                </Label>
+            </graphic>
+        </RadioButton>
+        <RadioButton toggleGroup="$color">
+            <graphic>
+                <Label text="VERDE" textFill="green" styleClass="colors">
+                </Label>
+            </graphic>
+        </RadioButton>
+        <RadioButton toggleGroup="$color">
+            <graphic>
+                <Label text="VIOLA" textFill="purple" styleClass="colors">
+                </Label>
+            </graphic>
+        </RadioButton>
+        <RadioButton toggleGroup="$color">
+            <graphic>
+                <Label text="GIALLO" textFill="orange" styleClass="colors">
+                </Label>
+            </graphic>
+        </RadioButton>
+        <RadioButton toggleGroup="$color">
+            <graphic>
+                <Label text="GRIGIO" textFill="darkgrey" styleClass="colors">
+                </Label>
+            </graphic>
+        </RadioButton>
     </VBox>
 
-    <Label text="Scegli un username:" textFill="blanchedalmond" GridPane.rowIndex="5" GridPane.columnIndex="0">
+    <Label text="Scegli un username:" textFill="white" GridPane.rowIndex="5" GridPane.columnIndex="0">
         <font>
             <Font name="ethnocentricRg-italic" size="20"/>
         </font>
@@ -61,5 +87,5 @@
     <TextField GridPane.rowIndex="6" GridPane.columnIndex="0"/>
 
     <Button text ="LOGIN" GridPane.rowIndex="7" GridPane.columnIndex="0" alignment="bottom_center"
-            GridPane.halignment = "CENTER"/>
+            GridPane.halignment = "CENTER"  onAction="#login"/>
    </GridPane>
