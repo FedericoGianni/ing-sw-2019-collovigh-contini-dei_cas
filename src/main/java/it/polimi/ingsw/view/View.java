@@ -8,7 +8,6 @@ import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.socket.SocketClient;
 import it.polimi.ingsw.view.GUI.Gui;
-import it.polimi.ingsw.view.GUI.GuiController;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
@@ -70,8 +69,6 @@ public class View implements ViewInterface {
         if (ui.equals("-gui")){
             Gui gui = new Gui();
             gui.setView(this);
-            //GuiController guiController = new GuiController(this, gui);
-            //gui.setGuiController(guiController);
             this.userInterface = gui;
             this.userInterface.startUI();
         }

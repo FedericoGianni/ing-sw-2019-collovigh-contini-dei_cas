@@ -2,38 +2,82 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
-import it.polimi.ingsw.network.RunClient;
-import it.polimi.ingsw.view.View;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+
+import static it.polimi.ingsw.network.ProtocolType.RMI;
+import static it.polimi.ingsw.network.ProtocolType.SOCKET;
 
 
 public class GuiController {
 
-    private View view;
+    private static Gui gui;
 
-    private Gui gui;
+    public static void setGui(Gui g) {
+        gui = g;
+    }
+
+    private ProtocolType protocolType;
+    String playerName;
+    PlayerColor playerColor;
+
+    @FXML
+    private ToggleGroup color;
+
+    @FXML
+    private ToggleGroup srmi;
+
+    @FXML
+    private TextField name;
 
     @FXML
     private void login(ActionEvent event){
-        System.out.println("[DEBUG] LOGIN CLICCATO!");
-        gui.getView().joinGame("test", PlayerColor.BLUE);
+        int colorChoice;
+        //System.out.println("[DEBUG] LOGIN CLICCATO!");
+        System.out.println("colore scelto : " + color.getToggles().indexOf(color.getSelectedToggle()));
+
+        colorChoice = color.getToggles().indexOf(color.getSelectedToggle());
+
+        switch(colorChoice) {
+            case 0:
+                playerColor = PlayerColor.BLUE;
+                break;
+            case 1:
+                playerColor = PlayerColor.GREEN;
+                break;
+            case 2:
+                playerColor = PlayerColor.PURPLE;
+                break;
+            case 3:
+                playerColor = PlayerColor.YELLOW;
+                break;
+            case 4:
+                playerColor = PlayerColor.GREY;
+                break;
+        }
+
+        playerName = name.getText();
+
+        gui.getView().createConnection(protocolType);
+        gui.getView().joinGame(playerName, playerColor);
     }
 
     @FXML
-    private void chooseSocket(ActionEvent event){
-        System.out.println("[DEBUG] SOCKET CLICCATO!");
-        //gui.getView().createConnection(ProtocolType.SOCKET);
-        view.createConnection(ProtocolType.SOCKET);
-    }
+    private void chooseConnType(ActionEvent event){
+        int choice;
+        choice = srmi.getToggles().indexOf(srmi.getSelectedToggle());
+        switch(choice) {
 
-    @FXML
-    private void chooseRMI(ActionEvent event){
-         System.out.println("[DEBUG] RMI CLICCATO!");
-         gui.getView().createConnection(ProtocolType.RMI);
+            case 0:
+                protocolType = SOCKET;
+                break;
+
+            case 1:
+                protocolType = RMI;
+                break;
+        }
     }
 
 }

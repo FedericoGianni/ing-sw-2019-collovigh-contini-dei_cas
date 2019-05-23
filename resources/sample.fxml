@@ -1,16 +1,7 @@
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 <GridPane fx:id="pane" fx:controller="it.polimi.ingsw.view.GUI.GuiController"
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" gridLinesVisible="true">
 
@@ -30,8 +21,8 @@
 
 
     <VBox GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="colors">
-        <RadioButton text="SOCKET" toggleGroup="$srmi" textFill="black" onAction="#chooseSocket"></RadioButton>
-        <RadioButton text="RMI"  toggleGroup="$srmi" textFill="black" onAction="#chooseRMI"></RadioButton>
+        <RadioButton text="SOCKET" toggleGroup="$srmi" textFill="black" onAction="#chooseConnType"></RadioButton>
+        <RadioButton text="RMI"  toggleGroup="$srmi" textFill="black" onAction="#chooseConnType"></RadioButton>
     </VBox>
 
         <Label text="Scegli un colore:" textFill="white" GridPane.columnIndex="0" GridPane.rowIndex="3">
@@ -46,7 +37,7 @@
     </fx:define>
 
     <VBox GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="colors">
-        <RadioButton toggleGroup="$color">
+        <RadioButton toggleGroup="$color" fx:id="blu">
             <graphic>
                 <Label text="BLU" textFill="blue" styleClass="colors">
                 </Label>
@@ -84,7 +75,7 @@
         </font>
     </Label>
 
-    <TextField GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+    <TextField id="name" fx:id="name" GridPane.rowIndex="6" GridPane.columnIndex="0" />
 
     <Button text ="LOGIN" GridPane.rowIndex="7" GridPane.columnIndex="0" alignment="bottom_center"
             GridPane.halignment = "CENTER"  onAction="#login"/>
