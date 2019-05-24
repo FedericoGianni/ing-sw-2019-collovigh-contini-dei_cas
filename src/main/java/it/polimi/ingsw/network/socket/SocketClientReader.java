@@ -331,6 +331,9 @@ public class SocketClientReader extends Thread {
             System.out.println("[DEBUG] [Server] login reply: " + commands[1]);
             if(!(commands[1].equals("OK")))
                 RunClient.getView().retryLogin(commands[1]);
+            else{
+                RunClient.getView().show(commands[0] + commands[1]);
+            }
             RunClient.getView().setPlayerId(Integer.parseInt(commands[2]));
         });
 

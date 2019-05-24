@@ -68,13 +68,13 @@ public class View implements ViewInterface {
         }
 
         if (ui.equals("-gui")){
-            //Gui gui = new Gui();
-            //gui.setView(this);
-            //this.userInterface = gui;
-            //new Thread( () -> {this.userInterface.startUI();}).start();
+            Gui gui = new Gui();
+            gui.setView(this);
+            this.userInterface = gui;
+            new Thread( () -> {this.userInterface.startUI();}).start();
             //this.userInterface.startUI();
-            GuiMap guiMap = new GuiMap();
-            new Thread( () -> {guiMap.startUI();}).start();
+            //GuiMap guiMap = new GuiMap();
+            //new Thread( () -> {guiMap.startUI();}).start();
         }
 
 
@@ -87,8 +87,17 @@ public class View implements ViewInterface {
     public void createConnection(ProtocolType type){
 
         if (type.equals(ProtocolType.RMI)){
+            /*
+            new Thread( () -> {
+                clientToVView = new RMIClient(serverIp,this);
+            }).start();
+            try {
+                sleep(2000);
+            } catch(InterruptedException e){
 
-            clientToVView = new RMIClient(serverIp,this);
+            }*/
+            clientToVView = new RMIClient(serverIp, this);
+
         }
 
         if (type.equals(ProtocolType.SOCKET)){

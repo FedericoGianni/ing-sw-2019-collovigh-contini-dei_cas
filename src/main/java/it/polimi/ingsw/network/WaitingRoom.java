@@ -30,7 +30,7 @@ public class WaitingRoom {
     private static int timerCount = TIMER;
 
     private static final int DEFAULT_MIN_PLAYERS = 1;
-    private static final int DEFAULT_MAX_PLAYERS = 1;
+    private static final int DEFAULT_MAX_PLAYERS = 2;
 
     private CopyOnWriteArrayList<String> players;
     private List<PlayerColor> colors;

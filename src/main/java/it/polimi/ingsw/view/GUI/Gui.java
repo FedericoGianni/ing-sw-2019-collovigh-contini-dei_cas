@@ -101,13 +101,10 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void retryLogin(String error) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
-            root.setId("pane");
-            Scene retryLogin = new Scene(root, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
-        } catch(IOException e){
-            
-        }
+        Platform.runLater( () -> {
+            System.out.println("[DEBUG] Chiamato retrylogin con errore: " + error);
+            show(error);
+        });
 
     }
 
