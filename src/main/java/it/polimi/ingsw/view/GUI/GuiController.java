@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -34,34 +35,36 @@ public class GuiController {
 
     @FXML
     private void login(ActionEvent event){
-        int colorChoice;
-        //System.out.println("[DEBUG] LOGIN CLICCATO!");
-        System.out.println("colore scelto : " + color.getToggles().indexOf(color.getSelectedToggle()));
 
-        colorChoice = color.getToggles().indexOf(color.getSelectedToggle());
+            int colorChoice;
+            //System.out.println("[DEBUG] LOGIN CLICCATO!");
+            System.out.println("colore scelto : " + color.getToggles().indexOf(color.getSelectedToggle()));
 
-        switch(colorChoice) {
-            case 0:
-                playerColor = PlayerColor.BLUE;
-                break;
-            case 1:
-                playerColor = PlayerColor.GREEN;
-                break;
-            case 2:
-                playerColor = PlayerColor.PURPLE;
-                break;
-            case 3:
-                playerColor = PlayerColor.YELLOW;
-                break;
-            case 4:
-                playerColor = PlayerColor.GREY;
-                break;
-        }
+            colorChoice = color.getToggles().indexOf(color.getSelectedToggle());
 
-        playerName = name.getText();
+            switch(colorChoice) {
+                case 0:
+                    playerColor = PlayerColor.BLUE;
+                    break;
+                case 1:
+                    playerColor = PlayerColor.GREEN;
+                    break;
+                case 2:
+                    playerColor = PlayerColor.PURPLE;
+                    break;
+                case 3:
+                    playerColor = PlayerColor.YELLOW;
+                    break;
+                case 4:
+                    playerColor = PlayerColor.GREY;
+                    break;
+            }
 
-        gui.getView().createConnection(protocolType);
-        gui.getView().joinGame(playerName, playerColor);
+            playerName = name.getText();
+
+            gui.getView().createConnection(protocolType);
+            gui.getView().joinGame(playerName, playerColor);
+
     }
 
     @FXML

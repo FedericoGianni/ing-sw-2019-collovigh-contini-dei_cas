@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.socket.SocketClient;
 import it.polimi.ingsw.view.GUI.Gui;
+import it.polimi.ingsw.view.GUI.GuiMap;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
@@ -67,10 +68,13 @@ public class View implements ViewInterface {
         }
 
         if (ui.equals("-gui")){
-            Gui gui = new Gui();
-            gui.setView(this);
-            this.userInterface = gui;
-            this.userInterface.startUI();
+            //Gui gui = new Gui();
+            //gui.setView(this);
+            //this.userInterface = gui;
+            //new Thread( () -> {this.userInterface.startUI();}).start();
+            //this.userInterface.startUI();
+            GuiMap guiMap = new GuiMap();
+            new Thread( () -> {guiMap.startUI();}).start();
         }
 
 
@@ -109,6 +113,11 @@ public class View implements ViewInterface {
     public void retryLogin(String error){
 
         userInterface.retryLogin(error);
+    }
+
+    public void show(String msg){
+        //new Thread( () -> {userInterface.show(msg);}).start();
+        userInterface.show(msg);
     }
 
     public int getPlayerId() {

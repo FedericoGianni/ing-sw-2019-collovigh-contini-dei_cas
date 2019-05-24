@@ -15,7 +15,7 @@
     -fx-border-color: #000;
     -fx-background-color: white;
     -fx-text-fill: white;
-    -fx-font-family: "ethnocentricRg-italic";
+    -fx-font-family: "ethnocentricRg-regular";
     -fx-background-image: null;
     -fx-border-radius: 15px;
     -fx-padding: 4px;
@@ -34,12 +34,25 @@
     -fx-background-image : null  ;
     -fx-border-radius    : 1px  ;
     -fx-text-fill: black;
-    -fx-font-size: 12px;
+    -fx-font-size: 15px;
 }
 .button .button:selected{
     -fx-background-color : yellow ;
     -fx-background-image : null  ;
 }
+
+.login_button{
+    -fx-border-width     : 2px   ;
+    -fx-border-color     : black  ;
+    -fx-background-color : orange;
+    -fx-background-image : null  ;
+    -fx-border-radius    : 1px  ;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-family: "Ethnocentric Rg";
+    -fx-font-style: italic;
+}
+
 
 .colors{
     -fx-font-style: italic;
