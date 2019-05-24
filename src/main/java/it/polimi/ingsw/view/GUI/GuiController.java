@@ -2,11 +2,13 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Stage;
 
 import static it.polimi.ingsw.network.ProtocolType.RMI;
 import static it.polimi.ingsw.network.ProtocolType.SOCKET;
@@ -23,6 +25,14 @@ public class GuiController {
     private ProtocolType protocolType;
     String playerName;
     PlayerColor playerColor;
+
+
+    private Scene secondScene;
+
+    public void setSecondScene(Scene scene) {
+        secondScene = scene;
+    }
+
 
     @FXML
     private ToggleGroup color;
@@ -83,4 +93,12 @@ public class GuiController {
         }
     }
 
+    public void openSecondScene(ActionEvent actionEvent) {
+        chooseConnType(actionEvent);
+        login(actionEvent);
+        Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        primaryStage.setScene(secondScene);
+    }
 }
+
+

@@ -14,7 +14,6 @@ import it.polimi.ingsw.view.View;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -123,7 +122,7 @@ public class RunClient {
                     t.start();
 
                     ui = cli;
-                    sleep(2000);
+                    sleep(200);
                     view = new View(cli);
                     cli = new CLI(view);
                     view.setVirtualView(sc.getScw());

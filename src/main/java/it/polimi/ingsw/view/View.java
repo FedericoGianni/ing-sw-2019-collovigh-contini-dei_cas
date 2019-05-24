@@ -8,7 +8,6 @@ import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.socket.SocketClient;
 import it.polimi.ingsw.view.GUI.Gui;
-import it.polimi.ingsw.view.GUI.GuiMap;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
@@ -101,19 +100,17 @@ public class View implements ViewInterface {
         }
 
         if (type.equals(ProtocolType.SOCKET)){
-
+            SocketClient sc = new SocketClient(serverIp, port);
+            Thread t = new Thread(sc);
+            t.start();
+            //SocketClientReader scr = new SocketClientReader(serverIp, port);
+            //scr.start();
             try {
-
-                SocketClient sc = new SocketClient(serverIp, port);
-                Thread t = new Thread(sc);
-                t.start();
-
                 sleep(2000);
-                clientToVView = sc.getScw();
+            } catch (InterruptedException e){
 
-            }catch (InterruptedException e){
-                e.printStackTrace();
             }
+            clientToVView = sc.getScw();
         }
 
         userInterface.login();
