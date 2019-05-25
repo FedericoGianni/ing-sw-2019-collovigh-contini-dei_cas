@@ -2,15 +2,17 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.cachemodel.Player;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -45,11 +47,15 @@ public class Gui extends Application implements UserInterface {
         this.guiController = guiController;
     }
 
+    @FXML
+    private ObservableList<Player> lobbyPlayers;
+
+
     //reference to this thread to open alert messages
     Thread t;
 
     public Gui(){
-        super();
+    super();
     }
 
     private static View view;
@@ -63,8 +69,6 @@ public class Gui extends Application implements UserInterface {
         return view;
     }
 
-    @FXML
-    Button login;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -72,7 +76,6 @@ public class Gui extends Application implements UserInterface {
         GuiController.setGui(this);
         GuiLobbyController.setGui(this);
         GuiMapController.setGui(this);
-
 
         Image img = new Image("/images/background_image.png");
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -169,6 +172,13 @@ public class Gui extends Application implements UserInterface {
             if(retryLogin) {
                 System.out.println("guiController: " + guiController);
                 guiController.openSecondScene(new ActionEvent());
+            }
+
+            lobbyPlayers = FXCollections.observableArrayList(view.getCacheModel().getCachedPlayers());
+            System.out.println("------------------cachedPlayer size: " + view.getCacheModel().getCachedPlayers().size());
+            for (int i = 0; i < lobbyPlayers.size(); i++) {
+                System.out.println("---------------player " + i + " :" + lobbyPlayers.get(i).getName());
+
             }
 
 

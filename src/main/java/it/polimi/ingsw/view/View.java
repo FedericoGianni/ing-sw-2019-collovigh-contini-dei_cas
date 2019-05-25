@@ -67,6 +67,7 @@ public class View implements ViewInterface {
         }
 
         if (ui.equals("-gui")) {
+
             Gui gui = new Gui();
             gui.setView(this);
             this.userInterface = gui;
@@ -74,8 +75,12 @@ public class View implements ViewInterface {
                 this.userInterface.startUI();
             }).start();
             //this.userInterface.startUI();
+
+
             //GuiMap guiMap = new GuiMap();
             //new Thread( () -> {guiMap.startUI();}).start();
+            //GuiLobby guiLobby = new GuiLobby();
+            //new Thread( () -> {guiLobby.startUI();}).start();
         }
 
     }

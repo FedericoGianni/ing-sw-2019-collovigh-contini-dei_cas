@@ -58,6 +58,7 @@ public class CacheModel {
                     players.add(new Player(cachedLobby.getNames().indexOf(name), name,null));
 
                     System.out.println("Player connessi: \n" + cachedLobby.getNames());
+                    //RunClient.getView().show("Player connessi: \n " + cachedLobby.getNames());
                 }
 
                 break;
