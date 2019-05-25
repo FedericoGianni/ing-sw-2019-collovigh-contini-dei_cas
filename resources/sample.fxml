@@ -78,5 +78,5 @@
     <TextField id="name" fx:id="name" GridPane.rowIndex="6" GridPane.columnIndex="0" />
 
     <Button text ="LOGIN" GridPane.rowIndex="7" GridPane.columnIndex="0" alignment="bottom_center"
-            GridPane.halignment = "CENTER" styleClass="login_button"  onAction="#openSecondScene"/>
+            GridPane.halignment = "CENTER" styleClass="login_button"  onAction="#login"/>
    </GridPane>

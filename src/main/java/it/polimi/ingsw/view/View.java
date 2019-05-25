@@ -66,16 +66,17 @@ public class View implements ViewInterface {
             this.userInterface.startUI();
         }
 
-        if (ui.equals("-gui")){
+        if (ui.equals("-gui")) {
             Gui gui = new Gui();
             gui.setView(this);
             this.userInterface = gui;
-            new Thread( () -> {this.userInterface.startUI();}).start();
+            new Thread(() -> {
+                this.userInterface.startUI();
+            }).start();
             //this.userInterface.startUI();
             //GuiMap guiMap = new GuiMap();
             //new Thread( () -> {guiMap.startUI();}).start();
         }
-
 
     }
 

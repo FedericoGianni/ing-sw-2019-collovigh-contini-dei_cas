@@ -17,4 +17,5 @@
       </Pane>
    </children>
    <Button onAction="#openFirstScene" text="Indietro" alignment="BOTTOM_LEFT" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+   <Button onAction="#openThirdScene" text="Continua" alignment="BOTTOM_RIGHT" GridPane.columnIndex="4" GridPane.rowIndex="10"/>
 </GridPane>

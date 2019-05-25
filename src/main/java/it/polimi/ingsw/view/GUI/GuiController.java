@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -26,6 +25,7 @@ public class GuiController {
     String playerName;
     PlayerColor playerColor;
 
+    private Stage myStage;
 
     private Scene secondScene;
 
@@ -46,34 +46,34 @@ public class GuiController {
     @FXML
     private void login(ActionEvent event){
 
-            int colorChoice;
-            //System.out.println("[DEBUG] LOGIN CLICCATO!");
-            System.out.println("colore scelto : " + color.getToggles().indexOf(color.getSelectedToggle()));
+        int colorChoice;
+        //System.out.println("[DEBUG] LOGIN CLICCATO!");
+        System.out.println("colore scelto : " + color.getToggles().indexOf(color.getSelectedToggle()));
 
-            colorChoice = color.getToggles().indexOf(color.getSelectedToggle());
+        colorChoice = color.getToggles().indexOf(color.getSelectedToggle());
 
-            switch(colorChoice) {
-                case 0:
-                    playerColor = PlayerColor.BLUE;
-                    break;
-                case 1:
-                    playerColor = PlayerColor.GREEN;
-                    break;
-                case 2:
-                    playerColor = PlayerColor.PURPLE;
-                    break;
-                case 3:
-                    playerColor = PlayerColor.YELLOW;
-                    break;
-                case 4:
-                    playerColor = PlayerColor.GREY;
-                    break;
-            }
+        switch(colorChoice) {
+            case 0:
+                playerColor = PlayerColor.BLUE;
+                break;
+            case 1:
+                playerColor = PlayerColor.GREEN;
+                break;
+            case 2:
+                playerColor = PlayerColor.PURPLE;
+                break;
+            case 3:
+                playerColor = PlayerColor.YELLOW;
+                break;
+            case 4:
+                playerColor = PlayerColor.GREY;
+                break;
+        }
 
-            playerName = name.getText();
+        playerName = name.getText();
 
-            gui.getView().createConnection(protocolType);
-            gui.getView().joinGame(playerName, playerColor);
+        gui.getView().createConnection(protocolType);
+        gui.getView().joinGame(playerName, playerColor);
 
     }
 
@@ -94,10 +94,14 @@ public class GuiController {
     }
 
     public void openSecondScene(ActionEvent actionEvent) {
-        chooseConnType(actionEvent);
-        login(actionEvent);
-        Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        primaryStage.setScene(secondScene);
+        //chooseConnType(actionEvent);
+        //login(actionEvent);
+        //Stage primaryStage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
+        myStage.setScene(secondScene);
+    }
+
+    public void setStageAndSetupListeners(Stage stage){
+        this.myStage = stage;
     }
 }
 
