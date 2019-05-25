@@ -105,6 +105,8 @@ public class SocketClientReader extends Thread {
 
                 String msg = receive();
 
+                LOGGER.log(level,"[SOCKET-CLIENT-READER] received: {0}", msg);
+
                 // if the line starts with a '{' -> json
 
                 if(msg.startsWith("{")) handleJson(msg);
@@ -337,11 +339,16 @@ public class SocketClientReader extends Thread {
             RunClient.getView().setPlayerId(Integer.parseInt(commands[2]));
         });
 
+
         //ping
         headersMap.put("ping", () -> {
             System.out.println("[DEBUG] Ricevuta ping request dal server.");
-            scw.send("pong\f" + scw.getPlayerId());
+            //scw.send("pong\f" + scw.getPlayerId());
         });
+
+
+
+
 
         //startSpawn
         headersMap.put("startSpawn", () -> {

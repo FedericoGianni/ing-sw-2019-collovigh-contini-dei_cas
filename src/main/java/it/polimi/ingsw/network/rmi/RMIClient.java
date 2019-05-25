@@ -29,11 +29,20 @@ public class RMIClient extends Client {
     private static final String REMOTE_OBJECT_NAME = "rmi_server";
     private Registry remoteRegistry;
     private final String serverIp;
+    private final int serverPort = 22220;
 
     //attributes relative to server -> client flow
     private static Boolean registryCreated = false;
     private String localName;
     private View view;
+
+    //view
+
+    public static final String DEFAULT_LOGIN_OK_REPLY = "OK";
+    public static final String DEFAULT_NAME_ALREADY_TAKEN_REPLY = "NAME_ALREADY_TAKEN";
+    public static final String DEFAULT_COLOR_ALREADY_TAKEN_REPLY = "COLOR_ALREADY_TAKEN";
+    public static final String DEFAULT_GAME_ALREADY_STARTED_REPLY = "GAME_ALREADY_STARTED";
+    public static final String DEFAULT_MAX_PLAYER_READCHED = "MAX_PLAYER_REACHED";
 
 
 
@@ -143,7 +152,7 @@ public class RMIClient extends Client {
 
             // locate the server registry
 
-            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
+            remoteRegistry = LocateRegistry.getRegistry(serverIp,serverPort);
             LOGGER.log(level,"[RMI-Client] registry located by client");
 
             //load the ToServer object from the registry
@@ -190,6 +199,10 @@ public class RMIClient extends Client {
             this.setPlayerId(playerId);
             this.getView().setPlayerId(playerId);
 
+            // temp x gui
+
+            view.show(DEFAULT_LOGIN_OK_REPLY);
+
             //return the playerId
 
             return playerId;
@@ -201,6 +214,8 @@ public class RMIClient extends Client {
 
             LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login with name: " +e.getName() + "but name was already used", e);
 
+            view.show(DEFAULT_NAME_ALREADY_TAKEN_REPLY);
+
             // Retry the login
 
             view.getUserInterface().retryLogin(e);
@@ -210,6 +225,8 @@ public class RMIClient extends Client {
             // LOG the exception
 
             LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login with color: " +e.getColor() + "but color was already used", e);
+
+            view.show(DEFAULT_COLOR_ALREADY_TAKEN_REPLY);
 
             // Retry the login
 
@@ -221,6 +238,8 @@ public class RMIClient extends Client {
 
             LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login but players were already max");
 
+            view.show(DEFAULT_MAX_PLAYER_READCHED);
+
             // Retry the login
 
             view.getUserInterface().retryLogin(e);
@@ -230,6 +249,8 @@ public class RMIClient extends Client {
             // LOG the exception
 
             LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login but game was already started");
+
+            view.show(DEFAULT_GAME_ALREADY_STARTED_REPLY);
 
             // Retry the login
 
@@ -257,7 +278,7 @@ public class RMIClient extends Client {
 
         try {
 
-            remoteRegistry = LocateRegistry.getRegistry(serverIp,2020);
+            remoteRegistry = LocateRegistry.getRegistry(serverIp,serverPort);
             LOGGER.log(level,"[RMI-Client] registry located by client");
 
             ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);

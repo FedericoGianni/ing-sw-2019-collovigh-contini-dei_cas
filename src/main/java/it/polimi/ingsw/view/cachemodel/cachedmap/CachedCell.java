@@ -4,6 +4,7 @@ import it.polimi.ingsw.view.cachemodel.updates.Update;
 
 import java.awt.*;
 import java.io.Serializable;
+import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 
 public abstract class CachedCell implements Serializable, Update {
 

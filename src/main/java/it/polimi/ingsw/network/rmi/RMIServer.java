@@ -20,6 +20,8 @@ public class RMIServer {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
+    private final int serverPort = 22220;
+
     //attributes relative to client -> server flow
     private static Boolean registryCreated = false;
     private static final String LOCALNAME = "rmi_server";
@@ -80,14 +82,14 @@ public class RMIServer {
 
             if (!registryCreated ) {
 
-                local = LocateRegistry.createRegistry(2020);
+                local = LocateRegistry.createRegistry(serverPort);
 
-                LOGGER.log(level, "[RMI-Server]created registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), "2020"});
+                LOGGER.log(level, "[RMI-Server]created registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), serverPort});
 
 
                 if (local == null){
-                    LocateRegistry.createRegistry(2020);
-                    local = LocateRegistry.getRegistry(2020);
+                    LocateRegistry.createRegistry(serverPort);
+                    local = LocateRegistry.getRegistry(serverPort);
                 }
 
                 registryCreated = true;
@@ -110,10 +112,10 @@ public class RMIServer {
 
             skeleton = new ToServerImpl(this);
 
-            local = LocateRegistry.getRegistry(2020);
+            local = LocateRegistry.getRegistry(serverPort);
 
 
-            LOGGER.log(level, "[RMI-Server]located registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), "2020"});
+            LOGGER.log(level, "[RMI-Server]located registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), serverPort});
 
 
             local.rebind(LOCALNAME, skeleton); // binding the string localName to hte instance in the registry

@@ -21,7 +21,7 @@ public class SocketPing implements Runnable {
     /**
      * The thread will send a "ping" string every DEFAULT_PING_INTERVAL millisecond
      */
-    public static final int DEFAULT_PING_INTERVAL = 10000;
+    public static final int DEFAULT_PING_INTERVAL = 100;
 
     /**
      * this flag can be set to false to stop the server ping requests, as the while loop continues until active is true
@@ -67,6 +67,7 @@ public class SocketPing implements Runnable {
                 //scw.send("ping\f" + scw.getId());
                 //scw.send("ping\f" + scw.getId());
                 out.write("ping\f" + scw.getId());
+                out.newLine();
                 out.flush();
                 LOGGER.log(INFO, "Sending ping message to client.");
             } catch (InterruptedException e) {
