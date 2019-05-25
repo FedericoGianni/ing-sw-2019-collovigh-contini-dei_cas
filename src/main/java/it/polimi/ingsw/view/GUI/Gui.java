@@ -22,8 +22,6 @@ public class Gui extends Application implements UserInterface {
 
     public static final float DEFAULT_MIN_WIDTH = 920;
     public static final float DEFAULT_MIN_HEIGHT = 540;
-    public static final float DEFAULT_MAX_WIDTH = 900;
-    public static final float DEFAULT_MAX_HEIGHT = 506;
 
     public static final String DEFAULT_LOGIN_OK_REPLY = "OK";
     public static final String DEFAULT_NAME_ALREADY_TAKEN_REPLY = "NAME_ALREADY_TAKEN";
@@ -31,19 +29,17 @@ public class Gui extends Application implements UserInterface {
     public static final String DEFAULT_GAME_ALREADY_STARTED_REPLY = "GAME_ALREADY_STARTED";
     public static final String DEFAULT_MAX_PLAYER_READCHED = "MAX_PLAYER_REACHED";
 
-    Parent root;
-    Scene firstScene, secondScene, thirdScene;
-    private static Stage stages;
-
-    private ScreenController screenController;
-
-    public String screenToActivate = "login";
-
     private static GuiController guiController;
     private static GuiLobbyController guiLobbyController;
     private static GuiMapController guiMapController;
 
-    FXMLLoader firstPaneLoader;
+    public void setGuiLobbyController(GuiLobbyController guic) {
+        this.guiLobbyController = guic;
+    }
+
+    public void setGuiMapController(GuiMapController guic) {
+        this.guiMapController = guic;
+    }
 
     public void setGuiController(GuiController guiController) {
         this.guiController = guiController;
@@ -60,7 +56,7 @@ public class Gui extends Application implements UserInterface {
 
     public void setView(View v) {
         view = v;
-        System.out.println("setView in GuiController called");
+        //System.out.println("setView in GuiController called");
     }
 
     public View getView() {
@@ -73,10 +69,9 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void start(Stage stage) throws Exception {
 
-        //root = FXMLLoader.load(getClass().getClassLoader().getResource("sample.fxml"));
-        //root.setId("pane");
-
         GuiController.setGui(this);
+        GuiLobbyController.setGui(this);
+        GuiMapController.setGui(this);
 
 
         Image img = new Image("/images/background_image.png");
@@ -89,7 +84,7 @@ public class Gui extends Application implements UserInterface {
 
         // login window
         // loader will then give a possibility to get related controller
-        this.firstPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("sample.fxml"));
+        FXMLLoader firstPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("sample.fxml"));
         Parent firstPane = firstPaneLoader.load();
         Scene firstScene = new Scene(firstPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
         firstScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("style.css").toExternalForm());
@@ -97,13 +92,13 @@ public class Gui extends Application implements UserInterface {
         // game lobby window
         FXMLLoader secondPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleLobby.fxml"));
         Parent secondPane = secondPageLoader.load();
-        Scene secondScene = new Scene(secondPane, DEFAULT_MAX_WIDTH, DEFAULT_MIN_HEIGHT);
+        Scene secondScene = new Scene(secondPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
         secondScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleLobby.css").toExternalForm());
 
         // main game window
         FXMLLoader thirdPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleMap.fxml"));
         Parent thirdPane = thirdPageLoader.load();
-        thirdScene = new Scene(thirdPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
+        Scene thirdScene = new Scene(thirdPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
         thirdScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleMap.css").toExternalForm());
 
         // injecting second scene into the controller of the first scene
@@ -114,18 +109,16 @@ public class Gui extends Application implements UserInterface {
 
         // injecting first scene into the controller of the second scene
         guiLobbyController = (GuiLobbyController) secondPageLoader.getController();
+        setGuiLobbyController(guiLobbyController);
         guiLobbyController.setFirstScene(firstScene);
         guiLobbyController.setThirdScene(thirdScene);
+        guiLobbyController.setStageAndSetupListeners(stage);
+
+        guiMapController = (GuiMapController) thirdPageLoader.getController();
+        setGuiMapController(guiMapController);
+        //TODO guiMapController.setStageAndSetupListeners(stage);
 
         stage.setScene(firstScene);
-
-
-                /*
-                screenController = new ScreenController(firstScene);
-                screenController.addScreen("login", FXMLLoader.load(getClass().getClassLoader().getResource( "sample.fxml" )));
-                screenController.addScreen("map", FXMLLoader.load(getClass().getClassLoader().getResource( "sampleMap.fxml" )));
-                screenController.activate("login");
-                */
         stage.show();
     }
 
@@ -137,41 +130,47 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void show(String s) {
 
-        //guiController = firstPaneLoader.getController();
-
         Platform.runLater( () -> {
-            System.out.println("guiController: " +guiController);
-            guiController.openSecondScene(new ActionEvent());
-
             //System.out.println("DEBUG show chimato con stringa " + s);
             String header;
             String msg;
+            Boolean retryLogin = false;
 
             switch (s){
                 case DEFAULT_LOGIN_OK_REPLY:
                     header = "login";
                     msg = "Benvenuto dal server!";
+                    retryLogin = true;
                     break;
 
                 case DEFAULT_COLOR_ALREADY_TAKEN_REPLY:
                     header = "login";
                     msg = "Colore già preso! Riprova";
+                    retryLogin = false;
                     break;
 
                 case DEFAULT_MAX_PLAYER_READCHED:
                     header = "login";
                     msg = "Massimo numero di giocatori raggiunto!";
+                    retryLogin = false;
                     break;
 
                 case DEFAULT_GAME_ALREADY_STARTED_REPLY:
                     header = "login";
                     msg = "Partita già in corso!";
+                    retryLogin = false;
                     break;
 
                 default:
                     header = s.substring(0, 10);
                     msg = s;
             }
+
+            if(retryLogin) {
+                System.out.println("guiController: " + guiController);
+                guiController.openSecondScene(new ActionEvent());
+            }
+
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
             alert.setHeaderText(header);
@@ -208,6 +207,10 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void startSpawn() {
+        Platform.runLater( () -> {
+            System.out.println("guiLobbyController: " + guiLobbyController);
+            guiLobbyController.openThirdScene(new ActionEvent());
+        });
 
     }
 

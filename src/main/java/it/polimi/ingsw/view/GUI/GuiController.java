@@ -94,9 +94,6 @@ public class GuiController {
     }
 
     public void openSecondScene(ActionEvent actionEvent) {
-        //chooseConnType(actionEvent);
-        //login(actionEvent);
-        //Stage primaryStage = (Stage)((Node) actionEvent.getSource()).getScene().getWindow();
         myStage.setScene(secondScene);
     }
 
