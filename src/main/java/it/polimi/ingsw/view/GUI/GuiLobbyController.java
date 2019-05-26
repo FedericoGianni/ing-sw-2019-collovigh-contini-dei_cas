@@ -66,7 +66,7 @@ public class GuiLobbyController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         ObservableList<Player> names = FXCollections.observableArrayList(gui.getView().getCacheModel().getCachedPlayers());
-        lobbyPlayersListView.itemsProperty().bind(listProperty);
+        //lobbyPlayersListView.itemsProperty().bind(listProperty);
 
     }
 

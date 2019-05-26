@@ -2,13 +2,9 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.cachemodel.Player;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -46,13 +42,6 @@ public class Gui extends Application implements UserInterface {
     public void setGuiController(GuiController guiController) {
         this.guiController = guiController;
     }
-
-    @FXML
-    private ObservableList<Player> lobbyPlayers;
-
-
-    //reference to this thread to open alert messages
-    Thread t;
 
     public Gui(){
     super();
@@ -173,14 +162,6 @@ public class Gui extends Application implements UserInterface {
                 System.out.println("guiController: " + guiController);
                 guiController.openSecondScene(new ActionEvent());
             }
-
-            lobbyPlayers = FXCollections.observableArrayList(view.getCacheModel().getCachedPlayers());
-            System.out.println("------------------cachedPlayer size: " + view.getCacheModel().getCachedPlayers().size());
-            for (int i = 0; i < lobbyPlayers.size(); i++) {
-                System.out.println("---------------player " + i + " :" + lobbyPlayers.get(i).getName());
-
-            }
-
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
             alert.setHeaderText(header);
