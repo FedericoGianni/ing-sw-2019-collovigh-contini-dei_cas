@@ -1,12 +1,46 @@
-#pane{
+.root{
+
+    -fx-background-color: #99aab5 ;
+
+
+}
+
+.label{
+
+    -fx-text-fill: #e49563;
+    -fx-font-family: "Showcard Gothic";
+    -fx-font-size: 20;
+}
+
+
+.list-view{
+
+    -fx-background-color: #4f5b66;
+    -fx-border-color: #4f5b66;
+    -fx-border-width: 0;
+}
+
+.list-cell{
+
+    -fx-background-color: #f5bf80;
+    -fx-font-size: 15;
+}
+
+.list-cell:even {
+    -fx-background-color: #FFA577;
+}
+
+#stackPane{
     -fx-background-image: url("/images/background_image.png");
     -fx-background-repeat: round;
     -fx-background-size: 900 506;
     -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
 
-.lobby{
-    -fx-font-scale: 2;
-    -fx-font-scale: 30px;
+#vBox{
+    -fx-background-color: #4f5b66;
+    -fx-opacity: 0.985;
+    -fx-background-radius: 10;
+
+
 }

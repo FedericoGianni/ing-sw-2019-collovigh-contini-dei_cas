@@ -8,14 +8,11 @@ import it.polimi.ingsw.network.socket.SocketServer;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * This class represent the main Server which is the common part shared by both Socket and RMI.
@@ -95,15 +92,26 @@ public class Server  {
 
         if (waitingRoom.isActive()) {
 
+            // Adds the player in the Waiting Room
+
             int playerId =  waitingRoom.addPlayer(name,playerColor);
 
             System.out.println("[DEBUG] Added player w/ id: " + playerId +" and name: " + name + " and color : " + playerColor);
+
+            // Puts the new Player in the hashMap
 
             clients.put(playerId, toView);
 
             System.out.println("[DEBUG] bounded player w/ id : " + playerId + " and toView: " + toView);
 
+            // notify All Players
+
+            waitingRoom.notifyNewPlayer();
+
+            // Returns the PlayerId
+
             return playerId;
+
         }else {
 
             throw new GameAlreadyStartedException();

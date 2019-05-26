@@ -5,11 +5,10 @@ import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
 import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,8 +17,8 @@ public class CacheModel {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
-    private  List<Player> players = new ArrayList<>();
-    private ObservableList<Player> lobbyPlayers = FXCollections.observableList(players);
+
+    private ObservableList<Player> players = FXCollections.observableArrayList();
     private  CachedGame game = null;
     private final View view;
     private CachedMap cachedMap;
@@ -28,21 +27,29 @@ public class CacheModel {
         this.view = view;
     }
 
-    public ObservableList<Player> getLobbyPlayers() {
-        return lobbyPlayers;
-    }
 
     private void update(InitialUpdate update) {
 
         LOGGER.log(level, " [CACHE-MODEL] Received initial update with players: " + update.getNames());
 
-        players = new ArrayList<>();
-        lobbyPlayers = FXCollections.observableArrayList(players);
+        //GuiLobbyController.clearLobbyPlayers();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                players.clear();
+            }
+        });
 
-        for (int i = 0; i < update.getNames().size() ; i++) {
-            players.add(new Player(i, update.getNames().get(i), update.getColors().get(i)));
-            lobbyPlayers.add(new Player(i, update.getNames().get(i), update.getColors().get(i)));
-        }
+
+            //GuiLobbyController.addLobbyPlayers(new Player(i, update.getNames().get(i), update.getColors().get(i)));
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < update.getNames().size() ; i++) {
+                    players.add(new Player(i, update.getNames().get(i), update.getColors().get(i)));
+                }
+            }
+        });
 
         cachedMap = new CachedMap(update.getMapType());
 
@@ -57,22 +64,28 @@ public class CacheModel {
             case LOBBY:
 
                 CachedLobby cachedLobby = (CachedLobby) updateClass.getUpdate();
-                lobbyPlayers.clear();
 
-                for (String name: cachedLobby.getNames()){
-
-                    players = new ArrayList<>();
-                    //lobbyPlayers = FXCollections.observableArrayList(players);
-
-                    players.add(new Player(cachedLobby.getNames().indexOf(name), name,null));
-                    lobbyPlayers.add(new Player(cachedLobby.getNames().indexOf(name), name,null));
-
-                    System.out.println("Player connessi: \n" + cachedLobby.getNames());
-                    for (int i = 0; i < lobbyPlayers.size(); i++) {
-                        System.out.println("Observale arrayList [ " + i + "] :" + lobbyPlayers.get(i).getName());
+                //GuiLobbyController.clearLobbyPlayers();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        players.clear();
                     }
-                    //RunClient.getView().show("Player connessi: \n " + cachedLobby.getNames());
-                }
+                });
+
+                    //GuiLobbyController.addLobbyPlayers(new Player(cachedLobby.getNames().indexOf(name), name,null));
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (String name: cachedLobby.getNames()) {
+                                players.add(new Player(cachedLobby.getNames().indexOf(name), name, null));
+                                System.out.println("Player connessi: \n" + cachedLobby.getNames());
+                            }
+                        }
+                    });
+
+
+
 
                 break;
 
@@ -133,7 +146,7 @@ public class CacheModel {
         }
     }
 
-    public List<Player> getCachedPlayers(){
+    public ObservableList<Player> getCachedPlayers(){
 
         return players;
     }
@@ -147,4 +160,11 @@ public class CacheModel {
 
         return game;
     }
+
+    /*
+    public ObservableList<Player> getLobbyPlayers() {
+        return lobbyPlayers;
+    }
+
+     */
 }

@@ -119,12 +119,6 @@ public class WaitingRoom {
 
             colors.add(playerColor);
 
-            for (ToView client : Server.getClients().values()){
-
-                client.sendUpdate(new UpdateClass(UpdateType.LOBBY,new CachedLobby(players)));
-
-                LOGGER.log(level,"Sent LOBBY_UPDATE to client : {0}", client);
-            }
 
             if (players.size() >= DEFAULT_MIN_PLAYERS) {
 
@@ -136,6 +130,17 @@ public class WaitingRoom {
             return players.indexOf(name);
 
         }else throw new OverMaxPlayerException();
+
+    }
+
+    public synchronized void notifyNewPlayer(){
+
+        for (ToView client : Server.getClients().values()){
+
+            client.sendUpdate(new UpdateClass(UpdateType.LOBBY,new CachedLobby(players)));
+
+            LOGGER.log(level,"Sent LOBBY_UPDATE to client : {0}", client);
+        }
 
     }
 
@@ -173,12 +178,7 @@ public class WaitingRoom {
         players.remove(id);
         colors.remove(id);
 
-        for (ToView client : Server.getClients().values()){
-
-            client.sendUpdate(new UpdateClass(UpdateType.LOBBY,new CachedLobby(players)));
-
-            LOGGER.log(level,"Sent LOBBY_UPDATE to client : {0}", client);
-        }
+        notifyNewPlayer();
     }
 
     /**
