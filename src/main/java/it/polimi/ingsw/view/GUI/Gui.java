@@ -76,16 +76,16 @@ public class Gui extends Application implements UserInterface {
 
         // login window
         // loader will then give a possibility to get related controller
-        FXMLLoader firstPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("sample.fxml"));
+        FXMLLoader firstPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("Login.fxml"));  // TEST
         Parent firstPane = firstPaneLoader.load();
         Scene firstScene = new Scene(firstPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
-        firstScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("style.css").toExternalForm());
+        //firstScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("style.css").toExternalForm());  // non serve : basta specificare nell FXML ( by d)
 
         // game lobby window
         FXMLLoader secondPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleLobby.fxml"));
         Parent secondPane = secondPageLoader.load();
         Scene secondScene = new Scene(secondPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
-        secondScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleLobby.css").toExternalForm());
+        //secondScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleLobby.css").toExternalForm());  // non serve : basta specificare nell FXML ( by d)
 
         // main game window
         FXMLLoader thirdPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleMap.fxml"));

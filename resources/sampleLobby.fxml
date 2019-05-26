@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.stage.Screen?>
-<StackPane fx:id="stackPane" prefHeight="${screen.visualBounds.height}" prefWidth="${screen.visualBounds.width}" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GuiLobbyController">
+<StackPane fx:id="stackPane" stylesheets="Murcielago.css" prefHeight="${screen.visualBounds.height}" prefWidth="${screen.visualBounds.width}" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GuiLobbyController">
    <fx:define>
       <Screen fx:factory="getPrimary" fx:id="screen" />
    </fx:define>
@@ -29,6 +29,6 @@
       </VBox>
    </children>
    <padding>
-      <Insets left="100.0" right="100.0" top="50.0" bottom="50.0" />
+      <Insets left="100.0" right="100.0" top="150.0" bottom="50.0" />
    </padding>
 </StackPane>

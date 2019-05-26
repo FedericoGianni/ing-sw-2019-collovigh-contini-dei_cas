@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane fx:id="stackPane" prefHeight="400.0" prefWidth="600.0" stylesheets="Murcielago.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GuiController">
+    <children>
+        <VBox fx:id="vBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+            <children>
+
+                <Label text="Choose Connection :">
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+
+                <Separator prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Separator>
+
+                <!-- define a Toggle group for Connection Choice -->
+
+                <fx:define>
+                    <ToggleGroup fx:id="srmi" />
+                </fx:define>
+
+                <!-- Radio Button for connection Choice -->
+
+                <VBox prefHeight="41.0" prefWidth="400.0">
+                    <children>
+                        <RadioButton onAction="#chooseConnType" text="Socket" toggleGroup="$srmi" selected="true" />
+                        <RadioButton onAction="#chooseConnType" text="RMI" toggleGroup="$srmi"/>
+                    </children>
+                    <padding>
+                        <Insets left="100.0" right="100.0" />
+                    </padding>
+                </VBox>
+
+
+                <Separator prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Separator>
+
+
+                <Label text="Choose Color :" />
+
+
+                <Separator layoutX="10.0" layoutY="91.0" prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Separator>
+
+                <!-- define a Toggle group for Connection Choice -->
+
+                <fx:define>
+                    <ToggleGroup fx:id="color" />
+                </fx:define>
+
+                <!-- define a Toggle group for Color Choice -->
+
+                <VBox layoutX="10.0" layoutY="50.0" prefHeight="41.0" prefWidth="400.0">
+                    <children>
+
+                        <RadioButton fx:id="bluButton" selected="true" text="Blu" toggleGroup="$color"/>
+                        <RadioButton fx:id="greenButton" text="Verde" toggleGroup="$color" />
+                        <RadioButton fx:id="purpleButton" text="Viola" toggleGroup="$color" />
+                        <RadioButton fx:id="yellowButton" text="Giallo" toggleGroup="$color" />
+                        <RadioButton fx:id="greyButton" text="Grigio" toggleGroup="$color" />
+
+                    </children>
+                    <padding>
+                        <Insets left="100.0" right="100.0" />
+                    </padding>
+                </VBox>
+
+
+                <Separator layoutX="10.0" layoutY="131.0" prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Separator>
+
+
+                <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="200.0">
+                    <children>
+
+
+                        <Label text="Username : " />
+
+
+                        <TextField fx:id="name" promptText="Type an username"/>
+
+
+                    </children>
+                </HBox>
+
+
+                <Separator layoutX="10.0" layoutY="124.0" prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Separator>
+
+
+                <Button onAction="#login" text="Login" />
+
+
+            </children>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="50.0" left="100.0" right="100.0" top="150.0" />
+    </padding>
+</StackPane>

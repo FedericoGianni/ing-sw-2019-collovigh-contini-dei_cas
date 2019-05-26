@@ -21,7 +21,7 @@ public class GuiController {
         gui = g;
     }
 
-    private ProtocolType protocolType;
+    private ProtocolType protocolType = SOCKET;
     String playerName;
     PlayerColor playerColor;
 
