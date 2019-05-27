@@ -104,16 +104,14 @@ public class SocketClientReader extends Thread {
                 // Read the line received
 
                 String msg = receive();
-
-                LOGGER.log(level,"[SOCKET-CLIENT-READER] received: {0}", msg);
-
                 // if the line starts with a '{' -> json
+                if(msg != null) {
+                    LOGGER.log(level,"[SOCKET-CLIENT-READER] received: {0}", msg);
 
-                if(msg.startsWith("{")) handleJson(msg);
-
-                // else will be handled by the HashMap
-
-                else handleMsg(splitCommand(msg));
+                    if (msg.startsWith("{")) handleJson(msg);
+                        // else will be handled by the HashMap
+                    else handleMsg(splitCommand(msg));
+                }
             }
 
 

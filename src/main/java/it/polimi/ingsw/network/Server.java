@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.socket.SocketServer;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.util.LinkedHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,7 +43,7 @@ public class Server  {
      */
     private static WaitingRoom waitingRoom;
 
-    private static ConcurrentHashMap<Integer, ToView> clients;
+    private static LinkedHashMap<Integer, ToView> clients;
 
     private static AtomicInteger clientsNum = new AtomicInteger(0);
 
@@ -59,7 +60,7 @@ public class Server  {
         try {
             waitingRoom = new WaitingRoom(-1);  // NOTE: this need to be changed: this can only create a new game but load a saved one
 
-            clients = new ConcurrentHashMap<>();
+            clients = new LinkedHashMap<>();
 
         }catch (GameNonExistentException e){
             e.printStackTrace();
@@ -172,7 +173,7 @@ public class Server  {
                 System.out.println("Client: " + client.toString());
             }
             //updates the hashmap
-            updateHashMap();
+            //updateHashMap();
 
         }else {
 
