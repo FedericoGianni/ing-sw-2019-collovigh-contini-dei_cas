@@ -28,7 +28,10 @@ public class View implements ViewInterface {
     private CacheModel cacheModel;
 
     private String serverIp;
+
+
     private int port;
+
 
 
     // startup methods
@@ -112,7 +115,7 @@ public class View implements ViewInterface {
             //SocketClientReader scr = new SocketClientReader(serverIp, port);
             //scr.start();
             try {
-                sleep(2000);
+                sleep(1000);
             } catch (InterruptedException e){
 
             }
@@ -173,6 +176,12 @@ public class View implements ViewInterface {
     @Override
     public void startReload() {
         userInterface.startReload();
+    }
+
+
+    @Override
+    public void startGame() {
+        userInterface.startGame();
     }
 
 

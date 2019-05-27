@@ -110,6 +110,8 @@ public class Server  {
 
             // Returns the PlayerId
 
+            //updateHashMap();
+
             return playerId;
 
         }else {
@@ -150,7 +152,10 @@ public class Server  {
      * @param playerId is the id of the player
      */
     public static void removePlayer(int playerId){
-
+        System.out.println("SERVER DEBUG removePlayer hashmap BEFORE removePlayer");
+        for (ToView client : clients.values()){
+            System.out.println("Client: " + client.toString());
+        }
         clients.remove(playerId);
 
         if ((waitingRoom.isActive()) && (WaitingRoom.getTimerCount() > 1)){
@@ -162,6 +167,12 @@ public class Server  {
             // remove the player from the waitingRoom
 
             waitingRoom.removePlayer(playerId);
+            System.out.println("SERVER DEBUG removePlayer hashmap AFTER removePlayer");
+            for (ToView client : clients.values()){
+                System.out.println("Client: " + client.toString());
+            }
+            //updates the hashmap
+            updateHashMap();
 
         }else {
 
@@ -229,5 +240,26 @@ public class Server  {
 
     public static ConcurrentMap<Integer,ToView> getClients() {
         return new ConcurrentHashMap<>(clients);
+    }
+
+    private static void updateHashMap(){
+        System.out.println("[SERVER] DEBUG updatehashMap. previous map: ");
+        for (int i = 0; i < clients.size() +1 ; i++) {
+            System.out.println("Client: " + i + " " + clients.get(i));
+        }
+
+        for (int i = 0; i < clients.size(); i++) {
+            if(clients.get(i) == null){
+                for (int j = i+1; j < clients.size(); j++) {
+                    clients.put(j-1, clients.get(j));
+                }
+            }
+        }
+        clients.remove(clients.size());
+
+        System.out.println("[SERVER] DEBUG new map: ");
+        for (int i = 0; i < clients.size() +1 ; i++) {
+            System.out.println("Client: " + i + " " + clients.get(i));
+        }
     }
 }

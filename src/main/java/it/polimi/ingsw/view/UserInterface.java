@@ -10,6 +10,7 @@ public interface UserInterface {
     // Utils
 
     void show(String s);
+    void startGame();
 
 
 

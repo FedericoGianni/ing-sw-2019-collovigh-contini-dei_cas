@@ -9,6 +9,9 @@ public interface ViewInterface {
 
     void sendUpdates(UpdateClass update);
 
+    //STARTGAME to switch gui to the main game window from lobby
+    void startGame();
+
     //SPAWN
     void startSpawn();
     void spawn(CachedPowerUp powerUp);

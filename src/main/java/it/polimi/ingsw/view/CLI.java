@@ -195,6 +195,11 @@ public class CLI implements UserInterface {
     }
 
     @Override
+    public void startGame() {
+        System.out.println("Gioco iniziato!");
+    }
+
+    @Override
     public void startSpawn() {
 
         List<CachedPowerUp> powerUps;

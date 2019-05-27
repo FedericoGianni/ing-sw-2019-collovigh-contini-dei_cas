@@ -8,6 +8,8 @@ public interface ToView  {
 
     void sendUpdate(UpdateClass update);
 
+    void startGame();
+
     // calls the same method on view Class
 
     /**

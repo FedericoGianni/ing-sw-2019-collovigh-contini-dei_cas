@@ -1,14 +1,14 @@
 package it.polimi.ingsw.view.cachemodel;
 
+import it.polimi.ingsw.view.GUI.GuiLobbyController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
 import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,8 +17,8 @@ public class CacheModel {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
-
-    private ObservableList<Player> players = FXCollections.observableArrayList();
+    private List<Player> players = new ArrayList<>();
+    //private ObservableList<Player> playersObsList = FXCollections.observableArrayList();
     private  CachedGame game = null;
     private final View view;
     private CachedMap cachedMap;
@@ -32,24 +32,31 @@ public class CacheModel {
 
         LOGGER.log(level, " [CACHE-MODEL] Received initial update with players: " + update.getNames());
 
-        //GuiLobbyController.clearLobbyPlayers();
+        players.clear();
+
+        GuiLobbyController.clearLobbyPlayers();
+        /*
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                players.clear();
+                playersObsList.clear();
             }
-        });
+        });*/
 
+        for (int i = 0; i < update.getNames().size() ; i++) {
+            players.add(new Player(i, update.getNames().get(i), update.getColors().get(i)));
+            GuiLobbyController.addLobbyPlayers(update.getNames().get(i));
+        }
 
-            //GuiLobbyController.addLobbyPlayers(new Player(i, update.getNames().get(i), update.getColors().get(i)));
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    for (int i = 0; i < update.getNames().size() ; i++) {
-                    players.add(new Player(i, update.getNames().get(i), update.getColors().get(i)));
+        /*
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < update.getNames().size() ; i++) {
+                playersObsList.add(new Player(i, update.getNames().get(i), update.getColors().get(i)));
                 }
             }
-        });
+        });*/
 
         cachedMap = new CachedMap(update.getMapType());
 
@@ -65,24 +72,37 @@ public class CacheModel {
 
                 CachedLobby cachedLobby = (CachedLobby) updateClass.getUpdate();
 
-                //GuiLobbyController.clearLobbyPlayers();
+                players.clear();
+                GuiLobbyController.clearLobbyPlayers();
+                /*
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        players.clear();
+                        playersObsList.clear();
                     }
-                });
+                });*/
+                /*
+                for (String name: cachedLobby.getNames()) {
+                    players.add(new Player(cachedLobby.getNames().indexOf(name), name, null));
+                    System.out.println("Player connessi: \n" + cachedLobby.getNames());
+                    GuiLobbyController.addLobbyPlayers(cachedLobby.getNames().get(name.indexOf(name)));
+                }*/
 
-                    //GuiLobbyController.addLobbyPlayers(new Player(cachedLobby.getNames().indexOf(name), name,null));
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            for (String name: cachedLobby.getNames()) {
-                                players.add(new Player(cachedLobby.getNames().indexOf(name), name, null));
-                                System.out.println("Player connessi: \n" + cachedLobby.getNames());
-                            }
+                for (int i = 0; i < cachedLobby.getNames().size(); i++) {
+                    players.add(new Player(i, cachedLobby.getNames().get(i), null));
+                    System.out.println("Player connessi: \n" + cachedLobby.getNames());
+                    GuiLobbyController.addLobbyPlayers(cachedLobby.getNames().get(i));
+                }
+                /*
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (String name: cachedLobby.getNames()) {
+                            players.add(new Player(cachedLobby.getNames().indexOf(name), name, null));
+                            //System.out.println("Player connessi: \n" + cachedLobby.getNames());
                         }
-                    });
+                    }
+                });*/
 
 
 
@@ -146,7 +166,7 @@ public class CacheModel {
         }
     }
 
-    public ObservableList<Player> getCachedPlayers(){
+    public List<Player> getCachedPlayers(){
 
         return players;
     }

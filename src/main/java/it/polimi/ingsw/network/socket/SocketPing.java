@@ -21,7 +21,7 @@ public class SocketPing implements Runnable {
     /**
      * The thread will send a "ping" string every DEFAULT_PING_INTERVAL millisecond
      */
-    public static final int DEFAULT_PING_INTERVAL = 4000;
+    public static final int DEFAULT_PING_INTERVAL = 5000;
 
     /**
      * this flag can be set to false to stop the server ping requests, as the while loop continues until active is true

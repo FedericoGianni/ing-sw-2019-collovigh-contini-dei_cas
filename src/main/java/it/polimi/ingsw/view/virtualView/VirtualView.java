@@ -95,6 +95,12 @@ public class VirtualView implements ViewInterface {
 
     }
 
+
+    @Override
+    public void startGame() {
+        view.startGame();
+    }
+
     @Override
     public void sendUpdates(UpdateClass update) {
 
@@ -141,7 +147,5 @@ public class VirtualView implements ViewInterface {
     public void useMarker(Color color, int playerId) {
 
     }
-
-
 
 }

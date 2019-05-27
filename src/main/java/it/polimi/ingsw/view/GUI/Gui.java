@@ -120,6 +120,14 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
+    public void startGame() {
+        Platform.runLater( () -> {
+            System.out.println("guiLobbyController: " + guiLobbyController);
+            guiLobbyController.openThirdScene(new ActionEvent());
+        });
+    }
+
+    @Override
     public void show(String s) {
 
         Platform.runLater( () -> {
@@ -198,11 +206,6 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void startSpawn() {
-        Platform.runLater( () -> {
-            System.out.println("guiLobbyController: " + guiLobbyController);
-            guiLobbyController.openThirdScene(new ActionEvent());
-        });
-
     }
 
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.view.cachemodel.Player;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GuiLobbyController {
 
@@ -25,12 +28,16 @@ public class GuiLobbyController {
     @FXML
     private ListView lobbyPlayersListView;
 
-    private ObservableList<Player> lobbyPlayers = gui.getView().getCacheModel().getCachedPlayers();
+    private static ObservableList<String> lobbyPlayers = FXCollections.observableArrayList();
+    final AtomicReference<ListChangeListener.Change<? extends String>> change = new AtomicReference<>(null);
 
     public void setStageAndSetupListeners(Stage stage){
         this.myStage = stage;
         lobbyPlayersListView.setItems(lobbyPlayers);
 
+        lobbyPlayers.addListener((ListChangeListener<String>) c -> {lobbyPlayersListView.refresh();});
+
+        /*
         lobbyPlayers.addListener((ListChangeListener.Change<? extends Player> change) -> {
             while(change.next()) {
                 if (change.wasUpdated()) {
@@ -47,6 +54,7 @@ public class GuiLobbyController {
                 }
             }
         });
+        */
     }
 
     public void setFirstScene(Scene scene) {
@@ -64,6 +72,25 @@ public class GuiLobbyController {
 
     public void openThirdScene(ActionEvent actionEvent) {
         myStage.setScene(mainScene);
+    }
+
+    public static void clearLobbyPlayers(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                lobbyPlayers.clear();
+            }
+        });
+    }
+
+    public static void addLobbyPlayers(String playerName){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                lobbyPlayers.add(playerName);
+            }
+        });
+
     }
 
 

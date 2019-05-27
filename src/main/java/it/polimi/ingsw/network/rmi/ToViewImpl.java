@@ -121,4 +121,13 @@ public class ToViewImpl implements ToView {
         }
 
     }
+
+    @Override
+    public void startGame() {
+        try {
+            client.startGame();
+        } catch (RemoteException e){
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
+        }
+    }
 }

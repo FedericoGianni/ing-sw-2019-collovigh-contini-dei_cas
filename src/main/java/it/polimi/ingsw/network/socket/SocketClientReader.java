@@ -346,7 +346,11 @@ public class SocketClientReader extends Thread {
             //scw.send("pong\f" + scw.getPlayerId());
         });
 
-
+        //initGame
+        headersMap.put("startGame", () -> {
+            System.out.println("[DEBUG] Ricevuto initGame dal server");
+            RunClient.getView().startGame();
+        });
 
 
 

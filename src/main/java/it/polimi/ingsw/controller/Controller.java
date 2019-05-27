@@ -16,8 +16,8 @@ import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
-import it.polimi.ingsw.view.virtualView.observers.Observers;
 import it.polimi.ingsw.view.virtualView.VirtualView;
+import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -244,6 +244,9 @@ public class Controller {
         for (VirtualView v: players){
 
             v.sendUpdates(updateClass);
+
+            //inform the virtual views that the game has started
+            v.startGame();
         }
     }
 

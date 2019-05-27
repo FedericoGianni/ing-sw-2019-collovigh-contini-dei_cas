@@ -1,7 +1,7 @@
 .root{
 
     -fx-background-color: #2b2b2b;
-    -fx-font-family: "Showcard Gothic";
+    -fx-font-family: "ethnocentricRg-regular";
     -fx-font-size: 15;
 }
 
@@ -9,6 +9,8 @@
 
     -fx-text-fill: #e49563;
     -fx-font-size: 20;
+    -fx-font-family: "Ethnocentric Rg";
+    -fx-font-style: italic;
 }
 
 .list-view{

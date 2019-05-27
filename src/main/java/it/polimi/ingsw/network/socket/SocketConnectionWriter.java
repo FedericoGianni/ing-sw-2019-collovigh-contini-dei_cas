@@ -136,6 +136,12 @@ public class SocketConnectionWriter extends Thread implements ToView {
         send(gson.toJson(update));
     }
 
+    @Override
+    public void startGame() {
+        LOGGER.info("sending initGame to conneted client");
+        send("startGame");
+    }
+
     public void disconnect(){
         LOGGER.log(WARNING, "Disconneting virtual view linked to this connection.");
 
