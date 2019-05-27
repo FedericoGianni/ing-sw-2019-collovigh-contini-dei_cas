@@ -26,23 +26,24 @@ public class RMIClient extends Client {
     private static Level level = Level.FINE;
 
     //attributes relative to client -> server flow
-    private static final String REMOTE_OBJECT_NAME = "rmi_server";
+    private final String remoteObjectName = "rmi_server";
     private Registry remoteRegistry;
     private final String serverIp;
-    private final int serverPort = 22220;
+    private int serverPort = 22220;
 
     //attributes relative to server -> client flow
     private static Boolean registryCreated = false;
     private String localName;
     private View view;
+    private int clientPort = 22221;
 
     //view
 
-    public static final String DEFAULT_LOGIN_OK_REPLY = "OK";
-    public static final String DEFAULT_NAME_ALREADY_TAKEN_REPLY = "NAME_ALREADY_TAKEN";
-    public static final String DEFAULT_COLOR_ALREADY_TAKEN_REPLY = "COLOR_ALREADY_TAKEN";
-    public static final String DEFAULT_GAME_ALREADY_STARTED_REPLY = "GAME_ALREADY_STARTED";
-    public static final String DEFAULT_MAX_PLAYER_READCHED = "MAX_PLAYER_REACHED";
+    private static final String DEFAULT_LOGIN_OK_REPLY = "OK";
+    private static final String DEFAULT_NAME_ALREADY_TAKEN_REPLY = "NAME_ALREADY_TAKEN";
+    private static final String DEFAULT_COLOR_ALREADY_TAKEN_REPLY = "COLOR_ALREADY_TAKEN";
+    private static final String DEFAULT_GAME_ALREADY_STARTED_REPLY = "GAME_ALREADY_STARTED";
+    private static final String DEFAULT_MAX_PLAYER_READCHED = "MAX_PLAYER_REACHED";
 
 
 
@@ -51,9 +52,20 @@ public class RMIClient extends Client {
         this.serverIp = serverIp;
         this.view = view;
 
+        // gets configs from json
+
+        Config config = getConfig();
+
+        this.serverPort = config.getRmiServerPort();
+
+        this.clientPort = config.getRmiClientPort();
+
+        // starts the remote objects
+
         createRegistry();
 
         createRemoteObject();
+
 
     }
 
@@ -79,15 +91,15 @@ public class RMIClient extends Client {
 
             LOGGER.log(level,"[RMI-CLIENT] Config successfully loaded ");
 
-            // returns the class
+            // returns the config file
 
             return config;
 
         }catch (Exception e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
-        }
 
-        return null;
+            return new Config(null,-1,-1,false);
+        }
     }
 
     /**
@@ -99,7 +111,7 @@ public class RMIClient extends Client {
 
             if (!RMIClient.registryCreated){
 
-                LocateRegistry.createRegistry(2021);
+                LocateRegistry.createRegistry(clientPort);
 
                 RMIClient.registryCreated = true;
             }
@@ -119,9 +131,9 @@ public class RMIClient extends Client {
 
             ToClientImpl skeleton = new ToClientImpl(this);
 
-            Registry localRegistry = LocateRegistry.getRegistry(2021);
+            Registry localRegistry = LocateRegistry.getRegistry(clientPort);
 
-            LOGGER.log(level, "[RMI-Client]located registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), "2021"});
+            LOGGER.log(level, "[RMI-Client]located registry at address: {0}, port:{1}", new Object[]{Inet4Address.getLocalHost().getHostAddress(), clientPort});
 
 
             //creation of client name for binding if only one client for each pc all will be 0
@@ -157,7 +169,7 @@ public class RMIClient extends Client {
 
             //load the ToServer object from the registry
 
-            return  (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+            return  (ToServer) remoteRegistry.lookup(remoteObjectName);
 
         }catch (Exception e){
 
@@ -281,7 +293,7 @@ public class RMIClient extends Client {
             remoteRegistry = LocateRegistry.getRegistry(serverIp,serverPort);
             LOGGER.log(level,"[RMI-Client] registry located by client");
 
-            ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
+            ToServer server = (ToServer) remoteRegistry.lookup(remoteObjectName);
 
             server.voteMapType(mapType);
 

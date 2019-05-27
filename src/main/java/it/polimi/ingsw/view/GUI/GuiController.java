@@ -46,8 +46,31 @@ public class GuiController {
     @FXML
     private void login(ActionEvent event){
 
+
+
+        // Connection choice
+
+        int connectionchoice = 0;
+
+        connectionchoice = srmi.getToggles().indexOf(srmi.getSelectedToggle());
+
+        switch(connectionchoice) {
+
+            case 0:
+                protocolType = SOCKET;
+                break;
+
+            case 1:
+                protocolType = RMI;
+                break;
+        }
+
+
+
+        // Color Choice
+
         int colorChoice;
-        //System.out.println("[DEBUG] LOGIN CLICCATO!");
+
         System.out.println("colore scelto : " + color.getToggles().indexOf(color.getSelectedToggle()));
 
         colorChoice = color.getToggles().indexOf(color.getSelectedToggle());
@@ -69,6 +92,8 @@ public class GuiController {
                 playerColor = PlayerColor.GREY;
                 break;
         }
+
+        // Name Choice
 
         playerName = name.getText();
 

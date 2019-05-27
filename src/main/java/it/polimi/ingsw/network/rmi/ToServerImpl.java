@@ -23,13 +23,15 @@ public class ToServerImpl implements ToServer{
     private static Level level = Level.FINE;
 
     private final RMIServer server;
+    private final int rmiClientPort;
     private int playerId;
 
     private Registry remote;
 
-    public ToServerImpl(RMIServer server) throws RemoteException{
+    public ToServerImpl(RMIServer server, int rmiClientPort) throws RemoteException{
 
         this.server = server;
+        this.rmiClientPort = rmiClientPort;
 
         UnicastRemoteObject.exportObject(this,0);
     }
@@ -44,7 +46,7 @@ public class ToServerImpl implements ToServer{
 
             // connect to the remote registry
 
-            remote = LocateRegistry.getRegistry(address, 2021);
+            remote = LocateRegistry.getRegistry(address, rmiClientPort);
 
             // create the Remote Object
 

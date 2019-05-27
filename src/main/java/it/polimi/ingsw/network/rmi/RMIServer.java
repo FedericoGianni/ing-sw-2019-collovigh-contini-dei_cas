@@ -20,7 +20,7 @@ public class RMIServer {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
-    private final int serverPort = 22220;
+    private int serverPort = 22220;
 
     //attributes relative to client -> server flow
     private static Boolean registryCreated = false;
@@ -31,9 +31,19 @@ public class RMIServer {
     //attributes relative to server -> client flow
     private static ConcurrentHashMap<Integer,ToViewImpl> remoteViews = new ConcurrentHashMap<>();
     private Registry remote;
+    private int clientPort = 22221;
 
 
     public RMIServer() {
+
+        // loads the config files from the json
+
+        Config config = getConfig();
+
+        this.serverPort = config.getRmiServerPort();
+        this.clientPort = config.getRmiClientPort();
+
+        // starts the remote objects
 
         this.createRegistry();
 
@@ -110,7 +120,7 @@ public class RMIServer {
 
         try {
 
-            skeleton = new ToServerImpl(this);
+            skeleton = new ToServerImpl(this, clientPort);
 
             local = LocateRegistry.getRegistry(serverPort);
 

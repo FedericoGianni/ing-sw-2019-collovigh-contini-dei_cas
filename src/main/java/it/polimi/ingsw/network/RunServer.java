@@ -42,7 +42,7 @@ public class RunServer {
 
                     // starts the server
 
-                    Server server = new Server(config.getRmiServerPort());
+                    Server server = new Server(config.getSocketServerPort());
 
                 } catch (Exception e) {
                     e.printStackTrace();
