@@ -153,6 +153,8 @@ public class Server  {
      * @param playerId is the id of the player
      */
     public static void removePlayer(int playerId){
+
+
         System.out.println("SERVER DEBUG removePlayer hashmap BEFORE removePlayer");
         for (ToView client : clients.values()){
             System.out.println("Client: " + client.toString());
@@ -168,12 +170,15 @@ public class Server  {
             // remove the player from the waitingRoom
 
             waitingRoom.removePlayer(playerId);
+
             System.out.println("SERVER DEBUG removePlayer hashmap AFTER removePlayer");
             for (ToView client : clients.values()){
                 System.out.println("Client: " + client.toString());
             }
+
             //updates the hashmap
-            //updateHashMap();
+
+            updateHashMap();
 
         }else {
 
@@ -244,19 +249,30 @@ public class Server  {
     }
 
     private static void updateHashMap(){
+
         System.out.println("[SERVER] DEBUG updatehashMap. previous map: ");
+
         for (int i = 0; i < clients.size() +1 ; i++) {
             System.out.println("Client: " + i + " " + clients.get(i));
         }
 
         for (int i = 0; i < clients.size(); i++) {
+
+
             if(clients.get(i) == null){
-                for (int j = i+1; j < clients.size(); j++) {
+
+
+                for (int j = i + 1 ; j < clients.size() + 1 ; j++) {
+
+
                     clients.put(j-1, clients.get(j));
+
+
                 }
             }
         }
-        clients.remove(clients.size());
+
+        clients.remove(clients.size() - 1);
 
         System.out.println("[SERVER] DEBUG new map: ");
         for (int i = 0; i < clients.size() +1 ; i++) {
