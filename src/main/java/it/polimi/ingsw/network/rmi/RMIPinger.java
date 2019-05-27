@@ -9,9 +9,9 @@ import java.util.logging.Logger;
 public class RMIPinger implements Runnable{
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.INFO;
+    private static Level level = Level.FINE;
 
-    private static final int WAIT_TIME = 1000;
+    private static final int WAIT_TIME = 10;
     private final ToClient target;
 
     private int pId;

@@ -250,11 +250,7 @@ public class Server  {
 
     private static void updateHashMap(){
 
-        System.out.println("[SERVER] DEBUG updatehashMap. previous map: ");
-
-        for (int i = 0; i < clients.size() +1 ; i++) {
-            System.out.println("Client: " + i + " " + clients.get(i));
-        }
+        LOGGER.log(level, "[Server] hasmap before update {0}", clients);
 
         for (int i = 0; i < clients.size(); i++) {
 
@@ -269,10 +265,10 @@ public class Server  {
 
 
                 }
+
+                clients.remove(clients.size() - 1);
             }
         }
-
-        clients.remove(clients.size() - 1);
 
         System.out.println("[SERVER] DEBUG new map: ");
         for (int i = 0; i < clients.size() +1 ; i++) {
