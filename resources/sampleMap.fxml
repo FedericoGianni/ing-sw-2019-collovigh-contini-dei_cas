@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="it.polimi.ingsw.view.GUI.GuiMapController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-</AnchorPane>
+<BorderPane fx:controller="it.polimi.ingsw.view.GUI.GuiMapController" xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400" prefWidth="600" fx:id="pane">
+
+    <top>
+       
+    </top>
+    <left>
+
+    </left>
+    <center>
+        <GridPane  fx:id="mappozza" xmlns:fx="http://javafx.com/fxml" id="mappozza"  prefHeight="200" prefWidth="320"
+                   alignment="center" hgap="10" vgap="10" styleClass ="mappozza">
+
+        </GridPane>
+    </center>
+    <right>
+
+    </right>
+    <bottom>
+
+    </bottom>
+
+</BorderPane>

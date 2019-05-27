@@ -1,16 +1,20 @@
 package it.polimi.ingsw.view.GUI;
 
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 
 public class GuiMap extends Application {
+
 
     public static void main(String[] args) {
         launch(args);
@@ -33,14 +37,16 @@ public class GuiMap extends Application {
 
             Scene scene = new Scene(root, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
             scene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleMap.css").toExternalForm());
-            Image img = new Image("/images/background_image.png");
+            Image img = new Image("/images/Map2.png");
             GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
             stage.setMinWidth(DEFAULT_MIN_WIDTH);
             stage.setMinHeight(DEFAULT_MIN_HEIGHT);
             stage.setMaxWidth(gd.getDisplayMode().getWidth());
             stage.setMaxHeight(gd.getDisplayMode().getHeight());
-            stage.setTitle("Adrenalina");
+            stage.setTitle("MapScreen");
+
+
             stage.setScene(scene);
             stage.show();
 
