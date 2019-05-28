@@ -1,9 +1,13 @@
 package it.polimi.ingsw.view.GUI;
 
 
+import it.polimi.ingsw.model.player.PlayerColor;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+
+
 
 
 public class GuiMapController {
@@ -18,6 +22,8 @@ public class GuiMapController {
     GridPane mappozza;
     @FXML
     BorderPane pane;
+    @FXML
+    TextArea log;
 
     @FXML
     public void initialize() {
@@ -41,6 +47,11 @@ public class GuiMapController {
                 break;
             }
         }
+    }
+
+    public void loginUpdater(String name, int id, PlayerColor color)
+    {
+        log.appendText("\nSi è collegato: "+name+" con l'id: "+id+" ed il colore: "+color);
     }
 
 

@@ -78,7 +78,7 @@ public class CacheModel {
             case INITIAL:
 
                 update((InitialUpdate) updateClass.getUpdate());
-
+                view.getUserInterface().notifyUpdate(UpdateType.INITIAL);
 
 
                 break;
