@@ -208,6 +208,10 @@ public class Gui extends Application implements UserInterface {
 
                 break;
 
+            case STATS:
+
+                break;
+
             default:
 
                 break;

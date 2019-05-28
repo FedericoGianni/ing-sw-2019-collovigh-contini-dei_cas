@@ -79,11 +79,15 @@ public class CacheModel {
 
                 update((InitialUpdate) updateClass.getUpdate());
 
+
+
                 break;
 
             case STATS:
 
                 players.get(updateClass.getPlayerId()).update((CachedStats) updateClass.getUpdate());
+
+                view.getUserInterface().notifyUpdate(UpdateType.STATS);
 
                 break;
 
