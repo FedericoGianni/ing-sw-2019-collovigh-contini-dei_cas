@@ -104,6 +104,8 @@ public class RunClient {
                 }catch (Exception e){
 
                     e.printStackTrace();
+
+                    view = new View("localhost", 22222, "-cli");
                 }
 
                 break;

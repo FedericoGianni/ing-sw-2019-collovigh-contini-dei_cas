@@ -15,6 +15,8 @@ public class RunServer {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
+    private static Server server;
+
 
     public static void main(String[] args) {
 
@@ -42,10 +44,12 @@ public class RunServer {
 
                     // starts the server
 
-                    Server server = new Server(config.getSocketServerPort());
+                    server = new Server(config.getSocketServerPort());
 
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                    server = new Server(22222);
                 }
 
                 break;
@@ -54,7 +58,7 @@ public class RunServer {
             case 1:
 
 
-                Server server = new Server(Integer.parseInt(args[0]));
+                server = new Server(Integer.parseInt(args[0]));
 
                 break;
 

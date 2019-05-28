@@ -78,9 +78,8 @@ public class RMIServer {
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+            return new Config(null,-1,-1,false);
         }
-
-        return null;
     }
 
     /**

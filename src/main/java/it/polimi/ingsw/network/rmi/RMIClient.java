@@ -118,7 +118,7 @@ public class RMIClient extends Client {
 
         }catch (Exception e){
 
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "[RMI-Client] registry was already created ");
         }
     }
 
