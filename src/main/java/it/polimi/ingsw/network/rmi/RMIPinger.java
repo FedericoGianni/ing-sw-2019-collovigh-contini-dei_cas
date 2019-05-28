@@ -59,7 +59,7 @@ public class RMIPinger implements Runnable{
 
             LOGGER.log(Level.WARNING, message);
 
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
+            LOGGER.log(level, e.getMessage(), e);
 
         }
 

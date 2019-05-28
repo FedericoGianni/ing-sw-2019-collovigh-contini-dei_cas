@@ -59,16 +59,13 @@ public class CacheModel {
                 for (int i = 0; i < cachedLobby.getNames().size(); i++) {
                     players.add(new Player(i, cachedLobby.getNames().get(i), null));
 
-                    //GuiLobbyController.addLobbyPlayers(cachedLobby.getNames().get(i));
-
-                    // notify the view
-
-                    view.getUserInterface().notifyUpdate(UpdateType.LOBBY);
                 }
 
-                // prints the players
+                // notify the view
 
-                System.out.println("Player connessi: \n" + cachedLobby.getNames());  // TODO delete print
+                view.getUserInterface().notifyUpdate(UpdateType.LOBBY, -1);
+
+                // prints the players
 
                 LOGGER.log(level, "[Cache-Model] received LOBBY update w/ players: {0}", cachedLobby.getNames() );
 
@@ -79,7 +76,7 @@ public class CacheModel {
 
                 update((InitialUpdate) updateClass.getUpdate());
 
-
+                view.getUserInterface().notifyUpdate(UpdateType.INITIAL, updateClass.getPlayerId());
 
                 break;
 
@@ -87,7 +84,7 @@ public class CacheModel {
 
                 players.get(updateClass.getPlayerId()).update((CachedStats) updateClass.getUpdate());
 
-                view.getUserInterface().notifyUpdate(UpdateType.STATS);
+                view.getUserInterface().notifyUpdate(UpdateType.STATS, updateClass.getPlayerId());
 
                 break;
 
@@ -95,11 +92,15 @@ public class CacheModel {
 
                 players.get(updateClass.getPlayerId()).update((CachedAmmoBag) updateClass.getUpdate());
 
+                view.getUserInterface().notifyUpdate(UpdateType.AMMO_BAG, updateClass.getPlayerId());
+
                 break;
 
             case POWERUP_BAG:
 
                 players.get(updateClass.getPlayerId()).update((CachedPowerUpBag) updateClass.getUpdate());
+
+                view.getUserInterface().notifyUpdate(UpdateType.POWERUP_BAG, updateClass.getPlayerId());
 
                 break;
 
@@ -107,11 +108,15 @@ public class CacheModel {
 
                 players.get(updateClass.getPlayerId()).update((CachedWeaponBag) updateClass.getUpdate());
 
+                view.getUserInterface().notifyUpdate(UpdateType.WEAPON_BAG, updateClass.getPlayerId());
+
                 break;
 
             case GAME:
 
                 this.game = (CachedGame) updateClass.getUpdate();
+
+                view.getUserInterface().notifyUpdate(UpdateType.GAME, updateClass.getPlayerId());
 
                 break;
 
@@ -124,6 +129,8 @@ public class CacheModel {
             case SPAWN_CELL:
 
                 this.cachedMap.update((CachedSpawnCell) updateClass.getUpdate());
+
+                view.getUserInterface().notifyUpdate(UpdateType.SPAWN_CELL, updateClass.getPlayerId());
 
                 break;
 

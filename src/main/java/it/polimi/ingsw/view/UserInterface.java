@@ -12,7 +12,7 @@ public interface UserInterface {
     // Utils
 
     void show(String s);
-    void notifyUpdate(UpdateType updateType);
+    void notifyUpdate(UpdateType updateType, int playerId);
     void startGame();
 
 

@@ -171,7 +171,7 @@ public class CLI implements UserInterface {
     }
 
     @Override
-    public void notifyUpdate(UpdateType updateType) {
+    public void notifyUpdate(UpdateType updateType, int playerId) {
 
         switch (updateType){
 
