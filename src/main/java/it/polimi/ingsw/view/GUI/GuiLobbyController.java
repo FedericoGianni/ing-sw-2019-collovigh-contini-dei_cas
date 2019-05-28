@@ -74,7 +74,7 @@ public class GuiLobbyController {
         myStage.setScene(mainScene);
     }
 
-    public static void clearLobbyPlayers(){
+    public void clearLobbyPlayers(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -83,7 +83,7 @@ public class GuiLobbyController {
         });
     }
 
-    public static void addLobbyPlayers(String playerName){
+    public void addLobbyPlayers(String playerName){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -92,6 +92,7 @@ public class GuiLobbyController {
         });
 
     }
+
 
 
 }

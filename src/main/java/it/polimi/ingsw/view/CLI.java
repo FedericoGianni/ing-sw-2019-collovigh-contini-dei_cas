@@ -4,9 +4,12 @@ import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+import it.polimi.ingsw.view.cachemodel.Player;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
 
@@ -165,6 +168,31 @@ public class CLI implements UserInterface {
         new Thread(() ->
             System.out.println(s)
         ).start();
+    }
+
+    @Override
+    public void notifyUpdate(UpdateType updateType) {
+
+        switch (updateType){
+
+            case LOBBY:
+
+                List<String> names = view.getCacheModel()
+                        .getCachedPlayers()
+                        .stream()
+                        .map(Player::getName)
+                        .collect(Collectors.toList());
+
+                System.out.println("Player connessi : " + names );
+
+                break;
+
+            default:
+
+                break;
+        }
+
+
     }
 
 

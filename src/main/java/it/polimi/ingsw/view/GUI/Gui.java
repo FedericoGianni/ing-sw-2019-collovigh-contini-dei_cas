@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.cachemodel.Player;
+import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -14,6 +16,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class Gui extends Application implements UserInterface {
@@ -180,6 +184,34 @@ public class Gui extends Application implements UserInterface {
             }
 
         });
+    }
+
+    @Override
+    public void notifyUpdate(UpdateType updateType) {
+
+        switch (updateType){
+
+            case LOBBY:
+
+                guiLobbyController.clearLobbyPlayers();
+
+                List<String> names = view.getCacheModel()
+                        .getCachedPlayers()
+                        .stream()
+                        .map(Player::getName)
+                        .collect(Collectors.toList());
+
+                for (String name: names){
+
+                    guiLobbyController.addLobbyPlayers(name);
+                }
+
+                break;
+
+            default:
+
+                break;
+        }
     }
 
     @Override

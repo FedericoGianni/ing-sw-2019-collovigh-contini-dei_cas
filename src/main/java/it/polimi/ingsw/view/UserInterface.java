@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+
 public interface UserInterface {
 
     /**
@@ -10,6 +12,7 @@ public interface UserInterface {
     // Utils
 
     void show(String s);
+    void notifyUpdate(UpdateType updateType);
     void startGame();
 
 
