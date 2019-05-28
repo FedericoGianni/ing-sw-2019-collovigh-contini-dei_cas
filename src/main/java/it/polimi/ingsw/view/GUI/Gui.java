@@ -127,6 +127,7 @@ public class Gui extends Application implements UserInterface {
     public void startGame() {
         Platform.runLater( () -> {
             System.out.println("guiLobbyController: " + guiLobbyController);
+            guiMapController.mapCreator();
             guiLobbyController.openThirdScene(new ActionEvent());
         });
     }

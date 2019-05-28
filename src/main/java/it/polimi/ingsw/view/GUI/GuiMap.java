@@ -37,7 +37,7 @@ public class GuiMap extends Application {
 
             Scene scene = new Scene(root, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
             scene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleMap.css").toExternalForm());
-            Image img = new Image("/images/Map2.png");
+
             GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 
             stage.setMinWidth(DEFAULT_MIN_WIDTH);
