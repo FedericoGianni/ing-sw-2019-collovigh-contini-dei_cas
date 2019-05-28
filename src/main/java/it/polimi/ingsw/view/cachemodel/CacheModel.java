@@ -67,6 +67,8 @@ public class CacheModel {
 
                 // prints the players
 
+                System.out.println("Player connessi: \n" + cachedLobby.getNames());  // TODO delete print
+
                 LOGGER.log(level, "[Cache-Model] received LOBBY update w/ players: {0}", cachedLobby.getNames() );
 
 

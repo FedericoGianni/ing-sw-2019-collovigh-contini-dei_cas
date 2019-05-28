@@ -9,6 +9,9 @@ import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
 public class Player {
 
     private final int playerId;
+
+
+
     private final PlayerColor playerColor;
     private final String name;
     private CachedStats stats;
@@ -64,5 +67,8 @@ public class Player {
 
     public CachedWeaponBag getWeaponbag() {
         return weaponbag;
+    }
+    public PlayerColor getPlayerColor() {
+        return playerColor;
     }
 }

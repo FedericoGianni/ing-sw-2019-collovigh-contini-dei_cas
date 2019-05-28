@@ -212,6 +212,11 @@ public class Gui extends Application implements UserInterface {
             case STATS:
 
                 break;
+            case INITIAL:
+
+                for(Player item:view.getCacheModel().getCachedPlayers())
+                    guiMapController.loginUpdater(item.getName(),item.getPlayerId(),item.getPlayerColor());
+                break;
 
             default:
 
