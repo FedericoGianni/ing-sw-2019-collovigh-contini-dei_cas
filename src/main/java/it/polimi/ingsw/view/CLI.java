@@ -3,6 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.Player;
@@ -309,6 +310,7 @@ public class CLI implements UserInterface {
 
             System.out.println("Scegli un powerUp da usare: ");
             read = scanner.nextInt();
+            scanner.nextLine();
 
             if (read >= 0 && read < powerUps.size()) validChoice = true;
 
@@ -437,9 +439,14 @@ public class CLI implements UserInterface {
             //TODO when the cachedModel will have Map find a better method to get this cell
             //this way you have to check locally if r,c is ok for every different type of map
             System.out.println("riga >>> (0,1,2)");
+
             r = scanner.nextInt();
+            scanner.nextLine();
+
             System.out.println("colonna >>> (0,1,2,3)");
+
             c = scanner.nextInt();
+            scanner.nextLine();
 
             if(r >= 0 && r <= 2 && c >= 0 && c <= 3){
                 validChoice = true;
@@ -449,7 +456,11 @@ public class CLI implements UserInterface {
 
         }while(!validChoice);
 
-        view.useTeleport(teleporter.getColor(), r,c);
+
+
+        JsonAction jsonAction = null;
+
+        view.doAction(jsonAction);
 
 
     }
