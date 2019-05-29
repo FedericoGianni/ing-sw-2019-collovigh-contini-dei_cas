@@ -94,11 +94,11 @@ public class JsonExampleMaker {
         try {
 
             Point finalpos = new Point(2,2);
-            List<String> moves = new ArrayList<>();
+            List<Directions> moves = new ArrayList<>();
 
-            moves.add("n");
-            moves.add("n");
-            moves.add("w");
+            moves.add(Directions.NORTH);
+            moves.add(Directions.NORTH);
+            moves.add(Directions.WEST);
 
             Move move = new Move(moves,finalpos);
 
