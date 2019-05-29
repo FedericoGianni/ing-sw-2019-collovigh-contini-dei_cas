@@ -112,9 +112,19 @@ public class SocketConnectionReader extends Thread {
                     String msg = input.readLine();
                     if(msg != null) {
 
-                        if (msg.startsWith("{"))
+                        if (msg.startsWith("{")){
 
-                        handleMsg(splitCommand(msg));
+                            // if the string starts with a '{' read the message as a json
+
+                            handleJson(msg);
+
+                        }else {
+
+                            // otherwise the string is passed to the hashMap
+
+                            handleMsg(splitCommand(msg));
+
+                        }
                     }
                 }
 
