@@ -73,6 +73,8 @@ public class Controller {
 
     private PowerUpPhase powerUpPhase = new PowerUpPhase(this);
 
+    private ActionPhase actionPhase = new ActionPhase(this);
+
 
 
 
@@ -146,6 +148,8 @@ public class Controller {
     public List<VirtualView> getVirtualViews(){
         return new ArrayList<>(players);
     }
+
+    public List<Integer> getShotPlayerThisTurn() { return shotPlayerThisTurn; }
 
     public TurnPhase getTurnPhase() {
         return turnPhase;
@@ -351,31 +355,6 @@ public class Controller {
         players.get(getCurrentPlayer()).startReload();
     }
 
-
-    public void useTeleport(Color color, int r, int c){
-        //TODO check if exception logic is viable
-        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useTeleport");
-        Cell cell = Model.getMap().getCell(r,c);
-        Teleporter t = (Teleporter) Model.getPlayer(getCurrentPlayer()).getPowerUpBag().findItem(TELEPORTER, color);
-        try {
-            t.use(cell);
-        } catch (CardNotPossessedException e){
-            //this shouldn't happen since the client can only send PowerUps that has in hand
-        } catch (CellNonExistentException e){
-            //this shouldn't happen too since the client can only send Cell which exists?
-            //TODO check for SameCellException? -> or it is a valid action?
-        }
-     }
-
-    public void useGranade(){
-        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useGranade");
-        //TODO
-    }
-
-    public void useTargetingScope(){
-        //TODO
-        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useTargetingScope");
-    }
 
     //ACTIONS
 
