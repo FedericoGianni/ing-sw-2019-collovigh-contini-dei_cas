@@ -1,1 +1,1 @@
-{"type":"MOVE","moves":["n","n","w"],"finalPos":{"x":2,"y":2}}
+{"moves":["n","n","w"],"finalPos":{"x":2,"y":2},"actionType":"MOVE"}

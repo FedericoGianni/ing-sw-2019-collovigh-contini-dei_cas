@@ -1,28 +1,32 @@
 package it.polimi.ingsw.view.actions;
 
+import it.polimi.ingsw.model.map.Directions;
+
 import java.awt.*;
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-public class Move implements Serializable, JsonAction {
+public class Move extends JsonAction  {
 
 
-    private final ActionTypes type = ActionTypes.MOVE;
     /**
      * this is a list of char that with the following symbols 'n' = 1 move up, 's' = one move down, w , e
      */
-    private final List<String> moves;
-
+    private final List<Directions> moves;
     private final Point finalPos;
 
-    public Move(Point finalPos, List<String> moves) {
-        this.finalPos = finalPos;
+    public Move( List<Directions> moves, Point finalPos) {
+        super(ActionTypes.MOVE);
+
         this.moves = moves;
+
+        this.finalPos = finalPos;
     }
 
-    @Override
-    public ActionTypes getType() {
-        return this.type;
+    public List<Directions> getMoves() {
+        return moves;
+    }
+
+    public Point getFinalPos() {
+        return finalPos;
     }
 }

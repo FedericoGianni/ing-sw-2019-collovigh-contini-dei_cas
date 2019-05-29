@@ -7,6 +7,7 @@ public enum ActionTypes {
     SHOOT,
     FRENZY_MOVE,
     FRENZY_GRAB,
-    FRENZY_SHOOT;
+    FRENZY_SHOOT,
+    POWER_UP;
 
 }

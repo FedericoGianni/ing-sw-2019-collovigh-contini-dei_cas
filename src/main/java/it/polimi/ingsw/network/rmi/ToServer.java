@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.networkexceptions.*;
+import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.rmi.Remote;
@@ -43,9 +44,7 @@ public interface ToServer extends Remote {
 
     //POWERUP
 
-     void useNewton(Color color, int playerId, Directions directions, int amount) throws RemoteException;
-     void useTeleport(Color color, int r, int c) throws RemoteException;
-     void useMarker(Color color, int playerId) throws RemoteException;
+     void doAction(JsonAction jsonAction) throws RemoteException;
 
 
 }

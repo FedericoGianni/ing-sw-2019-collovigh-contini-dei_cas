@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.ViewInterface;
+import it.polimi.ingsw.view.actions.JsonAction;
+import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 
@@ -130,17 +132,12 @@ public class VirtualView implements ViewInterface {
         controller.spawn(powerUp.getType(),powerUp.getColor());
     }
 
-    @Override
-    public void useNewton(Color color, int playerId, Directions directions, int amount) {
-        LOGGER.info("Virtual View id: " + this.playerId + "received useNewton and calling it on the controller.");
-        controller.useNewton(color, playerId, directions, amount);
-    }
+
 
     @Override
-    public void useTeleport(Color color, int r, int c) {
-        LOGGER.info("Virtual View id: " + this.playerId + "received useTeleport and calling it on the controller.");
-        controller.useTeleport(color, r, c);
+    public void doAction(JsonAction jsonAction) {
 
+        controller.doAction(jsonAction);
     }
 
     @Override

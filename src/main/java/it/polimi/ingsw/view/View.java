@@ -8,6 +8,8 @@ import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.socket.SocketClient;
 import it.polimi.ingsw.view.GUI.Gui;
+import it.polimi.ingsw.view.actions.JsonAction;
+import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
@@ -178,6 +180,11 @@ public class View implements ViewInterface {
         userInterface.startReload();
     }
 
+    @Override
+    public void doAction(JsonAction jsonAction) {
+
+    }
+
 
     @Override
     public void startGame() {
@@ -197,16 +204,6 @@ public class View implements ViewInterface {
         LOGGER.log(level, "[View] send spawn command to server with PowerUp: {0}", powerUp);
         clientToVView.spawn(powerUp);
 
-    }
-
-    @Override
-    public void useNewton(Color color, int playerId, Directions directions, int amount) {
-        clientToVView.useNewton(color, playerId, directions, amount);
-    }
-
-    @Override
-    public void useTeleport(Color color, int r, int c) {
-        clientToVView.useTeleport(color, r, c);
     }
 
     @Override

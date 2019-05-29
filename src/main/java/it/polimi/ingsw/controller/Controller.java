@@ -8,11 +8,14 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.Directions;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.model.powerup.Teleporter;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.view.actions.JsonAction;
+import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
@@ -63,6 +66,12 @@ public class Controller {
     private List<VirtualView> players;
 
     private final Observers observers;
+
+    // Methods Classes
+
+    private SpawnPhase spawnPhase = new SpawnPhase(this);
+
+    private PowerUpPhase powerUpPhase = new PowerUpPhase(this);
 
 
 
@@ -124,6 +133,8 @@ public class Controller {
     }
 
 
+    // Getters
+
     public Model getModel() {
         return model;
     }
@@ -136,7 +147,21 @@ public class Controller {
         return new ArrayList<>(players);
     }
 
+    public TurnPhase getTurnPhase() {
+        return turnPhase;
+    }
 
+    public int getCurrentPlayer(){
+
+        if(roundNumber == 0){
+            return 0;
+        }
+
+        return roundNumber % players.size();
+    }
+
+
+    // management Methods
 
     /**
      *
@@ -164,8 +189,6 @@ public class Controller {
     }
 
 
-    // management Methods
-
     /**
      *
      * @param name
@@ -173,10 +196,11 @@ public class Controller {
      */
     public int findPlayerByName(String name) {
 
-        List<String>nameList = model.getGame()
+        List<String>nameList = Model
+                .getGame()
                 .getPlayers()
                 .stream()
-                .map(player -> player.getPlayerName())
+                .map(Player::getPlayerName)
                 .collect(Collectors.toList());
 
         try {
@@ -194,6 +218,11 @@ public class Controller {
         }
     }
 
+    /**
+     *
+     * @param playerId is the id of the given player
+     * @return the name of the given player
+     */
     public String getPlayerName(int playerId){
 
         try {
@@ -206,32 +235,11 @@ public class Controller {
         }
     }
 
-    public TurnPhase getTurnPhase() {
-        return turnPhase;
-    }
 
-    /**
-     *
-     * @return and integer representing the id index of the virtualView representing the current playing player
-     */
-    private int getCurrentPlayer(){
+    public void setPlayerOnline(int playerId){ Model.getPlayer(playerId).getStats().setOnline(true); }
 
-        if(roundNumber == 0){
-            return 0;
-        }
+    public void setPlayerOffline(int playerId){ Model.getPlayer(playerId).getStats().setOnline(false); }
 
-        return roundNumber % players.size();
-    }
-
-    public void setPlayerOnline(int playerId){
-
-        Model.getPlayer(playerId).getStats().setOnline(true);
-    }
-
-    public void setPlayerOffline(int playerId){
-
-        Model.getPlayer(playerId).getStats().setOnline(false);
-    }
 
 
     // Turn Management
@@ -256,12 +264,12 @@ public class Controller {
             //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
             //the last phase (ACTION) will increment roundNumber
             case SPAWN:
-                handleSpawn();
+                spawnPhase.handleSpawn();
                 //increment phase should be done by the virtual view, who calls the function spawn
                 break;
 
             case POWERUP1:
-                handlePowerUp();
+                powerUpPhase.handlePowerUp();
                 break;
 
             case ACTION1:
@@ -269,7 +277,7 @@ public class Controller {
                 break;
 
             case POWERUP2:
-                handlePowerUp();
+                powerUpPhase.handlePowerUp();
                 break;
 
             case ACTION2:
@@ -277,7 +285,7 @@ public class Controller {
                 break;
 
             case POWERUP3:
-                handlePowerUp();
+                powerUpPhase.handlePowerUp();
                 break;
 
             case RELOAD:
@@ -292,41 +300,48 @@ public class Controller {
         }
     }
 
-    public void handleSpawn(){
 
-        if(Model.getPlayer(getCurrentPlayer()).getStats().getCurrentPosition() != null) {
-            //if player has already spawned it skips this phase
-            LOGGER.info("[CONTROLLER] skipping SPAWN phase for player: " +getCurrentPlayer());
-            incrementPhase();
+    public void incrementPhase(){
+        turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
+        handleTurnPhase();
+    }
 
-        } else if (Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().isEmpty()) {
+    // Spawn Phase
 
-            //if currentPlayer already has 0 powerups in hand -> draw 2
-            LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
-            drawPowerUp();
-            LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
-            drawPowerUp();
-            LOGGER.info("[CONTROLLER] calling startPhase0 for virtual view id: " + getCurrentPlayer());
-            players.get(getCurrentPlayer()).startSpawn();
+    public void spawn(PowerUpType type, Color color){ spawnPhase.spawn(type,color); }
 
-        } else {
 
-            //if currentPlayer already has more thean 0 -> draw only 1
-            LOGGER.info("[CONTROLLER] accessing Model to drawPowerUp for player: " + getCurrentPlayer());
-            drawPowerUp();
-            LOGGER.info("[CONTROLLER] calling startPhase0 for virtual view id: " + getCurrentPlayer());
-            players.get(getCurrentPlayer()).startSpawn();
+    // Power Up
+
+    public void drawPowerUp(){
+        Model.getPlayer(getCurrentPlayer()).drawPowerUp();
+    }
+
+    public void discardPowerUp(PowerUpType type, Color color){ powerUpPhase.discardPowerUp(type,color);}
+
+    public void doAction(JsonAction jsonAction) {
+
+        switch (jsonAction.getType()){
+
+            case POWER_UP:
+
+                powerUpPhase.usePowerUp((PowerUpAction) jsonAction);
+
+                break;
+
+            case MOVE:
+
+                //TODO move
+
+                break;
+
+            default:
+
+                break;
         }
     }
 
-    public void handlePowerUp(){
-        //if current player hasn't got any PowerUp in hand -> skip this phase
-        if(Model.getPlayer(getCurrentPlayer()).getPowerUpBag().getList().isEmpty()){
-            incrementPhase();
-        }else{
-            players.get(getCurrentPlayer()).startPowerUp();
-        }
-    }
+
 
     public void handleAction(){
         players.get(getCurrentPlayer()).startAction();
@@ -336,42 +351,6 @@ public class Controller {
         players.get(getCurrentPlayer()).startReload();
     }
 
-    /*
-     *Here there should be atomic functions which will be used by the main handlePhase() method
-     */
-
-    private void drawPowerUp(){
-        Model.getPlayer(getCurrentPlayer()).drawPowerUp();
-    }
-
-    private void discardPowerUp(PowerUpType type, Color color){
-        Model.getPlayer(getCurrentPlayer()).getPowerUpBag()
-                .sellItem(Model.getPlayer(getCurrentPlayer()).getPowerUpBag().findItem(type, color));
-
-    }
-
-    public void spawn(PowerUpType type, Color color){
-        LOGGER.info("[CONTROLLER] accessing Model to discard PowerUp for player: " + getCurrentPlayer());
-        discardPowerUp(type, color);
-        Model.getPlayer(getCurrentPlayer()).setPlayerPos(Model.getMap().getSpawnCell(color));
-        LOGGER.info("[CONTROLLER] incrementingGamePhase: " + getTurnPhase() );
-        incrementPhase();
-        LOGGER.info("[CONTROLLER] new Phase: " + getTurnPhase());
-    }
-
-    public void useNewton(Color color, int playerID, Directions d, int amount){
-        //TODO check if exception logic is viable
-        LOGGER.info("[CONTROLLER] player id: " + getCurrentPlayer() + "calling useNewton");
-
-        try {
-            Newton n = (Newton) Model.getPlayer(getCurrentPlayer()).getPowerUpBag().findItem(NEWTON, color);
-            n.use(Model.getPlayer(playerID), d, amount);
-        } catch(PlayerNonExistentException e){
-            //can be validated inside client so that he can send only existent players
-        } catch(CellNonExistentException e){
-            //same as before
-        }
-    }
 
     public void useTeleport(Color color, int r, int c){
         //TODO check if exception logic is viable
@@ -427,8 +406,5 @@ public class Controller {
         incrementPhase();
     }
 
-    public void incrementPhase(){
-        turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
-        handleTurnPhase();
-    }
+
 }

@@ -1,8 +1,17 @@
 package it.polimi.ingsw.network.socket;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.networkexceptions.*;
+import it.polimi.ingsw.view.actions.Grab;
+import it.polimi.ingsw.view.actions.JsonAction;
+import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.actions.ShootAction;
+import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
+import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
+import it.polimi.ingsw.view.actions.usepowerup.ScopeAction;
+import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -101,8 +110,12 @@ public class SocketConnectionReader extends Thread {
                 while(true) {
 
                     String msg = input.readLine();
-                    if(msg != null)
+                    if(msg != null) {
+
+                        if (msg.startsWith("{"))
+
                         handleMsg(splitCommand(msg));
+                    }
                 }
 
 
@@ -208,6 +221,90 @@ public class SocketConnectionReader extends Thread {
         headersMap.put("pong", () -> {
             LOGGER.log(INFO, "Client reply to ping: " + commands[1]);
         });
+    }
+
+
+    private void handleJson(String message){
+
+        // get the type of the class contained in the UpdateClass
+
+        String[] values = message.split("," );
+
+        // LOG the update
+
+        LOGGER.log(level, "[DEBUG] [SOCKET-CONN-READER] Received Json {0} : Calling handleJson method. ", values[values.length - 1 ]);
+
+        JsonAction jsonAction = null;
+        Gson gson = new Gson();
+
+        switch (values[values.length - 1]){
+
+            case "\"actionType\":\"POWER_UP\"":
+
+                switch (values[values.length - 2]){
+
+                    case "\"powerUpType\":\"NEWTON\"":
+
+                        jsonAction = gson.fromJson(message, NewtonAction.class);
+
+                        break;
+
+                    case "\"powerUpType\":\"TELEPORTER\"":
+
+                        jsonAction = gson.fromJson(message, TeleporterAction.class);
+
+                        break;
+
+                    case "\"powerUpType\":\"TAG_BACK_GRENADE\"":
+
+                        jsonAction = gson.fromJson(message, GrenadeAction.class);
+
+                        break;
+
+                    case "\"powerUpType\":\"TARGETING_SCOPE\"":
+
+                        jsonAction = gson.fromJson(message, ScopeAction.class);
+
+                        break;
+
+                    default:
+
+                        LOGGER.log(WARNING,"[SOCKET-CONN-READER] unknown PowerUp Type ");
+
+                        break;
+                }
+
+                break;
+
+            case "\"actionType\":\"MOVE\"":
+
+                jsonAction = gson.fromJson(message, Move.class);
+
+                break;
+
+            case "\"actionType\":\"GRAB\"":
+
+                jsonAction = gson.fromJson(message, Grab.class);
+
+                break;
+
+            case "\"actionType\":\"SHOOT\"":
+
+                jsonAction = gson.fromJson(message, ShootAction.class);
+
+                break;
+
+
+            default:
+
+                LOGGER.log(WARNING,"[SOCKET-CONN-READER] Unknown Action Type ");
+
+                break;
+        }
+
+        LOGGER.log(level,"[SOCKET-CONN-READER] Forwarding Action to controller : {0}  ", jsonAction );
+
+        Server.getController().doAction(jsonAction);
     }
 
 }

@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.jsonconfig.Config;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.io.BufferedReader;
@@ -158,6 +159,9 @@ public class RMIClient extends Client {
         }
     }
 
+
+    // Getter
+
     private ToServer getServer(){
 
         try {
@@ -178,6 +182,11 @@ public class RMIClient extends Client {
 
         return null;
     }
+
+    public View getView() {
+        return view;
+    }
+
 
 
     // connection
@@ -342,9 +351,7 @@ public class RMIClient extends Client {
         return -1;
     }
 
-    public View getView() {
-        return view;
-    }
+
 
 
 
@@ -370,17 +377,22 @@ public class RMIClient extends Client {
     }
 
     @Override
-    public void useNewton(Color color, int playerId, Directions directions, int amount) {
-        //TODO forward this function to view to handle useNewton function invocation
-    }
-
-    @Override
-    public void useTeleport(Color color, int r, int c) {
-        //TODO forward this function to view to handle useTeleport function invocation
-    }
-
-    @Override
     public void useMarker(Color color, int playerId) {
         //TODO forward this function to view to handle useMarker function invocation
+    }
+
+    @Override
+    public void doAction(JsonAction jsonAction) {
+
+        try {
+
+            ToServer server = getServer();
+
+            server.doAction(jsonAction);
+
+        }catch (RemoteException e){
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
     }
 }

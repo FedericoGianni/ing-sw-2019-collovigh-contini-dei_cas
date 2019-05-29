@@ -16,11 +16,4 @@ public class TargetingScope extends PowerUp {
         this.setType(PowerUpType.TARGETING_SCOPE);
     }
 
-    /**
-     * need to be implemented
-     */
-    public void use() {
-
-    }
-
 }

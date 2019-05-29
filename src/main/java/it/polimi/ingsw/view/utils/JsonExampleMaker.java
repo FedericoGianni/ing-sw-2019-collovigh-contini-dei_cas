@@ -4,13 +4,17 @@ import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.PowerUpBag;
 import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.TagbackGrenade;
+import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
+import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
@@ -27,8 +31,8 @@ public class JsonExampleMaker {
 
     public static void main(String[] args) {
 
-        writeInitialUpdate();
-        writeInitialUpdateClass();
+        writeUsePowerUp();
+        writeMove();
 
 
     }
@@ -96,7 +100,7 @@ public class JsonExampleMaker {
             moves.add("n");
             moves.add("w");
 
-            Move move = new Move(finalpos, moves);
+            Move move = new Move(moves,finalpos);
 
             FileWriter writer = new FileWriter("resources/json/jsonComunication/move.json");
 
@@ -269,6 +273,29 @@ public class JsonExampleMaker {
 
 
             gson.toJson(cbag, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void writeUsePowerUp(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            JsonAction jsonAction = new NewtonAction(Color.BLUE,0,2, Directions.NORTH);
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/usePowerUp.json");
+
+
+            gson.toJson(jsonAction, writer);
 
             writer.flush();
             writer.close();

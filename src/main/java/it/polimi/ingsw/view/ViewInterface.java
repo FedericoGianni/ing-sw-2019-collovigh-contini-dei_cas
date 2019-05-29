@@ -2,6 +2,8 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
+import it.polimi.ingsw.view.actions.JsonAction;
+import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 
@@ -18,8 +20,6 @@ public interface ViewInterface {
 
     //POWERUP
     void startPowerUp();
-    void useNewton(Color color, int playerId, Directions directions, int amount);
-    void useTeleport(Color color, int r, int c);
     void useMarker(Color color, int playerId);
 
     //ACTION
@@ -27,5 +27,11 @@ public interface ViewInterface {
 
     //RELOAD
     void startReload();
+
+    /**
+     *  used for actions submitted by the client
+     * @param jsonAction is the action that the clients want to do
+     */
+    void doAction(JsonAction jsonAction);
 
 }

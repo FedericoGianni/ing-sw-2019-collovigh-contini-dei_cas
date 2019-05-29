@@ -3,6 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
@@ -350,11 +351,16 @@ public class CLI implements UserInterface {
         Boolean validChoice = false;
         int player;
         String direction;
+        int amount;
 
 
         do {
+
+            validChoice = false;
+
             System.out.println("Su quale giocatore vuoi usare Newton? >>> ");
             player = scanner.nextInt();
+            scanner.nextLine();
 
             if(player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
                 validChoice = true;
@@ -362,11 +368,15 @@ public class CLI implements UserInterface {
                 System.out.println(retryMessage);
         }while(!validChoice);
 
-        validChoice = false;
+
 
         do{
+
+            validChoice = false;
+
             System.out.println("In quale direzione vuoi spostare il player selezionato? (Nord, Sud, Ovest, Est) >>> ");
             direction = scanner.next().toUpperCase();
+            scanner.nextLine();
 
             if(direction.equals("NORD") || direction.equals("SUD")
                     || direction.equals("EST") || direction.equals("OVEST"))
@@ -374,8 +384,32 @@ public class CLI implements UserInterface {
             else
                 System.out.println(retryMessage);
         }while(!validChoice);
-        //TODO check amount parameter what's for and why user should choose it?
-        view.useNewton(newton.getColor(), player, Directions.valueOf(direction), 0);
+
+
+        do{
+            validChoice = false;
+
+            System.out.println("Di quanto vuoi muovere il player? (1,2) >>> ");
+            amount = scanner.nextInt();
+            scanner.nextLine();
+
+            if(amount == 1 || amount == 2 )
+
+                validChoice = true;
+
+            else
+
+                System.out.println(retryMessage);
+
+        }while(!validChoice);
+
+        // Create a NewtonAction object
+
+        NewtonAction newtonAction = new NewtonAction(newton.getColor(),player,amount,Directions.valueOf(direction));
+
+        // sends it to the Virtual view
+
+        view.doAction(newtonAction);
     }
 
     private void useTeleporter(CachedPowerUp teleporter){

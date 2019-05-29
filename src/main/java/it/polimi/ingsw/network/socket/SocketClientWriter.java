@@ -1,9 +1,11 @@
 package it.polimi.ingsw.network.socket;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.io.BufferedWriter;
@@ -27,6 +29,8 @@ public class SocketClientWriter extends Client implements Runnable {
      * PrintWriter to handle the output stream from socket
      */
     private BufferedWriter output;
+
+    Gson gson = new Gson();
 
     /**
      * Constructor
@@ -76,21 +80,20 @@ public class SocketClientWriter extends Client implements Runnable {
         //send();
     }
 
-    @Override
-    public void useNewton(Color color, int playerId, Directions directions, int amount) {
-        //TODO string to forward to SocketConnectionReader to handle useNewton function invocation
-        //send();
-    }
-
-    @Override
-    public void useTeleport(Color color, int r, int c) {
-        //TODO string to forward to SocketConnectionReader to handle useNewton function invocation
-        //send();
-    }
 
     @Override
     public void useMarker(Color color, int playerId) {
         //TODO string to forward to SocketConnectionReader to handle useNewton function invocation
         //send();
+    }
+
+    @Override
+    public void doAction(JsonAction jsonAction) {
+
+        gson = new Gson();
+
+        LOGGER.log(level,"sending ACTION string to connected client of type :  {0} ", jsonAction.getType());
+        send(gson.toJson(jsonAction));
+
     }
 }

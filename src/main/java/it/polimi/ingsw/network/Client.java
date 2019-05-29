@@ -3,6 +3,7 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 public abstract class Client {
@@ -63,8 +64,12 @@ public abstract class Client {
     //SPAWN
     public abstract void spawn(CachedPowerUp powerUp);
 
-    //POWERUP
-    public abstract void useNewton(Color color, int playerId, Directions directions, int amount);
-    public abstract void useTeleport(Color color, int r, int c);
+    //SHOOT
     public abstract void useMarker(Color color, int playerId);
+
+    /**
+     * will be used for both powerUp and Actions
+     * @param jsonAction is the action the client submits
+     */
+    public abstract void doAction(JsonAction jsonAction);
 }

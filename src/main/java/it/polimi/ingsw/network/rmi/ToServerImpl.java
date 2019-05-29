@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.*;
+import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.rmi.NoSuchObjectException;
@@ -144,20 +145,9 @@ public class ToServerImpl implements ToServer{
     }
 
     @Override
-    public void useNewton(Color color, int playerId, Directions directions, int amount) {
+    public void doAction(JsonAction jsonAction) throws RemoteException {
 
-        Server.getController().useNewton( color, playerId, directions, amount);
-
-    }
-
-    @Override
-    public void useTeleport(Color color, int r, int c) {
-
-    }
-
-    @Override
-    public void useMarker(Color color, int playerId) {
-
+        Server.getController().doAction(jsonAction);
     }
 
 
