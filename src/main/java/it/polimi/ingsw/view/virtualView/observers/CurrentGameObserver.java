@@ -32,6 +32,26 @@ public class CurrentGameObserver implements Observer {
         }
     }
 
+    @Override
+    public void updateSinge(int playerId, Object object) {
+
+        // cast the Object in its dynamic type
+
+        this.game = (CachedGame) object;
+
+        // encapsulate the update in the update Class
+
+        UpdateClass updateClass = new UpdateClass(UpdateType.GAME, game, -1);
+
+        // send the update to the selected player's virtual View
+
+        observers
+                .getController()
+                .getVirtualView(playerId)
+                .sendUpdates(updateClass);
+
+    }
+
     public void setObservers(Observers observers) {
         this.observers = observers;
     }

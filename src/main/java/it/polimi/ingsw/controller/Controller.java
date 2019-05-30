@@ -240,10 +240,15 @@ public class Controller {
     }
 
 
-    public void setPlayerOnline(int playerId){ Model.getPlayer(playerId).getStats().setOnline(true); }
+    public void setPlayerOnline(int playerId){
+
+        Model.getPlayer(playerId).getStats().setOnline(true);
+
+    }
 
     public void setPlayerOffline(int playerId){ Model.getPlayer(playerId).getStats().setOnline(false); }
 
+    public Boolean isPlayerOnline(int playerId){ return Model.getPlayer(playerId).getStats().getOnline(); }
 
 
     // Turn Management
@@ -268,28 +273,57 @@ public class Controller {
             //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
             //the last phase (ACTION) will increment roundNumber
             case SPAWN:
-                spawnPhase.handleSpawn();
-                //increment phase should be done by the virtual view, who calls the function spawn
+
+                // if the player is online calls the function on its virtual view
+
+                if (isPlayerOnline(getCurrentPlayer())) spawnPhase.handleSpawn();
+
+                // otherwise it increments the turn phase
+
+                else incrementPhase();
+
+                // increment phase if virtual view method is called will be done in the answer method
+
                 break;
 
             case POWERUP1:
-                powerUpPhase.handlePowerUp();
+
+                if (isPlayerOnline(getCurrentPlayer())) powerUpPhase.handlePowerUp();
+
+                else incrementPhase();
+
                 break;
 
             case ACTION1:
-                handleAction();
+
+                if (isPlayerOnline(getCurrentPlayer())) handleAction();
+
+                else incrementPhase();
+
                 break;
 
             case POWERUP2:
-                powerUpPhase.handlePowerUp();
+
+                if (isPlayerOnline(getCurrentPlayer())) powerUpPhase.handlePowerUp();
+
+                else incrementPhase();
+
                 break;
 
             case ACTION2:
-                handleAction();
+
+                if (isPlayerOnline(getCurrentPlayer())) handleAction();
+
+                else incrementPhase();
+
                 break;
 
             case POWERUP3:
-                powerUpPhase.handlePowerUp();
+
+                if (isPlayerOnline(getCurrentPlayer())) powerUpPhase.handlePowerUp();
+
+                else incrementPhase();
+
                 break;
 
             case RELOAD:

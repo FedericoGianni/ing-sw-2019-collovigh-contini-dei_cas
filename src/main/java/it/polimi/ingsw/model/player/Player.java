@@ -127,14 +127,6 @@ public class Player {
     }
 
     /**
-     * @return the player's powerUp list
-     */
-    public List<PowerUp> getPowerUps() {
-
-        return this.currentPowerUps.getList();
-    }
-
-    /**
      * This action will delete one powerUp from Player's inventory and add it's value to the AmmoBag
      *
      * @param powerUp is the power up that needs to be turn into AmmoCubes

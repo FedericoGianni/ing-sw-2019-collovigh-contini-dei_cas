@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.virtualView.observers;
 
 import it.polimi.ingsw.model.map.AmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedGame;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
@@ -29,6 +30,26 @@ public class AmmoCellObserver implements Observer {
 
             virtualView.sendUpdates(updateClass);
         }
+
+    }
+
+    @Override
+    public void updateSinge(int playerId, Object object) {
+
+        // cast the Object in its dynamic type
+
+        this.ammoCell = (CachedAmmoCell) object;
+
+        // encapsulate the update in the update Class
+
+        UpdateClass updateClass = new UpdateClass(UpdateType.CELL_AMMO, ammoCell, -1);
+
+        // send the update to the selected player's virtual View
+
+        observers
+                .getController()
+                .getVirtualView(playerId)
+                .sendUpdates(updateClass);
 
     }
 

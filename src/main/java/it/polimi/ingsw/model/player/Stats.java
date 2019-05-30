@@ -7,7 +7,7 @@ import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
+import it.polimi.ingsw.view.cachemodel.sendables.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -252,5 +252,45 @@ public class Stats extends Subject {
     public void setOnline(Boolean online) {
         this.online = online;
         updateAll(new CachedStats(this));
+
+        getAllMyData();
+    }
+
+    private void getAllMyData(){
+
+        int playerId = getPlayerId();
+
+        for (Player player : Model.getGame().getPlayers()){
+
+            // sends player stats
+
+            player.getStats().updateSingle(new CachedStats(player.getStats()), playerId);
+
+            // sends WeaponBag
+
+            player.getCurrentWeapons().updateSingle(new CachedWeaponBag(player.getCurrentWeapons()),playerId);
+
+            // sends AmmoBag
+
+            player.getAmmoBag().updateSingle(new CachedAmmoBag(player.getAmmoBag()),playerId);
+        }
+
+        // PowerUps can be seen only by possessor
+
+        Model.getPlayer(playerId).getPowerUpBag().updateAll(new CachedPowerUpBag(Model.getPlayer(playerId).getPowerUpBag()));
+
+        // sends Cells
+
+        for(Cell[] c : Model.getMap().getMatrix()){
+            for(Cell c2 : c){
+
+                if(c2 != null ) c2.updateSingle(c2,playerId);
+
+            }
+        }
+
+        // sends Game
+
+        Model.getGame().updateSingle(new CachedGame(Model.getGame()),playerId);
     }
 }
