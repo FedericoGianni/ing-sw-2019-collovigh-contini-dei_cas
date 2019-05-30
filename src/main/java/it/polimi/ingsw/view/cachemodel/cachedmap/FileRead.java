@@ -7,7 +7,7 @@ import java.util.Random;
 
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 
-class FileRead {
+public class FileRead {
 
     public static final int R = 19;
     public static final int C = 49;
@@ -32,7 +32,7 @@ class FileRead {
         insertPlayer(2,1,'9');
         insertPlayer(2,2,'@');
         insertPlayer(2,3, '#');
-        showBattlefield(battelfield);
+        showBattlefield();
     }
 
 
@@ -106,10 +106,10 @@ class FileRead {
 
     }
 
-    public static void showBattlefield(char[][] b){
+    public static void showBattlefield(){
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
-                switch(b[i][j]) {
+                switch(battelfield[i][j]) {
 
                     case 'H':
                         System.out.print(ANSI_RED.escape() + '╔' + ANSI_RESET.escape());
@@ -223,10 +223,18 @@ class FileRead {
                         System.out.print(" ");
                         break;
                     default:
-                        System.out.print(b[i][j]);
+                        System.out.print(battelfield[i][j]);
                 }
             }
             System.out.println();
+        }
+    }
+
+    public static void loadMap(int mapType){
+        try {
+            populateMatrixFromFile(mapType);
+        }catch (Exception e){
+
         }
     }
 

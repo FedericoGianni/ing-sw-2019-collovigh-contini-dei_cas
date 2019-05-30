@@ -1,9 +1,14 @@
 package it.polimi.ingsw.network.socket;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.networkexceptions.*;
+import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
+import it.polimi.ingsw.network.networkexceptions.GameAlreadyStartedException;
+import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
+import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
 import it.polimi.ingsw.view.actions.Grab;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
@@ -12,6 +17,7 @@ import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.ScopeAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,6 +87,8 @@ public class SocketConnectionReader extends Thread {
     public SocketConnectionWriter getSocketConnectionWriter() {
         return socketConnectionWriter;
     }
+
+    int id;
 
     /**
      * Initialize the SocketConnectionReader, creates a new SocketConnectionWriter thread and runs it, populate the
@@ -209,7 +217,7 @@ public class SocketConnectionReader extends Thread {
                 }
 
 
-                int id = Server.addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()), socketConnectionWriter);
+                id = Server.addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()), socketConnectionWriter);
                 if(id >= 0){
                     socketConnectionWriter.send("login\fOK\f"+id);
                 }
@@ -230,6 +238,12 @@ public class SocketConnectionReader extends Thread {
         //ping
         headersMap.put("pong", () -> {
             LOGGER.log(INFO, "Client reply to ping: " + commands[1]);
+        });
+
+        //spawn
+        headersMap.put("spawn", () -> {
+            LOGGER.log(INFO, "received spawn from client");
+            Server.getController().getVirtualView(id).spawn(new CachedPowerUp(PowerUpType.valueOf(commands[1]), Color.valueOf(commands[2])));
         });
     }
 

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.cachemodel;
 
-import it.polimi.ingsw.view.GUI.GuiLobbyController;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
@@ -158,6 +157,10 @@ public class CacheModel {
     public CachedGame getGame() {
 
         return game;
+    }
+
+    public CachedMap getCachedMap() {
+        return cachedMap;
     }
 
     /*

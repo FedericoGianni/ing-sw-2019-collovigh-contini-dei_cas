@@ -7,6 +7,7 @@ import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.Player;
+import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 
 import java.util.List;
@@ -21,8 +22,6 @@ public class CLI implements UserInterface {
     private final View view;
     public static final String DEFAULT_NAME_ALREADY_TAKEN = "NAME_ALREADY_TAKEN";
     public static final String DEFAULT_COLOR_ALREADY_TAKEN = "COLOR_ALREADY_TAKEN";
-    //private SocketClientReader socketClientReader;
-    //private SocketClientWriter socketClientWriter;
 
     /**
      * Default constructor
@@ -32,15 +31,6 @@ public class CLI implements UserInterface {
         this.view = view;
         //this.socketClientWriter = s.getScw();
     }
-
-    /*
-    public CLI(SocketClient s) {
-        this.socketClientReader = s.getScr();
-        this.socketClientWriter = s.getScw();
-        this.view = null;
-    }*/
-
-
 
     // start Ui methods
 
@@ -75,7 +65,6 @@ public class CLI implements UserInterface {
                 break;
 
             default:
-
                 System.out.println("OPS: qualcosa è andato storto");
                 break;
         }
@@ -103,7 +92,7 @@ public class CLI implements UserInterface {
 
         do {
 
-            System.out.println("Digita: \n 1 -> Nuova Partita \n 2 -> Riconnessione a partita già iniziata \n 3 -> Load a saved Game");
+            System.out.println("Digita: \n 1 -> Nuova Partita \n 2 -> Riconnessione a partita già iniziata \n 3 -> Carica una partita salvata");
 
             choice = scanner.nextInt();
             scanner.nextLine();
@@ -162,41 +151,7 @@ public class CLI implements UserInterface {
 
 
         view.joinGame(playerName, PlayerColor.valueOf(playerColor.toUpperCase()));
-        //socketClientWriter.send("login" + "\f" + playerName + "\f" + playerColor);
-
     }
-
-    public  void show(String s){
-        new Thread(() ->
-            System.out.println(s)
-        ).start();
-    }
-
-    @Override
-    public void notifyUpdate(UpdateType updateType, int playerId) {
-
-        switch (updateType){
-
-            case LOBBY:
-
-                List<String> names = view.getCacheModel()
-                        .getCachedPlayers()
-                        .stream()
-                        .map(Player::getName)
-                        .collect(Collectors.toList());
-
-                System.out.println("Player connessi : " + names );
-
-                break;
-
-            default:
-
-                break;
-        }
-
-
-    }
-
 
     @Override
     public void retryLogin(String error) {
@@ -224,6 +179,81 @@ public class CLI implements UserInterface {
 
     }
 
+    public  void show(String s){
+        new Thread(() ->
+            System.out.println(s)
+        ).start();
+    }
+
+    @Override
+    public void notifyUpdate(UpdateType updateType, int playerId) {
+
+        switch (updateType){
+
+            case LOBBY:
+
+                List<String> names = view.getCacheModel()
+                        .getCachedPlayers()
+                        .stream()
+                        .map(Player::getName)
+                        .collect(Collectors.toList());
+
+                System.out.println("[LOBBY] Player connessi : " + names );
+
+                break;
+
+            case INITIAL:
+                //TODO mostrare quali colori hanno preso i giocatori?
+                FileRead.loadMap(view.getCacheModel().getMapType());
+                FileRead.showBattlefield();
+                break;
+
+            case STATS:
+                //TODO mostrare i cambiamenti nelle posizioni sulla mappa, danni subiti e disconnessioni
+
+                //new positions
+                int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
+                int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
+
+                FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
+                FileRead.showBattlefield();
+                break;
+
+            case POWERUP_BAG:
+
+                break;
+
+            case WEAPON_BAG:
+
+                break;
+
+            case AMMO_BAG:
+
+                break;
+
+            case GAME:
+
+                break;
+
+            case SPAWN_CELL:
+
+                break;
+
+            case CELL_AMMO:
+
+                break;
+
+
+
+            default:
+
+                break;
+        }
+
+
+    }
+
+
     @Override
     public void startGame() {
         System.out.println("Gioco iniziato!");
@@ -242,10 +272,10 @@ public class CLI implements UserInterface {
         do{
 
             while(view.getCacheModel().getCachedPlayers().size() <= 0) {
-                System.out.println("Waiting for InitialUpdate");
+                System.out.println("Attendi ricezione dell'update iniziale...");
 
                 try {
-                    sleep(2000);
+                    sleep(200);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -253,7 +283,7 @@ public class CLI implements UserInterface {
 
             while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()){
 
-                System.out.println("Waiting for powerUp");
+                System.out.println("Attendi ricezione dei PowerUp pescati...");
             }
 
             powerUps = view
@@ -271,7 +301,7 @@ public class CLI implements UserInterface {
 
             }
 
-            System.out.println("scegli un powerUp da scartare: ");
+            System.out.println("Scegli un powerUp da scartare: ");
             read = scanner.nextInt();
             scanner.nextLine();
 

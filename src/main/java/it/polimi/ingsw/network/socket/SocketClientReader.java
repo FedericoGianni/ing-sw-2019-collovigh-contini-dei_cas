@@ -30,7 +30,7 @@ import static java.util.logging.Level.WARNING;
 public class SocketClientReader extends Thread {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.INFO;
+    private static Level level = Level.FINE;
 
     Gson gson = new Gson();
     UpdateClass update;
@@ -340,7 +340,7 @@ public class SocketClientReader extends Thread {
 
         //ping
         headersMap.put("ping", () -> {
-            System.out.println("[DEBUG] Ricevuta ping request dal server.");
+            //System.out.println("[DEBUG] Ricevuta ping request dal server.");
             //scw.send("pong\f" + scw.getPlayerId());
         });
 

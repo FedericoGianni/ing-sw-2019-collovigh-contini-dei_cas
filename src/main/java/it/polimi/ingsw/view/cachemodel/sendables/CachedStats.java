@@ -48,4 +48,12 @@ public class CachedStats implements Serializable, Update {
     public Point getCurrentPosition() {
         return currentPosition;
     }
+
+    public int getCurrentPosX() {
+        return (int) currentPosition.getX();
+    }
+
+    public int getCurrentPosY() {
+        return (int) currentPosition.getY();
+    }
 }

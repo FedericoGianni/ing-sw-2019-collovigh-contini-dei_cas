@@ -3,12 +3,10 @@ package it.polimi.ingsw.view.virtualView;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.ViewInterface;
 import it.polimi.ingsw.view.actions.JsonAction;
-import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 
@@ -131,8 +129,6 @@ public class VirtualView implements ViewInterface {
     public void spawn(CachedPowerUp powerUp) {
         controller.spawn(powerUp.getType(),powerUp.getColor());
     }
-
-
 
     @Override
     public void doAction(JsonAction jsonAction) {

@@ -2,7 +2,6 @@ package it.polimi.ingsw.network.socket;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.view.actions.JsonAction;
@@ -77,7 +76,7 @@ public class SocketClientWriter extends Client implements Runnable {
     @Override
     public void spawn(CachedPowerUp powerUp) {
         //TODO string to send PowerUp chosen by the player to discard at SPAWN phase
-        //send();
+        send("spawn"+"\f"+powerUp.getType()+"\f"+powerUp.getColor());
     }
 
 
