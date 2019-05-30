@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.cachemodel;
 
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
+import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
 import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
@@ -78,6 +79,11 @@ public class CacheModel {
                 update((InitialUpdate) updateClass.getUpdate());
 
                 view.getUserInterface().notifyUpdate(UpdateType.INITIAL, updateClass.getPlayerId());
+
+                //cli PlayerColors
+                for(int i = 0; i < getCachedPlayers().size(); i++) {
+                    FileRead.addPlayerColor(getCachedPlayers().get(i).getPlayerColor());
+                }
 
                 break;
 

@@ -47,7 +47,9 @@ public class CLI implements UserInterface {
 
         int connectionType;
 
-        System.out.println("Ciao ! \n Benvenuto in ADRENALINA");
+        FileRead.showWelcome();
+
+        System.out.println("\nCiao! \n Benvenuto in ADRENALINA");
 
         do {
 
@@ -210,13 +212,16 @@ public class CLI implements UserInterface {
             case INITIAL:
                 //TODO mostrare quali colori hanno preso i giocatori?
                 FileRead.loadMap(view.getCacheModel().getMapType());
-                FileRead.showBattlefield();
+                System.out.println("Ho scelto casualmente la mappa di tipo: " + view.getCacheModel().getMapType());
+                //FileRead.showBattlefield();
                 break;
 
             case STATS:
                 //TODO mostrare i cambiamenti nelle posizioni sulla mappa, danni subiti e disconnessioni
+                System.out.println("[DEBUG] Ricevuto STATS update!");
 
                 //new positions
+                System.out.println("Il giocatore: " + playerId + " si è spostato!");
                 int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                 int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 

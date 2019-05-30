@@ -1,8 +1,11 @@
 package it.polimi.ingsw.view.cachemodel.cachedmap;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
+import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
@@ -11,15 +14,24 @@ public class FileRead {
 
     public static final int R = 19;
     public static final int C = 49;
+    public static final int R_W = 4;
+    public static final int C_W = 52;
+
+
     private static char battelfield[][] = new char[R][C];
+    private static char welcome[][] = new char[R_W][C_W];
+    private static List<AsciiColor> playerColorList = new ArrayList<>();
 
 
     public static void main(String args[]) {
         try {
             populateMatrixFromFile(3);
+
         }catch (Exception e){
             e.getMessage();
         }
+
+        showWelcome();
 
         insertPlayer(0,0,'1');
         insertPlayer(0,1,'2');
@@ -33,6 +45,7 @@ public class FileRead {
         insertPlayer(2,2,'@');
         insertPlayer(2,3, '#');
         showBattlefield();
+
     }
 
 
@@ -222,6 +235,21 @@ public class FileRead {
                     case 'ì':
                         System.out.print(" ");
                         break;
+                    case '0':
+                        System.out.print(playerColorList.get(0).escape() + '0' + ANSI_RESET.escape());
+                        break;
+                    case '1':
+                        System.out.print(playerColorList.get(1).escape() + '1' + ANSI_RESET.escape());
+                        break;
+                    case '2':
+                        System.out.print(playerColorList.get(2).escape() + '2' + ANSI_RESET.escape());
+                        break;
+                    case '3':
+                        System.out.print(playerColorList.get(3).escape() + '3' + ANSI_RESET.escape());
+                        break;
+                    case '4':
+                        System.out.print(playerColorList.get(4).escape() + '4' + ANSI_RESET.escape());
+                        break;
                     default:
                         System.out.print(battelfield[i][j]);
                 }
@@ -246,4 +274,86 @@ public class FileRead {
     public static void showMessage(String msg){
         System.out.println(msg);
     }
+
+
+    public static void populateWelcome() {
+        try {
+            // Open the file that is the first
+            // command line parameter
+            String path;
+            path = new File("resources/map/welcome.txt").getAbsolutePath();
+
+            FileInputStream fstream = new FileInputStream(path);
+            // Get the object of DataInputStream
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String strLine;
+            //Read File Line By Line
+            int r = 0;
+            int cl = 0;
+            while ((strLine = br.readLine()) != null) {
+
+                // Print the content on the console
+                for (int i = 0; i < C_W; i++) {
+                    if(strLine.charAt(i) == '\n'){
+                        welcome[r][i] = '\n';
+                    } else
+                        welcome[r][i] = strLine.charAt(i);
+                }
+                r++;
+            }
+
+            //Close the input stream
+            in.close();
+        } catch (Exception e) {//Catch exception if any
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+
+    public static void showWelcome(){
+        populateWelcome();
+        for (int i = 0; i < R_W; i++) {
+            for (int j = 0; j < C_W; j++) {
+                switch (welcome[i][j]){
+
+                    case '*':
+                        System.out.print(" ");
+                        break;
+
+                    default:
+                        System.out.print(ANSI_YELLOW.escape() + welcome[i][j] + ANSI_RESET.escape());
+                }
+
+                }
+            System.out.println();
+        }
+    }
+
+    //need ordered calls by playerid
+    public static void addPlayerColor(PlayerColor color){
+        //System.out.println("[DEBUG] CALLED addPlayerColor from WaitingRoom");
+
+        switch (color){
+            case BLUE:
+                playerColorList.add(ANSI_BLUE);
+                break;
+
+            case GREY:
+                playerColorList.add(ANSI_WHITE);
+                break;
+
+            case PURPLE:
+                playerColorList.add(ANSI_PURPLE);
+                break;
+
+            case YELLOW:
+                playerColorList.add(ANSI_YELLOW);
+                break;
+
+            case GREEN:
+                playerColorList.add(ANSI_GREEN);
+                break;
+        }
+    }
+
 }
