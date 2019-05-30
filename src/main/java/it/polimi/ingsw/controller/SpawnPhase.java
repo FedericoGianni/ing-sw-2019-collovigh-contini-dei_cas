@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 
 import java.util.logging.Level;
@@ -24,10 +25,20 @@ public class SpawnPhase {
 
     public void handleSpawn(){
 
+
+
         String drawString = "[CONTROLLER - Spawn] accessing Model to drawPowerUp for player: " + controller.getCurrentPlayer();
         String spawnString = "[CONTROLLER - Spawn] calling startPhase0 for virtual view id: " + controller.getCurrentPlayer();
 
-        if(Model.getPlayer(controller.getCurrentPlayer()).getStats().getCurrentPosition() != null) {
+        if (!controller.isPlayerOnline(controller.getCurrentPlayer())){
+
+            // if the player is not online skips the phase and do default spawn
+
+            defaultSpawn();
+
+            controller.incrementPhase();
+
+        } else if(Model.getPlayer(controller.getCurrentPlayer()).getStats().getCurrentPosition() != null) {
 
             //if player has already spawned it skips this phase
 
@@ -56,7 +67,21 @@ public class SpawnPhase {
         }
     }
 
+    public void defaultSpawn(){
 
+        controller.drawPowerUp();
+        controller.drawPowerUp();
+
+        // discard the first one
+
+        PowerUp powerUp = Model
+                .getPlayer(controller.getCurrentPlayer())
+                .getPowerUpBag()
+                .getList()
+                .get(0);
+
+        spawn(powerUp.getType(), powerUp.getColor());
+    }
 
 
     public void spawn(PowerUpType type, Color color){

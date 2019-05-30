@@ -376,6 +376,12 @@ public class SocketClientReader extends Thread {
             RunClient.getView().startReload();
         });
 
+        //askGrenade
+        headersMap.put("askGrenade", () -> {
+            LOGGER.log(level,"[Socket-Client-Reader] received askGrenade by server");
+            RunClient.getView().askGrenade();
+        });
+
     }
 
 

@@ -2,14 +2,19 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.view.actions.JsonAction;
+import it.polimi.ingsw.view.actions.SkipAction;
+import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
+import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -321,8 +326,8 @@ public class CLI implements UserInterface {
 
     @Override
     public void startPowerUp(){
-        //System.out.println("[DEBUG] PHASE startPowerUp1");
-        System.out.println("POWERUP PHASE");
+        System.out.println("[DEBUG] startPowerUp");
+
 
         List<CachedPowerUp> powerUps;
         Boolean validChoice = false;
@@ -335,7 +340,10 @@ public class CLI implements UserInterface {
                     .getCachedPlayers()
                     .get(view.getPlayerId())
                     .getPowerUpBag()
-                    .getPowerUpList();
+                    .getPowerUpList()
+                    .stream()
+                    .filter( x -> (( x.getType() != PowerUpType.TAG_BACK_GRENADE ) && ( x.getType() != PowerUpType.TARGETING_SCOPE )))
+                    .collect(Collectors.toList());
 
             System.out.println("Hai questi PowerUp:");
 
@@ -343,15 +351,71 @@ public class CLI implements UserInterface {
                 System.out.println( i + powerUps.get(i).toString());
             }
 
+            System.out.println("9 -> non usare powerUp");
+
             System.out.println("Scegli un powerUp da usare: ");
             read = scanner.nextInt();
             scanner.nextLine();
 
-            if (read >= 0 && read < powerUps.size()) validChoice = true;
+            if ((read >= 0 && read < powerUps.size()) || ( read == 9)) validChoice = true;
 
         }while(!validChoice);
 
-        usePowerUp(powerUps.get(read));
+        if ( read == 9){
+
+            // if the user types 9 -> end of powerUp phase
+
+            view.doAction(new SkipAction());
+
+        }else usePowerUp(powerUps.get(read));
+
+
+    }
+
+    @Override
+    public void askGrenade() {
+
+        Boolean valid;
+        Integer choice;
+
+        List<CachedPowerUp> grenades = view
+                .getCacheModel()
+                .getCachedPlayers()
+                .get(view.getPlayerId())
+                .getPowerUpBag()
+                .getPowerUpList()
+                .stream()
+                .filter( x ->  x.getType().equals(PowerUpType.TAG_BACK_GRENADE))
+                .collect(Collectors.toList());
+
+        do {
+
+            valid =false;
+
+            System.out.println("Ti hanno sparato: vuoi usare una granata ? \n hai queste granate: ");
+
+            for (int i = 0; i < grenades.size(); i++) {
+
+                System.out.println( i + grenades.get(i).toString());
+
+            }
+
+            System.out.println("Digita il numero della carta che vuoi usare o '9' per non usarne nessuna : ");
+
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 9 || (choice >= 0 && choice < 3 )) valid = true;
+
+
+        }while (!valid);
+
+        // if the player choose not to use grenades a grenadeAction will be also sent, but will have color null
+
+        if (choice == 9) view.doAction(new GrenadeAction(null,view.getPlayerId()));
+        else view.doAction(new GrenadeAction(grenades.get(choice).getColor(),view.getPlayerId()));
+
+
 
     }
 
@@ -450,28 +514,18 @@ public class CLI implements UserInterface {
 
     private void useTeleporter(CachedPowerUp teleporter){
 
-        int player;
-        Boolean validChoice = false;
+        Boolean validChoice;
         int r;
         int c;
 
         do{
-            System.out.println("Su quale giocatore vuoi usare Teleporter? >>> ");
-            player = scanner.nextInt();
 
-            if(player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
-                validChoice = true;
-            else
-                System.out.println("Scelta non valida. Riprova.");
+            validChoice = false;
 
-        }while(!validChoice);
+            System.out.println("In quale cella vuoi andare ? >>> ");
 
-        validChoice = false;
-
-        do{
-            System.out.println("In quale cella vuoi spostare il giocatore selezionato? >>> ");
-            //TODO when the cachedModel will have Map find a better method to get this cell
             //this way you have to check locally if r,c is ok for every different type of map
+
             System.out.println("riga >>> (0,1,2)");
 
             r = scanner.nextInt();
@@ -482,17 +536,21 @@ public class CLI implements UserInterface {
             c = scanner.nextInt();
             scanner.nextLine();
 
-            if(r >= 0 && r <= 2 && c >= 0 && c <= 3){
-                validChoice = true;
+            if(view.getCacheModel().getCachedMap().getCachedCell(r,c).equals(null)){
+
+                System.out.println("Cella non esistente. Riprova: ");
+
             } else {
-                System.out.println("Cella non valida. Riprova.");
+
+                validChoice = true;
+
             }
 
         }while(!validChoice);
 
 
-        //TODO @Dav idk how you want to handle this doAction, but this way it's always null
-        JsonAction jsonAction = null;
+
+        JsonAction jsonAction = new TeleporterAction(teleporter.getColor(),new Point(c,r));
 
         view.doAction(jsonAction);
 

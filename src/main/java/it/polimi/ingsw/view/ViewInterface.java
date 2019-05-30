@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.view.actions.JsonAction;
-import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
 
@@ -20,10 +18,11 @@ public interface ViewInterface {
 
     //POWERUP
     void startPowerUp();
-    void useMarker(Color color, int playerId);
+    void askGrenade();
 
     //ACTION
     void startAction();
+    void useMarker(Color color, int playerId);
 
     //RELOAD
     void startReload();

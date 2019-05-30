@@ -40,7 +40,12 @@ public class PowerUpPhase {
 
         int currentPlayer = controller.getCurrentPlayer();
 
-        if(!hasPowerUpPhase()){
+        if (controller.isPlayerOnline(currentPlayer)){
+
+            // if the player is not online skips the turn
+
+            controller.incrementPhase();
+        }else if(!hasPowerUpPhase()){
 
             //if current player hasn't got any usable PowerUp in hand  ( Newton or Teleporter ) -> skip this phase
 
@@ -55,17 +60,26 @@ public class PowerUpPhase {
 
     public void askGrenadeToShot(){
 
-        for (Integer playerId: controller.getShotPlayerThisTurn()){
+        if (!controller.getShotPlayerThisTurn().isEmpty()) {
 
-            if (hasGrenade(playerId)){
+            int playerId = controller.getShotPlayerThisTurn().get(0);
 
-                //TODO controller.getVirtualView(playerId).askGrenade()
+            if (hasGrenade(playerId)) {
+
+                controller.getVirtualView(playerId).askGrenade();
+
+            }else {
+
+                // if the player does not have the grenades it gets removed from the list and skipped
+
+                controller.getShotPlayerThisTurn().remove(0);
+
+                askGrenadeToShot();
             }
+
         }
 
-        // clears the list
 
-        controller.getShotPlayerThisTurn().clear();
     }
 
     // Client -> Server flow
@@ -123,6 +137,10 @@ public class PowerUpPhase {
 
             discardPowerUp(newtonAction.getPowerUpType(),newtonAction.getColor());
 
+            // calls again the handlePowerUp functions in case the player wants to use another
+
+            handlePowerUp();
+
         } catch(Exception e){
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
@@ -158,6 +176,10 @@ public class PowerUpPhase {
 
             discardPowerUp( teleporterAction.getPowerUpType(), teleporterAction.getColor());
 
+            // calls again the handlePowerUp functions in case the player wants to use another
+
+            handlePowerUp();
+
 
         } catch (CardNotPossessedException e){
 
@@ -176,28 +198,54 @@ public class PowerUpPhase {
 
         LOGGER.log(level, "[CONTROLLER - PowerUp] player w/ id: {0} was shot and responded with a grenade", grenadeAction.getPossessorId() );
 
-        try {
+        if (grenadeAction.getColor().equals(null)){
 
-            // Locate the powerUp in the model
+            //if the player choose to not use the grenade the color will be set to null:
 
-            TagbackGrenade grenade = (TagbackGrenade) Model.getPlayer(grenadeAction.getPossessorId()).getPowerUpBag().findItem(TAG_BACK_GRENADE, grenadeAction.getColor());
+            // Remove the player from the shot list
 
-            // use the grenade on the current player
+            controller.getShotPlayerThisTurn().remove(0);
 
-            grenade.applyOn(Model.getPlayer(currentPlayer), grenadeAction.getPossessorId());
+            // calls teh function to ask grenade to the next person in the list
 
-            // discard the powerUp
+            askGrenadeToShot();
 
-            Model.getPlayer(grenadeAction.getPossessorId()).getPowerUpBag().getItem(grenade);
+        } else {
 
-        }catch (Exception e){
+            try {
 
-            LOGGER.log(Level.WARNING, "[CONTROLLER - PowerUp] player w/ id {0} try to use a grenade but do not possess it", grenadeAction.getPossessorId());
-            LOGGER.log(Level.WARNING,e.getMessage(),e);
+                // Locate the powerUp in the model
+
+                TagbackGrenade grenade = (TagbackGrenade) Model.getPlayer(grenadeAction.getPossessorId()).getPowerUpBag().findItem(TAG_BACK_GRENADE, grenadeAction.getColor());
+
+                // use the grenade on the current player
+
+                grenade.applyOn(Model.getPlayer(currentPlayer), grenadeAction.getPossessorId());
+
+                // discard the powerUp
+
+                Model.getPlayer(grenadeAction.getPossessorId()).getPowerUpBag().getItem(grenade);
+
+                // Remove the player from the shot list
+
+                controller.getShotPlayerThisTurn().remove(0);
+
+                // calls teh function to ask grenade to the next person in the list
+
+                askGrenadeToShot();
+
+            } catch (Exception e) {
+
+                LOGGER.log(Level.WARNING, "[CONTROLLER - PowerUp] player w/ id {0} try to use a grenade but do not possess it", grenadeAction.getPossessorId());
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
+            }
+
         }
 
     }
 
+
+    // Utils
 
     public void discardPowerUp(PowerUpType type, Color color){
 
@@ -207,8 +255,6 @@ public class PowerUpPhase {
                 .sellItem(Model.getPlayer(currentPlayer).getPowerUpBag().findItem(type, color));
 
     }
-
-    // Utils
 
     public Boolean hasGrenade(int playerId){
 

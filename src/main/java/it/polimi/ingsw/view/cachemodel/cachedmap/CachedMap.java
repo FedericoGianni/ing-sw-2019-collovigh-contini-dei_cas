@@ -23,4 +23,8 @@ public class CachedMap {
     public int getMapType() {
         return mapType;
     }
+
+    public CachedCell getCachedCell(int r, int c) {
+        return map[r][c];
+    }
 }

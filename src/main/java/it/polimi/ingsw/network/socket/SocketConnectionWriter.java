@@ -127,7 +127,8 @@ public class SocketConnectionWriter extends Thread implements ToView {
      */
     @Override
     public void useGrenade() {
-
+        LOGGER.log(level, "[Socket-Conn-Writer] sending askGrenade string to client ");
+        send("askGrenade");
     }
 
     @Override

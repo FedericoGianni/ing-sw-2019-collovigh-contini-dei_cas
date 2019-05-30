@@ -131,7 +131,7 @@ public class ToClientImpl implements ToClient {
     @Override
     public void useGrenade() {
 
-        //TODO
+        client.getView().askGrenade();
 
     }
 
