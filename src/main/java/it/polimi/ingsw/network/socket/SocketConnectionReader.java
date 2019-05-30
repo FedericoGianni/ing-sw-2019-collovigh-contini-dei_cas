@@ -9,10 +9,7 @@ import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameAlreadyStartedException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
-import it.polimi.ingsw.view.actions.Grab;
-import it.polimi.ingsw.view.actions.JsonAction;
-import it.polimi.ingsw.view.actions.Move;
-import it.polimi.ingsw.view.actions.ShootAction;
+import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.ScopeAction;
@@ -315,6 +312,12 @@ public class SocketConnectionReader extends Thread {
             case "\"actionType\":\"SHOOT\"":
 
                 jsonAction = gson.fromJson(message, ShootAction.class);
+
+                break;
+
+            case "\"actionType\":\"SKIP\"":
+
+                jsonAction = gson.fromJson(message, SkipAction.class);
 
                 break;
 

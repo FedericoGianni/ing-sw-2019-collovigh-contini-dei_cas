@@ -1,18 +1,12 @@
 package it.polimi.ingsw.controller;
 
 
-import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
-import it.polimi.ingsw.customsexceptions.CellNonExistentException;
-import it.polimi.ingsw.customsexceptions.PlayerNonExistentException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUpType;
-import it.polimi.ingsw.model.powerup.Teleporter;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
@@ -30,8 +24,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
-import static it.polimi.ingsw.model.powerup.PowerUpType.NEWTON;
-import static it.polimi.ingsw.model.powerup.PowerUpType.TELEPORTER;
 
 /**
  *
@@ -155,6 +147,8 @@ public class Controller {
         return turnPhase;
     }
 
+    public int getGameId() { return gameId; }
+
     public int getCurrentPlayer(){
 
         if(roundNumber == 0){
@@ -268,19 +262,14 @@ public class Controller {
     }
 
     public void handleTurnPhase(){
+
         switch(turnPhase){
             //once the virtual wiev has done the action the controller sets the next turnPhase to the next turnphase
             //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
             //the last phase (ACTION) will increment roundNumber
             case SPAWN:
 
-                // if the player is online calls the function on its virtual view
-
-                if (isPlayerOnline(getCurrentPlayer())) spawnPhase.handleSpawn();
-
-                // otherwise it increments the turn phase
-
-                else incrementPhase();
+                spawnPhase.handleSpawn();
 
                 // increment phase if virtual view method is called will be done in the answer method
 
@@ -288,9 +277,7 @@ public class Controller {
 
             case POWERUP1:
 
-                if (isPlayerOnline(getCurrentPlayer())) powerUpPhase.handlePowerUp();
-
-                else incrementPhase();
+                powerUpPhase.handlePowerUp();
 
                 break;
 
@@ -370,6 +357,42 @@ public class Controller {
             case MOVE:
 
                 //TODO move
+
+                break;
+
+            case GRAB:
+
+                //TODO grab
+
+                break;
+
+            case SHOOT:
+
+                //TODO shoot
+
+                break;
+
+            case FRENZY_MOVE:
+
+                //TODO frenzyGrab
+
+                break;
+
+            case FRENZY_GRAB:
+
+                //TODO frenzyGrab
+
+                break;
+
+            case FRENZY_SHOOT:
+
+                //TODO frenzyShoot
+
+                break;
+
+            case SKIP:
+
+                incrementPhase();
 
                 break;
 

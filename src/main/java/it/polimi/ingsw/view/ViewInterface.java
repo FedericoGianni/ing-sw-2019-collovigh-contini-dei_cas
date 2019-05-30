@@ -20,10 +20,11 @@ public interface ViewInterface {
 
     //POWERUP
     void startPowerUp();
-    void useMarker(Color color, int playerId);
+    void askGrenade();
 
     //ACTION
     void startAction();
+    void useMarker(Color color, int playerId);
 
     //RELOAD
     void startReload();

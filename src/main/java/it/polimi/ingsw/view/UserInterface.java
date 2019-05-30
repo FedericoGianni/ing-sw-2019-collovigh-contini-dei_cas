@@ -35,6 +35,8 @@ public interface UserInterface {
 
     void startPowerUp();
 
+    void askGrenade();
+
     void startAction();
 
     void startReload();

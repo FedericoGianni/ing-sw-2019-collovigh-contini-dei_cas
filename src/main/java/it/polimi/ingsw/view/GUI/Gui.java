@@ -257,6 +257,11 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
+    public void askGrenade() {
+
+    }
+
+    @Override
     public void startAction() {
 
     }
