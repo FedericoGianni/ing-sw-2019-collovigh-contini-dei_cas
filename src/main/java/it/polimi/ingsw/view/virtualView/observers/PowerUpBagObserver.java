@@ -36,4 +36,25 @@ public class PowerUpBagObserver implements Observer {
     }
 
 
+    @Override
+    public void updateSinge(int playerId, Object object) {
+
+        // cast the Object in its dynamic type
+
+        this.powerUpBag =(CachedPowerUpBag) object;
+
+        // encapsulate the update in the update Class
+
+        UpdateClass updateClass = new UpdateClass(UpdateType.POWERUP_BAG, powerUpBag, playerObserver.getPlayerId());
+
+        // send the update to the Virtual View
+
+        playerObserver
+                .getTopClass()
+                .getController()
+                .getVirtualView(playerId)
+                .sendUpdates(updateClass);
+    }
+
+
 }

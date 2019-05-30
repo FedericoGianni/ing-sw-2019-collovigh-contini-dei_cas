@@ -31,18 +31,10 @@ class TagbackGrenadeTest {
 
         TagbackGrenade grenade = new TagbackGrenade(Color.BLUE);
 
-        assertThrows(CardNotPossessedException.class,() -> {
-            grenade.applyOn(Model.getPlayer(1));
-        });
-
-
         Model.getPlayer(0).addPowerUp(grenade);
 
-        try {
-            grenade.applyOn(Model.getPlayer(1));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        grenade.applyOn(Model.getPlayer(1), 0);
+
 
         assertEquals(0,Model.getGame().getPlayers().get(1).getStats().getMarks().get(0));
         assertEquals(1,Model.getGame().getPlayers().get(1).getMarks().size());

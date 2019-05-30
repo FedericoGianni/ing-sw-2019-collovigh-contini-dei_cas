@@ -37,6 +37,17 @@ public abstract class Subject {
         }
     }
 
+    public void updateSingle(Object object, int playerId){
+
+        if (Observers.isInitialized()){
+
+            for (Observer observer : observers) {
+
+                observer.updateSinge(playerId,object);
+            }
+        }
+    }
+
 
 
 }

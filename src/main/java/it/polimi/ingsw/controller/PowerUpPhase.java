@@ -2,14 +2,11 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.customsexceptions.CellNonExistentException;
-import it.polimi.ingsw.customsexceptions.PlayerNonExistentException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.model.map.Directions;
-import it.polimi.ingsw.model.powerup.Newton;
-import it.polimi.ingsw.model.powerup.PowerUpType;
-import it.polimi.ingsw.model.powerup.Teleporter;
+import it.polimi.ingsw.model.powerup.*;
+import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
@@ -17,9 +14,10 @@ import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.List;
 
-import static it.polimi.ingsw.model.powerup.PowerUpType.NEWTON;
-import static it.polimi.ingsw.model.powerup.PowerUpType.TELEPORTER;
+import static it.polimi.ingsw.model.powerup.PowerUpType.*;
 
 public class PowerUpPhase {
 
@@ -42,9 +40,9 @@ public class PowerUpPhase {
 
         int currentPlayer = controller.getCurrentPlayer();
 
-        if(Model.getPlayer(currentPlayer).getPowerUpBag().getList().isEmpty()){
+        if(hasPowerUpPhase()){
 
-            //if current player hasn't got any PowerUp in hand -> skip this phase
+            //if current player hasn't got any usable PowerUp in hand  ( Newton or Teleporter ) -> skip this phase
 
             controller.incrementPhase();
 
@@ -53,6 +51,21 @@ public class PowerUpPhase {
             controller.getVirtualView(currentPlayer).startPowerUp();
 
         }
+    }
+
+    public void askGrenadeToShot(){
+
+        for (Integer playerId: controller.getShotPlayerThisTurn()){
+
+            if (hasGrenade(playerId)){
+
+                //TODO controller.getVirtualView(playerId).askGrenade()
+            }
+        }
+
+        // clears the list
+
+        controller.getShotPlayerThisTurn().clear();
     }
 
     // Client -> Server flow
@@ -78,6 +91,8 @@ public class PowerUpPhase {
                 break;
 
             case TAG_BACK_GRENADE:
+
+                useGrenade((GrenadeAction) powerUpAction);
 
                 break;
 
@@ -108,13 +123,9 @@ public class PowerUpPhase {
 
             discardPowerUp(newtonAction.getPowerUpType(),newtonAction.getColor());
 
-        } catch(PlayerNonExistentException e){
+        } catch(Exception e){
 
-            //can be validated inside client so that he can send only existent players
-
-        } catch(CellNonExistentException e){
-
-            //same as before
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
 
         }
     }
@@ -131,7 +142,7 @@ public class PowerUpPhase {
 
         // gets the chosen Cell from the model
 
-        Cell cell = Model.getMap().getCell(newPos.y,newPos.x);  // TODO verificare
+        Cell cell = Model.getMap().getCell( newPos.y, newPos.x);
 
         try {
 
@@ -159,6 +170,35 @@ public class PowerUpPhase {
     }
 
 
+    public void useGrenade(GrenadeAction grenadeAction){
+
+        int currentPlayer = controller.getCurrentPlayer();
+
+        LOGGER.log(level, "[CONTROLLER - PowerUp] player w/ id: {0} was shot and responded with a grenade", grenadeAction.getPossessorId() );
+
+        try {
+
+            // Locate the powerUp in the model
+
+            TagbackGrenade grenade = (TagbackGrenade) Model.getPlayer(grenadeAction.getPossessorId()).getPowerUpBag().findItem(TAG_BACK_GRENADE, grenadeAction.getColor());
+
+            // use the grenade on the current player
+
+            grenade.applyOn(Model.getPlayer(currentPlayer), grenadeAction.getPossessorId());
+
+            // discard the powerUp
+
+            Model.getPlayer(grenadeAction.getPossessorId()).getPowerUpBag().getItem(grenade);
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, "[CONTROLLER - PowerUp] player w/ id {0} try to use a grenade but do not possess it", grenadeAction.getPossessorId());
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
+
+    }
+
+
     public void discardPowerUp(PowerUpType type, Color color){
 
         int currentPlayer = controller.getCurrentPlayer();
@@ -166,5 +206,46 @@ public class PowerUpPhase {
         Model.getPlayer(currentPlayer).getPowerUpBag()
                 .sellItem(Model.getPlayer(currentPlayer).getPowerUpBag().findItem(type, color));
 
+    }
+
+    // Utils
+
+    public Boolean hasGrenade(int playerId){
+
+        List<PowerUp> list = Model
+                .getPlayer(playerId)
+                .getPowerUpBag()
+                .getList()
+                .stream()
+                .filter(x -> x.getType().equals(TAG_BACK_GRENADE))
+                .collect(Collectors.toList());
+
+        return !(list.isEmpty());
+    }
+
+    public Boolean hasPowerUpPhase(){
+
+        List<PowerUp> list = Model
+                .getPlayer(controller.getCurrentPlayer())
+                .getPowerUpBag()
+                .getList()
+                .stream()
+                .filter(x -> (x.getType().equals(TELEPORTER)) || (x.getType().equals(NEWTON)) )
+                .collect(Collectors.toList());
+
+        return !(list.isEmpty());
+    }
+
+    public Boolean hasTargetingScope(){
+
+        List<PowerUp> list = Model
+                .getPlayer(controller.getCurrentPlayer())
+                .getPowerUpBag()
+                .getList()
+                .stream()
+                .filter(x -> x.getType().equals(TARGETING_SCOPE) )
+                .collect(Collectors.toList());
+
+        return !(list.isEmpty());
     }
 }

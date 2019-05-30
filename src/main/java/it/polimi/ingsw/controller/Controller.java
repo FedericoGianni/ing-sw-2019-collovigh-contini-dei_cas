@@ -73,6 +73,8 @@ public class Controller {
 
     private PowerUpPhase powerUpPhase = new PowerUpPhase(this);
 
+    private ActionPhase actionPhase = new ActionPhase(this);
+
 
 
 
@@ -146,6 +148,8 @@ public class Controller {
     public List<VirtualView> getVirtualViews(){
         return new ArrayList<>(players);
     }
+
+    public List<Integer> getShotPlayerThisTurn() { return shotPlayerThisTurn; }
 
     public TurnPhase getTurnPhase() {
         return turnPhase;
@@ -236,10 +240,15 @@ public class Controller {
     }
 
 
-    public void setPlayerOnline(int playerId){ Model.getPlayer(playerId).getStats().setOnline(true); }
+    public void setPlayerOnline(int playerId){
+
+        Model.getPlayer(playerId).getStats().setOnline(true);
+
+    }
 
     public void setPlayerOffline(int playerId){ Model.getPlayer(playerId).getStats().setOnline(false); }
 
+    public Boolean isPlayerOnline(int playerId){ return Model.getPlayer(playerId).getStats().getOnline(); }
 
 
     // Turn Management
@@ -264,28 +273,57 @@ public class Controller {
             //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
             //the last phase (ACTION) will increment roundNumber
             case SPAWN:
-                spawnPhase.handleSpawn();
-                //increment phase should be done by the virtual view, who calls the function spawn
+
+                // if the player is online calls the function on its virtual view
+
+                if (isPlayerOnline(getCurrentPlayer())) spawnPhase.handleSpawn();
+
+                // otherwise it increments the turn phase
+
+                else incrementPhase();
+
+                // increment phase if virtual view method is called will be done in the answer method
+
                 break;
 
             case POWERUP1:
-                powerUpPhase.handlePowerUp();
+
+                if (isPlayerOnline(getCurrentPlayer())) powerUpPhase.handlePowerUp();
+
+                else incrementPhase();
+
                 break;
 
             case ACTION1:
-                handleAction();
+
+                if (isPlayerOnline(getCurrentPlayer())) handleAction();
+
+                else incrementPhase();
+
                 break;
 
             case POWERUP2:
-                powerUpPhase.handlePowerUp();
+
+                if (isPlayerOnline(getCurrentPlayer())) powerUpPhase.handlePowerUp();
+
+                else incrementPhase();
+
                 break;
 
             case ACTION2:
-                handleAction();
+
+                if (isPlayerOnline(getCurrentPlayer())) handleAction();
+
+                else incrementPhase();
+
                 break;
 
             case POWERUP3:
-                powerUpPhase.handlePowerUp();
+
+                if (isPlayerOnline(getCurrentPlayer())) powerUpPhase.handlePowerUp();
+
+                else incrementPhase();
+
                 break;
 
             case RELOAD:
@@ -351,31 +389,6 @@ public class Controller {
         players.get(getCurrentPlayer()).startReload();
     }
 
-
-    public void useTeleport(Color color, int r, int c){
-        //TODO check if exception logic is viable
-        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useTeleport");
-        Cell cell = Model.getMap().getCell(r,c);
-        Teleporter t = (Teleporter) Model.getPlayer(getCurrentPlayer()).getPowerUpBag().findItem(TELEPORTER, color);
-        try {
-            t.use(cell);
-        } catch (CardNotPossessedException e){
-            //this shouldn't happen since the client can only send PowerUps that has in hand
-        } catch (CellNonExistentException e){
-            //this shouldn't happen too since the client can only send Cell which exists?
-            //TODO check for SameCellException? -> or it is a valid action?
-        }
-     }
-
-    public void useGranade(){
-        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useGranade");
-        //TODO
-    }
-
-    public void useTargetingScope(){
-        //TODO
-        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling useTargetingScope");
-    }
 
     //ACTIONS
 
