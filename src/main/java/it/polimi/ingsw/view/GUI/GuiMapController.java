@@ -2,12 +2,16 @@ package it.polimi.ingsw.view.GUI;
 
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.cachemodel.Player;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-
-
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Box;
 
 
 public class GuiMapController {
@@ -18,13 +22,15 @@ public class GuiMapController {
         gui = g;
     }
 
-    @FXML
-    GridPane mappozza;
+
     @FXML
     BorderPane pane;
     @FXML
     TextArea log;
-
+    @FXML
+    GridPane innerMap;
+    @FXML
+    BorderPane mappozzaExt;
     @FXML
     public void initialize() {
 
@@ -33,17 +39,19 @@ public class GuiMapController {
     public void mapCreator()
     {
 
+
         switch(gui.getView().getCacheModel().getMapType()) {
             case 1: {
-                mappozza.setStyle("-fx-background-image: url('/images/Map1.png')");
+
                 break;
             }
             case 2: {
-                mappozza.setStyle("-fx-background-image: url('/images/Map2.png')");
+                mappozzaExt.setStyle("-fx-background-image: url('/images/Map2ext2.png')");
+                innerMap.setStyle("-fx-background-image: url('/images/Map2Inside.png')");
                 break;
             }
             case 3: {
-                mappozza.setStyle("-fx-background-image: url('/images/Map3.png')");
+                mappozzaExt.setStyle("-fx-background-image: url('/images/Map3.png')");
                 break;
             }
         }
@@ -54,6 +62,21 @@ public class GuiMapController {
         log.appendText("\nSi è collegato: "+name+" con l'id: "+id+" ed il colore: "+color);
     }
 
+    public void statsUpdater(Player player)
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        alert.setContentText("Updated player stats");
+
+        alert.showAndWait();
+
+    }
+
+    @FXML
+    public void click1()
+    {
+        log.appendText("cliccato 1");
+    }
 
 
 }
