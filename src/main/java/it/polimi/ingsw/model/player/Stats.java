@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model.player;
 
 
-import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
+import it.polimi.ingsw.customsexceptions.OverMaxDmgException;
+import it.polimi.ingsw.customsexceptions.OverMaxMarkException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.map.Cell;
@@ -30,7 +31,7 @@ public class Stats extends Subject {
      */
     private List<Integer> dmgTaken = new ArrayList<>();
     private Cell currentPosition;
-    private Boolean online = true;
+    private Boolean online;
 
     /**
      *
@@ -40,6 +41,7 @@ public class Stats extends Subject {
         this.score = 0;
         this.deaths = 0;
         this.currentPosition = currentPosition;
+        this.online = true;
     }
 
     /**

@@ -321,8 +321,8 @@ public class CLI implements UserInterface {
 
     @Override
     public void startPowerUp(){
-        System.out.println("[DEBUG] startPowerUp1");
-
+        //System.out.println("[DEBUG] PHASE startPowerUp1");
+        System.out.println("POWERUP PHASE");
 
         List<CachedPowerUp> powerUps;
         Boolean validChoice = false;
@@ -352,7 +352,6 @@ public class CLI implements UserInterface {
         }while(!validChoice);
 
         usePowerUp(powerUps.get(read));
-
 
     }
 
@@ -492,7 +491,7 @@ public class CLI implements UserInterface {
         }while(!validChoice);
 
 
-
+        //TODO @Dav idk how you want to handle this doAction, but this way it's always null
         JsonAction jsonAction = null;
 
         view.doAction(jsonAction);

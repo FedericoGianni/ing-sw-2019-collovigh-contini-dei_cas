@@ -68,9 +68,8 @@ public class VirtualView implements ViewInterface {
         // refresh the ToClient reference
 
         this.view = Server.getClient(playerId);
-
-        //TODO start the same method inside the real view passing througt network
         LOGGER.info("Virtual View id " + playerId + " received startPowerUp and forwarding it to the real view");
+        view.startPowerUp();
     }
 
     @Override

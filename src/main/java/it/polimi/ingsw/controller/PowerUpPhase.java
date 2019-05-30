@@ -12,10 +12,10 @@ import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 
 import java.awt.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.List;
 
 import static it.polimi.ingsw.model.powerup.PowerUpType.*;
 
@@ -40,7 +40,7 @@ public class PowerUpPhase {
 
         int currentPlayer = controller.getCurrentPlayer();
 
-        if(hasPowerUpPhase()){
+        if(!hasPowerUpPhase()){
 
             //if current player hasn't got any usable PowerUp in hand  ( Newton or Teleporter ) -> skip this phase
 
