@@ -94,6 +94,12 @@ public class VirtualView implements ViewInterface {
 
     }
 
+    @Override
+    public void askGrenade() {
+        this.view = Server.getClient(playerId);
+        LOGGER.info("Virtual view id " + playerId + "forwarding askGrenade to view");
+        view.askGrenade();
+    }
 
     @Override
     public void startGame() {

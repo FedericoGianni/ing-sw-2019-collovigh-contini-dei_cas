@@ -40,7 +40,7 @@ public class PowerUpPhase {
 
         int currentPlayer = controller.getCurrentPlayer();
 
-        if (controller.isPlayerOnline(currentPlayer)){
+        if (!controller.isPlayerOnline(currentPlayer)){
 
             // if the player is not online skips the turn
 

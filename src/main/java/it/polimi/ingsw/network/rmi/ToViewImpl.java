@@ -108,11 +108,11 @@ public class ToViewImpl implements ToView {
     }
 
     @Override
-    public void useGrenade() {
+    public void askGrenade() {
 
         try {
 
-            client.useGrenade();
+            client.askGrenade();
 
             LOGGER.log(level,"[RMI-SERVER] sent useGrenade to player with address :{0}", ipAddress);
 

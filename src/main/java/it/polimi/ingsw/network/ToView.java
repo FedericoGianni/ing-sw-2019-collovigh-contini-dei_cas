@@ -35,5 +35,6 @@ public interface ToView  {
     /**
      * This method will be called on a player if he/she was shot in the previous phase and has grenades
      */
-    void useGrenade();
+    void askGrenade();
+
 }

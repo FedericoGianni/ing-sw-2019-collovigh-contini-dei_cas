@@ -129,7 +129,7 @@ public class ToClientImpl implements ToClient {
      * This method will be called on a player if he/she was shot in the previous phase and has grenades
      */
     @Override
-    public void useGrenade() {
+    public void askGrenade() {
 
         client.getView().askGrenade();
 

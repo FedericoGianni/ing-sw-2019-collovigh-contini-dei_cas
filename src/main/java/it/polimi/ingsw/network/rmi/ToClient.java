@@ -64,6 +64,6 @@ public interface ToClient extends  Remote {
     void startReload()throws RemoteException;
 
 
-    void useGrenade()throws RemoteException;
+    void askGrenade()throws RemoteException;
 
 }

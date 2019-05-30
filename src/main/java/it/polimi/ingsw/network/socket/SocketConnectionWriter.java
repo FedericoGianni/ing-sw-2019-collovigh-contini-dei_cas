@@ -126,7 +126,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
      * This method will be called on a player if he/she was shot in the previous phase and has grenades
      */
     @Override
-    public void useGrenade() {
+    public void askGrenade() {
         LOGGER.log(level, "[Socket-Conn-Writer] sending askGrenade string to client ");
         send("askGrenade");
     }
@@ -142,6 +142,8 @@ public class SocketConnectionWriter extends Thread implements ToView {
         LOGGER.info("sending initGame to conneted client");
         send("startGame");
     }
+
+
 
     public void disconnect(){
         LOGGER.log(WARNING, "Disconneting virtual view linked to this connection.");
