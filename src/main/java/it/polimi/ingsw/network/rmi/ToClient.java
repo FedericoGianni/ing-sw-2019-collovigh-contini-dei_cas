@@ -45,7 +45,7 @@ public interface ToClient extends  Remote {
 
     //Updates
 
-    void startGame() throws RemoteException; //TODO @Dav check if it's ok (by Fede)
+    void startGame() throws RemoteException;
 
     void sendUpdate(UpdateClass update) throws RemoteException;
 

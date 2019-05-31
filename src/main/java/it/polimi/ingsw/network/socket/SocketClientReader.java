@@ -5,7 +5,6 @@ import it.polimi.ingsw.network.RunClient;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.PowerUpTurnUpdate;

@@ -199,7 +199,7 @@ public class PowerUpPhase {
 
         LOGGER.log(level, "[CONTROLLER - PowerUp] player w/ id: {0} was shot and responded with a grenade", grenadeAction.getPossessorId() );
 
-        if (grenadeAction.getColor().equals(null)){
+        if (grenadeAction.getColor() == null ){
 
             //if the player choose to not use the grenade the color will be set to null:
 
@@ -276,7 +276,7 @@ public class PowerUpPhase {
                 .getGame()
                 .getPlayers()
                 .stream()
-                .filter( x -> !(x.getStats().getCurrentPosition().equals(null)))
+                .filter( x -> (x.getStats().getCurrentPosition() != null ))
                 .collect(Collectors.toList());
 
         List<PowerUp> list = Model

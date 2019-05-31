@@ -45,7 +45,7 @@ public class VirtualView implements ViewInterface {
 
         this.view = Server.getClient(playerId); // can change if player disconnect -> to be refreshed every method
 
-        LOGGER.info("Virtual View id " + playerId + " received startPhase0 and forwarding it to the real view");
+        LOGGER.log(level,"[Virtual View] id {0} received startPhase0 and forwarding it to the real view",playerId);
 
         // calls the function on the ToClient interface
 
@@ -59,7 +59,7 @@ public class VirtualView implements ViewInterface {
         // refresh the ToClient reference
 
         this.view = Server.getClient(playerId);
-        LOGGER.info("Virtual View id " + playerId + " received startPowerUp and forwarding it to the real view");
+        LOGGER.log(level,"[Virtual View] id {0} received startPowerUp and forwarding it to the real view", playerId);
         view.startPowerUp();
     }
 
@@ -70,7 +70,9 @@ public class VirtualView implements ViewInterface {
 
         this.view = Server.getClient(playerId);
 
-        //TODO start the same method inside the real view passing thorught network
+        view.startAction();
+
+        LOGGER.log(level,"[Virtual View] id {0} received startAction and forwarding it to the real view",playerId);
     }
 
     @Override
@@ -80,15 +82,16 @@ public class VirtualView implements ViewInterface {
 
         this.view = Server.getClient(playerId);
 
-        //TODO start the same method inside the real view passing throught network
-        LOGGER.info("Virtual View id " + playerId + " received startReload and forwarding it to the real view");
+        view.startReload();
+
+        LOGGER.log(level,"[Virtual View] id {0} received startReload and forwarding it to the real view",playerId);
 
     }
 
     @Override
     public void askGrenade() {
         this.view = Server.getClient(playerId);
-        LOGGER.info("Virtual view id " + playerId + "forwarding askGrenade to view");
+        LOGGER.log(level,"[Virtual View] id {0} forwarding askGrenade to view", playerId);
         view.askGrenade();
     }
 
@@ -104,15 +107,11 @@ public class VirtualView implements ViewInterface {
 
         this.view = Server.getClient(playerId);
 
-        System.out.println("[VIRTUAL-VIEW] view = " + view);
-
-        System.out.println("[VIRTUAL-VIEW] update = " + update );
-
         // sends the updates to the net if the client is connected
 
         if (view != null)  this.view.sendUpdate(update);
 
-        LOGGER.log(level, " send update to client: " + playerId + " update: "+ update.getType());
+        LOGGER.log(level, () -> " send update to client: " + playerId + " update: "+ update.getType());
 
     }
 

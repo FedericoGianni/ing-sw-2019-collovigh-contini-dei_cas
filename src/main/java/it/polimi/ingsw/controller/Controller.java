@@ -12,7 +12,6 @@ import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 import it.polimi.ingsw.view.virtualView.observers.Observers;

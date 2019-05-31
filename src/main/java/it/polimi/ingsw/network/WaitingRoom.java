@@ -82,11 +82,9 @@ public class WaitingRoom {
 
         if(this.mapType == 0) {
             Server.setController(new Controller(this.players, this.colors, this.activeGame));
-            //TODO start controller
             Server.getController().handleTurnPhase();
         } else{
             Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType));
-            //TODO start controller
             Server.getController().handleTurnPhase();
         }
 
