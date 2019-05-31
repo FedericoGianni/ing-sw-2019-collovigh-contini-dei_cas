@@ -119,6 +119,19 @@ public class FileRead {
 
     }
 
+    public static void removePlayer(int id){
+
+        Character.forDigit(id, 10);
+
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if(battelfield[i][j] == id){
+                    battelfield[i][j] = ' ';
+                }
+            }
+        }
+    }
+
     public static void showBattlefield(){
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {

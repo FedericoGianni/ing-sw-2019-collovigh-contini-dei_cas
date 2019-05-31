@@ -185,7 +185,7 @@ public class View implements ViewInterface {
 
     @Override
     public void doAction(JsonAction jsonAction) {
-
+        clientToVView.doAction(jsonAction);
     }
 
 

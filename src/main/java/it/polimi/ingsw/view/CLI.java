@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
@@ -213,7 +214,6 @@ public class CLI implements UserInterface {
                 //TODO mostrare quali colori hanno preso i giocatori?
                 FileRead.loadMap(view.getCacheModel().getMapType());
                 System.out.println("Ho scelto casualmente la mappa di tipo: " + view.getCacheModel().getMapType());
-                //FileRead.showBattlefield();
                 break;
 
             case STATS:
@@ -224,7 +224,7 @@ public class CLI implements UserInterface {
                 System.out.println("Il giocatore: " + playerId + " si è spostato!");
                 int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                 int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
-
+                FileRead.removePlayer(playerId);
                 FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
                 FileRead.showBattlefield();
                 break;
@@ -267,6 +267,23 @@ public class CLI implements UserInterface {
     @Override
     public void startGame() {
         System.out.println("Gioco iniziato!");
+
+        while(view.getCacheModel().getCachedMap() == null){
+            System.out.println("Attendi ricezione del tipo di mappa...");
+            try{
+                sleep(200);
+            } catch (Exception e){
+
+            }
+        }
+
+        try {
+            FileRead.populateMatrixFromFile(view.getCacheModel().getMapType());
+        } catch(InvalidMapTypeException e){
+            System.out.println("[DEBUG] Errore nel caricamento della mappa: \n" + e.getMessage());
+        }
+
+        FileRead.showBattlefield();
     }
 
     @Override
@@ -326,7 +343,8 @@ public class CLI implements UserInterface {
 
     @Override
     public void startPowerUp(){
-        System.out.println("[DEBUG] startPowerUp");
+        //System.out.println("[DEBUG] startPowerUp");
+        System.out.println("POWERUP PHASE");
 
 
         List<CachedPowerUp> powerUps;
