@@ -128,6 +128,8 @@ public class CacheModel {
 
                 this.cachedMap.update((CachedAmmoCell) updateClass);
 
+                view.getUserInterface().notifyUpdate(UpdateType.AMMO_CELL,updateClass.getPlayerId());
+
                 break;
 
             case SPAWN_CELL:
