@@ -61,7 +61,7 @@ public class AmmoBag extends Subject implements Bag<AmmoCube> {
 
             this.ammoCubes.sort(Comparator.comparing(AmmoCube::getColor));
 
-            this.updateAll(new CachedAmmoBag(this));
+            this.updateAll(this);
         }
 
 
@@ -106,6 +106,9 @@ public class AmmoBag extends Subject implements Bag<AmmoCube> {
         else {
             this.ammoCubes.remove(item);
             this.ammoCubes.sort(Comparator.comparing(AmmoCube::getColor));
+
+            updateAll(this);
+
             return item;
         }
     }

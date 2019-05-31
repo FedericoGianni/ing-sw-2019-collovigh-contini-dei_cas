@@ -8,7 +8,7 @@ import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.ViewInterface;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,8 +22,6 @@ public class VirtualView implements ViewInterface {
     private ToView view;
     private Controller controller;
 
-    private boolean isConnected = true;
-
     public VirtualView(int playerId, Controller controller, ToView toView) {
         this.playerId = playerId;
         this.controller = controller;
@@ -35,14 +33,7 @@ public class VirtualView implements ViewInterface {
         this.view = view;
     }
 
-    public boolean isConnected() {
-        return isConnected;
-    }
-
-    public void setConnected(boolean connected) {
-        isConnected = connected;
-    }
-
+    public int getPlayerId() { return playerId; }
 
     //methods to forward to the corresponding view throught network
 

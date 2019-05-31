@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 public interface ToView  {
 

@@ -1,14 +1,16 @@
 package it.polimi.ingsw.view.cachemodel.sendables;
 
 import it.polimi.ingsw.model.CurrentGame;
-import it.polimi.ingsw.view.cachemodel.updates.Update;
+import it.polimi.ingsw.view.updates.Update;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CachedGame implements Serializable, Update {
+public class CachedGame extends UpdateClass {
 
     /**
      * This list contains Pair with x -> killerId, y -> amount
@@ -17,6 +19,8 @@ public class CachedGame implements Serializable, Update {
 
 
     public CachedGame(CurrentGame game) {
+
+        super(UpdateType.GAME, -1);
 
         for (int i = 0; i < game.getKillShotTrack().size(); i++) {
 

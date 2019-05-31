@@ -1,13 +1,14 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoBag;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 public class AmmoBagObserver implements Observer {
 
-    private CachedAmmoBag ammoBag;
+    private AmmoBag ammoBag;
     private final PlayerObserver playerObserver;
 
     public AmmoBagObserver(PlayerObserver up) {
@@ -20,11 +21,11 @@ public class AmmoBagObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.ammoBag = (CachedAmmoBag) object;
+        this.ammoBag = (AmmoBag) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.AMMO_BAG,ammoBag, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedAmmoBag(ammoBag,playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -39,11 +40,11 @@ public class AmmoBagObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.ammoBag = (CachedAmmoBag) object;
+        this.ammoBag = (AmmoBag) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.AMMO_BAG,ammoBag, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedAmmoBag(ammoBag,playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 

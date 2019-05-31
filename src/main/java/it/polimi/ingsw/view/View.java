@@ -10,7 +10,7 @@ import it.polimi.ingsw.view.GUI.Gui;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

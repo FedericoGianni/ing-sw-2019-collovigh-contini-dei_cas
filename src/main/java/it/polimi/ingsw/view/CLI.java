@@ -13,7 +13,8 @@ import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 import java.awt.*;
 import java.util.List;
@@ -249,11 +250,15 @@ public class CLI implements UserInterface {
 
                 break;
 
-            case CELL_AMMO:
+            case AMMO_CELL:
 
                 break;
 
+            case TURN:
 
+                //TODO
+
+                break;
 
             default:
 
@@ -261,6 +266,40 @@ public class CLI implements UserInterface {
         }
 
 
+    }
+
+    private void notifyTurnUpdate(TurnUpdate turnUpdate){
+
+        switch (turnUpdate.getActionType()){
+
+            case POWERUP:
+
+                //TODO
+
+                break;
+
+            case SHOOT:
+
+                //TODO
+
+                break;
+
+            case GRAB:
+
+                //TODO
+
+                break;
+
+            case MOVE:
+
+                //TODO
+
+                break;
+
+            default:
+
+                break;
+        }
     }
 
 
@@ -597,4 +636,5 @@ public class CLI implements UserInterface {
 
         }while(!validChoice);
     }
+
 }

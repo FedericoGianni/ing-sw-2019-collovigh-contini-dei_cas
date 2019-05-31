@@ -35,7 +35,7 @@ public class WeaponBag extends Subject implements Bag<Weapon> {
 
         weapons.add(item);
 
-        updateAll(new CachedWeaponBag(this));
+        updateAll(this);
 
     }
 
@@ -56,7 +56,7 @@ public class WeaponBag extends Subject implements Bag<Weapon> {
 
             // updates the observer
 
-            updateAll(new CachedWeaponBag(this));
+            updateAll(this);
 
             // return the weapon
 

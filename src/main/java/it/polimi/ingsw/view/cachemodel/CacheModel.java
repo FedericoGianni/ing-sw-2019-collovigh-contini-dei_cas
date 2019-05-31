@@ -4,9 +4,9 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
-import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.InitialUpdate;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class CacheModel {
 
             case LOBBY:
 
-                CachedLobby cachedLobby = (CachedLobby) updateClass.getUpdate();
+                CachedLobby cachedLobby = (CachedLobby) updateClass;
 
                 players.clear();
 
@@ -76,11 +76,12 @@ public class CacheModel {
 
             case INITIAL:
 
-                update((InitialUpdate) updateClass.getUpdate());
+                update((InitialUpdate) updateClass);
 
                 view.getUserInterface().notifyUpdate(UpdateType.INITIAL, updateClass.getPlayerId());
 
                 //cli PlayerColors
+
                 for(int i = 0; i < getCachedPlayers().size(); i++) {
                     FileRead.addPlayerColor(getCachedPlayers().get(i).getPlayerColor());
                 }
@@ -89,7 +90,7 @@ public class CacheModel {
 
             case STATS:
 
-                players.get(updateClass.getPlayerId()).update((CachedStats) updateClass.getUpdate());
+                players.get(updateClass.getPlayerId()).update((CachedStats) updateClass);
 
                 view.getUserInterface().notifyUpdate(UpdateType.STATS, updateClass.getPlayerId());
 
@@ -97,7 +98,7 @@ public class CacheModel {
 
             case AMMO_BAG:
 
-                players.get(updateClass.getPlayerId()).update((CachedAmmoBag) updateClass.getUpdate());
+                players.get(updateClass.getPlayerId()).update((CachedAmmoBag) updateClass);
 
                 view.getUserInterface().notifyUpdate(UpdateType.AMMO_BAG, updateClass.getPlayerId());
 
@@ -105,7 +106,7 @@ public class CacheModel {
 
             case POWERUP_BAG:
 
-                players.get(updateClass.getPlayerId()).update((CachedPowerUpBag) updateClass.getUpdate());
+                players.get(updateClass.getPlayerId()).update((CachedPowerUpBag) updateClass);
 
                 view.getUserInterface().notifyUpdate(UpdateType.POWERUP_BAG, updateClass.getPlayerId());
 
@@ -113,7 +114,7 @@ public class CacheModel {
 
             case WEAPON_BAG:
 
-                players.get(updateClass.getPlayerId()).update((CachedWeaponBag) updateClass.getUpdate());
+                players.get(updateClass.getPlayerId()).update((CachedWeaponBag) updateClass);
 
                 view.getUserInterface().notifyUpdate(UpdateType.WEAPON_BAG, updateClass.getPlayerId());
 
@@ -121,25 +122,29 @@ public class CacheModel {
 
             case GAME:
 
-                this.game = (CachedGame) updateClass.getUpdate();
+                this.game = (CachedGame) updateClass;
 
                 view.getUserInterface().notifyUpdate(UpdateType.GAME, updateClass.getPlayerId());
 
                 break;
 
-            case CELL_AMMO:
+            case AMMO_CELL:
 
-                this.cachedMap.update((CachedAmmoCell) updateClass.getUpdate());
+                this.cachedMap.update((CachedAmmoCell) updateClass);
 
                 break;
 
             case SPAWN_CELL:
 
-                this.cachedMap.update((CachedSpawnCell) updateClass.getUpdate());
+                this.cachedMap.update((CachedSpawnCell) updateClass);
 
                 view.getUserInterface().notifyUpdate(UpdateType.SPAWN_CELL, updateClass.getPlayerId());
 
                 break;
+
+            case TURN:
+
+
 
             default:
 

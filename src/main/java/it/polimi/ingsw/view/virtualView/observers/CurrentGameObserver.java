@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
 import it.polimi.ingsw.view.cachemodel.sendables.CachedGame;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 public class CurrentGameObserver implements Observer {
@@ -22,7 +22,7 @@ public class CurrentGameObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.GAME, game, -1);
+        UpdateClass updateClass = game;
 
         // send the update to all Virtual Views
 
@@ -41,7 +41,7 @@ public class CurrentGameObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.GAME, game, -1);
+        UpdateClass updateClass = game;
 
         // send the update to the selected player's virtual View
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.cachemodel.updates;
+package it.polimi.ingsw.view.updates;
 
 public enum UpdateType {
 
@@ -8,7 +8,8 @@ public enum UpdateType {
     AMMO_BAG,
     GAME,
     SPAWN_CELL,
-    CELL_AMMO,
+    AMMO_CELL,
     INITIAL,
-    LOBBY;
+    LOBBY,
+    TURN;
 }

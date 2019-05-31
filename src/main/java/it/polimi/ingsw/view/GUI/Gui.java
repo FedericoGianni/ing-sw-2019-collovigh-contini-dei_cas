@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.Player;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateType;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;

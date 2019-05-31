@@ -60,7 +60,7 @@ public class Stats extends Subject {
     public void setScore(int score) {
 
         this.score = score;
-        updateAll(new CachedStats(this));
+        updateAll(this);
     }
 
     /**
@@ -70,7 +70,7 @@ public class Stats extends Subject {
     public void addScore(int score){
 
         this.score = this.score + score ;
-        updateAll(new CachedStats(this));
+        updateAll(this);
     }
 
     /**
@@ -89,7 +89,7 @@ public class Stats extends Subject {
     public void setDeaths(int deaths) {
 
         this.deaths = deaths;
-        updateAll(new CachedStats(this));
+        updateAll(this);
     }
 
     /**
@@ -99,7 +99,7 @@ public class Stats extends Subject {
     public void addDeath(){
 
         this.deaths++;
-        updateAll(new CachedStats(this));
+        updateAll(this);
     }
 
     public int getPlayerId(){
@@ -130,7 +130,7 @@ public class Stats extends Subject {
 
         if (marks.size() <= MAX_MARKS) {
             this.marks = new ArrayList<>(marks);
-            updateAll(new CachedStats(this));
+            updateAll(this);
         }
         else {
             throw new OverMaxMarkException();
@@ -146,7 +146,7 @@ public class Stats extends Subject {
 
         if (this.marks.size()<MAX_MARKS){
             this.marks.add(playerId);
-            updateAll(new CachedStats(this));
+            updateAll(this);
         }
 
     }
@@ -168,7 +168,7 @@ public class Stats extends Subject {
 
         if (dmgTaken.size() <= MAX_DMG) {
             this.dmgTaken = new ArrayList<>(dmgTaken);
-            updateAll(new CachedStats(this));
+            updateAll(this);
         }
         else throw new OverMaxDmgException();
 
@@ -193,7 +193,7 @@ public class Stats extends Subject {
 
 
             marks.removeAll(Collections.singleton(playerId));
-            updateAll(new CachedStats(this));
+            updateAll(this);
         }
 
         if (this.dmgTaken.size() < MAX_DMG ){
@@ -206,7 +206,7 @@ public class Stats extends Subject {
                 }
             }
 
-            updateAll(new CachedStats(this));
+            updateAll(this);
         }
 
 
@@ -227,7 +227,7 @@ public class Stats extends Subject {
     public void resetDmg(){
 
         this.dmgTaken = new ArrayList<>();
-        updateAll(new CachedStats(this));
+        updateAll(this);
     }
 
     /**
@@ -244,7 +244,7 @@ public class Stats extends Subject {
      */
     public void setCurrentPosition(Cell currentPosition) {
         this.currentPosition = currentPosition;
-        updateAll(new CachedStats(this));
+        updateAll(this);
     }
 
     public Boolean getOnline() {
@@ -253,7 +253,7 @@ public class Stats extends Subject {
 
     public void setOnline(Boolean online) {
         this.online = online;
-        updateAll(new CachedStats(this));
+        updateAll(this);
 
         getAllMyData();
     }
@@ -266,20 +266,20 @@ public class Stats extends Subject {
 
             // sends player stats
 
-            player.getStats().updateSingle(new CachedStats(player.getStats()), playerId);
+            player.getStats().updateSingle(player.getStats(), playerId);
 
             // sends WeaponBag
 
-            player.getCurrentWeapons().updateSingle(new CachedWeaponBag(player.getCurrentWeapons()),playerId);
+            player.getCurrentWeapons().updateSingle(player.getCurrentWeapons(),playerId);
 
             // sends AmmoBag
 
-            player.getAmmoBag().updateSingle(new CachedAmmoBag(player.getAmmoBag()),playerId);
+            player.getAmmoBag().updateSingle(player.getAmmoBag(),playerId);
         }
 
         // PowerUps can be seen only by possessor
 
-        Model.getPlayer(playerId).getPowerUpBag().updateAll(new CachedPowerUpBag(Model.getPlayer(playerId).getPowerUpBag()));
+        Model.getPlayer(playerId).getPowerUpBag().updateAll(Model.getPlayer(playerId).getPowerUpBag());
 
         // sends Cells
 

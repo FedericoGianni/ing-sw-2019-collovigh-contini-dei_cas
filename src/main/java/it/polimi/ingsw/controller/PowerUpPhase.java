@@ -5,6 +5,7 @@ import it.polimi.ingsw.customsexceptions.CellNonExistentException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.powerup.*;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
@@ -271,6 +272,13 @@ public class PowerUpPhase {
 
     public Boolean hasPowerUpPhase(){
 
+        List<Player> spawned = Model
+                .getGame()
+                .getPlayers()
+                .stream()
+                .filter( x -> !(x.getStats().getCurrentPosition().equals(null)))
+                .collect(Collectors.toList());
+
         List<PowerUp> list = Model
                 .getPlayer(controller.getCurrentPlayer())
                 .getPowerUpBag()
@@ -279,7 +287,16 @@ public class PowerUpPhase {
                 .filter(x -> (x.getType().equals(TELEPORTER)) || (x.getType().equals(NEWTON)) )
                 .collect(Collectors.toList());
 
+        if (spawned.size() <= 1){
+
+            list = list.stream()
+                    .filter( x -> x.getType().equals(TELEPORTER) )
+                    .collect(Collectors.toList());
+
+        }
+
         return !(list.isEmpty());
+
     }
 
     public Boolean hasTargetingScope(){
@@ -294,4 +311,5 @@ public class PowerUpPhase {
 
         return !(list.isEmpty());
     }
+
 }

@@ -2,8 +2,8 @@ package it.polimi.ingsw.view.virtualView.observers;
 
 import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 public class SpawnCellObserver implements Observer {
@@ -24,7 +24,7 @@ public class SpawnCellObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass( UpdateType.SPAWN_CELL, spawnCell);
+        UpdateClass updateClass = spawnCell;
 
         // send the update to the Virtual View
 
@@ -45,7 +45,7 @@ public class SpawnCellObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass( UpdateType.SPAWN_CELL, spawnCell);
+        UpdateClass updateClass = spawnCell;
 
         // send the update to the selected player's virtual View
 

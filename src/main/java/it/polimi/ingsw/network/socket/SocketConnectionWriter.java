@@ -3,7 +3,7 @@ package it.polimi.ingsw.network.socket;
 import com.google.gson.Gson;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

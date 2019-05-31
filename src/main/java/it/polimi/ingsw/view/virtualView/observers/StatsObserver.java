@@ -1,8 +1,9 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 import java.util.logging.Level;
@@ -14,7 +15,7 @@ public class StatsObserver implements Observer {
     private static Level level = Level.FINE;
 
     private final PlayerObserver playerObserver;
-    private CachedStats stats;
+    private Stats stats;
 
     public StatsObserver(PlayerObserver up) {
 
@@ -27,11 +28,11 @@ public class StatsObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.stats = (CachedStats) object;
+        this.stats = (Stats) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.STATS, stats, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedStats(stats, playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -47,13 +48,11 @@ public class StatsObserver implements Observer {
 
         LOGGER.log(level,"[Stats-Observer] sending Reconnection DATA to player: {0}", playerId);
 
-        // cast the Object in its dynamic type
-
-        this.stats = (CachedStats) object;
+        this.stats = (Stats) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.STATS, stats, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedStats(stats, playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 

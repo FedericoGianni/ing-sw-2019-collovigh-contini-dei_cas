@@ -59,7 +59,7 @@ public class PowerUpBag  extends Subject implements Bag<PowerUp> {
 
             this.powerUps.add(item);
 
-            this.updateAll(new CachedPowerUpBag(this));
+            this.updateAll(this);
         }
 
     }
@@ -77,7 +77,7 @@ public class PowerUpBag  extends Subject implements Bag<PowerUp> {
         else {
             this.powerUps.remove(item);
 
-            updateAll(new CachedPowerUpBag(this));
+            updateAll(this);
 
             return item;
         }
@@ -96,7 +96,7 @@ public class PowerUpBag  extends Subject implements Bag<PowerUp> {
 
         this.powerUps.remove(item);
 
-        updateAll(new CachedPowerUpBag(this));
+        updateAll(this);
 
         return cube;
     }

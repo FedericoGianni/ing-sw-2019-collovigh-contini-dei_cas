@@ -1,2 +1,1 @@
-{"type":"INITIAL","update":{"names":["Alex","Bob"],"colors":["BLUE","YELLOW"],"mapType":0,"gameId":-1},"playerId":0}
-Ciao
+{"names":["Alex","Bob"],"colors":["BLUE","YELLOW"],"mapType":0,"gameId":-1,"playerId":-1,"type":"INITIAL"}

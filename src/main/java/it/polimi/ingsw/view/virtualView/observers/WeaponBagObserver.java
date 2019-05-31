@@ -1,13 +1,14 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.player.WeaponBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 public class WeaponBagObserver implements Observer {
 
-    private CachedWeaponBag cachedWeaponBag;
+    private WeaponBag weaponBag;
     private final PlayerObserver playerObserver;
 
     public WeaponBagObserver(PlayerObserver playerObserver) {
@@ -19,11 +20,11 @@ public class WeaponBagObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.cachedWeaponBag = (CachedWeaponBag) object;
+        this.weaponBag = (WeaponBag) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.AMMO_BAG,cachedWeaponBag, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedWeaponBag(weaponBag, playerObserver.getPlayerId());
 
         // send the update to all the Virtual Views
 
@@ -38,11 +39,11 @@ public class WeaponBagObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.cachedWeaponBag = (CachedWeaponBag) object;
+        this.weaponBag = (WeaponBag) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.AMMO_BAG,cachedWeaponBag, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedWeaponBag(weaponBag, playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 

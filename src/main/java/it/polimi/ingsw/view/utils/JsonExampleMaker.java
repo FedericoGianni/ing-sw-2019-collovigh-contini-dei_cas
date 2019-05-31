@@ -15,13 +15,15 @@ import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
-import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
-import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
-import it.polimi.ingsw.view.cachemodel.updates.Update;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.InitialUpdate;
+import it.polimi.ingsw.view.updates.Update;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
+import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
+import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 import java.awt.*;
 import java.io.FileWriter;
@@ -32,9 +34,18 @@ public class JsonExampleMaker {
 
     public static void main(String[] args) {
 
+        writeStats();
+        writeInitialUpdateClass();
+        writeInitialUpdate();
+        writeCachedPowerUpBag();
+        writePowerUpBagUpdate();
+
         writeUsePowerUp();
         writeMove();
         writeSkip();
+
+        writeMoveTurnUpdate();
+        writeGrabTurnUpdate();
 
 
     }
@@ -72,7 +83,7 @@ public class JsonExampleMaker {
 
             stats.addMarks(0);
 
-            CachedStats cachedStats = new CachedStats(stats);
+            CachedStats cachedStats = new CachedStats(stats,0);
 
 
             FileWriter writer = new FileWriter("resources/json/jsonComunication/stats.json");
@@ -131,18 +142,12 @@ public class JsonExampleMaker {
             bag.addItem(powerUp1);
             bag.addItem(powerUp2);
 
-            Update cachedPowerUpBag = new CachedPowerUpBag(bag);
-
-            UpdateClass updateClass = new UpdateClass(UpdateType.POWERUP_BAG,cachedPowerUpBag,0);
+            UpdateClass updateClass = new CachedPowerUpBag(bag,0);
 
             FileWriter writer = new FileWriter("resources/json/jsonComunication/update.json");
 
 
             gson.toJson(updateClass, writer);
-
-            writer.write('\n');
-
-            writer.write("Ciao");
 
             writer.flush();
             writer.close();
@@ -169,18 +174,12 @@ public class JsonExampleMaker {
             colors.add(PlayerColor.BLUE);
             colors.add(PlayerColor.YELLOW);
 
-            InitialUpdate initialUpdate = new InitialUpdate(names,colors,-1,0);
-
-            UpdateClass updateClass = new UpdateClass(UpdateType.INITIAL,initialUpdate,0);
+            UpdateClass updateClass = new InitialUpdate(names,colors,-1,0);
 
             FileWriter writer = new FileWriter("resources/json/jsonComunication/initialUpdateClass.json");
 
 
             gson.toJson(updateClass, writer);
-
-            writer.write('\n');
-
-            writer.write("Ciao");
 
             writer.flush();
             writer.close();
@@ -227,34 +226,6 @@ public class JsonExampleMaker {
         }
     }
 
-    public static void writeExample(){
-
-        Gson gson = new Gson();
-
-        try {
-
-            PowerUp powerUp1 = new Newton(Color.BLUE);
-            PowerUp powerUp2 = new TagbackGrenade(Color.RED);
-
-            PowerUpBag bag = new PowerUpBag();
-            bag.addItem(powerUp1);
-            bag.addItem(powerUp2);
-
-            Object updateClass = new CachedPowerUpBag(bag);
-
-            FileWriter writer = new FileWriter("resources/json/jsonComunication/example.json");
-
-
-            gson.toJson(updateClass, writer);
-
-            writer.flush();
-            writer.close();
-
-        }catch (Exception e){
-
-            e.printStackTrace();
-        }
-    }
 
     public static void writeCachedPowerUpBag(){
 
@@ -269,7 +240,7 @@ public class JsonExampleMaker {
             bag.addItem(powerUp1);
             bag.addItem(powerUp2);
 
-            CachedPowerUpBag cbag = new CachedPowerUpBag(bag);
+            CachedPowerUpBag cbag = new CachedPowerUpBag(bag,0);
 
             FileWriter writer = new FileWriter("resources/json/jsonComunication/cachedPowerUpBag.json");
 
@@ -320,6 +291,52 @@ public class JsonExampleMaker {
 
 
             gson.toJson(jsonAction, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void writeMoveTurnUpdate(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            TurnUpdate turnUpdate = new MoveTurnUpdate(0);
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/MoveTurnUpdate.json");
+
+
+            gson.toJson(turnUpdate, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void writeGrabTurnUpdate(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            TurnUpdate turnUpdate = new GrabTurnUpdate(0,"Gun");
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/GrabTurnUpdate.json");
+
+
+            gson.toJson(turnUpdate, writer);
 
             writer.flush();
             writer.close();

@@ -2,9 +2,7 @@ package it.polimi.ingsw.view.virtualView.observers;
 
 import it.polimi.ingsw.model.map.AmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedGame;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 public class AmmoCellObserver implements Observer {
@@ -22,7 +20,7 @@ public class AmmoCellObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.CELL_AMMO, ammoCell);
+        UpdateClass updateClass = ammoCell;
 
         // send the update to the Virtual View
 
@@ -42,7 +40,7 @@ public class AmmoCellObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.CELL_AMMO, ammoCell, -1);
+        UpdateClass updateClass = ammoCell;
 
         // send the update to the selected player's virtual View
 

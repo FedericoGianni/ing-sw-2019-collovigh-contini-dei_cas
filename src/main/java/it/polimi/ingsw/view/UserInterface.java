@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 public interface UserInterface {
 
@@ -40,6 +41,7 @@ public interface UserInterface {
     void startAction();
 
     void startReload();
+
 
 
 }

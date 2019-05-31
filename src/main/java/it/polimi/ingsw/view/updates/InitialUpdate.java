@@ -1,11 +1,11 @@
-package it.polimi.ingsw.view.cachemodel.updates;
+package it.polimi.ingsw.view.updates;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class InitialUpdate implements Serializable, Update{
+public class InitialUpdate extends UpdateClass{
 
     private final List<String> names;
     private final List<PlayerColor> colors;
@@ -13,6 +13,9 @@ public class InitialUpdate implements Serializable, Update{
     private final int gameId;
 
     public InitialUpdate(List<String> names, List<PlayerColor> colors,int gameId, int mapType) {
+
+        super(UpdateType.INITIAL);
+
         this.names = names;
         this.colors = colors;
         this.mapType = mapType;

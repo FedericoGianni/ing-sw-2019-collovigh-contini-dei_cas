@@ -7,8 +7,8 @@ import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedLobby;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +138,7 @@ public class WaitingRoom {
 
         for (ToView client : Server.getClients().values()){
 
-            client.sendUpdate(new UpdateClass(UpdateType.LOBBY,new CachedLobby(players)));
+            client.sendUpdate(new CachedLobby(players));
 
             LOGGER.log(level,"Sent LOBBY_UPDATE to client : {0}", client);
         }

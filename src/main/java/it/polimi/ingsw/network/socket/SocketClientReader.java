@@ -3,9 +3,13 @@ package it.polimi.ingsw.network.socket;
 import com.google.gson.Gson;
 import it.polimi.ingsw.network.RunClient;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
-import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.InitialUpdate;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
+import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
+import it.polimi.ingsw.view.updates.otherplayerturn.PowerUpTurnUpdate;
+import it.polimi.ingsw.view.updates.otherplayerturn.ShootTurnUpdate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,7 +37,6 @@ public class SocketClientReader extends Thread {
     private static Level level = Level.FINE;
 
     Gson gson = new Gson();
-    UpdateClass update;
 
     /**
      * Attribute representing a BufferedReader to manage input stream from socket
@@ -170,21 +173,13 @@ public class SocketClientReader extends Thread {
      */
     public void handleJson(String msg) {
 
-        // get the type of the class contained in the UpdateClass
+        // split the gson to get the last parameter (GSON can not detect the superclass)
 
-        String type = msg.substring(9, 12);
+        String[] update = msg.split(",");
 
         // LOG the update
 
-        LOGGER.log(level, "[DEBUG] [SOCKET-CLIENT-READER] Received Json {0} : Calling handleJson method. ", type);
-
-        // gets the json of the class contained (GSON can not detect the class)
-
-        String update = msg.substring(msg.indexOf("\"update\":") + 9, msg.indexOf(",\"playerId\""));
-
-        // gets the playerId attribute
-
-        int playerId = Integer.parseInt(msg.substring(msg.lastIndexOf(':') + 1, msg.length() - 1));
+        LOGGER.log(level, "[DEBUG] [SOCKET-CLIENT-READER] Received Json {0} : Calling handleJson method. ", update[ update.length - 1 ]);
 
         // creates a new UpdateClass variable ( will be instantiated in the switch )
 
@@ -196,125 +191,155 @@ public class SocketClientReader extends Thread {
 
         // switchCase on the type
 
-        switch (type) {
+        switch (update[update.length - 1]) {
 
-            case "INI":
+            case "\"type\":\"INITIAL\"}":
 
-                // gets the inner class from the "update" json string
+                // rebuilds the class
 
-                InitialUpdate initialUpdate = gson.fromJson(update, InitialUpdate.class);
-
-                // creates a new UpdateClass from the obtained parameters
-
-                updateClass = new UpdateClass(UpdateType.INITIAL, initialUpdate, playerId);
+                updateClass = gson.fromJson(msg, InitialUpdate.class);
 
                 break;
 
+            case "\"type\":\"POWERUP_BAG\"}":
 
-            case "POW":
+                // rebuilds the class
 
-                // gets the inner class from the "update" json string
-
-                CachedPowerUpBag cachedPowerUpBag = gson.fromJson(update, CachedPowerUpBag.class);
-
-                // creates a new UpdateClass from the obtained parameters
-
-                updateClass = new UpdateClass(UpdateType.POWERUP_BAG, cachedPowerUpBag, playerId);
+                updateClass = gson.fromJson(msg, CachedPowerUpBag.class);
 
                 break;
 
-            case "STA":
+            case "\"type\":\"STATS\"}":
 
-                // gets the inner class from the "update" json string
+                // rebuilds the class
 
-                CachedStats cachedStats = gson.fromJson(update, CachedStats.class);
-
-                // creates a new UpdateClass from the obtained parameters
-
-                updateClass = new UpdateClass(UpdateType.STATS, cachedStats, playerId);
+                updateClass = gson.fromJson(msg, CachedStats.class);
 
                 break;
 
-            case "WEA":
+            case "\"type\":\"WEAPON_BAG\"}":
 
-                // gets the inner class from the "update" json string
+                // rebuilds the class
 
-                CachedWeaponBag cachedWeaponBag = gson.fromJson(update,CachedWeaponBag.class);
-
-                // creates a new UpdateClass from the obtained parameters
-
-                updateClass = new UpdateClass(UpdateType.WEAPON_BAG, cachedWeaponBag, playerId);
+                updateClass = gson.fromJson(msg,CachedWeaponBag.class);
 
                 break;
 
-            case "AMM":
+            case "\"type\":\"AMMO_BAG\"}":
 
-                // gets the inner class from the "update" json string
+                // rebuilds the class
 
-                CachedAmmoBag cachedAmmoBag = gson.fromJson(update, CachedAmmoBag.class);
-
-                // creates a new UpdateClass from the obtained parameters
-
-                updateClass = new UpdateClass(UpdateType.AMMO_BAG, cachedAmmoBag, playerId);
+                updateClass = gson.fromJson(msg, CachedAmmoBag.class);
 
                 break;
 
-            case "GAM":
+            case "\"type\":\"GAME\"}":
 
-                // gets the inner class from the "update" json string
+                // rebuilds the class
 
-                CachedGame cachedGame = gson.fromJson(update, CachedGame.class);
-
-                // creates a new UpdateClass from the obtained parameters
-
-                updateClass = new UpdateClass(UpdateType.GAME, cachedGame, playerId);
+                updateClass = gson.fromJson(msg, CachedGame.class);
 
                 break;
 
-            case "SPA":
+            case "\"type\":\"SPAWN_CELL\"}":
 
-                // gets the inner class from the "update" json string
+                // rebuilds the class
 
-                CachedSpawnCell cachedSpawnCell = gson.fromJson(update, CachedSpawnCell.class);
-
-                // creates a new UpdateClass from the obtained parameters
-
-                updateClass = new UpdateClass(UpdateType.SPAWN_CELL, cachedSpawnCell, playerId);
+                updateClass = gson.fromJson(msg, CachedSpawnCell.class);
 
                 break;
 
+            case "\"type\":\"AMMO_CELL\"}":
 
-            case "CEL":
+                // rebuilds the class
 
-                // gets the inner class from the "update" json string
-
-                CachedAmmoCell cachedAmmoCell = gson.fromJson(update, CachedAmmoCell.class);
-
-                // creates a new UpdateClass from the obtained parameters
-
-                updateClass = new UpdateClass(UpdateType.CELL_AMMO, cachedAmmoCell, playerId);
+                updateClass = gson.fromJson(msg, CachedAmmoCell.class);
 
                 break;
 
-            case "LOB":
+            case "\"type\":\"LOBBY\"}":
 
-                // gets the inner class from the "update" json string
+                // rebuilds the class
 
-                CachedLobby cachedLobby = gson.fromJson(update, CachedLobby.class);
+                updateClass = gson.fromJson(msg, CachedLobby.class);
 
-                // creates a new UpdateClass from the obtained parameters
+                break;
 
-                updateClass = new UpdateClass(UpdateType.LOBBY, cachedLobby, playerId);
+            case "\"type\":\"TURN\"}":
+
+                // json will be handled in secondary method
+
+                handleTurnUpdate(msg);
 
                 break;
 
             default:
+
+                LOGGER.log(WARNING,"[Socket-Client-Reader] Received unknown Update");
 
                 break;
 
         }
 
         RunClient.getView().sendUpdates(updateClass);
+    }
+
+    private void handleTurnUpdate(String message){
+
+        // split the gson to get the last parameter (GSON can not detect the superclass)
+
+        String[] splitted = message.split(",");
+
+        // creates a new UpdateClass variable ( will be instantiated in the switch )
+
+        UpdateClass updateClass = null;
+
+
+        switch (splitted[ splitted.length - 3 ]){
+
+            case "\"actionType\":\"MOVE\"":
+
+                // rebuilds the class
+
+                updateClass = gson.fromJson(message,MoveTurnUpdate.class);
+
+                break;
+
+            case "\"actionType\":\"GRAB\"":
+
+                // rebuilds the class
+
+                updateClass = gson.fromJson(message, GrabTurnUpdate.class);
+
+                break;
+
+            case "\"actionType\":\"SHOOT\"":
+
+                // rebuilds the class
+
+                updateClass = gson.fromJson(message, ShootTurnUpdate.class);
+
+                break;
+
+            case "\"actionType\":\"POWERUP\"":
+
+                // rebuilds the class
+
+                updateClass = gson.fromJson(message, PowerUpTurnUpdate.class);
+
+                break;
+
+            default:
+
+                LOGGER.log(WARNING,"[Socket-Client-Reader] Received unknown TurnUpdate");
+
+                break;
+
+        }
+
+
+        RunClient.getView().sendUpdates(updateClass);
+
     }
 
 

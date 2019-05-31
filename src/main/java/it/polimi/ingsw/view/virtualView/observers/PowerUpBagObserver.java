@@ -1,12 +1,13 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.player.PowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 
 public class PowerUpBagObserver implements Observer {
 
-    private CachedPowerUpBag powerUpBag = null;
+    private PowerUpBag powerUpBag = null;
     private final PlayerObserver playerObserver;
 
     public PowerUpBagObserver(PlayerObserver up) {
@@ -20,11 +21,11 @@ public class PowerUpBagObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.powerUpBag =(CachedPowerUpBag) object;
+        this.powerUpBag =(PowerUpBag) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.POWERUP_BAG, powerUpBag, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedPowerUpBag(powerUpBag,playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -41,11 +42,11 @@ public class PowerUpBagObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.powerUpBag =(CachedPowerUpBag) object;
+        this.powerUpBag =(PowerUpBag) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new UpdateClass(UpdateType.POWERUP_BAG, powerUpBag, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedPowerUpBag(powerUpBag,playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 

@@ -2,13 +2,15 @@ package it.polimi.ingsw.view.cachemodel.sendables;
 
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Stats;
-import it.polimi.ingsw.view.cachemodel.updates.Update;
+import it.polimi.ingsw.view.updates.Update;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.awt.*;
 import java.io.Serializable;
 import java.util.List;
 
-public class CachedStats implements Serializable, Update {
+public class CachedStats extends UpdateClass {
 
     private final int score;
     private final int deaths;
@@ -17,7 +19,9 @@ public class CachedStats implements Serializable, Update {
     private final List<Integer> dmgTaken;
     private final Point currentPosition;
 
-    public CachedStats(Stats stats) {
+    public CachedStats(Stats stats, int playerId) {
+
+        super(UpdateType.STATS,playerId);
 
         this.score = stats.getScore();
         this.deaths = stats.getDeaths();

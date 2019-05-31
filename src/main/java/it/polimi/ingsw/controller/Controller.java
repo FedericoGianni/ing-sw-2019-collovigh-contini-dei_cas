@@ -10,9 +10,10 @@ import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
-import it.polimi.ingsw.view.cachemodel.updates.InitialUpdate;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateType;
+import it.polimi.ingsw.view.updates.InitialUpdate;
+import it.polimi.ingsw.view.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
@@ -249,8 +250,7 @@ public class Controller {
 
     private void sendInitialUpdate(List<String> nameList, List<PlayerColor>playerColors, int gameId, int mapType ){
 
-        InitialUpdate update = new InitialUpdate(nameList,playerColors, gameId, mapType);
-        UpdateClass updateClass = new UpdateClass(UpdateType.INITIAL,update,-1);
+        UpdateClass updateClass = new InitialUpdate(nameList,playerColors, gameId, mapType);
 
         for (VirtualView v: players){
 
@@ -442,6 +442,21 @@ public class Controller {
     //TODO need to know Cached_Weapon logic and MacroEffect logic
     public void shoot(int weapon, int target){
         incrementPhase();
+    }
+
+    /**
+     *
+     * @param turnUpdate is the update to send to the Inactive player
+     */
+    public void updateInactivePlayers(TurnUpdate turnUpdate){
+
+        for (VirtualView player : players){
+
+            if (isPlayerOnline(player.getPlayerId()) && (player.getPlayerId() != getCurrentPlayer())){
+
+                player.sendUpdates(turnUpdate);
+            }
+        }
     }
 
 

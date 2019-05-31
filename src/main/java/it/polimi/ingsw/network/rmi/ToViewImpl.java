@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.rmi;
 
 import it.polimi.ingsw.network.ToView;
-import it.polimi.ingsw.view.cachemodel.updates.UpdateClass;
+import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.rmi.RemoteException;
 import java.util.logging.Level;
