@@ -111,7 +111,7 @@ public class FileRead {
         int c = 0;
 
         do{
-            r = genRandInt(1 + 7*x, 5 + 7*x);
+            r = genRandInt(1 + 7*x, 3 + 7*x);
             c = genRandInt(1+ 12*y, 10 + 12*y);
         }while(battelfield[r][c] != ' ');
 
@@ -121,11 +121,12 @@ public class FileRead {
 
     public static void removePlayer(int id){
 
-        Character.forDigit(id, 10);
+        char c = Character.forDigit(id, 10);
+        //System.out.println("id: " + Character.forDigit(id, 10));
 
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
-                if(battelfield[i][j] == id){
+                if(battelfield[i][j] == c){
                     battelfield[i][j] = ' ';
                 }
             }

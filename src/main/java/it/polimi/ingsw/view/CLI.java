@@ -17,6 +17,7 @@ import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 import java.awt.*;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -47,7 +48,7 @@ public class CLI implements UserInterface {
     @Override
     public void startUI() {
 
-        int connectionType;
+        int connectionType = -1;
 
         FileRead.showWelcome();
 
@@ -57,7 +58,11 @@ public class CLI implements UserInterface {
 
             System.out.println("Digita: \n 1 per connetterti al server con SOCKET \n 2 per farlo con RMI");
 
-            connectionType = scanner.nextInt();
+            try {
+                connectionType = scanner.nextInt();
+            }catch (InputMismatchException e){
+                System.out.println("Valore non valido. Riprova!");
+            }
 
             scanner.nextLine();
 
@@ -225,6 +230,7 @@ public class CLI implements UserInterface {
                 System.out.println("Il giocatore: " + playerId + " si è spostato!");
                 int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                 int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
+
                 FileRead.removePlayer(playerId);
                 FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
                 FileRead.showBattlefield();
@@ -387,6 +393,7 @@ public class CLI implements UserInterface {
 
 
         List<CachedPowerUp> powerUps;
+        List<CachedPowerUp> usablePowerUps;
         Boolean validChoice = false;
         int read;
 
@@ -399,14 +406,31 @@ public class CLI implements UserInterface {
                     .getPowerUpBag()
                     .getPowerUpList()
                     .stream()
+                    .collect(Collectors.toList());
+
+            usablePowerUps = view
+                    .getCacheModel()
+                    .getCachedPlayers()
+                    .get(view.getPlayerId())
+                    .getPowerUpBag()
+                    .getPowerUpList()
+                    .stream()
                     .filter( x -> (( x.getType() != PowerUpType.TAG_BACK_GRENADE ) && ( x.getType() != PowerUpType.TARGETING_SCOPE )))
                     .collect(Collectors.toList());
+
 
             System.out.println("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
-                System.out.println( i + powerUps.get(i).toString());
+                System.out.println( i + " :" + powerUps.get(i).toString());
             }
+
+            System.out.println("Puoi usare uno di questi:");
+            for (int i = 0; i < usablePowerUps.size(); i++) {
+                System.out.println(i + " :" + usablePowerUps.get(i).toString());
+            }
+
+            //TODO se ho solo NEWTON e c'è solo 1 player stampa a schermo skipp this phase
 
             System.out.println("9 -> non usare powerUp");
 
@@ -414,7 +438,7 @@ public class CLI implements UserInterface {
             read = scanner.nextInt();
             scanner.nextLine();
 
-            if ((read >= 0 && read < powerUps.size()) || ( read == 9)) validChoice = true;
+            if ((read >= 0 && read < usablePowerUps.size()) || ( read == 9)) validChoice = true;
 
         }while(!validChoice);
 
@@ -424,7 +448,7 @@ public class CLI implements UserInterface {
 
             view.doAction(new SkipAction());
 
-        }else usePowerUp(powerUps.get(read));
+        }else usePowerUp(usablePowerUps.get(read));
 
 
     }
@@ -562,7 +586,33 @@ public class CLI implements UserInterface {
 
         // Create a NewtonAction object
 
-        NewtonAction newtonAction = new NewtonAction(newton.getColor(),player,amount,Directions.valueOf(direction));
+        Directions enDirection;
+
+        switch (direction){
+            case "NORD":
+                enDirection = Directions.NORTH;
+                break;
+
+            case "SUD":
+                enDirection = Directions.SOUTH;
+                break;
+
+            case "EST":
+                enDirection = Directions.EAST;
+                break;
+
+            case "OVEST":
+                enDirection = Directions.WEST;
+                break;
+
+            default:
+                //this can never happen
+                System.out.println("[DEBUG] direzione non valida!");
+                enDirection = Directions.NORTH;
+                break;
+        }
+
+        NewtonAction newtonAction = new NewtonAction(newton.getColor(),player,amount,enDirection);
 
         // sends it to the Virtual view
 
