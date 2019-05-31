@@ -224,6 +224,7 @@ public class CLI implements UserInterface {
                 System.out.println("Il giocatore: " + playerId + " si è spostato!");
                 int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                 int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
+                System.out.println("[DEBUG] chiamo FileRead.rempvePlayer(playerId)");
                 FileRead.removePlayer(playerId);
                 FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
                 FileRead.showBattlefield();
