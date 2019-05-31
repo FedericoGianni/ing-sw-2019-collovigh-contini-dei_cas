@@ -9,17 +9,17 @@ import java.io.Serializable;
 
 public abstract class CachedCell extends UpdateClass {
 
-    private final CellType type;
+    private final CellType cellType;
 
     public CachedCell(CellType type) {
 
         super((type.equals(CellType.SPAWN) ? UpdateType.SPAWN_CELL : UpdateType.AMMO_CELL));
 
-        this.type = type;
+        this.cellType = type;
     }
 
     public CellType getCellType() {
-        return type;
+        return cellType;
     }
 
     public abstract Point getPosition();
