@@ -35,7 +35,7 @@ import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
 public class Controller {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.FINE;
+    private static Level level = Level.INFO;
 
     private int gameId;
 
@@ -345,6 +345,8 @@ public class Controller {
     public void discardPowerUp(PowerUpType type, Color color){ powerUpPhase.discardPowerUp(type,color);}
 
     public void doAction(JsonAction jsonAction) {
+
+        LOGGER.log(level,"[Controller] Received do action of type: {0}", jsonAction.getType());
 
         switch (jsonAction.getType()){
 

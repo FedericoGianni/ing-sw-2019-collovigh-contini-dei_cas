@@ -38,7 +38,7 @@ public class AmmoCellObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.ammoCell = (CachedAmmoCell) object;
+        this.ammoCell = new CachedAmmoCell((AmmoCell) object);
 
         // encapsulate the update in the update Class
 
