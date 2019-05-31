@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public abstract class CachedCell extends UpdateClass {
 
-    private final CellType type;
+    private final CellType cellType;
 
     public CachedCell(CellType type) {
 
@@ -19,7 +19,7 @@ public abstract class CachedCell extends UpdateClass {
     }
 
     public CellType getCellType() {
-        return type;
+        return cellType;
     }
 
     public abstract Point getPosition();
