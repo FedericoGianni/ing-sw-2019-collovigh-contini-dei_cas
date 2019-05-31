@@ -13,6 +13,7 @@ import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.TagbackGrenade;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
@@ -33,6 +34,7 @@ public class JsonExampleMaker {
 
         writeUsePowerUp();
         writeMove();
+        writeSkip();
 
 
     }
@@ -304,6 +306,29 @@ public class JsonExampleMaker {
 
             e.printStackTrace();
         }
+    }
+
+    public static void writeSkip(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            JsonAction jsonAction = new SkipAction();
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/skip.json");
+
+
+            gson.toJson(jsonAction, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
     }
 
 }

@@ -1,1 +1,1 @@
-{"moves":["n","n","w"],"finalPos":{"x":2,"y":2},"actionType":"MOVE"}
+{"moves":["NORTH","NORTH","WEST"],"finalPos":{"x":2,"y":2},"actionType":"MOVE"}

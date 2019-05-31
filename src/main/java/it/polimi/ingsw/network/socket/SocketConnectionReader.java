@@ -260,7 +260,7 @@ public class SocketConnectionReader extends Thread {
 
         switch (values[values.length - 1]){
 
-            case "\"actionType\":\"POWER_UP\"":
+            case "\"actionType\":\"POWER_UP\"}":
 
                 switch (values[values.length - 2]){
 
@@ -297,30 +297,47 @@ public class SocketConnectionReader extends Thread {
 
                 break;
 
-            case "\"actionType\":\"MOVE\"":
+            case "\"actionType\":\"MOVE\"}":
 
                 jsonAction = gson.fromJson(message, Move.class);
 
                 break;
 
-            case "\"actionType\":\"GRAB\"":
+            case "\"actionType\":\"GRAB\"}":
 
                 jsonAction = gson.fromJson(message, Grab.class);
 
                 break;
 
-            case "\"actionType\":\"SHOOT\"":
+            case "\"actionType\":\"SHOOT\"}":
 
                 jsonAction = gson.fromJson(message, ShootAction.class);
 
                 break;
 
-            case "\"actionType\":\"SKIP\"":
+            case "{\"actionType\":\"SKIP\"}":
 
                 jsonAction = gson.fromJson(message, SkipAction.class);
 
                 break;
 
+            case "{\"actionType\":\"FRENZY_MOVE\"}":
+
+                jsonAction = gson.fromJson(message,FrenzyMove.class);
+
+                break;
+
+            case "{\"actionType\":\"FRENZY_GRAB\"}":
+
+                jsonAction = gson.fromJson(message,FrenzyGrab.class);
+
+                break;
+
+            case "{\"actionType\":\"FRENZY_SHOOT\"}":
+
+                jsonAction = gson.fromJson(message,FrenzyShoot.class);
+
+                break;
 
             default:
 
@@ -329,7 +346,7 @@ public class SocketConnectionReader extends Thread {
                 break;
         }
 
-        LOGGER.log(level,"[SOCKET-CONN-READER] Forwarding Action to controller : {0}  ", jsonAction );
+        LOGGER.log(level,"[SOCKET-CONN-READER] Forwarding Action to controller : {0}  ", jsonAction.getType() );
 
         Server.getController().doAction(jsonAction);
     }
