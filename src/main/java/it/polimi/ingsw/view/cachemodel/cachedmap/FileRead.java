@@ -1,12 +1,15 @@
 package it.polimi.ingsw.view.cachemodel.cachedmap;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 
@@ -32,7 +35,11 @@ public class FileRead {
         }
 
         showWelcome();
-
+        playerColorList.add(ANSI_BLUE);
+        playerColorList.add(ANSI_PURPLE);
+        playerColorList.add(ANSI_WHITE);
+        playerColorList.add(ANSI_YELLOW);
+        playerColorList.add(ANSI_GREEN);
         insertPlayer(0,0,'1');
         insertPlayer(0,1,'2');
         insertPlayer(0,2,'3');
@@ -44,6 +51,23 @@ public class FileRead {
         insertPlayer(2,1,'9');
         insertPlayer(2,2,'@');
         insertPlayer(2,3, '#');
+        Vector<Character> v = new Vector<>();
+        v.add('à');
+        v.add('ò');
+        v.add('è');
+
+
+        insertAmmoCard(0,0, v);
+        insertAmmoCard(0, 1, v);
+        insertAmmoCard(0,2, v);
+        insertAmmoCard(0, 3, v);
+        insertAmmoCard(1, 0 ,v);
+        insertAmmoCard(1,1, v);
+        insertAmmoCard(1,2,v);
+        insertAmmoCard(1,3,v);
+        insertAmmoCard(2,1,v);
+        insertAmmoCard(2,2,v);
+        insertAmmoCard(2,3,v);
         showBattlefield();
 
     }
@@ -95,11 +119,110 @@ public class FileRead {
         }
     }
 
-    public static int genRandInt(int lower, int upper){
+    private static int genRandInt(int lower, int upper){
         Random rand = new Random();
         return rand.nextInt(upper-lower) + lower;
     }
 
+    //call this function from UPDATE of type AmmoCell
+    public static void insertAmmoCard(int x, int y, CachedAmmoCell c){
+
+            for (int j = 0; j < c.getAmmoList().size(); j++) {
+                Vector<Character> v = generateAmmoCard(c.getAmmoList());
+                insertAmmoCard(x, y, v);
+            }
+    }
+
+    private static void insertAmmoCard(int x, int y, Vector<Character> v){
+
+        if(x < 0 || x > 2 || y < 0 || y > 3)
+            return;
+
+
+        int r = -1;
+        int c = -1;
+        Boolean validPos = false;
+
+        do {
+            //rows
+            switch (x) {
+                case 0:
+                    r = genRandInt(0, 5);
+                    break;
+
+                case 1:
+                    r = genRandInt(8, 11);
+                    break;
+
+                case 2:
+                    r = genRandInt(14, 17);
+                    break;
+            }
+
+            //cols
+            switch (y) {
+                case 0:
+                    c = genRandInt(1, 10);
+                    break;
+                case 1:
+                    c = genRandInt(13, 22);
+                    break;
+                case 2:
+                    c = genRandInt(23, 32);
+                    break;
+                case 3:
+                    c = genRandInt(35, 44);
+                    break;
+            }
+
+            int validCount = 0;
+
+            for (int i = 0; i < v.size(); i++) {
+                if (battelfield[r][c+i] == ' ') {
+                    validCount++;
+                }
+            }
+
+            if(validCount == v.size()){
+                validPos = true;
+            }
+
+        }while(!validPos);
+
+        for (int i = 0; i < v.size(); i++) {
+            battelfield[r][c + i] = v.get(i);
+        }
+
+    }
+
+    private static Vector<Character> generateAmmoCard(List <Color> ammoCubeList) {
+
+        Vector<Character> charList = new Vector<>();
+
+        for (int i = 0; i < ammoCubeList.size(); i++) {
+
+            switch (ammoCubeList.get(i)) {
+                case BLUE:
+                    charList.add('à');
+                    break;
+
+                case RED:
+                    charList.add('ò');
+                    break;
+
+                case YELLOW:
+                    charList.add('è');
+                    break;
+            }
+
+            //add PowerUp to the ammoCard
+            if (charList.size() == 2) {
+                charList.add('+');
+            }
+        }
+
+        return charList;
+    }
 
     public static void insertPlayer(int x, int y, char id){
 
@@ -107,16 +230,45 @@ public class FileRead {
            return;
 
 
-        int r = 0;
-        int c = 0;
+        int r = -1;
+        int c = -1;
 
-        do{
-            r = genRandInt(1 + 7*x, 3 + 7*x);
-            c = genRandInt(1+ 12*y, 10 + 12*y);
+        do {
+            //rows
+            switch (x) {
+                case 0:
+                    r = genRandInt(0, 5);
+                    break;
+
+                case 1:
+                    r = genRandInt(8, 11);
+                    break;
+
+                case 2:
+                    r = genRandInt(14, 17);
+                    break;
+            }
+
+            //cols
+            switch (y) {
+                case 0:
+                    c = genRandInt(1, 10);
+                    break;
+                case 1:
+                    c = genRandInt(13, 22);
+                    break;
+                case 2:
+                    c = genRandInt(23, 32);
+                    break;
+                case 3:
+                    c = genRandInt(35, 44);
+                    break;
+            }
+
         }while(battelfield[r][c] != ' ');
 
-        battelfield[r][c] = id;
 
+        battelfield[r][c] = id;
     }
 
     public static void removePlayer(int id){
@@ -263,6 +415,15 @@ public class FileRead {
                         break;
                     case '4':
                         System.out.print(playerColorList.get(4).escape() + '4' + ANSI_RESET.escape());
+                        break;
+                    case 'à':
+                        System.out.print(ANSI_BLUE.escape() + 'à' + ANSI_RESET.escape());
+                        break;
+                    case 'ò':
+                        System.out.print(ANSI_RED.escape() + 'ò' + ANSI_RESET.escape());
+                        break;
+                    case 'è':
+                        System.out.print(ANSI_YELLOW.escape() + 'ò' + ANSI_RESET.escape());
                         break;
                     default:
                         System.out.print(battelfield[i][j]);

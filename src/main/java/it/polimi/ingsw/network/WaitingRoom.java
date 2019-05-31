@@ -7,8 +7,6 @@ import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedLobby;
-import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,7 @@ public class WaitingRoom {
     private static final int TIMER = 5;
     private static int timerCount = TIMER;
 
-    private static final int DEFAULT_MIN_PLAYERS = 2;
+    private static final int DEFAULT_MIN_PLAYERS = 1;
     private static final int DEFAULT_MAX_PLAYERS = 5;
 
     private CopyOnWriteArrayList<String> players;

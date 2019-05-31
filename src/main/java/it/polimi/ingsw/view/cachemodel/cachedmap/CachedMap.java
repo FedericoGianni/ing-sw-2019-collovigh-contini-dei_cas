@@ -27,4 +27,6 @@ public class CachedMap {
     public CachedCell getCachedCell(int r, int c) {
         return map[r][c];
     }
+
+    public CachedCell[][] getCachedCellMatrix(){return map;}
 }

@@ -41,7 +41,7 @@ public class CachedAmmoCell extends CachedCell {
         return ammoList;
     }
 
-    public Boolean getPowerUp() {
+    public Boolean hasPowerUp() {
         return powerUp;
     }
 

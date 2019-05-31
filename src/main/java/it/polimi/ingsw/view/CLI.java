@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.ProtocolType;
-import it.polimi.ingsw.view.actions.ActionTypes;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
@@ -13,13 +12,15 @@ import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.Player;
+import it.polimi.ingsw.view.cachemodel.cachedmap.CachedCell;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
@@ -220,6 +221,7 @@ public class CLI implements UserInterface {
                 //TODO mostrare quali colori hanno preso i giocatori?
                 FileRead.loadMap(view.getCacheModel().getMapType());
                 System.out.println("Ho scelto casualmente la mappa di tipo: " + view.getCacheModel().getMapType());
+
                 break;
 
             case STATS:
@@ -257,7 +259,15 @@ public class CLI implements UserInterface {
                 break;
 
             case AMMO_CELL:
-
+                //TODO inserire ammocell nella mappa della cli FileRead
+                System.out.println("[DEBUG] Ricevuto AMMO_CELL update -> inserisco le ammoCard nella mappa");
+                for(CachedCell c1[] : view.getCacheModel().getCachedMap().getCachedCellMatrix()) {
+                    for(CachedCell c2 : c1){
+                        if(c2.getCellType().equals("AMMO_CELL")){
+                            FileRead.insertAmmoCard((int) c2.getPosition().getX(), (int) c2.getPosition().getY(), (CachedAmmoCell) c2);
+                        }
+                    }
+                }
                 break;
 
             case TURN:
@@ -643,7 +653,7 @@ public class CLI implements UserInterface {
             c = scanner.nextInt();
             scanner.nextLine();
 
-            if(view.getCacheModel().getCachedMap().getCachedCell(r,c).equals(null)){
+            if(view.getCacheModel().getCachedMap().getCachedCell(r,c) == null){
 
                 System.out.println("Cella non esistente. Riprova: ");
 
@@ -682,9 +692,9 @@ public class CLI implements UserInterface {
             System.out.println("AZIONE:");
             System.out.println("Puoi:");
 
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < actions.size(); i++) {
 
-                System.out.println( i + actions.get(i));
+                System.out.println( i + ": " + actions.get(i));
 
             }
 
