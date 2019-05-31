@@ -11,6 +11,8 @@ import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+import it.polimi.ingsw.view.updates.otherplayerturn.PowerUpTurnUpdate;
 
 import java.awt.*;
 import java.util.List;
@@ -116,6 +118,10 @@ public class PowerUpPhase {
                 break;
 
         }
+
+        // notify the inactive players
+
+        controller.updateInactivePlayers(new PowerUpTurnUpdate(controller.getCurrentPlayer(),new CachedPowerUp(powerUpAction.getPowerUpType(),powerUpAction.getColor())));
     }
 
     public void useNewton(NewtonAction newtonAction){
