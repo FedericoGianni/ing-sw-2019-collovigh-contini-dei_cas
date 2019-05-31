@@ -13,14 +13,14 @@ public interface ToClient extends  Remote {
      * @param name is the name that was chosen by the user
      * @throws RemoteException
      */
-    void NameAlreadyTaken(String name) throws RemoteException;
+    void nameAlreadyTaken(String name) throws RemoteException;
 
     /**
      * This method notify the user that the color chosen is already taken
      * @param color is the color that was chosen by the user
      * @throws RemoteException
      */
-    void ColorAlreadyTaken(PlayerColor color) throws RemoteException;
+    void colorAlreadyTaken(PlayerColor color) throws RemoteException;
 
     /**
      *

@@ -1,15 +1,11 @@
 package it.polimi.ingsw.network.rmi;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.map.Directions;
+
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
-
-import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -126,9 +122,7 @@ public class ToServerImpl implements ToServer{
 
             return playerId;
 
-        }catch (RemoteException e){
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
-        }catch (NotBoundException e){
+        }catch (Exception e){
             LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
 

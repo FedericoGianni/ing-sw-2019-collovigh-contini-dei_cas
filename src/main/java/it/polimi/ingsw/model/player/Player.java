@@ -12,8 +12,6 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

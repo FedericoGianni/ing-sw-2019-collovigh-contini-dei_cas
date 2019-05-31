@@ -30,7 +30,7 @@ public class ToClientImpl implements ToClient {
      * {@inheritDoc}
      */
     @Override
-    public void NameAlreadyTaken(String name) throws RemoteException{
+    public void nameAlreadyTaken(String name) throws RemoteException{
 
 
     }
@@ -39,7 +39,7 @@ public class ToClientImpl implements ToClient {
      * {@inheritDoc}
      */
     @Override
-    public void ColorAlreadyTaken(PlayerColor color) throws RemoteException{
+    public void colorAlreadyTaken(PlayerColor color) throws RemoteException{
 
     }
 
