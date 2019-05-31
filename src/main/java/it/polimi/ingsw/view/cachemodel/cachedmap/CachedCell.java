@@ -15,7 +15,7 @@ public abstract class CachedCell extends UpdateClass {
 
         super((type.equals(CellType.SPAWN) ? UpdateType.SPAWN_CELL : UpdateType.AMMO_CELL));
 
-        this.type = type;
+        this.cellType = type;
     }
 
     public CellType getCellType() {
