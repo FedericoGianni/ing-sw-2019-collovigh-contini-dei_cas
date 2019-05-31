@@ -122,8 +122,7 @@ public class FileRead {
     public static void removePlayer(int id){
 
         char c = Character.forDigit(id, 10);
-        System.out.println("removePlayer called inside FileRead");
-        System.out.println("id: " + Character.forDigit(id, 10));
+        //System.out.println("id: " + Character.forDigit(id, 10));
 
         for (int i = 0; i < R; i++) {
             for (int j = 0; j < C; j++) {
