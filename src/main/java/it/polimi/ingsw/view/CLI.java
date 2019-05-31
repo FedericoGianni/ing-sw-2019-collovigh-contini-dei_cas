@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.view.actions.ActionTypes;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
@@ -17,9 +18,8 @@ import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 import java.awt.*;
-import java.util.InputMismatchException;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
@@ -262,7 +262,7 @@ public class CLI implements UserInterface {
 
             case TURN:
 
-                //TODO
+
 
                 break;
 
@@ -666,8 +666,105 @@ public class CLI implements UserInterface {
 
     @Override
     public void startAction() {
-        //TODO first action handling
+
+
+        Boolean valid;
+        int choice = -1;
+
+        List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E PRENDI ", "SPARA", "SKIP"));
+
+
+
+        do {
+
+            valid = false;
+
+            System.out.println("AZIONE:");
+            System.out.println("Puoi:");
+
+            for (int i = 0; i < 7; i++) {
+
+                System.out.println( i + actions.get(i));
+
+            }
+
+            System.out.println("Digita il numero dell'azione che vuoi fare: ");
+
+            try {
+
+                choice = scanner.nextInt();
+                scanner.nextLine();
+
+            }catch (InputMismatchException e){
+
+                System.out.println("non è un numero: Riprova!");
+
+            }
+
+
+            if (choice >=0 && choice < actions.size()){
+
+                valid = true;
+            }else {
+
+                System.out.println(" Scelta non valida: Riprova");
+            }
+
+
+
+        }while (!valid);
+
+        switch (choice){
+
+            case 0:
+
+                startMove();
+
+                break;
+
+            case 1:
+
+                startGrab();
+
+                break;
+
+            case 2:
+
+                startShoot();
+
+                break;
+
+            case 3:
+
+                view.doAction(new SkipAction());
+
+                break;
+
+            default:
+
+                System.out.println("Azione non esistente");
+
+                break;
+        }
     }
+
+
+    public void startMove(){
+
+        //TODO Move
+    }
+
+    public void startGrab(){
+
+        //TODO Grab
+    }
+
+    public void startShoot(){
+
+        //TODO Shoot
+    }
+
+
 
     @Override
     public void startReload() {

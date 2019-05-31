@@ -432,6 +432,22 @@ public class Map {
 
     }
 
+    public void ReplaceAmmoCard(){
+
+        AmmoCell cell;
+
+        for(Cell[] c : this.matrix){
+
+            for(Cell c2 : c){
+
+                if(c2 != null && c2.isAmmoCell())
+
+                    c2.generateAmmoCard();
+
+            }
+        }
+    }
+
     /**
      * Method useful for canSee method inside, which records if canSee algorithm has already visited this Cell
      */

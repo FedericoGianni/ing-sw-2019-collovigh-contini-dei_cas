@@ -203,4 +203,15 @@ public abstract class Cell extends Subject {
 
         return isAmmoCell;
     }
+
+    public void generateAmmoCard(){
+
+        if (isAmmoCell){
+
+            AmmoCell cell = (AmmoCell) this;
+
+            cell.generateAmmoCard();
+
+        }
+    }
 }

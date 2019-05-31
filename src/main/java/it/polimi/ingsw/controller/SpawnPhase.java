@@ -30,7 +30,16 @@ public class SpawnPhase {
         String drawString = "[CONTROLLER - Spawn] accessing Model to drawPowerUp for player: " + controller.getCurrentPlayer();
         String spawnString = "[CONTROLLER - Spawn] calling startPhase0 for virtual view id: " + controller.getCurrentPlayer();
 
-        if (!controller.isPlayerOnline(controller.getCurrentPlayer())){
+        if (Model.getPlayer(controller.getCurrentPlayer()).getStats().getCurrentPosition() != null) {
+
+            //if player has already spawned it skips this phase
+
+            LOGGER.log(level,"[CONTROLLER - Spawn] skipping SPAWN phase for player:{0} ", controller.getCurrentPlayer());
+            controller.incrementPhase();
+
+
+
+        } else if (!controller.isPlayerOnline(controller.getCurrentPlayer())) {
 
             // if the player is not online skips the phase and do default spawn
 
@@ -38,12 +47,7 @@ public class SpawnPhase {
 
             controller.incrementPhase();
 
-        } else if(Model.getPlayer(controller.getCurrentPlayer()).getStats().getCurrentPosition() != null) {
 
-            //if player has already spawned it skips this phase
-
-            LOGGER.log(level,"[CONTROLLER - Spawn] skipping SPAWN phase for player:{0} ", controller.getCurrentPlayer());
-            controller.incrementPhase();
 
         } else if (Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().getList().isEmpty()) {
 
@@ -58,7 +62,7 @@ public class SpawnPhase {
 
         } else {
 
-            //if currentPlayer already has more thean 0 -> draw only 1
+            //if currentPlayer already has more then 0 -> draw only 1
 
             LOGGER.log(level, drawString);
             controller.drawPowerUp();
@@ -69,7 +73,10 @@ public class SpawnPhase {
 
     public void defaultSpawn(){
 
-        controller.drawPowerUp();
+        // if the player have 0 powerUps draw 2
+
+        if (Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().getList().isEmpty()) controller.drawPowerUp();
+
         controller.drawPowerUp();
 
         // discard the first one

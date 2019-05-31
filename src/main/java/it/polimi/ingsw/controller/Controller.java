@@ -3,12 +3,12 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.view.actions.JsonAction;
+import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
@@ -282,33 +282,25 @@ public class Controller {
 
             case ACTION1:
 
-                if (isPlayerOnline(getCurrentPlayer())) handleAction();
-
-                else incrementPhase();
+                actionPhase.handleAction();
 
                 break;
 
             case POWERUP2:
 
-                if (isPlayerOnline(getCurrentPlayer())) powerUpPhase.handlePowerUp();
-
-                else incrementPhase();
+                powerUpPhase.handlePowerUp();
 
                 break;
 
             case ACTION2:
 
-                if (isPlayerOnline(getCurrentPlayer())) handleAction();
-
-                else incrementPhase();
+                actionPhase.handleAction();
 
                 break;
 
             case POWERUP3:
 
-                if (isPlayerOnline(getCurrentPlayer())) powerUpPhase.handlePowerUp();
-
-                else incrementPhase();
+                powerUpPhase.handlePowerUp();
 
                 break;
 
@@ -357,7 +349,7 @@ public class Controller {
 
             case MOVE:
 
-                //TODO move
+                actionPhase.move((Move)jsonAction);
 
                 break;
 
@@ -404,11 +396,6 @@ public class Controller {
     }
 
 
-
-    public void handleAction(){
-        players.get(getCurrentPlayer()).startAction();
-    }
-
     public void handleReload(){
         players.get(getCurrentPlayer()).startReload();
     }
@@ -416,32 +403,6 @@ public class Controller {
 
     //ACTIONS
 
-    public void move(int r, int c){
-        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling move");
-        Cell cell = Model.getMap().getCell(r, c);
-        Model.getPlayer(getCurrentPlayer()).setPlayerPos(cell);
-        incrementPhase();
-    }
-
-    public void moveGrab(int r, int c){
-        LOGGER.info("[CONTROLLER] player id " + getCurrentPlayer() + "calling moveGrab");
-        Cell cell = Model.getMap().getCell(r, c);
-        LOGGER.info("[CONTROLLER] accessing Model to set new position");
-        Model.getPlayer(getCurrentPlayer()).setPlayerPos(cell);
-        grab();
-        incrementPhase();
-    }
-
-    public void grab(){
-        LOGGER.info("[CONTROLLER] accessing Model to grab Ammo inside cell: " + Model.getPlayer(getCurrentPlayer()).getStats().getCurrentPosition());
-        Model.getPlayer(getCurrentPlayer()).pickAmmoHere();
-        incrementPhase();
-    }
-
-    //TODO need to know Cached_Weapon logic and MacroEffect logic
-    public void shoot(int weapon, int target){
-        incrementPhase();
-    }
 
     /**
      *

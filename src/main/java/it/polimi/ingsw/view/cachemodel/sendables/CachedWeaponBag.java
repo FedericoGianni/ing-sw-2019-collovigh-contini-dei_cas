@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class CachedWeaponBag extends UpdateClass {
 
     private final List<String> weapons;
+    private final List<Boolean> loaded;
 
     public CachedWeaponBag(WeaponBag bag, int playerId) {
 
@@ -25,9 +26,17 @@ public class CachedWeaponBag extends UpdateClass {
                 .stream()
                 .map(Weapon::getName)
                 .collect(Collectors.toList());
+
+        this.loaded = bag
+                .getList()
+                .stream()
+                .map(Weapon::isLoaded)
+                .collect(Collectors.toList());
     }
 
     public List<String> getWeapons() {
         return weapons;
     }
+
+    public List<Boolean> getLoaded() { return loaded; }
 }

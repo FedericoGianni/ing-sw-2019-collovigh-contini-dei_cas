@@ -39,6 +39,9 @@ public class PowerUpPhase {
 
     // Server -> Client flow
 
+    /**
+     * This methods will forward the action Request to the virtual View
+     */
     public void handlePowerUp(){
 
         int currentPlayer = controller.getCurrentPlayer();

@@ -61,12 +61,21 @@ public class AmmoCell extends Cell {
     public AmmoCard pickAmmoPlaced() {
 
         AmmoCard tempAmmo = ammoPlaced;
-        ammoPlaced = AmmoCard.generateRandCard();
+
+        ammoPlaced = null;
+
         updateAll(this);
 
         return tempAmmo;
     }
 
+    public void generateAmmoCard(){
+
+        if (ammoPlaced == null) ammoPlaced = AmmoCard.generateRandCard();
+
+        updateAll(this);
+
+    }
 
 
 }
