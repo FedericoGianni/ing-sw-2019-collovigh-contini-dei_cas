@@ -54,7 +54,7 @@ public class FileRead {
         Vector<Character> v = new Vector<>();
         v.add('à');
         v.add('ò');
-        v.add('è');
+        v.add('+');
 
         insertAmmoCard(0,0,v);
         insertAmmoCard(0, 1, v);
@@ -474,13 +474,16 @@ public class FileRead {
                         System.out.print(playerColorList.get(4).escape() + '4' + ANSI_RESET.escape());
                         break;
                     case 'à':
-                        System.out.print(ANSI_BLUE.escape() + 'à' + ANSI_RESET.escape());
+                        System.out.print(ANSI_BLUE.escape() + '°' + ANSI_RESET.escape());
                         break;
                     case 'ò':
-                        System.out.print(ANSI_RED.escape() + 'ò' + ANSI_RESET.escape());
+                        System.out.print(ANSI_RED.escape() + '°' + ANSI_RESET.escape());
                         break;
                     case 'è':
-                        System.out.print(ANSI_YELLOW.escape() + 'ò' + ANSI_RESET.escape());
+                        System.out.print(ANSI_YELLOW.escape() + '°' + ANSI_RESET.escape());
+                        break;
+                    case '+':
+                        System.out.print(ANSI_WHITE.escape() + '^' + ANSI_RESET.escape());
                         break;
                     default:
                         System.out.print(battelfield[i][j]);

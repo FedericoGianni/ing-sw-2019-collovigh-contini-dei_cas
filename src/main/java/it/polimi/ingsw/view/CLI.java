@@ -411,6 +411,7 @@ public class CLI implements UserInterface {
         List<CachedPowerUp> usablePowerUps;
         Boolean validChoice = false;
         int read;
+        scanner.reset();
 
         do{
 
@@ -448,7 +449,7 @@ public class CLI implements UserInterface {
             //TODO se ho solo NEWTON e c'è solo 1 player stampa a schermo skipp this phase
 
             System.out.println("9 -> non usare powerUp");
-
+            scanner.reset();
             System.out.println("Scegli un powerUp da usare: ");
             read = scanner.nextInt();
             scanner.nextLine();

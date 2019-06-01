@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.controller.TurnPhase.RELOAD;
 import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
 
 /**
@@ -310,7 +311,10 @@ public class Controller {
                 //check if it's ok to increment roundNumber here
 
                 //this 2 commands should be called by reload method, not here
-                roundNumber++;
+                if(hasSomeoneDied){
+                    //TODO calculate points
+                }
+                //TODO when a virtual view reloads don't call increment phase -> it should be done here so that it calc points
                 incrementPhase();
                 break;
         }
@@ -318,6 +322,11 @@ public class Controller {
 
 
     public void incrementPhase(){
+        if(turnPhase == RELOAD){
+            turnPhase = SPAWN;
+            roundNumber++;
+            handleTurnPhase();
+        }
         turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
         handleTurnPhase();
     }
@@ -399,8 +408,6 @@ public class Controller {
     public void handleReload(){
         if(!(Model.getGame().getPlayers().get(getCurrentPlayer()).getWeapons().size() == 0)){
             players.get(getCurrentPlayer()).startReload();
-        } else{
-            incrementPhase();
         }
     }
 
