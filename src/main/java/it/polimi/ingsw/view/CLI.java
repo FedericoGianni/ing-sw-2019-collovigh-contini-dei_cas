@@ -790,7 +790,6 @@ public class CLI implements UserInterface {
         Boolean validChoice = false;
         int read;
 
-
         do{
             System.out.println("Vuoi ricaricare? Le tue armi sono: ");
             //TODO show weapons -> need cachedWeapons

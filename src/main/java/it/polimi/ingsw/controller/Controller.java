@@ -397,7 +397,11 @@ public class Controller {
 
 
     public void handleReload(){
-        players.get(getCurrentPlayer()).startReload();
+        if(!(Model.getGame().getPlayers().get(getCurrentPlayer()).getWeapons().size() == 0)){
+            players.get(getCurrentPlayer()).startReload();
+        } else{
+            incrementPhase();
+        }
     }
 
 
