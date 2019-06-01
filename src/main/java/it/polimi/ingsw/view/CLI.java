@@ -840,9 +840,9 @@ public class CLI implements UserInterface {
                 System.out.println("Stato: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getOnline());
             }
             else {
-                System.out.println("Danni: " + "nessuno.");
-                System.out.println("Marchi: " + "nessuno.");
-                System.out.println("Morti: " + " 0.");
+                System.out.println("Danni: " + "[]");
+                System.out.println("Marchi: " + "[]");
+                System.out.println("Morti: " + " 0");
             }
 
             if(view.getCacheModel().getCachedPlayers().get(i).getWeaponbag() != null)
