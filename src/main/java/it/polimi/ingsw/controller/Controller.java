@@ -326,9 +326,10 @@ public class Controller {
             turnPhase = SPAWN;
             roundNumber++;
             handleTurnPhase();
+        } else {
+            turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
+            handleTurnPhase();
         }
-        turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
-        handleTurnPhase();
     }
 
     // Spawn Phase

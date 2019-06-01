@@ -12,9 +12,12 @@ import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.Player;
+import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
+import it.polimi.ingsw.view.cachemodel.cachedmap.CachedCell;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
@@ -344,6 +347,7 @@ public class CLI implements UserInterface {
         }
 
         FileRead.showBattlefield();
+        showInfo();
     }
 
     @Override
@@ -446,25 +450,25 @@ public class CLI implements UserInterface {
                 System.out.println(i + " :" + usablePowerUps.get(i).toString());
             }
 
-            //TODO se ho solo NEWTON e c'è solo 1 player stampa a schermo skipp this phase
-
             System.out.println("9 -> non usare powerUp");
             scanner.reset();
             System.out.println("Scegli un powerUp da usare: ");
             read = scanner.nextInt();
             scanner.nextLine();
 
-            if ((read >= 0 && read < usablePowerUps.size()) || ( read == 9)) validChoice = true;
+            if ((read >= 0 && read < usablePowerUps.size()) || read == 9) validChoice = true;
 
         }while(!validChoice);
 
         if ( read == 9){
-
             // if the user types 9 -> end of powerUp phase
-
             view.doAction(new SkipAction());
 
-        }else usePowerUp(usablePowerUps.get(read));
+        }else if(read == 8){
+            showInfo();
+        } else {
+            usePowerUp(usablePowerUps.get(read));
+        }
 
 
     }
@@ -497,7 +501,7 @@ public class CLI implements UserInterface {
 
             }
 
-            System.out.println("Digita il numero della carta che vuoi usare o '9' per non usarne nessuna : ");
+            System.out.println("Digita il numero della carta che vuoi usare o '9' per non usarne nessuna: ");
 
             choice = scanner.nextInt();
             scanner.nextLine();
@@ -699,6 +703,7 @@ public class CLI implements UserInterface {
 
             valid = false;
 
+
             System.out.println("AZIONE:");
             System.out.println("Puoi:");
 
@@ -707,6 +712,10 @@ public class CLI implements UserInterface {
                 System.out.println( i + ": " + actions.get(i));
 
             }
+
+
+            System.out.println("8: info giocatori");
+            System.out.println("9: mostra armi nelle celle di spawn");
 
             System.out.println("Digita il numero dell'azione che vuoi fare: ");
 
@@ -722,7 +731,7 @@ public class CLI implements UserInterface {
             }
 
 
-            if (choice >=0 && choice < actions.size()){
+            if ((choice >=0 && choice < actions.size()) || choice==8 || choice==9){
 
                 valid = true;
             }else {
@@ -758,6 +767,16 @@ public class CLI implements UserInterface {
 
                 view.doAction(new SkipAction());
 
+                break;
+
+            case 8:
+                showInfo();
+                startAction();
+                break;
+
+            case 9:
+                showWeapInSpawnCells();
+                startAction();
                 break;
 
             default:
@@ -801,6 +820,75 @@ public class CLI implements UserInterface {
             //if(read) validChoice = true;
 
         }while(!validChoice);
+    }
+
+    /**
+     * Show informations needed by the user to play his turn i.e. other players stats, weapons...
+     */
+    private void showInfo(){
+
+        System.out.println("[INFO PARTITA]");
+
+        System.out.println("Giocatori: ");
+        for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
+            System.out.print("\n" + view.getCacheModel().getCachedPlayers().get(i).getPlayerId());
+            System.out.print(" :" + view.getCacheModel().getCachedPlayers().get(i).getName() + "\n");
+            if(view.getCacheModel().getCachedPlayers().get(i).getStats() != null) {
+                System.out.println("Danni: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getDmgTaken().toString());
+                System.out.println("Marchi: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getMarks());
+                System.out.println("Morti: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getDeaths());
+                System.out.println("Stato: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getOnline());
+            }
+            else {
+                System.out.println("Danni: " + "nessuno.");
+                System.out.println("Marchi: " + "nessuno.");
+                System.out.println("Morti: " + " 0.");
+            }
+
+            if(view.getCacheModel().getCachedPlayers().get(i).getWeaponbag() != null)
+                System.out.println("Armi: " + view.getCacheModel().getCachedPlayers().get(i).getWeaponbag().getWeapons().toString());
+            else
+                System.out.println("Armi: " + " nessuna.");
+        }
+    }
+
+    /**
+     * Show info needed by the user to see which weapons are avaiable in spawn cells to be bought
+     */
+    private void showWeapInSpawnCells(){
+        System.out.println("[ARMI - SPAWN CELLS]");
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                CachedCell c = view.getCacheModel().getCachedMap().getCachedCell(i, j);
+                if(c != null){
+                    if(c.getCellType().equals(CellType.SPAWN)){
+                        c = (CachedSpawnCell) c;
+
+                        //need only row index to determine which spawn cell we are in
+                        switch ((int) c.getPosition().getX()){
+                            case 0:
+                                System.out.println(AsciiColor.ANSI_BLUE.escape() + "SPAWN BLU" + AsciiColor.ANSI_RESET.escape());
+                                break;
+
+                            case 1:
+                                System.out.println(AsciiColor.ANSI_RED.escape() + "SPAWN ROSSO" + AsciiColor.ANSI_RESET.escape());
+                                break;
+
+                            case 2:
+                                System.out.println(AsciiColor.ANSI_YELLOW.escape() + "SPAWN GIALLO" + AsciiColor.ANSI_RESET.escape());
+                                break;
+
+                        }
+                        for (int k = 0; k < ((CachedSpawnCell) c).getWeaponNames().size(); k++) {
+                            System.out.println("Arma " + k + " : " + ((CachedSpawnCell) c).getWeaponNames().get(k));
+                        }
+
+
+                    }
+                }
+            }
+        }
     }
 
 }
