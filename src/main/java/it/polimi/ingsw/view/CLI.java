@@ -12,7 +12,7 @@ import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.Player;
-import it.polimi.ingsw.view.cachemodel.cachedmap.CachedCell;
+import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.updates.UpdateType;
@@ -259,15 +259,20 @@ public class CLI implements UserInterface {
                 break;
 
             case AMMO_CELL:
-                //TODO inserire ammocell nella mappa della cli FileRead
-                System.out.println("[DEBUG] Ricevuto AMMO_CELL update -> inserisco le ammoCard nella mappa");
-                for(CachedCell c1[] : view.getCacheModel().getCachedMap().getCachedCellMatrix()) {
-                    for(CachedCell c2 : c1){
-                        if(c2.getCellType().equals("AMMO_CELL")){
-                            FileRead.insertAmmoCard((int) c2.getPosition().getX(), (int) c2.getPosition().getY(), (CachedAmmoCell) c2);
+                //insert AmmoCard in FileRead
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        if (view.getCacheModel().getCachedMap().getCachedCell(i, j) != null) {
+                            if (view.getCacheModel().getCachedMap().getCachedCell(i, j).getCellType().equals(CellType.AMMO)) {
+                                FileRead.removeAmmoCard(i,j, (CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i,j));
+                                FileRead.insertAmmoCard(i, j, (CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i, j));
+                                //TODO check if ammo has been grabbed by some player
+                                //} else if(view.getCacheModel().getCachedMap().getCachedCell(i,j).)
+                            }
                         }
                     }
                 }
+
                 break;
 
             case TURN:
@@ -643,15 +648,19 @@ public class CLI implements UserInterface {
 
             //this way you have to check locally if r,c is ok for every different type of map
 
-            System.out.println("riga >>> (0,1,2)");
+            do {
+                System.out.println("riga >>> (0,1,2)");
 
-            r = scanner.nextInt();
-            scanner.nextLine();
+                r = scanner.nextInt();
+                scanner.nextLine();
+            } while (r < 0 || r > 2);
 
-            System.out.println("colonna >>> (0,1,2,3)");
+            do {
+                System.out.println("colonna >>> (0,1,2,3)");
 
-            c = scanner.nextInt();
-            scanner.nextLine();
+                c = scanner.nextInt();
+                scanner.nextLine();
+            } while (c < 0 || c > 3);
 
             if(view.getCacheModel().getCachedMap().getCachedCell(r,c) == null){
 

@@ -56,11 +56,14 @@ public class FileRead {
         v.add('ò');
         v.add('è');
 
-
-        insertAmmoCard(0,0, v);
+        insertAmmoCard(0,0,v);
         insertAmmoCard(0, 1, v);
+        //removeAmmoCard(0,1,v);
+        removeAmmoCard(0,0, v);
         insertAmmoCard(0,2, v);
+        removeAmmoCard(0,2,v);
         insertAmmoCard(0, 3, v);
+        removeAmmoCard(0,3,v);
         insertAmmoCard(1, 0 ,v);
         insertAmmoCard(1,1, v);
         insertAmmoCard(1,2,v);
@@ -127,10 +130,8 @@ public class FileRead {
     //call this function from UPDATE of type AmmoCell
     public static void insertAmmoCard(int x, int y, CachedAmmoCell c){
 
-            for (int j = 0; j < c.getAmmoList().size(); j++) {
-                Vector<Character> v = generateAmmoCard(c.getAmmoList());
-                insertAmmoCard(x, y, v);
-            }
+        Vector<Character> v = generateAmmoCard(c.getAmmoList());
+        insertAmmoCard(x, y, v);
     }
 
     private static void insertAmmoCard(int x, int y, Vector<Character> v){
@@ -195,6 +196,62 @@ public class FileRead {
 
     }
 
+    public static void removeAmmoCard(int x, int y, CachedAmmoCell c){
+        Vector<Character> v = generateAmmoCard(c.getAmmoList());
+        removeAmmoCard(x, y, v);
+    }
+
+    private static void removeAmmoCard(int x, int y, Vector<Character> v){
+
+        int r_min = -1, r_max = -1;
+        int c_min = -1, c_max = -1;
+
+        switch (x) {
+            case 0:
+                r_min = 0;
+                r_max = 5;
+                break;
+
+            case 1:
+                r_min = 8;
+                r_max = 11;
+                break;
+
+            case 2:
+                r_min = 14;
+                r_max = 17;
+                break;
+        }
+
+        //cols
+        switch (y) {
+            case 0:
+                c_min = 1;
+                c_max = 10;
+                break;
+            case 1:
+                c_min = 13;
+                c_max = 22;
+                break;
+            case 2:
+                c_min = 23;
+                c_max = 32;
+                break;
+            case 3:
+                c_min = 35;
+                c_max = 45;
+                break;
+        }
+
+        for (int i = r_min; i <= r_max; i++) {
+            for (int j = c_min; j <= c_max; j++) {
+                if(battelfield[i][j] == v.get(0) || battelfield[i][j] == v.get(1) || battelfield[i][j]== v.get(2)){
+                    battelfield[i][j] = ' ';
+                }
+            }
+        }
+    }
+
     private static Vector<Character> generateAmmoCard(List <Color> ammoCubeList) {
 
         Vector<Character> charList = new Vector<>();
@@ -214,11 +271,11 @@ public class FileRead {
                     charList.add('è');
                     break;
             }
+        }
 
-            //add PowerUp to the ammoCard
-            if (charList.size() == 2) {
-                charList.add('+');
-            }
+        //add PowerUp to the ammoCard
+        if (ammoCubeList.size() == 2) {
+            charList.add('+');
         }
 
         return charList;
