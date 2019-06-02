@@ -464,7 +464,7 @@ public class Controller {
                 switch (Model.getPlayer(i).getStats().getDeaths()){
 
                     //TODO check if first death here is 0 or already 1
-                    case 0:
+                    case 1:
                         Model.getPlayer(dmgList.get(0)).addScore(8);
                         Model.getPlayer(dmgList.get(1)).addScore(6);
                         Model.getPlayer(dmgList.get(2)).addScore(4);
@@ -472,7 +472,7 @@ public class Controller {
                         Model.getPlayer(dmgList.get(4)).addScore(2);
                         break;
 
-                    case 1:
+                    case 2:
                         Model.getPlayer(dmgList.get(0)).addScore(6);
                         Model.getPlayer(dmgList.get(1)).addScore(4);
                         Model.getPlayer(dmgList.get(2)).addScore(2);
@@ -480,7 +480,7 @@ public class Controller {
                         Model.getPlayer(dmgList.get(4)).addScore(1);
                         break;
 
-                    case 2:
+                    case 3:
                         Model.getPlayer(dmgList.get(0)).addScore(4);
                         Model.getPlayer(dmgList.get(1)).addScore(2);
                         Model.getPlayer(dmgList.get(2)).addScore(2);
@@ -488,25 +488,25 @@ public class Controller {
                         Model.getPlayer(dmgList.get(4)).addScore(1);
                         break;
 
-                    case 3:
+                    case 4:
                         Model.getPlayer(dmgList.get(0)).addScore(2);
                         Model.getPlayer(dmgList.get(1)).addScore(2);
                         Model.getPlayer(dmgList.get(2)).addScore(1);
                         Model.getPlayer(dmgList.get(3)).addScore(1);
                         break;
 
-                    case 4:
+                    case 5:
                         Model.getPlayer(dmgList.get(0)).addScore(2);
                         Model.getPlayer(dmgList.get(1)).addScore(1);
                         Model.getPlayer(dmgList.get(2)).addScore(1);
                         break;
 
-                    case 5:
+                    case 6:
                         Model.getPlayer(dmgList.get(0)).addScore(1);
                         Model.getPlayer(dmgList.get(1)).addScore(1);
                         break;
 
-                    case 6:
+                    case 7:
                         Model.getPlayer(dmgList.get(0)).addScore(1);
                         break;
 
@@ -514,6 +514,11 @@ public class Controller {
                         //TODO no more points! (or only 1 to the first dmg?)
 
                 }
+
+                // reset the damage list
+
+                Model.getPlayer(i).resetDmg();
+
             }
         }
     }
