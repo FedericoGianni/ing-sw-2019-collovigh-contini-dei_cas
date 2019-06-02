@@ -54,7 +54,9 @@ public class SpawnCell extends Cell {
      */
     public void populateWeapon(){
 
-        for (int i = 0; i < (3-weapons.size()); i++) {
+        int prevSize = weapons.size();
+
+        for (int i = 0; i < ( 3 - prevSize ); i++) {
 
             this.weapons.add(Model.getGame().drawWeapon());
         }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ProtocolType;
@@ -214,6 +215,12 @@ public class View implements ViewInterface {
         clientToVView.useMarker(color, playerId);
     }
 
+    @Override
+    public Boolean askMoveValid(int row, int column, Directions direction) {
+
+        //TODO
+        return null;
+    }
 
 
     //Update flow

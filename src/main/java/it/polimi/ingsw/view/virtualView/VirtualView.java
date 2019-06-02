@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.virtualView;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.ViewInterface;
@@ -134,6 +135,12 @@ public class VirtualView implements ViewInterface {
     @Override
     public void useMarker(Color color, int playerId) {
 
+    }
+
+    @Override
+    public Boolean askMoveValid(int row, int column, Directions direction) {
+        //TODO
+        return null;
     }
 
 }

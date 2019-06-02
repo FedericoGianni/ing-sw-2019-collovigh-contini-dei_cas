@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
@@ -408,6 +409,10 @@ public class Controller {
 
                 break;
         }
+    }
+
+    Boolean askMoveValid(int row, int column, Directions direction){
+        return actionPhase.askMoveValid(row,column,direction);
     }
 
 

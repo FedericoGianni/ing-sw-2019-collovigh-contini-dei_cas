@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.view.actions.Move;
 
 import java.awt.*;
@@ -90,5 +91,12 @@ public class ActionPhase {
 
 
     public void shoot(int weapon, int target){
+    }
+
+    Boolean askMoveValid(int row, int column, Directions direction){
+
+        //TODO
+
+        return false;
     }
 }

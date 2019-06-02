@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.updates.UpdateClass;
@@ -23,6 +24,7 @@ public interface ViewInterface {
     //ACTION
     void startAction();
     void useMarker(Color color, int playerId);
+    Boolean askMoveValid(int row, int column, Directions direction);
 
     //RELOAD
     void startReload();

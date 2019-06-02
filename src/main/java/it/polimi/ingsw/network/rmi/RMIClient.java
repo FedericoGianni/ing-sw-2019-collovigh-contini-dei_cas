@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.rmi;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.jsonconfig.Config;
@@ -393,5 +394,11 @@ public class RMIClient extends Client {
 
             LOGGER.log(Level.WARNING,e.getMessage(),e);
         }
+    }
+
+    @Override
+    public Boolean askMoveValid(int row, int column, Directions direction) {
+        //TODO
+        return false;
     }
 }

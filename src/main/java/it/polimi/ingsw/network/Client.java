@@ -72,4 +72,5 @@ public abstract class Client {
      * @param jsonAction is the action the client submits
      */
     public abstract void doAction(JsonAction jsonAction);
+    public abstract Boolean askMoveValid(int row, int column, Directions direction);
 }
