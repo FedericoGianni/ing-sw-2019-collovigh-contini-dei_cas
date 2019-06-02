@@ -139,8 +139,12 @@ public class VirtualView implements ViewInterface {
 
     @Override
     public Boolean askMoveValid(int row, int column, Directions direction) {
-        //TODO
-        return null;
+        controller.askMoveValid(row, column, direction);
+        return true;
     }
 
+    @Override
+    public void setValidMove(boolean b) {
+        //i don't need this method here
+    }
 }

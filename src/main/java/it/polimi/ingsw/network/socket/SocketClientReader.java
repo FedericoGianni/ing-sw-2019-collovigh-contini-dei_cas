@@ -406,6 +406,16 @@ public class SocketClientReader extends Thread {
             RunClient.getView().askGrenade();
         });
 
+        //askValidMove
+        headersMap.put("askMoveValid", () -> {
+            LOGGER.log(level,"[Socket-Client-Reader] received askValidMove by server");
+            if(commands[1].equals("true")) {
+                RunClient.getView().setValidMove(true);
+            } else{
+                RunClient.getView().setValidMove(false);
+            }
+        });
+
     }
 
 

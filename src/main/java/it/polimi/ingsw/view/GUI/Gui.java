@@ -94,7 +94,7 @@ public class Gui extends Application implements UserInterface {
         // main game window
         FXMLLoader thirdPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleMap.fxml"));
         Parent thirdPane = thirdPageLoader.load();
-        Scene thirdScene = new Scene(thirdPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
+        Scene thirdScene = new Scene(thirdPane, gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight());
         thirdScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleMap.css").toExternalForm());
 
         // injecting second scene into the controller of the first scene
@@ -268,6 +268,11 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void startReload() {
+
+    }
+
+    @Override
+    public void setValidMove(boolean b) {
 
     }
 }

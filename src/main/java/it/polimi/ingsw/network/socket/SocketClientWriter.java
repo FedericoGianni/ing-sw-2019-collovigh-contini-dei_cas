@@ -99,7 +99,7 @@ public class SocketClientWriter extends Client implements Runnable {
 
     @Override
     public Boolean askMoveValid(int row, int column, Directions direction) {
-        //TODO
-        return false;
+        send("askMoveValid\f" + row + "\f" + column + "\f" + direction);
+        return true;
     }
 }

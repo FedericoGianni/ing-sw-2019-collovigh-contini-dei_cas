@@ -97,6 +97,6 @@ public class ActionPhase {
 
         //TODO
 
-        return false;
+        return true;
     }
 }

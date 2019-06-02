@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.socket;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.Server;
@@ -241,6 +242,18 @@ public class SocketConnectionReader extends Thread {
         headersMap.put("spawn", () -> {
             LOGGER.log(INFO, "received spawn from client");
             Server.getController().getVirtualView(id).spawn(new CachedPowerUp(PowerUpType.valueOf(commands[1]), Color.valueOf(commands[2])));
+        });
+
+        //askMoveValid
+        headersMap.put("askMoveValid", () -> {
+           LOGGER.log(INFO, "received askValidDirection from client");
+           Boolean valid = Server.getController().getVirtualView(id).askMoveValid(Integer.valueOf(commands[1]), Integer.valueOf(commands[2]), Directions.valueOf(commands[3]));
+
+           if(valid){
+               socketConnectionWriter.send("askMoveValid\ftrue");
+           } else{
+               socketConnectionWriter.send("askMoveValid\ffalse");
+           }
         });
     }
 

@@ -218,10 +218,14 @@ public class View implements ViewInterface {
     @Override
     public Boolean askMoveValid(int row, int column, Directions direction) {
 
-        //TODO
+        clientToVView.askMoveValid(row, column, direction);
         return null;
     }
 
+    @Override
+    public void setValidMove(boolean b) {
+        userInterface.setValidMove(b);
+    }
 
     //Update flow
     //Update fl

@@ -8,6 +8,8 @@ import it.polimi.ingsw.view.updates.UpdateClass;
 
 public interface ViewInterface {
 
+    void setValidMove(boolean b);
+
     void sendUpdates(UpdateClass update);
 
     //STARTGAME to switch gui to the main game window from lobby

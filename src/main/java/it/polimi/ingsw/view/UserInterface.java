@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.view.updates.UpdateType;
-import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 public interface UserInterface {
 
@@ -15,6 +14,8 @@ public interface UserInterface {
     void show(String s);
     void notifyUpdate(UpdateType updateType, int playerId);
     void startGame();
+
+    void setValidMove(boolean b);
 
 
 

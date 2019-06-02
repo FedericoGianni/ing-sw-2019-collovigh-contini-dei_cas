@@ -34,6 +34,7 @@ public class CLI implements UserInterface {
     private final View view;
     public static final String DEFAULT_NAME_ALREADY_TAKEN = "NAME_ALREADY_TAKEN";
     public static final String DEFAULT_COLOR_ALREADY_TAKEN = "COLOR_ALREADY_TAKEN";
+    public int validMove;
 
     /**
      * Default constructor
@@ -42,6 +43,14 @@ public class CLI implements UserInterface {
     public CLI(View view) {
         this.view = view;
         //this.socketClientWriter = s.getScw();
+    }
+
+    public void setValidMove(boolean validMove) {
+        if(validMove){
+            this.validMove = 1;
+        } else {
+            this.validMove = 0;
+        }
     }
 
     // start Ui methods
@@ -766,6 +775,11 @@ public class CLI implements UserInterface {
         }
     }
 
+    /**
+     *
+     * @param s a String which is already in the right form (cardinal point to upper case)
+     * @return the enum in Directions linked to the String
+     */
     private Directions directionTranslator(String s){
         Directions direction;
 
@@ -849,9 +863,25 @@ public class CLI implements UserInterface {
 
                 if((choice.equals("NORD") || choice.equals("SUD") || choice.equals("EST") || choice.equals("OVEST"))){
                     //&& checkValidDirection(directionTranslator(choice))){
-                    valid = true;
-                    directionsList.add(directionTranslator(choice));
-                    moves++;
+                    validMove = -1;
+                    Point p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+                    view.askMoveValid((int) p.getX(), (int) p.getY(), directionTranslator(choice));
+
+                    do{
+                        System.out.println("[DEBUG] controllo valid Move...");
+                        if(validMove == 1) {
+                            valid = true;
+                            directionsList.add(directionTranslator(choice));
+                            moves++;
+                        }
+                        try {
+                            sleep(500);
+                        } catch(InterruptedException e){
+                            e.getMessage();
+                        }
+                    }while(validMove == -1);
+
+
                 } else{
                     System.out.println("Direzione non valida! Riprova");
                 }
