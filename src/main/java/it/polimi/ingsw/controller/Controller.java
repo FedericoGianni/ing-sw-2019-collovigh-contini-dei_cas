@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.controller.TurnPhase.RELOAD;
 import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
 
+
 /**
  *
  * This class represent the Controller and invokes actions which modify the Model directly.
@@ -435,6 +436,7 @@ public class Controller {
         }
     }
 
+    //TODO find a way to test this method (@Dav maybe with saved games?)
     private void calculatePoints(){
         //for each player who has died this turn
         //+1 point for the player who did him the first dmg

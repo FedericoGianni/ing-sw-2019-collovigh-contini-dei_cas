@@ -606,33 +606,7 @@ public class CLI implements UserInterface {
 
         // Create a NewtonAction object
 
-        Directions enDirection;
-
-        switch (direction){
-            case "NORD":
-                enDirection = Directions.NORTH;
-                break;
-
-            case "SUD":
-                enDirection = Directions.SOUTH;
-                break;
-
-            case "EST":
-                enDirection = Directions.EAST;
-                break;
-
-            case "OVEST":
-                enDirection = Directions.WEST;
-                break;
-
-            default:
-                //this can never happen
-                System.out.println("[DEBUG] direzione non valida!");
-                enDirection = Directions.NORTH;
-                break;
-        }
-
-        NewtonAction newtonAction = new NewtonAction(newton.getColor(),player,amount,enDirection);
+        NewtonAction newtonAction = new NewtonAction(newton.getColor(),player,amount,directionTranslator(direction));
 
         // sends it to the Virtual view
 
@@ -787,19 +761,112 @@ public class CLI implements UserInterface {
         }
     }
 
+    private Directions directionTranslator(String s){
+        Directions direction;
+
+        switch (s){
+            case "NORD":
+                direction = Directions.NORTH;
+                break;
+
+            case "SUD":
+                direction = Directions.SOUTH;
+                break;
+
+            case "EST":
+                direction = Directions.EAST;
+                break;
+
+            case "OVEST":
+                direction = Directions.WEST;
+                break;
+
+            default:
+                //this can never happen
+                System.out.println("[DEBUG] direzione non valida!");
+                direction = Directions.NORTH;
+                break;
+        }
+
+        return direction;
+    }
+
+    private boolean checkValidDirection(List<Directions> d){
+        //TODO check if the direction is valid (no walls, out of map.. ecc)
+
+        switch (d.size()){
+
+            case 0:
+                //just check from player position
+                int currX, currY;
+                Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+                currX = (int) p.getX();
+                currY = (int) p.getY();
+
+                //TODO need getNorth, getSouth, getEast, getWest for cachhedMap? or send every direction to server to check
+                //view.getCacheModel().getCachedMap().getCachedCell(currX, currY);
+                break;
+
+            case 1:
+                //case 0 check + case 1
+
+                break;
+
+            case 2:
+                //case 0 check + case 1 check + case 2 check
+
+                break;
+        }
+
+        return true;
+    }
+
 
     public void startMove(){
+        //move ->  sono sempre max 3
+        int moves = 0, maxMoves = 3;
+        List<Directions> directionsList = new ArrayList<>();
+        boolean valid = false;
+        String choice;
 
-        //TODO Move
+        do{
+
+            scanner.reset();
+            System.out.println("In che direzione ti vuoi muovere? Ti restano " + (maxMoves-moves) + " movimenti.");
+            System.out.println("Inserisci una direzione (Nord, Sud, Ovest, Est) >>> ");
+
+            do{
+
+                choice = scanner.nextLine();
+                choice = choice.toUpperCase();
+
+                //TODO check for walls ecc.
+
+                if((choice.equals("NORD") || choice.equals("SUD") || choice.equals("EST") || choice.equals("OVEST"))){
+                    //&& checkValidDirection(directionTranslator(choice))){
+                    valid = true;
+                    directionsList.add(directionTranslator(choice));
+                    moves++;
+                } else{
+                    System.out.println("Direzione non valida! Riprova");
+                }
+
+            } while(!valid);
+
+        } while(moves < maxMoves);
+
+        //TODO @Dav why i need to send him final position from client?
+        System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
+        //view.doAction(new Move(directionsList));
     }
 
     public void startGrab(){
-
+        //grab -> se hai più di 2 danni 2 movimenti + grab / altrimenti 1
         //TODO Grab
     }
 
     public void startShoot(){
-
+        //shoot -> se hai più di 5 danni un movimento / altrimento 0 movimenti
         //TODO Shoot
     }
 
