@@ -687,7 +687,7 @@ public class CLI implements UserInterface {
 
             }
 
-
+            System.out.println("7: mostra mappa");
             System.out.println("8: info giocatori");
             System.out.println("9: mostra armi nelle celle di spawn");
 
@@ -705,7 +705,7 @@ public class CLI implements UserInterface {
             }
 
 
-            if ((choice >=0 && choice < actions.size()) || choice==8 || choice==9){
+            if ((choice >=0 && choice < actions.size()) || choice==8 || choice==9 || choice==7){
 
                 valid = true;
             }else {
@@ -741,6 +741,11 @@ public class CLI implements UserInterface {
 
                 view.doAction(new SkipAction());
 
+                break;
+
+            case 7:
+                FileRead.showBattlefield();
+                startAction();
                 break;
 
             case 8:
@@ -904,7 +909,7 @@ public class CLI implements UserInterface {
                 System.out.println("Danni: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getDmgTaken().toString());
                 System.out.println("Marchi: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getMarks());
                 System.out.println("Morti: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getDeaths());
-                System.out.println("Stato: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getOnline());
+                System.out.println("Online: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getOnline());
             }
             else {
                 System.out.println("Danni: " + "[]");
@@ -915,7 +920,7 @@ public class CLI implements UserInterface {
             if(view.getCacheModel().getCachedPlayers().get(i).getWeaponbag() != null)
                 System.out.println("Armi: " + view.getCacheModel().getCachedPlayers().get(i).getWeaponbag().getWeapons().toString());
             else
-                System.out.println("Armi: " + " nessuna.");
+                System.out.println("Armi: " + " nessuna.\n");
         }
     }
 
