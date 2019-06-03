@@ -34,7 +34,7 @@ public class CLI implements UserInterface {
     private final View view;
     public static final String DEFAULT_NAME_ALREADY_TAKEN = "NAME_ALREADY_TAKEN";
     public static final String DEFAULT_COLOR_ALREADY_TAKEN = "COLOR_ALREADY_TAKEN";
-    public int validMove;
+    public int validMove = -1;
 
     /**
      * Default constructor
@@ -865,6 +865,11 @@ public class CLI implements UserInterface {
                     //&& checkValidDirection(directionTranslator(choice))){
                     validMove = -1;
                     Point p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+
+                    System.out.println("[CLI] ask to server if move: " + directionTranslator(choice) + " from pos: " +  p );
+
+                    System.out.println( "[CLI] cell: " + view.getCacheModel().getCachedMap().getCachedCell( p.x, p.y).getCellType() );
+
                     view.askMoveValid((int) p.getX(), (int) p.getY(), directionTranslator(choice));
 
                     do{
@@ -873,6 +878,9 @@ public class CLI implements UserInterface {
                             valid = true;
                             directionsList.add(directionTranslator(choice));
                             moves++;
+                        }else if (validMove == 0){
+
+                            System.out.println(" [CLI] 00000000");
                         }
                         try {
                             sleep(500);

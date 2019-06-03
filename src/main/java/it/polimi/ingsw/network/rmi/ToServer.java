@@ -46,7 +46,7 @@ public interface ToServer extends Remote {
 
      void doAction(JsonAction jsonAction) throws RemoteException;
 
-     Boolean askMoveValid(int row, int column, Directions direction) throws RemoteException;
+     boolean askMoveValid(int row, int column, Directions direction) throws RemoteException;
 
 
 }

@@ -254,7 +254,7 @@ public class Map {
                 (this.matrix[0][1]).setColor(BLUE);
 
                 (this.matrix[0][2]).setAdjNorth(null);
-                (this.matrix[0][2]).setAdjSouth(this.matrix[1][2]);
+                (this.matrix[0][2]).setAdjSouth(null);  // TODO check @ fede
                 (this.matrix[0][2]).setAdjEast(this.matrix[0][3]);
                 (this.matrix[0][2]).setAdjWest(this.matrix[0][1]);
                 (this.matrix[0][2]).setColor(BLUE);

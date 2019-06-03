@@ -12,7 +12,10 @@ public class GrabAction extends JsonAction {
 
     private final List<Directions> directions;
 
-    private final String weaponName;
+    private final String newWeaponName;
+
+    private final String discardedWeapon;
+
 
     public GrabAction(List<Directions> directions) {
 
@@ -20,7 +23,9 @@ public class GrabAction extends JsonAction {
 
         this.directions = directions;
 
-        this.weaponName=null;
+        this.newWeaponName = null;
+
+        this.discardedWeapon = null;
 
     }
 
@@ -30,32 +35,38 @@ public class GrabAction extends JsonAction {
 
         this.directions = new ArrayList<>();
 
-        this.weaponName = null;
+        this.newWeaponName = null;
+
+        this.discardedWeapon = null;
     }
 
-    public GrabAction( List<Directions> directions, String weaponName) {
+    public GrabAction( List<Directions> directions, String newWeaponName, String discardedWeapon) {
 
         super(ActionTypes.GRAB);
 
         this.directions = directions;
 
-        this.weaponName = weaponName;
+        this.newWeaponName = newWeaponName;
+
+        this.discardedWeapon = discardedWeapon;
 
     }
 
-    public GrabAction(String weaponName) {
+    public GrabAction(  String newWeaponName, String discardedWeapon) {
 
         super(ActionTypes.GRAB);
 
-        this.weaponName = weaponName;
-
         this.directions = new ArrayList<>();
+
+        this.newWeaponName = newWeaponName;
+
+        this.discardedWeapon = discardedWeapon;
 
     }
 
     public List<Directions> getDirection() { return directions; }
 
-    public String getWeaponName() {
-        return weaponName;
-    }
+    public String getNewWeaponName() { return newWeaponName; }
+
+    public String getDiscardedWeapon() { return discardedWeapon; }
 }

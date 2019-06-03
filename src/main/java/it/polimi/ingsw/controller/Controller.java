@@ -411,7 +411,7 @@ public class Controller {
         }
     }
 
-    public Boolean askMoveValid(int row, int column, Directions direction){
+    public boolean askMoveValid(int row, int column, Directions direction){
         return actionPhase.askMoveValid(row,column,direction);
     }
 

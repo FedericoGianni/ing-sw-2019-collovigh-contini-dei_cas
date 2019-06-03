@@ -98,7 +98,7 @@ public class SocketClientWriter extends Client implements Runnable {
     }
 
     @Override
-    public Boolean askMoveValid(int row, int column, Directions direction) {
+    public boolean askMoveValid(int row, int column, Directions direction) {
         send("askMoveValid\f" + row + "\f" + column + "\f" + direction);
         return true;
     }

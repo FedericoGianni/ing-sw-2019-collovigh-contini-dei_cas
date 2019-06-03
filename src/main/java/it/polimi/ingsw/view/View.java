@@ -216,7 +216,7 @@ public class View implements ViewInterface {
     }
 
     @Override
-    public Boolean askMoveValid(int row, int column, Directions direction) {
+    public boolean askMoveValid(int row, int column, Directions direction) {
 
         return clientToVView.askMoveValid(row, column, direction);
     }

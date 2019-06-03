@@ -26,7 +26,7 @@ public interface ViewInterface {
     //ACTION
     void startAction();
     void useMarker(Color color, int playerId);
-    Boolean askMoveValid(int row, int column, Directions direction);
+    boolean askMoveValid(int row, int column, Directions direction);
 
     //RELOAD
     void startReload();

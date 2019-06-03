@@ -11,6 +11,7 @@ import java.util.List;
 
 public class WeaponBag extends Subject implements Bag<Weapon> {
 
+
     private List<Weapon> weapons;
 
     public WeaponBag() {

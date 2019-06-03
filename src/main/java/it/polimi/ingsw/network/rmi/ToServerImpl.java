@@ -146,7 +146,7 @@ public class ToServerImpl implements ToServer{
     }
 
     @Override
-    public Boolean askMoveValid(int row, int column, Directions direction) throws RemoteException {
+    public boolean askMoveValid(int row, int column, Directions direction) throws RemoteException {
 
         return Server.getController().getVirtualView(playerId).askMoveValid(row,column,direction);
 
