@@ -5,7 +5,9 @@ import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.JsonAction;
+import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
@@ -291,7 +293,6 @@ public class CLI implements UserInterface {
                 break;
 
             case TURN:
-
 
 
                 break;
@@ -681,7 +682,7 @@ public class CLI implements UserInterface {
         Boolean valid;
         int choice = -1;
 
-        List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E PRENDI ", "SPARA", "SKIP"));
+        List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "RACCOGLI", "SPARA", "SKIP"));
 
 
 
@@ -700,7 +701,7 @@ public class CLI implements UserInterface {
             }
 
             System.out.println("7: mostra mappa");
-            System.out.println("8: info giocatori");
+            System.out.println("8: mostra info sui giocatori");
             System.out.println("9: mostra armi nelle celle di spawn");
 
             System.out.println("Digita il numero dell'azione che vuoi fare: ");
@@ -713,11 +714,12 @@ public class CLI implements UserInterface {
             }catch (InputMismatchException e){
 
                 System.out.println("non è un numero: Riprova!");
+                scanner.reset();
 
             }
 
 
-            if ((choice >=0 && choice < actions.size()) || choice==8 || choice==9 || choice==7){
+            if ((choice >=0 && choice < actions.size()) || choice==7 || choice==8 || choice==9){
 
                 valid = true;
             }else {
@@ -744,15 +746,21 @@ public class CLI implements UserInterface {
                 break;
 
             case 2:
-
-                startShoot();
+                //TODO grab without move
+                System.out.println("Case 2 -> grab without move called");
+                view.doAction(new GrabAction());
 
                 break;
 
             case 3:
+                startShoot();
+
+
+                break;
+
+            case 4:
 
                 view.doAction(new SkipAction());
-
                 break;
 
             case 7:
@@ -773,7 +781,6 @@ public class CLI implements UserInterface {
             default:
 
                 System.out.println("Azione non esistente");
-
                 break;
         }
     }
@@ -850,6 +857,8 @@ public class CLI implements UserInterface {
         List<Directions> directionsList = new ArrayList<>();
         boolean valid = false;
         String choice;
+        Point p = null;
+        Point finalPos = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
 
         do{
 
@@ -867,15 +876,37 @@ public class CLI implements UserInterface {
                 if((choice.equals("NORD") || choice.equals("SUD") || choice.equals("EST") || choice.equals("OVEST"))){
 
                     validMove = -1;
-                    Point p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+                    p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
 
                     System.out.println("[CLI] ask to server if move: " + directionTranslator(choice) + " from pos: " +  p );
 
                     System.out.println( "[CLI] cell: " + view.getCacheModel().getCachedMap().getCachedCell( p.x, p.y).getCellType() );
 
                     Directions d = directionTranslator(choice);
+                    List <Directions> previous = new ArrayList<>();
 
-                    view.askMoveValid((int) p.getX(), (int) p.getY(), d);
+                    for (int i = 0; i < previous.size(); i++) {
+                        switch (previous.get(i)){
+                            case NORTH:
+                                finalPos.x = finalPos.x -1;
+                                break;
+
+                            case SOUTH:
+                                finalPos.x = finalPos.x +1;
+                                break;
+
+                            case WEST:
+                                finalPos.y = finalPos.y -1;
+                                break;
+
+                            case EAST:
+                                finalPos.y = finalPos.y +1;
+                                break;
+                        }
+                    }
+
+
+                    view.askMoveValid(finalPos.x, finalPos.y, d);
 
 
                     do{
@@ -898,6 +929,7 @@ public class CLI implements UserInterface {
                         if(validMove == 1) {
                             System.out.println("[CLI] Direzione valida!");
                             valid = true;
+                            previous.add(d);
                             directionsList.add(directionTranslator(choice));
                             moves++;
                         }else if (validMove == 0){
@@ -919,7 +951,7 @@ public class CLI implements UserInterface {
 
         //TODO @Dav why i need to send him final position from client?
         System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
-        //view.doAction(new Move(directionsList));
+        view.doAction(new Move(directionsList, finalPos));
     }
 
     public void startGrab(){

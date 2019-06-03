@@ -12,9 +12,9 @@ import it.polimi.ingsw.view.actions.Move;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class ActionPhase {
@@ -76,11 +76,11 @@ public class ActionPhase {
 
             // gets the correspondent cell in the model
 
-            Cell cell = Model.getMap().getCell(finalPos.y, finalPos.x);
+            Cell cell = Model.getMap().getCell(finalPos.x, finalPos.y);
 
             // move the player
-
-            Model.getPlayer(controller.getCurrentPlayer()).setPlayerPos(cell);
+            //TODO @Dav not working maybe you should have passed from getStats to change position?
+            Model.getPlayer(controller.getCurrentPlayer()).getStats().setCurrentPosition(cell);
 
             // increment the phase
 
@@ -135,6 +135,8 @@ public class ActionPhase {
 
 
     public void grab(){
+        //TODO
+        System.out.println("[DEBUG] Grab called inside controller!");
     }
 
 

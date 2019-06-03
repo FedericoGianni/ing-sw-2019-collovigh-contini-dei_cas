@@ -372,6 +372,7 @@ public class Controller {
             case GRAB:
 
                 //TODO grab
+                actionPhase.grab();
 
                 break;
 
