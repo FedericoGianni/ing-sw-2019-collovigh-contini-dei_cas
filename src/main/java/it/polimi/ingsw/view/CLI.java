@@ -857,8 +857,9 @@ public class CLI implements UserInterface {
         List<Directions> directionsList = new ArrayList<>();
         boolean valid = false;
         String choice;
-        Point p = null;
-        Point finalPos = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+        int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
+        int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+        List <Directions> previous = new ArrayList<>();
 
         do{
 
@@ -876,37 +877,42 @@ public class CLI implements UserInterface {
                 if((choice.equals("NORD") || choice.equals("SUD") || choice.equals("EST") || choice.equals("OVEST"))){
 
                     validMove = -1;
-                    p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+                    //p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
 
-                    System.out.println("[CLI] ask to server if move: " + directionTranslator(choice) + " from pos: " +  p );
+                    System.out.println("[CLI] ask to server if move: " + directionTranslator(choice) + " from pos: " +  x + ", "  + y);
 
-                    System.out.println( "[CLI] cell: " + view.getCacheModel().getCachedMap().getCachedCell( p.x, p.y).getCellType() );
+                    //System.out.println( "[CLI] cell: " + view.getCacheModel().getCachedMap().getCachedCell( p.x, p.y).getCellType() );
 
                     Directions d = directionTranslator(choice);
-                    List <Directions> previous = new ArrayList<>();
 
-                    for (int i = 0; i < previous.size(); i++) {
-                        switch (previous.get(i)){
+
+                    for(Directions direction : previous) {
+                        System.out.println("[DEBUG] entro nel ciclo for per cambiare finalPos con le prvious...");
+                        switch (direction){
                             case NORTH:
-                                finalPos.x = finalPos.x -1;
+                                if(x > 0)
+                                    x--;
                                 break;
 
                             case SOUTH:
-                                finalPos.x = finalPos.x +1;
+                                if(x < 2)
+                                    x++;
                                 break;
 
                             case WEST:
-                                finalPos.y = finalPos.y -1;
+                                if(y > 0)
+                                    y--;
                                 break;
 
                             case EAST:
-                                finalPos.y = finalPos.y +1;
+                                if(y < 3)
+                                    y++;
                                 break;
                         }
                     }
 
 
-                    view.askMoveValid(finalPos.x, finalPos.y, d);
+                    view.askMoveValid(x, y, d);
 
 
                     do{
@@ -930,6 +936,33 @@ public class CLI implements UserInterface {
                             System.out.println("[CLI] Direzione valida!");
                             valid = true;
                             previous.add(d);
+                            if(previous.size() == 3){
+                                //TODO I'll fix without duplicated code! (to push a working move first version)
+                                for(Directions direction : previous) {
+                                    System.out.println("[DEBUG] entro nel ciclo for per cambiare finalPos con le prvious...");
+                                    switch (direction){
+                                        case NORTH:
+                                            if(x > 0)
+                                                x--;
+                                            break;
+
+                                        case SOUTH:
+                                            if(x < 2)
+                                                x++;
+                                            break;
+
+                                        case WEST:
+                                            if(y > 0)
+                                                y--;
+                                            break;
+
+                                        case EAST:
+                                            if(y < 3)
+                                                y++;
+                                            break;
+                                    }
+                                }
+                            }
                             directionsList.add(directionTranslator(choice));
                             moves++;
                         }else if (validMove == 0){
@@ -951,7 +984,7 @@ public class CLI implements UserInterface {
 
         //TODO @Dav why i need to send him final position from client?
         System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
-        view.doAction(new Move(directionsList, finalPos));
+        view.doAction(new Move(directionsList, new Point(x,y)));
     }
 
     public void startGrab(){

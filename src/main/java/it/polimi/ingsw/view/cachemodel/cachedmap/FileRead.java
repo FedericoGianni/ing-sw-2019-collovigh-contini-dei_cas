@@ -235,7 +235,7 @@ public class FileRead {
                 break;
             case 2:
                 c_min = 23;
-                c_max = 32;
+                c_max = 34;
                 break;
             case 3:
                 c_min = 35;
@@ -245,7 +245,7 @@ public class FileRead {
 
         for (int i = r_min; i <= r_max; i++) {
             for (int j = c_min; j <= c_max; j++) {
-                if(battelfield[i][j] == v.get(0) || battelfield[i][j] == v.get(1) || battelfield[i][j]== v.get(2)){
+                if(battelfield[i][j] == v.get(0) || battelfield[i][j] == v.get(1) || battelfield[i][j] == v.get(2) || battelfield[i][j] == '+'){
                     battelfield[i][j] = ' ';
                 }
             }

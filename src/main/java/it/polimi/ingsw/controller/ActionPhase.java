@@ -296,7 +296,7 @@ public class ActionPhase {
     boolean askMoveValid(int row, int column, Directions direction){
 
         System.out.println("[CONTROLLER] receiveed askMove valid from pos: " + row + ", " + column + " and direction : " + direction );
-        System.out.println(" CELL: is ammocell: " + Model.getMap().getCell(row,column).isAmmoCell() + " have color : "+ Model.getMap().getCell(row,column).getColor());
+        //System.out.println(" CELL: is ammocell: " + Model.getMap().getCell(row,column).isAmmoCell() + " have color : "+ Model.getMap().getCell(row,column).getColor());
 
         Cell startCell = Model.getMap().getCell(row,column);
 
