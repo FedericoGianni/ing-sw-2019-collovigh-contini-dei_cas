@@ -6,17 +6,13 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.shape.Box?>
 <BorderPane fx:controller="it.polimi.ingsw.view.GUI.GuiMapController" xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400" prefWidth="600" fx:id="pane">
+            prefHeight="900" prefWidth="1600" fx:id="pane">
 
     <top>
         <VBox>
-            <Label text="Log of events"></Label>
+            <Label text="Log of events" ></Label>
             <TextArea fx:id="log" editable="false" focusTraversable="false" wrapText="true" text="Game started" prefHeight="100" prefWidth="200">
             </TextArea>
         </VBox>
@@ -29,14 +25,22 @@
 
     </left>
     <center>
-        <BorderPane fx:id="mappozzaExt" styleClass ="mappozza" prefHeight="300" prefWidth="420">
-            <center>
-                <GridPane  fx:id="innerMap" xmlns:fx="http://javafx.com/fxml"  prefHeight="200" prefWidth="320"
-                     alignment="center" hgap="10" vgap="10" styleClass ="mappozza" >
+        <GridPane  fx:id="innerMap" xmlns:fx="http://javafx.com/fxml" alignment="center"  styleClass ="mapin" >
+                    <Button  fx:id="b00" GridPane.rowIndex="0" GridPane.columnIndex="0"  onAction="#b00Click" styleClass="butun"></Button>
+                    <Button  fx:id="b01" GridPane.rowIndex="0" GridPane.columnIndex="1"  onAction="#b01Click" styleClass="butun"></Button>
+                    <Button  fx:id="b02" GridPane.rowIndex="0" GridPane.columnIndex="2"  onAction="#b02Click" styleClass="butunSpawn"></Button>
+                    <Button  fx:id="b03" GridPane.rowIndex="0" GridPane.columnIndex="3"  onAction="#b03Click" styleClass="butun"></Button>
 
-                </GridPane>
-            </center>
-        </BorderPane>
+                    <Button  fx:id="b10" GridPane.rowIndex="1" GridPane.columnIndex="0"  onAction="#b10Click" styleClass="butunSpawn"></Button>
+                    <Button  fx:id="b11" GridPane.rowIndex="1" GridPane.columnIndex="1"  onAction="#b11Click" styleClass="butun"></Button>
+                    <Button  fx:id="b12" GridPane.rowIndex="1" GridPane.columnIndex="2"  onAction="#b12Click" styleClass="butun"></Button>
+                    <Button  fx:id="b13" GridPane.rowIndex="1" GridPane.columnIndex="3"  onAction="#b13Click" styleClass="butun"></Button>
+
+                    <Button  fx:id="b20" GridPane.rowIndex="2" GridPane.columnIndex="0"  onAction="#b20Click" styleClass="butun"></Button>
+                    <Button  fx:id="b21" GridPane.rowIndex="2" GridPane.columnIndex="1"  onAction="#b21Click" styleClass="butun"></Button>
+                    <Button  fx:id="b22" GridPane.rowIndex="2" GridPane.columnIndex="2"  onAction="#b22Click" styleClass="butun"></Button>
+                    <Button  fx:id="b23" GridPane.rowIndex="2" GridPane.columnIndex="3"  onAction="#b23Click" styleClass="butunSpawn"></Button>
+        </GridPane>
     </center>
     <right>
         <VBox >
@@ -46,7 +50,7 @@
     </right>
     <bottom>
         <VBox>
-            <Label text="Plancia"></Label>
+            <Label text="Plancia e my weapons"></Label>
         </VBox>
     </bottom>
 
