@@ -299,19 +299,23 @@ public class Player {
 
 
     public void pickAmmoHere(){
-        AmmoCard a = stats.getCurrentPosition().pickAmmoPlaced();
-        //problema il player può decidere quali inserire se non può inserirli tutti
-        if(a.getAmmoList().size() > 2){
-            List<AmmoCube> l = a.getAmmoList();
-            for(AmmoCube ammoCube : l){
-                ammo.addItem(ammoCube);
-            }
-        } else{
-            List<AmmoCube> l = a.getAmmoList();
-            for(AmmoCube ammoCube : l){
-                ammo.addItem(ammoCube);
-            }
+
+        AmmoCard ammoCard = stats.getCurrentPosition().pickAmmoPlaced();
+
+        //if the ammo card has a powerUp the player draws a powerUp
+
+        if (ammoCard.getPowerUp()) {
+
             drawPowerUp();
+
+        }
+
+        // adds the ammoCube
+
+        for (AmmoCube ammoCube : ammoCard.getAmmoList()){
+
+            ammo.addItem(ammoCube);
+
         }
     }
 

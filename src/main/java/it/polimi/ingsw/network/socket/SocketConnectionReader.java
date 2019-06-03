@@ -318,7 +318,7 @@ public class SocketConnectionReader extends Thread {
 
             case "\"actionType\":\"GRAB\"}":
 
-                jsonAction = gson.fromJson(message, Grab.class);
+                jsonAction = gson.fromJson(message, GrabAction.class);
 
                 break;
 

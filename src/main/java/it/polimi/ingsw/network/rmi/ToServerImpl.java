@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.rmi;
 
 
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.networkexceptions.*;
@@ -142,6 +143,13 @@ public class ToServerImpl implements ToServer{
     public void doAction(JsonAction jsonAction) throws RemoteException {
 
         Server.getController().doAction(jsonAction);
+    }
+
+    @Override
+    public Boolean askMoveValid(int row, int column, Directions direction) throws RemoteException {
+
+        return Server.getController().getVirtualView(playerId).askMoveValid(row,column,direction);
+
     }
 
 

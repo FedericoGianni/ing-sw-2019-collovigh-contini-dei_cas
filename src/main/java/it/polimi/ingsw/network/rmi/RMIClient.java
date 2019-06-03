@@ -398,7 +398,18 @@ public class RMIClient extends Client {
 
     @Override
     public Boolean askMoveValid(int row, int column, Directions direction) {
-        //TODO
+
+        try {
+
+            ToServer server = getServer();
+
+            server.askMoveValid(row,column,direction);
+
+        }catch (RemoteException e){
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
+
         return false;
     }
 }
