@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.map;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.awt.*;
 
@@ -265,7 +264,7 @@ public class Map {
                 (this.matrix[0][3]).setAdjWest(this.matrix[0][2]);
                 (this.matrix[0][3]).setColor(GREEN);
 
-                (this.matrix[1][0]).setAdjNorth(this.matrix[0][0]);
+                (this.matrix[1][0]).setAdjNorth(this.matrix[0][0]); //TODO check
                 (this.matrix[1][0]).setAdjSouth(null);
                 (this.matrix[1][0]).setAdjEast(this.matrix[1][1]);
                 (this.matrix[1][0]).setAdjWest(null);

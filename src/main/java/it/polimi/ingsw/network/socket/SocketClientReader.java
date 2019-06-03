@@ -411,7 +411,7 @@ public class SocketClientReader extends Thread {
             LOGGER.log(level,"[Socket-Client-Reader] received askValidMove by server");
             if(commands[1].equals("true")) {
                 RunClient.getView().setValidMove(true);
-            } else{
+            } else if(commands[1].equals("false")){
                 RunClient.getView().setValidMove(false);
             }
         });

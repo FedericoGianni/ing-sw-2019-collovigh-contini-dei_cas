@@ -51,6 +51,9 @@ public class CLI implements UserInterface {
         } else {
             this.validMove = 0;
         }
+        synchronized(this) {
+            this.notify();
+        }
     }
 
     // start Ui methods
@@ -850,19 +853,19 @@ public class CLI implements UserInterface {
 
         do{
 
+
             scanner.reset();
             System.out.println("In che direzione ti vuoi muovere? Ti restano " + (maxMoves-moves) + " movimenti.");
             System.out.println("Inserisci una direzione (Nord, Sud, Ovest, Est) >>> ");
 
             do{
-
                 choice = scanner.nextLine();
                 choice = choice.toUpperCase();
 
                 //TODO check for walls ecc.
 
                 if((choice.equals("NORD") || choice.equals("SUD") || choice.equals("EST") || choice.equals("OVEST"))){
-                    //&& checkValidDirection(directionTranslator(choice))){
+
                     validMove = -1;
                     Point p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
 
@@ -870,28 +873,44 @@ public class CLI implements UserInterface {
 
                     System.out.println( "[CLI] cell: " + view.getCacheModel().getCachedMap().getCachedCell( p.x, p.y).getCellType() );
 
-                    view.askMoveValid((int) p.getX(), (int) p.getY(), directionTranslator(choice));
+                    Directions d = directionTranslator(choice);
+
+                    view.askMoveValid((int) p.getX(), (int) p.getY(), d);
+
 
                     do{
-                        System.out.println("[DEBUG] controllo valid Move...");
+
+                        while(validMove == -1){
+                            try
+                            {
+                                synchronized(this) {
+                                    System.out.println("Waiting to receive validMove reply...");
+                                    this.wait();
+                                }
+
+                            } catch (InterruptedException e) {
+
+                            }
+                            System.out.println("Runner away!");
+                        }
+
+                        //System.out.println("[DEBUG] controllo valid Move...");
                         if(validMove == 1) {
+                            System.out.println("[CLI] Direzione valida!");
                             valid = true;
                             directionsList.add(directionTranslator(choice));
                             moves++;
                         }else if (validMove == 0){
 
-                            System.out.println(" [CLI] 00000000");
+                            System.out.println(" [CLI] Direzione non valida!");
+                            valid = false;
                         }
-                        try {
-                            sleep(500);
-                        } catch(InterruptedException e){
-                            e.getMessage();
-                        }
+
                     }while(validMove == -1);
 
 
                 } else{
-                    System.out.println("Direzione non valida! Riprova");
+                    System.out.println("Scrivi correttamente la direzione dei punti cardinali! Riprova");
                 }
 
             } while(!valid);
