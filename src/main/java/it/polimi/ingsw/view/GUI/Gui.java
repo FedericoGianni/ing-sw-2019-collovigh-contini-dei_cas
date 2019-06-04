@@ -19,11 +19,16 @@ import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.Thread.sleep;
+
 
 public class Gui extends Application implements UserInterface {
 
     public static final float DEFAULT_MIN_WIDTH = 920;
     public static final float DEFAULT_MIN_HEIGHT = 540;
+
+    public static final float DEFAULT_MIN_WIDTH_MAP = 1000;
+    public static final float DEFAULT_MIN_HEIGHT_MAP = 700;
 
     public static final String DEFAULT_LOGIN_OK_REPLY = "OK";
     public static final String DEFAULT_NAME_ALREADY_TAKEN_REPLY = "NAME_ALREADY_TAKEN";
@@ -94,7 +99,7 @@ public class Gui extends Application implements UserInterface {
         // main game window
         FXMLLoader thirdPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleMap.fxml"));
         Parent thirdPane = thirdPageLoader.load();
-        Scene thirdScene = new Scene(thirdPane, gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight());
+        Scene thirdScene = new Scene(thirdPane, DEFAULT_MIN_WIDTH_MAP, DEFAULT_MIN_HEIGHT_MAP);
         thirdScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleMap.css").toExternalForm());
 
         // injecting second scene into the controller of the first scene
@@ -210,13 +215,17 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case STATS:
-
+                guiMapController.statsUpdater(playerId);
+                //possibilità: cambio pos,danni subiti, spostmanto e marchi, disconnessioni
                 break;
             case INITIAL:
 
                 for(Player item:view.getCacheModel().getCachedPlayers())
                     guiMapController.loginUpdater(item.getName(),item.getPlayerId(),item.getPlayerColor());
                 break;
+            case POWERUP_BAG:
+                guiMapController.powerUpDisplayer();
+
 
             default:
 
@@ -248,6 +257,25 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void startSpawn() {
+        while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()){
+
+            guiMapController.printLog("Attendi ricezione dei PowerUp pescati...");
+            try {
+                sleep(200);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+
+        //view.spawn(powerUps.get(read));
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                guiMapController.startSpawn();
+            }
+        });
     }
 
 

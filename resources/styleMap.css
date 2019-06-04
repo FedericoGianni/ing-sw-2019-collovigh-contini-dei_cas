@@ -1,8 +1,3 @@
-.mappozza{
-    -fx-background-repeat: no-repeat;
-    -fx-background-size: stretch;
-    -fx-background-position: center center;
-}
 .mapin{
     -fx-background-repeat: no-repeat;
     -fx-background-size: stretch;
@@ -18,3 +13,4 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
+

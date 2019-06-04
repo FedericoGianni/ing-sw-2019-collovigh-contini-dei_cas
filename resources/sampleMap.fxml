@@ -7,8 +7,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane fx:controller="it.polimi.ingsw.view.GUI.GuiMapController" xmlns:fx="http://javafx.com/fxml"
-            prefHeight="900" prefWidth="1600" fx:id="pane">
+            prefHeight="400" prefWidth="700" maxHeight="400" maxWidth="700" fx:id="pane">
 
     <top>
         <VBox>
@@ -25,7 +26,7 @@
 
     </left>
     <center>
-        <GridPane  fx:id="innerMap" xmlns:fx="http://javafx.com/fxml" alignment="center"  styleClass ="mapin" >
+        <GridPane  fx:id="innerMap" xmlns:fx="http://javafx.com/fxml" alignment="center"  styleClass ="mapin" prefHeight="300" prefWidth="600">
                     <Button  fx:id="b00" GridPane.rowIndex="0" GridPane.columnIndex="0"  onAction="#b00Click" styleClass="butun"></Button>
                     <Button  fx:id="b01" GridPane.rowIndex="0" GridPane.columnIndex="1"  onAction="#b01Click" styleClass="butun"></Button>
                     <Button  fx:id="b02" GridPane.rowIndex="0" GridPane.columnIndex="2"  onAction="#b02Click" styleClass="butunSpawn"></Button>
@@ -43,9 +44,15 @@
         </GridPane>
     </center>
     <right>
-        <VBox >
-            <Label text="Weapons Here"></Label>
+        <VBox>
+            <children>
+            <Label text="Weapons "></Label>
+
             <Label text="PowerUps Here"></Label>
+                <ImageView fx:id="powerUp1"></ImageView>
+                <ImageView fx:id="powerUp2"></ImageView>
+                <ImageView fx:id="powerUp3"></ImageView>
+            </children>
         </VBox>
     </right>
     <bottom>
