@@ -924,6 +924,11 @@ public class CLI implements UserInterface {
 
             } while(!valid);
 
+            //TODO check if this works: you should see single movements in map
+            FileRead.removePlayer(view.getPlayerId());
+            FileRead.insertPlayer(x,y, Character.forDigit(view.getPlayerId(), 10));
+            FileRead.showBattlefield();
+
         } while(moves < maxMoves);
 
         x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
