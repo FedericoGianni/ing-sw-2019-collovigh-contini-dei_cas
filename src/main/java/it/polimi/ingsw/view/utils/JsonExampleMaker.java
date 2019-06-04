@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.TagbackGrenade;
+import it.polimi.ingsw.model.weapons.Damage;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
@@ -46,6 +47,8 @@ public class JsonExampleMaker {
 
         writeMoveTurnUpdate();
         writeGrabTurnUpdate();
+
+        writeDamageList();
 
 
     }
@@ -346,6 +349,33 @@ public class JsonExampleMaker {
             e.printStackTrace();
         }
 
+    }
+
+    public static void writeDamageList(){
+
+        Gson gson = new Gson();
+
+        // int a, int b, boolean c, boolean d, boolean diff,int dm,boolean at
+
+        List<Damage> damageList = new ArrayList<>();
+
+        try{
+
+            Damage damage = new Damage(2,3,true,false,false,5,true);
+
+            damageList.add(damage);
+
+            FileWriter writer = new FileWriter("resources/json/weapons/damageList.json");
+
+            gson.toJson(damageList, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
     }
 
 }

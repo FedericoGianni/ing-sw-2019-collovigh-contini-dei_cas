@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
@@ -21,6 +22,8 @@ public class ActionPhase {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
+
+    private static final String logStart = "[Controller-GrabAction] Player w/ id: ";
 
     private final Controller controller;
 
@@ -55,6 +58,8 @@ public class ActionPhase {
      * @param moveAction is the moveAction requested by the client
      */
     public void move(Move moveAction){
+
+
 
         // logs the action
 
@@ -92,6 +97,10 @@ public class ActionPhase {
 
     public void moveGrab(GrabAction grabAction){
 
+        boolean moveValid = true;
+
+        boolean grabValid = false;
+
         // logs the action
 
         LOGGER.log(level,() -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + "calling Grab");
@@ -116,27 +125,71 @@ public class ActionPhase {
 
                 LOGGER.log(Level.WARNING, () -> "[Controller-GrabAction] Player w/ id: " + playerId + " tried to move more than 1 but only has damage : " + Model.getPlayer(playerId).getDmg().size() );
 
+                moveValid = false;
+
             }
         }
 
-        grabStuffFromCurrPosition(grabAction.getNewWeaponName());
+        grabValid = grabStuffFromCurrPosition(grabAction.getNewWeaponName());
 
         // check if player has more than MAX weapon:
 
         if (Model.getPlayer(playerId).getCurrentWeapons().getList().size() > 3){
 
-            if (grabAction.getDiscardedWeapon() == null){
+            if (grabAction.getDiscardedWeapon() != null){
 
+                // search in the player's weapon bag the specified weapon
+
+                List<Weapon> matchingList = Model
+                        .getPlayer(playerId)
+                        .getCurrentWeapons()
+                        .getList().stream()
+                        .filter(x -> x.getName().equals(grabAction.getDiscardedWeapon()))
+                        .collect(Collectors.toList());
+
+                // if the weapon exist it deletes it
+
+                if (!matchingList.isEmpty()){
+
+                    try {
+
+                        Model.getPlayer(playerId).delWeapon(matchingList.get(0));
+
+                        LOGGER.log(level, () -> logStart + playerId + " discarded weapon w/ name: " + matchingList.get(0).getName());
+
+                    }catch (CardNotPossessedException e){
+
+                        LOGGER.log(Level.WARNING, e.getMessage(), e);
+                    }
+
+                }else{
+
+                    // if the weapon do not exist it sets the validity bool to false
+
+                    grabValid = false;
+
+                    LOGGER.log(level,() -> logStart + playerId + " name specified for discarded weapon does not correspond to weapon");
+
+                }
+
+            }else {
+
+                // if the weapon do not exist it sets the validity bool to false
+
+                grabValid = false;
+
+                LOGGER.log(level,() -> logStart + playerId + " no name specified for discarded weapon ");
 
             }
+
         }
 
-    }
 
+        if (grabValid && moveValid){
 
-    public void grab(){
-        //TODO
-        System.out.println("[DEBUG] Grab called inside controller!");
+            controller.incrementPhase();
+        }
+
     }
 
 
@@ -196,7 +249,7 @@ public class ActionPhase {
         LOGGER.log(level,() -> "[Controller-GrabAction] Player w/ id: " + playerId + " moved " + direction + " in cell : " + Model.getMap().cellToCoord(Model.getPlayer(playerId).getCurrentPosition()) );
     }
 
-    private void grabStuffFromCurrPosition(String weaponName){
+    private boolean grabStuffFromCurrPosition(String weaponName){
 
         // gets the id of the current player
 
@@ -212,6 +265,8 @@ public class ActionPhase {
 
             Model.getPlayer(playerId).pickAmmoHere();
 
+            return true;
+
         }else{
 
             SpawnCell spawnCell = (SpawnCell) position;
@@ -222,9 +277,9 @@ public class ActionPhase {
 
             if (weaponName == null){
 
-                LOGGER.log(Level.WARNING,() ->"[Controller-GrabAction] Player w/ id: " + playerId + " tried to grab a weapon but specified no name: the cheaper one will be purchased if the player can pay for it" );
+                LOGGER.log(Level.WARNING,"[Controller-GrabAction] Player w/ id: {0} tried to grab a weapon but specified no name", playerId );
 
-                selected = selectCheapestWeapon(spawnCell);
+                return false;
 
             }else {
 
@@ -240,11 +295,9 @@ public class ActionPhase {
 
                     // Logs
 
-                    LOGGER.log(Level.WARNING, () -> "[Controller-GrabAction] Player w/ id: " + playerId + " specified wrong weapon name: the cheaper one will be purchased if the player can pay for it");
+                    LOGGER.log(Level.WARNING, "[Controller-GrabAction] Player w/ id: {0} specified wrong weapon name", playerId);
 
-                    // buy the cheaper weapon in the cell
-
-                    selected = selectCheapestWeapon(spawnCell);
+                    return false;
 
                 }else {
 
@@ -252,25 +305,27 @@ public class ActionPhase {
 
                     selected = namesCheckWeapons.get(0);
 
+                    try {
+
+                        // buy the selected weapon
+
+                        spawnCell.buy(selected, Model.getPlayer(playerId));
+
+                        // Log
+
+                        LOGGER.log(level, () -> "[Controller-GrabAction] Player w/ id: " + playerId + " bought a new weapon : " + selected.getName());
+
+                        return true;
+
+
+                    }catch (NotEnoughAmmoException e){
+
+                        LOGGER.log(Level.WARNING, "[Controller-GrabAction] Player w/ id: {0} could not pay for the weapon", playerId);
+
+                        return false;
+                    }
 
                 }
-
-                try {
-
-                    // buy the selected weapon
-
-                    spawnCell.buy(selected, Model.getPlayer(playerId));
-
-                    // Log
-
-                    LOGGER.log(Level.WARNING, () -> "[Controller-GrabAction] Player w/ id: " + playerId + " specified wrong weapon name: the cheaper one will be purchased if the player can pay for it");
-
-                }catch (NotEnoughAmmoException e){
-
-                    LOGGER.log(Level.WARNING, () -> "[Controller-GrabAction] Player w/ id: " + playerId + " could not pay for the weapon");
-                }
-
-
             }
         }
     }

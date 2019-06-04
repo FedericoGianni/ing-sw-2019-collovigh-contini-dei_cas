@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.weapons;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
@@ -10,11 +11,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Marker extends MicroEffect {
 
@@ -22,7 +21,7 @@ public class Marker extends MicroEffect {
     private boolean seeAbleTargetNeeded; //some effects can target unSeeable players or need to see players
     private int markers;//the number of markers given
     private boolean differentPlayer;
-    private static ArrayList markersArray=new ArrayList<>();//this array stataicaly contains all the marker types
+    private static List<Marker> markersArray=new ArrayList<>();//this array stataicaly contains all the marker types
     // the player number is 100 you need to target every player in the traget's square( check hellion
     // if player number is 1000 io need can target up to the number /1000
 
@@ -33,7 +32,7 @@ public class Marker extends MicroEffect {
         this.differentPlayer=dp;
     }
 
-    public static ArrayList<Marker> getMarkersArray() {
+    public static List<Marker> getMarkersArray() {
         return markersArray;
     }
 

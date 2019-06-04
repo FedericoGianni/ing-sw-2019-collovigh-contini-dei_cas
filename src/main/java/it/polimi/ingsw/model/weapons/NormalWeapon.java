@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.weapons;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.ammo.AmmoCube;
@@ -12,6 +13,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

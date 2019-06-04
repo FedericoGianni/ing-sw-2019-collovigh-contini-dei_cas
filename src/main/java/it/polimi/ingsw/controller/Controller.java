@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
@@ -371,8 +372,7 @@ public class Controller {
 
             case GRAB:
 
-                //TODO grab
-                actionPhase.grab();
+                actionPhase.moveGrab((GrabAction) jsonAction);
 
                 break;
 

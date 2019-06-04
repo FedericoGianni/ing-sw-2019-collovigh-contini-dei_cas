@@ -1,0 +1,9 @@
+[
+  {"cellNumber":2,"beforeShooting":true,"afterShooting":true,"facoltative":false,"toCell":false,"target":false,"myCell":false},
+  {"cellNumber":2,"beforeShooting":true,"afterShooting":false,"facoltative":true,"toCell":false,"target":true,"myCell":false},
+  {"cellNumber":1,"beforeShooting":false,"afterShooting":true,"facoltative":true,"toCell":false,"target":true,"myCell":false},
+  {"cellNumber":1,"beforeShooting":true,"afterShooting":true,"facoltative":false,"toCell":false,"target":false,"myCell":false},
+  {"cellNumber":100,"beforeShooting":true,"afterShooting":false,"facoltative":false,"toCell":true,"target":false,"myCell":false},
+  {"cellNumber":2,"beforeShooting":false,"afterShooting":true,"facoltative":true,"toCell":false,"target":true,"myCell":false},
+  {"cellNumber":2,"beforeShooting":true,"afterShooting":false,"facoltative":true,"toCell":false,"target":true,"myCell":true}
+]

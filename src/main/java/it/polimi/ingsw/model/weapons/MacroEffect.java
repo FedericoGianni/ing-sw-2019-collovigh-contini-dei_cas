@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.weapons;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.Player;
@@ -8,11 +9,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MacroEffect {
 
@@ -100,6 +99,8 @@ public class MacroEffect {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
 
     }
 

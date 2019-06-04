@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.weapons;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.Map;
@@ -9,11 +10,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Mover extends MicroEffect {
 
@@ -24,7 +23,7 @@ public class Mover extends MicroEffect {
     private boolean toCell;//you have to move to a specified cell if this flag is true--must change to a Cell type or to a point type
     private boolean target;//set true if you need to move the target not the shooter
     private boolean myCell;//set true if i need to move other players to my cell
-    private static ArrayList <Mover> weaponMov=new ArrayList<>();
+    private static List <Mover> weaponMov=new ArrayList<>();
 
     //if something moves before shooting pay attention, you need to calculate if you can shoot him after the move
     //movere delays a lot of things to the other classes so check them, for example in tractor beam 1 the damage checks that i can see the trget after the movement
@@ -207,7 +206,7 @@ public class Mover extends MicroEffect {
         this.target = target;
     }
 
-    public static ArrayList<Mover> getMoversArray() {
+    public static List<Mover> getMoversArray() {
         return weaponMov;
     }
 
@@ -242,6 +241,8 @@ public class Mover extends MicroEffect {
         }
 
     }
+
+
 
     /**
      * creates a Mover and adds it t the list
