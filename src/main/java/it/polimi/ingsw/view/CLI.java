@@ -36,7 +36,7 @@ public class CLI implements UserInterface {
     private final View view;
     public static final String DEFAULT_NAME_ALREADY_TAKEN = "NAME_ALREADY_TAKEN";
     public static final String DEFAULT_COLOR_ALREADY_TAKEN = "COLOR_ALREADY_TAKEN";
-    public int validMove = -1;
+    private int validMove = -1;
 
     /**
      * Default constructor
@@ -820,36 +820,6 @@ public class CLI implements UserInterface {
         return direction;
     }
 
-    private boolean checkValidDirection(List<Directions> d){
-        //TODO check if the direction is valid (no walls, out of map.. ecc)
-
-        switch (d.size()){
-
-            case 0:
-                //just check from player position
-                int currX, currY;
-                Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
-                currX = (int) p.getX();
-                currY = (int) p.getY();
-
-                //TODO need getNorth, getSouth, getEast, getWest for cachhedMap? or send every direction to server to check
-                //view.getCacheModel().getCachedMap().getCachedCell(currX, currY);
-                break;
-
-            case 1:
-                //case 0 check + case 1
-
-                break;
-
-            case 2:
-                //case 0 check + case 1 check + case 2 check
-
-                break;
-        }
-
-        return true;
-    }
-
 
     public void startMove(){
         //move ->  sono sempre max 3
@@ -857,8 +827,8 @@ public class CLI implements UserInterface {
         List<Directions> directionsList = new ArrayList<>();
         boolean valid = false;
         String choice;
-        int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
-        int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+        int x;
+        int y;
         List <Directions> previous = new ArrayList<>();
 
         do{
@@ -872,11 +842,14 @@ public class CLI implements UserInterface {
                 choice = scanner.nextLine();
                 choice = choice.toUpperCase();
 
+                x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
+                y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+
                 //TODO check for walls ecc.
 
                 if((choice.equals("NORD") || choice.equals("SUD") || choice.equals("EST") || choice.equals("OVEST"))){
 
-                    validMove = -1;
+                    //validMove = -1;
                     //p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
 
                     System.out.println("[CLI] ask to server if move: " + directionTranslator(choice) + " from pos: " +  x + ", "  + y);
@@ -885,93 +858,64 @@ public class CLI implements UserInterface {
 
                     Directions d = directionTranslator(choice);
 
-
-                    for(Directions direction : previous) {
+                    for (Directions direction : previous) {
                         System.out.println("[DEBUG] entro nel ciclo for per cambiare finalPos con le prvious...");
-                        switch (direction){
+                        switch (direction) {
                             case NORTH:
-                                if(x > 0)
+                                if (x > 0)
                                     x--;
                                 break;
 
                             case SOUTH:
-                                if(x < 2)
+                                if (x < 2)
                                     x++;
                                 break;
 
                             case WEST:
-                                if(y > 0)
+                                if (y > 0)
                                     y--;
                                 break;
 
                             case EAST:
-                                if(y < 3)
+                                if (y < 3)
                                     y++;
                                 break;
                         }
                     }
 
-
                     view.askMoveValid(x, y, d);
+                    validMove = -1;
 
 
-                    do{
 
-                        while(validMove == -1){
-                            try
-                            {
-                                synchronized(this) {
-                                    System.out.println("Waiting to receive validMove reply...");
-                                    this.wait();
-                                }
-
-                            } catch (InterruptedException e) {
-
+                    while(validMove == -1){
+                        try
+                        {
+                            synchronized(this) {
+                                System.out.println("Waiting to receive validMove reply...");
+                                this.wait();
                             }
-                            System.out.println("Runner away!");
+
+                        } catch (InterruptedException e) {
+
                         }
+                        System.out.println("Received validMove reply!");
+                    }
 
-                        //System.out.println("[DEBUG] controllo valid Move...");
-                        if(validMove == 1) {
-                            System.out.println("[CLI] Direzione valida!");
-                            valid = true;
-                            previous.add(d);
-                            if(previous.size() == 3){
-                                //TODO I'll fix without duplicated code! (to push a working move first version)
-                                for(Directions direction : previous) {
-                                    System.out.println("[DEBUG] entro nel ciclo for per cambiare finalPos con le prvious...");
-                                    switch (direction){
-                                        case NORTH:
-                                            if(x > 0)
-                                                x--;
-                                            break;
+                    //System.out.println("[DEBUG] controllo valid Move...");
+                    if(validMove == 1) {
+                        System.out.println("Direzione valida!");
+                        valid = true;
+                        previous.add(d);
+                        directionsList.add(directionTranslator(choice));
+                        moves++;
+                    }else if (validMove == 0){
 
-                                        case SOUTH:
-                                            if(x < 2)
-                                                x++;
-                                            break;
+                        System.out.println(" [CLI] Direzione non valida!");
+                        valid = false;
+                    }
 
-                                        case WEST:
-                                            if(y > 0)
-                                                y--;
-                                            break;
 
-                                        case EAST:
-                                            if(y < 3)
-                                                y++;
-                                            break;
-                                    }
-                                }
-                            }
-                            directionsList.add(directionTranslator(choice));
-                            moves++;
-                        }else if (validMove == 0){
-
-                            System.out.println(" [CLI] Direzione non valida!");
-                            valid = false;
-                        }
-
-                    }while(validMove == -1);
 
 
                 } else{
@@ -980,7 +924,39 @@ public class CLI implements UserInterface {
 
             } while(!valid);
 
+            //TODO check if this works: you should see single movements in map
+            FileRead.removePlayer(view.getPlayerId());
+            FileRead.insertPlayer(x,y, Character.forDigit(view.getPlayerId(), 10));
+            FileRead.showBattlefield();
+
         } while(moves < maxMoves);
+
+        x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
+        y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+
+        for (Directions direction : previous) {
+            switch (direction) {
+                case NORTH:
+                    if (x > 0)
+                        x--;
+                    break;
+
+                case SOUTH:
+                    if (x < 2)
+                        x++;
+                    break;
+
+                case WEST:
+                    if (y > 0)
+                        y--;
+                    break;
+
+                case EAST:
+                    if (y < 3)
+                        y++;
+                    break;
+            }
+        }
 
         //TODO @Dav why i need to send him final position from client?
         System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
