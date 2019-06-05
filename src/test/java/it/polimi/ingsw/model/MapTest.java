@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.map.CellColor;
+import it.polimi.ingsw.model.map.JsonMap;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -10,7 +11,6 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MapTest {
 
@@ -23,7 +23,9 @@ class MapTest {
 
     @Test
     void generateCellsShouldGenerateRightCellColor() {
-        Map m = Map.genMap(1);
+        //Map m = Map.genMap(1);
+        Map m = new Map(JsonMap.genJsonMap(1));
+
 
         assert (m.getCell(0, 0).getColor() == CellColor.BLUE);
         assert (m.getCell(0, 1).getColor() == CellColor.BLUE);
@@ -80,7 +82,8 @@ class MapTest {
 
     @Test
     void getAdjShouldReturnRightCell() {
-        Map m = Map.genMap(1);
+        //Map m = Map.genMap(1);
+        Map m = new Map(JsonMap.genJsonMap(1));
 
         assert (m.getCell(0, 0).getNorth() == null);
         assert (m.getCell(0, 0).getSouth() == m.getCell(1, 0));
@@ -112,7 +115,8 @@ class MapTest {
 
     @Test
     void cellToCoord() {
-        Map m = Map.genMap(1);
+        //Map m = Map.genMap(1);
+        Map m = new Map(JsonMap.genJsonMap(1));
 
         assertEquals(m.cellToCoord(m.getCell(0, 0)), new Point(0, 0));
         assertEquals(m.cellToCoord(m.getCell(1, 2)), new Point(1, 2));

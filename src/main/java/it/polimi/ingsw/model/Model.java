@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.map.JsonMap;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -20,7 +21,8 @@ public class Model {
      */
     public Model(List<String> playerNames, List<PlayerColor> playerColors, int mapType) {
 
-        Map map = Map.genMap(mapType);
+        Map map = new Map(JsonMap.genJsonMap(mapType));
+        //Map map = Map.genMap(mapType);
 
         List<Player> playerList = new ArrayList<>();
         for (int i = 0; i < playerNames.size(); i++) {

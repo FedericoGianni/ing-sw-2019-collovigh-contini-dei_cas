@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.map;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCard;
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
@@ -23,13 +22,14 @@ public abstract class Cell extends Subject {
     private Cell adjSouth;
     private Cell adjEast;
     private Cell adjWest;
-    private List<Player> playersHere=new ArrayList<>();
+    private List<Player> playersHere;
 
     /**
      * Default constructor
      */
     public Cell() {
         this.visit=false;
+        this.playersHere = new ArrayList<>();
     }
 
     /**
@@ -170,6 +170,10 @@ public abstract class Cell extends Subject {
         this.visit=true;
     }
 
+    public void setVisited(boolean b){
+        this.visit = b;
+    }
+
     public void unvisit() {
         this.visit=false;
     }
@@ -183,12 +187,18 @@ public abstract class Cell extends Subject {
         return this.visit;
     }
 
+    /*
     @Override
     public String toString() {
 
 
         return this.getClass().toString() + Model.getMap().cellToCoord(this);
-    }
+    }*/
+
+     @Override
+     public String toString(){
+         return "Cella: colroe: " + color;
+     }
 
     public Weapon buy(Weapon w, AmmoBag cash) throws NotEnoughAmmoException {
 

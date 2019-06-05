@@ -1,0 +1,182 @@
+{
+  "matrix": [
+    [
+      {
+        "cellType" : "AMMO",
+        "color": "BLUE",
+        "visit": false,
+        "isAmmoCell": true,
+        "adjSouth": {
+          "x": 1,
+          "y": 0
+        },
+        "adjEast": {
+          "x": 0,
+          "y": 1
+        }
+      },
+      {
+        "cellType" : "AMMO",
+        "color": "BLUE",
+        "visit": false,
+        "isAmmoCell": true,
+        "adjEast": {
+          "x": 0,
+          "y": 2
+        },
+        "adjWest": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "cellType" : "SPAWN",
+        "color": "BLUE",
+        "visit": false,
+        "isAmmoCell": false,
+        "adjSouth": {
+          "x": 1,
+          "y": 2
+        },
+        "adjEast": {
+          "x": 0,
+          "y": 3
+        },
+        "adjWest": {
+          "x": 0,
+          "y": 1
+        }
+      },
+      {
+        "cellType" : "AMMO",
+        "color": "GREEN",
+        "visit": false,
+        "isAmmoCell": true,
+        "adjSouth": {
+          "x": 1,
+          "y": 3
+        },
+        "adjWest": {
+          "x": 0,
+          "y": 2
+        }
+      }
+    ],
+    [
+      {
+        "cellType" : "SPAWN",
+        "color": "RED",
+        "visit": false,
+        "isAmmoCell": false,
+        "adjNorth": {
+          "x": 0,
+          "y": 0
+        },
+        "adjEast": {
+          "x": 1,
+          "y": 1
+        }
+      },
+      {
+        "cellType" : "AMMO",
+        "color": "RED",
+        "visit": false,
+        "isAmmoCell": true,
+        "adjSouth": {
+          "x": 2,
+          "y": 1
+        },
+        "adjWest": {
+          "x": 1,
+          "y": 0
+        }
+      },
+      {
+        "cellType" : "AMMO",
+        "color": "YELLOW",
+        "visit": false,
+        "isAmmoCell": true,
+        "adjNorth": {
+          "x": 0,
+          "y": 2
+        },
+        "adjSouth": {
+          "x": 2,
+          "y": 2
+        },
+        "adjEast": {
+          "x": 1,
+          "y": 3
+        }
+      },
+      {
+        "cellType" : "AMMO",
+        "color": "YELLOW",
+        "visit": false,
+        "isAmmoCell": true,
+        "adjNorth": {
+          "x": 0,
+          "y": 3
+        },
+        "adjSouth": {
+          "x": 2,
+          "y": 3
+        },
+        "adjWest": {
+          "x": 1,
+          "y": 2
+        }
+      }
+    ],
+    [
+      null,
+      {
+        "cellType" : "AMMO",
+        "color": "GREY",
+        "visit": false,
+        "isAmmoCell": true,
+        "adjNorth": {
+          "x": 1,
+          "y": 1
+        },
+        "adjEast": {
+          "x": 2,
+          "y": 2
+        }
+      },
+      {
+        "cellType" : "AMMO",
+        "color": "YELLOW",
+        "visit": false,
+        "isAmmoCell": true,
+        "adjNorth": {
+          "x": 1,
+          "y": 2
+        },
+        "adjEast": {
+          "x": 2,
+          "y": 3
+        },
+        "adjWest": {
+          "x": 2,
+          "y": 1
+        }
+      },
+      {
+        "cellType" : "SPAWN",
+        "color": "YELLOW",
+        "visit": false,
+        "isAmmoCell": false,
+        "adjNorth": {
+          "x": 1,
+          "y": 3
+        },
+        "adjWest": {
+          "x": 2,
+          "y": 2
+        }
+      }
+    ]
+  ],
+  "mapType": 2
+} 

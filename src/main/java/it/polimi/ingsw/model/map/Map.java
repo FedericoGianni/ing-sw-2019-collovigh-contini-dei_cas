@@ -1,10 +1,15 @@
 package it.polimi.ingsw.model.map;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 import static it.polimi.ingsw.model.map.CellColor.*;
 import static java.lang.Math.abs;
@@ -23,7 +28,7 @@ public class Map {
      * mapType is set at 2 because this default type is valid for every number of players
      */
     public Map() {
-        this.mapType = 2;
+        this.mapType = 1;
         this.matrix = new Cell[MAP_R][MAP_C];
     }
 
@@ -36,7 +41,70 @@ public class Map {
         this.matrix = clone.matrix;
     }
 
-    private final Cell[][] matrix;
+    /**
+     * Generates a new Map from a jsonMap
+     * @param jsonMap simplified map which can be read/stored in a .json file
+     */
+    public Map(JsonMap jsonMap){
+
+        this.mapType = jsonMap.getMapType();
+        this.matrix = new Cell[MAP_R][MAP_C];
+
+        //recreating cells by type
+        for (int i = 0; i < MAP_R; i++) {
+            for (int j = 0; j < MAP_C; j++) {
+                if(jsonMap.getCell(i,j) != null){
+                    if(jsonMap.getCell(i,j).getCellType().equals(CellType.AMMO)) {
+                        this.matrix[i][j] = new AmmoCell();
+                        System.out.println("Debug new AmmoCell creata");
+                    } else {
+                        this.matrix[i][j] = new SpawnCell();
+                        System.out.println("debug new spawnCell creata");
+                    }
+                } else {
+                    this.matrix[i][j] = null;
+                }
+            }
+        }
+
+        setAdjacencesFromJson(jsonMap);
+    }
+
+    public void setAdjacencesFromJson(JsonMap jsonMap){
+
+        //setting adjacences
+        for (int i = 0; i < MAP_R; i++) {
+            for (int j = 0; j < MAP_C; j++) {
+                if(this.matrix[i][j] != null){
+                    if(jsonMap.getCell(i,j).getAdjNorth() != null)
+                        this.matrix[i][j].setAdjNorth(this.getCell(jsonMap.getCell(i,j).getAdjNorth().x, jsonMap.getCell(i,j).getAdjNorth().y));
+                    else
+                        this.matrix[i][j].setAdjNorth(null);
+
+                    if(jsonMap.getCell(i,j).getAdjSouth() != null)
+                        this.matrix[i][j].setAdjSouth(this.getCell(jsonMap.getCell(i, j).getAdjSouth().x, jsonMap.getCell(i, j).getAdjSouth().y));
+                    else
+                        this.matrix[i][j].setAdjSouth(null);
+
+                    if(jsonMap.getCell(i,j).getAdjEast() != null)
+                        this.matrix[i][j].setAdjEast(this.getCell(jsonMap.getCell(i, j).getAdjEast().x, jsonMap.getCell(i, j).getAdjEast().y));
+                    else
+                        this.matrix[i][j].setAdjEast(null);
+
+                    if(jsonMap.getCell(i,j).getAdjWest() != null)
+                        this.matrix[i][j].setAdjWest(this.getCell(jsonMap.getCell(i, j).getAdjWest().x, jsonMap.getCell(i, j).getAdjWest().y));
+                    else
+                        this.matrix[i][j].setAdjWest(null);
+
+                    this.matrix[i][j].setColor(jsonMap.getCell(i,j).getColor());
+                    this.matrix[i][j].setVisited(jsonMap.getCell(i,j).isVisit());
+                    this.matrix[i][j].setAmmoCell(jsonMap.getCell(i,j).isAmmoCell());
+                }
+            }
+        }
+    }
+
+    private Cell[][] matrix;
 
     private int mapType;
 
@@ -105,7 +173,8 @@ public class Map {
             case 1:
                 m = new Map();
                 m.mapType = 1;
-                m.generateCells(1);
+                //m.generateCells(1);
+                m.genCellsFromJson(1);
 
                 break;
 
@@ -543,6 +612,19 @@ public class Map {
         return null;
     }
 
+    private void genCellsFromJson(int mapType){
+        JsonMap jsonMap = new JsonMap();
+        Gson gson = new Gson();
+
+        String path = new File("resources/json/map2.json").getAbsolutePath();
+        try {
+            jsonMap = gson.fromJson(new FileReader(path), JsonMap.class);
+        } catch(IOException e){
+            e.getMessage();
+        }
+
+
+    }
 
 
 }

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.map.AmmoCell;
 import it.polimi.ingsw.model.map.CellColor;
+import it.polimi.ingsw.model.map.JsonMap;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.PlayerColor;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,8 @@ class AmmoCellTest {
 
     @Test
     void pickAmmoPlaced() {
-        Map m = Map.genMap(1);
+        //Map m = Map.genMap(1);
+        Map m = new Map(JsonMap.genJsonMap(1));
 
         AmmoCard c1;
         AmmoCard c2;
