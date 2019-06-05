@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.weapons;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
@@ -78,64 +79,15 @@ public class Marker extends MicroEffect {
      */
     public static void populator()
     {
-        //JSON parser object to parse read file
-        JSONParser jsonParser = new JSONParser();
-        String path = new File("resources/json/MarkerTypes").getAbsolutePath();
-        try (FileReader reader = new FileReader(path))
-        {
-            //Read JSON file
-            Object obj = jsonParser.parse(reader);
+        List<Marker> markerList = Parser.markerReader();
 
-            JSONArray markerTypes = (JSONArray) obj;
-            //System.out.println(damageTypes);
+        for (Marker marker: markerList){
 
+            Marker.insertMarkerType(marker);
 
-            for (int i = 0; i < markerTypes.size(); i++) {
-                  parseMarkerObject((JSONObject)markerTypes.get(i));
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
 
     }
-
-    /**
-     * create a Marker and adds it to the static list
-     * @param markers
-     */
-    private static void parseMarkerObject(JSONObject markers)
-    {
-        //Get employee object within list
-        JSONObject mObject = (JSONObject) markers.get("Marker");//Choose the class  to read--not really, something similar
-
-        //get the damage amount
-        String t = (String) mObject.get("markers");
-        //System.out.println(t);
-
-        //Get playerNum
-        String d = (String) mObject.get("playerNum");
-        //System.out.println(d);
-
-        //Get seeAble
-        String stn = (String) mObject.get("seeAbleTargetNeeded");
-        //System.out.println(stn);
-
-        //Get seeAble
-        String dp = (String) mObject.get("differentPlayer");
-        //System.out.println(stn);
-
-        Marker dd=new Marker(Integer.parseInt(t),Integer.parseInt(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(dp));
-        Marker.insertMarkerType(dd);
-
-    }
-
-
-
 
     @Override
     public void applyOn(Player player) {

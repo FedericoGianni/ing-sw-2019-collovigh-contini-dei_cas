@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.weapons;
 
+import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.model.Deck;
 
 import java.util.*;
@@ -19,7 +20,7 @@ public class WeaponDeck implements Deck<Weapon> {
     private WeaponDeck() {
 
         this.weaponList = new ArrayList<>();
-        weaponList.addAll(NormalWeapon.weaponsCreator());//create and return all the normal weapons
+        weaponList.addAll(Parser.normalWeaponReader());//create and return all the normal weapons
         //then add special weapons
     }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.weapons;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.Player;
@@ -77,31 +78,9 @@ public class MacroEffect {
      */
     public static void effectCreator()//static beacuse no macroEffects  may exist before the first call of this method
     {
-        //JSON parser object to parse read file
-        JSONParser jsonParser = new JSONParser();
-        String path = new File("resources/json/macroEffects").getAbsolutePath();
-        try (FileReader reader = new FileReader(path))
-        {//change to relative files paths
-            //Read JSON file
-            Object ob = jsonParser.parse(reader);
+        List<MacroEffect> macroEffectList = Parser.macroEffectReader();
 
-            JSONArray macros = (JSONArray) ob;
-
-            for (int i = 0; i < macros.size(); i++) {
-                 parseDamageObject((JSONObject)macros.get(i));
-            }
-            //for each Json input object
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-
+        macroEffects.addAll(macroEffectList);
     }
 
     /**

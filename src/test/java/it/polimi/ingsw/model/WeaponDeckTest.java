@@ -32,7 +32,6 @@ class WeaponDeckTest {
     @Test
     void printWeaponDeck(){
         WeaponDeck deck = WeaponDeck.populateDeck();
-        weaponsCreator();
         for(int i=0;i<deck.getSize();i++)
         {
            deck.getRandomCard().print();
