@@ -167,7 +167,9 @@ public class NormalWeapon extends Weapon{
 
     /**
      * creates the static weaponsList
+     * @deprecated
      */
+    @Deprecated
     public static  ArrayList<NormalWeapon>  weaponsCreator()
     {
         //----------------microEffects ecc creator
@@ -205,7 +207,9 @@ public class NormalWeapon extends Weapon{
     /**
      * reads the JSON and creates a NormalWeapon object and adds it to the list
      * @param micros
+     * @deprecated
      */
+    @Deprecated
     private static NormalWeapon parseWeaponObject(JSONObject micros)
     {
         //Get  object within list
@@ -243,7 +247,9 @@ public class NormalWeapon extends Weapon{
      * @param wpCost
      * @param type
      * @return the cost in AmmoCubes
+     * @deprecated
      */
+    @Deprecated
     public static ArrayList<AmmoCube> ammoAnalizer(ArrayList<AmmoCube> wpCost,String type)
     {
             if(type=="BLUE")
@@ -262,7 +268,9 @@ public class NormalWeapon extends Weapon{
      * @param mf
      * @param typeEncoded
      * @return a MacroEffects list
+     * @deprecated
      */
+    @Deprecated
     public static ArrayList<MacroEffect> effectsAnalizer (ArrayList<MacroEffect> mf,int typeEncoded)
     {
         mf.add(MacroEffect.getMacroEffects().get(typeEncoded));

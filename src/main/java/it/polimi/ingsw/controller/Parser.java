@@ -6,12 +6,8 @@ import it.polimi.ingsw.model.weapons.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,22 +20,33 @@ public class Parser {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
-    private static final String LOG_START = "[Parser]";
+    private static final String LOG_START = "[Parser] ";
 
     // paths
 
     private static final String DAMAGE_PATH = "resources/json/damageTypes";
     private static final String MACRO_EFFECT_PATH = "resources/json/macroEffects";
+    private static final String MARKER_PATH = "resources/json/MarkerTypes";
+    private static final String MOVER_PATH = "resources/json/mover";
+    private static final String NORMAL_WEAPON_PATH = "resources/json/Weaponary";
 
 
     // Json Simple
 
     private static JSONParser jsonParser = new JSONParser();
 
+    private Parser() {
+
+    }
 
 
     // weapon Methods
 
+    /**
+     * DAMAGE
+     *
+     * @return the list of the damage from the json
+     */
     public static List<Damage> damageReader(){
 
         List<Damage> damageList = new ArrayList<>();
@@ -65,17 +72,12 @@ public class Parser {
 
             }
 
-        } catch (FileNotFoundException e) {
+            LOGGER.log(level, () -> LOG_START + "Damages successfully loaded from json");
+
+        } catch (Exception e) {
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
 
-        } catch (IOException e) {
-
-            LOGGER.log(Level.WARNING, e.getMessage(),e);
-
-        } catch (ParseException e) {
-
-            LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
 
         return damageList;
@@ -131,7 +133,7 @@ public class Parser {
      *
      *  this method uses the simple JSON to populate the macroEffect Class that are in a known number
      */
-    public static List<MacroEffect> effectCreator(){
+    public static List<MacroEffect> macroEffectReader(){
 
         List<MacroEffect> macroEffectList= new ArrayList<>();
 
@@ -151,9 +153,11 @@ public class Parser {
 
             for (int i = 0; i < macros.size(); i++) {
 
-                parseMacroEffectObject((JSONObject)macros.get(i));
+                macroEffectList.add(parseMacroEffectObject((JSONObject)macros.get(i)));
 
             }
+
+            LOGGER.log(level, () -> LOG_START + "Macro Effects successfully loaded from json");
 
 
         } catch (Exception e) {
@@ -198,29 +202,23 @@ public class Parser {
         //ITERATE THE AMMOCOST OF THE MACROEFFECTS
         types = (JSONArray) employeeObject.get("cost");//iterate the MicroEffects codification
         ArrayList <AmmoCube> fc=new ArrayList<>();
-        if(types!=null && types.size()!=0)
+        if(types!=null && !(types.isEmpty()))
         {for (int i = 0; i < types.size(); i++) {//read Every Effect type and differenciate it
             JSONObject type=(JSONObject)types.get(i);
             String typeEncoded=(String)type.get("ammoC");
             fc.add(ammoAnalizer(typeEncoded));//method that can decode the microeffect code
 
         }
-            MacroEffect mf=new MacroEffect(n,microF,fc);//create the macro effect by the list of micro Effects
+            return new MacroEffect(n,microF,fc);//create the macro effect by the list of micro Effects
 
-            return mf;
 
         }else{
 
-            fc=null;//this means the effect doesn't have cost
 
-            MacroEffect mf=new MacroEffect(n,microF);//create the macro effect by the list of micro Effects ad empty AmmoCubes
+            return new MacroEffect(n,microF);//create the macro effect by the list of micro Effects ad empty AmmoCubes
 
-            return mf;
 
         }
-
-
-
 
     }
 
@@ -264,6 +262,237 @@ public class Parser {
         }else{
             return new AmmoCube(Color.YELLOW);
         }
+    }
+
+
+    /**
+     * MARKER
+     *
+     * this method uses the semplified JSON to populate the microeffets-MArker Class that are in a known number
+     */
+    public static List<Marker> markerReader()
+    {
+        List<Marker> markerList = new ArrayList<>();
+
+        //JSON parser object to parse read file
+        JSONParser jsonParser = new JSONParser();
+        String path = new File(MARKER_PATH).getAbsolutePath();
+        try (FileReader reader = new FileReader(path))
+        {
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+
+            JSONArray markerTypes = (JSONArray) obj;
+
+
+            for (int i = 0; i < markerTypes.size(); i++) {
+                markerList.add(parseMarkerObject((JSONObject)markerTypes.get(i)));
+            }
+
+            LOGGER.log(level, () -> LOG_START + "Markers successfully loaded from json");
+
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
+        }
+
+        return markerList;
+
+    }
+
+    /**
+     * create a Marker
+     * @param markers is the json Object
+     * @return the Marker object;
+     */
+    private static Marker parseMarkerObject(JSONObject markers)
+    {
+        //Get employee object within list
+        JSONObject mObject = (JSONObject) markers.get("Marker");
+
+        //get the damage amount
+        String t = (String) mObject.get("markers");
+
+        //Get playerNum
+        String d = (String) mObject.get("playerNum");
+
+        //Get seeAble
+        String stn = (String) mObject.get("seeAbleTargetNeeded");
+
+        //Get seeAble
+        String dp = (String) mObject.get("differentPlayer");
+
+        return new Marker(Integer.parseInt(t),Integer.parseInt(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(dp));
+
+    }
+
+    /**
+     * MOVER
+     *
+     * this method uses the semplified JSON to populate the microeffets-Damage Class that are in a known number
+     */
+    public static List<Mover> moverReader() {
+
+        List<Mover> moverList =new ArrayList<>();
+
+        //JSON parser object to parse read file
+        JSONParser jsonParser = new JSONParser();
+        String path = new File(MOVER_PATH).getAbsolutePath();
+        try (FileReader reader = new FileReader(path))
+        {
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+
+            JSONArray damageTypes = (JSONArray) obj;
+
+            for (int i = 0; i < damageTypes.size(); i++) {
+
+                moverList.add( parseMoverObject((JSONObject)damageTypes.get(i)) );
+            }
+            //for each Json input object
+
+        } catch (Exception e) {
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+        }
+
+        return moverList;
+    }
+
+    /**
+     * creates a Mover and adds it t the list
+     * @param damages
+     */
+    private static Mover parseMoverObject(JSONObject damages)
+    {
+        //Get employee object within list
+        JSONObject employeeObject = (JSONObject) damages.get("Mover");//Choose the class
+
+        //get the damage amount
+        String t = (String) employeeObject.get("cellNumber");
+
+        //Get playerNum
+        String d = (String) employeeObject.get("beforeShooting");
+
+        //Get seeAble
+        String stn = (String) employeeObject.get("afterShooting");
+
+        //Get melee
+        String melee = (String) employeeObject.get("facoltative");
+
+        //Get melee
+        String diffP = (String) employeeObject.get("toCell");
+
+        //Get melee
+        String dist = (String) employeeObject.get("target");
+
+        //Get melee
+        String my = (String) employeeObject.get("mycell");
+
+        return new Mover(Integer.parseInt(t),Boolean.parseBoolean(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(melee),Boolean.parseBoolean(diffP),Boolean.parseBoolean(dist),Boolean.parseBoolean(my));
+    }
+
+
+    /**
+     * WEAPON
+     *
+     * creates the static weaponsList
+     */
+    public static  List<NormalWeapon>  normalWeaponReader()
+    {
+        //----------------microEffects ecc creator
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+
+        List<NormalWeapon> normalWeapons =new ArrayList<>();
+        //JSON parser object to parse read file
+        JSONParser jsonParser = new JSONParser();
+        try (FileReader reader = new FileReader(NORMAL_WEAPON_PATH))
+        {//change to relative files paths
+            //Read JSON file
+            Object obj = jsonParser.parse(reader);
+
+            JSONArray wps = (JSONArray) obj;
+
+            for (int i = 0; i < wps.size(); i++) {
+                normalWeapons.add(parseWeaponObject((JSONObject)wps.get(i)));
+            }
+            //for each Json input object
+
+        } catch (Exception e) {
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+        }
+
+        return normalWeapons;
+    }
+
+    /**
+     * reads the JSON and creates a NormalWeapon object and adds it to the list
+     * @param micros
+     */
+    private static NormalWeapon parseWeaponObject(JSONObject micros)
+    {
+        //Get  object within list
+        JSONObject employeeObject = (JSONObject) micros.get("Weapon");//Choose the class
+
+        //get the damage amount
+        String n = (String) employeeObject.get("name");
+
+        JSONArray types = (JSONArray) employeeObject.get("cost");//iterate the ammocubes cost codification
+        ArrayList <AmmoCube> wpCost=new ArrayList<>();
+
+        for (int i = 0; i < types.size(); i++) {//read ammoCube type and differenciate it
+            JSONObject type=(JSONObject)types.get(i);
+            String typeEncoded= (String)type.get("ammoC");
+            ammoAnalizer(wpCost,typeEncoded);//method that can decodify the ammos code---see documentatio
+        }
+        types = (JSONArray) employeeObject.get("macroEffects");//iterate the ammocubes cost codification
+        ArrayList <MacroEffect> mf=new ArrayList<>();
+
+        for (int i = 0; i < types.size(); i++) {//read Every Effect type and differenciate it
+            JSONObject type=(JSONObject)types.get(i);
+            int typeEncoded=Integer.parseInt((String)type.get("num"));
+            effectsAnalizer(mf,typeEncoded);//method that can decodify the microevfect code---see documentation
+            //here changes microF
+        }
+
+
+        return new NormalWeapon(n,wpCost,mf);
+    }
+
+    /**
+     * creates the ammo from the JSON using the COlor class
+     * @param wpCost
+     * @param type
+     * @return the cost in AmmoCubes
+     */
+    private static List<AmmoCube> ammoAnalizer(List<AmmoCube> wpCost,String type)
+    {
+        if(type=="BLUE")
+        {
+            wpCost.add(new AmmoCube(Color.BLUE));
+        }else if(type=="RED") {
+            wpCost.add(new AmmoCube(Color.RED));
+        }else{
+            wpCost.add(new AmmoCube(Color.YELLOW));
+        }
+        return wpCost;
+    }
+
+    /**
+     * generate a MacroEffects list
+     * @param mf
+     * @param typeEncoded
+     * @return a MacroEffects list
+     */
+    private static List<MacroEffect> effectsAnalizer (List<MacroEffect> mf,int typeEncoded)
+    {
+        mf.add(MacroEffect.getMacroEffects().get(typeEncoded));
+        return mf;
     }
 
 

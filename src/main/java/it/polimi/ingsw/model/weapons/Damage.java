@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.weapons;
 import com.google.gson.Gson;
+import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
@@ -146,68 +147,13 @@ public class Damage extends MicroEffect {
      */
     public static void populator() //static beacuse no damages types may exixst before the first call of this method
     {
-        //JSON parser object to parse read file
-        JSONParser jsonParser = new JSONParser();
-        String path = new File("resources/json/damageTypes").getAbsolutePath();
-        try (FileReader reader = new FileReader(path))
-        {
-            //Read JSON file
-            Object obj = jsonParser.parse(reader);
-            JSONArray damageTypes = (JSONArray) obj;
+        List<Damage> damageList= Parser.damageReader();
 
-                for (int i = 0; i < damageTypes.size(); i++) {
-                     parseDamageObject((JSONObject)damageTypes.get(i));
-                }
-            //for each Json input object
+        for (Damage damage : damageList){
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            Damage.insertDamage(damage);
         }
 
-    }
-
-    /**
-     * reads the JSON and create a Damage object with the values
-     * @param damages
-     */
-    private static void parseDamageObject(JSONObject damages)
-    {
-        //Get employee object within list
-        JSONObject employeeObject = (JSONObject) damages.get("Damage");//Choose the class
-
-        //get the damage amount
-        String t = (String) employeeObject.get("damage");
-        //System.out.println(t);
-
-        //Get playerNum
-        String d = (String) employeeObject.get("playerNum");
-        //System.out.println(d);
-
-        //Get seeAble
-        String stn = (String) employeeObject.get("seeAbleTargetNeeded");
-        //System.out.println(stn);
-
-        //Get melee
-        String melee = (String) employeeObject.get("melee");
-        //System.out.println(melee);
-
-        //Get melee
-        String diffP = (String) employeeObject.get("differentPlayer");
-        //System.out.println(melee);
-
-        //Get melee
-        String dist = (String) employeeObject.get("distMin");
-        //System.out.println(melee);
-
-        //Get melee
-        String alTarg= (String) employeeObject.get("alreadyTargeted");
-        //System.out.println(melee);
-        Damage dd=new Damage(Integer.parseInt(t),Integer.parseInt(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(melee),Boolean.parseBoolean(diffP),Integer.parseInt(dist),Boolean.parseBoolean(alTarg));
-        Damage.insertDamage(dd);
     }
 
     @Override

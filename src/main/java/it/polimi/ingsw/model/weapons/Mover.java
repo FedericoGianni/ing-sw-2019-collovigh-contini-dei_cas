@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.weapons;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.view.actions.Move;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -219,71 +221,12 @@ public class Mover extends MicroEffect {
      */
     public static void populator()//static beacuse no damages types may exixst before the first call of this method
     {
-        //JSON parser object to parse read file
-        JSONParser jsonParser = new JSONParser();
-        String path = new File("resources/json/mover").getAbsolutePath();
-        try (FileReader reader = new FileReader(path))
-        {
-            //Read JSON file
-            Object obj = jsonParser.parse(reader);
+        List<Mover> moverList = Parser.moverReader();
 
-            JSONArray damageTypes = (JSONArray) obj;
+        for (Mover mover: moverList){
 
-            for (int i = 0; i < damageTypes.size(); i++) {parseMoverObject((JSONObject)damageTypes.get(i)); }
-            //for each Json input object
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            Mover.insertWeaponMov(mover);
         }
-
-    }
-
-
-
-    /**
-     * creates a Mover and adds it t the list
-     * @param damages
-     */
-    private static void parseMoverObject(JSONObject damages)
-    {
-        //Get employee object within list
-        JSONObject employeeObject = (JSONObject) damages.get("Mover");//Choose the class
-
-        //get the damage amount
-        String t = (String) employeeObject.get("cellNumber");
-        //System.out.println(t);
-
-        //Get playerNum
-        String d = (String) employeeObject.get("beforeShooting");
-        //System.out.println(d);
-
-        //Get seeAble
-        String stn = (String) employeeObject.get("afterShooting");
-        //System.out.println(stn);
-
-        //Get melee
-        String melee = (String) employeeObject.get("facoltative");
-        //System.out.println(melee);
-
-        //Get melee
-        String diffP = (String) employeeObject.get("toCell");
-        //System.out.println(melee);
-
-        //Get melee
-        String dist = (String) employeeObject.get("target");
-        //System.out.println(melee);
-
-        //Get melee
-        String my = (String) employeeObject.get("mycell");
-        //System.out.println(melee);
-
-
-        Mover dd=new Mover(Integer.parseInt(t),Boolean.parseBoolean(d),Boolean.parseBoolean(stn),Boolean.parseBoolean(melee),Boolean.parseBoolean(diffP),Boolean.parseBoolean(dist),Boolean.parseBoolean(my));
-        Mover.insertWeaponMov(dd);
 
     }
 
