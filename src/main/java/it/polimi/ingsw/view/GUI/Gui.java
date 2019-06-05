@@ -214,21 +214,20 @@ public class Gui extends Application implements UserInterface {
 
                 break;
 
-            case STATS:
-                guiMapController.statsUpdater(playerId);
-                //possibilità: cambio pos,danni subiti, spostmanto e marchi, disconnessioni
+            case STATS: //possibilità: cambio pos,danni subiti, spostmanto e marchi, disconnessioni
+                    guiMapController.statsUpdater(playerId);
                 break;
-            case INITIAL:
 
+            case INITIAL:
                 for(Player item:view.getCacheModel().getCachedPlayers())
                     guiMapController.loginUpdater(item.getName(),item.getPlayerId(),item.getPlayerColor());
                 break;
-            case POWERUP_BAG:
-                guiMapController.powerUpDisplayer();
 
+            case POWERUP_BAG:
+                    guiMapController.powerUpDisplayer();
+                break;
 
             default:
-
                 break;
         }
     }

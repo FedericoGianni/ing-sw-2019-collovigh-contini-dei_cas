@@ -24,7 +24,7 @@ public class GuiMapController {
 
     private static Gui gui;
     private int rows=3,col=4;
-    private  Button map[][]=new Button[3][4];
+    private  Button map[][]=new Button[rows][col];
     public static void setGui(Gui g) {
         gui = g;
     }
@@ -36,7 +36,6 @@ public class GuiMapController {
     TextArea log;
     @FXML
     GridPane innerMap;
-
     @FXML
     Button b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;
     @FXML
@@ -228,11 +227,17 @@ public class GuiMapController {
     }
 
     public void statsUpdater(int id)
-    {//the player is removed from its posticn before the update
+    {//the player is removed from its postion before the update
 
+        if(!gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getOnline())
+        {
+            log.appendText("\nIl giocatore "+id+" si è scollegato.");
+
+            return;
+        }
         log.appendText("\nUpdated stats del player: "+id);
-        int r=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
-        int c=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
+        int r=gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX();
+        int c=gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY();
         mapPos(r,c,id);
     }
 
@@ -274,6 +279,17 @@ public class GuiMapController {
             map[r][c].setStyle("-fx-background-image: url('/images/player1.png')");
             log.appendText("\n Placed player "+id+" in cell "+r+c);
         }
+
+        //eliminating the powerups effects after the beginning
+        powerUp1.setOnMouseClicked((e) -> {
+
+        });
+        powerUp2.setOnMouseClicked((e) -> {
+
+        });
+        powerUp3.setOnMouseClicked((e) -> {
+
+        });
         //no other player icons now
     }
 
