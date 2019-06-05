@@ -33,7 +33,7 @@ public class Damage extends MicroEffect {
     //if the distance is 1000 is like 1 , no more no less
     //if the minimum distance is 100 is an unseeble Player by default, you have to target an unseeable player(check heatseeker)
     //only the damage tag have the distance inside
-    private static ArrayList <Damage> damages=new ArrayList<>();
+    private static List <Damage> damages = new ArrayList<>();
 
     /**
      *
@@ -78,7 +78,7 @@ public class Damage extends MicroEffect {
         damages.add(dm);
     }
 
-    public static ArrayList <Damage> getDamagesList()
+    public static List <Damage> getDamagesList()
     {
         return damages;
     }
@@ -144,7 +144,7 @@ public class Damage extends MicroEffect {
     /**
      * this method uses the semplified JSON to populate the microeffets-Damage Class that are in a known number
      */
-    public static void populator()//static beacuse no damages types may exixst before the first call of this method
+    public static void populator() //static beacuse no damages types may exixst before the first call of this method
     {
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();

@@ -11,9 +11,7 @@ import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,52 +22,29 @@ public class RunClient {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
-    private static RMIClient rmic ; // to be deleted
-
-    public static UserInterface ui; // to be deleted
-
-    public static CLI cli; // to be deleted
+    private static final int DEFAULT_SOCKET_PORT = 22222;
+    private static final String DEFAULT_UI_CHOICE = "-cli";
+    private static final String DEFAULT_SERVER_IP = "localhost";
 
     private static View view;
 
+    // for saves
+    private static final String CONFIG_PATH = "resources/json/startupConfig/config.json";
+    private static Gson gson = new Gson();
+    private static Config config;
 
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public static CLI getCli() {
-        return cli;
-    }
 
-    /**
-     * @deprecated
-     * @param ui
-     */
-    @Deprecated
-    public static void setUi(UserInterface ui) {
-        RunClient.ui = ui;
-    }
 
-    /**
-     * @deprecated
-     * @return
-     */
-    @Deprecated
-    public static UserInterface getUi() {
-        return ui;
-    }
 
-    public static View getView() {
-        return view;
-    }
 
     /**
      *
      * @param args ->
-     *             arg1 = ip server
-     *             arg2 = socket port
-     *             arg3 = gui ( -gui for graphical interface or -cli for command line interface)
+     *             arg0 = ip server
+     *             arg1 = socket port
+     *             arg2 = gui ( -gui for graphical interface or -cli for command line interface)
+     *             arg3 = rmi serverPort
+     *             arg4 = rmi clientPort
      */
 
     public static void main(String[] args) {
@@ -87,7 +62,7 @@ public class RunClient {
 
                     // creates a reader for the file
 
-                    BufferedReader br = new BufferedReader( new FileReader( new File("resources/json/startupConfig/config.json").getAbsolutePath()));
+                    BufferedReader br = new BufferedReader( new FileReader( new File(CONFIG_PATH).getAbsolutePath()));
 
                     // load the Config File
 
@@ -99,51 +74,78 @@ public class RunClient {
 
                     // starts the game
 
-                    view = new View(config.getServerIp(), config.getSocketClientPort(), config.getGui());
+                    view = new View(config.getServerIp(), config.getSocketPort(), config.getGui());
 
-                }catch (Exception e){
+                }catch (FileNotFoundException e){
 
-                    e.printStackTrace();
+                    LOGGER.log(Level.WARNING, "[RunClient] jsonFile not found, start client assuming server is local");
 
-                    view = new View("localhost", 22222, "-cli");
+                    // creates a new config file
+
+                    config = new Config(DEFAULT_SERVER_IP, DEFAULT_SOCKET_PORT, DEFAULT_UI_CHOICE);
+
+                    // saves it
+
+                    saveCurrentConfig(config);
+
+                    // starts the view w/ default values
+
+                    view = new View(DEFAULT_SERVER_IP, DEFAULT_SOCKET_PORT, DEFAULT_UI_CHOICE);
+
                 }
+
+                break;
+
+            case 1:
+
+                // creates a new config file
+
+                config = new Config(args[0], DEFAULT_SOCKET_PORT, DEFAULT_UI_CHOICE);
+
+                // saves it
+
+                saveCurrentConfig(config);
+
+                // starts the view w/ default values
+
+                view = new View(args[0], DEFAULT_SOCKET_PORT, DEFAULT_UI_CHOICE);
 
                 break;
 
             case 3:
 
-                startWithThree(args);
+                view = new View(args[0], Integer.parseInt(args[1]), args[2]);
+
+                // creates a new config file
+
+                config = new Config(args[0], Integer.parseInt(args[1]), args[2]);
+
+                // saves it
+
+                saveCurrentConfig(config);
 
                 break;
 
-            case 2:
 
-                try {
-                    SocketClient sc = new SocketClient(args[0], Integer.parseInt(args[1]));
-                    Thread t = new Thread(sc);
-                    t.start();
+            case 5:
 
-                    ui = cli;
-                    sleep(200);
-                    view = new View(cli);
-                    cli = new CLI(view);
-                    view.setVirtualView(sc.getScw());
-                    cli.login();
+                view = new View(args[0], Integer.parseInt(args[1]), args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]));
 
-                    //rmic = new RMIClient("localhost");
-                    //rmic.joinGame("a", PlayerColor.GREEN);
+                // creates a new config file
 
+                config = new Config(args[0], Integer.parseInt(args[1]), args[2], Integer.parseInt(args[3]), Integer.parseInt(args[4]));
 
-                } catch (Exception e) {
+                // saves it
 
-                    e.printStackTrace();
-                }
+                saveCurrentConfig(config);
 
                 break;
+
+
 
             default:
 
-                System.out.println("[ERROR] this args configurations has still not been implemented ");
+                LOGGER.log(Level.WARNING, "[RunClient] args number not matching any of our criteria: \n 0-> json files in path {0} \n 1-> ipAddress \n 2-> ipAddress, socketPort, \"-cli\" / \"-gui\" \n 3-> ipAddress, socketPort, \"-cli\" / \"-gui\", rmiServerPort, rmiClientPort ", CONFIG_PATH );
 
                 break;
 
@@ -152,18 +154,34 @@ public class RunClient {
 
     }
 
+
     /**
-     * This function will start the client if the program is launched with three arguments
-     * 1-> server Ip
-     * 2-> server port for socket
-     * 3-> -cli for cli / -gui for gui
-     *
-     * @param args are the three args
+     *  this function saves the configuration files
+     * @param config is the config class
      */
-    private static void startWithThree(String[] args){
+    private static void saveCurrentConfig( Config config ){
 
-        view = new View(args[0], Integer.parseInt(args[1]), args[2]);
+        try{
 
+            gson = new Gson();
+
+            FileWriter writer = new FileWriter(CONFIG_PATH);
+
+            gson.toJson(config, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (IOException e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(),e );
+        }
+    }
+
+    // getter
+
+    public static View getView() {
+        return view;
     }
 }
 

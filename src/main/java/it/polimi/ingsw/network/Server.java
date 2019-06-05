@@ -29,7 +29,7 @@ public class Server  {
     private static String ip_address;
 
     /**
-     * Port of the Server
+     * Port of the Socket Server
      */
     private static int port;
 
@@ -55,6 +55,7 @@ public class Server  {
      * the attribute ip_address and finally starting the two type of Server.
      */
     public Server(int port) {
+
         this.port = port;
 
         try {
@@ -76,6 +77,37 @@ public class Server  {
         socketHandler.start();
 
         this.rmiServer = new RMIServer();
+    }
+
+    /**
+     * Constructor w/ rmi ports
+     *
+     * Initialize the main Server by first creating a WaitingRoom, then getting its local host address and assigning it to
+     * the attribute ip_address and finally starting the two type of Server.
+     */
+    public Server(int port,  int serverPort, int clientPort) {
+
+        this.port = port;
+
+        try {
+            waitingRoom = new WaitingRoom(-1);  // NOTE: this need to be changed: this can only create a new game but load a saved one
+
+            clients = new LinkedHashMap<>();
+
+        }catch (GameNonExistentException e){
+            e.printStackTrace();
+        }
+        try {
+            ip_address = Inet4Address.getLocalHost().getHostAddress();
+            Logger.getLogger("infoLogging").info("RemoteServer is up and running on ip " + ip_address);
+        } catch(UnknownHostException e){
+            e.getMessage();
+        }
+
+        Thread socketHandler = new Thread(new SocketServer(port));
+        socketHandler.start();
+
+        this.rmiServer = new RMIServer(serverPort,clientPort);
     }
 
     /**
