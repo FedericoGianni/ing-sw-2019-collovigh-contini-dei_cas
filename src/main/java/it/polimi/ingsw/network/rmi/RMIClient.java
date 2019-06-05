@@ -1,19 +1,14 @@
 package it.polimi.ingsw.network.rmi;
 
-import com.google.gson.Gson;
+
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
-import it.polimi.ingsw.network.jsonconfig.Config;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.net.Inet4Address;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -30,13 +25,13 @@ public class RMIClient extends Client {
     private final String remoteObjectName = "rmi_server";
     private Registry remoteRegistry;
     private final String serverIp;
-    private int serverPort = 22220;
+    private final int serverPort;
 
     //attributes relative to server -> client flow
     private static Boolean registryCreated = false;
     private String localName;
     private View view;
-    private int clientPort = 22221;
+    private final int clientPort;
 
     //view
 
@@ -53,13 +48,30 @@ public class RMIClient extends Client {
         this.serverIp = serverIp;
         this.view = view;
 
+        // use default config
+
+        this.serverPort = 22220;
+        this.clientPort = 22221;
+
+        // starts the remote objects
+
+        createRegistry();
+
+        createRemoteObject();
+
+
+    }
+
+    public RMIClient(String serverIp, View view, int serverPort, int clientPort) {
+
+        this.serverIp = serverIp;
+        this.view = view;
+
         // gets configs from json
 
-        Config config = getConfig();
+        this.serverPort = serverPort;
 
-        this.serverPort = config.getRmiServerPort();
-
-        this.clientPort = config.getRmiClientPort();
+        this.clientPort = clientPort;
 
         // starts the remote objects
 
@@ -72,36 +84,6 @@ public class RMIClient extends Client {
 
 
     // Utilities
-
-    private Config getConfig(){
-
-        Gson gson = new Gson();
-
-
-        try{
-
-            // creates a reader for the file
-
-            BufferedReader br = new BufferedReader( new FileReader( new File("resources/json/startupConfig/config.json").getAbsolutePath()));
-
-            // load the Config File
-
-            Config config = gson.fromJson(br, Config.class);
-
-            // LOG the load
-
-            LOGGER.log(level,"[RMI-CLIENT] Config successfully loaded ");
-
-            // returns the config file
-
-            return config;
-
-        }catch (Exception e){
-            LOGGER.log(Level.WARNING, e.getMessage(),e);
-
-            return new Config(null,-1,-1,false);
-        }
-    }
 
     /**
      * this method creates a new Rmi registry on port 2021 if thi was not already created

@@ -1,13 +1,8 @@
 package it.polimi.ingsw.network.rmi;
 
 
-import com.google.gson.Gson;
-import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.jsonconfig.Config;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -20,28 +15,27 @@ public class RMIServer {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
-    private int serverPort = 22220;
+
 
     //attributes relative to client -> server flow
     private static Boolean registryCreated = false;
     private static final String LOCALNAME = "rmi_server";
+    private final int serverPort;
     private Registry local;
     private ToServerImpl skeleton;
 
     //attributes relative to server -> client flow
     private static ConcurrentHashMap<Integer,ToViewImpl> remoteViews = new ConcurrentHashMap<>();
     private Registry remote;
-    private int clientPort = 22221;
+    private final int clientPort;
 
 
     public RMIServer() {
 
-        // loads the config files from the json
+        // use the default config ports
 
-        Config config = getConfig();
-
-        this.serverPort = config.getRmiServerPort();
-        this.clientPort = config.getRmiClientPort();
+        this.serverPort = 22220;
+        this.clientPort = 22221;
 
         // starts the remote objects
 
@@ -51,35 +45,19 @@ public class RMIServer {
 
     }
 
+    public RMIServer(int serverPort, int clientPort) {
 
-    private Config getConfig(){
+        // use the default config ports
 
-        Gson gson = new Gson();
+        this.serverPort = serverPort;
+        this.clientPort = clientPort;
 
+        // starts the remote objects
 
-        try{
+        this.createRegistry();
 
-            // creates a reader for the file
+        this.createRemoteObject();
 
-            BufferedReader br = new BufferedReader( new FileReader( new File("resources/json/startupConfig/config.json").getAbsolutePath()));
-
-            // load the Config File
-
-            Config config = gson.fromJson(br, Config.class);
-
-            // LOG the load
-
-            LOGGER.log(level,"[RMI-SERVER] Config successfully loaded ");
-
-            // returns the class
-
-            return config;
-
-        }catch (Exception e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(),e);
-            return new Config(null,-1,-1,false);
-        }
     }
 
     /**

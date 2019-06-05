@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;

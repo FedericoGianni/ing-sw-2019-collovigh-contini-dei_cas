@@ -28,10 +28,13 @@ public class View implements ViewInterface {
     private Client clientToVView;
     private CacheModel cacheModel;
 
+    // for net configuration
+
     private String serverIp;
-
-
     private int port;
+    private final int rmiServerPort;
+    private final int rmiClientPort;
+
 
 
 
@@ -44,6 +47,9 @@ public class View implements ViewInterface {
     @Deprecated
     public View(UserInterface userInterface) {
         this.userInterface = userInterface;
+
+        this.rmiServerPort = -1;
+        this.rmiClientPort = -1;
 
     }
 
@@ -63,6 +69,50 @@ public class View implements ViewInterface {
         this.cacheModel = new CacheModel(this);
         this.serverIp = serverIp;
         this.port = port;
+        this.rmiClientPort = -1;
+        this.rmiServerPort = -1;
+
+        if (ui.equals("-cli")){
+
+            this.userInterface = new CLI(this);
+            this.userInterface.startUI();
+        }
+
+        if (ui.equals("-gui")) {
+
+            Gui gui = new Gui();
+            gui.setView(this);
+            this.userInterface = gui;
+            new Thread(() -> {
+                this.userInterface.startUI();
+            }).start();
+            //this.userInterface.startUI();
+
+
+            //GuiMap guiMap = new GuiMap();
+            //new Thread( () -> {guiMap.startUI();}).start();
+            //GuiLobby guiLobby = new GuiLobby();
+            //new Thread( () -> {guiLobby.startUI();}).start();
+        }
+
+    }
+
+    /**
+     *  constructor variant used if the user specified rmi ports
+     *
+     * @param serverIp ip of the server
+     * @param port port of the socket server
+     * @param ui -cli for CLI or -gui for GUI
+     * @param rmiServerPort is the port for the rmi registry on the server
+     * @param rmiClientPort is the port for the rmi registry on the client
+     */
+    public View(String serverIp, int port,  String ui , int rmiServerPort, int rmiClientPort) {
+
+        this.cacheModel = new CacheModel(this);
+        this.serverIp = serverIp;
+        this.port = port;
+        this.rmiClientPort = rmiClientPort;
+        this.rmiServerPort = rmiServerPort;
 
         if (ui.equals("-cli")){
 
@@ -96,16 +146,20 @@ public class View implements ViewInterface {
     public void createConnection(ProtocolType type){
 
         if (type.equals(ProtocolType.RMI)){
-            /*
-            new Thread( () -> {
-                clientToVView = new RMIClient(serverIp,this);
-            }).start();
-            try {
-                sleep(2000);
-            } catch(InterruptedException e){
 
-            }*/
-            clientToVView = new RMIClient(serverIp, this);
+            if (rmiServerPort == -1){
+
+                // if the ports are not specified calls the default contructor w/ default ports
+
+                clientToVView = new RMIClient(serverIp, this);
+
+            } else {
+
+                // if the ports are specified calls the correspondent constructor
+
+                clientToVView = new RMIClient(serverIp,this,rmiServerPort,rmiClientPort);
+
+            }
 
         }
 

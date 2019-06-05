@@ -155,8 +155,7 @@ public class MacroEffect {
      * @param type
      * @return a micro effects array
      */
-    private static ArrayList<MicroEffect> differenciator(ArrayList<MicroEffect>microF,int type)
-    {
+    private static ArrayList<MicroEffect> differenciator(ArrayList<MicroEffect>microF,int type) {
         if(type<201)//damage type effect from 100 to 200
         {
             type=type-101;

@@ -8,9 +8,9 @@ public class ConfigWriter {
 
     public static void main(String[] args) {
 
-        try{
+        Config config = new Config("192.168.1.33",22222,"-cli");
 
-            Config config = new Config("192.168.1.33",22222,22222,false);
+        try{
 
             Gson gson = new Gson();
 
