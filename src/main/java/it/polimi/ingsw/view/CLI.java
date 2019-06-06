@@ -55,7 +55,7 @@ public class CLI implements UserInterface {
             this.validMove = 0;
         }
         synchronized(this) {
-            this.notify();
+            this.notifyAll();
         }
     }
 
@@ -749,12 +749,9 @@ public class CLI implements UserInterface {
 
             case 3:
                 startShoot();
-
-
                 break;
 
             case 4:
-
                 view.doAction(new SkipAction());
                 break;
 
@@ -861,8 +858,8 @@ public class CLI implements UserInterface {
                     Point start = new Point(x,y);
                     Point finalPos = genPointFromDirections(previous, start);
 
-                    view.askMoveValid(finalPos.x, finalPos.y, d);
                     validMove = -1;
+                    view.askMoveValid(finalPos.x, finalPos.y, d);
 
                     while(validMove == -1){
                         try
@@ -959,15 +956,37 @@ public class CLI implements UserInterface {
     }
 
     public void startGrab(){
-        //grab -> se hai più di 2 danni 2 movimenti + grab / altrimenti 1
+
+        int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
+        int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+        Point startingPoint = new Point(x,y);
+
+        List<Directions> directionsList;
+
+        //grab -> if player has more than 2 dmg -> 2 moves else -> only 1 move
         if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() > 2){
-            handleMove(2);
+            directionsList = handleMove(2);
         } else {
-            handleMove(1);
+            directionsList = handleMove(1);
+        }
+
+        Point finalPos = genPointFromDirections(directionsList, startingPoint);
+
+        CellType cellType = view.getCacheModel().getCachedMap().getCachedCell(finalPos.x, finalPos.y).getCellType();
+
+        switch (cellType){
+
+            case AMMO:
+
+                break;
+
+            case SPAWN:
+
+                break;
         }
 
         //TODO GrabAction
-        //view.doAction(new GrabAction());
+        view.doAction(new GrabAction(directionsList));
     }
 
     public void startShoot(){
