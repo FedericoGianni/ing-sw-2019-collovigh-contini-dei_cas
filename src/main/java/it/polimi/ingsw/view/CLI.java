@@ -815,13 +815,13 @@ public class CLI implements UserInterface {
         return direction;
     }
 
+    private List <Directions> handleMove(int maxMoves){
 
-    public void startMove(){
-        //move ->  sono sempre max 3
-        int moves = 0, maxMoves = 3;
+        int moves = 0;
         List<Directions> directionsList = new ArrayList<>();
         boolean valid = false;
         String choice;
+        Point temp_moves;
         int x;
         int y;
         List <Directions> previous = new ArrayList<>();
@@ -831,7 +831,7 @@ public class CLI implements UserInterface {
 
             scanner.reset();
             System.out.println("In che direzione ti vuoi muovere? Ti restano " + (maxMoves-moves) + " movimenti.");
-            System.out.println("Inserisci una direzione (Nord, Sud, Ovest, Est) >>> ");
+            System.out.println("Inserisci una direzione (Nord, Sud, Ovest, Est, Stop per fermarti qui) >>> ");
 
             do{
                 choice = scanner.nextLine();
@@ -839,118 +839,43 @@ public class CLI implements UserInterface {
 
                 x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
                 y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+                temp_moves = new Point(x,y);
 
                 //TODO check for walls ecc.
+                if (choice.equals("STOP")) {
+                    return directionsList;
+                }
+
 
                 if((choice.equals("NORD") || choice.equals("SUD") || choice.equals("EST") || choice.equals("OVEST"))){
 
                     //validMove = -1;
                     //p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
 
-                    System.out.println("[CLI] ask to server if move: " + directionTranslator(choice) + " from pos: " +  x + ", "  + y);
+                    //System.out.println("[CLI] ask to server if move: " + directionTranslator(choice) + " from pos: " +  x + ", "  + y);
 
                     //System.out.println( "[CLI] cell: " + view.getCacheModel().getCachedMap().getCachedCell( p.x, p.y).getCellType() );
 
                     Directions d = directionTranslator(choice);
 
-                        FileRead.removePlayer(view.getPlayerId());
-                        int x_temp = x;
-                        int y_temp = y;
+                    Point start = new Point(x,y);
+                    Point finalPos = genPointFromDirections(previous, start);
 
-                        if(previous.isEmpty()){
-                            switch (d) {
-                                case NORTH:
-                                    if (x > 0)
-                                        x_temp--;
-                                    break;
-
-                                case SOUTH:
-                                    if (x < 2)
-                                        x_temp++;
-                                    break;
-
-                                case WEST:
-                                    if (y > 0)
-                                        y_temp--;
-                                    break;
-
-                                case EAST:
-                                    if (y < 3)
-                                        y_temp++;
-                                    break;
-                            }
-                        }
-
-                        for(Directions dir : previous) {
-                            switch (dir) {
-                                case NORTH:
-                                    if (x > 0)
-                                        x_temp--;
-                                    break;
-
-                                case SOUTH:
-                                    if (x < 2)
-                                        x_temp++;
-                                    break;
-
-                                case WEST:
-                                    if (y > 0)
-                                        y_temp--;
-                                    break;
-
-                                case EAST:
-                                    if (y < 3)
-                                        y_temp++;
-                                    break;
-                            }
-                        }
-
-                        FileRead.insertPlayer(x_temp, y_temp, Character.forDigit(view.getPlayerId(), 10));
-                        FileRead.showBattlefield();
-
-
-                    for (Directions direction : previous) {
-                        System.out.println("[DEBUG] entro nel ciclo for per cambiare finalPos con le prvious...");
-                        switch (direction) {
-                            case NORTH:
-                                if (x > 0)
-                                    x--;
-                                break;
-
-                            case SOUTH:
-                                if (x < 2)
-                                    x++;
-                                break;
-
-                            case WEST:
-                                if (y > 0)
-                                    y--;
-                                break;
-
-                            case EAST:
-                                if (y < 3)
-                                    y++;
-                                break;
-                        }
-                    }
-
-                    view.askMoveValid(x, y, d);
+                    view.askMoveValid(finalPos.x, finalPos.y, d);
                     validMove = -1;
-
-
 
                     while(validMove == -1){
                         try
                         {
                             synchronized(this) {
-                                System.out.println("Waiting to receive validMove reply...");
+                                //System.out.println("Waiting to receive validMove reply...");
                                 this.wait();
                             }
 
                         } catch (InterruptedException e) {
 
                         }
-                        System.out.println("Received validMove reply!");
+                        //System.out.println("Received validMove reply!");
                     }
 
                     //System.out.println("[DEBUG] controllo valid Move...");
@@ -960,14 +885,18 @@ public class CLI implements UserInterface {
                         previous.add(d);
                         directionsList.add(directionTranslator(choice));
                         moves++;
+
+                        //update map view with single movements
+                        temp_moves = genPointFromDirections(directionsList, temp_moves);
+                        FileRead.removePlayer(view.getPlayerId());
+                        FileRead.insertPlayer(temp_moves.x, temp_moves.y, Character.forDigit(view.getPlayerId(), 10));
+                        FileRead.showBattlefield();
+
                     }else if (validMove == 0){
 
-                        System.out.println(" [CLI] Direzione non valida!");
+                        System.out.println("Direzione non valida! Riprova >>> ");
                         valid = false;
                     }
-
-
-
 
                 } else{
                     System.out.println("Scrivi correttamente la direzione dei punti cardinali! Riprova");
@@ -975,48 +904,70 @@ public class CLI implements UserInterface {
 
             } while(!valid);
 
-            //TODO check if this works: you should see single movements in map
-            //FileRead.removePlayer(view.getPlayerId());
-            //FileRead.insertPlayer(x,y, Character.forDigit(view.getPlayerId(), 10));
-            //FileRead.showBattlefield();
-
         } while(moves < maxMoves);
 
-        x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
-        y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+        return directionsList;
+    }
 
-        for (Directions direction : previous) {
+    private Point genPointFromDirections(List<Directions> directions, Point start){
+
+        Point finalPos = new Point(start);
+        //generate final point destination to forward to the server
+        for (Directions direction : directions) {
             switch (direction) {
                 case NORTH:
-                    if (x > 0)
-                        x--;
+                    if (finalPos.x > 0)
+                        finalPos.x--;
                     break;
 
                 case SOUTH:
-                    if (x < 2)
-                        x++;
+                    if (finalPos.x < MAP_R-1)
+                        finalPos.x++;
                     break;
 
                 case WEST:
-                    if (y > 0)
-                        y--;
+                    if (finalPos.y > 0)
+                        finalPos.y--;
                     break;
 
                 case EAST:
-                    if (y < 3)
-                        y++;
+                    if (finalPos.y < MAP_C-1)
+                        finalPos.y++;
                     break;
             }
         }
 
+        return finalPos;
+    }
+
+
+    public void startMove(){
+
+        int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
+        int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+        Point startingPoint = new Point(x,y);
+
+
+        //move -> always max 3 movements
+        List<Directions> directionsList = handleMove(3);
+        Point finalPos = genPointFromDirections(directionsList, startingPoint);
+
+
         //TODO @Dav why i need to send him final position from client?
         System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
-        view.doAction(new Move(directionsList, new Point(x,y)));
+        view.doAction(new Move(directionsList, finalPos));
     }
 
     public void startGrab(){
         //grab -> se hai più di 2 danni 2 movimenti + grab / altrimenti 1
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() > 2){
+            handleMove(2);
+        } else {
+            handleMove(1);
+        }
+
         //TODO GrabAction
+        //view.doAction(new GrabAction());
     }
 
     public void startShoot(){
