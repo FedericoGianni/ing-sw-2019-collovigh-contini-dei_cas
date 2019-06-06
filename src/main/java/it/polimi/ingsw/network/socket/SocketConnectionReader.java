@@ -10,6 +10,7 @@ import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameAlreadyStartedException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.utils.Protocol;
 import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
@@ -217,19 +218,18 @@ public class SocketConnectionReader extends Thread {
 
                 id = Server.addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()), socketConnectionWriter);
                 if(id >= 0){
-                    socketConnectionWriter.send("login\fOK\f"+id);
+                    socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_LOGIN_OK_REPLY + "\f"+id);
                 }
 
 
             }catch (NameAlreadyTakenException e){       //NOTE: temporary solution by D, just to make it compile
-                socketConnectionWriter.send("login\fNAME_ALREADY_TAKEN");
+                socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_NAME_ALREADY_TAKEN_REPLY);
             }catch (ColorAlreadyTakenException e){
-                socketConnectionWriter.send("login\fCOLOR_ALREADY_TAKEN");
+                socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_COLOR_ALREADY_TAKEN_REPLY);
             }catch (OverMaxPlayerException e){
-                socketConnectionWriter.send("login\fMAX_PLAYER_REACHED");
+                socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_MAX_PLAYER_READCHED);
             }catch (GameAlreadyStartedException e){
-                socketConnectionWriter.send("login\fGAME_ALREADY_STARTED");
-                //TODO fix (by D ) may not work
+                socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_GAME_ALREADY_STARTED_REPLY);
             }
         });
 
@@ -250,9 +250,9 @@ public class SocketConnectionReader extends Thread {
            Boolean valid = Server.getController().getVirtualView(id).askMoveValid(Integer.valueOf(commands[1]), Integer.valueOf(commands[2]), Directions.valueOf(commands[3]));
 
            if(valid){
-               socketConnectionWriter.send("askMoveValid\ftrue");
+               socketConnectionWriter.send(commands[0] + "\ftrue");
            } else{
-               socketConnectionWriter.send("askMoveValid\ffalse");
+               socketConnectionWriter.send(commands[0] + "\ffalse");
            }
         });
     }

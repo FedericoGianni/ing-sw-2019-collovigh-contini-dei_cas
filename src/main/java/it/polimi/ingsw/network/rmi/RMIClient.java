@@ -9,12 +9,15 @@ import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+
 import java.net.Inet4Address;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static it.polimi.ingsw.utils.Protocol.*;
 
 public class RMIClient extends Client {
 
@@ -32,15 +35,6 @@ public class RMIClient extends Client {
     private String localName;
     private View view;
     private final int clientPort;
-
-    //view
-
-    private static final String DEFAULT_LOGIN_OK_REPLY = "OK";
-    private static final String DEFAULT_NAME_ALREADY_TAKEN_REPLY = "NAME_ALREADY_TAKEN";
-    private static final String DEFAULT_COLOR_ALREADY_TAKEN_REPLY = "COLOR_ALREADY_TAKEN";
-    private static final String DEFAULT_GAME_ALREADY_STARTED_REPLY = "GAME_ALREADY_STARTED";
-    private static final String DEFAULT_MAX_PLAYER_READCHED = "MAX_PLAYER_REACHED";
-
 
 
     public RMIClient(String serverIp, View view) {

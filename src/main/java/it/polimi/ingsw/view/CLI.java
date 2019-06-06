@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.utils.Protocol;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
@@ -28,14 +29,14 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
+import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
 import static java.lang.Thread.sleep;
 
 public class CLI implements UserInterface {
 
     private final Scanner scanner = new Scanner(System.in);
     private final View view;
-    public static final String DEFAULT_NAME_ALREADY_TAKEN = "NAME_ALREADY_TAKEN";
-    public static final String DEFAULT_COLOR_ALREADY_TAKEN = "COLOR_ALREADY_TAKEN";
     private int validMove = -1;
 
     /**
@@ -188,11 +189,17 @@ public class CLI implements UserInterface {
     @Override
     public void retryLogin(String error) {
         switch (error){
-            case DEFAULT_NAME_ALREADY_TAKEN:
+            case Protocol.DEFAULT_NAME_ALREADY_TAKEN_REPLY:
                 System.out.println("Nome già preso.");
                 break;
-            case DEFAULT_COLOR_ALREADY_TAKEN:
+            case Protocol.DEFAULT_COLOR_ALREADY_TAKEN_REPLY:
                 System.out.println("Colore già preso.");
+                break;
+            case Protocol.DEFAULT_GAME_ALREADY_STARTED_REPLY:
+                System.out.println("Gioco già avviato!");
+                break;
+            case Protocol.DEFAULT_MAX_PLAYER_READCHED:
+                System.out.println("Massimo numero di giocatori raggiunto!");
                 break;
             default:
                 System.out.println(" Qualcosa è andato storto");
@@ -849,6 +856,31 @@ public class CLI implements UserInterface {
                         FileRead.removePlayer(view.getPlayerId());
                         int x_temp = x;
                         int y_temp = y;
+
+                        if(previous.isEmpty()){
+                            switch (d) {
+                                case NORTH:
+                                    if (x > 0)
+                                        x_temp--;
+                                    break;
+
+                                case SOUTH:
+                                    if (x < 2)
+                                        x_temp++;
+                                    break;
+
+                                case WEST:
+                                    if (y > 0)
+                                        y_temp--;
+                                    break;
+
+                                case EAST:
+                                    if (y < 3)
+                                        y_temp++;
+                                    break;
+                            }
+                        }
+
                         for(Directions dir : previous) {
                             switch (dir) {
                                 case NORTH:
@@ -1047,8 +1079,8 @@ public class CLI implements UserInterface {
     private void showWeapInSpawnCells(){
         System.out.println("[ARMI - SPAWN CELLS]");
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < MAP_R; i++) {
+            for (int j = 0; j < MAP_C; j++) {
                 CachedCell c = view.getCacheModel().getCachedMap().getCachedCell(i, j);
                 if(c != null){
                     if(c.getCellType().equals(CellType.SPAWN)){

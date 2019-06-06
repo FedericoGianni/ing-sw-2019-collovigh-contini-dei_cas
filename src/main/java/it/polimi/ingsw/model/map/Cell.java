@@ -187,6 +187,7 @@ public abstract class Cell extends Subject {
         return this.visit;
     }
 
+    //commented by Fed because it works only if Map is created from Model, needed for debug with Map only
     /*
     @Override
     public String toString() {
@@ -195,8 +196,8 @@ public abstract class Cell extends Subject {
         return this.getClass().toString() + Model.getMap().cellToCoord(this);
     }*/
 
-     @Override
-     public String toString(){
+    @Override
+    public String toString(){
          return "Cella: colroe: " + color;
      }
 

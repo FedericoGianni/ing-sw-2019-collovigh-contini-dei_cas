@@ -24,7 +24,7 @@ public class WaitingRoom {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     public static final Level level = Level.INFO;
 
-    private static final int TIMER = 1;
+    private static final int TIMER = 2;
     private static int timerCount = TIMER;
 
     private static final int DEFAULT_MIN_PLAYERS = 1;

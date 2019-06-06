@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.utils;
+package it.polimi.ingsw.utils;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
@@ -19,9 +19,7 @@ import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.updates.InitialUpdate;
-import it.polimi.ingsw.view.updates.Update;
 import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
