@@ -18,6 +18,22 @@ public class JsonCell {
     private Point adjWest;
     private List<Player> playersHere;
 
+    public JsonCell(){
+
+    }
+
+    public JsonCell(CellType cellType, CellColor color, boolean visit, boolean isAmmoCell, Point adjNorth, Point adjSouth, Point adjEast, Point adjWest, List<Player> playersHere) {
+        this.cellType = cellType;
+        this.color = color;
+        this.visit = visit;
+        this.isAmmoCell = isAmmoCell;
+        this.adjNorth = adjNorth;
+        this.adjSouth = adjSouth;
+        this.adjEast = adjEast;
+        this.adjWest = adjWest;
+        this.playersHere = playersHere;
+    }
+
     public void setCellType(CellType cellType) {
         this.cellType = cellType;
     }

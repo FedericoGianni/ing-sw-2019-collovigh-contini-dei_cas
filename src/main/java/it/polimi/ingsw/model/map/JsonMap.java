@@ -2,6 +2,7 @@
 package it.polimi.ingsw.model.map;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 
 import java.awt.*;
 import java.io.*;
@@ -28,10 +29,77 @@ public class JsonMap {
         return mapType;
     }
 
+    /**
+     * Default contructor
+     */
     public JsonMap(){
 
     }
 
+    /**
+     * Constructor used to generate a JsonMap from a Map
+     * @param map
+     */
+    public JsonMap(Map map){
+
+        this.mapType = map.getMapType();
+        //this.matrix = new JsonCell[MAP_R][MAP_C];
+
+        for(int i = 0; i < MAP_R; i++){
+            for (int j = 0; j < MAP_C; j++) {
+                if(map.getCell(i,j) != null){
+
+                    this.matrix[i][j] = new JsonCell();
+
+                    this.getCell(i,j).setColor(map.getCell(i,j).getColor());
+                    this.getCell(i,j).setAmmoCell(map.getCell(i,j).isAmmoCell());
+
+                    if(map.getCell(i,j).isAmmoCell()) {
+                        this.getCell(i,j).setCellType(CellType.AMMO);
+                    } else{
+                        this.getCell(i,j).setCellType(CellType.SPAWN);
+                    }
+
+                    this.matrix[i][j].setVisit(false);
+
+                    if(map.getCell(i,j).getNorth() != null){
+                        this.getCell(i,j).setAdjNorth(new Point(i-1, j));
+                    } else {
+                        this.getCell(i,j).setAdjNorth(null);
+                    }
+
+                    if(map.getCell(i,j).getSouth() != null){
+                        this.getCell(i,j).setAdjSouth(new Point(i+1, j));
+                    } else {
+                        this.getCell(i,j).setAdjSouth(null);
+                    }
+
+                    if(map.getCell(i,j).getEast() != null){
+                        this.getCell(i,j).setAdjEast(new Point(i, j+1));
+                    } else {
+                        this.getCell(i,j).setAdjEast(null);
+                    }
+
+                    if(map.getCell(i,j).getWest() != null){
+                        this.getCell(i,j).setAdjWest(new Point(i, j-1));
+                    } else {
+                        this.getCell(i,j).setAdjWest(null);
+                    }
+
+
+                } else {
+                    //this.matrix[i][j] = new JsonCell();
+                    this.matrix[i][j] = null;
+                }
+            }
+        }
+    }
+
+    /**
+     * Generate a JsonMap from a json file
+     * @param mapType integer representing the type of map
+     * @return a JsonMap with attributes read from json
+     */
     public static JsonMap genJsonMap(int mapType){
 
         String path = null;

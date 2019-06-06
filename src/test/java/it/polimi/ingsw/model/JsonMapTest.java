@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.CellColor;
 import it.polimi.ingsw.model.map.JsonMap;
 import it.polimi.ingsw.model.map.Map;
+import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -21,6 +22,10 @@ class JsonMapTest {
         System.out.println("cella 0, 0: " + jsonMap.getCell(0,0));
         assert(jsonMap.getCell(0,0).getColor() == CellColor.BLUE);
         assert(jsonMap.getCell(1,1).getAdjEast().equals(new Point(1,2)));
+        assert (jsonMap.getCell(0,0).getAdjEast().equals(new Point(0,1)));
+
+        jsonMap = JsonMap.genJsonMap(2);
+        assert (jsonMap.getCell(0,0).getAdjEast().equals(new Point(0,1)));
 
     }
 
@@ -81,6 +86,27 @@ class JsonMapTest {
             }
         }
 
+    }
+
+    @Test
+    void genJsonMapFromRealMap(){
+        Map m = new Map(JsonMap.genJsonMap(2));
+
+        assert (m.getCell(0,0).getEast().equals(m.getCell(0,1)));
+
+        JsonMap jsonMap = new JsonMap(m);
+
+        assert(jsonMap.getMapType() == 2);
+        assert (jsonMap.getCell(0,0).getCellType().equals(CellType.AMMO));
+        assert (jsonMap.getCell(0,1).getColor().equals(CellColor.BLUE));
+
+        assert (jsonMap.getCell(0,0).getAdjNorth() == null);
+        assert (jsonMap.getCell(0,0).getAdjSouth().equals(new Point(1,0)));
+        assert (jsonMap.getCell(0,0).getAdjWest() == null);
+
+        assert (jsonMap.getCell(2,0) == null);
+
+        assert (jsonMap.getCell(0,0).getAdjEast().equals(new Point(0,1)));
     }
 }
 

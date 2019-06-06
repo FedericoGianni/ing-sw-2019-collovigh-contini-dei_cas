@@ -19,6 +19,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.utils.Protocol.*;
 import static java.lang.Thread.sleep;
 
 
@@ -29,12 +30,6 @@ public class Gui extends Application implements UserInterface {
 
     public static final float DEFAULT_MIN_WIDTH_MAP = 1000;
     public static final float DEFAULT_MIN_HEIGHT_MAP = 700;
-
-    public static final String DEFAULT_LOGIN_OK_REPLY = "OK";
-    public static final String DEFAULT_NAME_ALREADY_TAKEN_REPLY = "NAME_ALREADY_TAKEN";
-    public static final String DEFAULT_COLOR_ALREADY_TAKEN_REPLY = "COLOR_ALREADY_TAKEN";
-    public static final String DEFAULT_GAME_ALREADY_STARTED_REPLY = "GAME_ALREADY_STARTED";
-    public static final String DEFAULT_MAX_PLAYER_READCHED = "MAX_PLAYER_REACHED";
 
     private static GuiController guiController;
     private static GuiLobbyController guiLobbyController;
