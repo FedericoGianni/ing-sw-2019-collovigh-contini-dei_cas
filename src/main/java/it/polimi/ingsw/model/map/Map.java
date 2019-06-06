@@ -1,17 +1,12 @@
 package it.polimi.ingsw.model.map;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
-import static it.polimi.ingsw.model.map.CellColor.*;
 import static java.lang.Math.abs;
 
 /**
@@ -22,6 +17,15 @@ public class Map {
 
     private static final int MAP_R = 3;
     private static final int MAP_C = 4;
+
+
+    private Cell[][] matrix;
+
+    private int mapType;
+
+    public Cell[][] getMatrix() {
+        return matrix.clone();
+    }
 
     /**
      * Default constructor
@@ -50,16 +54,14 @@ public class Map {
         this.mapType = jsonMap.getMapType();
         this.matrix = new Cell[MAP_R][MAP_C];
 
-        //recreating cells by type
+        //recreating cells by readign type from json
         for (int i = 0; i < MAP_R; i++) {
             for (int j = 0; j < MAP_C; j++) {
                 if(jsonMap.getCell(i,j) != null){
                     if(jsonMap.getCell(i,j).getCellType().equals(CellType.AMMO)) {
                         this.matrix[i][j] = new AmmoCell();
-                        System.out.println("Debug new AmmoCell creata");
                     } else {
                         this.matrix[i][j] = new SpawnCell();
-                        System.out.println("debug new spawnCell creata");
                     }
                 } else {
                     this.matrix[i][j] = null;
@@ -72,7 +74,7 @@ public class Map {
 
     public void setAdjacencesFromJson(JsonMap jsonMap){
 
-        //setting adjacences
+        //setting adjacences from jsonMap to Map
         for (int i = 0; i < MAP_R; i++) {
             for (int j = 0; j < MAP_C; j++) {
                 if(this.matrix[i][j] != null){
@@ -102,14 +104,6 @@ public class Map {
                 }
             }
         }
-    }
-
-    private Cell[][] matrix;
-
-    private int mapType;
-
-    public Cell[][] getMatrix() {
-        return matrix.clone();
     }
 
     /**
@@ -149,329 +143,12 @@ public class Map {
         return new Map(this);
     }
 
-
-
     /**
      *
      * @return actual type of Map: 1, 2, 3
      */
     public int getMapType() {
         return mapType;
-    }
-
-    /**
-     *
-     * @param mapType integer representing the map type which can be chosen at the creation of the Map
-     * @return a Map created based on the current playing map type
-     */
-    public static Map genMap(int mapType) {
-
-        Map m = null;
-
-        switch(mapType) {
-
-            case 1:
-                m = new Map();
-                m.mapType = 1;
-                //m.generateCells(1);
-                m.genCellsFromJson(1);
-
-                break;
-
-            case 2:
-                m = new Map();
-                m.mapType = 2;
-                m.generateCells(2);
-
-                break;
-
-            case 3:
-                m = new Map();
-                m.mapType = 3;
-                m.generateCells(3);
-
-                break;
-
-            default:
-
-                break;
-
-        }
-
-        return m;
-
-    }
-
-    /**
-     *
-     * @param mapType an integer representing the type of Map, passed as a parameter to populate the matrix of Cells in different modes
-     */
-    public void generateCells(int mapType) {
-
-        switch (mapType){
-
-            case 1:
-
-                (this.matrix[0][0]) = new AmmoCell();
-                (this.matrix[0][1]) = new AmmoCell();
-                (this.matrix[0][2]) = new SpawnCell();
-                (this.matrix[0][3]) = null;
-
-                (this.matrix[1][0]) = new SpawnCell();
-                (this.matrix[1][1]) = new AmmoCell();
-                (this.matrix[1][2]) = new AmmoCell();
-                (this.matrix[1][3]) = new AmmoCell();
-
-                (this.matrix[2][0]) = null;
-                (this.matrix[2][1]) = new AmmoCell();
-                (this.matrix[2][2]) = new AmmoCell();
-                (this.matrix[2][3]) = new SpawnCell();
-
-                (this.matrix[0][0]).setAdjNorth(null);
-                (this.matrix[0][0]).setAdjSouth(this.matrix[1][0]);
-                (this.matrix[0][0]).setAdjEast(this.matrix[0][1]);
-                (this.matrix[0][0]).setAdjWest(null);
-                (this.matrix[0][0]).setColor(BLUE);
-
-                (this.matrix[0][1]).setAdjNorth(null);
-                (this.matrix[0][1]).setAdjSouth(null);
-                (this.matrix[0][1]).setAdjEast(this.matrix[0][2]);
-                (this.matrix[0][1]).setAdjWest(this.matrix[0][0]);
-                (this.matrix[0][1]).setColor(BLUE);
-
-                (this.matrix[0][2]).setAdjNorth(null);
-                (this.matrix[0][2]).setAdjSouth(this.matrix[1][2]);
-                (this.matrix[0][2]).setAdjEast(null);
-                (this.matrix[0][2]).setAdjWest(this.matrix[0][1]);
-                (this.matrix[0][2]).setColor(BLUE);
-
-                (this.matrix[1][0]).setAdjNorth(this.matrix[0][0]);
-                (this.matrix[1][0]).setAdjSouth(null);
-                (this.matrix[1][0]).setAdjEast(this.matrix[1][1]);
-                (this.matrix[1][0]).setAdjWest(null);
-                (this.matrix[1][0]).setColor(RED);
-
-                (this.matrix[1][1]).setAdjNorth(null);
-                (this.matrix[1][1]).setAdjSouth(this.matrix[2][1]);
-                (this.matrix[1][1]).setAdjEast(this.matrix[1][2]);
-                (this.matrix[1][1]).setAdjWest(this.matrix[1][0]);
-                (this.matrix[1][1]).setColor(RED);
-
-                (this.matrix[1][2]).setAdjNorth(this.matrix[0][2]);
-                (this.matrix[1][2]).setAdjSouth(null);
-                (this.matrix[1][2]).setAdjEast(this.matrix[1][3]);
-                (this.matrix[1][2]).setAdjWest(this.matrix[1][1]);
-                //this cell is actually purple but in the same room as the Red ones, so we treat it just like a red one
-                (this.matrix[1][2]).setColor(RED);
-
-                (this.matrix[1][3]).setAdjNorth(null);
-                (this.matrix[1][3]).setAdjSouth(this.matrix[2][3]);
-                (this.matrix[1][3]).setAdjEast(null);
-                (this.matrix[1][3]).setAdjWest(this.matrix[1][2]);
-                (this.matrix[1][3]).setColor(YELLOW);
-
-                (this.matrix[2][0]) = null;
-
-                (this.matrix[2][1]).setAdjNorth(this.matrix[1][1]);
-                (this.matrix[2][1]).setAdjSouth(null);
-                (this.matrix[2][1]).setAdjEast(this.matrix[2][2]);
-                (this.matrix[2][1]).setAdjWest(null);
-                (this.matrix[2][1]).setColor(GREY);
-
-                (this.matrix[2][2]).setAdjNorth(null);
-                (this.matrix[2][2]).setAdjSouth(null);
-                (this.matrix[2][2]).setAdjEast(this.matrix[2][3]);
-                (this.matrix[2][2]).setAdjWest(this.matrix[2][1]);
-                (this.matrix[2][2]).setColor(GREY);
-
-                (this.matrix[2][3]).setAdjNorth(this.matrix[1][3]);
-                (this.matrix[2][3]).setAdjSouth(null);
-                (this.matrix[2][3]).setAdjEast(null);
-                (this.matrix[2][3]).setAdjWest(this.matrix[2][2]);
-                (this.matrix[2][3]).setColor(YELLOW);
-
-                break;
-
-            case 2:
-
-                (this.matrix[0][0]) = new AmmoCell();
-                (this.matrix[0][1]) = new AmmoCell();
-                (this.matrix[0][2]) = new SpawnCell();
-                (this.matrix[0][3]) = new AmmoCell();
-
-                (this.matrix[1][0]) = new SpawnCell();
-                (this.matrix[1][1]) = new AmmoCell();
-                (this.matrix[1][2]) = new AmmoCell();
-                (this.matrix[1][3]) = new AmmoCell();
-
-                (this.matrix[2][0]) = null;
-                (this.matrix[2][1]) = new AmmoCell();
-                (this.matrix[2][2]) = new AmmoCell();
-                (this.matrix[2][3]) = new SpawnCell();
-
-                (this.matrix[0][0]).setAdjNorth(null);
-                (this.matrix[0][0]).setAdjSouth(this.matrix[1][0]);
-                (this.matrix[0][0]).setAdjEast(this.matrix[0][1]);
-                (this.matrix[0][0]).setAdjWest(null);
-                (this.matrix[0][0]).setColor(BLUE);
-
-                (this.matrix[0][1]).setAdjNorth(null);
-                (this.matrix[0][1]).setAdjSouth(null);
-                (this.matrix[0][1]).setAdjEast(this.matrix[0][2]);
-                (this.matrix[0][1]).setAdjWest(this.matrix[0][0]);
-                (this.matrix[0][1]).setColor(BLUE);
-
-                (this.matrix[0][2]).setAdjNorth(null);
-                (this.matrix[0][2]).setAdjSouth(this.matrix[1][2]);  // TODO check @ fede
-                (this.matrix[0][2]).setAdjEast(this.matrix[0][3]);
-                (this.matrix[0][2]).setAdjWest(this.matrix[0][1]);
-                (this.matrix[0][2]).setColor(BLUE);
-
-                (this.matrix[0][3]).setAdjNorth(null);
-                (this.matrix[0][3]).setAdjSouth(this.matrix[1][3]);
-                (this.matrix[0][3]).setAdjEast(null);
-                (this.matrix[0][3]).setAdjWest(this.matrix[0][2]);
-                (this.matrix[0][3]).setColor(GREEN);
-
-                (this.matrix[1][0]).setAdjNorth(this.matrix[0][0]); //TODO check
-                (this.matrix[1][0]).setAdjSouth(null);
-                (this.matrix[1][0]).setAdjEast(this.matrix[1][1]);
-                (this.matrix[1][0]).setAdjWest(null);
-                (this.matrix[1][0]).setColor(RED);
-
-                (this.matrix[1][1]).setAdjNorth(null);
-                (this.matrix[1][1]).setAdjSouth(this.matrix[2][1]);
-                (this.matrix[1][1]).setAdjEast(null);
-                (this.matrix[1][1]).setAdjWest(this.matrix[1][0]);
-                (this.matrix[1][1]).setColor(RED);
-
-                (this.matrix[1][2]).setAdjNorth(this.matrix[0][2]);
-                (this.matrix[1][2]).setAdjSouth(this.matrix[2][2]);
-                (this.matrix[1][2]).setAdjEast(this.matrix[1][3]);
-                (this.matrix[1][2]).setAdjWest(null);
-                (this.matrix[1][2]).setColor(YELLOW);
-
-                (this.matrix[1][3]).setAdjNorth(this.matrix[0][3]);
-                (this.matrix[1][3]).setAdjSouth(this.matrix[2][3]);
-                (this.matrix[1][3]).setAdjEast(null);
-                (this.matrix[1][3]).setAdjWest(this.matrix[1][2]);
-                (this.matrix[1][3]).setColor(YELLOW);
-
-                (this.matrix[2][1]).setAdjNorth(this.matrix[1][1]);
-                (this.matrix[2][1]).setAdjSouth(null);
-                (this.matrix[2][1]).setAdjEast(this.matrix[2][2]);
-                (this.matrix[2][1]).setAdjWest(null);
-                (this.matrix[2][1]).setColor(GREY);
-
-                (this.matrix[2][2]).setAdjNorth(this.matrix[1][2]);
-                (this.matrix[2][2]).setAdjSouth(null);
-                (this.matrix[2][2]).setAdjEast(this.matrix[2][3]);
-                (this.matrix[2][2]).setAdjWest(this.matrix[2][1]);
-                (this.matrix[2][2]).setColor(YELLOW);
-
-                (this.matrix[2][3]).setAdjNorth(this.matrix[1][3]);
-                (this.matrix[2][3]).setAdjSouth(null);
-                (this.matrix[2][3]).setAdjEast(null);
-                (this.matrix[2][3]).setAdjWest(this.matrix[2][2]);
-                (this.matrix[2][3]).setColor(YELLOW);
-
-                break;
-
-            case 3:
-
-                (this.matrix[0][0]) = new AmmoCell();
-                (this.matrix[0][1]) = new AmmoCell();
-                (this.matrix[0][2]) = new SpawnCell();
-                (this.matrix[0][3]) = new AmmoCell();
-
-                (this.matrix[1][0]) = new SpawnCell();
-                (this.matrix[1][1]) = new AmmoCell();
-                (this.matrix[1][2]) = new AmmoCell();
-                (this.matrix[1][3]) = new AmmoCell();
-
-                (this.matrix[2][0]) = new AmmoCell();
-                (this.matrix[2][1]) = new AmmoCell();
-                (this.matrix[2][2]) = new AmmoCell();
-                (this.matrix[2][3]) = new SpawnCell();
-
-                (this.matrix[0][0]).setAdjNorth(null);
-                (this.matrix[0][0]).setAdjSouth(this.matrix[1][0]);
-                (this.matrix[0][0]).setAdjEast(this.matrix[0][1]);
-                (this.matrix[0][0]).setAdjWest(null);
-                (this.matrix[0][0]).setColor(RED);
-
-                (this.matrix[0][1]).setAdjNorth(null);
-                (this.matrix[0][1]).setAdjSouth(this.matrix[1][1]);
-                (this.matrix[0][1]).setAdjEast(this.matrix[0][2]);
-                (this.matrix[0][1]).setAdjWest(this.matrix[0][0]);
-                (this.matrix[0][1]).setColor(BLUE);
-
-                (this.matrix[0][2]).setAdjNorth(null);
-                (this.matrix[0][2]).setAdjSouth(this.matrix[1][2]);
-                (this.matrix[0][2]).setAdjEast(this.matrix[0][3]);
-                (this.matrix[0][2]).setAdjWest(this.matrix[0][1]);
-                (this.matrix[0][2]).setColor(BLUE);
-
-                (this.matrix[0][3]).setAdjNorth(null);
-                (this.matrix[0][3]).setAdjSouth(this.matrix[1][3]);
-                (this.matrix[0][3]).setAdjEast(null);
-                (this.matrix[0][3]).setAdjWest(this.matrix[0][2]);
-                (this.matrix[0][3]).setColor(GREEN);
-
-                (this.matrix[1][0]).setAdjNorth(this.matrix[0][0]);
-                (this.matrix[1][0]).setAdjSouth(this.matrix[2][0]);
-                (this.matrix[1][0]).setAdjEast(null);
-                (this.matrix[1][0]).setAdjWest(null);
-                (this.matrix[1][0]).setColor(RED);
-
-                (this.matrix[1][1]).setAdjNorth(this.matrix[0][1]);
-                (this.matrix[1][1]).setAdjSouth(this.matrix[2][1]);
-                (this.matrix[1][1]).setAdjEast(null);
-                (this.matrix[1][1]).setAdjWest(null);
-                (this.matrix[1][1]).setColor(PURPLE);
-
-                (this.matrix[1][2]).setAdjNorth(this.matrix[0][2]);
-                (this.matrix[1][2]).setAdjSouth(this.matrix[2][2]);
-                (this.matrix[1][2]).setAdjEast(this.matrix[1][3]);
-                (this.matrix[1][2]).setAdjWest(null);
-                (this.matrix[1][2]).setColor(YELLOW);
-
-                (this.matrix[1][3]).setAdjNorth(this.matrix[0][3]);
-                (this.matrix[1][3]).setAdjSouth(this.matrix[2][3]);
-                (this.matrix[1][3]).setAdjEast(null);
-                (this.matrix[1][3]).setAdjWest(this.matrix[1][2]);
-                (this.matrix[1][3]).setColor(YELLOW);
-
-                (this.matrix[2][0]).setAdjNorth(this.matrix[1][0]);
-                (this.matrix[2][0]).setAdjSouth(null);
-                (this.matrix[2][0]).setAdjEast(this.matrix[2][1]);
-                (this.matrix[2][0]).setAdjWest(null);
-                (this.matrix[2][0]).setColor(GREY);
-
-                (this.matrix[2][1]).setAdjNorth(this.matrix[1][1]);
-                (this.matrix[2][1]).setAdjSouth(null);
-                (this.matrix[2][1]).setAdjEast(this.matrix[2][2]);
-                (this.matrix[2][1]).setAdjWest(this.matrix[2][0]);
-                (this.matrix[2][1]).setColor(GREY);
-
-                (this.matrix[2][2]).setAdjNorth(this.matrix[1][2]);
-                (this.matrix[2][2]).setAdjSouth(null);
-                (this.matrix[2][2]).setAdjEast(this.matrix[2][3]);
-                (this.matrix[2][2]).setAdjWest(this.matrix[2][1]);
-                (this.matrix[2][2]).setColor(YELLOW);
-
-                (this.matrix[2][3]).setAdjNorth(this.matrix[1][3]);
-                (this.matrix[2][3]).setAdjSouth(null);
-                (this.matrix[2][3]).setAdjEast(null);
-                (this.matrix[2][3]).setAdjWest(this.matrix[2][2]);
-                (this.matrix[2][3]).setColor(YELLOW);
-
-                break;
-
-            default:
-
-                break;
-        }
     }
 
     public void updateObserver(){
@@ -611,20 +288,4 @@ public class Map {
 
         return null;
     }
-
-    private void genCellsFromJson(int mapType){
-        JsonMap jsonMap = new JsonMap();
-        Gson gson = new Gson();
-
-        String path = new File("resources/json/map2.json").getAbsolutePath();
-        try {
-            jsonMap = gson.fromJson(new FileReader(path), JsonMap.class);
-        } catch(IOException e){
-            e.getMessage();
-        }
-
-
-    }
-
-
 }

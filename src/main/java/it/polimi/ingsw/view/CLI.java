@@ -237,16 +237,16 @@ public class CLI implements UserInterface {
             case INITIAL:
                 //TODO mostrare quali colori hanno preso i giocatori?
                 FileRead.loadMap(view.getCacheModel().getMapType());
-                System.out.println("Ho scelto casualmente la mappa di tipo: " + view.getCacheModel().getMapType());
+                System.out.println("[NOTIFICA] Ho scelto casualmente la mappa di tipo: " + view.getCacheModel().getMapType());
 
                 break;
 
             case STATS:
-                //TODO mostrare i cambiamenti nelle posizioni sulla mappa, danni subiti e disconnessioni
-                System.out.println("[DEBUG] Ricevuto STATS update!");
+                //TODO mostrare i cambiamenti di danni subiti e disconnessioni
+                //System.out.println("[DEBUG] Ricevuto STATS update!");
 
                 //new positions
-                System.out.println("Il giocatore: " + playerId + " si è spostato!");
+                System.out.println("[NOTIFICA] Il giocatore: " + playerId + " si è spostato!");
                 int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                 int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 
@@ -684,50 +684,38 @@ public class CLI implements UserInterface {
 
         List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "RACCOGLI", "SPARA", "SKIP"));
 
-
-
         do {
 
             valid = false;
 
 
-            System.out.println("AZIONE:");
-            System.out.println("Puoi:");
+            System.out.println("SELEZIONA UN AZIONE:");
 
             for (int i = 0; i < actions.size(); i++) {
-
                 System.out.println( i + ": " + actions.get(i));
-
             }
 
             System.out.println("7: mostra mappa");
             System.out.println("8: mostra info sui giocatori");
             System.out.println("9: mostra armi nelle celle di spawn");
 
-            System.out.println("Digita il numero dell'azione che vuoi fare: ");
-
             try {
 
                 choice = scanner.nextInt();
                 scanner.nextLine();
 
-            }catch (InputMismatchException e){
-
-                System.out.println("non è un numero: Riprova!");
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero: Riprova!");
                 scanner.reset();
-
             }
 
 
             if ((choice >=0 && choice < actions.size()) || choice==7 || choice==8 || choice==9){
-
                 valid = true;
-            }else {
 
+            }else {
                 System.out.println(" Scelta non valida: Riprova");
             }
-
-
 
         }while (!valid);
 
@@ -858,6 +846,37 @@ public class CLI implements UserInterface {
 
                     Directions d = directionTranslator(choice);
 
+                        FileRead.removePlayer(view.getPlayerId());
+                        int x_temp = x;
+                        int y_temp = y;
+                        for(Directions dir : previous) {
+                            switch (dir) {
+                                case NORTH:
+                                    if (x > 0)
+                                        x_temp--;
+                                    break;
+
+                                case SOUTH:
+                                    if (x < 2)
+                                        x_temp++;
+                                    break;
+
+                                case WEST:
+                                    if (y > 0)
+                                        y_temp--;
+                                    break;
+
+                                case EAST:
+                                    if (y < 3)
+                                        y_temp++;
+                                    break;
+                            }
+                        }
+
+                        FileRead.insertPlayer(x_temp, y_temp, Character.forDigit(view.getPlayerId(), 10));
+                        FileRead.showBattlefield();
+
+
                     for (Directions direction : previous) {
                         System.out.println("[DEBUG] entro nel ciclo for per cambiare finalPos con le prvious...");
                         switch (direction) {
@@ -925,9 +944,9 @@ public class CLI implements UserInterface {
             } while(!valid);
 
             //TODO check if this works: you should see single movements in map
-            FileRead.removePlayer(view.getPlayerId());
-            FileRead.insertPlayer(x,y, Character.forDigit(view.getPlayerId(), 10));
-            FileRead.showBattlefield();
+            //FileRead.removePlayer(view.getPlayerId());
+            //FileRead.insertPlayer(x,y, Character.forDigit(view.getPlayerId(), 10));
+            //FileRead.showBattlefield();
 
         } while(moves < maxMoves);
 

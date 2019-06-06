@@ -18,14 +18,16 @@ class AmmoCellTest {
 
     @Test
     void getColor() {
-        Map m = Map.genMap(2);
+        //Map m = Map.genMap(2);
+        Map m = new Map(JsonMap.genJsonMap(2));
 
         assertEquals(m.getCell(0, 0).getColor(), CellColor.BLUE);
     }
 
     @Test
     void getAmmoPlaced() {
-        Map m = Map.genMap(2);
+        //Map m = Map.genMap(2);
+        Map m = new Map(JsonMap.genJsonMap(2));
 
         AmmoCard card = AmmoCard.generateRandCard();
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.ammo.AmmoCube;
+import it.polimi.ingsw.model.map.JsonMap;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -20,7 +21,8 @@ class PowerUpBagTest {
 
     @Test
     void addItemShoudAddItemToPowerUpBag() {
-        Map m = Map.genMap(2);
+        Map m = new Map(JsonMap.genJsonMap(2));
+        //Map m = Map.genMap(2);
 
         Player p = new Player("test", 0, PlayerColor.BLUE);
 
@@ -46,7 +48,8 @@ class PowerUpBagTest {
     @Test
     void getItemShouldRemovePowerUpFromPowerUpBag() {
 
-        Map m = Map.genMap(2);
+        //Map m = Map.genMap(2);
+        Map m = new Map(JsonMap.genJsonMap(2));
 
         Player p = new Player("test", 1, PlayerColor.BLUE);
 

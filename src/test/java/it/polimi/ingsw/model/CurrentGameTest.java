@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
+import it.polimi.ingsw.model.map.JsonMap;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -26,7 +27,8 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p3);
 
-        Map m = Map.genMap(1);
+        //Map m = Map.genMap(1);
+        Map m = new Map(JsonMap.genJsonMap(1));
 
         CurrentGame c = new CurrentGame(players, m);
 
@@ -43,7 +45,8 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p3);
 
-        Map m = Map.genMap(1);
+        //Map m = Map.genMap(1);
+        Map m = new Map(JsonMap.genJsonMap(1));
 
         CurrentGame c = new CurrentGame(players, m);
         PowerUp teleport = new Teleporter(Color.YELLOW);
@@ -80,7 +83,8 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p3);
 
-        Map m = Map.genMap(1);
+        //Map m = Map.genMap(1);
+        Map m = new Map(JsonMap.genJsonMap(1));
 
         CurrentGame c = new CurrentGame(players, m);
         for (int id = 0; id < 3; id++) {
@@ -99,7 +103,8 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p1);
 
-        Map m = Map.genMap(1);
+        //Map m = Map.genMap(1);
+        Map m = new Map(JsonMap.genJsonMap(1));
 
         CurrentGame c = new CurrentGame(players, m);
         assertEquals(p1.getPlayerId(), c.playerToId(p1));
@@ -116,7 +121,8 @@ class CurrentGameTest {
         players.add(p2);
         players.add(p3);
 
-        Map m = Map.genMap(1);
+        //Map m = Map.genMap(1);
+        Map m = new Map(JsonMap.genJsonMap(1));
 
         CurrentGame c = new CurrentGame(players, m);
         assertEquals(c.getPlayers() , players);

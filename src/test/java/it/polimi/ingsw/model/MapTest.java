@@ -17,8 +17,8 @@ class MapTest {
 
     @Test
     void getMapTypeShouldReturnActualMapType() {
-        Map m = new Map();
-        assertEquals(2, m.genMap(2).getMapType());
+        Map m = new Map(JsonMap.genJsonMap(2));
+        assertEquals(2, m.getMapType());
     }
 
     @Test
@@ -43,7 +43,8 @@ class MapTest {
         assert (m.getCell(2, 3).getColor() == CellColor.YELLOW);
 
         //Now changing to MapType 2 to check if colors are different as it should be
-        m = Map.genMap(2);
+        //m = Map.genMap(2);
+        m = new Map(JsonMap.genJsonMap(2));
 
         assert (m.getCell(0, 0).getColor() == CellColor.BLUE);
         assert (m.getCell(0, 1).getColor() == CellColor.BLUE);
@@ -61,7 +62,7 @@ class MapTest {
         assert (m.getCell(2, 3).getColor() == CellColor.YELLOW);
 
         //Now changing mapType to 3 to check if colors change as they should
-        m = Map.genMap(3);
+        m = new Map(JsonMap.genJsonMap(3));
 
         assert (m.getCell(0, 0).getColor() == CellColor.RED);
         assert (m.getCell(0, 1).getColor() == CellColor.BLUE);
@@ -103,9 +104,9 @@ class MapTest {
         assert (m.getCell(0, 3) == null);
 
         //Now changing Map type to 2 and checking if Cell[0][3] is not null anymore
-        m = new Map();
-        m.genMap(2);
-        m.generateCells(2);
+        m = new Map(JsonMap.genJsonMap(2));
+        //m.genMap(2);
+        //m.generateCells(2);
 
         assert (m.getCell(0, 3).getNorth() == null);
         assert (m.getCell(0, 3).getSouth() == m.getCell(1, 3));
