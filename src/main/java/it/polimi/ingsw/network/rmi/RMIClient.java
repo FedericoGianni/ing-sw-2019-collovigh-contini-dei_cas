@@ -385,6 +385,8 @@ public class RMIClient extends Client {
 
             view.setValidMove(answer);
 
+            
+
             return true;
 
         }catch (RemoteException e){

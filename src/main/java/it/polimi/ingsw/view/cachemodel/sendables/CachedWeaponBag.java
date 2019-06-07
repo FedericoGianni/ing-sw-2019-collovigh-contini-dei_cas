@@ -1,37 +1,23 @@
 package it.polimi.ingsw.view.cachemodel.sendables;
 
-import it.polimi.ingsw.model.player.WeaponBag;
-import it.polimi.ingsw.model.weapons.Weapon;
-import it.polimi.ingsw.view.updates.Update;
+
+
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
-
-import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CachedWeaponBag extends UpdateClass {
 
     private final List<String> weapons;
     private final List<Boolean> loaded;
 
-    public CachedWeaponBag(WeaponBag bag, int playerId) {
+    public CachedWeaponBag(List<String> weapons, List<Boolean> loaded, int playerId) {
 
         super(UpdateType.POWERUP_BAG,playerId);
 
-        bag.getList().stream().map(Weapon::getName).collect(Collectors.toList());
+        this.weapons = weapons;
 
-        this.weapons = bag
-                .getList()
-                .stream()
-                .map(Weapon::getName)
-                .collect(Collectors.toList());
-
-        this.loaded = bag
-                .getList()
-                .stream()
-                .map(Weapon::isLoaded)
-                .collect(Collectors.toList());
+        this.loaded = loaded;
     }
 
     public List<String> getWeapons() {

@@ -18,18 +18,11 @@ public class CachedGame extends UpdateClass {
     private final List<Point> killShotTrack = new ArrayList<>();
 
 
-    public CachedGame(CurrentGame game) {
+    public CachedGame(List<Point> killShotTrack) {
 
         super(UpdateType.GAME, -1);
 
-        for (int i = 0; i < game.getKillShotTrack().size(); i++) {
 
-            this.killShotTrack.add(new Point(
-                    game.getKillShotTrack().get(i).getKillerId(),
-                    game.getKillShotTrack().get(i).getAmount()
-                    ));
-            
-        }
 
 
 

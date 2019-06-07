@@ -126,6 +126,7 @@ public class CurrentGame extends Subject{
 
     public void setKillShotTrack(List<Skull> killShotTrack) {
         this.killShotTrack = killShotTrack;
+        updateAll(this);
     }
     
     /**
@@ -139,7 +140,7 @@ public class CurrentGame extends Subject{
         for (Boolean b: overkill){
             this.killShotTrack.add(new Skull(killerId,b));
 
-            updateAll(new CachedGame(this));
+            updateAll(this);
 
         }
 
@@ -156,7 +157,7 @@ public class CurrentGame extends Subject{
 
         this.killShotTrack.add(new Skull(killerId,overkill));
 
-        updateAll(new CachedGame(this));
+        updateAll(this);
 
         if (this.killShotTrack.size() >= KILL_SHOT_TRACK) throw new FrenzyActivatedException(killerId);
     }

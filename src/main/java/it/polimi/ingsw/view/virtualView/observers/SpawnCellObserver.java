@@ -1,30 +1,31 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.SpawnCell;
+import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SpawnCellObserver implements Observer {
 
-    private CachedSpawnCell spawnCell;
+    private SpawnCell spawnCell;
     private Observers observers;
 
-    public SpawnCellObserver(){
-
-    }
 
     @Override
     public void update(Object object) {
 
         // cast the Object in its dynamic type
 
-        this.spawnCell = new CachedSpawnCell((SpawnCell) object);
+        this.spawnCell = (SpawnCell) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = spawnCell;
+        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames(spawnCell), Model.getMap().cellToCoord(spawnCell));
 
         // send the update to the Virtual View
 
@@ -41,11 +42,11 @@ public class SpawnCellObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.spawnCell = new CachedSpawnCell((SpawnCell) object);
+        this.spawnCell = (SpawnCell) object;
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = spawnCell;
+        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames(spawnCell), Model.getMap().cellToCoord(spawnCell));
 
         // send the update to the selected player's virtual View
 
@@ -54,6 +55,15 @@ public class SpawnCellObserver implements Observer {
                 .getVirtualView(playerId)
                 .sendUpdates(updateClass);
 
+    }
+
+    private List<String> extractWeaponsNames(SpawnCell spawnCell){
+
+        return spawnCell
+                .getWeapons()
+                .stream()
+                .map(Weapon::getName)
+                .collect(Collectors.toList());
     }
 
     public void setObservers(Observers observers) {

@@ -102,7 +102,7 @@ public class ActionPhase {
 
         // logs the action
 
-        LOGGER.log(level, () -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + "calling Grab");
+        LOGGER.log(level, () -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + " calling Grab");
 
         int playerId = controller.getCurrentPlayer();
 
@@ -187,6 +187,12 @@ public class ActionPhase {
         if (grabValid && moveValid){
 
             controller.incrementPhase();
+
+            controller.handleTurnPhase();
+
+        }else {
+
+            handleAction();
         }
 
     }

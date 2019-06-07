@@ -1,9 +1,14 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
 import it.polimi.ingsw.model.player.PowerUpBag;
+import it.polimi.ingsw.model.powerup.PowerUp;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PowerUpBagObserver implements Observer {
 
@@ -25,7 +30,7 @@ public class PowerUpBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedPowerUpBag(powerUpBag,playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedPowerUpBag(extractCachedPowerUp(powerUpBag),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -46,7 +51,7 @@ public class PowerUpBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedPowerUpBag(powerUpBag,playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedPowerUpBag(extractCachedPowerUp(powerUpBag),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -55,6 +60,18 @@ public class PowerUpBagObserver implements Observer {
                 .getController()
                 .getVirtualView(playerId)
                 .sendUpdates(updateClass);
+    }
+
+    private List<CachedPowerUp> extractCachedPowerUp(PowerUpBag powerUpBag){
+
+        List<CachedPowerUp> powerUpList = new ArrayList<>();
+
+        for (PowerUp up: powerUpBag.getList()){
+
+            powerUpList.add(new CachedPowerUp(up.getType(),up.getColor()));
+        }
+
+        return powerUpList;
     }
 
 

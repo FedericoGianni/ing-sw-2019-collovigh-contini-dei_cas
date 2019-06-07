@@ -1,10 +1,13 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
 import it.polimi.ingsw.model.player.WeaponBag;
+import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
 import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class WeaponBagObserver implements Observer {
 
@@ -24,7 +27,7 @@ public class WeaponBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedWeaponBag(weaponBag, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedWeaponBag(extractWeaponsName(weaponBag), extractLoaded(weaponBag), playerObserver.getPlayerId());
 
         // send the update to all the Virtual Views
 
@@ -43,7 +46,7 @@ public class WeaponBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedWeaponBag(weaponBag, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedWeaponBag(extractWeaponsName(weaponBag), extractLoaded(weaponBag), playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -52,5 +55,23 @@ public class WeaponBagObserver implements Observer {
                 .getController()
                 .getVirtualView(playerId)
                 .sendUpdates(updateClass);
+    }
+
+    private List<String> extractWeaponsName(WeaponBag weaponBag){
+
+        return weaponBag
+                .getList()
+                .stream()
+                .map(Weapon::getName)
+                .collect(Collectors.toList());
+    }
+
+    private List<Boolean> extractLoaded(WeaponBag weaponBag){
+
+        return weaponBag
+                .getList()
+                .stream()
+                .map(Weapon::isLoaded)
+                .collect(Collectors.toList());
     }
 }

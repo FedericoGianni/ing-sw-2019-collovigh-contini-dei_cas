@@ -293,6 +293,6 @@ public class Stats extends Subject {
 
         // sends Game
 
-        Model.getGame().updateSingle(new CachedGame(Model.getGame()),playerId);
+        Model.getGame().updateSingle(Model.getGame(),playerId);
     }
 }

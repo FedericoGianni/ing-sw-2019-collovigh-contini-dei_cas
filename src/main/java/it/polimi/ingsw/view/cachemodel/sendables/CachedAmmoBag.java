@@ -15,15 +15,11 @@ public class CachedAmmoBag extends UpdateClass {
 
     private final List<Color> ammoList;
 
-    public CachedAmmoBag(AmmoBag bag, int playerId) {
+    public CachedAmmoBag(List<Color> ammoList, int playerId) {
 
         super(UpdateType.STATS,playerId);
 
-        this.ammoList = bag
-                .getList()
-                .stream()
-                .map(AmmoCube::getColor)
-                .collect(Collectors.toList());
+        this.ammoList = ammoList;
 
 
     }

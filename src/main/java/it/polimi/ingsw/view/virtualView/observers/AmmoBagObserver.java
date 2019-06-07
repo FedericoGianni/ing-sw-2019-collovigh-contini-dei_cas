@@ -1,10 +1,15 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoBag;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AmmoBagObserver implements Observer {
 
@@ -25,7 +30,7 @@ public class AmmoBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoBag(ammoBag,playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList(ammoBag),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -44,7 +49,7 @@ public class AmmoBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoBag(ammoBag,playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList(ammoBag),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -54,5 +59,14 @@ public class AmmoBagObserver implements Observer {
                 .getVirtualView(playerId)
                 .sendUpdates(updateClass);
 
+    }
+
+    private List<Color> extractAmmoList(AmmoBag ammoBag){
+
+        return ammoBag
+                .getList()
+                .stream()
+                .map(AmmoCube::getColor)
+                .collect(Collectors.toList());
     }
 }

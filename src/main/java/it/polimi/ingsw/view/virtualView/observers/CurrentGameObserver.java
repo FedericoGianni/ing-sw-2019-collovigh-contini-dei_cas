@@ -1,28 +1,34 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedGame;
 import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CurrentGameObserver implements Observer {
 
-    private CachedGame game;
+    private CurrentGame game;
     private Observers observers;
 
-    public CurrentGameObserver() {
-    }
 
     @Override
     public void update(Object object) {
 
         // cast the Object in its dynamic type
 
-        this.game = (CachedGame) object;
+        this.game = (CurrentGame) object;
+
+        // translates the killShotTrack into a list of Point
+
+        List<Point> killShotTrack = extractKillShotTrack(game);
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = game;
+        UpdateClass updateClass = new CachedGame(killShotTrack);
 
         // send the update to all Virtual Views
 
@@ -37,11 +43,15 @@ public class CurrentGameObserver implements Observer {
 
         // cast the Object in its dynamic type
 
-        this.game = (CachedGame) object;
+        this.game = (CurrentGame) object;
+
+        // translates the killShotTrack into a list of Point
+
+        List<Point> killShotTrack = extractKillShotTrack(game);
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = game;
+        UpdateClass updateClass = new CachedGame(killShotTrack);
 
         // send the update to the selected player's virtual View
 
@@ -49,6 +59,24 @@ public class CurrentGameObserver implements Observer {
                 .getController()
                 .getVirtualView(playerId)
                 .sendUpdates(updateClass);
+
+    }
+
+
+    private List<Point> extractKillShotTrack(CurrentGame game){
+
+        List<Point> killShotTrack = new ArrayList<>();
+
+        for (int i = 0; i < game.getKillShotTrack().size(); i++) {
+
+            killShotTrack.add(new Point(
+                    game.getKillShotTrack().get(i).getKillerId(),
+                    game.getKillShotTrack().get(i).getAmount()
+            ));
+
+        }
+
+        return killShotTrack;
 
     }
 

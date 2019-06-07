@@ -36,8 +36,6 @@ public class JsonExampleMaker {
         writeStats();
         writeInitialUpdateClass();
         writeInitialUpdate();
-        writeCachedPowerUpBag();
-        writePowerUpBagUpdate();
 
         writeUsePowerUp();
         writeMove();
@@ -84,7 +82,7 @@ public class JsonExampleMaker {
 
             stats.addMarks(0);
 
-            CachedStats cachedStats = new CachedStats(stats,0);
+            CachedStats cachedStats = new CachedStats(stats.getPlayerId(),stats.getScore(),stats.getDeaths(),stats.getOnline(),stats.getMarks(),stats.getDmgTaken(),Model.getMap().cellToCoord(stats.getCurrentPosition()));
 
 
             FileWriter writer = new FileWriter("resources/json/jsonComunication/stats.json");
@@ -130,34 +128,6 @@ public class JsonExampleMaker {
         }
     }
 
-    public static void writePowerUpBagUpdate(){
-
-        Gson gson = new Gson();
-
-        try {
-
-            PowerUp powerUp1 = new Newton(Color.BLUE);
-            PowerUp powerUp2 = new TagbackGrenade(Color.RED);
-
-            PowerUpBag bag = new PowerUpBag();
-            bag.addItem(powerUp1);
-            bag.addItem(powerUp2);
-
-            UpdateClass updateClass = new CachedPowerUpBag(bag,0);
-
-            FileWriter writer = new FileWriter("resources/json/jsonComunication/update.json");
-
-
-            gson.toJson(updateClass, writer);
-
-            writer.flush();
-            writer.close();
-
-        }catch (Exception e){
-
-            e.printStackTrace();
-        }
-    }
 
     public static void writeInitialUpdateClass(){
 
@@ -217,36 +187,6 @@ public class JsonExampleMaker {
             writer.write('\n');
 
             writer.write("Ciao");
-
-            writer.flush();
-            writer.close();
-
-        }catch (Exception e){
-
-            e.printStackTrace();
-        }
-    }
-
-
-    public static void writeCachedPowerUpBag(){
-
-        Gson gson = new Gson();
-
-        try {
-
-            PowerUp powerUp1 = new Newton(Color.BLUE);
-            PowerUp powerUp2 = new TagbackGrenade(Color.RED);
-
-            PowerUpBag bag = new PowerUpBag();
-            bag.addItem(powerUp1);
-            bag.addItem(powerUp2);
-
-            CachedPowerUpBag cbag = new CachedPowerUpBag(bag,0);
-
-            FileWriter writer = new FileWriter("resources/json/jsonComunication/cachedPowerUpBag.json");
-
-
-            gson.toJson(cbag, writer);
 
             writer.flush();
             writer.close();

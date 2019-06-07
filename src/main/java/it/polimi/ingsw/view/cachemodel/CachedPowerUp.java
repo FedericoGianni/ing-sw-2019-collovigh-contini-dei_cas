@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.cachemodel;
 
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 
 import java.io.Serializable;
@@ -12,12 +11,6 @@ public class CachedPowerUp implements Serializable {
 
     private final Color color;
     private final PowerUpType type;
-
-
-    public CachedPowerUp(PowerUp powerUp) {
-        this.color = powerUp.getColor();
-        this.type = powerUp.getType();
-    }
 
     public CachedPowerUp(PowerUpType type, Color color){
         this.type = type;

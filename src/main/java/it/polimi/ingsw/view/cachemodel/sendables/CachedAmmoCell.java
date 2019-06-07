@@ -15,25 +15,14 @@ public class CachedAmmoCell extends CachedCell {
 
     private final List<Color> ammoList;
     private final Boolean powerUp;
-    private final Point position;
 
-    public CachedAmmoCell(AmmoCell ammoCell) {
+    public CachedAmmoCell(List<Color> ammoList, Boolean powerUp, Point position ) {
 
-        super(CellType.AMMO);
+        super(CellType.AMMO, position);
 
-        this.ammoList = ammoCell
-                .getAmmoPlaced()
-                .getAmmoList()
-                .stream()
-                .map(AmmoCube::getColor)
-                .collect(Collectors.toList());
+        this.ammoList = ammoList;
 
-        this.powerUp = ammoCell
-                .getAmmoPlaced()
-                .getPowerUp();
-
-        this.position=Model.getMap().cellToCoord(ammoCell);
-
+        this.powerUp = powerUp;
 
     }
 
@@ -43,9 +32,5 @@ public class CachedAmmoCell extends CachedCell {
 
     public Boolean hasPowerUp() {
         return powerUp;
-    }
-
-    public Point getPosition() {
-        return position;
     }
 }

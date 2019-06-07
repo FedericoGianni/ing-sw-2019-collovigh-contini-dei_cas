@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.updates.UpdateClass;
@@ -32,7 +33,7 @@ public class StatsObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedStats(stats, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedStats(playerObserver.getPlayerId(),stats.getScore(),stats.getDeaths(),stats.getOnline(),stats.getMarks(),stats.getDmgTaken(), Model.getMap().cellToCoord(stats.getCurrentPosition()));
 
         // send the update to the Virtual View
 
@@ -52,7 +53,7 @@ public class StatsObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedStats(stats, playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedStats(playerObserver.getPlayerId(),stats.getScore(),stats.getDeaths(),stats.getOnline(),stats.getMarks(),stats.getDmgTaken(), Model.getMap().cellToCoord(stats.getCurrentPosition()));
 
         // send the update to the Virtual View
 
