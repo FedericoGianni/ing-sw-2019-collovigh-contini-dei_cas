@@ -242,7 +242,6 @@ public class CLI implements UserInterface {
                 break;
 
             case INITIAL:
-                //TODO mostrare quali colori hanno preso i giocatori?
                 FileRead.loadMap(view.getCacheModel().getMapType());
                 System.out.println("[NOTIFICA] Ho scelto casualmente la mappa di tipo: " + view.getCacheModel().getMapType());
 
@@ -694,7 +693,7 @@ public class CLI implements UserInterface {
         Boolean valid;
         int choice = -1;
 
-        List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "RACCOGLI", "SPARA", "SKIP"));
+        List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA", "SKIP"));
 
         do {
 
@@ -734,27 +733,18 @@ public class CLI implements UserInterface {
         switch (choice){
 
             case 0:
-
                 startMove();
-
                 break;
 
             case 1:
-
                 startGrab();
-
                 break;
 
             case 2:
-                //TODO grab without move
-                //i still need to differentiate spawn grab (buy weapon) from ammo grab
-                break;
-
-            case 3:
                 startShoot();
                 break;
 
-            case 4:
+            case 3:
                 view.doAction(new SkipAction());
                 break;
 
@@ -956,7 +946,7 @@ public class CLI implements UserInterface {
         view.doAction(new Move(directionsList, finalPos));
     }
 
-    public void startGrab(){
+    private void startGrab(){
 
         int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
         int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
@@ -1040,9 +1030,7 @@ public class CLI implements UserInterface {
         if(currWeap.size() >= 3){
             System.out.println("Hai già 3 armi. Scegli un arma da scartare >>>");
 
-            for (int i = 0; i < currWeap.size(); i++) {
-                System.out.println("Arma " + i + " " + currWeap.get(i));
-            }
+            showCurrWeapons();
 
             System.out.println("Seleziona il numero dell'arma che vuoi scartare >>> ");
             valid = false;
@@ -1111,6 +1099,21 @@ public class CLI implements UserInterface {
 
     }
 
+    private void showCurrWeapons(){
+
+        List<String> currWeap = new ArrayList<>();
+
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
+            currWeap = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
+        }
+
+        for (int i = 0; i < currWeap.size(); i++) {
+            System.out.println("Arma " + i + " " + currWeap.get(i));
+        }
+    }
+
+
+
 
 
     public void startShoot(){
@@ -1123,18 +1126,32 @@ public class CLI implements UserInterface {
     @Override
     public void startReload() {
         Boolean validChoice = false;
-        int read;
+        int read = -1;
+
+        List<String> weapons = new ArrayList<>();
+
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
+            weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
+        }
 
         do{
             System.out.println("Vuoi ricaricare? Le tue armi sono: ");
-            //TODO show weapons -> need cachedWeapons
-            System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
-            read = scanner.nextInt();
+            showCurrWeapons();
 
-            //TODO check if weapon index is ok
-            //if(read) validChoice = true;
+            System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
+            try {
+                read = scanner.nextInt();
+
+            } catch (InputMismatchException e){
+                scanner.nextLine();
+                System.out.println("Non è un numero! Riprova >>> ");
+            }
+
+            if(read >= 0 && read <= weapons.size()) validChoice = true;
 
         }while(!validChoice);
+
+        //TODO forward RELOAD action to the view
     }
 
     /**
