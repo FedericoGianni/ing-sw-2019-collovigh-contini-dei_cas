@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.runner;
 
 //qua dovrò avviare il client da terminale passandogli gia come parametro ip del server porta cli/gui rmi/socket
 //inizio direttamente dalla schermata di login del giocatore

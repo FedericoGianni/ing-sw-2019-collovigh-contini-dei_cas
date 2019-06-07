@@ -1,6 +1,7 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.runner;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.jsonconfig.Config;
 import it.polimi.ingsw.view.View;
 

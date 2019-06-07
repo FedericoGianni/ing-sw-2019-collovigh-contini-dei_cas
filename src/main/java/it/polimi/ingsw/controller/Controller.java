@@ -374,7 +374,7 @@ public class Controller {
 
             case GRAB:
 
-                actionPhase.moveGrab((GrabAction) jsonAction);
+                actionPhase.grab((GrabAction) jsonAction);
 
                 break;
 

@@ -85,7 +85,7 @@ public class ActionPhase {
     }
 
 
-    public void moveGrab(GrabAction grabAction) {
+    public void grab(GrabAction grabAction) {
 
         boolean moveValid = true;
 
