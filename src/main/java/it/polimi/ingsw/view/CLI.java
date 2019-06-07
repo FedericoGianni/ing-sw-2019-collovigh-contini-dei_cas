@@ -55,7 +55,7 @@ public class CLI implements UserInterface {
             this.validMove = 0;
         }
         synchronized(this) {
-            this.notify();
+            this.notifyAll();
         }
     }
 
@@ -167,11 +167,11 @@ public class CLI implements UserInterface {
         System.out.println("Seleziona un colore (GREEN, GREY, PURPLE, BLUE,YELLOW): ");
 
         do {
-            playerColor = scanner.nextLine();
+            playerColor = scanner.nextLine().toUpperCase();
 
-            if(playerColor.equalsIgnoreCase("GREEN") || playerColor.equalsIgnoreCase("GREY") ||
-                    playerColor.equalsIgnoreCase("YELLOW") || playerColor.equalsIgnoreCase("PURPLE") ||
-                    playerColor.equalsIgnoreCase("BLUE")) {
+            if(playerColor.equals("GREEN") || playerColor.equals("GREY") ||
+                    playerColor.equals("YELLOW") || playerColor.equals("PURPLE") ||
+                    playerColor.equals("BLUE")) {
                 validColorChoice = true;
             } else {
                 System.out.println("Please enter a valid color choice: ");
@@ -242,7 +242,6 @@ public class CLI implements UserInterface {
                 break;
 
             case INITIAL:
-                //TODO mostrare quali colori hanno preso i giocatori?
                 FileRead.loadMap(view.getCacheModel().getMapType());
                 System.out.println("[NOTIFICA] Ho scelto casualmente la mappa di tipo: " + view.getCacheModel().getMapType());
 
@@ -267,7 +266,7 @@ public class CLI implements UserInterface {
                 break;
 
             case WEAPON_BAG:
-
+                System.out.println("[NOTIFICA] Hai una nuova arma!");
                 break;
 
             case AMMO_BAG:
@@ -284,14 +283,19 @@ public class CLI implements UserInterface {
 
             case AMMO_CELL:
                 //insert AmmoCard in FileRead
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 4; j++) {
+                for (int i = 0; i < MAP_R; i++) {
+                    for (int j = 0; j < MAP_C; j++) {
                         if (view.getCacheModel().getCachedMap().getCachedCell(i, j) != null) {
                             if (view.getCacheModel().getCachedMap().getCachedCell(i, j).getCellType().equals(CellType.AMMO)) {
+
                                 FileRead.removeAmmoCard(i,j, (CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i,j));
-                                FileRead.insertAmmoCard(i, j, (CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i, j));
-                                //TODO check if ammo has been grabbed by some player
-                                //} else if(view.getCacheModel().getCachedMap().getCachedCell(i,j).)
+
+                                //TODO check if it works -> it should not let see ammoCard if they are picked up
+                                //if ammoCell has been picked up don't show it on map
+                                if(!((CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i,j)).getAmmoList().isEmpty()) {
+                                    FileRead.insertAmmoCard(i, j, (CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i, j));
+                                }
+
                             }
                         }
                     }
@@ -689,7 +693,7 @@ public class CLI implements UserInterface {
         Boolean valid;
         int choice = -1;
 
-        List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "RACCOGLI", "SPARA", "SKIP"));
+        List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA", "SKIP"));
 
         do {
 
@@ -729,32 +733,18 @@ public class CLI implements UserInterface {
         switch (choice){
 
             case 0:
-
                 startMove();
-
                 break;
 
             case 1:
-
                 startGrab();
-
                 break;
 
             case 2:
-                //TODO grab without move
-                System.out.println("Case 2 -> grab without move called");
-                view.doAction(new GrabAction());
-
+                startShoot();
                 break;
 
             case 3:
-                startShoot();
-
-
-                break;
-
-            case 4:
-
                 view.doAction(new SkipAction());
                 break;
 
@@ -861,8 +851,8 @@ public class CLI implements UserInterface {
                     Point start = new Point(x,y);
                     Point finalPos = genPointFromDirections(previous, start);
 
-                    view.askMoveValid(finalPos.x, finalPos.y, d);
                     validMove = -1;
+                    view.askMoveValid(finalPos.x, finalPos.y, d);
 
                     while(validMove == -1){
                         try
@@ -952,23 +942,179 @@ public class CLI implements UserInterface {
         List<Directions> directionsList = handleMove(3);
         Point finalPos = genPointFromDirections(directionsList, startingPoint);
 
-
-        //TODO @Dav why i need to send him final position from client?
-        System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
+        //System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
         view.doAction(new Move(directionsList, finalPos));
     }
 
-    public void startGrab(){
-        //grab -> se hai più di 2 danni 2 movimenti + grab / altrimenti 1
+    private void startGrab(){
+
+        int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
+        int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+        Point startingPoint = new Point(x,y);
+
+        List<Directions> directionsList;
+
+        //grab -> if player has more than 2 dmg -> 2 moves else -> only 1 move
         if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() > 2){
-            handleMove(2);
+            directionsList = handleMove(2);
         } else {
-            handleMove(1);
+            directionsList = handleMove(1);
         }
 
-        //TODO GrabAction
-        //view.doAction(new GrabAction());
+        Point finalPos = genPointFromDirections(directionsList, startingPoint);
+
+        CellType cellType = view.getCacheModel().getCachedMap().getCachedCell(finalPos.x, finalPos.y).getCellType();
+
+        switch (cellType){
+
+            case AMMO:
+                view.doAction(new GrabAction(directionsList));
+                break;
+
+            case SPAWN:
+                List<String> weapons = handleWeaponGrab(finalPos);
+                view.doAction(new GrabAction(directionsList, weapons.get(0), weapons.get(1)));
+                break;
+        }
     }
+
+    /**
+     * Handle weapons grab: if player has already 3 weapons he has to choose 1 to discard
+     * @param pos current spawn cell from where he wants to buy the weapon
+     * @return a List of String representing the name of the weapon to buy and, if needed, the one to discard
+     */
+    //TODO i need to check that he buy weap when i have more ammo and that it let me choose one to discard when i have already 3
+    private List<String> handleWeaponGrab(Point pos){
+
+        CachedSpawnCell cell = (CachedSpawnCell) view.getCacheModel().getCachedMap().getCachedCell(pos.x, pos.y);
+
+        List<String> weapons = cell.getWeaponNames();
+        List<String> choice = new ArrayList<>(Collections.nCopies(2, null));
+
+        System.out.println("ARMI IN VENDITA: ");
+        for (int i = 0; i < cell.getWeaponNames().size(); i++) {
+            System.out.println("Arma " + i + " : " + cell.getWeaponNames().get(i));
+        }
+
+        System.out.println("Digita il numero dell'arma che vuoi acquistare >>> ");
+        int buy = -1, discard = -1;
+        boolean valid = false;
+        scanner.reset();
+
+        do {
+
+            scanner.reset();
+
+            try {
+                buy = scanner.nextInt();
+
+                if(buy >= 0 && buy <= weapons.size()) {
+                    valid = true;
+                } else {
+                    System.out.println("Numero non valido! Riprova >>> ");
+                }
+
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("Non è un numero! Riprova >>> ");
+            }
+
+        } while (!valid);
+
+        //if the player has already 3 weapons he has to choose one to discard to buy another one
+        List <String> currWeap = new ArrayList<>();
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
+            currWeap = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
+        }
+
+        if(currWeap.size() >= 3){
+            System.out.println("Hai già 3 armi. Scegli un arma da scartare >>>");
+
+            showCurrWeapons();
+
+            System.out.println("Seleziona il numero dell'arma che vuoi scartare >>> ");
+            valid = false;
+
+            do {
+
+                scanner.nextLine();
+                scanner.reset();
+
+                try {
+                    discard = scanner.nextInt();
+
+                    if(discard >= 0 && discard <= currWeap.size()){
+                        valid = true;
+                    } else {
+                        System.out.println("Numero non valido! Riprova >>> ");
+                    }
+
+                } catch (InputMismatchException e) {
+                    System.out.println("Non è un numero! Riprova >>> ");
+                }
+
+            }while (!valid);
+
+            switch (discard){
+
+                case 0:
+                    choice.set(1, currWeap.get(0));
+                    break;
+
+                case 1:
+                    choice.set(1, currWeap.get(1));
+                    break;
+
+                case 2:
+                    choice.set(1, currWeap.get(2));
+                    break;
+
+                default:
+                    //this can't happen since we do valid checks before switch case
+                    System.out.println("Scelta arma da scartare non valida!");
+            }
+        }
+
+        switch (buy){
+
+            case 0:
+                choice.set(0, weapons.get(0));
+                break;
+
+            case 1:
+                choice.set(0, weapons.get(1));
+                break;
+
+            case 2:
+                choice.set(0, weapons.get(2));
+                break;
+
+            default:
+                //this cannot happen since we control valid number before switch case
+                System.out.println("Scelta non valida!");
+        }
+
+
+        return choice;
+
+    }
+
+    private void showCurrWeapons(){
+
+        List<String> currWeap = new ArrayList<>();
+
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
+            currWeap = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
+        }
+
+        for (int i = 0; i < currWeap.size(); i++) {
+            System.out.println("Arma " + i + " " + currWeap.get(i));
+        }
+    }
+
+
+
+
 
     public void startShoot(){
         //shoot -> se hai più di 5 danni un movimento / altrimento 0 movimenti
@@ -980,18 +1126,32 @@ public class CLI implements UserInterface {
     @Override
     public void startReload() {
         Boolean validChoice = false;
-        int read;
+        int read = -1;
+
+        List<String> weapons = new ArrayList<>();
+
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
+            weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
+        }
 
         do{
             System.out.println("Vuoi ricaricare? Le tue armi sono: ");
-            //TODO show weapons -> need cachedWeapons
-            System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
-            read = scanner.nextInt();
+            showCurrWeapons();
 
-            //TODO check if weapon index is ok
-            //if(read) validChoice = true;
+            System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
+            try {
+                read = scanner.nextInt();
+
+            } catch (InputMismatchException e){
+                scanner.nextLine();
+                System.out.println("Non è un numero! Riprova >>> ");
+            }
+
+            if(read >= 0 && read <= weapons.size()) validChoice = true;
 
         }while(!validChoice);
+
+        //TODO forward RELOAD action to the view
     }
 
     /**

@@ -383,7 +383,9 @@ public class RMIClient extends Client {
 
             answer= server.askMoveValid(row,column,direction);
 
+            System.out.println("chiamo setValidMove...");
             view.setValidMove(answer);
+            System.out.println("setValidMove chiamato " + answer);
 
             
 
