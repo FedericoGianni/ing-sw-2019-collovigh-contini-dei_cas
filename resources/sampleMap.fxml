@@ -56,9 +56,12 @@
         </VBox>
     </right>
     <bottom>
-        <VBox>
+        <HBox>
             <Label text="Plancia e my weapons"></Label>
-        </VBox>
+            <Button text="Move" onAction="#move" fx:id="moveButton"></Button>
+            <Button text="Shoot"></Button>
+            <Button text="Reload"></Button>
+        </HBox>
     </bottom>
 
 </BorderPane>

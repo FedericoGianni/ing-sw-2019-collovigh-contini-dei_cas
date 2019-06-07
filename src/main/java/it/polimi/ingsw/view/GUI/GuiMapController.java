@@ -2,8 +2,10 @@ package it.polimi.ingsw.view.GUI;
 
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
+import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.cachemodel.Player;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Box;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -40,6 +43,8 @@ public class GuiMapController {
     Button b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;
     @FXML
     ImageView powerUp1,powerUp2,powerUp3;
+    @FXML
+    Button moveButton;
 
     @FXML
     public void initialize() {
@@ -220,7 +225,31 @@ public class GuiMapController {
         log.appendText("\nCliccato cella 23");
     }
 
+    @FXML
+    private void move()
+    {
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION);
+        a.setContentText("Choose a cell to move to.");
+        a.show();
+       /* for(int r=0;r<rows;r++)
+        {
+            for(int c=0;c<col;c++)
+            {
+                int subR=r,subC=c;
+                map[r][c].setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        ArrayList <Directions> directionsList=new ArrayList<>();
+                        directionsList=direzioni();
+                        gui.getView().doAction(new Move(directionsList, new Point(subR,subC)));
+                        map[subR][subC].setStyle("\"-fx-background-image: url('null')\"");
+                    }
+                });
+            }
+        }*/
+    }
 
+    @FXML
     public void loginUpdater(String name, int id, PlayerColor color)
     {
         log.appendText("\nSi è collegato: "+name+" con l'id: "+id+" ed il colore: "+color);
@@ -239,6 +268,7 @@ public class GuiMapController {
         int r=gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX();
         int c=gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY();
         mapPos(r,c,id);
+
     }
 
     public void printLog(String s)
