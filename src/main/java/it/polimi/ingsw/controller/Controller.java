@@ -72,6 +72,8 @@ public class Controller {
 
     private ActionPhase actionPhase = new ActionPhase(this);
 
+    private GrabPhase grabPhase = new GrabPhase(this);
+
 
 
 

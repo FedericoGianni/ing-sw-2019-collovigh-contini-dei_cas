@@ -8,6 +8,7 @@ import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,12 +60,17 @@ public class AmmoCellObserver implements Observer {
 
     private List<Color> extractAmmoList(AmmoCell ammoCell){
 
-        return ammoCell
-                .getAmmoPlaced()
-                .getAmmoList()
-                .stream()
-                .map(AmmoCube::getColor)
-                .collect(Collectors.toList());
+        if (ammoCell.getAmmoPlaced() != null) {
+            return ammoCell
+                    .getAmmoPlaced()
+                    .getAmmoList()
+                    .stream()
+                    .map(AmmoCube::getColor)
+                    .collect(Collectors.toList());
+        }else {
+
+            return  new ArrayList<>();
+        }
     }
 
     public void setObservers(Observers observers) {

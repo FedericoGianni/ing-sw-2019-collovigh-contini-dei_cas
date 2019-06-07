@@ -9,10 +9,6 @@ import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +19,7 @@ public class ActionPhase {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
-    private static final String logStart = "[Controller-GrabAction] Player w/ id: ";
+    private static final String LOG_START = "[Controller-GrabAction] Player w/ id: ";
 
     private final Controller controller;
 
@@ -74,17 +70,12 @@ public class ActionPhase {
 
         } else {
 
-            // reads the final position
+            // moves the current player in the directions specified in the list
 
-            Point finalPos = moveAction.getFinalPos();
+            for (Directions direction : moveAction.getMoves()){
 
-            // gets the correspondent cell in the model
-
-            Cell cell = Model.getMap().getCell(finalPos.x, finalPos.y);
-
-            // move the player
-            //TODO @Dav not working maybe you should have passed from getStats to change position?
-            Model.getPlayer(controller.getCurrentPlayer()).getStats().setCurrentPosition(cell);
+                moveCurrentPlayer(direction);
+            }
 
             // increment the phase
 
@@ -122,12 +113,14 @@ public class ActionPhase {
 
             } else {
 
-                LOGGER.log(Level.WARNING, () -> "[Controller-GrabAction] Player w/ id: " + playerId + " tried to move more than 1 but only has damage : " + Model.getPlayer(playerId).getDmg().size());
+                LOGGER.log(Level.WARNING, () -> LOG_START + playerId + " tried to move more than 1 but only has damage : " + Model.getPlayer(playerId).getDmg().size());
 
                 moveValid = false;
 
             }
         }
+
+        // grab the correspondent item from the cell the player is in
 
         grabValid = grabStuffFromCurrPosition(grabAction.getNewWeaponName());
 
@@ -154,7 +147,7 @@ public class ActionPhase {
 
                         Model.getPlayer(playerId).delWeapon(matchingList.get(0));
 
-                        LOGGER.log(level, () -> logStart + playerId + " discarded weapon w/ name: " + matchingList.get(0).getName());
+                        LOGGER.log(level, () -> LOG_START + playerId + " discarded weapon w/ name: " + matchingList.get(0).getName());
 
                     }catch (CardNotPossessedException e){
 
@@ -167,7 +160,7 @@ public class ActionPhase {
 
                     grabValid = false;
 
-                    LOGGER.log(level,() -> logStart + playerId + " name specified for discarded weapon does not correspond to weapon");
+                    LOGGER.log(level,() -> LOG_START + playerId + " name specified for discarded weapon does not correspond to weapon");
 
                 }
 
@@ -177,7 +170,7 @@ public class ActionPhase {
 
                 grabValid = false;
 
-                LOGGER.log(level,() -> logStart + playerId + " no name specified for discarded weapon ");
+                LOGGER.log(level,() -> LOG_START + playerId + " no name specified for discarded weapon ");
 
             }
 
@@ -189,6 +182,8 @@ public class ActionPhase {
             controller.incrementPhase();
 
             controller.handleTurnPhase();
+
+            // TODO controller.updateInactivePlayers(n);
 
         }else {
 
@@ -251,7 +246,7 @@ public class ActionPhase {
 
         // logs the position change
 
-        LOGGER.log(level, () -> "[Controller-GrabAction] Player w/ id: " + playerId + " moved " + direction + " in cell : " + Model.getMap().cellToCoord(Model.getPlayer(playerId).getCurrentPosition()));
+        LOGGER.log(level, () -> LOG_START + playerId + " moved " + direction + " in cell : " + Model.getMap().cellToCoord(Model.getPlayer(playerId).getCurrentPosition()));
     }
 
     private boolean grabStuffFromCurrPosition(String weaponName){
@@ -318,7 +313,7 @@ public class ActionPhase {
 
                         // Log
 
-                        LOGGER.log(level, () -> "[Controller-GrabAction] Player w/ id: " + playerId + " bought a new weapon : " + selected.getName());
+                        LOGGER.log(level, () -> LOG_START + playerId + " bought a new weapon : " + selected.getName());
 
                         return true;
 
@@ -335,28 +330,12 @@ public class ActionPhase {
         }
     }
 
-    private Weapon selectCheapestWeapon(SpawnCell spawnCell) {
-
-        List<Weapon> weapons = new ArrayList<>(spawnCell.getWeapons());
-
-        Collections.sort(weapons, (p1, p2) -> {
-
-            if (p1.getCost().size() < p2.getCost().size()) return -1;
-
-            else if (p1.getCost().size() > p2.getCost().size()) return 1;
-
-            else return 0;
-        });
-
-
-        return weapons.get(0);
-
-    }
-
     boolean askMoveValid(int row, int column, Directions direction) {
 
-        System.out.println("[CONTROLLER] receiveed askMove valid from pos: " + row + ", " + column + " and direction : " + direction);
-        //System.out.println(" CELL: is ammocell: " + Model.getMap().getCell(row,column).isAmmoCell() + " have color : "+ Model.getMap().getCell(row,column).getColor());
+        //LOG
+
+        LOGGER.log(level, () -> "[CONTROLLER] receiveed askMove valid from pos: " + row + ", " + column + " and direction : " + direction);
+
         if (Model.getMap().getCell(row, column) == null) {
             return false;
         } else {
