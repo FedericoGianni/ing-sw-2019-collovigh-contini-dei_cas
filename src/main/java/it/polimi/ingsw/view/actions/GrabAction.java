@@ -16,7 +16,7 @@ public class GrabAction extends JsonAction {
 
     private final String discardedWeapon;
 
-
+    //AMMO GRAB with moves
     public GrabAction(List<Directions> directions) {
 
         super(ActionTypes.GRAB);
@@ -29,6 +29,7 @@ public class GrabAction extends JsonAction {
 
     }
 
+    //AMMO GRAB without moves
     public GrabAction() {
 
         super(ActionTypes.GRAB);
@@ -40,6 +41,7 @@ public class GrabAction extends JsonAction {
         this.discardedWeapon = null;
     }
 
+    //SPAWN GRAB with moves (discardedWeapon only if he has already 3 weapons, otherwise null)
     public GrabAction( List<Directions> directions, String newWeaponName, String discardedWeapon) {
 
         super(ActionTypes.GRAB);
@@ -52,6 +54,7 @@ public class GrabAction extends JsonAction {
 
     }
 
+    //SPAWN GRAB without moves (discardedWeapon only if he has already 3 weapons, otherwise null)
     public GrabAction(  String newWeaponName, String discardedWeapon) {
 
         super(ActionTypes.GRAB);
