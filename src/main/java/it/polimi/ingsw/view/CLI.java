@@ -288,7 +288,7 @@ public class CLI implements UserInterface {
                         if (view.getCacheModel().getCachedMap().getCachedCell(i, j) != null) {
                             if (view.getCacheModel().getCachedMap().getCachedCell(i, j).getCellType().equals(CellType.AMMO)) {
 
-                                FileRead.removeAmmoCard(i,j, (CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i,j));
+                                FileRead.removeAmmoCard(i,j);
 
                                 //TODO check if it works -> it should not let see ammoCard if they are picked up
                                 //if ammoCell has been picked up don't show it on map

@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 
@@ -51,14 +50,13 @@ public class FileRead {
         insertPlayer(2,1,'9');
         insertPlayer(2,2,'@');
         insertPlayer(2,3, '#');
-        Vector<Character> v = new Vector<>();
+        List<Character> v = new ArrayList<>();
         v.add('à');
         v.add('ò');
         v.add('+');
 
         insertAmmoCard(0,0,v);
         insertAmmoCard(0, 1, v);
-        //removeAmmoCard(0,1,v);
         removeAmmoCard(0,0, v);
         insertAmmoCard(0,2, v);
         removeAmmoCard(0,2,v);
@@ -71,6 +69,8 @@ public class FileRead {
         insertAmmoCard(2,1,v);
         insertAmmoCard(2,2,v);
         insertAmmoCard(2,3,v);
+
+        removeAmmoCard(2,3,v);
         showBattlefield();
 
     }
@@ -130,11 +130,11 @@ public class FileRead {
     //call this function from UPDATE of type AmmoCell
     public static void insertAmmoCard(int x, int y, CachedAmmoCell c){
 
-        Vector<Character> v = generateAmmoCard(c.getAmmoList());
+        List<Character> v = generateAmmoCard(c.getAmmoList());
         insertAmmoCard(x, y, v);
     }
 
-    private static void insertAmmoCard(int x, int y, Vector<Character> v){
+    private static void insertAmmoCard(int x, int y, List<Character> v){
 
         if(x < 0 || x > 2 || y < 0 || y > 3)
             return;
@@ -197,11 +197,19 @@ public class FileRead {
     }
 
     public static void removeAmmoCard(int x, int y, CachedAmmoCell c){
-        Vector<Character> v = generateAmmoCard(c.getAmmoList());
+        List<Character> v = generateAmmoCard(c.getAmmoList());
         removeAmmoCard(x, y, v);
     }
 
-    private static void removeAmmoCard(int x, int y, Vector<Character> v){
+    public static void removeAmmoCard(int x, int y){
+        List<Character> v = new ArrayList<>();
+        v.add('à');
+        v.add('è');
+        v.add('ò');
+        removeAmmoCard(x,y,v);
+    }
+
+    private static void removeAmmoCard(int x, int y, List<Character> v){
 
         int r_min = -1, r_max = -1;
         int c_min = -1, c_max = -1;
@@ -252,9 +260,9 @@ public class FileRead {
         }
     }
 
-    private static Vector<Character> generateAmmoCard(List <Color> ammoCubeList) {
+    private static List<Character> generateAmmoCard(List <Color> ammoCubeList) {
 
-        Vector<Character> charList = new Vector<>();
+        List<Character> charList = new ArrayList<>();
 
         for (int i = 0; i < ammoCubeList.size(); i++) {
 
