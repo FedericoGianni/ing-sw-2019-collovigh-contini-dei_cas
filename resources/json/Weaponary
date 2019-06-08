@@ -92,7 +92,7 @@
   },
   {
     "Weapon": {
-      "name": "ELECTROSHYTE",
+      "name": "ELECTROSCYTHE",
       "cost": [
         {
           "ammoC": "BLUE"

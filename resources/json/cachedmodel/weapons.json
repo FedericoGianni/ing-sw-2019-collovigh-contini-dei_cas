@@ -1,0 +1,6 @@
+[
+  {"name":"LOCK RIFLE","firstEffectCost":["BLUE","BLUE"],"secondEffectCost":["RED"],"thirdEffectCost":[]},
+  {"name":"MACHINE GUN","firstEffectCost":["BLUE","RED"],"secondEffectCost":["YELLOW"],"thirdEffectCost":["BLUE"]},
+  {"name":"ELECTROSCYTHE","firstEffectCost":["BLUE"],"secondEffectCost":["BLUE","RED"],"thirdEffectCost":[]},
+  {"name":"TRACTOR BEAM","firstEffectCost":["BLUE"],"secondEffectCost":["RED","YELLOW"],"thirdEffectCost":[]}
+]

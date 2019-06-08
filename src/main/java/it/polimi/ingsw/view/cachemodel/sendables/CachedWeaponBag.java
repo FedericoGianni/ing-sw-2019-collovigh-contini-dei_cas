@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.cachemodel.sendables;
 
 
 
+
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
 import java.util.List;
