@@ -95,6 +95,7 @@ public class SpawnCell extends Cell {
         if (player.canPay(w.getCost())){
 
             weapons.remove(w);
+
             this.populateWeapon();
 
             updateAll(this);

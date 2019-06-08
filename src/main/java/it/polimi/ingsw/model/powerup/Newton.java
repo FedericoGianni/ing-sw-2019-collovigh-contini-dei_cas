@@ -45,7 +45,7 @@ public class Newton extends PowerUp {
         //be careful that Point type default x and y are float, not integers
 
         Point coord = cellCardinalMove(p.getCurrentPosition(),directions,amount);
-        Cell dest = Model.getMap().getCell(coord.y,coord.x);
+        Cell dest = Model.getMap().getCell(coord.x,coord.y);
 
         if (!Model.getMap().hasCell(dest)){
 

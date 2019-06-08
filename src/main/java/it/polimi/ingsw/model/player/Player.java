@@ -343,7 +343,19 @@ public class Player {
 
     public void buy(Weapon w) throws NotEnoughAmmoException{
 
-        this.currentWeapons.addItem(this.stats.getCurrentPosition().buy(w, this));
+        try {
+
+            this.currentWeapons.addItem(this.stats.getCurrentPosition().buy(w, this));
+
+            for (Color colour : w.getCost().stream().map(AmmoCube::getColor).collect(Collectors.toList())) {
+
+                this.pay(colour);
+            }
+
+        }catch (CardNotPossessedException e){
+
+            throw new NotEnoughAmmoException();
+        }
 
     }
 
