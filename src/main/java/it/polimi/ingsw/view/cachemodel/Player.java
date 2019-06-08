@@ -71,4 +71,32 @@ public class Player {
     public PlayerColor getPlayerColor() {
         return playerColor;
     }
+
+    @Override
+    public String toString(){
+
+        if(getStats() != null && getWeaponbag() != null){
+            return "ID: " + getStats().getPlayerId() + "\n" +
+                    "Nome: " + getName() + "\n" +
+                    "Danni: " + getStats().getDmgTaken() + "\n" +
+                    "Marchi: " + getStats().getMarks() + "\n" +
+                    "Online: " + getStats().getOnline() +
+                    "Armi: " + getWeaponbag().toString() + "\n";
+
+        } else if(getStats() != null) {
+            return "ID: " + playerId + "\n" +
+                    "Nome: " + getName() + "\n" +
+                    "Danni: " + getStats().getDmgTaken() + "\n" +
+                    "Marchi: " + getStats().getMarks() + "\n" +
+                    "Online: " + getStats().getOnline() + "\n" +
+                    "Armi : " + " nessuna \n";
+        } else {
+            return "ID: " + playerId + "\n" +
+                    "Nome: " + getName() + "\n" +
+                    "Danni" + "[ ]" + "\n" +
+                    "Marchi" + "[ ]" + "\n" +
+                    "Online: " + " true" + "\n" +
+                    "Armi : " + " nessuna \n";
+        }
+    }
 }

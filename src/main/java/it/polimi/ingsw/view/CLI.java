@@ -1174,6 +1174,13 @@ public class CLI implements UserInterface {
         System.out.println("[INFO PARTITA]");
 
         System.out.println("Giocatori: ");
+
+        List<Player> players = view.getCacheModel().getCachedPlayers();
+
+        players.stream()
+                .forEachOrdered(System.out::println);
+
+        /*
         for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
             System.out.print("\n" + view.getCacheModel().getCachedPlayers().get(i).getPlayerId());
             System.out.print(" :" + view.getCacheModel().getCachedPlayers().get(i).getName() + "\n");
@@ -1193,7 +1200,7 @@ public class CLI implements UserInterface {
                 System.out.println("Armi: " + view.getCacheModel().getCachedPlayers().get(i).getWeaponbag().getWeapons().toString());
             else
                 System.out.println("Armi: " + " nessuna.\n");
-        }
+        }*/
     }
 
     /**

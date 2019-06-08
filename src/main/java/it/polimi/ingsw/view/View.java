@@ -16,6 +16,8 @@ import it.polimi.ingsw.view.updates.UpdateClass;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.Thread.sleep;
+
 public class View implements ViewInterface {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
@@ -167,12 +169,12 @@ public class View implements ViewInterface {
             t.start();
             //SocketClientReader scr = new SocketClientReader(serverIp, port);
             //scr.start();
-            /*
+
             try {
                 sleep(1000);
             } catch (InterruptedException e){
 
-            }*/
+            }
             while (sc.getScw() == null){
                 try {
                     wait();
