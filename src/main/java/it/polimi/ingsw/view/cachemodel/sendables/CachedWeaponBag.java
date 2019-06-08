@@ -14,7 +14,7 @@ public class CachedWeaponBag extends UpdateClass {
 
     public CachedWeaponBag(List<String> weapons, List<Boolean> loaded, int playerId) {
 
-        super(UpdateType.POWERUP_BAG,playerId);
+        super(UpdateType.WEAPON_BAG,playerId);
 
         this.weapons = weapons;
 

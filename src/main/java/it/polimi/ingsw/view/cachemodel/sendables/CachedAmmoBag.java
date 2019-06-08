@@ -17,7 +17,7 @@ public class CachedAmmoBag extends UpdateClass {
 
     public CachedAmmoBag(List<Color> ammoList, int playerId) {
 
-        super(UpdateType.STATS,playerId);
+        super(UpdateType.AMMO_BAG,playerId);
 
         this.ammoList = ammoList;
 

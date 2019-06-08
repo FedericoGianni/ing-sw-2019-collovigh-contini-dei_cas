@@ -47,10 +47,15 @@ public class CachedStats extends UpdateClass {
     }
 
     public int getCurrentPosX() {
-        return (int) currentPosition.getX();
+        return  currentPosition.x;
     }
 
     public int getCurrentPosY() {
-        return (int) currentPosition.getY();
+        return currentPosition.y;
+    }
+
+    @Override
+    public String toString() {
+        return "position : " + currentPosition + ", online: " + online ;
     }
 }

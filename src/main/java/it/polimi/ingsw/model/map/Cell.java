@@ -121,25 +121,6 @@ public abstract class Cell extends Subject {
 
     /**
      *
-     * @return null since this is the abstract class and SpawnCell doesn't have Ammo inside
-     * the method is instead overrided in AmmoCell method so that it returns the Ammo placed
-     */
-    public AmmoCard getAmmoPlaced(){
-        return null;
-    }
-
-    /**
-     *
-     * @return ull since this is the abstract class and SpawnCell doesn't have Ammo inside
-     * the method is instead overrided in AmmoCell method so that it returns the Ammo placed to be
-     * taken by the player who calls this method
-     */
-    public AmmoCard pickAmmoPlaced(){
-        return null;
-    }
-
-    /**
-     *
      * @return a list of Players who are currently inside this Cell
      */
     public List<Player> getPlayers()
@@ -201,11 +182,6 @@ public abstract class Cell extends Subject {
          return "Cella: colroe: " + color;
      }
 
-    public Weapon buy(Weapon w, AmmoBag cash) throws NotEnoughAmmoException {
-
-        return null;
-    }
-
     public void setAmmoCell(boolean ammoCell) {
         isAmmoCell = ammoCell;
     }
@@ -225,4 +201,30 @@ public abstract class Cell extends Subject {
 
         }
     }
+
+
+    // abstract methods
+
+    /**
+     *
+     * @return the Ammocard placed in the cell if it is an AmmoCell or null otherwise
+     */
+    public abstract AmmoCard getAmmoPlaced();
+
+    /**
+     *
+     * @return the only rference to the Ammocard placed in the cell and sets it to null if it is an AmmoCell or null otherwise
+     */
+    public abstract AmmoCard pickAmmoPlaced();
+
+    /**
+     *
+     * @param w is the weapon reference
+     * @param player is the player that wants to buy it
+     * @return the weapon's reference if the cell is Spawn or null otherwise
+     * @throws NotEnoughAmmoException if the player can not pay for it
+     */
+    public abstract Weapon buy(Weapon w, Player player) throws NotEnoughAmmoException;
+
+
 }

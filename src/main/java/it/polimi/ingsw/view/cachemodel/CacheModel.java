@@ -172,5 +172,4 @@ public class CacheModel {
         return cachedMap;
     }
 
-    public List<Color> get
 }

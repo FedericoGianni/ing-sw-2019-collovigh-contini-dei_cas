@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.map;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
@@ -35,6 +36,16 @@ public class SpawnCell extends Cell {
 
         // add observer to the class
         if (Observers.isInitialized()) addObserver(Observers.getSpawnCellObserver());
+    }
+
+    @Override
+    public AmmoCard getAmmoPlaced() {
+        return null;
+    }
+
+    @Override
+    public AmmoCard pickAmmoPlaced() {
+        return null;
     }
 
 
@@ -76,10 +87,9 @@ public class SpawnCell extends Cell {
 
 
     /**
-     * @param w is the weapon that will be bought
-     * @param player is the  the player who wants to buy it
-     * @return true if the operation succeeded
+     * {@inheritDoc}
      */
+    @Override
     public Weapon buy(Weapon w, Player player) throws NotEnoughAmmoException {
 
         if (player.canPay(w.getCost())){
