@@ -112,7 +112,7 @@ public class VirtualView implements ViewInterface {
 
         if (view != null)  this.view.sendUpdate(update);
 
-        LOGGER.log(level, () -> " send update to client: " + playerId + " update: "+ update.getType());
+        LOGGER.log(level, () -> " send update to client: " + playerId + " update: "+ update.getType() + "\n update content: " + update);
 
     }
 

@@ -16,6 +16,7 @@ import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
+import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.updates.InitialUpdate;
@@ -33,6 +34,7 @@ public class JsonExampleMaker {
 
     public static void main(String[] args) {
 
+        /*
         writeStats();
         writeInitialUpdateClass();
         writeInitialUpdate();
@@ -46,6 +48,42 @@ public class JsonExampleMaker {
 
         writeDamageList();
 
+         */
+
+        writeWeapons();
+
+
+    }
+
+    public static void writeWeapons(){
+
+        List<CachedFullWeapon> weaponList = new ArrayList<>();
+
+        List<Color> cost_1 = new ArrayList<>();
+        cost_1.add(Color.BLUE);
+        cost_1.add(Color.BLUE);
+
+        List<Color> cost_2 = new ArrayList<>();
+        cost_2.add(Color.RED);
+
+        weaponList.add(new CachedFullWeapon("LOCK RIFLE", cost_1, cost_2, new ArrayList<>() ));
+
+        try {
+
+            Gson gson = new Gson();
+
+            FileWriter writer = new FileWriter("resources/json/cachedmodel/weapons.json");
+
+            gson.toJson(weaponList,writer);
+
+            writer.flush();
+            writer.close();
+
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
 
     }
 

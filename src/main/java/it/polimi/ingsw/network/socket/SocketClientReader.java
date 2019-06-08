@@ -268,7 +268,7 @@ public class SocketClientReader extends Thread {
 
                 // json will be handled in secondary method
 
-                handleTurnUpdate(msg);
+                updateClass = handleTurnUpdate(msg);
 
                 break;
 
@@ -283,7 +283,7 @@ public class SocketClientReader extends Thread {
         RunClient.getView().sendUpdates(updateClass);
     }
 
-    private void handleTurnUpdate(String message){
+    private UpdateClass handleTurnUpdate(String message){
 
         // split the gson to get the last parameter (GSON can not detect the superclass)
 
@@ -337,7 +337,7 @@ public class SocketClientReader extends Thread {
         }
 
 
-        RunClient.getView().sendUpdates(updateClass);
+        return updateClass;
 
     }
 

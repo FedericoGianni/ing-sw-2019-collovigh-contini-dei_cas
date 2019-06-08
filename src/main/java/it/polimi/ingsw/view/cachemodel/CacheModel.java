@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.cachemodel;
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
@@ -19,7 +20,6 @@ public class CacheModel {
     private static Level level = Level.INFO;
 
     private List<Player> players = new ArrayList<>();
-    //private ObservableList<Player> playersObsList = FXCollections.observableArrayList();
     private  CachedGame game = null;
     private final View view;
     private CachedMap cachedMap;
@@ -172,10 +172,4 @@ public class CacheModel {
         return cachedMap;
     }
 
-    /*
-    public ObservableList<Player> getLobbyPlayers() {
-        return lobbyPlayers;
-    }
-
-     */
 }

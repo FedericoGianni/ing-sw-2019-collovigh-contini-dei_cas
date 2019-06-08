@@ -343,7 +343,7 @@ public class Player {
 
     public void buy(Weapon w) throws NotEnoughAmmoException{
 
-        this.currentWeapons.addItem(this.stats.getCurrentPosition().buy(w, this.ammo));
+        this.currentWeapons.addItem(this.stats.getCurrentPosition().buy(w, this));
 
     }
 
@@ -444,6 +444,11 @@ public class Player {
         this.getPowerUpBag().addItem(Model.getGame().drawPowerUp());
     }
 
+    /**
+     *
+     * @param cost is a List of ammoCube that the player is required to pay
+     * @return true if the player can pay the cost
+     */
     public Boolean canPay(List<AmmoCube> cost) {
 
         List<Color> possessed = this

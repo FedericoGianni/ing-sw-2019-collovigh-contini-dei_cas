@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.cachemodel.sendables;
 
 
 
+
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
 
@@ -14,7 +15,7 @@ public class CachedWeaponBag extends UpdateClass {
 
     public CachedWeaponBag(List<String> weapons, List<Boolean> loaded, int playerId) {
 
-        super(UpdateType.POWERUP_BAG,playerId);
+        super(UpdateType.WEAPON_BAG,playerId);
 
         this.weapons = weapons;
 
