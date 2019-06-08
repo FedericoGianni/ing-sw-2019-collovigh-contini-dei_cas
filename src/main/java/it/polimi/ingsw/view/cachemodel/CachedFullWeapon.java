@@ -19,4 +19,20 @@ public class CachedFullWeapon implements Serializable {
         this.secondEffectCost = secondEffectCost;
         this.thirdEffectCost = thirdEffectCost;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Color> getFirstEffectCost() {
+        return firstEffectCost;
+    }
+
+    public List<Color> getSecondEffectCost() {
+        return secondEffectCost;
+    }
+
+    public List<Color> getThirdEffectCost() {
+        return thirdEffectCost;
+    }
 }
