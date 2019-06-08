@@ -35,7 +35,7 @@ import static java.lang.Thread.sleep;
 
 public class CLI implements UserInterface {
 
-    private final Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
     private final View view;
     private int validMove = -1;
 
@@ -251,14 +251,17 @@ public class CLI implements UserInterface {
                 //TODO mostrare i cambiamenti di danni subiti e disconnessioni
                 //System.out.println("[DEBUG] Ricevuto STATS update!");
 
-                //new positions
-                System.out.println("[NOTIFICA] Il giocatore: " + playerId + " si è spostato!");
-                int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
-                int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
+                if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
+                    //new positions
+                    System.out.println("[NOTIFICA] Il giocatore: " + playerId + " si è spostato!");
+                    int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
+                    int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 
-                FileRead.removePlayer(playerId);
-                FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
-                FileRead.showBattlefield();
+                    FileRead.removePlayer(playerId);
+                    FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
+                    FileRead.showBattlefield();
+                }
+
                 break;
 
             case POWERUP_BAG:
@@ -288,7 +291,7 @@ public class CLI implements UserInterface {
                         if (view.getCacheModel().getCachedMap().getCachedCell(i, j) != null) {
                             if (view.getCacheModel().getCachedMap().getCachedCell(i, j).getCellType().equals(CellType.AMMO)) {
 
-                                FileRead.removeAmmoCard(i,j, (CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i,j));
+                                FileRead.removeAmmoCard(i,j);
 
                                 //TODO check if it works -> it should not let see ammoCard if they are picked up
                                 //if ammoCell has been picked up don't show it on map
@@ -376,6 +379,7 @@ public class CLI implements UserInterface {
 
     @Override
     public void startSpawn() {
+        //TODO consume scanner buffer if user type random numbers when waiting for its turn
 
         List<CachedPowerUp> powerUps;
 
@@ -431,6 +435,8 @@ public class CLI implements UserInterface {
 
     @Override
     public void startPowerUp(){
+        //TODO consume scanner buffer if user type random numbers when waiting for its turn
+
         //System.out.println("[DEBUG] startPowerUp");
         System.out.println("POWERUP PHASE");
 
@@ -438,7 +444,7 @@ public class CLI implements UserInterface {
         List<CachedPowerUp> powerUps;
         List<CachedPowerUp> usablePowerUps;
         Boolean validChoice = false;
-        int read;
+        int read = -1;
         scanner.reset();
 
         do{
@@ -477,8 +483,16 @@ public class CLI implements UserInterface {
             System.out.println("9 -> non usare powerUp");
             scanner.reset();
             System.out.println("Scegli un powerUp da usare: ");
-            read = scanner.nextInt();
-            scanner.nextLine();
+
+            while(read == -1) {
+                try {
+                    read = scanner.nextInt();
+                    scanner.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("Non è un numero! Riprova");
+                    scanner.nextLine();
+                }
+            }
 
             if ((read >= 0 && read < usablePowerUps.size()) || read == 9) validChoice = true;
 
@@ -688,7 +702,7 @@ public class CLI implements UserInterface {
 
     @Override
     public void startAction() {
-
+        //TODO consume scanner buffer if user type random numbers when waiting for its tur
 
         Boolean valid;
         int choice = -1;
@@ -717,7 +731,7 @@ public class CLI implements UserInterface {
 
             } catch (InputMismatchException e){
                 System.out.println("Non è un numero: Riprova!");
-                scanner.reset();
+                scanner.nextLine();
             }
 
 
@@ -818,8 +832,6 @@ public class CLI implements UserInterface {
 
         do{
 
-
-            scanner.reset();
             System.out.println("In che direzione ti vuoi muovere? Ti restano " + (maxMoves-moves) + " movimenti.");
             System.out.println("Inserisci una direzione (Nord, Sud, Ovest, Est, Stop per fermarti qui) >>> ");
 
