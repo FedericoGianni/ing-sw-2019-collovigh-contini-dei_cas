@@ -34,7 +34,7 @@ public class Gui extends Application implements UserInterface {
     private static GuiController guiController;
     private static GuiLobbyController guiLobbyController;
     private static GuiMapController guiMapController;
-
+    private int validMove=-1;
     public void setGuiLobbyController(GuiLobbyController guic) {
         this.guiLobbyController = guic;
     }
@@ -295,6 +295,11 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void setValidMove(boolean b) {
+        if(b){
+            guiMapController.setValidMove(1);
+        } else {
+            guiMapController.setValidMove(0);
+        }
 
     }
 }
