@@ -334,6 +334,7 @@ public class ActionPhase {
             return true;
 
         }else {
+            //default CANNOT_PAY_WEAPON
             String s =  " tried to buy a weapon but can not pay for it";
             LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + s);
             controller.getVirtualView(controller.getCurrentPlayer()).show(s);
