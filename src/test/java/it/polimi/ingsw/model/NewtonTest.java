@@ -89,9 +89,6 @@ class NewtonTest {
 
         Model.getPlayer(0).setPlayerPos(Model.getMap().getCell(0,0));
 
-        assertThrows(CellNonExistentException.class,() -> {
-            test.use(Model.getPlayer(0), Directions.SOUTH,2);
-        });
 
         Player err = new Player("Cheater",99,PlayerColor.BLUE);
 

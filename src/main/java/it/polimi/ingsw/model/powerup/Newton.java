@@ -37,19 +37,33 @@ public class Newton extends PowerUp {
      */
     public void use(Player p, Directions directions, int amount) throws PlayerNonExistentException,CellNonExistentException{
 
+        // checks if the player exist in the model
+
         if (!Model.getGame().getPlayers().contains(p)){
+
+            // if not throws exception
 
             throw new PlayerNonExistentException();
         }
 
-        //be careful that Point type default x and y are float, not integers
+        // gets the player position
 
-        Point coord = cellCardinalMove(p.getCurrentPosition(),directions,amount);
-        Cell dest = Model.getMap().getCell(coord.x,coord.y);
+        Cell dest = p.getCurrentPosition();
+
+        // gets the final player position
+
+        for (int i = 0; i < min(MAX_MOVE,amount); i++) {
+
+            dest = cellCardinalMove(dest,directions);
+
+        }
+
+        // checks if the computed position exist in the current map
 
         if (!Model.getMap().hasCell(dest)){
 
             throw new CellNonExistentException();
+
         }else{
 
             p.setPlayerPos(dest);
@@ -61,37 +75,33 @@ public class Newton extends PowerUp {
     /**
      *
      * @param cell is the starting point
-     * @param directions in which the player is moved
-     * @param amount is the number of movement if it exit the matrix the value will remain the limit
+     * @param direction in which the player is moved
      * @return the coord of the new position
      */
-    private Point cellCardinalMove(Cell cell,Directions directions, int amount){
+    private Cell cellCardinalMove(Cell cell,Directions direction){
 
-        Point base = Model.getMap().cellToCoord(cell);
+        switch (direction){
 
-        if (amount >= MAX_MOVE) amount = MAX_MOVE;
+            case NORTH:
 
-        if (directions == Directions.NORTH){
+                return (cell.getNorth() == null) ? cell : cell.getNorth();
 
-            base.y = max(base.y - amount,0);
+            case SOUTH:
+
+                return (cell.getSouth() == null) ? cell : cell.getSouth();
+
+            case WEST:
+
+                return (cell.getWest() == null) ? cell : cell.getWest();
+
+            case EAST:
+
+                return (cell.getEast() == null) ? cell : cell.getEast();
+
+            default:
+
+                return cell;
         }
-
-        if (directions == Directions.SOUTH){
-
-            base.y = min(base.y + amount,2);
-        }
-
-        if (directions == Directions.EAST){
-
-            base.x = min(base.x + amount,3);
-        }
-
-        if (directions == Directions.WEST){
-
-            base.x = max(base.x - amount,0);
-        }
-
-        return base;
     }
 
 
