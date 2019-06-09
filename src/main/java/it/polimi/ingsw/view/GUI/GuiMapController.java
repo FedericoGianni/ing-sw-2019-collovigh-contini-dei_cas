@@ -405,26 +405,26 @@ public class GuiMapController {
         Directions direction;
 
         switch (s){
-            case "NORD":
+            case "NORTH":
                 direction = Directions.NORTH;
                 break;
 
-            case "SUD":
+            case "SOUTH":
                 direction = Directions.SOUTH;
                 break;
 
-            case "EST":
+            case "EAST":
                 direction = Directions.EAST;
                 break;
 
-            case "OVEST":
+            case "WEST":
                 direction = Directions.WEST;
                 break;
 
             default:
                 //this can never happen
                 System.out.println("[DEBUG] direzione non valida!");
-                direction = Directions.NORTH;
+                direction = null;
                 break;
         }
 
