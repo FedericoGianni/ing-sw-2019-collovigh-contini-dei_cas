@@ -139,4 +139,9 @@ public class ToClientImpl implements ToClient {
     public void startGame() throws RemoteException {
         client.getView().startGame();
     }
+
+    @Override
+    public void show(String s) throws RemoteException {
+        client.getView().show(s);
+    }
 }

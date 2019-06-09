@@ -1,19 +1,14 @@
 package it.polimi.ingsw.model.map;
 
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCard;
-import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
-import it.polimi.ingsw.model.player.AmmoBag;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 
@@ -95,6 +90,7 @@ public class SpawnCell extends Cell {
         if (player.canPay(w.getCost())){
 
             weapons.remove(w);
+
             this.populateWeapon();
 
             updateAll(this);

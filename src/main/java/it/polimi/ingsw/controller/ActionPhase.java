@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
-import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
+
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.Directions;
@@ -9,6 +8,7 @@ import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +20,13 @@ public class ActionPhase {
     private static Level level = Level.INFO;
 
     private static final String LOG_START = "[Controller-GrabAction] Player w/ id: ";
+
+    //Grab
+
+    private static final int MAX_GRAB_MOVES = 1;
+    private static final int MAX_GRAB_MOVES_PLUS = 2;
+    private static final int DMG_FOR_PLUS = 2;
+    private static final int MAX_WEAPONS = 3;
 
     private final Controller controller;
 
@@ -49,12 +56,15 @@ public class ActionPhase {
         }
     }
 
+
+    // MOVE_ACTION
+
     /**
      * This methods will move the player
      *
      * @param moveAction is the moveAction requested by the client
      */
-    public void move(Move moveAction) {
+    public void moveAction(Move moveAction) {
 
         // logs the action
 
@@ -72,10 +82,7 @@ public class ActionPhase {
 
             // moves the current player in the directions specified in the list
 
-            for (Directions direction : moveAction.getMoves()){
-
-                moveCurrentPlayer(direction);
-            }
+            move(moveAction.getMoves());
 
             // increment the phase
 
@@ -84,119 +91,24 @@ public class ActionPhase {
 
     }
 
+    /**
+     * this method moves the current player
+     * @param directionsList is the list of the directions the player wants to move
+     */
+    private void move(List<Directions> directionsList){
 
-    public void grab(GrabAction grabAction) {
+        // move the player
 
-        boolean moveValid = true;
+        for (Directions direction : directionsList){
 
-        boolean grabValid = false;
-
-        // logs the action
-
-        LOGGER.log(level, () -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + " calling Grab");
-
-        int playerId = controller.getCurrentPlayer();
-
-        // if the player wants to move
-
-        if (!grabAction.getDirection().isEmpty()) {
-
-            // the first move can be done by anyone
-
-            moveCurrentPlayer(grabAction.getDirection().get(0));
-
-            // the second one can be done only if you have more than 2 damage points
-
-            if ((Model.getPlayer(playerId).getDmg().size() > 2) && (grabAction.getDirection().size() > 1)) {
-
-                moveCurrentPlayer(grabAction.getDirection().get(1));
-
-            } else {
-
-                LOGGER.log(Level.WARNING, () -> LOG_START + playerId + " tried to move more than 1 but only has damage : " + Model.getPlayer(playerId).getDmg().size());
-
-                moveValid = false;
-
-            }
+            moveCurrentPlayer(direction);
         }
-
-        // grab the correspondent item from the cell the player is in
-
-        grabValid = grabStuffFromCurrPosition(grabAction.getNewWeaponName());
-
-        // check if player has more than MAX weapon:
-
-        if (Model.getPlayer(playerId).getCurrentWeapons().getList().size() > 3) {
-
-            if (grabAction.getDiscardedWeapon() != null){
-
-                // search in the player's weapon bag the specified weapon
-
-                List<Weapon> matchingList = Model
-                        .getPlayer(playerId)
-                        .getCurrentWeapons()
-                        .getList().stream()
-                        .filter(x -> x.getName().equals(grabAction.getDiscardedWeapon()))
-                        .collect(Collectors.toList());
-
-                // if the weapon exist it deletes it
-
-                if (!matchingList.isEmpty()){
-
-                    try {
-
-                        Model.getPlayer(playerId).delWeapon(matchingList.get(0));
-
-                        LOGGER.log(level, () -> LOG_START + playerId + " discarded weapon w/ name: " + matchingList.get(0).getName());
-
-                    }catch (CardNotPossessedException e){
-
-                        LOGGER.log(Level.WARNING, e.getMessage(), e);
-                    }
-
-                }else{
-
-                    // if the weapon do not exist it sets the validity bool to false
-
-                    grabValid = false;
-
-                    LOGGER.log(level,() -> LOG_START + playerId + " name specified for discarded weapon does not correspond to weapon");
-
-                }
-
-            }else {
-
-                // if the weapon do not exist it sets the validity bool to false
-
-                grabValid = false;
-
-                LOGGER.log(level,() -> LOG_START + playerId + " no name specified for discarded weapon ");
-
-            }
-
-        }
-
-
-        if (grabValid && moveValid){
-
-            controller.incrementPhase();
-
-            controller.handleTurnPhase();
-
-            // TODO controller.updateInactivePlayers(n);
-
-        }else {
-
-            handleAction();
-        }
-
     }
 
-
-    public void shoot(int weapon, int target) {
-    }
-
-
+    /**
+     * This method move the player in the given direction
+     * @param direction the player wants to move to
+     */
     private void moveCurrentPlayer(Directions direction) {
 
         // gets the id of the current player
@@ -209,36 +121,7 @@ public class ActionPhase {
 
         // change the position var in the direction given
 
-        switch (direction) {
-
-            case NORTH:
-
-                if (position.getNorth() != null) position = position.getNorth();
-
-                break;
-
-            case EAST:
-
-                if (position.getEast() != null) position = position.getEast();
-
-                break;
-
-            case WEST:
-
-                if (position.getWest() != null) position = position.getWest();
-
-                break;
-
-            case SOUTH:
-
-                if (position.getSouth() != null) position = position.getSouth();
-
-                break;
-
-            default:
-
-                break;
-        }
+        position = (getNextCell(direction,position) != null) ? getNextCell(direction,position) : position;
 
         // sets the player in the new position
 
@@ -249,7 +132,252 @@ public class ActionPhase {
         LOGGER.log(level, () -> LOG_START + playerId + " moved " + direction + " in cell : " + Model.getMap().cellToCoord(Model.getPlayer(playerId).getCurrentPosition()));
     }
 
-    private boolean grabStuffFromCurrPosition(String weaponName){
+    /**
+     *  This method compute the next cell given a direction
+     * @param direction is the direction to move
+     * @param startPoint is the cell from which starts
+     * @return the cell in the direction specified
+     */
+    private Cell getNextCell(Directions direction, Cell startPoint){
+
+        if (startPoint != null) {
+
+            switch (direction) {
+
+                case NORTH:
+
+                    if (startPoint.getNorth() != null) return startPoint.getNorth();
+
+                    break;
+
+                case EAST:
+
+                    if (startPoint.getEast() != null) return startPoint.getEast();
+
+                    break;
+
+                case WEST:
+
+                    if (startPoint.getWest() != null) return startPoint.getWest();
+
+                    break;
+
+                case SOUTH:
+
+                    if (startPoint.getSouth() != null) return startPoint.getSouth();
+
+                    break;
+
+                default:
+
+                    break;
+            }
+        }
+
+        return null;
+    }
+
+
+    // GRAB_ACTION
+
+    /**
+     * This method represent the "Grab" action
+     * @param grabAction is the class received from the view
+     */
+    public void grabAction(GrabAction grabAction) {
+
+        // logs the action
+
+        LOGGER.log(level, () -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + " calling Grab");
+
+        // check if the actions are possible
+
+        if (checkGrabMove(grabAction) && checkGrab(grabAction, simulateMovement(grabAction))){
+
+            // moves the player
+
+            move(grabAction.getDirection());
+
+            // gets the type of the cell the player is in
+
+            if (Model.getPlayer(controller.getCurrentPlayer()).getCurrentPosition().isAmmoCell()){
+
+                grabAmmoFromCurrPosition();
+
+                // increment the phase
+
+                controller.incrementPhase();
+
+            }else {
+
+                grabWeaponFromCurrPosition(grabAction);
+
+                // increment the phase
+
+                controller.incrementPhase();
+            }
+
+        }else {
+
+            // if the checks fails recalls handleAction methods
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " failed grab Action ");
+
+            handleAction();
+
+        }
+    }
+
+    /**
+     * This method will check if the player can do the specified moves
+     * @param grabAction is the class containing the list of moves
+     * @return true if the moves are legal or false otherwise
+     */
+    private Boolean checkGrabMove(GrabAction grabAction){
+
+        // gets the id of the current player
+
+        int playerId = controller.getCurrentPlayer();
+
+        if (!grabAction.getDirection().isEmpty()) {
+
+            if (grabAction.getDirection().size() > MAX_GRAB_MOVES_PLUS){
+
+                LOGGER.log(Level.WARNING, () -> LOG_START + playerId + " tried to more than max movements");
+
+                return false;
+            }
+
+            if ((grabAction.getDirection().size() > MAX_GRAB_MOVES) && (Model.getPlayer(playerId).getDmg().size() < DMG_FOR_PLUS)){
+
+                LOGGER.log(Level.WARNING, () -> LOG_START + playerId + " tried to move more than one but has only damage : " + Model.getPlayer(playerId).getDmg().size() );
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * this method will check if the player can grab in the specified cell
+     * @param grabAction is the class containing the names of the weapon to buy or to discard
+     * @param cell is the specified cell
+     * @return true if the player can grab false otherwise
+     */
+    private Boolean checkGrab(GrabAction grabAction, Cell cell){
+
+        if (cell == null) return false;
+
+        if (!cell.isAmmoCell()) {
+
+            if (grabAction.getNewWeaponName() == null) {
+
+                // if the player did not specify the weapon to buy -> false
+
+                LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to buy a weapon but did not specify the name ");
+
+                return false;
+
+            } else {
+
+                if (findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell) == null) {
+
+                    LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " the specified weapon was not found in the cell : " + grabAction.getNewWeaponName());
+
+                    return false;
+
+                } else {
+
+                    if ((Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS) && (grabAction.getDiscardedWeapon() == null)) {
+
+                        LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to buy a weapon but has already max weapon and did not specify weapon to delete");
+
+                        return false;
+                    }
+
+                    return currentPlayerCanBuyWeapon(findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell));
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * This method will return the weapon instance if there is a weapon with given name in the specified spawn or null
+     * @param weaponName is the name specified
+     * @param spawnCell is the Spawn Cell specified
+     * @return the weapon instance or null if not found
+     */
+    private Weapon findWeaponInSpawnCell(String weaponName, SpawnCell spawnCell){
+
+        List<Weapon> weaponList = spawnCell
+                .getWeapons()
+                .stream()
+                .filter( x -> x.getName().equalsIgnoreCase(weaponName))
+                .collect(Collectors.toList());
+
+        return weaponList.isEmpty() ? null : weaponList.get(0);
+    }
+
+    /**
+     *
+     * @param weapon is the weapon to buy
+     * @return true if the player can buy it
+     */
+    private Boolean currentPlayerCanBuyWeapon(Weapon weapon){
+
+
+        if ((weapon != null) && (Model.getPlayer(controller.getCurrentPlayer()).canPay(weapon.getCost()))){
+
+            return true;
+
+        }else {
+            String s =  " tried to buy a weapon but can not pay for it";
+            LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + s);
+            controller.getVirtualView(controller.getCurrentPlayer()).show(s);
+            return false;
+        }
+    }
+
+    /**
+     * This method simulate the actual movement and return the cell the player would reach if he moves
+     * @param grabAction is the action the controller gets
+     * @return the final cell the player would reach if he moves
+     */
+    private Cell simulateMovement(GrabAction grabAction){
+
+        Cell cell = Model.getPlayer(controller.getCurrentPlayer()).getCurrentPosition();
+
+        for (Directions direction : grabAction.getDirection()){
+
+            cell = getNextCell(direction,cell);
+        }
+
+        return cell;
+    }
+
+    /**
+     * This method will pick the ammo card from the map
+     */
+    private void grabAmmoFromCurrPosition(){
+
+        // gets the id of the current player
+
+        int playerId = controller.getCurrentPlayer();
+
+        // pick the ammo in the current position
+
+        Model.getPlayer(playerId).pickAmmoHere();
+    }
+
+    /**
+     * This method will buy the specified weapon from the current cell
+     *
+     * @param grabAction is the class containing the weapon requested
+     */
+    private void grabWeaponFromCurrPosition(GrabAction grabAction){
 
         // gets the id of the current player
 
@@ -257,80 +385,46 @@ public class ActionPhase {
 
         //gets the current position
 
-        Cell position = Model.getPlayer(playerId).getCurrentPosition();
+        SpawnCell position = (SpawnCell) Model.getPlayer(playerId).getCurrentPosition();
 
-        // if the cell is an ammoCell it picks up the ammo
+        // buy the weapon it is asked by the player
 
-        if (position.isAmmoCell()) {
+        try{
 
-            Model.getPlayer(playerId).pickAmmoHere();
+            Model.getPlayer(controller.getCurrentPlayer()).buy(findWeaponInSpawnCell(grabAction.getNewWeaponName(), position));
 
-            return true;
+            if (Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS ){
 
-        }else{
-
-            SpawnCell spawnCell = (SpawnCell) position;
-
-            Weapon selected;
-
-            // if the cell is a spawn cell it draws the weapon it is asked by the player
-
-            if (weaponName == null) {
-
-                LOGGER.log(Level.WARNING,"[Controller-GrabAction] Player w/ id: {0} tried to grab a weapon but specified no name", playerId );
-
-                return false;
-
-            } else {
-
-                // serach the weapon with the specified name
-
-                List<Weapon> namesCheckWeapons = spawnCell
-                        .getWeapons()
+                List<Weapon> weaponList = Model.getPlayer(controller.getCurrentPlayer())
+                        .getCurrentWeapons()
+                        .getList()
                         .stream()
-                        .filter(x -> x.getName().equalsIgnoreCase(weaponName))
+                        .filter( x-> x.getName().equalsIgnoreCase(grabAction.getDiscardedWeapon()))
                         .collect(Collectors.toList());
 
-                if (namesCheckWeapons.isEmpty()) {
-
-                    // Logs
-
-                    LOGGER.log(Level.WARNING, "[Controller-GrabAction] Player w/ id: {0} specified wrong weapon name", playerId);
-
-                    return false;
-
-                } else {
-
-                    //select the weapon
-
-                    selected = namesCheckWeapons.get(0);
-
-                    try {
-
-                        // buy the selected weapon
-
-                        spawnCell.buy(selected, Model.getPlayer(playerId));
-
-                        // Log
-
-                        LOGGER.log(level, () -> LOG_START + playerId + " bought a new weapon : " + selected.getName());
-
-                        return true;
-
-
-                    }catch (NotEnoughAmmoException e){
-
-                        LOGGER.log(Level.WARNING, "[Controller-GrabAction] Player w/ id: {0} could not pay for the weapon", playerId);
-
-                        return false;
-                    }
-
-                }
+                Model.getPlayer(controller.getCurrentPlayer()).delWeapon(weaponList.get(0));
             }
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
     }
 
-    boolean askMoveValid(int row, int column, Directions direction) {
+
+    // SHOOT_ACTION
+
+    public void shoot(int weapon, int target) {
+
+        throw new UnsupportedOperationException();
+
+        //TODO implement method
+    }
+
+
+    // UTILS
+
+    public boolean askMoveValid(int row, int column, Directions direction) {
 
         //LOG
 
@@ -338,8 +432,9 @@ public class ActionPhase {
 
         if (Model.getMap().getCell(row, column) == null) {
             return false;
-        } else {
-            Cell startCell = Model.getMap().getCell(row, column);
+        }
+
+        Cell startCell = Model.getMap().getCell(row, column);
 
         switch (direction){
 
@@ -374,6 +469,4 @@ public class ActionPhase {
 
         return false;
     }
-}
-
 }

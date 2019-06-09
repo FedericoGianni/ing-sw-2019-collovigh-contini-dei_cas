@@ -37,4 +37,10 @@ public interface ToView  {
      */
     void askGrenade();
 
+    /**
+     * This method is used by the controller to show msg on the ui if needed
+     * @param s message to show on the user interface
+     */
+    void show(String s);
+
 }

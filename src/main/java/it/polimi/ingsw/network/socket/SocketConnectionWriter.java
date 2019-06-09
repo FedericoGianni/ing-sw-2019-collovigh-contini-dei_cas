@@ -143,7 +143,11 @@ public class SocketConnectionWriter extends Thread implements ToView {
         send("startGame");
     }
 
-
+    @Override
+    public void show(String s) {
+        LOGGER.info("sending show to connected client");
+        send("show\f" + s);
+    }
 
     public void disconnect(){
         LOGGER.log(WARNING, "Disconneting virtual view linked to this connection.");

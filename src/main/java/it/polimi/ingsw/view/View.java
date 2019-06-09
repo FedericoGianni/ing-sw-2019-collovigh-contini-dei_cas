@@ -193,9 +193,10 @@ public class View implements ViewInterface {
         userInterface.retryLogin(error);
     }
 
+    @Override
     public void show(String msg){
-        //new Thread( () -> {userInterface.show(msg);}).start();
-        userInterface.show(msg);
+        new Thread( () -> {userInterface.show(msg);}).start();
+        //userInterface.show(msg);
     }
 
     public int getPlayerId() {
@@ -305,6 +306,8 @@ public class View implements ViewInterface {
         // forward it to the CacheModel
         cacheModel.update(update);
     }
+
+
 
 
 

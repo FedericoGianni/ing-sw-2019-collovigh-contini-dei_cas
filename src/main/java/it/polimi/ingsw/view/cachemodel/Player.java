@@ -111,8 +111,8 @@ public class Player {
                     "Nome: " + getName() + "\n" +
                     "Danni: " + getStats().getDmgTaken() + "\n" +
                     "Marchi: " + getStats().getMarks() + "\n" +
-                    "Online: " + getStats().getOnline() +
-                    "Armi: " + getWeaponbag().toString() + "\n" + ANSI_RESET.escape();
+                    "Online: " + getStats().getOnline() + "\n" +
+                    "Armi: " + "\t" + getWeaponbag().toString() + "\n" + ANSI_RESET.escape();
 
         } else if(getStats() != null) {
             return s + "ID: " + playerId + "\n" +
@@ -128,7 +128,7 @@ public class Player {
                     //"Danni: " + getStats().getDmgTaken() + "\n" +
                     //"Marchi: " + getStats().getMarks() + "\n" +
                     //"Online: " + getStats().getOnline() + "\n" +
-                    "Armi : " + getWeaponbag().toString() + " \n" + ANSI_RESET.escape();
+                    "Armi : " + "\t" + getWeaponbag().toString() + " \n" + ANSI_RESET.escape();
         }
         else {
             return s + "ID: " + playerId + "\n" +

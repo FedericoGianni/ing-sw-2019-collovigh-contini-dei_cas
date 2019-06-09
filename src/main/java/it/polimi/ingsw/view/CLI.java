@@ -270,10 +270,12 @@ public class CLI implements UserInterface {
 
             case WEAPON_BAG:
                 System.out.println("[NOTIFICA] WEAPON_BAG update ricevuto!");
+                System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag());
                 break;
 
             case AMMO_BAG:
                 System.out.println("[NOTIFICA] AMMO_BAG update ricevuto!");
+                System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag());
                 break;
 
             case GAME:

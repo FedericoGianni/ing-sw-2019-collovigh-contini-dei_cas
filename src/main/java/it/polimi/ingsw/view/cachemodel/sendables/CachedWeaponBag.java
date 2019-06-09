@@ -30,16 +30,15 @@ public class CachedWeaponBag extends UpdateClass {
 
     @Override
     public String toString(){
-
         String s = new String();
 
         if(weapons != null){
             for (int i = 0; i < weapons.size(); i++) {
-                s.concat(i + " :" + weapons.get(i));
+                s = s.concat(i + " :" + weapons.get(i));
                 if(loaded.get(i).equals(true))
-                    s.concat(" carica.\n");
+                    s = s.concat(" carica.\n");
                 else
-                    s.concat(" scarica.\n");
+                    s =s.concat(" scarica.\n");
             }
         }
 

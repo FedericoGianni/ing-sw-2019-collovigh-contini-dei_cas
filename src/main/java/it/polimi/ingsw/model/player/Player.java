@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -343,7 +344,19 @@ public class Player {
 
     public void buy(Weapon w) throws NotEnoughAmmoException{
 
-        this.currentWeapons.addItem(this.stats.getCurrentPosition().buy(w, this));
+        try {
+
+            this.currentWeapons.addItem(this.stats.getCurrentPosition().buy(w, this));
+
+            for (Color colour : w.getCost().stream().map(AmmoCube::getColor).collect(Collectors.toList())) {
+
+                this.pay(colour);
+            }
+
+        }catch (CardNotPossessedException e){
+
+            throw new NotEnoughAmmoException();
+        }
 
     }
 

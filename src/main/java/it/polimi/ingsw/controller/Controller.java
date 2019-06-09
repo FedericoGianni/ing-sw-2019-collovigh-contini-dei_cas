@@ -312,9 +312,14 @@ public class Controller {
                 break;
 
             case RELOAD:
+
                 //TODO handle last turn phase. reload and increment round number
+
                 handleReload();
-                //check if it's ok to increment roundNumber here
+
+                // replaces the empty ammoCard
+
+                Model.getMap().ReplaceAmmoCard();
 
                 //this 2 commands should be called by reload method, not here
                 if(hasSomeoneDied){
@@ -368,13 +373,13 @@ public class Controller {
 
             case MOVE:
 
-                actionPhase.move((Move)jsonAction);
+                actionPhase.moveAction((Move)jsonAction);
 
                 break;
 
             case GRAB:
 
-                actionPhase.grab((GrabAction) jsonAction);
+                actionPhase.grabAction((GrabAction) jsonAction);
 
                 break;
 

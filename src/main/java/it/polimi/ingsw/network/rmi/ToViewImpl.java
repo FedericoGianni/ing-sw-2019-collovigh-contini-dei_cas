@@ -130,4 +130,13 @@ public class ToViewImpl implements ToView {
             LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
     }
+
+    @Override
+    public void show(String s) {
+        try {
+            client.show(s);
+        } catch (RemoteException e){
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
+        }
+    }
 }

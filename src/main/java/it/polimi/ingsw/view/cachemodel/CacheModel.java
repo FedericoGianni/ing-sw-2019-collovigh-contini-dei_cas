@@ -1,10 +1,10 @@
 package it.polimi.ingsw.view.cachemodel;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
+import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class CacheModel {
 
@@ -170,6 +171,22 @@ public class CacheModel {
 
     public CachedMap getCachedMap() {
         return cachedMap;
+    }
+
+    public CachedFullWeapon getWeaponInfo(String name) throws WeaponNotFoundException {
+
+        // load the list from the parser
+
+        List<CachedFullWeapon> weaponList = CacheModelParser.readCachedFullWeaponsFromList();
+
+        // search the list of the weapon for the given name
+
+        List<CachedFullWeapon> matchingWeapon = weaponList
+                .stream()
+                .filter( x -> x.getName().equalsIgnoreCase(name))
+                .collect(Collectors.toList());
+
+        return (matchingWeapon.isEmpty()) ? null : matchingWeapon.get(0);
     }
 
 }
