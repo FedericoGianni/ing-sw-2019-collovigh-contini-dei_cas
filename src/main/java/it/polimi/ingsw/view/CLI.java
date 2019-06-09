@@ -265,23 +265,23 @@ public class CLI implements UserInterface {
                 break;
 
             case POWERUP_BAG:
-
+                System.out.println("[NOTIFIC] POWEUPBAG update ricevuto!");
                 break;
 
             case WEAPON_BAG:
-                System.out.println("[NOTIFICA] Hai una nuova arma!");
+                System.out.println("[NOTIFICA] WEAPON_BAG update ricevuto!");
                 break;
 
             case AMMO_BAG:
-
+                System.out.println("[NOTIFICA] AMMO_BAG update ricevuto!");
                 break;
 
             case GAME:
-
+                System.out.println("[NOTIFICA] GAME update ricevuto!");
                 break;
 
             case SPAWN_CELL:
-
+                System.out.println("[NOTIFICA] SPAWN_CELL update ricevuto!");
                 break;
 
             case AMMO_CELL:
@@ -495,6 +495,7 @@ public class CLI implements UserInterface {
             }
 
             if ((read >= 0 && read < usablePowerUps.size()) || read == 9) validChoice = true;
+            else scanner.nextLine();
 
         }while(!validChoice);
 

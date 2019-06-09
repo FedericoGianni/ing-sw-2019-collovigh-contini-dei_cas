@@ -31,7 +31,7 @@ public class CachedWeaponBag extends UpdateClass {
     @Override
     public String toString(){
 
-        String s = null;
+        String s = new String();
 
         if(weapons != null){
             for (int i = 0; i < weapons.size(); i++) {
