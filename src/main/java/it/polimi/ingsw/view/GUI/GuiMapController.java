@@ -2,21 +2,22 @@ package it.polimi.ingsw.view.GUI;
 
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
-import it.polimi.ingsw.view.cachemodel.Player;
+import it.polimi.ingsw.view.actions.Move;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Box;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -28,8 +29,8 @@ public class GuiMapController {
     public static void setGui(Gui g) {
         gui = g;
     }
-
-
+    private ArrayList <Directions> movementDirections;
+    private int validMove=-1;
     @FXML
     BorderPane pane;
     @FXML
@@ -40,6 +41,8 @@ public class GuiMapController {
     Button b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;
     @FXML
     ImageView powerUp1,powerUp2,powerUp3;
+    @FXML
+    Button stopMov;
 
     @FXML
     public void initialize() {
@@ -158,69 +161,277 @@ public class GuiMapController {
     }
 
     @FXML
-    private void b00Click(ActionEvent event )
+    private void move()
     {
-        log.appendText("Cliccato cella 00");
-    }
-    @FXML
-    private void b01Click(ActionEvent event)
-    {
-        log.appendText("\nCliccato cella 01");
-    }
-    @FXML
-    private void b02Click(ActionEvent event)
-    {
-        log.appendText("\nCliccato cella 02");
-    }
-    @FXML
-    private void b03Click(ActionEvent event)
-    {
-        log.appendText("\nCliccato cella 03");
+
+        movementDirections=new ArrayList<>();
+        int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
+        int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
+        handleMovement(x,y,3,movementDirections);
     }
 
-    @FXML//secod row
-    private void b10Click()
+    private void handleMovement(int x,int y,int m,ArrayList<Directions> movementDirections)//called from move,do stuff for real
     {
-        log.appendText("\nCliccato cella 10");
-    }
-    @FXML
-    private void b11Click()
-    {
-        log.appendText("\nCliccato cella 11");
-    }
-    @FXML
-    private void b12Click()
-    {
-        log.appendText("\nCliccato cella 12");
-    }
-    @FXML
-    private void b13Click()
-    {
-        log.appendText("\nCliccato cella 13");
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION);
+        a.setContentText("Move the Pawn in an adjacent cell click STOP on the left to stop the movements\n Remembre you have "+m+" moves left");
+        a.show();
+        int M=m-1;
+        //enable button events
+
+        stopMov.setOnAction(new EventHandler<ActionEvent>() {//stop button
+            @Override public void handle(ActionEvent e) {
+                gui.getView().doAction(new Move(movementDirections,new Point(x,y)));
+            }
+        });
+
+        //buttons here enable the movements in adjacent cells
+        if(y<3)
+        {map[x][y+1].setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(moveValidator("EAST",x,y)) {
+                    movementDirections.add(Directions.EAST);
+                    map[x][y].setStyle("-fx-background-image: null");
+                    map[x][y+1].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    eventMover(x,y+1,M);
+                }
+                else{
+                    eventMover(x,y,m);
+                }
+            }
+        });}
+        if(x<2)
+        {map[x+1][y].setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(moveValidator("SOUTH",x,y))
+                {   movementDirections.add(Directions.SOUTH);
+                    map[x][y].setStyle("-fx-background-image: null");
+                    map[x+1][y].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    eventMover(x+1,y,M);
+                }
+                else{
+                    eventMover(x,y,m);
+                }
+            }
+        });}
+        if(y-1>=0)
+        {map[x][y-1].setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(moveValidator("WEST",x,y)) {
+                    movementDirections.add(Directions.WEST);
+                    map[x][y].setStyle("-fx-background-image: null");
+                    map[x][y-1].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    eventMover(x,y-1,M);
+                }
+                else{
+                    eventMover(x,y,m);
+                }
+            }
+        });}
+        if(x-1>=0)
+        {map[x-1][y].setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(moveValidator("NORTH",x,y)) {
+                    movementDirections.add(Directions.NORTH);
+                    map[x][y].setStyle("-fx-background-image: null");
+                    map[x-1][y].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    eventMover(x-1,y,M);
+                }
+                else{
+                    eventMover(x,y,m);
+                }
+            }
+        });}
     }
 
-    @FXML//third row
-    private void b20Click()
+    private void mapEventDeleter()
     {
-        log.appendText("\nCliccato cella 20");
+        for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
+        {
+            for(int j=0;j<col;j++)
+            {
+                map[i][j].setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+
+                    }
+
+                });
+            }
+        }
     }
-    @FXML
-    private void b21Click()
+    private void eventMover(int x,int y,int m)
     {
-        log.appendText("\nCliccato cella 21");
+        if(m==0)
+        {
+            Alert a=new Alert(Alert.AlertType.INFORMATION);
+            a.setContentText("No more movements left. Moving...");
+            a.show();
+            gui.getView().doAction(new Move(movementDirections,new Point(x,y)));
+            return;
+        }
+        for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
+        {
+            for(int j=0;j<col;j++)
+            {
+                map[i][j].setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+
+                    }
+
+                });
+            }
+        }
+        int M=m-1;
+        //buttons here enable the movements in adjacent cells
+        if(y<3)
+        {map[x][y+1].setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(moveValidator("EAST",x,y)) {
+                    movementDirections.add(Directions.EAST);
+                    map[x][y].setStyle("-fx-background-image: null");
+                    map[x][y+1].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    map[x][y+1].setStyle("-fx-background-repeat: no-repeat;");
+                    eventMover(x,y+1,M);
+                }
+                else{
+                    eventMover(x,y,m);
+                }
+            }
+        });}
+        if(x<2)
+        {map[x+1][y].setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(moveValidator("SOUTH",x,y))
+                {   movementDirections.add(Directions.SOUTH);
+                    map[x][y].setStyle("-fx-background-image: null");
+                    map[x+1][y].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    eventMover(x+1,y,M);
+                }
+                else{
+                    eventMover(x,y,m);
+                }
+            }
+        });}
+        if(y-1>=0)
+        {map[x][y-1].setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(moveValidator("WEST",x,y)) {
+                    movementDirections.add(Directions.WEST);
+                    map[x][y].setStyle("-fx-background-image: null");
+                    map[x][y-1].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    eventMover(x,y-1,M);
+                }
+                else{
+                    eventMover(x,y,m);
+                }
+            }
+        });}
+        if(x-1>=0)
+        {map[x-1][y].setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(moveValidator("NORTH",x,y)) {
+                    movementDirections.add(Directions.NORTH);
+                    map[x][y].setStyle("-fx-background-image: null");
+                    map[x-1][y].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    eventMover(x-1,y,M);
+                }
+                else{
+                    eventMover(x,y,m);
+                }
+            }
+        });}
+
     }
-    @FXML
-    private void b22Click()
+    /**
+     * takes the id returns the string of the image
+     * @param id
+     * @return
+     */
+    private String fromIDtoIMG(int id)
     {
-        log.appendText("\nCliccato cella 22");
-    }
-    @FXML
-    private void b23Click()
-    {
-        log.appendText("\nCliccato cella 23");
+        switch (id) {
+            case 0:
+                return "-fx-background-image: url('/images/player0.png')";
+            case 1:
+                return "-fx-background-image: url('/images/player1.png')";
+            case 2:
+                return "-fx-background-image: url('/images/player2.png')";
+            case 3:
+                return "-fx-background-image: url('/images/player3.png')";
+            case 4:
+                return "-fx-background-image: url('/images/player4.png')";
+        }
+        return null;
     }
 
+    public void setValidMove(int validMove) {
+       this.validMove=validMove;
+        synchronized(this) {
+            this.notifyAll();
+        }
+    }
+    private boolean moveValidator(String dir,int x,int y)//x and y are the arrive postions of the move dir is the direction
+    {
+         validMove =-1;
+        gui.getView().askMoveValid(x, y,directionTranslator(dir) );
+        while(validMove == -1){
+            try
+            {
+                synchronized(this) {
+                    //System.out.println("Waiting to receive validMove reply...");
+                    this.wait();
+                }
 
+            } catch (InterruptedException e) {
+
+            }
+
+        }
+
+        if(validMove == 1) {
+            log.appendText("\n Direzione valida!");
+            return true;
+
+        }else {//validmove=0
+            Alert a =new Alert(Alert.AlertType.INFORMATION);
+            log.appendText("\n direzione non vlida");
+            return false;
+        }
+
+    }
+
+    private Directions directionTranslator(String s){
+        Directions direction;
+
+        switch (s){
+            case "NORTH":
+                direction = Directions.NORTH;
+                break;
+
+            case "SOUTH":
+                direction = Directions.SOUTH;
+                break;
+
+            case "EAST":
+                direction = Directions.EAST;
+                break;
+
+            case "WEST":
+                direction = Directions.WEST;
+                break;
+
+            default:
+                //this can never happen
+                System.out.println("[DEBUG] direzione non valida!");
+                direction = null;
+                break;
+        }
+
+        return direction;
+    }
+
+    @FXML
     public void loginUpdater(String name, int id, PlayerColor color)
     {
         log.appendText("\nSi è collegato: "+name+" con l'id: "+id+" ed il colore: "+color);
@@ -239,7 +450,15 @@ public class GuiMapController {
         int r=gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX();
         int c=gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY();
         mapPos(r,c,id);
+        stopMov.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) { }
+        });
+
+
     }
+
+
 
     public void printLog(String s)
     {
@@ -270,15 +489,10 @@ public class GuiMapController {
 
     private void mapPos(int r,int c,int id)
     {
-        if(id==0)//move player 0
-        {
-            map[r][c].setStyle("-fx-background-image: url('/images/player0.png')");
+            System.out.println("riga: "+r+"colonna :"+c);
+            map[r][c].setStyle(fromIDtoIMG(id));
             log.appendText("\n Placed player "+id+" in cell "+r+c);
-        }else if(id==1)
-        {
-            map[r][c].setStyle("-fx-background-image: url('/images/player1.png')");
-            log.appendText("\n Placed player "+id+" in cell "+r+c);
-        }
+
 
         //eliminating the powerups effects after the beginning
         powerUp1.setOnMouseClicked((e) -> {
@@ -290,7 +504,10 @@ public class GuiMapController {
         powerUp3.setOnMouseClicked((e) -> {
 
         });
-        //no other player icons now
+
+        //afetr move i delete moving things
+       mapEventDeleter();
+
     }
 
 
