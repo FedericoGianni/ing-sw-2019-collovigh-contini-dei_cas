@@ -13,7 +13,6 @@ public class Player {
     private final int playerId;
 
 
-
     private final PlayerColor playerColor;
     private final String name;
     private CachedStats stats;
@@ -27,22 +26,22 @@ public class Player {
         this.playerColor = color;
     }
 
-    public void update(CachedStats stats){
+    public void update(CachedStats stats) {
 
         this.stats = stats;
     }
 
-    public void update(CachedPowerUpBag powerUpBag){
+    public void update(CachedPowerUpBag powerUpBag) {
 
         this.powerUpBag = powerUpBag;
     }
 
-    public void update(CachedAmmoBag ammoBag){
+    public void update(CachedAmmoBag ammoBag) {
 
         this.ammoBag = ammoBag;
     }
 
-    public void update(CachedWeaponBag weaponbag){
+    public void update(CachedWeaponBag weaponbag) {
 
         this.weaponbag = weaponbag;
     }
@@ -70,16 +69,17 @@ public class Player {
     public CachedWeaponBag getWeaponbag() {
         return weaponbag;
     }
+
     public PlayerColor getPlayerColor() {
         return playerColor;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
         String s;
 
-        switch (playerColor){
+        switch (playerColor) {
 
             case GREY:
                 s = ANSI_WHITE.escape();
@@ -105,6 +105,37 @@ public class Player {
                 s = "";
                 break;
         }
+
+        s = s.concat("\nID: " + getPlayerId());
+        s = s.concat("\nNome: " + getName());
+
+        if (getStats() != null) {
+            s = s.concat("\nDanni: " + getStats().getDmgTaken());
+            s = s.concat("\nMarchi: " + getStats().getMarks());
+            s = s.concat("\nOnline: " + getStats().getOnline());
+        } else {
+            s = s.concat("\nDanni" + "[ ]");
+            s = s.concat("\nMarchi" + "[ ]");
+            s = s.concat("\nOnline: " + " true");
+        }
+
+        if (getWeaponbag() != null) {
+            s = s.concat("\nArmi: " + "\t" + getWeaponbag().toString());
+        } else {
+            s = s.concat("\nArmi: nessuna");
+        }
+
+        if (getAmmoBag() != null) {
+            s = s.concat("\nMunizioni: " + getAmmoBag().toString());
+        } else {
+            s = s.concat("\nMunizioni: nessuna");
+        }
+
+        s = s.concat(ANSI_RESET.escape());
+
+        return s;
+
+        /*
 
         if(getStats() != null && getWeaponbag() != null){
             return s + "ID: " + getStats().getPlayerId() + "\n" +
@@ -138,5 +169,6 @@ public class Player {
                     "Online: " + " true" + "\n" +
                     "Armi : " + " nessuna \n" + ANSI_RESET.escape();
         }
+    */
     }
 }

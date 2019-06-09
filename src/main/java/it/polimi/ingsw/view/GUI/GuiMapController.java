@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.view.actions.Move;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -374,7 +373,7 @@ public class GuiMapController {
     private boolean moveValidator(String dir,int x,int y)//x and y are the arrive postions of the move dir is the direction
     {
          validMove =-1;
-        gui.getView().askMoveValid(x, y,directionTranslator(dir) );
+        gui.getView().askMoveValid(x, y, Directions.valueOf(dir));
         while(validMove == -1){
             try
             {
@@ -401,35 +400,7 @@ public class GuiMapController {
 
     }
 
-    private Directions directionTranslator(String s){
-        Directions direction;
 
-        switch (s){
-            case "NORTH":
-                direction = Directions.NORTH;
-                break;
-
-            case "SOUTH":
-                direction = Directions.SOUTH;
-                break;
-
-            case "EAST":
-                direction = Directions.EAST;
-                break;
-
-            case "WEST":
-                direction = Directions.WEST;
-                break;
-
-            default:
-                //this can never happen
-                System.out.println("[DEBUG] direzione non valida!");
-                direction = null;
-                break;
-        }
-
-        return direction;
-    }
 
     @FXML
     public void loginUpdater(String name, int id, PlayerColor color)

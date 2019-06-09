@@ -146,7 +146,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
     @Override
     public void show(String s) {
         LOGGER.info("sending show to connected client");
-        String msg = "showMessage\fabc";
+        String msg = "showMessage\f" + s;
         send(msg);
     }
 

@@ -28,7 +28,7 @@ public class CachedAmmoBag extends UpdateClass {
     @Override
     public String toString(){
 
-        String s = "Ammo: ";
+        String s = new String();
 
         if(ammoList != null) {
 
@@ -37,19 +37,19 @@ public class CachedAmmoBag extends UpdateClass {
                 switch (c){
 
                     case BLUE:
-                        s.concat(ANSI_BLUE.escape());
+                        s = s.concat(ANSI_BLUE.escape());
                         break;
 
                     case RED:
-                        s.concat(ANSI_RED.escape());
+                        s = s.concat(ANSI_RED.escape());
                         break;
 
                     case YELLOW:
-                        s.concat(ANSI_YELLOW.escape());
+                        s = s.concat(ANSI_YELLOW.escape());
                         break;
 
                     default:
-                        s.concat(ANSI_WHITE.escape());
+                        s = s.concat(ANSI_WHITE.escape());
                 }
 
                 s = s.concat("°" + ANSI_RESET.escape());
