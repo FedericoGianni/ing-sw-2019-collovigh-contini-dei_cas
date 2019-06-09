@@ -97,12 +97,31 @@ public class ActionPhase {
      */
     private void move(List<Directions> directionsList){
 
-        // move the player
+        // gets the final position
 
-        for (Directions direction : directionsList){
+        Cell finalPosition = simulateMovement(directionsList);
 
-            moveCurrentPlayer(direction);
+        // moves the player
+
+        Model.getPlayer(controller.getCurrentPlayer()).setPlayerPos(finalPosition);
+
+    }
+
+    /**
+     * This method simulate the actual movement and return the cell the player would reach if he moves
+     * @param directions is the list of movements the player wants to do
+     * @return the final cell the player would reach if he moves
+     */
+    private Cell simulateMovement(List<Directions> directions){
+
+        Cell cell = Model.getPlayer(controller.getCurrentPlayer()).getCurrentPosition();
+
+        for (Directions direction : directions){
+
+            cell = getNextCell(direction,cell);
         }
+
+        return cell;
     }
 
     /**
@@ -178,6 +197,7 @@ public class ActionPhase {
     }
 
 
+
     // GRAB_ACTION
 
     /**
@@ -192,7 +212,7 @@ public class ActionPhase {
 
         // check if the actions are possible
 
-        if (checkGrabMove(grabAction) && checkGrab(grabAction, simulateMovement(grabAction))){
+        if (checkGrabMove(grabAction) && checkGrab(grabAction, simulateMovement(grabAction.getDirection()))){
 
             // moves the player
 
@@ -275,7 +295,7 @@ public class ActionPhase {
 
         }else {
 
-            if ( cell.getAmmoPlaced() != null){
+            if ( cell.getAmmoPlaced() == null){
 
                 LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to pick an ammoCard in a cell that was empty ");
 
@@ -360,23 +380,6 @@ public class ActionPhase {
             controller.getVirtualView(controller.getCurrentPlayer()).show(s);
             return false;
         }
-    }
-
-    /**
-     * This method simulate the actual movement and return the cell the player would reach if he moves
-     * @param grabAction is the action the controller gets
-     * @return the final cell the player would reach if he moves
-     */
-    private Cell simulateMovement(GrabAction grabAction){
-
-        Cell cell = Model.getPlayer(controller.getCurrentPlayer()).getCurrentPosition();
-
-        for (Directions direction : grabAction.getDirection()){
-
-            cell = getNextCell(direction,cell);
-        }
-
-        return cell;
     }
 
     /**

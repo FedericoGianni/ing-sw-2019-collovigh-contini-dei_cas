@@ -23,6 +23,9 @@ public class Server  {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
+    private static final int MIN_PLAYER_CONNECTED = 3;
+    private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = false;
+
     /**
      * IP Address of the Server
      */
@@ -223,6 +226,11 @@ public class Server  {
             // sets the player to offline
 
             controller.setPlayerOffline(playerId);
+
+            if ( (ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < MIN_PLAYER_CONNECTED) ){
+
+                controller.endGame();
+            }
 
             // LOG the player disconnection
 

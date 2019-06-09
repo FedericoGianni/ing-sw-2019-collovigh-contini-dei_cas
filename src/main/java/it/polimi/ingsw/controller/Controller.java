@@ -165,6 +165,18 @@ public class Controller {
         return roundNumber % players.size();
     }
 
+    public List<Integer> getPlayerOnline(){
+
+        return   Model
+                .getGame()
+                .getPlayers()
+                .stream()
+                .filter( x -> x.getStats().getOnline())
+                .map(Player::getPlayerId)
+                .collect(Collectors.toList());
+
+
+    }
 
     // management Methods
 
@@ -339,11 +351,16 @@ public class Controller {
         if(turnPhase == RELOAD){
             turnPhase = SPAWN;
             roundNumber++;
+            LOGGER.log(level, "[CONTROLLER] switch to phase: {0}", turnPhase);
             handleTurnPhase();
         } else {
             turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
+
+            LOGGER.log(level, "[CONTROLLER] switch to phase: {0}", turnPhase);
+
             handleTurnPhase();
         }
+
     }
 
     // Spawn Phase
@@ -561,6 +578,12 @@ public class Controller {
         return dmgCounter;
 
     }
+
+    public void endGame(){
+
+        //TODO implement
+    }
+
 
 
 }

@@ -14,11 +14,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 
 /**
@@ -33,7 +35,7 @@ import static java.util.logging.Level.WARNING;
 public class SocketClientReader extends Thread {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.FINE;
+    private static Level level = INFO;
 
     Gson gson = new Gson();
 
@@ -418,9 +420,14 @@ public class SocketClientReader extends Thread {
 
         //show
         headersMap.put("show", () -> {
-            LOGGER.log(level,"[Socket-Client-Reader] received show by server");
-            if(commands.length > 1)
-                RunClient.getView().show(commands[1]);
+            LOGGER.log(WARNING,() -> "[Socket-Client-Reader] received show by server " + Arrays.toString(commands));
+
+            RunClient.getView().show(commands[1]);
+
+            if(commands.length > 1) {
+                LOGGER.log(level,"[Socket-Client-Reader] received show by server _ if exec");
+
+            }
         });
     }
 
