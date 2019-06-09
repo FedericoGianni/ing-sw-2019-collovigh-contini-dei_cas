@@ -1,7 +1,8 @@
-package it.polimi.ingsw.view.cachemodel;
+package it.polimi.ingsw.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,7 +29,6 @@ public class CacheModelParser {
         List<CachedFullWeapon> weaponList = new ArrayList<>();
 
         try {
-
 
             // creates a reader for the file
 

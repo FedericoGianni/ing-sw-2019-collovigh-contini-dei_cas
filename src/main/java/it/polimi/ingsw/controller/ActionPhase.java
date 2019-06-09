@@ -414,6 +414,8 @@ public class ActionPhase {
 
             Model.getPlayer(controller.getCurrentPlayer()).buy(findWeaponInSpawnCell(grabAction.getNewWeaponName(), position));
 
+            LOGGER.log(level, () -> LOG_START + controller.getCurrentPlayer() + " bought a new weapon: " + grabAction.getNewWeaponName() );
+
             if (Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS ){
 
                 List<Weapon> weaponList = Model.getPlayer(controller.getCurrentPlayer())
@@ -424,6 +426,9 @@ public class ActionPhase {
                         .collect(Collectors.toList());
 
                 Model.getPlayer(controller.getCurrentPlayer()).delWeapon(weaponList.get(0));
+
+                LOGGER.log(level, () -> LOG_START + controller.getCurrentPlayer() + " discarded a weapon: " + grabAction.getDiscardedWeapon() );
+
             }
 
         }catch (Exception e){

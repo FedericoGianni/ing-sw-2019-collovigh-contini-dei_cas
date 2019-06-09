@@ -1,6 +1,23 @@
 [
-  {"name":"LOCK RIFLE","firstEffectCost":["BLUE","BLUE"],"secondEffectCost":["RED"],"thirdEffectCost":[]},
-  {"name":"MACHINE GUN","firstEffectCost":["BLUE","RED"],"secondEffectCost":["YELLOW"],"thirdEffectCost":["BLUE"]},
-  {"name":"ELECTROSCYTHE","firstEffectCost":["BLUE"],"secondEffectCost":["BLUE","RED"],"thirdEffectCost":[]},
-  {"name":"TRACTOR BEAM","firstEffectCost":["BLUE"],"secondEffectCost":["RED","YELLOW"],"thirdEffectCost":[]}
+  {"name":"LOCK RIFLE","firstEffectCost":["BLUE","BLUE"],"secondEffectCost":["RED"],"secondEffectType":"CONCATENABLE"},
+  {"name":"MACHINE GUN","firstEffectCost":["BLUE","RED"],"secondEffectCost":["YELLOW"],"thirdEffectCost":["BLUE"],"secondEffectType":"CONCATENABLE","thirdEffectType":"CONCATENABLE"},
+  {"name":"ELECTROSCYTHE","firstEffectCost":["BLUE"],"secondEffectCost":["BLUE","RED"],"secondEffectType":"ESCLUSIVE"},
+  {"name":"TRACTOR BEAM","firstEffectCost":["BLUE"],"secondEffectCost":["RED","YELLOW"],"secondEffectType":"ESCLUSIVE"},
+  {"name":"T.H.O.R.","firstEffectCost":["BLUE","RED"],"secondEffectCost":["BLUE"],"thirdEffectCost":["BLUE"],"secondEffectType":"CONCATENABLE","thirdEffectType":"CONCATENABLE"},
+  {"name":"PLASMA GUN","firstEffectCost":["BLUE","YELLOW"],"secondEffectCost":[],"thirdEffectCost":["BLUE"],"secondEffectType":"CONCATENABLE","thirdEffectType":"CONCATENABLE"},
+  {"name":"WHISPER","firstEffectCost":["BLUE","BLUE","YELLOW"]},
+  {"name":"VORTEX CANNON","firstEffectCost":["RED","BLUE"],"secondEffectCost":["RED"],"secondEffectType":"CONCATENABLE"},
+  {"name":"FURNACE","firstEffectCost":["RED","BLUE"],"secondEffectCost":[],"secondEffectType":"ESCLUSIVE"},
+  {"name":"HEAT SEEKER","firstEffectCost":["RED","RED","YELLOW"]},
+  {"name":"HELLION","firstEffectCost":["RED","YELLOW"],"secondEffectCost":["RED"],"secondEffectType":"ESCLUSIVE"},
+  {"name":"FLAMETHROWER","firstEffectCost":["RED"],"secondEffectCost":["YELLOW","YELLOW"],"secondEffectType":"ESCLUSIVE"},
+  {"name":"GRENADE LAUNCHER","firstEffectCost":["RED"],"secondEffectCost":["RED"],"secondEffectType":"CONCATENABLE"},
+  {"name":"ROCKET LAUNCHER","firstEffectCost":["RED","RED"],"secondEffectCost":["BLUE"],"thirdEffectCost":["YELLOW"],"secondEffectType":"CONCATENABLE","thirdEffectType":"CONCATENABLE"},
+  {"name":"RAILGUN","firstEffectCost":["YELLOW","YELLOW","BLUE"],"secondEffectCost":[],"secondEffectType":"ESCLUSIVE"},
+  {"name":"CYBERBLADE","firstEffectCost":["YELLOW","RED"],"secondEffectCost":[],"thirdEffectCost":["YELLOW"],"secondEffectType":"CONCATENABLE","thirdEffectType":"CONCATENABLE"},
+  {"name":"ZX-2","firstEffectCost":["YELLOW","RED"],"secondEffectCost":[],"secondEffectType":"ESCLUSIVE"},
+  {"name":"SHOTGUN","firstEffectCost":["YELLOW","YELLOW"],"secondEffectCost":[],"secondEffectType":"ESCLUSIVE"},
+  {"name":"POWER GLOVE","firstEffectCost":["YELLOW","BLUE"],"secondEffectCost":["BLUE"],"secondEffectType":"ESCLUSIVE"},
+  {"name":"SHOCKWAVE","firstEffectCost":["YELLOW"],"secondEffectCost":["YELLOW"],"secondEffectType":"ESCLUSIVE"},
+  {"name":"SLEDGEHAMMER","firstEffectCost":["YELLOW"],"secondEffectCost":["RED"],"secondEffectType":"ESCLUSIVE"}
 ]

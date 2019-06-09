@@ -17,6 +17,7 @@ import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
+import it.polimi.ingsw.view.cachemodel.EffectType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.updates.InitialUpdate;
@@ -66,13 +67,13 @@ public class JsonExampleMaker {
         List<Color> cost_2 = new ArrayList<>();
         cost_2.add(Color.RED);
 
-        weaponList.add(new CachedFullWeapon("LOCK RIFLE", cost_1, cost_2, new ArrayList<>() ));
+        weaponList.add(new CachedFullWeapon("LOCK RIFLE", cost_1, cost_2, null , EffectType.CONCATENABLE, EffectType.ESCLUSIVE));
 
         try {
 
             Gson gson = new Gson();
 
-            FileWriter writer = new FileWriter("resources/json/cachedmodel/weapons.json");
+            FileWriter writer = new FileWriter("resources/json/cachedmodel/weapons_TEST.json");
 
             gson.toJson(weaponList,writer);
 
