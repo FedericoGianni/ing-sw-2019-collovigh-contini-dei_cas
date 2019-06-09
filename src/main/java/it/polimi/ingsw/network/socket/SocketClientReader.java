@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.WARNING;
 
 /**
@@ -35,7 +34,7 @@ import static java.util.logging.Level.WARNING;
 public class SocketClientReader extends Thread {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = INFO;
+    private static Level level = WARNING;
 
     Gson gson = new Gson();
 
@@ -110,11 +109,13 @@ public class SocketClientReader extends Thread {
                 String msg = receive();
                 // if the line starts with a '{' -> json
                 if(msg != null) {
+
                     LOGGER.log(level,"[SOCKET-CLIENT-READER] received: {0}", msg);
 
                     if (msg.startsWith("{")) handleJson(msg);
                         // else will be handled by the HashMap
                     else handleMsg(splitCommand(msg));
+
                 }
             }
 
@@ -152,7 +153,7 @@ public class SocketClientReader extends Thread {
      * runs it in a separate thread
      * @param message the result of splitCommand
      */
-    public void handleMsg(String[] message) {
+    private void handleMsg(String[] message) {
         this.commands = message;
         FunctionInterface function = headersMap.get(message[0]);
         if (function == null)
@@ -161,7 +162,7 @@ public class SocketClientReader extends Thread {
         else
             try {
                 new Thread(() -> {
-                    function.execute();
+                    function.execute(message);
                 }).start();
             } catch (NumberFormatException e) {
                 LOGGER.log(WARNING, "[DEBUG] [CLIENT] ERRORE nel formato del messaggio socket ricevuto! ");
@@ -172,7 +173,7 @@ public class SocketClientReader extends Thread {
      * Handle the Json received from Server
      * @param msg a String representing the Json received from the Server (SocketConnectionWriter)
      */
-    public void handleJson(String msg) {
+    private void handleJson(String msg) {
 
         // split the gson to get the last parameter (GSON can not detect the superclass)
 
@@ -353,7 +354,7 @@ public class SocketClientReader extends Thread {
         headersMap = new HashMap<>();
 
         // login username
-        headersMap.put("login", () -> {
+        headersMap.put("login", (commands) -> {
             System.out.println("[DEBUG] [Server] login reply: " + commands[1]);
             if(!(commands[1].equals("OK")))
                 RunClient.getView().retryLogin(commands[1]);
@@ -365,13 +366,13 @@ public class SocketClientReader extends Thread {
 
 
         //ping
-        headersMap.put("ping", () -> {
+        headersMap.put("ping", (commands) -> {
             //System.out.println("[DEBUG] Ricevuta ping request dal server.");
             //scw.send("pong\f" + scw.getPlayerId());
         });
 
         //initGame
-        headersMap.put("startGame", () -> {
+        headersMap.put("startGame", (commands) -> {
             System.out.println("[DEBUG] Ricevuto initGame dal server");
             RunClient.getView().startGame();
         });
@@ -379,37 +380,37 @@ public class SocketClientReader extends Thread {
 
 
         //startSpawn
-        headersMap.put("startSpawn", () -> {
+        headersMap.put("startSpawn", (commands) -> {
             System.out.println("[DEBUG] Ricevuto startSpawn dal server");
             RunClient.getView().startSpawn();
         });
 
         //startPowerUp
-        headersMap.put("startPowerUp", () -> {
+        headersMap.put("startPowerUp", (commands) -> {
             System.out.println("[DEBUG] Ricevuto startPowerUp dal server");
             RunClient.getView().startPowerUp();
         });
 
         //startAction
-        headersMap.put("startAction", () -> {
+        headersMap.put("startAction", (commands) -> {
             System.out.println("[DEBUG] Ricevuto startAction dal server");
             RunClient.getView().startAction();
         });
 
         //reload
-        headersMap.put("startReload", () -> {
+        headersMap.put("startReload", (commands) -> {
             System.out.println("[DEBUG] Ricevuto startReload dal server");
             RunClient.getView().startReload();
         });
 
         //askGrenade
-        headersMap.put("askGrenade", () -> {
+        headersMap.put("askGrenade", (commands) -> {
             LOGGER.log(level,"[Socket-Client-Reader] received askGrenade by server");
             RunClient.getView().askGrenade();
         });
 
         //askValidMove
-        headersMap.put("askMoveValid", () -> {
+        headersMap.put("askMoveValid", (commands) -> {
             LOGGER.log(level,"[Socket-Client-Reader] received askValidMove by server");
             if(commands[1].equals("true")) {
                 RunClient.getView().setValidMove(true);
@@ -419,7 +420,7 @@ public class SocketClientReader extends Thread {
         });
 
         //show
-        headersMap.put("show", () -> {
+        headersMap.put("showMessage", (commands) -> {
             LOGGER.log(WARNING,() -> "[Socket-Client-Reader] received show by server " + Arrays.toString(commands));
 
             RunClient.getView().show(commands[1]);

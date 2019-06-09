@@ -175,7 +175,7 @@ public class SocketConnectionReader extends Thread {
         else
             try {
                 new Thread (() -> {
-                    function.execute();
+                    function.execute(commands);
                 }).start();
             } catch(NumberFormatException e) {
                LOGGER.log(WARNING, "[DEBUG] [SERVER] ERRORE nel formato del messaggio socket ricevuto!");
@@ -193,7 +193,7 @@ public class SocketConnectionReader extends Thread {
         headersMap = new HashMap<>();
 
         // login username
-        headersMap.put("login", () -> {
+        headersMap.put("login", (commands) -> {
             try {
 
                 String address = socket.getInetAddress().toString();
@@ -234,18 +234,18 @@ public class SocketConnectionReader extends Thread {
         });
 
         //ping
-        headersMap.put("pong", () -> {
+        headersMap.put("pong", (commands) -> {
             LOGGER.log(INFO, "Client reply to ping: " + commands[1]);
         });
 
         //spawn
-        headersMap.put("spawn", () -> {
+        headersMap.put("spawn", (commands) -> {
             LOGGER.log(INFO, "received spawn from client");
             Server.getController().getVirtualView(id).spawn(new CachedPowerUp(PowerUpType.valueOf(commands[1]), Color.valueOf(commands[2])));
         });
 
         //askMoveValid
-        headersMap.put("askMoveValid", () -> {
+        headersMap.put("askMoveValid", (commands) -> {
            LOGGER.log(INFO, "received askValidDirection from client");
            Boolean valid = Server.getController().getVirtualView(id).askMoveValid(Integer.valueOf(commands[1]), Integer.valueOf(commands[2]), Directions.valueOf(commands[3]));
 

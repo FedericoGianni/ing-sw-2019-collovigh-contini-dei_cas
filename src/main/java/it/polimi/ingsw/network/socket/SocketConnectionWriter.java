@@ -80,7 +80,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
      * Send a String to the specified socket output stream
      * @param message to be sent
      */
-    public void send(String message) {
+    public synchronized void send(String message) {
         try {
             output.write(message);
             output.newLine();
@@ -146,7 +146,8 @@ public class SocketConnectionWriter extends Thread implements ToView {
     @Override
     public void show(String s) {
         LOGGER.info("sending show to connected client");
-        send("show\f" + s);
+        String msg = "showMessage\fabc";
+        send(msg);
     }
 
     public void disconnect(){

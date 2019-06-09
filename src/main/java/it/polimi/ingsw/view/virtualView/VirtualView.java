@@ -98,11 +98,13 @@ public class VirtualView implements ViewInterface {
 
     @Override
     public void startGame() {
+        this.view = Server.getClient(playerId);
         view.startGame();
     }
 
     @Override
     public void show(String s) {
+        this.view = Server.getClient(playerId);
         view.show(s);
     }
 

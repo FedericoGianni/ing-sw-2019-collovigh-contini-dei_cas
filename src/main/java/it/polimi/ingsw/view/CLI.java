@@ -219,9 +219,11 @@ public class CLI implements UserInterface {
     }
 
     public  void show(String s){
+        /*
         new Thread(() ->
             System.out.println(s)
-        ).start();
+        ).start();*/
+        System.out.println(s);
     }
 
     @Override
