@@ -419,7 +419,8 @@ public class SocketClientReader extends Thread {
         //show
         headersMap.put("show", () -> {
             LOGGER.log(level,"[Socket-Client-Reader] received show by server");
-            RunClient.getView().show(commands[1]);
+            if(commands[1] != null)
+                RunClient.getView().show(commands[1]);
         });
     }
 
