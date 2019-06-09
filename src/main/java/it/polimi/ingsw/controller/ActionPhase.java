@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -353,9 +354,10 @@ public class ActionPhase {
             return true;
 
         }else {
-
-            LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to buy a weapon but can not pay for it");
-
+            //default CANNOT_PAY_WEAPON
+            String s =  " tried to buy a weapon but can not pay for it";
+            LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + s);
+            controller.getVirtualView(controller.getCurrentPlayer()).show(s);
             return false;
         }
     }

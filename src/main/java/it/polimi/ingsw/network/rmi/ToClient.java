@@ -66,4 +66,6 @@ public interface ToClient extends  Remote {
 
     void askGrenade()throws RemoteException;
 
+    void show(String s) throws RemoteException;
+
 }

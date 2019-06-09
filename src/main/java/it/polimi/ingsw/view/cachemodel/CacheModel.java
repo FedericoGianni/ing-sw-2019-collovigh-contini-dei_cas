@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.cachemodel;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;

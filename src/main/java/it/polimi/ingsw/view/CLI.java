@@ -265,23 +265,25 @@ public class CLI implements UserInterface {
                 break;
 
             case POWERUP_BAG:
-
+                System.out.println("[NOTIFIC] POWEUPBAG update ricevuto!");
                 break;
 
             case WEAPON_BAG:
-                System.out.println("[NOTIFICA] Hai una nuova arma!");
+                System.out.println("[NOTIFICA] WEAPON_BAG update ricevuto!");
+                System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag());
                 break;
 
             case AMMO_BAG:
-
+                System.out.println("[NOTIFICA] AMMO_BAG update ricevuto!");
+                System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag());
                 break;
 
             case GAME:
-
+                System.out.println("[NOTIFICA] GAME update ricevuto!");
                 break;
 
             case SPAWN_CELL:
-
+                System.out.println("[NOTIFICA] SPAWN_CELL update ricevuto!");
                 break;
 
             case AMMO_CELL:
@@ -495,6 +497,7 @@ public class CLI implements UserInterface {
             }
 
             if ((read >= 0 && read < usablePowerUps.size()) || read == 9) validChoice = true;
+            else scanner.nextLine();
 
         }while(!validChoice);
 
@@ -1174,6 +1177,13 @@ public class CLI implements UserInterface {
         System.out.println("[INFO PARTITA]");
 
         System.out.println("Giocatori: ");
+
+        List<Player> players = view.getCacheModel().getCachedPlayers();
+
+        players.stream()
+                .forEachOrdered(System.out::println);
+
+        /*
         for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
             System.out.print("\n" + view.getCacheModel().getCachedPlayers().get(i).getPlayerId());
             System.out.print(" :" + view.getCacheModel().getCachedPlayers().get(i).getName() + "\n");
@@ -1193,7 +1203,7 @@ public class CLI implements UserInterface {
                 System.out.println("Armi: " + view.getCacheModel().getCachedPlayers().get(i).getWeaponbag().getWeapons().toString());
             else
                 System.out.println("Armi: " + " nessuna.\n");
-        }
+        }*/
     }
 
     /**

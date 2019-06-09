@@ -50,7 +50,7 @@ public class CachedPowerUp implements Serializable {
                 break;
         }
 
-        return s +"PowerUp{" +
+        return s +"PowerUp {" +
                 "color=" + color +
                 ", type=" + type +
                 '}' + ANSI_RESET.escape();

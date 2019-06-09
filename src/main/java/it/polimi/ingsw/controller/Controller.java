@@ -552,7 +552,7 @@ public class Controller {
 
         //System.out.println("DEBUG playerDmgBoard: ");
         //System.out.println(playerDmgBoard);
-
+        //TODO this list contain dmgCount ordered by playerId, i should find the id of the top to the bottom of more dmg done
         //now i have to order the dmgCounter from top dmg to lowest dmg done by playerid
         Collections.sort(dmgCounter);
         Collections.reverse(dmgCounter);

@@ -102,6 +102,11 @@ public class VirtualView implements ViewInterface {
     }
 
     @Override
+    public void show(String s) {
+        view.show(s);
+    }
+
+    @Override
     public void sendUpdates(UpdateClass update) {
 
         // refresh the ToClient reference
@@ -147,4 +152,6 @@ public class VirtualView implements ViewInterface {
     public void setValidMove(boolean b) {
         //i don't need this method here
     }
+
+
 }

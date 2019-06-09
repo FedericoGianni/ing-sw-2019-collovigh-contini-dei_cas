@@ -6,6 +6,8 @@ import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
 
+import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
+
 public class Player {
 
     private final int playerId;
@@ -70,5 +72,71 @@ public class Player {
     }
     public PlayerColor getPlayerColor() {
         return playerColor;
+    }
+
+    @Override
+    public String toString(){
+
+        String s;
+
+        switch (playerColor){
+
+            case GREY:
+                s = ANSI_WHITE.escape();
+                break;
+
+            case BLUE:
+                s = ANSI_BLUE.escape();
+                break;
+
+            case YELLOW:
+                s = ANSI_YELLOW.escape();
+                break;
+
+            case GREEN:
+                s = ANSI_GREEN.escape();
+                break;
+
+            case PURPLE:
+                s = ANSI_PURPLE.escape();
+                break;
+
+            default:
+                s = "";
+                break;
+        }
+
+        if(getStats() != null && getWeaponbag() != null){
+            return s + "ID: " + getStats().getPlayerId() + "\n" +
+                    "Nome: " + getName() + "\n" +
+                    "Danni: " + getStats().getDmgTaken() + "\n" +
+                    "Marchi: " + getStats().getMarks() + "\n" +
+                    "Online: " + getStats().getOnline() + "\n" +
+                    "Armi: " + "\t" + getWeaponbag().toString() + "\n" + ANSI_RESET.escape();
+
+        } else if(getStats() != null) {
+            return s + "ID: " + playerId + "\n" +
+                    "Nome: " + getName() + "\n" +
+                    "Danni: " + getStats().getDmgTaken() + "\n" +
+                    "Marchi: " + getStats().getMarks() + "\n" +
+                    "Online: " + getStats().getOnline() + "\n" +
+                    "Armi : " + " nessuna \n" + ANSI_RESET.escape();
+
+        } else if(getWeaponbag() != null){
+            return s + "ID: " + playerId + "\n" +
+                    "Nome: " + getName() + "\n" +
+                    //"Danni: " + getStats().getDmgTaken() + "\n" +
+                    //"Marchi: " + getStats().getMarks() + "\n" +
+                    //"Online: " + getStats().getOnline() + "\n" +
+                    "Armi : " + "\t" + getWeaponbag().toString() + " \n" + ANSI_RESET.escape();
+        }
+        else {
+            return s + "ID: " + playerId + "\n" +
+                    "Nome: " + getName() + "\n" +
+                    "Danni" + "[ ]" + "\n" +
+                    "Marchi" + "[ ]" + "\n" +
+                    "Online: " + " true" + "\n" +
+                    "Armi : " + " nessuna \n" + ANSI_RESET.escape();
+        }
     }
 }

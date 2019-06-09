@@ -5,6 +5,7 @@ package it.polimi.ingsw.view.cachemodel.sendables;
 
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
+
 import java.util.List;
 
 public class CachedWeaponBag extends UpdateClass {
@@ -26,4 +27,21 @@ public class CachedWeaponBag extends UpdateClass {
     }
 
     public List<Boolean> getLoaded() { return loaded; }
+
+    @Override
+    public String toString(){
+        String s = new String();
+
+        if(weapons != null){
+            for (int i = 0; i < weapons.size(); i++) {
+                s = s.concat(i + " :" + weapons.get(i));
+                if(loaded.get(i).equals(true))
+                    s = s.concat(" carica.\n");
+                else
+                    s =s.concat(" scarica.\n");
+            }
+        }
+
+        return s;
+    }
 }

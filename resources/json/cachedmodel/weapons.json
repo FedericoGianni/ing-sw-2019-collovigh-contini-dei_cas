@@ -2,8 +2,5 @@
   {"name":"LOCK RIFLE","firstEffectCost":["BLUE","BLUE"],"secondEffectCost":["RED"],"thirdEffectCost":[]},
   {"name":"MACHINE GUN","firstEffectCost":["BLUE","RED"],"secondEffectCost":["YELLOW"],"thirdEffectCost":["BLUE"]},
   {"name":"ELECTROSCYTHE","firstEffectCost":["BLUE"],"secondEffectCost":["BLUE","RED"],"thirdEffectCost":[]},
-  {"name":"TRACTOR BEAM","firstEffectCost":["BLUE"],"secondEffectCost":["RED","YELLOW"],"thirdEffectCost":[]},
-  {"name":"T.H.O.R.","firstEffectCost":["BLUE","RED"],"secondEffectCost":["BLUE"],"thirdEffectCost":["BLUE"]},
-  {"name":"PLASMA GUN","firstEffectCost":["BLUE","YELLOW"],"secondEffectCost":[],"thirdEffectCost":["BLUE"]},
-  {"name":"WHISPER","firstEffectCost":["BLUE","BLUE","YELLOW"],"secondEffectCost":[],"thirdEffectCost":[]}
+  {"name":"TRACTOR BEAM","firstEffectCost":["BLUE"],"secondEffectCost":["RED","YELLOW"],"thirdEffectCost":[]}
 ]

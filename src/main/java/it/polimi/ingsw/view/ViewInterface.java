@@ -31,6 +31,9 @@ public interface ViewInterface {
     //RELOAD
     void startReload();
 
+    //SHOW -> when controller needs to shwo msg on the client UI
+    void show(String s);
+
     /**
      *  used for actions submitted by the client
      * @param jsonAction is the action that the clients want to do
