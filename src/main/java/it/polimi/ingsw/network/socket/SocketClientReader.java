@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.WARNING;
 
 /**
@@ -34,7 +35,7 @@ import static java.util.logging.Level.WARNING;
 public class SocketClientReader extends Thread {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = WARNING;
+    private static Level level = FINE;
 
     Gson gson = new Gson();
 
@@ -110,7 +111,7 @@ public class SocketClientReader extends Thread {
                 // if the line starts with a '{' -> json
                 if(msg != null) {
 
-                    LOGGER.log(level,"[SOCKET-CLIENT-READER] received: {0}", msg);
+                    LOGGER.log(WARNING,"[SOCKET-CLIENT-READER] received: {0}", msg);
 
                     if (msg.startsWith("{")) handleJson(msg);
                         // else will be handled by the HashMap
@@ -421,7 +422,7 @@ public class SocketClientReader extends Thread {
 
         //show
         headersMap.put("showMessage", (commands) -> {
-            LOGGER.log(WARNING,() -> "[Socket-Client-Reader] received show by server " + Arrays.toString(commands));
+            LOGGER.log(level,() -> "[Socket-Client-Reader] received show by server " + Arrays.toString(commands));
             RunClient.getView().show(commands[1]);
         });
     }

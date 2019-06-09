@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
 import static it.polimi.ingsw.view.UiHelpers.directionTranslator;
 import static it.polimi.ingsw.view.UiHelpers.genPointFromDirections;
 import static java.lang.Thread.sleep;
@@ -221,11 +222,15 @@ public class CLI implements UserInterface {
     }
 
     public  void show(String s){
-        /*
-        new Thread(() ->
-            System.out.println(s)
-        ).start();*/
         System.out.println(s);
+
+        //if weapon buy has failed, re-sync the local cli map with real player position
+        if(s.equals(DEFAULT_CANNOT_BUY_WEAPON)){
+            FileRead.removePlayer(view.getPlayerId());
+            Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+            FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
+            FileRead.showBattlefield();
+        }
     }
 
     @Override
@@ -732,7 +737,7 @@ public class CLI implements UserInterface {
             System.out.println("9: mostra armi nelle celle di spawn");
 
             try {
-
+                scanner.reset();
                 choice = scanner.nextInt();
                 scanner.nextLine();
 

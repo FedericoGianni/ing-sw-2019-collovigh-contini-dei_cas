@@ -43,7 +43,7 @@ public class SocketConnectionReader extends Thread {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
 
-    private static Level level = INFO;
+    private static Level level = WARNING;
 
     /**
      * Reference to the socket to be handled, which is passed as a parameter to the constructor

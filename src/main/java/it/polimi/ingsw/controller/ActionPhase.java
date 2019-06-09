@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
+
 public class ActionPhase {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
@@ -375,7 +377,7 @@ public class ActionPhase {
 
         }else {
             //default CANNOT_PAY_WEAPON
-            String s =  " tried to buy a weapon but can not pay for it";
+            String s = DEFAULT_CANNOT_BUY_WEAPON;
             LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + s);
             controller.getVirtualView(controller.getCurrentPlayer()).show(s);
             return false;
