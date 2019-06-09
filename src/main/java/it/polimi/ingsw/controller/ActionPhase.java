@@ -270,37 +270,57 @@ public class ActionPhase {
 
         if (!cell.isAmmoCell()) {
 
-            if (grabAction.getNewWeaponName() == null) {
+            return checkWeaponGrab(grabAction,cell);
 
-                // if the player did not specify the weapon to buy -> false
+        }else {
 
-                LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to buy a weapon but did not specify the name ");
+            if ( cell.getAmmoPlaced() != null){
+
+                LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to pick an ammoCard in a cell that was empty ");
+
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * this method will check if the player can grab a weapon in the specified cell
+     * @param grabAction is the class containing the names of the weapon to buy or to discard
+     * @param cell is the specified cell
+     * @return true if the player can grab false otherwise
+     */
+    private Boolean checkWeaponGrab(GrabAction grabAction, Cell cell){
+
+        if (grabAction.getNewWeaponName() == null) {
+
+            // if the player did not specify the weapon to buy -> false
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to buy a weapon but did not specify the name ");
+
+            return false;
+
+        } else {
+
+            if (findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell) == null) {
+
+                LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " the specified weapon was not found in the cell : " + grabAction.getNewWeaponName());
 
                 return false;
 
             } else {
 
-                if (findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell) == null) {
+                if ((Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS) && (grabAction.getDiscardedWeapon() == null)) {
 
-                    LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " the specified weapon was not found in the cell : " + grabAction.getNewWeaponName());
+                    LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to buy a weapon but has already max weapon and did not specify weapon to delete");
 
                     return false;
-
-                } else {
-
-                    if ((Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS) && (grabAction.getDiscardedWeapon() == null)) {
-
-                        LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to buy a weapon but has already max weapon and did not specify weapon to delete");
-
-                        return false;
-                    }
-
-                    return currentPlayerCanBuyWeapon(findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell));
                 }
+
+                return currentPlayerCanBuyWeapon(findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell));
             }
         }
-
-        return true;
     }
 
     /**

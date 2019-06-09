@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.map;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCard;
-import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
 
@@ -168,15 +167,6 @@ public abstract class Cell extends Subject {
         return this.visit;
     }
 
-    //commented by Fed because it works only if Map is created from Model, needed for debug with Map only
-    /*
-    @Override
-    public String toString() {
-
-
-        return this.getClass().toString() + Model.getMap().cellToCoord(this);
-    }*/
-
     @Override
     public String toString(){
          return "Cella: colroe: " + color;
@@ -213,7 +203,7 @@ public abstract class Cell extends Subject {
 
     /**
      *
-     * @return the only rference to the Ammocard placed in the cell and sets it to null if it is an AmmoCell or null otherwise
+     * @return the only reference to the AmmoCard placed in the cell and sets it to null if it is an AmmoCell or null otherwise
      */
     public abstract AmmoCard pickAmmoPlaced();
 
