@@ -2,9 +2,9 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.model.map.CellColor;
 import it.polimi.ingsw.model.map.JsonMap;
 import it.polimi.ingsw.model.map.Map;
+import it.polimi.ingsw.utils.CellColor;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import org.junit.jupiter.api.Test;
 

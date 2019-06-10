@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.ammo;
 
 
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.utils.Color;
 
 /**
  * this class represents the single cube that the game use for representing ammo

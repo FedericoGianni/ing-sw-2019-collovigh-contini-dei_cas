@@ -1,15 +1,12 @@
 package it.polimi.ingsw.model.weapons;
 
 import it.polimi.ingsw.customsexceptions.*;
-import it.polimi.ingsw.customsexceptions.DeadPlayerException;
-import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
-import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
-import it.polimi.ingsw.model.ammo.AmmoCube;
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.Color;
 
 import java.util.ArrayList;
 import java.util.List;

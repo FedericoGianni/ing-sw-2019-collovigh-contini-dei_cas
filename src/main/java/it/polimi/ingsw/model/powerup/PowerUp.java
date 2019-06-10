@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model.powerup;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.ammo.AmmoCube;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PowerUpType;
 
 /**
  *  Abstract Class for PowerUps

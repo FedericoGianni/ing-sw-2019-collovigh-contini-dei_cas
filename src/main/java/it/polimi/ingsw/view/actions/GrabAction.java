@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.actions;
 
-import it.polimi.ingsw.model.map.Directions;
+import it.polimi.ingsw.utils.Directions;
 
 import java.util.ArrayList;
 import java.util.List;

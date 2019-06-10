@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.ammo;
 
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.utils.Color;
 
 import java.util.ArrayList;
 import java.util.List;

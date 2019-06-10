@@ -2,11 +2,15 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.customsexceptions.CellNonExistentException;
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.powerup.*;
+import it.polimi.ingsw.model.powerup.Newton;
+import it.polimi.ingsw.model.powerup.PowerUp;
+import it.polimi.ingsw.model.powerup.TagbackGrenade;
+import it.polimi.ingsw.model.powerup.Teleporter;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
@@ -20,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.model.powerup.PowerUpType.*;
+import static it.polimi.ingsw.utils.PowerUpType.*;
 
 public class PowerUpPhase {
 

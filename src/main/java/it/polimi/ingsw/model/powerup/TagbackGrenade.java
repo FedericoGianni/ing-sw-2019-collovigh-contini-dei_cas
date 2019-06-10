@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model.powerup;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
-
-import java.util.List;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PowerUpType;
 
 /**
  * 

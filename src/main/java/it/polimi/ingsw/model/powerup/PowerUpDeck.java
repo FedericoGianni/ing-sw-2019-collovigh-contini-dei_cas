@@ -1,9 +1,12 @@
 package it.polimi.ingsw.model.powerup;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Deck;
+import it.polimi.ingsw.utils.Color;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Random;
 
 /**
  *  This class will be used to instantiate two decks of power ups one from which player draw cards and one that collect all discarded cards

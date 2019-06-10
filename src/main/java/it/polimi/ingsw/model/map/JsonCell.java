@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.map;
 
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.CellColor;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 
 import java.awt.*;

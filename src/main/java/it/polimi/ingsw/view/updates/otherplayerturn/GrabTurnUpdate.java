@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.updates.otherplayerturn;
 
 
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.utils.Color;
 
 import java.util.ArrayList;
 import java.util.List;

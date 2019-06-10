@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.utils.CellColor;
 
 import java.util.ArrayList;
 import java.util.List;

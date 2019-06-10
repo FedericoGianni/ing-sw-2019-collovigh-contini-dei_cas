@@ -1,15 +1,11 @@
 package it.polimi.ingsw.view.cachemodel.sendables;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.model.ammo.AmmoCube;
-import it.polimi.ingsw.model.map.AmmoCell;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedCell;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 
 import java.awt.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CachedAmmoCell extends CachedCell {
 

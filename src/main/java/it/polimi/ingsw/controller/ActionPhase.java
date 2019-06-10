@@ -3,9 +3,9 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
 

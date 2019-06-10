@@ -154,7 +154,7 @@ public class Gui extends Application implements UserInterface {
                     retryLogin = false;
                     break;
 
-                case DEFAULT_MAX_PLAYER_READCHED:
+                case DEFAULT_MAX_PLAYER_REACHED:
                     header = "login";
                     msg = "Massimo numero di giocatori raggiunto!";
                     retryLogin = false;

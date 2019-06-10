@@ -1,16 +1,12 @@
 package it.polimi.ingsw.model.weapons;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.controller.Parser;
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 

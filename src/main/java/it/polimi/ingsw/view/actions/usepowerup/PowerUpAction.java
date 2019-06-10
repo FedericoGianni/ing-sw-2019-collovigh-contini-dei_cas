@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.actions.usepowerup;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.powerup.PowerUpType;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.ActionTypes;
 import it.polimi.ingsw.view.actions.JsonAction;
 

@@ -1,17 +1,18 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.customsexceptions.CellNonExistentException;
 import it.polimi.ingsw.customsexceptions.PlayerNonExistentException;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.Newton;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Directions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NewtonTest {
 

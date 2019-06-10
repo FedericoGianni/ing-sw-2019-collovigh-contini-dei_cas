@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.cachemodel;
 
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.utils.Color;
 
 import java.io.Serializable;
 import java.util.List;

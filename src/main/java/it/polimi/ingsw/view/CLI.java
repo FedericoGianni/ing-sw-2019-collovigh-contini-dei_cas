@@ -1,10 +1,10 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.utils.Protocol;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.JsonAction;
@@ -51,6 +51,9 @@ public class CLI implements UserInterface {
         //this.socketClientWriter = s.getScw();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setValidMove(boolean validMove) {
         if(validMove){
             this.validMove = 1;
@@ -65,7 +68,7 @@ public class CLI implements UserInterface {
     // start Ui methods
 
     /**
-     * This function starts the ui and ask the user which protocol wants to use
+     * {@inheritDoc}
      */
     @Override
     public void startUI() {
@@ -120,7 +123,9 @@ public class CLI implements UserInterface {
 
     // game initialization functions
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void gameSelection() {
 
@@ -157,6 +162,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void login() {
 
@@ -189,6 +197,9 @@ public class CLI implements UserInterface {
         view.joinGame(playerName, PlayerColor.valueOf(playerColor.toUpperCase()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void retryLogin(String error) {
         switch (error){
@@ -201,7 +212,7 @@ public class CLI implements UserInterface {
             case Protocol.DEFAULT_GAME_ALREADY_STARTED_REPLY:
                 System.out.println("Gioco già avviato!");
                 break;
-            case Protocol.DEFAULT_MAX_PLAYER_READCHED:
+            case Protocol.DEFAULT_MAX_PLAYER_REACHED:
                 System.out.println("Massimo numero di giocatori raggiunto!");
                 break;
             default:
@@ -211,6 +222,9 @@ public class CLI implements UserInterface {
         login();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void retryLogin(Exception e) {
 
@@ -221,6 +235,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public  void show(String s){
         System.out.println(s);
 
@@ -233,6 +250,9 @@ public class CLI implements UserInterface {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyUpdate(UpdateType updateType, int playerId) {
 
@@ -364,7 +384,9 @@ public class CLI implements UserInterface {
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame() {
         System.out.println("Gioco iniziato!");
@@ -388,6 +410,9 @@ public class CLI implements UserInterface {
         showInfo();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startSpawn() {
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
@@ -444,6 +469,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startPowerUp(){
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
@@ -523,6 +551,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void askGrenade() {
 
@@ -712,6 +743,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startAction() {
         //TODO consume scanner buffer if user type random numbers when waiting for its tur
@@ -1082,7 +1116,9 @@ public class CLI implements UserInterface {
     }
 
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startReload() {
         Boolean validChoice = false;

@@ -2,15 +2,13 @@ package it.polimi.ingsw.model.powerup;
 
 import it.polimi.ingsw.customsexceptions.CellNonExistentException;
 import it.polimi.ingsw.customsexceptions.PlayerNonExistentException;
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PowerUpType;
 
-import java.awt.*;
-
-import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 
 /**
