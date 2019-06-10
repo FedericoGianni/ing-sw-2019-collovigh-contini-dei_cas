@@ -493,6 +493,15 @@ public class FileRead {
                     case '+':
                         System.out.print(ANSI_WHITE.escape() + '^' + ANSI_RESET.escape());
                         break;
+                    case 'ç':
+                        System.out.print(ANSI_RED.escape() + '§' + ANSI_RESET.escape());
+                        break;
+                    case '§':
+                        System.out.print(ANSI_BLUE.escape() + '§' + ANSI_RESET.escape());
+                        break;
+                    case 'ù':
+                        System.out.print(ANSI_YELLOW.escape() + '§' + ANSI_RESET.escape());
+                        break;
                     default:
                         System.out.print(battelfield[i][j]);
                 }

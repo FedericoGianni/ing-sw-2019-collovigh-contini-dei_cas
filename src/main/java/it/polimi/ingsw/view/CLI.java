@@ -317,12 +317,17 @@ public class CLI implements UserInterface {
 
             case WEAPON_BAG:
                 System.out.println("[NOTIFICA] WEAPON_BAG update ricevuto!");
-                System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag());
+                //show update only on the player who has bought the weapon
+                if(playerId == view.getPlayerId()) {
+                    System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag());
+                }
                 break;
 
             case AMMO_BAG:
                 //System.out.println("[NOTIFICA] AMMO_BAG update ricevuto!");
-                System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag());
+                if(playerId == view.getPlayerId()) {
+                    System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag());
+                }
                 break;
 
             case GAME:
@@ -474,8 +479,15 @@ public class CLI implements UserInterface {
             }
 
             System.out.println("Scegli un powerUp da scartare: ");
-            read = scanner.nextInt();
-            scanner.nextLine();
+
+            try {
+                read = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
+                read = -1;
+            }
 
             if (read >= 0 && read < powerUps.size()) validChoice = true;
 
