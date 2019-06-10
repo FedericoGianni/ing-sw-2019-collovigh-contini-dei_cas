@@ -1,11 +1,12 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.weapons.*;
+import it.polimi.ingsw.utils.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;

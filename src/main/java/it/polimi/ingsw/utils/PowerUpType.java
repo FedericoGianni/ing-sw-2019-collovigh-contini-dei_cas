@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.powerup;
+package it.polimi.ingsw.utils;
 
 public enum PowerUpType {
 

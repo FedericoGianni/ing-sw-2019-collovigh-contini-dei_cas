@@ -1,15 +1,15 @@
 package it.polimi.ingsw.network.socket;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameAlreadyStartedException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.utils.Protocol;
 import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
@@ -227,7 +227,7 @@ public class SocketConnectionReader extends Thread {
             }catch (ColorAlreadyTakenException e){
                 socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_COLOR_ALREADY_TAKEN_REPLY);
             }catch (OverMaxPlayerException e){
-                socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_MAX_PLAYER_READCHED);
+                socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_MAX_PLAYER_REACHED);
             }catch (GameAlreadyStartedException e){
                 socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_GAME_ALREADY_STARTED_REPLY);
             }

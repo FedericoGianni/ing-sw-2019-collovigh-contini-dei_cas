@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.cachemodel.cachedmap;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 
 import java.io.*;

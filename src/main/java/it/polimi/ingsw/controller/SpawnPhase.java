@@ -1,9 +1,9 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.powerup.PowerUp;
-import it.polimi.ingsw.model.powerup.PowerUpType;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PowerUpType;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

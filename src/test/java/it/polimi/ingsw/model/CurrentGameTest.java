@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.powerup.*;
+import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

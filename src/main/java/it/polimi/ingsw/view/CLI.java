@@ -1,10 +1,10 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.utils.Protocol;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.JsonAction;
@@ -41,6 +41,7 @@ public class CLI implements UserInterface {
     private Scanner scanner = new Scanner(System.in);
     private final View view;
     private int validMove = -1;
+    private Object obj = new Object();
 
     /**
      * Default constructor
@@ -51,6 +52,9 @@ public class CLI implements UserInterface {
         //this.socketClientWriter = s.getScw();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setValidMove(boolean validMove) {
         if(validMove){
             this.validMove = 1;
@@ -65,7 +69,7 @@ public class CLI implements UserInterface {
     // start Ui methods
 
     /**
-     * This function starts the ui and ask the user which protocol wants to use
+     * {@inheritDoc}
      */
     @Override
     public void startUI() {
@@ -120,7 +124,9 @@ public class CLI implements UserInterface {
 
     // game initialization functions
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void gameSelection() {
 
@@ -157,6 +163,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void login() {
 
@@ -189,6 +198,9 @@ public class CLI implements UserInterface {
         view.joinGame(playerName, PlayerColor.valueOf(playerColor.toUpperCase()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void retryLogin(String error) {
         switch (error){
@@ -201,7 +213,7 @@ public class CLI implements UserInterface {
             case Protocol.DEFAULT_GAME_ALREADY_STARTED_REPLY:
                 System.out.println("Gioco già avviato!");
                 break;
-            case Protocol.DEFAULT_MAX_PLAYER_READCHED:
+            case Protocol.DEFAULT_MAX_PLAYER_REACHED:
                 System.out.println("Massimo numero di giocatori raggiunto!");
                 break;
             default:
@@ -211,6 +223,9 @@ public class CLI implements UserInterface {
         login();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void retryLogin(Exception e) {
 
@@ -221,18 +236,25 @@ public class CLI implements UserInterface {
 
     }
 
-    public  void show(String s){
-        System.out.println(s);
+    /**
+     * {@inheritDoc}
+     */
+    public synchronized void show(String s){
 
-        //if weapon buy has failed, re-sync the local cli map with real player position
-        if(s.equals(DEFAULT_CANNOT_BUY_WEAPON)){
-            FileRead.removePlayer(view.getPlayerId());
-            Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
-            FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
-            FileRead.showBattlefield();
-        }
+            System.out.println(s);
+
+            //if weapon buy has failed, re-sync the local cli map with real player position
+            if (s.equals(DEFAULT_CANNOT_BUY_WEAPON)) {
+                FileRead.removePlayer(view.getPlayerId());
+                Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+                FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
+                FileRead.showBattlefield();
+            }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyUpdate(UpdateType updateType, int playerId) {
 
@@ -364,7 +386,9 @@ public class CLI implements UserInterface {
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame() {
         System.out.println("Gioco iniziato!");
@@ -388,6 +412,9 @@ public class CLI implements UserInterface {
         showInfo();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startSpawn() {
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
@@ -444,6 +471,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startPowerUp(){
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
@@ -498,7 +528,7 @@ public class CLI implements UserInterface {
             while(read == -1) {
                 try {
                     read = scanner.nextInt();
-                    scanner.nextLine();
+                    //scanner.nextLine();
                 } catch (InputMismatchException e) {
                     System.out.println("Non è un numero! Riprova");
                     scanner.nextLine();
@@ -523,6 +553,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void askGrenade() {
 
@@ -712,6 +745,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startAction() {
         //TODO consume scanner buffer if user type random numbers when waiting for its tur
@@ -721,79 +757,79 @@ public class CLI implements UserInterface {
 
         List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA", "SKIP"));
 
-        do {
+            do {
 
-            valid = false;
-
-
-            System.out.println("SELEZIONA UN AZIONE:");
-
-            for (int i = 0; i < actions.size(); i++) {
-                System.out.println( i + ": " + actions.get(i));
-            }
-
-            System.out.println("7: mostra mappa");
-            System.out.println("8: mostra info sui giocatori");
-            System.out.println("9: mostra armi nelle celle di spawn");
-
-            try {
-                scanner.reset();
-                choice = scanner.nextInt();
-                scanner.nextLine();
-
-            } catch (InputMismatchException e){
-                System.out.println("Non è un numero: Riprova!");
-                scanner.nextLine();
-            }
+                valid = false;
 
 
-            if ((choice >=0 && choice < actions.size()) || choice==7 || choice==8 || choice==9){
-                valid = true;
+                show("SELEZIONA UN AZIONE:");
 
-            }else {
-                System.out.println(" Scelta non valida: Riprova");
-            }
+                for (int i = 0; i < actions.size(); i++) {
+                    System.out.println(i + ": " + actions.get(i));
+                }
 
-        }while (!valid);
+                show("7: mostra mappa");
+                show("8: mostra info sui giocatori");
+                show("9: mostra armi nelle celle di spawn");
 
-        switch (choice){
+                try {
+                    scanner.reset();
+                    choice = scanner.nextInt();
+                    scanner.nextLine();
 
-            case 0:
-                startMove();
-                break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Non è un numero: Riprova!");
+                    scanner.nextLine();
+                }
 
-            case 1:
-                startGrab();
-                break;
 
-            case 2:
-                startShoot();
-                break;
+                if ((choice >= 0 && choice < actions.size()) || choice == 7 || choice == 8 || choice == 9) {
+                    valid = true;
 
-            case 3:
-                view.doAction(new SkipAction());
-                break;
+                } else {
+                    System.out.println(" Scelta non valida: Riprova");
+                }
 
-            case 7:
-                FileRead.showBattlefield();
-                startAction();
-                break;
+            } while (!valid);
 
-            case 8:
-                showInfo();
-                startAction();
-                break;
+            switch (choice) {
 
-            case 9:
-                showWeapInSpawnCells();
-                startAction();
-                break;
+                case 0:
+                    startMove();
+                    break;
 
-            default:
+                case 1:
+                    startGrab();
+                    break;
 
-                System.out.println("Azione non esistente");
-                break;
-        }
+                case 2:
+                    startShoot();
+                    break;
+
+                case 3:
+                    view.doAction(new SkipAction());
+                    break;
+
+                case 7:
+                    FileRead.showBattlefield();
+                    startAction();
+                    break;
+
+                case 8:
+                    showInfo();
+                    startAction();
+                    break;
+
+                case 9:
+                    showWeapInSpawnCells();
+                    startAction();
+                    break;
+
+                default:
+
+                    System.out.println("Azione non esistente");
+                    break;
+                }
     }
 
     private List <Directions> handleMove(int maxMoves){
@@ -1082,7 +1118,9 @@ public class CLI implements UserInterface {
     }
 
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startReload() {
         Boolean validChoice = false;
@@ -1097,6 +1135,7 @@ public class CLI implements UserInterface {
         do{
             System.out.println("Vuoi ricaricare? Le tue armi sono: ");
             showCurrWeapons();
+            System.out.println("9 -> non ricaricare.");
 
             System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
             try {
@@ -1107,9 +1146,13 @@ public class CLI implements UserInterface {
                 System.out.println("Non è un numero! Riprova >>> ");
             }
 
-            if(read >= 0 && read <= weapons.size()) validChoice = true;
+            if((read >= 0 && read <= weapons.size()) || read == 9) validChoice = true;
 
         }while(!validChoice);
+
+        if(read == 9){
+            view.doAction(new SkipAction());
+        }
 
         //TODO forward RELOAD action to the view
     }

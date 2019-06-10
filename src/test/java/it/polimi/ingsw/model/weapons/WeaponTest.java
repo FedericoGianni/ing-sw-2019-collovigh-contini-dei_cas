@@ -1,14 +1,14 @@
 package it.polimi.ingsw.model.weapons;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.AmmoBag;
+import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class WeaponTest {
 

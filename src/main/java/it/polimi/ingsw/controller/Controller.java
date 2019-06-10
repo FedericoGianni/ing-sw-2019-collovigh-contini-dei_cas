@@ -1,13 +1,13 @@
 package it.polimi.ingsw.controller;
 
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.powerup.PowerUpType;
 import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;

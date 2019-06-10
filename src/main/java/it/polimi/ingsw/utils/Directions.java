@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.map;
+package it.polimi.ingsw.utils;
 
 public enum Directions {
 

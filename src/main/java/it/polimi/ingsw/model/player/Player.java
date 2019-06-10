@@ -4,13 +4,13 @@ import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
 import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.util.List;

@@ -3,8 +3,7 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCube;
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoBag;
+import it.polimi.ingsw.utils.Color;
 
 import java.util.ArrayList;
 import java.util.Comparator;

@@ -1,16 +1,10 @@
 package it.polimi.ingsw.utils;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.PowerUpBag;
 import it.polimi.ingsw.model.player.Stats;
-import it.polimi.ingsw.model.powerup.Newton;
-import it.polimi.ingsw.model.powerup.PowerUp;
-import it.polimi.ingsw.model.powerup.TagbackGrenade;
 import it.polimi.ingsw.model.weapons.Damage;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
@@ -18,7 +12,6 @@ import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.EffectType;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;

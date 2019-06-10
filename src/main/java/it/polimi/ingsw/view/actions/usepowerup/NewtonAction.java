@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.actions.usepowerup;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.map.Directions;
-import it.polimi.ingsw.model.powerup.PowerUpType;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PowerUpType;
 
 public class NewtonAction extends PowerUpAction {
 

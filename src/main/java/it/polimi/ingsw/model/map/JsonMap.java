@@ -7,7 +7,7 @@ import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import java.awt.*;
 import java.io.*;
 
-import static it.polimi.ingsw.model.map.CellColor.*;
+import static it.polimi.ingsw.utils.CellColor.*;
 
 public class JsonMap {
 

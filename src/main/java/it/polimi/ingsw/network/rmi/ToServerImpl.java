@@ -1,12 +1,13 @@
 package it.polimi.ingsw.network.rmi;
 
 
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.networkexceptions.*;
+import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

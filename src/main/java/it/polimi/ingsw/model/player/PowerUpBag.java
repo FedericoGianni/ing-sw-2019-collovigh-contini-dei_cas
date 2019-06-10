@@ -1,13 +1,12 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCube;
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.powerup.PowerUp;
-import it.polimi.ingsw.model.powerup.PowerUpType;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PowerUpType;
 
 import java.util.ArrayList;
 import java.util.List;

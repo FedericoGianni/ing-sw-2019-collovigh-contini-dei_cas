@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.ammo.AmmoCube;
+import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AmmoCubeTest {
 

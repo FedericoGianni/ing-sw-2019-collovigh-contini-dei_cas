@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.weapons.*;
+import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

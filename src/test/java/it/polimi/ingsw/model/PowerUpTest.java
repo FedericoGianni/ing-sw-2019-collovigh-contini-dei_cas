@@ -3,9 +3,10 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.TagbackGrenade;
+import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PowerUpTest {
 

@@ -1,11 +1,11 @@
 package it.polimi.ingsw.network.rmi;
 
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.networkexceptions.*;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -235,7 +235,7 @@ public class RMIClient extends Client {
 
             LOGGER.log(Level.WARNING,"[RMI-Client]Attempted login but players were already max");
 
-            view.show(DEFAULT_MAX_PLAYER_READCHED);
+            view.show(DEFAULT_MAX_PLAYER_REACHED);
 
             // Retry the login
 

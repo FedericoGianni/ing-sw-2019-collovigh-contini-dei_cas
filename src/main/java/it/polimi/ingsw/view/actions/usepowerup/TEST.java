@@ -1,12 +1,11 @@
 package it.polimi.ingsw.view.actions.usepowerup;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.map.Directions;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.JsonAction;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 

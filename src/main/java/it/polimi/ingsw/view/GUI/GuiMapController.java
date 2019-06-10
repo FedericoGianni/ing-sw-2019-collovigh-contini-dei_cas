@@ -1,10 +1,10 @@
 package it.polimi.ingsw.view.GUI;
 
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.map.Directions;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.powerup.PowerUpType;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.Move;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

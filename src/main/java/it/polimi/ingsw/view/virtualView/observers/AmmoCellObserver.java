@@ -1,9 +1,9 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.AmmoCell;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.virtualView.VirtualView;

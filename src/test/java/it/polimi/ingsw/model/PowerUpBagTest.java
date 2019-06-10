@@ -9,6 +9,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.PowerUpBag;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.PowerUpDeck;
+import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

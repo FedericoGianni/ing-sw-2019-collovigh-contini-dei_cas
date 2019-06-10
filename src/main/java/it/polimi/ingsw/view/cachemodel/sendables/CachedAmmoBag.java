@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.cachemodel.sendables;
 
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
 
