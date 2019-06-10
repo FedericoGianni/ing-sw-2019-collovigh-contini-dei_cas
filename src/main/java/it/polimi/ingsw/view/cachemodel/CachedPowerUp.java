@@ -50,9 +50,25 @@ public class CachedPowerUp implements Serializable {
                 break;
         }
 
-        return s +"PowerUp {" +
-                "color=" + color +
-                ", type=" + type +
-                '}' + ANSI_RESET.escape();
+        switch (type){
+
+            case NEWTON:
+                s = s.concat("RAGGIO CINETICO");
+                break;
+
+            case TARGETING_SCOPE:
+                s = s.concat("MIRINO");
+                break;
+
+            case TAG_BACK_GRENADE:
+                s = s.concat("GRANATA");
+                break;
+
+            case TELEPORTER:
+                s = s.concat("TELETRASPORTO");
+                break;
+        }
+
+        return s + ANSI_RESET.escape();
     }
 }

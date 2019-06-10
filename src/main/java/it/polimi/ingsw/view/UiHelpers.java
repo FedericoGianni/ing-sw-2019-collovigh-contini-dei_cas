@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Directions;
 
 import java.awt.*;
@@ -13,8 +14,15 @@ import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
  */
 public class UiHelpers {
 
+    public static final int DEFAULT_MAX_NORMAL_MOVES = 3;
+    public static final int DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT = 6;
+    public static final int DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB = 3;
+    public static final int DEFAULT_MOVES_WITH_GRAB = 1;
+    public static final int DEFAULT_ENHANCED_MOVES_WITH_GRAB = 2;
+    public static final int DEFAULT_ENHANCED_MOVES_WITH_SHOOT = 1;
+
     /**
-     *
+     * Helper method to translate cardinal directions from IT to EN
      * @param s a String which is already in the right form (cardinal point to upper case)
      * @return the enum in Directions linked to the String
      */
@@ -46,6 +54,44 @@ public class UiHelpers {
         }
 
         return direction;
+    }
+
+    /**
+     * Helper method to translate color with enum from italian to english
+     * @param s color in italian
+     * @return PlayerColor enum corrisponding to the italian color
+     */
+    public static PlayerColor colorTranslator(String s){
+        PlayerColor playerColor;
+
+        switch (s){
+
+            case "VERDE":
+                playerColor = PlayerColor.GREEN;
+                break;
+
+            case "GIALLO":
+                playerColor = PlayerColor.YELLOW;
+                break;
+
+            case "VIOLA":
+                playerColor = PlayerColor.PURPLE;
+                break;
+
+            case "GRIGIO":
+                playerColor = PlayerColor.GREY;
+                break;
+
+            case "BLU":
+                playerColor = PlayerColor.BLUE;
+                break;
+
+            default:
+                System.out.println("[DEBUG] PlayerColor non valido!");
+                playerColor = PlayerColor.GREY;
+        }
+
+        return playerColor;
     }
 
     public static Point genPointFromDirections(List<Directions> directions, Point start){
