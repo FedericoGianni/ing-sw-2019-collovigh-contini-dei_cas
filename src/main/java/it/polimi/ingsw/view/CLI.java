@@ -41,6 +41,7 @@ public class CLI implements UserInterface {
     private Scanner scanner = new Scanner(System.in);
     private final View view;
     private int validMove = -1;
+    private Object obj = new Object();
 
     /**
      * Default constructor
@@ -238,16 +239,17 @@ public class CLI implements UserInterface {
     /**
      * {@inheritDoc}
      */
-    public  void show(String s){
-        System.out.println(s);
+    public synchronized void show(String s){
 
-        //if weapon buy has failed, re-sync the local cli map with real player position
-        if(s.equals(DEFAULT_CANNOT_BUY_WEAPON)){
-            FileRead.removePlayer(view.getPlayerId());
-            Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
-            FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
-            FileRead.showBattlefield();
-        }
+            System.out.println(s);
+
+            //if weapon buy has failed, re-sync the local cli map with real player position
+            if (s.equals(DEFAULT_CANNOT_BUY_WEAPON)) {
+                FileRead.removePlayer(view.getPlayerId());
+                Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+                FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
+                FileRead.showBattlefield();
+            }
     }
 
     /**
@@ -526,7 +528,7 @@ public class CLI implements UserInterface {
             while(read == -1) {
                 try {
                     read = scanner.nextInt();
-                    scanner.nextLine();
+                    //scanner.nextLine();
                 } catch (InputMismatchException e) {
                     System.out.println("Non è un numero! Riprova");
                     scanner.nextLine();
@@ -755,79 +757,79 @@ public class CLI implements UserInterface {
 
         List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA", "SKIP"));
 
-        do {
+            do {
 
-            valid = false;
-
-
-            System.out.println("SELEZIONA UN AZIONE:");
-
-            for (int i = 0; i < actions.size(); i++) {
-                System.out.println( i + ": " + actions.get(i));
-            }
-
-            System.out.println("7: mostra mappa");
-            System.out.println("8: mostra info sui giocatori");
-            System.out.println("9: mostra armi nelle celle di spawn");
-
-            try {
-                scanner.reset();
-                choice = scanner.nextInt();
-                scanner.nextLine();
-
-            } catch (InputMismatchException e){
-                System.out.println("Non è un numero: Riprova!");
-                scanner.nextLine();
-            }
+                valid = false;
 
 
-            if ((choice >=0 && choice < actions.size()) || choice==7 || choice==8 || choice==9){
-                valid = true;
+                show("SELEZIONA UN AZIONE:");
 
-            }else {
-                System.out.println(" Scelta non valida: Riprova");
-            }
+                for (int i = 0; i < actions.size(); i++) {
+                    System.out.println(i + ": " + actions.get(i));
+                }
 
-        }while (!valid);
+                show("7: mostra mappa");
+                show("8: mostra info sui giocatori");
+                show("9: mostra armi nelle celle di spawn");
 
-        switch (choice){
+                try {
+                    scanner.reset();
+                    choice = scanner.nextInt();
+                    scanner.nextLine();
 
-            case 0:
-                startMove();
-                break;
+                } catch (InputMismatchException e) {
+                    System.out.println("Non è un numero: Riprova!");
+                    scanner.nextLine();
+                }
 
-            case 1:
-                startGrab();
-                break;
 
-            case 2:
-                startShoot();
-                break;
+                if ((choice >= 0 && choice < actions.size()) || choice == 7 || choice == 8 || choice == 9) {
+                    valid = true;
 
-            case 3:
-                view.doAction(new SkipAction());
-                break;
+                } else {
+                    System.out.println(" Scelta non valida: Riprova");
+                }
 
-            case 7:
-                FileRead.showBattlefield();
-                startAction();
-                break;
+            } while (!valid);
 
-            case 8:
-                showInfo();
-                startAction();
-                break;
+            switch (choice) {
 
-            case 9:
-                showWeapInSpawnCells();
-                startAction();
-                break;
+                case 0:
+                    startMove();
+                    break;
 
-            default:
+                case 1:
+                    startGrab();
+                    break;
 
-                System.out.println("Azione non esistente");
-                break;
-        }
+                case 2:
+                    startShoot();
+                    break;
+
+                case 3:
+                    view.doAction(new SkipAction());
+                    break;
+
+                case 7:
+                    FileRead.showBattlefield();
+                    startAction();
+                    break;
+
+                case 8:
+                    showInfo();
+                    startAction();
+                    break;
+
+                case 9:
+                    showWeapInSpawnCells();
+                    startAction();
+                    break;
+
+                default:
+
+                    System.out.println("Azione non esistente");
+                    break;
+                }
     }
 
     private List <Directions> handleMove(int maxMoves){
@@ -1133,6 +1135,7 @@ public class CLI implements UserInterface {
         do{
             System.out.println("Vuoi ricaricare? Le tue armi sono: ");
             showCurrWeapons();
+            System.out.println("9 -> non ricaricare.");
 
             System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
             try {
@@ -1143,9 +1146,13 @@ public class CLI implements UserInterface {
                 System.out.println("Non è un numero! Riprova >>> ");
             }
 
-            if(read >= 0 && read <= weapons.size()) validChoice = true;
+            if((read >= 0 && read <= weapons.size()) || read == 9) validChoice = true;
 
         }while(!validChoice);
+
+        if(read == 9){
+            view.doAction(new SkipAction());
+        }
 
         //TODO forward RELOAD action to the view
     }
