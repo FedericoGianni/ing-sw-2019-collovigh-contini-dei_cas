@@ -38,7 +38,9 @@ public class VirtualView implements ViewInterface {
 
     //methods to forward to the corresponding view throught network
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startSpawn() {
 
@@ -54,6 +56,9 @@ public class VirtualView implements ViewInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startPowerUp(){
 
@@ -64,6 +69,9 @@ public class VirtualView implements ViewInterface {
         view.startPowerUp();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startAction() {
 
@@ -76,6 +84,9 @@ public class VirtualView implements ViewInterface {
         LOGGER.log(level,"[Virtual View] id {0} received startAction and forwarding it to the real view",playerId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startReload() {
 
@@ -89,6 +100,9 @@ public class VirtualView implements ViewInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void askGrenade() {
         this.view = Server.getClient(playerId);
@@ -96,18 +110,27 @@ public class VirtualView implements ViewInterface {
         view.askGrenade();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame() {
         this.view = Server.getClient(playerId);
         view.startGame();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void show(String s) {
         this.view = Server.getClient(playerId);
         view.show(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendUpdates(UpdateClass update) {
 
@@ -127,29 +150,43 @@ public class VirtualView implements ViewInterface {
 
     //methods called by the view to the virtual view to call controller
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void spawn(CachedPowerUp powerUp) {
         controller.spawn(powerUp.getType(),powerUp.getColor());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doAction(JsonAction jsonAction) {
 
         controller.doAction(jsonAction);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void useMarker(Color color, int playerId) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean askMoveValid(int row, int column, Directions direction) {
 
         return controller.askMoveValid(row, column, direction);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setValidMove(boolean b) {
         //i don't need this method here

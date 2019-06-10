@@ -140,8 +140,8 @@ public class View implements ViewInterface {
     }
 
     /**
-     *  create a new client for handling connection to server
-     * @param type
+     * creates a new client for handling connection to server
+     * @param type protocolType (socket/rmi)
      */
     public void createConnection(ProtocolType type){
 
@@ -193,6 +193,9 @@ public class View implements ViewInterface {
         userInterface.retryLogin(error);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void show(String msg){
         new Thread( () -> {userInterface.show(msg);}).start();
@@ -221,38 +224,57 @@ public class View implements ViewInterface {
 
     //methods started from virtual view -> view
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startSpawn(){
         userInterface.startSpawn();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startPowerUp() {
        userInterface.startPowerUp();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startAction() {
         userInterface.startAction();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startReload() {
         userInterface.startReload();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void askGrenade() {
         userInterface.askGrenade();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doAction(JsonAction jsonAction) {
         clientToVView.doAction(jsonAction);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame() {
         userInterface.startGame();
@@ -264,7 +286,9 @@ public class View implements ViewInterface {
     //use clientToView which is an abstract class implemented both by rmi/socket in the client->server flow
 
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void spawn(CachedPowerUp powerUp) {
 
@@ -273,17 +297,26 @@ public class View implements ViewInterface {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void useMarker(Color color, int playerId) {
         clientToVView.useMarker(color, playerId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean askMoveValid(int row, int column, Directions direction) {
 
         return clientToVView.askMoveValid(row, column, direction);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setValidMove(boolean b) {
         userInterface.setValidMove(b);
@@ -297,7 +330,9 @@ public class View implements ViewInterface {
         return cacheModel;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendUpdates(UpdateClass update) {
         // LOG the update
