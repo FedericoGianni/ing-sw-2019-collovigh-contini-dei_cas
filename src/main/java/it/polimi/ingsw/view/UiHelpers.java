@@ -168,11 +168,11 @@ public class UiHelpers {
                 translate = "VULCANIZZATORE";
                 break;
 
-            case "HEATSEEKER":
+            case "HEAT SEEKER":
                 translate = "RAZZO TERMICO";
                 break;
 
-            case "WHISPER":
+            case "WHISPERER":
                 translate = "FUCILE DI PRECISIONE";
                 break;
 

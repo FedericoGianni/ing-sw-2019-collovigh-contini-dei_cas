@@ -5,10 +5,7 @@ import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.utils.Protocol;
-import it.polimi.ingsw.view.actions.GrabAction;
-import it.polimi.ingsw.view.actions.JsonAction;
-import it.polimi.ingsw.view.actions.Move;
-import it.polimi.ingsw.view.actions.SkipAction;
+import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
@@ -1134,7 +1131,7 @@ public class CLI implements UserInterface {
         }
 
         for (int i = 0; i < currWeap.size(); i++) {
-            System.out.println("Arma " + i + " " + currWeap.get(i));
+            System.out.println("Arma " + i + " " + UiHelpers.weaponTranslator(currWeap.get(i)));
         }
     }
 
@@ -1145,6 +1142,11 @@ public class CLI implements UserInterface {
         int choice = -1;
         List<Directions> directionsList = new ArrayList<>();
         CachedFullWeapon weapon;
+
+        //SHOOT ACTION requirements
+        List<List<Integer>> targetList;
+        List<Integer> effects = new ArrayList<>();
+        List<Point> cells = new ArrayList<>();
 
         //weapon checks
         int targets = -1; //number of targets needed by the weapons (reads this from json CachedFullWeapons)
@@ -1175,19 +1177,23 @@ public class CLI implements UserInterface {
             showCurrWeapons();
 
             try{
+
                 scanner.reset();
                 choice = scanner.nextInt();
+
+                int weaponBagSize = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons().size();
+                if(choice >= 0 && choice <= weaponBagSize){
+                    valid = true;
+
+                } else {
+                    System.out.println("Scelta non valida! Riprova >>> ");
+                }
+
             } catch (InputMismatchException e){
                 System.out.println("Non è un numero! Riprova >>> ");
                 scanner.nextLine();
             }
 
-            int weaponBagSize = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons().size();
-            if(choice >= 0 && choice <= weaponBagSize){
-                valid = true;
-            } else {
-                System.out.println("Scelta non valida! Riprova >>> ");
-            }
 
         } while (!valid);
 
@@ -1205,16 +1211,82 @@ public class CLI implements UserInterface {
         // choose target/s and additional info needed to shoot with a particular weapon
         //TODO user needs to choose weapons effect to use (check if he can pay w/ ammo/powerups
 
-
-
-
         //TODO local checks with the attributes read from json (i.e. numtarget, samecell, ...)
+
+        //TODO method which takes effect type as parameter (or CachedFullWeapon) and returns List<Int> with effects chosen
+        //TODO also checks if he can pay this effects (w/ ammo/powerUps)
+        //effects = chooseEffects();
+        effects.add(0);
+        targetList = chooseTargets(1,1);
+
 
         //forward the shoot action to the controller -> if shoot fails it won't do the shoot and
         //let the user retry the shoot specifiying why shoot has failed
-        //TODO replace SkipAction with real ShootAction
-        view.doAction(new SkipAction());
 
+        //just to test a basic shoot
+        view.doAction(new ShootAction(targetList, effects, cells));
+
+    }
+
+    /**
+     * Helper method needed by startShoot to collect target/s to be shot
+     * @return a List of List<Integer> representing the targets for each of the weapon effect
+     * (index 0 -> base effect, index 1 -> second effect, index 2 -> third effect)
+     */
+    private List<List<Integer>> chooseTargets(int targetsNum, int effectsNum){
+
+        List<List<Integer>> targetsList = new ArrayList<>();
+        boolean valid = false;
+
+        for (int i = 0; i < effectsNum; i++) {
+
+            List<Integer> tempTargetList = new ArrayList<>();
+
+            System.out.println("Effetto: " + i);
+
+            for (int j = 0; j < targetsNum; j++) {
+
+                do {
+
+                    int read = -1;
+                    System.out.println("Seleziona un bersaglio (ID) >>> ");
+
+                    try {
+                        read = scanner.nextInt();
+
+                        if(read >= 0 && read <= view.getCacheModel().getCachedPlayers().size()){
+                            valid = true;
+                            tempTargetList.add(read);
+                        }
+
+                    } catch (InputMismatchException e) {
+                        System.out.println("Non è un numero! Riprova >>> ");
+                        scanner.nextLine();
+                    }
+
+                } while (!valid);
+            }
+
+            targetsList.add(tempTargetList);
+        }
+
+        return targetsList;
+    }
+
+    /**
+     * Helper method to retrieve which weapon effect the player wants to use.
+     * @param w CachedFullWeapon chosen by the player to shoot (need it to read effect types/cost)
+     * @return a List<Integer> representing which weapon effects the user wants to use
+     */
+    private List<Integer> chooseEffects(CachedFullWeapon w){
+
+        List<Integer> effects = new ArrayList<>();
+
+        //TODO ask the player to choose which weapon effect to activate
+        //TODO check if effects are exclusive/concatenable
+        //TODO check if player can pay for the effects chosen w/ ammo/powerups
+
+        return effects;
     }
 
 
