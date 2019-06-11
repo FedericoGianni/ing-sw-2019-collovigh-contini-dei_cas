@@ -31,7 +31,7 @@ class CurrentGameTest {
         //Map m = Map.genMap(1);
         Map m = new Map(JsonMap.genJsonMap(1));
 
-        CurrentGame c = new CurrentGame(players, m);
+        CurrentGame c = new CurrentGame(players, m,8);
 
         assert(c.getPlayers().equals(players));
     }
@@ -49,7 +49,7 @@ class CurrentGameTest {
         //Map m = Map.genMap(1);
         Map m = new Map(JsonMap.genJsonMap(1));
 
-        CurrentGame c = new CurrentGame(players, m);
+        CurrentGame c = new CurrentGame(players, m,8);
         PowerUp teleport = new Teleporter(Color.YELLOW);
         PowerUp venom = new TagbackGrenade(Color.YELLOW);
         PowerUp viewF = new TargetingScope(Color.YELLOW);
@@ -87,7 +87,7 @@ class CurrentGameTest {
         //Map m = Map.genMap(1);
         Map m = new Map(JsonMap.genJsonMap(1));
 
-        CurrentGame c = new CurrentGame(players, m);
+        CurrentGame c = new CurrentGame(players, m,8);
         for (int id = 0; id < 3; id++) {
             assertEquals(players.get(id), c.idToPlayer(id));
         }
@@ -107,7 +107,7 @@ class CurrentGameTest {
         //Map m = Map.genMap(1);
         Map m = new Map(JsonMap.genJsonMap(1));
 
-        CurrentGame c = new CurrentGame(players, m);
+        CurrentGame c = new CurrentGame(players, m,8);
         assertEquals(p1.getPlayerId(), c.playerToId(p1));
     }
 
@@ -125,7 +125,7 @@ class CurrentGameTest {
         //Map m = Map.genMap(1);
         Map m = new Map(JsonMap.genJsonMap(1));
 
-        CurrentGame c = new CurrentGame(players, m);
+        CurrentGame c = new CurrentGame(players, m,8);
         assertEquals(c.getPlayers() , players);
     }
 
@@ -136,7 +136,7 @@ class CurrentGameTest {
         players.add(new Player("Agent",0,PlayerColor.BLUE));
         players.add(new Player("Agent47",1, PlayerColor.YELLOW));
 
-        CurrentGame currentGame = new CurrentGame(players,null);
+        CurrentGame currentGame = new CurrentGame(players,null,8);
 
         assertEquals(0,currentGame.getKillShotTrack().size());
 
@@ -162,7 +162,7 @@ class CurrentGameTest {
         players.add(new Player("Agent",0,PlayerColor.BLUE));
         players.add(new Player("Agent47",1, PlayerColor.YELLOW));
 
-        CurrentGame currentGame = new CurrentGame(players,null);
+        CurrentGame currentGame = new CurrentGame(players,null,8);
 
         List<Boolean> list = new ArrayList<>();
 

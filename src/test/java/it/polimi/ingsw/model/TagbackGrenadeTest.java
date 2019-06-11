@@ -27,7 +27,7 @@ class TagbackGrenadeTest {
 
 
 
-        Model kat = new Model(names,colors,2);
+        Model kat = new Model(names,colors,2,8);
 
         TagbackGrenade grenade = new TagbackGrenade(Color.BLUE);
 

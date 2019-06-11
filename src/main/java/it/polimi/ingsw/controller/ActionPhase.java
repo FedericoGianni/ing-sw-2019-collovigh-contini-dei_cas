@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -86,6 +87,10 @@ public class ActionPhase {
             // moves the current player in the directions specified in the list
 
             move(moveAction.getMoves());
+
+            // notify other player
+
+            controller.updateInactivePlayers(new MoveTurnUpdate(controller.getCurrentPlayer()));
 
             // increment the phase
 

@@ -28,7 +28,7 @@ class WeaponTest {
         playerColors.add(PlayerColor.YELLOW);
 
         //generating model
-        Model currentModel = new Model(playerNames, playerColors, 2);
+        Model currentModel = new Model(playerNames, playerColors, 2,8);
 
         Weapon w = new NormalWeapon("Gun", new ArrayList<AmmoCube>(),new ArrayList<MacroEffect>());
 

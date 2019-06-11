@@ -62,7 +62,7 @@ class AmmoCellTest {
         pc.add(PlayerColor.BLUE);
         pc.add(PlayerColor.PURPLE);
 
-        Model model=new Model(names,pc,1);
+        Model model=new Model(names,pc,1,8);
 
         Map m = Model.getMap();
 

@@ -117,7 +117,7 @@ public class JsonExampleMaker {
         playerColors.add(PlayerColor.YELLOW);
 
         //generating model
-        Model currentModel = new Model(playerNames, playerColors, 2);
+        Model currentModel = new Model(playerNames, playerColors, 2, 8);
 
         Cell cell = Model.getMap().getCell(1,1);
 

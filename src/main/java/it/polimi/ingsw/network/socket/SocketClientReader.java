@@ -166,7 +166,7 @@ public class SocketClientReader extends Thread {
                     function.execute(message);
                 }).start();
             } catch (NumberFormatException e) {
-                LOGGER.log(WARNING, "[DEBUG] [CLIENT] ERRORE nel formato del messaggio socket ricevuto! ");
+                LOGGER.log(level, "[DEBUG] [CLIENT] ERRORE nel formato del messaggio socket ricevuto! ");
             }
     }
 

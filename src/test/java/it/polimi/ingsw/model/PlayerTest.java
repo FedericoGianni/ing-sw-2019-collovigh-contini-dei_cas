@@ -24,7 +24,7 @@ class PlayerTest {
         pc.add(PlayerColor.BLUE);
         pc.add(PlayerColor.GREEN);
         //generate the map (type 2)
-        Model m=new Model(playerNames,pc,2);
+        Model m=new Model(playerNames,pc,2, 8);
 
 
         //generate a player with a name and its starting position
@@ -70,7 +70,7 @@ class PlayerTest {
         pc.add(PlayerColor.GREEN);
         pc.add(PlayerColor.GREY);
 
-            Model m=new Model(playerNames,pc,2);
+            Model m=new Model(playerNames,pc,2, 8);
         //generate players in a fixed position
         Player p1=Model.getPlayer(0);
         p1.setPlayerPos(Model.getMap().getCell(0,3));
@@ -123,7 +123,7 @@ class PlayerTest {
         pc.add(PlayerColor.GREEN);
         pc.add(PlayerColor.GREY);
 
-        Model m=new Model(playerNames,pc,3);
+        Model m=new Model(playerNames,pc,3, 8);
         //generate players in a fixed position
         Player p1=Model.getPlayer(0);
         p1.setPlayerPos(Model.getMap().getCell(0,0));
@@ -175,7 +175,7 @@ class PlayerTest {
         pc.add(PlayerColor.GREEN);
         pc.add(PlayerColor.GREY);
 
-        Model m=new Model(playerNames,pc,1);
+        Model m=new Model(playerNames,pc,1,8);
         //generate players in a fixed position
         Player p1=Model.getPlayer(0);
         p1.setPlayerPos(Model.getMap().getCell(1,2));

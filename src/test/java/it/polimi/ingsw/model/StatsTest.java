@@ -163,7 +163,7 @@ class StatsTest {
         List<PlayerColor> colors = new ArrayList<>();
         colors.add(PlayerColor.BLUE);
 
-        Model model = new Model(players,colors,1);
+        Model model = new Model(players,colors,1, 8);
 
         Stats stats2 = Model.getPlayer(0).getStats();
 
@@ -210,7 +210,7 @@ class StatsTest {
         colors.add(PlayerColor.BLUE);
         colors.add(PlayerColor.BLUE);
 
-        Model model = new Model(players,colors,1);
+        Model model = new Model(players,colors,1, 8);
 
         assertThrows(DeadPlayerException.class, () -> {
 
@@ -245,7 +245,7 @@ class StatsTest {
         colors.add(PlayerColor.BLUE);
         colors.add(PlayerColor.BLUE);
 
-        Model model = new Model(players,colors,1);
+        Model model = new Model(players,colors,1, 8);
 
         assertThrows(OverKilledPlayerException.class, () -> {
 
@@ -277,7 +277,7 @@ class StatsTest {
         colors.add(PlayerColor.BLUE);
         colors.add(PlayerColor.BLUE);
 
-        Model model = new Model(players,colors,1);
+        Model model = new Model(players,colors,1, 8);
 
         Stats stats = Model.getPlayer(0).getStats();
 

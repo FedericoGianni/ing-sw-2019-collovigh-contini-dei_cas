@@ -19,7 +19,7 @@ public class Model {
     /**
      * Default constructor
      */
-    public Model(List<String> playerNames, List<PlayerColor> playerColors, int mapType) {
+    public Model(List<String> playerNames, List<PlayerColor> playerColors, int mapType, int skulls) {
 
         Map map = new Map(JsonMap.genJsonMap(mapType));
         //Map map = Map.genMap(mapType);
@@ -29,7 +29,7 @@ public class Model {
             playerList.add(new Player(playerNames.get(i), i, playerColors.get(i)));
         }
 
-        game = new CurrentGame(playerList, map);
+        game = new CurrentGame(playerList, map, skulls);
 
         if (Observers.isInitialized()) map.updateObserver();
 

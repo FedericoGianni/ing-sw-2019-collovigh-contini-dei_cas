@@ -51,7 +51,7 @@ class NormalWeaponTest {
         pc.add(PlayerColor.PURPLE);
         pc.add(PlayerColor.BLUE);
         //generate the map (type 2)
-        Model m=new Model(playerNames,pc,2);
+        Model m=new Model(playerNames,pc,2,8);
 
 
         //generate a player with a name and its starting position
@@ -118,7 +118,7 @@ class NormalWeaponTest {
         pc.add(PlayerColor.BLUE);
         pc.add(PlayerColor.GREEN);
         //generate the map (type 2)
-        Model m=new Model(playerNames,pc,2);
+        Model m=new Model(playerNames,pc,2,8);
 
 
         //generate a player with a name and its starting position
@@ -195,7 +195,7 @@ class NormalWeaponTest {
         List<PlayerColor> pc=new ArrayList<>();
         pc.add(PlayerColor.BLUE);
         pc.add(PlayerColor.PURPLE);
-        Model m=new Model(names,pc,2);
+        Model m=new Model(names,pc,2,8);
 
         Player shooter= Model.getGame().getPlayers().get(0);
         Player target1=Model.getGame().getPlayers().get(1);
@@ -255,7 +255,7 @@ class NormalWeaponTest {
         pc.add(PlayerColor.BLUE);
         pc.add(PlayerColor.PURPLE);
 
-        Model m=new Model(names,pc,2);
+        Model m=new Model(names,pc,2,8);
 
         Player shooter= Model.getGame().getPlayers().get(0);
         Player target1=Model.getGame().getPlayers().get(1);

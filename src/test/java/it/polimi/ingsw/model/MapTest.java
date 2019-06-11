@@ -138,7 +138,7 @@ class MapTest {
         c.add(PlayerColor.GREY);
         c.add(PlayerColor.GREEN);
         c.add(PlayerColor.YELLOW);
-        Model m =new Model(pn,c,2);
+        Model m =new Model(pn,c,2,8);
 
         Player p1=Model.getPlayer(0);
         Player p2=Model.getPlayer(1);

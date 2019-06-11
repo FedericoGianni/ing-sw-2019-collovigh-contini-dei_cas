@@ -30,6 +30,8 @@ public class WaitingRoom {
     private static final int DEFAULT_MIN_PLAYERS = 1;
     private static final int DEFAULT_MAX_PLAYERS = 5;
 
+    private int skulls = 8;
+
     private CopyOnWriteArrayList<String> players;
     private List<PlayerColor> colors;
     private Boolean active;
@@ -79,10 +81,10 @@ public class WaitingRoom {
         activeGame = games.addGame();
 
         if(this.mapType == 0) {
-            Server.setController(new Controller(this.players, this.colors, this.activeGame));
+            Server.setController(new Controller(this.players, this.colors, this.activeGame, skulls));
             Server.getController().handleTurnPhase();
         } else{
-            Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType));
+            Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType, skulls));
             Server.getController().handleTurnPhase();
         }
 
@@ -119,8 +121,10 @@ public class WaitingRoom {
 
             if (players.size() >= DEFAULT_MIN_PLAYERS) {
 
-                System.out.println("[WaitingRoom] start timer");
-                Thread thread = new Thread(() -> { startTimer(); });
+                LOGGER.info("[Waiting-Room] start timer");
+
+                Thread thread = new Thread(() ->  startTimer() );
+
                 thread.start();
             }
 
@@ -136,7 +140,7 @@ public class WaitingRoom {
 
             client.sendUpdate(new CachedLobby(players));
 
-            LOGGER.log(level,"Sent LOBBY_UPDATE to client : {0}", client);
+            LOGGER.log(level,"[Waiting-Room] Sent LOBBY_UPDATE to client : {0}", client);
         }
 
     }
@@ -198,20 +202,28 @@ public class WaitingRoom {
 
                 if (players.size() >= DEFAULT_MIN_PLAYERS) {
 
-                    System.out.println("[DEBUG] WaitingRoomTimer counter: " + timerCount);
+                    LOGGER.log(level,() -> "[Waiting-Room] WaitingRoomTimer counter: " + timerCount);
+
                     timerCount--;
+
                     if ((timerCount <= 0) || (players.size() == DEFAULT_MAX_PLAYERS)) {
-                        System.out.println("[DEBUG] Timer has expired!");
+
+                        LOGGER.warning("[Waiting-Room] Timer has expired!");
+
                         //chiama initGame o gestire timer scaduto
-                        System.out.println("[DEBUG] AVVIO DELLA PARTITA IN CORSO...");
+
+                        LOGGER.info("[Waiting-Room] AVVIO DELLA PARTITA IN CORSO...");
+
                         initGame();
+
                         //termina l'esecuzione del thread
+
                         this.cancel();
                     }
 
                 }else {
 
-                    System.out.println("[WAITING-ROOM] Timer annullato ");
+                    LOGGER.warning("[Waiting-Room] Timer annullato ");
 
                     timerCount = TIMER;
 
@@ -245,5 +257,13 @@ public class WaitingRoom {
         return games;
     }
 
+    public synchronized void setSkulls(int skulls){
 
+        if (skulls > 0 && skulls < 8) {
+
+            this.skulls = skulls;
+
+            LOGGER.log(level, () -> "[Waiting-Room] a player changed the skulls from default to : " + skulls);
+        }
+    }
 }

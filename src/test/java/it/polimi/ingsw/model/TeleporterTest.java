@@ -29,7 +29,7 @@ class TeleporterTest {
         colors.add(PlayerColor.YELLOW);
         colors.add(PlayerColor.PURPLE);
 
-        Model kat = new Model(names,colors,2);
+        Model kat = new Model(names,colors,2,8);
 
         Cell cell = Model.getMap().getCell(1,0);
 

@@ -25,7 +25,7 @@ class ModelTest {
         playerColors.add(PlayerColor.YELLOW);
 
         //generating model
-        Model currentModel = new Model(playerNames, playerColors, 2);
+        Model currentModel = new Model(playerNames, playerColors, 2,8);
 
         //checking that Map is correctly generated from Model contructor
         assertEquals(2, Model.getMap().getMapType());

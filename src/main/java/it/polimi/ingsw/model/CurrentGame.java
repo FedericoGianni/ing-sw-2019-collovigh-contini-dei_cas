@@ -27,7 +27,7 @@ import java.util.List;
 public class CurrentGame extends Subject{
 
     //TODO add the possibility to choose how many skull to place in the Kill_Shot_Track at game start
-    private static final int KILL_SHOT_TRACK = 8;
+    private final int skulls ;
     private List<Player> players;
     private Map currentMap;
     private PowerUpDeck powerUpDeck;
@@ -36,7 +36,7 @@ public class CurrentGame extends Subject{
     private List<Skull> killShotTrack;
 
 
-    public CurrentGame(List<Player> players, Map currentMap) {
+    public CurrentGame(List<Player> players, Map currentMap, int skulls) {
 
         Collections.sort(players, Comparator.comparing(Player::getPlayerId));
 
@@ -46,6 +46,7 @@ public class CurrentGame extends Subject{
         this.weaponDeck = WeaponDeck.populateDeck();
         this.thrashPowerUpDeck = new PowerUpDeck();
         this.killShotTrack = new ArrayList<>();
+        this.skulls = skulls;
     }
 
     /**
@@ -53,14 +54,15 @@ public class CurrentGame extends Subject{
      * @param clone CurrentGame instance to be copied
      */
     public CurrentGame(CurrentGame clone){
+
         this.players = new ArrayList<>();
-        for(Player p : clone.players){
-            this.players.add(p);
-        }
+        this.players.addAll(clone.players);
+
         this.currentMap = clone.currentMap;
         this.powerUpDeck =  new PowerUpDeck(clone.powerUpDeck);
         this.weaponDeck = new WeaponDeck(clone.weaponDeck);
         this.thrashPowerUpDeck = new PowerUpDeck(clone.thrashPowerUpDeck);
+        this.skulls = clone.skulls;
     }
 
 
@@ -144,7 +146,7 @@ public class CurrentGame extends Subject{
 
         }
 
-        if (this.killShotTrack.size() >= KILL_SHOT_TRACK) throw new FrenzyActivatedException(killerId);
+        if (this.killShotTrack.size() >= skulls) throw new FrenzyActivatedException(killerId);
     }
 
     /**
@@ -159,7 +161,7 @@ public class CurrentGame extends Subject{
 
         updateAll(this);
 
-        if (this.killShotTrack.size() >= KILL_SHOT_TRACK) throw new FrenzyActivatedException(killerId);
+        if (this.killShotTrack.size() >= skulls ) throw new FrenzyActivatedException(killerId);
     }
 
 

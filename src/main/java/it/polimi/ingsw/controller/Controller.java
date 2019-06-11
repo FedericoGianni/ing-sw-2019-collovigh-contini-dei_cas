@@ -83,7 +83,7 @@ public class Controller {
      * @param playerColors is a list of player's Color
      * @param gameId is the id of the game
      */
-    public Controller(List<String> nameList, List<PlayerColor>playerColors, int gameId) {
+    public Controller(List<String> nameList, List<PlayerColor>playerColors, int gameId, int skulls) {
 
         this.observers = new Observers(this, nameList.size()); // needs to stay first
 
@@ -99,7 +99,7 @@ public class Controller {
 
         sendInitialUpdate( nameList, playerColors, gameId, mapType);
 
-        this.model = new Model(nameList,playerColors,mapType);
+        this.model = new Model(nameList,playerColors,mapType,skulls);
 
         LOGGER.log(level,"[CONTROLLER] Initialized Model with random MapType");
     }
@@ -111,12 +111,12 @@ public class Controller {
      * @param gameId is the id of the game
      * @param mapType is the mapType
      */
-    public Controller(List<String> nameList, List<PlayerColor>playerColors,int gameId, int mapType) {
+    public Controller(List<String> nameList, List<PlayerColor>playerColors,int gameId, int mapType, int skulls) {
 
 
         this.observers = new Observers(this, nameList.size()); // needs to stay first
 
-        this.model = new Model(nameList,playerColors,mapType);
+        this.model = new Model(nameList,playerColors,mapType,skulls);
 
         this.roundNumber = 0;
         this.gameId = gameId;

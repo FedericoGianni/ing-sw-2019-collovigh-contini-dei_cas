@@ -31,7 +31,7 @@ class NewtonTest {
 
 
 
-        Model kat = new Model(names,colors,2);
+        Model kat = new Model(names,colors,2,8);
 
         Newton test = new Newton(Color.BLUE);
 

@@ -29,7 +29,7 @@ class ThorTest {
         playerNames.add("shooter");
         ArrayList<PlayerColor> pc=new ArrayList<>();
         pc.add(PlayerColor.PURPLE);
-        Model m=new Model(playerNames,pc,2);
+        Model m=new Model(playerNames,pc,2,8);
         Player shooter = Model.getPlayer(0);
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         shooter.getAmmoBag().addItem(new AmmoCube(Color.BLUE));
@@ -52,7 +52,7 @@ class ThorTest {
         pc.add(PlayerColor.GREEN);
         pc.add(PlayerColor.GREY);
 
-        Model m=new Model(playerNames,pc,2);
+        Model m=new Model(playerNames,pc,2,8);
         //generate players in a fixed position
         Player shooter=Model.getPlayer(0);
         shooter.setPlayerPos(Model.getMap().getCell(0,3));
