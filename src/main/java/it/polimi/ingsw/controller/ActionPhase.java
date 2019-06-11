@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_ALREADY_PICKED_AMMO_HERE;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
 
 public class ActionPhase {
@@ -300,6 +301,7 @@ public class ActionPhase {
             if ( cell.getAmmoPlaced() == null){
 
                 LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to pick an ammoCard in a cell that was empty ");
+                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_ALREADY_PICKED_AMMO_HERE);
 
                 return false;
             }

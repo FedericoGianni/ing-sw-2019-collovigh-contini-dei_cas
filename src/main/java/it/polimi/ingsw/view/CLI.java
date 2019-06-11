@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
@@ -13,6 +12,7 @@ import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
+import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
@@ -21,6 +21,7 @@ import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
+import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
@@ -32,8 +33,8 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
-import static it.polimi.ingsw.view.UiHelpers.directionTranslator;
-import static it.polimi.ingsw.view.UiHelpers.genPointFromDirections;
+import static it.polimi.ingsw.view.UiHelpers.*;
+import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 import static java.lang.Thread.sleep;
 
 public class CLI implements UserInterface {
@@ -136,8 +137,13 @@ public class CLI implements UserInterface {
 
             System.out.println("Digita: \n 1 -> Nuova Partita \n 2 -> Riconnessione a partita già iniziata \n 3 -> Carica una partita salvata");
 
-            choice = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
+            }
 
         }while (!(choice == 1 || choice == 2 || choice == 3));
 
@@ -176,17 +182,17 @@ public class CLI implements UserInterface {
         System.out.println("Scegli un nome: ");
         playerName = scanner.nextLine();
 
-        System.out.println("Seleziona un colore (GREEN, GREY, PURPLE, BLUE,YELLOW): ");
+        System.out.println("Seleziona un colore (VERDE, GIALLO, GRIGIO, VIOLA, BLU): ");
 
         do {
             playerColor = scanner.nextLine().toUpperCase();
 
-            if(playerColor.equals("GREEN") || playerColor.equals("GREY") ||
-                    playerColor.equals("YELLOW") || playerColor.equals("PURPLE") ||
-                    playerColor.equals("BLUE")) {
+            if(playerColor.equals("VERDE") || playerColor.equals("GRIGIO") ||
+                    playerColor.equals("GIALLO") || playerColor.equals("VIOLA") ||
+                    playerColor.equals("BLU")) {
                 validColorChoice = true;
             } else {
-                System.out.println("Please enter a valid color choice: ");
+                System.out.println("Colore non valido. Riprova:  ");
             }
 
         }while(!validColorChoice);
@@ -195,7 +201,7 @@ public class CLI implements UserInterface {
         //System.out.println("[DEBUG] PlayerColor: " + playerColor);
 
 
-        view.joinGame(playerName, PlayerColor.valueOf(playerColor.toUpperCase()));
+        view.joinGame(playerName, UiHelpers.colorTranslator(playerColor.toUpperCase()));
     }
 
     /**
@@ -205,21 +211,21 @@ public class CLI implements UserInterface {
     public void retryLogin(String error) {
         switch (error){
             case Protocol.DEFAULT_NAME_ALREADY_TAKEN_REPLY:
-                System.out.println("Nome già preso.");
+                System.out.println(ANSI_YELLOW.escape() + "[!] Nome già preso." + ANSI_RESET.escape());
                 break;
             case Protocol.DEFAULT_COLOR_ALREADY_TAKEN_REPLY:
-                System.out.println("Colore già preso.");
+                System.out.println(ANSI_YELLOW.escape() + "[!] Colore già preso." + ANSI_RESET.escape());
                 break;
             case Protocol.DEFAULT_GAME_ALREADY_STARTED_REPLY:
-                System.out.println("Gioco già avviato!");
+                System.out.println(ANSI_YELLOW.escape() + "[!] Gioco già avviato!" + ANSI_RESET.escape());
                 break;
             case Protocol.DEFAULT_MAX_PLAYER_REACHED:
-                System.out.println("Massimo numero di giocatori raggiunto!");
+                System.out.println(ANSI_YELLOW.escape() + "[!] Massimo numero di giocatori raggiunto!" + ANSI_RESET.escape());
                 break;
             default:
                 System.out.println(" Qualcosa è andato storto");
         }
-        System.out.println("Login fallito. Riprova");
+        System.out.println(ANSI_YELLOW.escape() + "[!] Login fallito. Riprova" + ANSI_RESET.escape());
         login();
     }
 
@@ -268,13 +274,14 @@ public class CLI implements UserInterface {
                         .map(Player::getName)
                         .collect(Collectors.toList());
 
-                System.out.println("[LOBBY] Player connessi : " + names );
+                System.out.println(ANSI_GREEN.escape() + "[LOBBY] Player connessi : " + names + ANSI_RESET.escape());
 
                 break;
 
             case INITIAL:
                 FileRead.loadMap(view.getCacheModel().getMapType());
-                System.out.println("[NOTIFICA] Ho scelto casualmente la mappa di tipo: " + view.getCacheModel().getMapType());
+                System.out.println(ANSI_GREEN.escape() + "[NOTIFICA] Ho scelto casualmente la mappa di tipo: "
+                        + view.getCacheModel().getMapType() + ANSI_RESET.escape());
 
                 break;
 
@@ -284,7 +291,7 @@ public class CLI implements UserInterface {
 
                 if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
                     //new positions
-                    System.out.println("[NOTIFICA] Il giocatore: " + playerId + " si è spostato!");
+                    System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è spostato!" + ANSI_RESET.escape());
                     int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                     int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 
@@ -293,20 +300,34 @@ public class CLI implements UserInterface {
                     FileRead.showBattlefield();
                 }
 
+                //player disconnected
+                if(!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()){
+                    show(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
+                }
+
+                if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null){
+                    //TODO show dmg updates or let the user sees them from player info?
+                }
+
                 break;
 
             case POWERUP_BAG:
-                System.out.println("[NOTIFIC] POWEUPBAG update ricevuto!");
+                //System.out.println("[NOTIFICA] POWEUPBAG update ricevuto!");
                 break;
 
             case WEAPON_BAG:
                 System.out.println("[NOTIFICA] WEAPON_BAG update ricevuto!");
-                System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag());
+                //show update only on the player who has bought the weapon
+                if(playerId == view.getPlayerId()) {
+                    System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag());
+                }
                 break;
 
             case AMMO_BAG:
-                System.out.println("[NOTIFICA] AMMO_BAG update ricevuto!");
-                System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag());
+                //System.out.println("[NOTIFICA] AMMO_BAG update ricevuto!");
+                if(playerId == view.getPlayerId()) {
+                    System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag());
+                }
                 break;
 
             case GAME:
@@ -326,7 +347,6 @@ public class CLI implements UserInterface {
 
                                 FileRead.removeAmmoCard(i,j);
 
-                                //TODO check if it works -> it should not let see ammoCard if they are picked up
                                 //if ammoCell has been picked up don't show it on map
                                 if(!((CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i,j)).getAmmoList().isEmpty()) {
                                     FileRead.insertAmmoCard(i, j, (CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i, j));
@@ -459,8 +479,15 @@ public class CLI implements UserInterface {
             }
 
             System.out.println("Scegli un powerUp da scartare: ");
-            read = scanner.nextInt();
-            scanner.nextLine();
+
+            try {
+                read = scanner.nextInt();
+                scanner.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
+                read = -1;
+            }
 
             if (read >= 0 && read < powerUps.size()) validChoice = true;
 
@@ -761,6 +788,9 @@ public class CLI implements UserInterface {
 
                 valid = false;
 
+                //NOTE: startAction uses show instead of system.out.println because there's a chance that
+                //when the controller reply back with a message the showBattlefield method and the startAction method
+                //and the map won't be displayed correctly
 
                 show("SELEZIONA UN AZIONE:");
 
@@ -935,7 +965,7 @@ public class CLI implements UserInterface {
 
 
         //move -> always max 3 movements
-        List<Directions> directionsList = handleMove(3);
+        List<Directions> directionsList = handleMove(DEFAULT_MAX_NORMAL_MOVES);
         Point finalPos = genPointFromDirections(directionsList, startingPoint);
 
         //System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
@@ -951,10 +981,10 @@ public class CLI implements UserInterface {
         List<Directions> directionsList;
 
         //grab -> if player has more than 2 dmg -> 2 moves else -> only 1 move
-        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() > 2){
-            directionsList = handleMove(2);
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB){
+            directionsList = handleMove(DEFAULT_ENHANCED_MOVES_WITH_GRAB);
         } else {
-            directionsList = handleMove(1);
+            directionsList = handleMove(DEFAULT_MOVES_WITH_GRAB);
         }
 
         Point finalPos = genPointFromDirections(directionsList, startingPoint);
@@ -1109,12 +1139,79 @@ public class CLI implements UserInterface {
     }
 
 
+    private void startShoot(){
+
+        boolean valid = false;
+        int choice = -1;
+        List<Directions> directionsList = new ArrayList<>();
+
+        //weapon checks
+        int targets = -1; //number of targets needed by the weapons (reads this from json CachedFullWeapons)
+        boolean needCell = false; //if this weapon needs a Cell for movements related to the shoot
+        //second and third effect type -> ECLUSIVE/CONCATENABLE need an enum class for this
+
+        int playerDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
+
+        //if player has > 5 dmg he can do one movement, otherwise no moves
+        if(playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT){
+            directionsList = handleMove(DEFAULT_ENHANCED_MOVES_WITH_SHOOT);
+        }
+
+        Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+        Point finalPos = genPointFromDirections(directionsList, startingPoint);
+
+        // At this point there are 3 cases:
+        // case A -> player hasn't gained enhanced shoot
+        // case B -> player has gained an extra move with enhanced shoot and does it
+        // case C -> player has gained ane extra move with enhanced shoot but didn't move
+        // directionList and finalPos will be sent in case B or C
+
+        //CHOOSE WEAPON PHASE
+
+        do{
+
+            System.out.println("Seleziona l'arma con cui vuoi sparare: ");
+            showCurrWeapons();
+
+            try{
+                scanner.reset();
+                choice = scanner.nextInt();
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova >>> ");
+                scanner.nextLine();
+            }
+
+            int weaponBagSize = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons().size();
+            if(choice >= 0 && choice <= weaponBagSize){
+                valid = true;
+            } else {
+                System.out.println("Scelta non valida! Riprova >>> ");
+            }
+
+        } while (!valid);
+
+        try {
+
+            CachedFullWeapon weapon = view.getCacheModel()
+                    .getWeaponInfo(view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
+                            .getWeaponbag().getWeapons().get(choice));
+
+        } catch (WeaponNotFoundException e){
+            System.out.println("Weapon not found "+ e.getMessage());
+        }
+
+        //PRE-SHOOT PHASE choose wep effects, checks if he can pay
+        // choose target/s and additional info needed to shoot with a particular weapon
+        //TODO user needs to choose weapons effect to use (check if he can pay w/ ammo/powerups)
 
 
+        //TODO local checks with the attributes read from json (i.e. numtarget, samecell, ...)
 
-    public void startShoot(){
-        //shoot -> se hai più di 5 danni un movimento / altrimento 0 movimenti
-        //TODO Shoot
+        //forward the shoot action to the controller -> if shoot fails it won't do the shoot and
+        //let the user retry the shoot specifiying why shoot has failed
+        //TODO replace SkipAction with real ShootAction
+        view.doAction(new SkipAction());
+
     }
 
 
@@ -1123,7 +1220,7 @@ public class CLI implements UserInterface {
      */
     @Override
     public void startReload() {
-        Boolean validChoice = false;
+        boolean validChoice = false;
         int read = -1;
 
         List<String> weapons = new ArrayList<>();
@@ -1131,6 +1228,8 @@ public class CLI implements UserInterface {
         if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
             weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
         }
+
+        //TODO user can reload every weapons he can in a single reload phase!
 
         do{
             System.out.println("Vuoi ricaricare? Le tue armi sono: ");
@@ -1170,28 +1269,6 @@ public class CLI implements UserInterface {
 
         players.stream()
                 .forEachOrdered(System.out::println);
-
-        /*
-        for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
-            System.out.print("\n" + view.getCacheModel().getCachedPlayers().get(i).getPlayerId());
-            System.out.print(" :" + view.getCacheModel().getCachedPlayers().get(i).getName() + "\n");
-            if(view.getCacheModel().getCachedPlayers().get(i).getStats() != null) {
-                System.out.println("Danni: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getDmgTaken().toString());
-                System.out.println("Marchi: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getMarks());
-                System.out.println("Morti: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getDeaths());
-                System.out.println("Online: " + view.getCacheModel().getCachedPlayers().get(i).getStats().getOnline());
-            }
-            else {
-                System.out.println("Danni: " + "[]");
-                System.out.println("Marchi: " + "[]");
-                System.out.println("Morti: " + " 0");
-            }
-
-            if(view.getCacheModel().getCachedPlayers().get(i).getWeaponbag() != null)
-                System.out.println("Armi: " + view.getCacheModel().getCachedPlayers().get(i).getWeaponbag().getWeapons().toString());
-            else
-                System.out.println("Armi: " + " nessuna.\n");
-        }*/
     }
 
     /**
@@ -1205,7 +1282,7 @@ public class CLI implements UserInterface {
                 CachedCell c = view.getCacheModel().getCachedMap().getCachedCell(i, j);
                 if(c != null){
                     if(c.getCellType().equals(CellType.SPAWN)){
-                        c = (CachedSpawnCell) c;
+                         c = (CachedSpawnCell) c;
 
                         //need only row index to determine which spawn cell we are in
                         switch ((int) c.getPosition().getX()){
