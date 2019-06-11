@@ -1019,7 +1019,7 @@ public class CLI implements UserInterface {
 
         System.out.println("ARMI IN VENDITA: ");
         for (int i = 0; i < cell.getWeaponNames().size(); i++) {
-            System.out.println("Arma " + i + " : " + cell.getWeaponNames().get(i));
+            System.out.println("Arma " + i + " : " + UiHelpers.weaponTranslator(cell.getWeaponNames().get(i)));
         }
 
         System.out.println("Digita il numero dell'arma che vuoi acquistare >>> ");
@@ -1144,6 +1144,7 @@ public class CLI implements UserInterface {
         boolean valid = false;
         int choice = -1;
         List<Directions> directionsList = new ArrayList<>();
+        CachedFullWeapon weapon;
 
         //weapon checks
         int targets = -1; //number of targets needed by the weapons (reads this from json CachedFullWeapons)
@@ -1192,17 +1193,19 @@ public class CLI implements UserInterface {
 
         try {
 
-            CachedFullWeapon weapon = view.getCacheModel()
-                    .getWeaponInfo(view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
-                            .getWeaponbag().getWeapons().get(choice));
+            weapon = view.getCacheModel()
+                .getWeaponInfo(view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
+                        .getWeaponbag().getWeapons().get(choice));
 
         } catch (WeaponNotFoundException e){
             System.out.println("Weapon not found "+ e.getMessage());
         }
 
-        //PRE-SHOOT PHASE choose wep effects, checks if he can pay
+        // PRE-SHOOT PHASE choose wep effects, checks if he can pay
         // choose target/s and additional info needed to shoot with a particular weapon
-        //TODO user needs to choose weapons effect to use (check if he can pay w/ ammo/powerups)
+        //TODO user needs to choose weapons effect to use (check if he can pay w/ ammo/powerups
+
+
 
 
         //TODO local checks with the attributes read from json (i.e. numtarget, samecell, ...)
@@ -1300,14 +1303,11 @@ public class CLI implements UserInterface {
 
                         }
                         for (int k = 0; k < ((CachedSpawnCell) c).getWeaponNames().size(); k++) {
-                            System.out.println("Arma " + k + " : " + ((CachedSpawnCell) c).getWeaponNames().get(k));
+                            System.out.println("Arma " + k + " : " + UiHelpers.weaponTranslator(((CachedSpawnCell) c).getWeaponNames().get(k)));
                         }
-
-
                     }
                 }
             }
         }
     }
-
 }
