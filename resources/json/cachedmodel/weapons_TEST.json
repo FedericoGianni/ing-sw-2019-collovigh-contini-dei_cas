@@ -1,1 +1,1 @@
-[{"name":"LOCK RIFLE","firstEffectCost":["BLUE","BLUE"],"secondEffectCost":["RED"],"secondEffectType":"CONCATENABLE","thirdEffectType":"ESCLUSIVE"}]
+[{"name":"LOCK RIFLE","firstEffectCost":["BLUE","BLUE"],"secondEffectCost":["RED"],"effectTypes":["CONCATENABLE","ESCLUSIVE"],"effectRequirements":[{"numberOfTargets":[0,1,2],"cellRequired":false},{"numberOfTargets":[1],"cellRequired":false}]}]

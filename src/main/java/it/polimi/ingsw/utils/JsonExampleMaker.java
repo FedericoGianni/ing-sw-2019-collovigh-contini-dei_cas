@@ -11,6 +11,7 @@ import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
+import it.polimi.ingsw.view.cachemodel.EffectRequirements;
 import it.polimi.ingsw.view.cachemodel.EffectType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.updates.InitialUpdate;
@@ -60,7 +61,26 @@ public class JsonExampleMaker {
         List<Color> cost_2 = new ArrayList<>();
         cost_2.add(Color.RED);
 
-        weaponList.add(new CachedFullWeapon("LOCK RIFLE", cost_1, cost_2, null , EffectType.CONCATENABLE, EffectType.ESCLUSIVE));
+        List<EffectType> effectTypes = new ArrayList<>();
+
+        effectTypes.add(EffectType.CONCATENABLE);
+        effectTypes.add(EffectType.ESCLUSIVE);
+
+        List<EffectRequirements> effectRequirements = new ArrayList<>();
+
+        List<Integer> targets  = new ArrayList<>();
+
+        targets.add(0);
+        targets.add(1);
+        targets.add(2);
+
+        effectRequirements.add(new EffectRequirements(targets,false));
+
+        List<Integer> targets_2  = new ArrayList<>();
+        targets_2.add(1);
+        effectRequirements.add(new EffectRequirements(targets_2,false));
+
+        weaponList.add(new CachedFullWeapon("LOCK RIFLE", cost_1, cost_2, null , effectTypes, effectRequirements));
 
         try {
 
