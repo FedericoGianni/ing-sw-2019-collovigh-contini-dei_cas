@@ -583,8 +583,8 @@ public class CLI implements UserInterface {
     @Override
     public void askGrenade() {
 
-        Boolean valid;
-        Integer choice;
+        boolean valid;
+        int choice = -1;
 
         List<CachedPowerUp> grenades = view
                 .getCacheModel()
@@ -598,7 +598,7 @@ public class CLI implements UserInterface {
 
         do {
 
-            valid =false;
+            valid = false;
 
             System.out.println("Ti hanno sparato: vuoi usare una granata ? \n hai queste granate: ");
 
@@ -610,8 +610,12 @@ public class CLI implements UserInterface {
 
             System.out.println("Digita il numero della carta che vuoi usare o '9' per non usarne nessuna: ");
 
-            choice = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                choice = scanner.nextInt();
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
+            }
 
             if (choice == 9 || (choice >= 0 && choice < 3 )) valid = true;
 
@@ -1012,7 +1016,7 @@ public class CLI implements UserInterface {
         CachedSpawnCell cell = (CachedSpawnCell) view.getCacheModel().getCachedMap().getCachedCell(pos.x, pos.y);
 
         List<String> weapons = cell.getWeaponNames();
-        List<String> choice = new ArrayList<>(Collections.nCopies(2, null));
+        List<String> choice = new ArrayList<>();
 
         System.out.println("ARMI IN VENDITA: ");
         for (int i = 0; i < cell.getWeaponNames().size(); i++) {
@@ -1081,35 +1085,40 @@ public class CLI implements UserInterface {
             switch (discard){
 
                 case 0:
-                    choice.set(1, currWeap.get(0));
+                    choice.add(currWeap.get(0));
                     break;
 
                 case 1:
-                    choice.set(1, currWeap.get(1));
+                    choice.add(currWeap.get(1));
                     break;
 
                 case 2:
-                    choice.set(1, currWeap.get(2));
+                    choice.add(currWeap.get(2));
                     break;
 
                 default:
                     //this can't happen since we do valid checks before switch case
                     System.out.println("Scelta arma da scartare non valida!");
             }
+
+        } else {
+            //if player has less than 3 weapon, he doesn't need to choose one to discard
+            choice.add(null);
         }
+
 
         switch (buy){
 
             case 0:
-                choice.set(0, weapons.get(0));
+                choice.add(weapons.get(0));
                 break;
 
             case 1:
-                choice.set(0, weapons.get(1));
+                choice.add(weapons.get(1));
                 break;
 
             case 2:
-                choice.set(0, weapons.get(2));
+                choice.add(weapons.get(2));
                 break;
 
             default:
@@ -1141,7 +1150,7 @@ public class CLI implements UserInterface {
         boolean valid = false;
         int choice = -1;
         List<Directions> directionsList = new ArrayList<>();
-        CachedFullWeapon weapon;
+        CachedFullWeapon weapon = null;
 
         //SHOOT ACTION requirements
         List<List<Integer>> targetList;
@@ -1207,6 +1216,8 @@ public class CLI implements UserInterface {
             System.out.println("Weapon not found "+ e.getMessage());
         }
 
+        //System.out.println(ANSI_BLUE.escape() + "[DEBUG] ARMA SCELTA: " + weapon.getName() + ANSI_RESET.escape());
+
         // PRE-SHOOT PHASE choose wep effects, checks if he can pay
         // choose target/s and additional info needed to shoot with a particular weapon
         //TODO user needs to choose weapons effect to use (check if he can pay w/ ammo/powerups
@@ -1225,11 +1236,7 @@ public class CLI implements UserInterface {
 
         //just to test a basic shoot
 
-        //TODO specify the weapon name
-
-        String weaponName = null;
-
-        view.doAction(new ShootAction(weaponName,targetList, effects, cells));
+        view.doAction(new ShootAction("LOCK RIFLE", targetList, effects, cells));
 
     }
 

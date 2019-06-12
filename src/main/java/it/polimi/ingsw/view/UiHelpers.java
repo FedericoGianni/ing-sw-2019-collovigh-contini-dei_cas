@@ -2,6 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
 
 import java.awt.*;
 import java.util.List;
@@ -137,7 +138,7 @@ public class UiHelpers {
         switch (weapon) {
 
             case "LOCK RIFLE":
-                translate = "DISTRUTTORE";
+                translate = "FUCILE DI PRECISIONE";
                 break;
 
             case "MACHINE GUN":
@@ -173,7 +174,7 @@ public class UiHelpers {
                 break;
 
             case "WHISPERER":
-                translate = "FUCILE DI PRECISIONE";
+                translate = "DISTRUTTORE";
                 break;
 
             case "HELLION":
@@ -224,4 +225,27 @@ public class UiHelpers {
         return translate;
 
         }
+
+    public static AsciiColor colorAsciiTranslator(PlayerColor playerColor){
+
+        switch (playerColor){
+            case BLUE:
+                return AsciiColor.ANSI_BLUE;
+
+            case GREY:
+                return AsciiColor.ANSI_WHITE;
+
+            case YELLOW:
+                return AsciiColor.ANSI_YELLOW;
+
+            case PURPLE:
+                return AsciiColor.ANSI_PURPLE;
+
+            case GREEN:
+                return AsciiColor.ANSI_GREEN;
+        }
+
+        System.out.println("[DEBUG] PlayerColor not valid!");
+        return AsciiColor.ANSI_WHITE;
     }
+}

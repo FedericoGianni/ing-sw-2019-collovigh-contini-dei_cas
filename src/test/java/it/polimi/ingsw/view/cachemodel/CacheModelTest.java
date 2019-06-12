@@ -1,10 +1,9 @@
 package it.polimi.ingsw.view.cachemodel;
 
-import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CacheModelTest {
 

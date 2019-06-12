@@ -6,7 +6,7 @@ import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
 
-import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
+import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_RESET;
 
 public class Player {
 
@@ -77,8 +77,9 @@ public class Player {
     @Override
     public String toString() {
 
-        String s;
+        String s = new String();
 
+        /*
         switch (playerColor) {
 
             case GREY:
@@ -104,13 +105,13 @@ public class Player {
             default:
                 s = "";
                 break;
-        }
+        }*/
 
         s = s.concat("\nID: " + getPlayerId());
         s = s.concat("\nNome: " + getName());
 
         if (getStats() != null) {
-            s = s.concat("\nDanni: " + getStats().getDmgTaken());
+            s = s.concat(CacheModel.showDmgTaken(playerId, getStats().getDmgTaken()));
             s = s.concat("\nMarchi: " + getStats().getMarks());
             s = s.concat("\nOnline: " + getStats().getOnline());
         } else {

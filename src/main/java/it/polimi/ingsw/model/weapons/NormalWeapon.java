@@ -326,7 +326,7 @@ public class NormalWeapon extends Weapon{
 
                 for(MicroEffect micro: this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
                 {
-                    if(cells!=null)//if you also have mover effects
+                    if(cells!=null && !cells.isEmpty())//if you also have mover effects
                     {micro.microEffectApplicator(targetLists.get(macroCont),this,cells.get(macroCont));}//the method that applies the effects
                     else{
                         micro.microEffectApplicator(targetLists.get(macroCont),this,null);
