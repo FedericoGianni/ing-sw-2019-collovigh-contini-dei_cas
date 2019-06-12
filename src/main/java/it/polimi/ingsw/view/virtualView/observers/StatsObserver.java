@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 
 public class StatsObserver implements Observer {
 
+    private static final int MAX_DMG = 12;
+
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
@@ -30,6 +32,10 @@ public class StatsObserver implements Observer {
         // cast the Object in its dynamic type
 
         this.stats = (Stats) object;
+
+        // check if the player is dead
+
+        checkPlayerDead((Stats) object);
 
         // encapsulate the update in the update Class
 
@@ -51,6 +57,10 @@ public class StatsObserver implements Observer {
 
         this.stats = (Stats) object;
 
+        // check if the player is dead
+
+        checkPlayerDead((Stats) object);
+
         // encapsulate the update in the update Class
 
         UpdateClass updateClass = new CachedStats(playerObserver.getPlayerId(),stats.getScore(),stats.getDeaths(),stats.getOnline(),stats.getMarks(),stats.getDmgTaken(), Model.getMap().cellToCoord(stats.getCurrentPosition()));
@@ -64,5 +74,29 @@ public class StatsObserver implements Observer {
                 .sendUpdates(updateClass);
     }
 
+    /**
+     * This method will check if the player is dead and if that is the case will notify the controller
+     * @param stats is the stats updated
+     */
+    private void checkPlayerDead(Stats stats){
 
+        // if the player died
+
+        if (stats.getDmgTaken().size() > MAX_DMG -1){
+
+            if (stats.getDmgTaken().size() >= MAX_DMG){
+
+                // if the player gets overkilled
+
+                playerObserver.getTopClass().getController().overKillPlayer(stats.getPlayerId());
+
+            }else{
+
+                // if the player gets killed
+
+                playerObserver.getTopClass().getController().killPlayer(stats.getPlayerId());
+            }
+
+        }
+    }
 }

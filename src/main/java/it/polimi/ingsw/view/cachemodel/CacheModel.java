@@ -187,7 +187,12 @@ public class CacheModel {
                 .filter( x -> x.getName().equalsIgnoreCase(name))
                 .collect(Collectors.toList());
 
-        return (matchingWeapon.isEmpty()) ? null : matchingWeapon.get(0);
+
+        if(matchingWeapon.isEmpty()){
+
+            throw new WeaponNotFoundException();
+
+        }else return matchingWeapon.get(0);
     }
 
 }

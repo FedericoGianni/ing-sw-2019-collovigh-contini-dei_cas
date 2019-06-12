@@ -73,8 +73,6 @@ public class Controller {
 
     private ActionPhase actionPhase = new ActionPhase(this);
 
-    private GrabPhase grabPhase = new GrabPhase(this);
-
 
 
 
@@ -602,6 +600,28 @@ public class Controller {
         //now i should have a list of integer (playerIds) oredered by top dmg to low dmg
         return dmgCounter;
 
+    }
+
+    /**
+     * This method will kill the player
+     * @param playerId is the id of the dead player
+     */
+    public void killPlayer(int playerId){
+
+        hasSomeoneDied = true;
+
+        LOGGER.log(Level.INFO, "[Controller] Player w/ id {0} has been killed ", playerId);
+    }
+
+    /**
+     * This method will over kill the player
+     * @param playerId is the id of the dead player
+     */
+    public void overKillPlayer(int playerId){
+
+        hasSomeoneDied = true;
+
+        LOGGER.log(Level.INFO, "[Controller] Player w/ id {0} has been overKilled ", playerId);
     }
 
     public void endGame(){

@@ -137,16 +137,15 @@ public class CurrentGame extends Subject{
      * @param overkill is a list of Boolean that are true if the player gets overkilled
      * @throws FrenzyActivatedException if the killShotTrack is empty
      */
-    public void addkills(int killerId, List<Boolean> overkill) throws FrenzyActivatedException{
+    public void addkills(int killerId, List<Boolean> overkill) {
 
         for (Boolean b: overkill){
-            this.killShotTrack.add(new Skull(killerId,b));
 
-            updateAll(this);
+            this.killShotTrack.add(new Skull(killerId,b));
 
         }
 
-        if (this.killShotTrack.size() >= skulls) throw new FrenzyActivatedException(killerId);
+        updateAll(this);
     }
 
     /**
@@ -155,16 +154,16 @@ public class CurrentGame extends Subject{
      * @param overkill is a list of Boolean that are true if the player gets overkilled
      * @throws FrenzyActivatedException if the killShotTrack is empty
      */
-    public void addkills(int killerId, Boolean overkill) throws FrenzyActivatedException{
+    public void addkills(int killerId, Boolean overkill) {
 
         this.killShotTrack.add(new Skull(killerId,overkill));
 
         updateAll(this);
-
-        if (this.killShotTrack.size() >= skulls ) throw new FrenzyActivatedException(killerId);
     }
 
-
+    public int getSkulls() {
+        return skulls;
+    }
 
     /**
      * @return the actual Map

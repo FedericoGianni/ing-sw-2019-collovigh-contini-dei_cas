@@ -2,14 +2,11 @@ package it.polimi.ingsw.model.player;
 
 
 import it.polimi.ingsw.customsexceptions.DeadPlayerException;
-import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.customsexceptions.OverMaxDmgException;
 import it.polimi.ingsw.customsexceptions.OverMaxMarkException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.view.cachemodel.sendables.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -180,7 +177,7 @@ public class Stats extends Subject {
      * @param playerId is the id of the player who gave them
      * @throws DeadPlayerException if player died
      */
-    public void addDmgTaken(int dmg, int playerId) throws DeadPlayerException, OverKilledPlayerException{
+    public void addDmgTaken(int dmg, int playerId){
 
 
         if (marks.indexOf(playerId) != -1) {
@@ -209,18 +206,10 @@ public class Stats extends Subject {
             updateAll(this);
         }
 
-
-
-        if (dmgTaken.size() == MAX_DMG){  // if player gets Overkilled
+        if ((dmgTaken.size() >= MAX_DMG - 1)){  // if player has more than MAX_DMG -1 (simply dead)
 
             this.addDeath();
 
-            throw new OverKilledPlayerException(this.getPlayerId());
-        }
-
-        if ((dmgTaken.size()>= MAX_DMG - 1)&&(dmgTaken.size()<MAX_DMG)){  // if player has more than MAX_DMG -1 (simply dead)
-            this.addDeath();
-            throw new DeadPlayerException(this.getPlayerId());
         }
     }
 
@@ -246,7 +235,7 @@ public class Stats extends Subject {
 
         // remove the player from the previous cell
 
-        if(this.getCurrentPosition()!=null) this.getCurrentPosition().removePlayerFromHere(Model.getPlayer(getPlayerId()));
+        if(this.currentPosition != null) this.getCurrentPosition().removePlayerFromHere(Model.getPlayer(getPlayerId()));
 
         // sets the new position in the stats
 
@@ -254,7 +243,7 @@ public class Stats extends Subject {
 
         // sets the player in the cell if not null
 
-        if (currentPosition != null) currentPosition.addPlayerHere(Model.getPlayer(getPlayerId()));
+        if (this.currentPosition != null) currentPosition.addPlayerHere(Model.getPlayer(getPlayerId()));
 
         // updates the observers
 

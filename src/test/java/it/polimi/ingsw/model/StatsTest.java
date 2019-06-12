@@ -212,56 +212,25 @@ class StatsTest {
 
         Model model = new Model(players,colors,1, 8);
 
-        assertThrows(DeadPlayerException.class, () -> {
 
-            Stats stats = Model.getPlayer(0).getStats();
+        Stats stats = Model.getPlayer(0).getStats();
 
-            for (int i = 0; i < (maxDmg -1); i++) {
+        for (int i = 0; i < (maxDmg -1); i++) {
 
-                stats.addDmgTaken(1,0);
+            stats.addDmgTaken(1,0);
 
-            }
-        });
+        }
 
-        assertThrows(DeadPlayerException.class, () -> {
 
-            Stats stats1 = Model.getPlayer(1).getStats();
 
-            stats1.addDmgTaken(11,0);
-        });
 
-    }
+        Stats stats1 = Model.getPlayer(1).getStats();
 
-    @Test
-    void shouldThrowOverKilledPlayerException(){
+        stats1.addDmgTaken(11,0);
 
-        int maxDmg = 12;
-
-        List<String> players = new ArrayList<>();
-        players.add("Agent");
-        players.add("Agent47");
-
-        List<PlayerColor> colors = new ArrayList<>();
-        colors.add(PlayerColor.BLUE);
-        colors.add(PlayerColor.BLUE);
-
-        Model model = new Model(players,colors,1, 8);
-
-        assertThrows(OverKilledPlayerException.class, () -> {
-
-            Stats stats1 = Model.getPlayer(1).getStats();
-
-            stats1.addDmgTaken(maxDmg,0);
-        });
-
-        assertThrows(OverKilledPlayerException.class, () -> {
-
-            Stats stats1 = Model.getPlayer(1).getStats();
-
-            stats1.addDmgTaken(maxDmg +5,0);
-        });
 
     }
+
 
     @Test
     void shouldAddMarksToDamage(){
