@@ -29,7 +29,7 @@ public class AmmoBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList(ammoBag),playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList((AmmoBag) object),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -48,7 +48,7 @@ public class AmmoBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList(ammoBag),playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList((AmmoBag) object),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 

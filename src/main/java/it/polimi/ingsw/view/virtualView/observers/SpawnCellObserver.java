@@ -25,7 +25,7 @@ public class SpawnCellObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames(spawnCell), Model.getMap().cellToCoord(spawnCell));
+        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames((SpawnCell) object), Model.getMap().cellToCoord((SpawnCell) object));
 
         // send the update to the Virtual View
 
@@ -46,7 +46,7 @@ public class SpawnCellObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames(spawnCell), Model.getMap().cellToCoord(spawnCell));
+        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames((SpawnCell) object), Model.getMap().cellToCoord((SpawnCell) object));
 
         // send the update to the selected player's virtual View
 

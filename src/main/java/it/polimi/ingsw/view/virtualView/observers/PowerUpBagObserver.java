@@ -30,7 +30,7 @@ public class PowerUpBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedPowerUpBag(extractCachedPowerUp(powerUpBag),playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedPowerUpBag(extractCachedPowerUp((PowerUpBag) object),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -51,7 +51,7 @@ public class PowerUpBagObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedPowerUpBag(extractCachedPowerUp(powerUpBag),playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedPowerUpBag(extractCachedPowerUp((PowerUpBag) object),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 

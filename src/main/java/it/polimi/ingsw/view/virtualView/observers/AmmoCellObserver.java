@@ -27,7 +27,7 @@ public class AmmoCellObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoCell(extractAmmoList(ammoCell),extractPowerUp(ammoCell), Model.getMap().cellToCoord(ammoCell));
+        UpdateClass updateClass = new CachedAmmoCell(extractAmmoList((AmmoCell) object),extractPowerUp((AmmoCell) object), Model.getMap().cellToCoord((AmmoCell) object));
 
         // send the update to the Virtual View
 
@@ -47,7 +47,7 @@ public class AmmoCellObserver implements Observer {
 
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoCell(extractAmmoList(ammoCell),extractPowerUp(ammoCell), Model.getMap().cellToCoord(ammoCell));
+        UpdateClass updateClass = new CachedAmmoCell(extractAmmoList((AmmoCell) object),extractPowerUp((AmmoCell) object), Model.getMap().cellToCoord((AmmoCell) object));
 
         // send the update to the selected player's virtual View
 

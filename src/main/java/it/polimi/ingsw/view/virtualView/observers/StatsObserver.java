@@ -26,7 +26,7 @@ public class StatsObserver implements Observer {
     }
 
     @Override
-    public void update(Object object) {
+    public synchronized void update(Object object) {
 
 
         // cast the Object in its dynamic type
@@ -51,7 +51,7 @@ public class StatsObserver implements Observer {
     }
 
     @Override
-    public void updateSinge(int playerId, Object object) {
+    public synchronized void updateSinge(int playerId, Object object) {
 
         LOGGER.log(level,"[Stats-Observer] sending Reconnection DATA to player: {0}", playerId);
 

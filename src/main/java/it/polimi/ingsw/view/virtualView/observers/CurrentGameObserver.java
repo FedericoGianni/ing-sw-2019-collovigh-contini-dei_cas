@@ -16,7 +16,7 @@ public class CurrentGameObserver implements Observer {
     private Observers observers;
 
     @Override
-    public void update(Object object) {
+    public synchronized void update(Object object) {
 
         // moves the previous saved current game
 
@@ -32,7 +32,7 @@ public class CurrentGameObserver implements Observer {
 
         // translates the killShotTrack into a list of Point
 
-        List<Point> killShotTrack = extractKillShotTrack(game);
+        List<Point> killShotTrack = extractKillShotTrack((CurrentGame) object);
 
         // encapsulate the update in the update Class
 
@@ -47,7 +47,7 @@ public class CurrentGameObserver implements Observer {
     }
 
     @Override
-    public void updateSinge(int playerId, Object object) {
+    public synchronized void updateSinge(int playerId, Object object) {
 
         // moves the previous saved current game
 
@@ -63,7 +63,7 @@ public class CurrentGameObserver implements Observer {
 
         // translates the killShotTrack into a list of Point
 
-        List<Point> killShotTrack = extractKillShotTrack(game);
+        List<Point> killShotTrack = extractKillShotTrack((CurrentGame) object);
 
         // encapsulate the update in the update Class
 
