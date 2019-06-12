@@ -11,6 +11,7 @@ import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.actions.ShootAction;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
@@ -402,7 +403,7 @@ public class Controller {
 
             case SHOOT:
 
-                //TODO shoot
+                actionPhase.shootAction((ShootAction) jsonAction);
 
                 break;
 

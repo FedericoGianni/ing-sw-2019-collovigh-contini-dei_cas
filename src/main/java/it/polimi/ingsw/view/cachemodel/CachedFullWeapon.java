@@ -14,8 +14,9 @@ public class CachedFullWeapon implements Serializable {
     private final List<Color> thirdEffectCost;
     private final List<EffectType> effectTypes;
     private final List<EffectRequirements> effectRequirements;
+    private final List<String> effectsDescriptions;
 
-    public CachedFullWeapon(String name, List<Color> firstEffectCost, List<Color> secondEffectCost, List<Color> thirdEffectCost, List<EffectType> effectTypes, List<EffectRequirements> effectRequirements) {
+    public CachedFullWeapon(String name, List<Color> firstEffectCost, List<Color> secondEffectCost, List<Color> thirdEffectCost, List<EffectType> effectTypes, List<EffectRequirements> effectRequirements, List<String> effectsDescriptions) {
         this.name = name;
         this.firstEffectCost = firstEffectCost;
         this.secondEffectCost = secondEffectCost;
@@ -23,6 +24,7 @@ public class CachedFullWeapon implements Serializable {
 
         this.effectTypes = effectTypes;
         this.effectRequirements = effectRequirements;
+        this.effectsDescriptions = effectsDescriptions;
     }
 
     public String getName() {
@@ -40,4 +42,10 @@ public class CachedFullWeapon implements Serializable {
     public List<Color> getThirdEffectCost() {
         return thirdEffectCost;
     }
+
+    public List<EffectType> getEffectTypes() { return effectTypes; }
+
+    public List<EffectRequirements> getEffectRequirements() { return effectRequirements; }
+
+    public List<String> getEffectsDescriptions() { return effectsDescriptions; }
 }

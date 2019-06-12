@@ -80,7 +80,13 @@ public class JsonExampleMaker {
         targets_2.add(1);
         effectRequirements.add(new EffectRequirements(targets_2,false));
 
-        weaponList.add(new CachedFullWeapon("LOCK RIFLE", cost_1, cost_2, null , effectTypes, effectRequirements));
+        List<String> effectsDescriptions = new ArrayList<>();
+
+        effectsDescriptions.add("effetto base: Dai 2 danni e 1 marchio a 1 bersaglio che puoi vedere. ");
+        effectsDescriptions.add("secondo aggancio: Dai 1 marchio a un altro bersaglio che puoi vedere.");
+
+
+        weaponList.add(new CachedFullWeapon("LOCK RIFLE", cost_1, cost_2, null , effectTypes, effectRequirements, effectsDescriptions));
 
         try {
 

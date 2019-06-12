@@ -465,7 +465,7 @@ public class ActionPhase {
 
     // SHOOT_ACTION
 
-    public void shoot(ShootAction shootAction) {
+    public void shootAction(ShootAction shootAction) {
 
         throw new UnsupportedOperationException();
 
