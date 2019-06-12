@@ -8,6 +8,8 @@ import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.actions.ShootAction;
+import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 
 import java.util.List;
@@ -232,6 +234,10 @@ public class ActionPhase {
 
                 grabAmmoFromCurrPosition();
 
+                // update the inactive players
+
+                controller.updateInactivePlayers(new GrabTurnUpdate(controller.getCurrentPlayer()));
+
                 // increment the phase
 
                 controller.incrementPhase();
@@ -239,6 +245,10 @@ public class ActionPhase {
             }else {
 
                 grabWeaponFromCurrPosition(grabAction);
+
+                // update the inactive players
+
+                controller.updateInactivePlayers(new GrabTurnUpdate(controller.getCurrentPlayer(),grabAction.getNewWeaponName()));
 
                 // increment the phase
 
@@ -452,7 +462,7 @@ public class ActionPhase {
 
     // SHOOT_ACTION
 
-    public void shoot(int weapon, int target) {
+    public void shoot(ShootAction shootAction) {
 
         throw new UnsupportedOperationException();
 

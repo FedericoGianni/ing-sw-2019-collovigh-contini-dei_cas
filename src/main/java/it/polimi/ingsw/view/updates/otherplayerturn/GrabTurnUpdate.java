@@ -1,20 +1,14 @@
 package it.polimi.ingsw.view.updates.otherplayerturn;
 
 
-import it.polimi.ingsw.utils.Color;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GrabTurnUpdate extends TurnUpdate{
 
     private final String weapon;
-    private final List<Color> ammo = new ArrayList<>();
 
-    public GrabTurnUpdate( int playerId, List<Color> ammo) {
+    public GrabTurnUpdate( int playerId) {
         super(TurnUpdateType.GRAB, playerId);
         weapon = null;
-        this.ammo.addAll(ammo);
     }
 
     public GrabTurnUpdate( int playerId, String weapon) {
@@ -24,10 +18,5 @@ public class GrabTurnUpdate extends TurnUpdate{
 
     public String getWeapon() {
         return weapon;
-    }
-
-    public List<Color> getAmmo() {
-
-        return ammo;
     }
 }
