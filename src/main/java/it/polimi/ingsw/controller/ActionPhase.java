@@ -489,7 +489,6 @@ public class ActionPhase {
 
     public void shootAction(ShootAction shootAction) {
 
-
         // gets the id of the current player
 
         int playerId = controller.getCurrentPlayer();
@@ -620,6 +619,14 @@ public class ActionPhase {
 
                 controller.setFrenzyStarter(e.getPlayerId());
             }
+
+            controller.incrementPhase();
+
+        }else {
+
+            LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " weapon not found ");
+
+            handleAction();
         }
     }
 

@@ -140,13 +140,10 @@ class CurrentGameTest {
 
         assertEquals(0,currentGame.getKillShotTrack().size());
 
-        try {
 
-            currentGame.addkills(0, true);
+        currentGame.addkills(0, true);
 
-        }catch (FrenzyActivatedException e){
-            e.printStackTrace();
-        }
+
 
         assertEquals(0,currentGame.getKillShotTrack().get(0).getKillerId());
         assertEquals(2,currentGame.getKillShotTrack().get(0).getAmount());
@@ -166,26 +163,18 @@ class CurrentGameTest {
 
         List<Boolean> list = new ArrayList<>();
 
-        try{
 
 
 
-            for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
 
-                list.add(false);
+            list.add(false);
 
-            }
-
-            currentGame.addkills(0, list);
-
-
-
-        }catch (FrenzyActivatedException e){
-
-            assertEquals(0,e.getPlayerId());
-
-            assertEquals(list.size(),currentGame.getKillShotTrack().size());
         }
+
+        currentGame.addkills(0, list);
+
+
 
 
     }

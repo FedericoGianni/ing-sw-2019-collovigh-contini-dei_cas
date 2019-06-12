@@ -12,15 +12,23 @@ import java.util.List;
 public class CurrentGameObserver implements Observer {
 
     private CurrentGame game;
+    private CurrentGame previous;
     private Observers observers;
-
 
     @Override
     public void update(Object object) {
 
+        // moves the previous saved current game
+
+        previous = game;
+
         // cast the Object in its dynamic type
 
-        this.game = (CurrentGame) object;
+        this.game = new CurrentGame((CurrentGame) object);
+
+        // check if frenzy has begun
+
+        checkFrenzy(game);
 
         // translates the killShotTrack into a list of Point
 
@@ -41,9 +49,17 @@ public class CurrentGameObserver implements Observer {
     @Override
     public void updateSinge(int playerId, Object object) {
 
+        // moves the previous saved current game
+
+        previous = game;
+
         // cast the Object in its dynamic type
 
-        this.game = (CurrentGame) object;
+        this.game = new CurrentGame((CurrentGame) object);
+
+        // check if frenzy has begun
+
+        checkFrenzy(game);
 
         // translates the killShotTrack into a list of Point
 
@@ -78,6 +94,22 @@ public class CurrentGameObserver implements Observer {
 
         return killShotTrack;
 
+    }
+
+    private void checkFrenzy(CurrentGame game){
+
+        // if the killShotTrack goes over the max
+
+        if ((previous.getKillShotTrack().size() < previous.getSkulls()) && (game.getKillShotTrack().size() >= previous.getSkulls())){
+
+            // set the frenzy starter
+
+            observers.getController().setFrenzyStarter(game.getKillShotTrack().get(game.getKillShotTrack().size() -1).getKillerId());
+
+            // set the frenzy check to true
+
+            observers.getController().setFrenzy(true);
+        }
     }
 
     public void setObservers(Observers observers) {
