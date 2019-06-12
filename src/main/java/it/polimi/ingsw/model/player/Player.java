@@ -71,10 +71,12 @@ public class Player {
      * @param c set the player's position in the map
      */
     public void setPlayerPos(Cell c) {
-        if(this.getCurrentPosition()!=null)
-            this.getCurrentPosition().removePlayerFromHere(this);
+
+        if(this.getCurrentPosition()!=null) this.getCurrentPosition().removePlayerFromHere(this);
+
          this.stats.setCurrentPosition(c);
-         c.addPlayerHere(this);
+
+         if (c != null) c.addPlayerHere(this);
     }
 
     /**

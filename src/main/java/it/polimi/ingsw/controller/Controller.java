@@ -179,6 +179,30 @@ public class Controller {
 
     }
 
+    public Boolean getFrenzy() {
+        return frenzy;
+    }
+
+    public Boolean getHasSomeoneDied() {
+        return hasSomeoneDied;
+    }
+
+    public int getFrenzyStarter() {
+        return frenzyStarter;
+    }
+
+    public void setFrenzy(Boolean frenzy) {
+        this.frenzy = frenzy;
+    }
+
+    public void setHasSomeoneDied(Boolean hasSomeoneDied) {
+        this.hasSomeoneDied = hasSomeoneDied;
+    }
+
+    public void setFrenzyStarter(int frenzyStarter) {
+        this.frenzyStarter = frenzyStarter;
+    }
+
     // management Methods
 
     /**

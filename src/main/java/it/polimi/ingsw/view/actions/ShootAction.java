@@ -14,9 +14,13 @@ public class ShootAction extends JsonAction{
     private final List<Integer> effects;
     private final List<Point> cells;
 
-    public ShootAction(List<List<Integer>> targetIds, List<Integer> effects, List<Point> cells) {
+    private final String weaponName;
+
+    public ShootAction(String weaponName,List<List<Integer>> targetIds, List<Integer> effects, List<Point> cells) {
 
         super(ActionTypes.SHOOT);
+
+        this.weaponName = weaponName;
 
         this.move = null;
 
@@ -28,9 +32,11 @@ public class ShootAction extends JsonAction{
 
     }
 
-    public ShootAction( Directions move, List<List<Integer>> targetIds, List<Integer> effects, List<Point> cells ) {
+    public ShootAction( String weaponName, Directions move, List<List<Integer>> targetIds, List<Integer> effects, List<Point> cells ) {
 
         super(ActionTypes.SHOOT);
+
+        this.weaponName = weaponName;
 
         this.targetIds = targetIds;
 
@@ -55,5 +61,9 @@ public class ShootAction extends JsonAction{
 
     public List<Point> getCells() {
         return cells;
+    }
+
+    public String getWeaponName() {
+        return weaponName;
     }
 }

@@ -68,7 +68,7 @@ public abstract class Weapon {
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public abstract void shoot(ArrayList<ArrayList<Player>> targetLists, ArrayList<Integer> effects, ArrayList<Cell> cells) throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException;//may need to be changed
+    public abstract void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException;//may need to be changed
 
     /**
      * @param cost

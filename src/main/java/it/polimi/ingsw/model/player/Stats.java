@@ -243,7 +243,21 @@ public class Stats extends Subject {
      * @param currentPosition of the player
      */
     public void setCurrentPosition(Cell currentPosition) {
+
+        // remove the player from the previous cell
+
+        if(this.getCurrentPosition()!=null) this.getCurrentPosition().removePlayerFromHere(Model.getPlayer(getPlayerId()));
+
+        // sets the new position in the stats
+
         this.currentPosition = currentPosition;
+
+        // sets the player in the cell if not null
+
+        if (currentPosition != null) currentPosition.addPlayerHere(Model.getPlayer(getPlayerId()));
+
+        // updates the observers
+
         updateAll(this);
     }
 

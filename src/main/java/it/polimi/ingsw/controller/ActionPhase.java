@@ -1,9 +1,11 @@
 package it.polimi.ingsw.controller;
 
 
+import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.SpawnCell;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.GrabAction;
@@ -12,6 +14,7 @@ import it.polimi.ingsw.view.actions.ShootAction;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +28,8 @@ public class ActionPhase {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
-    private static final String LOG_START = "[Controller-GrabAction] Player w/ id: ";
+    private static final String LOG_START_GRAB = "[Controller-GrabAction] Player w/ id: ";
+    private static final String LOG_START_SHOOT = "[Controller-ShootAction]";
 
     //Grab
 
@@ -158,7 +162,7 @@ public class ActionPhase {
 
         // logs the position change
 
-        LOGGER.log(level, () -> LOG_START + playerId + " moved " + direction + " in cell : " + Model.getMap().cellToCoord(Model.getPlayer(playerId).getCurrentPosition()));
+        LOGGER.log(level, () -> LOG_START_GRAB + playerId + " moved " + direction + " in cell : " + Model.getMap().cellToCoord(Model.getPlayer(playerId).getCurrentPosition()));
     }
 
     /**
@@ -259,7 +263,7 @@ public class ActionPhase {
 
             // if the checks fails recalls handleAction methods
 
-            LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " failed grab Action ");
+            LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " failed grab Action ");
 
             handleAction();
 
@@ -281,14 +285,14 @@ public class ActionPhase {
 
             if (grabAction.getDirection().size() > MAX_GRAB_MOVES_PLUS){
 
-                LOGGER.log(Level.WARNING, () -> LOG_START + playerId + " tried to more than max movements");
+                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + playerId + " tried to more than max movements");
 
                 return false;
             }
 
             if ((grabAction.getDirection().size() > MAX_GRAB_MOVES) && (Model.getPlayer(playerId).getDmg().size() < DMG_FOR_PLUS)){
 
-                LOGGER.log(Level.WARNING, () -> LOG_START + playerId + " tried to move more than one but has only damage : " + Model.getPlayer(playerId).getDmg().size() );
+                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + playerId + " tried to move more than one but has only damage : " + Model.getPlayer(playerId).getDmg().size() );
 
                 return false;
             }
@@ -315,7 +319,7 @@ public class ActionPhase {
 
             if ( cell.getAmmoPlaced() == null){
 
-                LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to pick an ammoCard in a cell that was empty ");
+                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " tried to pick an ammoCard in a cell that was empty ");
                 controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_ALREADY_PICKED_AMMO_HERE);
 
                 return false;
@@ -337,7 +341,7 @@ public class ActionPhase {
 
             // if the player did not specify the weapon to buy -> false
 
-            LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to buy a weapon but did not specify the name ");
+            LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " tried to buy a weapon but did not specify the name ");
 
             return false;
 
@@ -345,7 +349,7 @@ public class ActionPhase {
 
             if (findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell) == null) {
 
-                LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " the specified weapon was not found in the cell : " + grabAction.getNewWeaponName());
+                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " the specified weapon was not found in the cell : " + grabAction.getNewWeaponName());
 
                 return false;
 
@@ -353,7 +357,7 @@ public class ActionPhase {
 
                 if ((Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS) && (grabAction.getDiscardedWeapon() == null)) {
 
-                    LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + " tried to buy a weapon but has already max weapon and did not specify weapon to delete");
+                    LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " tried to buy a weapon but has already max weapon and did not specify weapon to delete");
 
                     return false;
                 }
@@ -381,6 +385,24 @@ public class ActionPhase {
     }
 
     /**
+     * This method will return the weapon instance if there is a weapon with given name in the specified player's weaponBag or null
+     * @param weaponName is the name of the weapon
+     * @param playerId is the id of the player
+     * @return the weapon instance or null if not found
+     */
+    private Weapon findWeaponInWeaponBag(String weaponName, int playerId){
+
+        List<Weapon> weaponList = Model.getPlayer(playerId)
+                .getCurrentWeapons()
+                .getList()
+                .stream()
+                .filter(x -> x.getName().equalsIgnoreCase(weaponName))
+                .collect(Collectors.toList());
+
+        return weaponList.isEmpty() ? null : weaponList.get(0);
+    }
+
+    /**
      *
      * @param weapon is the weapon to buy
      * @return true if the player can buy it
@@ -397,7 +419,7 @@ public class ActionPhase {
             //default CANNOT_PAY_WEAPON
 
             String s = DEFAULT_CANNOT_BUY_WEAPON;
-            LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + s);
+            LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + s);
             controller.getVirtualView(controller.getCurrentPlayer()).show(s);
 
             return false;
@@ -439,7 +461,7 @@ public class ActionPhase {
 
             Model.getPlayer(controller.getCurrentPlayer()).buy(findWeaponInSpawnCell(grabAction.getNewWeaponName(), position));
 
-            LOGGER.log(level, () -> LOG_START + controller.getCurrentPlayer() + " bought a new weapon: " + grabAction.getNewWeaponName() );
+            LOGGER.log(level, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " bought a new weapon: " + grabAction.getNewWeaponName() );
 
             if (Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS ){
 
@@ -452,7 +474,7 @@ public class ActionPhase {
 
                 Model.getPlayer(controller.getCurrentPlayer()).delWeapon(weaponList.get(0));
 
-                LOGGER.log(level, () -> LOG_START + controller.getCurrentPlayer() + " discarded a weapon: " + grabAction.getDiscardedWeapon() );
+                LOGGER.log(level, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " discarded a weapon: " + grabAction.getDiscardedWeapon() );
 
             }
 
@@ -467,9 +489,138 @@ public class ActionPhase {
 
     public void shootAction(ShootAction shootAction) {
 
-        throw new UnsupportedOperationException();
 
-        //TODO implement method
+        // gets the id of the current player
+
+        int playerId = controller.getCurrentPlayer();
+
+        // gets the specified weapon
+
+        Weapon selected = findWeaponInWeaponBag(shootAction.getWeaponName(),playerId);
+
+        // check if weapon exist
+
+        if (selected != null){
+
+            try {
+
+                // translate the list of point in a list of cell
+
+                List<Cell> cells = shootAction
+                        .getCells()
+                        .stream()
+                        .map( x -> Model.getMap().getCell(x.x,x.y))
+                        .collect(Collectors.toList());
+
+                List<List<Player>> targets = new ArrayList<>();
+
+                // translate the lists of Integer in lists of Players
+
+                for (int i = 0; i < shootAction.getTargetIds().size() ; i++) {
+
+                    List<Player> temp = new ArrayList<>();
+
+                    for (Integer id : shootAction.getTargetIds().get(i)){
+
+                        temp.add(Model.getPlayer(id));
+                    }
+
+                    targets.add(temp);
+                }
+
+
+                selected.shoot(targets,shootAction.getEffects(),cells);
+
+
+            }catch (WeaponNotLoadedException weaponNonLoadedException){
+
+                LOGGER.log(Level.WARNING, weaponNonLoadedException.getMessage(), weaponNonLoadedException);
+
+                controller.getVirtualView(playerId).show("player tried to shoot with unloaded weapon !");
+
+            }catch (PlayerInSameCellException e){
+
+                LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+                controller.getVirtualView(playerId).show("player tried to shoot to player in same cell !");
+
+            }catch (PlayerInDifferentCellException e){
+
+                LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+                controller.getVirtualView(playerId).show("player tried to shoot to player in different cell !");
+
+            }catch (UncorrectDistanceException e){
+
+                LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+                controller.getVirtualView(playerId).show("player tried to shoot to player with illegal distance !");
+
+            }catch (SeeAblePlayerException e){
+
+                LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+                controller.getVirtualView(playerId).show("player tried to shoot to seeable player ? !");
+
+            }catch (UncorrectEffectsException e){
+
+                LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+                controller.getVirtualView(playerId).show("player tried to shoot with illegal effects !");
+
+            }catch (NotCorrectPlayerNumberException e){
+
+                LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+                controller.getVirtualView(playerId).show("player tried to shoot with illegal target number specified !");
+
+            }catch (PlayerNotSeeableException e){
+
+                LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+                controller.getVirtualView(playerId).show("player tried to shoot to target that can not see !");
+
+            }catch (DeadPlayerException e){
+
+                LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " player w/ id: " + e.getPlayerId() + " has been killed ");
+
+                // set hasSomeoneDied check to true
+
+                controller.setHasSomeoneDied(true);
+
+                // remove the player from the map
+
+                Model.getPlayer(e.getPlayerId()).setPlayerPos(null);
+
+            }catch (OverKilledPlayerException e){
+
+                LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " player w/ id: " + e.getPlayerId() + " has been overkilled ");
+
+                // set hasSomeoneDied check to true
+
+                controller.setHasSomeoneDied(true);
+
+                // remove the player from the map
+
+                Model.getPlayer(e.getPlayerId()).setPlayerPos(null);
+
+            }catch (FrenzyActivatedException e){
+
+                LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " player w/ id: " + e.getPlayerId() + " activated frenzy ");
+
+                // set hasSomeoneDied check to true
+
+                controller.setHasSomeoneDied(true);
+
+                //set the frenzy check to true
+
+                controller.setFrenzy(true);
+
+                // set the frenzyStarter
+
+                controller.setFrenzyStarter(e.getPlayerId());
+            }
+        }
     }
 
 
