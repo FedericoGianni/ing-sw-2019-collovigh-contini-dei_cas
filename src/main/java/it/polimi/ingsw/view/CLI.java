@@ -1016,7 +1016,7 @@ public class CLI implements UserInterface {
         CachedSpawnCell cell = (CachedSpawnCell) view.getCacheModel().getCachedMap().getCachedCell(pos.x, pos.y);
 
         List<String> weapons = cell.getWeaponNames();
-        List<String> choice = new ArrayList<>(Collections.nCopies(2, null));
+        List<String> choice = new ArrayList<>();
 
         System.out.println("ARMI IN VENDITA: ");
         for (int i = 0; i < cell.getWeaponNames().size(); i++) {

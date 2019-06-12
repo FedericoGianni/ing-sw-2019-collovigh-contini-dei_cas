@@ -1,7 +1,9 @@
 package it.polimi.ingsw.view.cachemodel;
 
 import it.polimi.ingsw.utils.CacheModelParser;
+import it.polimi.ingsw.view.UiHelpers;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedMap;
 import it.polimi.ingsw.view.cachemodel.cachedmap.FileRead;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
@@ -21,7 +23,7 @@ public class CacheModel {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
-    private List<Player> players = new ArrayList<>();
+    private static List<Player> players = new ArrayList<>();
     private  CachedGame game = null;
     private final View view;
     private CachedMap cachedMap;
@@ -193,6 +195,57 @@ public class CacheModel {
             throw new WeaponNotFoundException();
 
         }else return matchingWeapon.get(0);
+    }
+
+    public static String showDmgTaken(int playerId, List<Integer> dmgTaken){
+
+        String s = "Danni: [ ";
+
+        for (int i = 0; i < dmgTaken.size(); i++) {
+            switch (dmgTaken.get(i)){
+                case 0:
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat("0");
+                    s = s.concat(AsciiColor.ANSI_RESET.escape());
+                    break;
+
+                case 1:
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat("1");
+                    s = s.concat(AsciiColor.ANSI_RESET.escape());
+                    break;
+
+                case 2:
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat("2");
+                    s = s.concat(AsciiColor.ANSI_RESET.escape());
+                    break;
+
+                case 3:
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat("3");
+                    s = s.concat(AsciiColor.ANSI_RESET.escape());
+                    break;
+
+                case 4:
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat("4");
+                    s = s.concat(AsciiColor.ANSI_RESET.escape());
+                    break;
+
+                case 5:
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat("5");
+                    s = s.concat(AsciiColor.ANSI_RESET.escape());
+                    break;
+            }
+
+            s = s.concat(", ");
+        }
+
+        s = s.concat(" ]");
+
+        return s;
     }
 
 }
