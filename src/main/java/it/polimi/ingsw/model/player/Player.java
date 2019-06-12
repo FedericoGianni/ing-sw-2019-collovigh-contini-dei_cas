@@ -1,9 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
-import it.polimi.ingsw.customsexceptions.DeadPlayerException;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
-import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.ammo.AmmoCube;
@@ -326,30 +324,79 @@ public class Player {
     {
         return this.ammo;
     }
-    /**
-     * This function will subtract an ammo cube of the given
-     * @param color and
-     * @return it
-     */
-    public AmmoCube pay(Color color) throws CardNotPossessedException{
 
-        return this.ammo.getItem(this.ammo.getList().stream()
-                .filter( ammoCube -> ammoCube.getColor()==color)
-                .collect(Collectors.toList())
-                .get(0)
-        );
+    /**
+     * This function will subtract from the AmmoBag the cost given
+     * @param cost is the cost to pay
+     */
+    public void pay(List<AmmoCube> cost) throws CardNotPossessedException{
+
+        // if the player can not pay throw an exception
+
+        if (!this.canPay(cost)) throw new CardNotPossessedException();
+
+        // gets the list of the color to pay
+
+        List<Color> required = cost
+                .stream()
+                .map(AmmoCube::getColor)
+                .collect(Collectors.toList());
+
+        // fo each element of the above list
+
+        for (Color ammocube : required) {
+
+            // gets the cubes that are possessed which match the required color
+
+            List<AmmoCube> matchingPossessed = this
+                    .ammo
+                    .getList()
+                    .stream()
+                    .filter( ammoCube -> ammoCube.getColor().equals(ammocube) )
+                    .collect(Collectors.toList());
+
+            // delete the first one
+
+            this.ammo.getItem(matchingPossessed.get(0));
+
+        }
+    }
+
+    /**
+     * This function will subtract from the AmmoBag the cost given
+     * @param cost is the cost to pay
+     */
+    public void pay(Color cost) throws CardNotPossessedException{
+
+        // gets the cubes that are possessed which match the required color
+
+        List<AmmoCube> matchingPossessed = this
+                .ammo
+                .getList()
+                .stream()
+                .filter( ammoCube -> ammoCube.getColor().equals(cost) )
+                .collect(Collectors.toList());
+
+        // if the list is empty the player can not pay for it
+
+        if (matchingPossessed.isEmpty()) throw new CardNotPossessedException();
+
+        // delete the first one
+
+        this.ammo.getItem(matchingPossessed.get(0));
     }
 
     public void buy(Weapon w) throws NotEnoughAmmoException{
 
         try {
 
+            // adds the item from the cell and deletes it from it
+
             this.currentWeapons.addItem(this.stats.getCurrentPosition().buy(w, this));
 
-            for (Color colour : w.getCost().stream().map(AmmoCube::getColor).collect(Collectors.toList())) {
+            // pay the cost of the weapon
 
-                this.pay(colour);
-            }
+            this.pay(w.getCost());
 
         }catch (CardNotPossessedException e){
 
@@ -389,7 +436,7 @@ public class Player {
      * @param fromPlayerId is the id of the player who made the damage
      * @param value is the value of the damage
      */
-    public void addDmg(int fromPlayerId, int value) throws DeadPlayerException,OverKilledPlayerException{
+    public void addDmg(int fromPlayerId, int value) {
 
         this.stats.addDmgTaken(value, fromPlayerId);
     }

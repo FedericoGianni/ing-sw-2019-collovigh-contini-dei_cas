@@ -465,7 +465,7 @@ public class Controller {
 
 
     public void handleReload(){
-        if(!(Model.getGame().getPlayers().get(getCurrentPlayer()).getWeapons().size() == 0)){
+        if(!(Model.getGame().getPlayers().get(getCurrentPlayer()).getWeapons().isEmpty())){
             players.get(getCurrentPlayer()).startReload();
         }
     }
@@ -611,6 +611,9 @@ public class Controller {
         hasSomeoneDied = true;
 
         LOGGER.log(Level.INFO, "[Controller] Player w/ id {0} has been killed ", playerId);
+
+        Model.getPlayer(playerId).setPlayerPos(null);
+
     }
 
     /**
@@ -622,6 +625,9 @@ public class Controller {
         hasSomeoneDied = true;
 
         LOGGER.log(Level.INFO, "[Controller] Player w/ id {0} has been overKilled ", playerId);
+
+        Model.getPlayer(playerId).setPlayerPos(null);
+
     }
 
     public void endGame(){
