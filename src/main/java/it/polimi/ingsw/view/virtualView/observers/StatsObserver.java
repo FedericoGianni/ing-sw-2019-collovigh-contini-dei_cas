@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 import java.util.logging.Level;
@@ -26,7 +25,7 @@ public class StatsObserver implements Observer {
     }
 
     @Override
-    public void update(Object object) {
+    public synchronized void update(Object object) {
 
 
         // cast the Object in its dynamic type
@@ -51,7 +50,7 @@ public class StatsObserver implements Observer {
     }
 
     @Override
-    public void updateSinge(int playerId, Object object) {
+    public synchronized void updateSinge(int playerId, Object object) {
 
         LOGGER.log(level,"[Stats-Observer] sending Reconnection DATA to player: {0}", playerId);
 

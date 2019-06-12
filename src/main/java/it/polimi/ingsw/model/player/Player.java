@@ -72,11 +72,7 @@ public class Player {
      */
     public void setPlayerPos(Cell c) {
 
-        if(this.getCurrentPosition()!=null) this.getCurrentPosition().removePlayerFromHere(this);
-
          this.stats.setCurrentPosition(c);
-
-         if (c != null) c.addPlayerHere(this);
     }
 
     /**

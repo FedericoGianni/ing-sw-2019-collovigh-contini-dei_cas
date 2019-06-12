@@ -14,20 +14,16 @@ import java.util.stream.Collectors;
 
 public class AmmoCellObserver implements Observer {
 
-    private AmmoCell ammoCell;
+
     private Observers observers;
 
 
     @Override
     public void update(Object object) {
 
-        // cast the Object in its dynamic type
-
-        this.ammoCell = (AmmoCell) object;
-
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoCell(extractAmmoList(ammoCell),extractPowerUp(ammoCell), Model.getMap().cellToCoord(ammoCell));
+        UpdateClass updateClass = new CachedAmmoCell(extractAmmoList((AmmoCell) object),extractPowerUp((AmmoCell) object), Model.getMap().cellToCoord((AmmoCell) object));
 
         // send the update to the Virtual View
 
@@ -41,13 +37,9 @@ public class AmmoCellObserver implements Observer {
     @Override
     public void updateSinge(int playerId, Object object) {
 
-        // cast the Object in its dynamic type
-
-        this.ammoCell = (AmmoCell) object;
-
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoCell(extractAmmoList(ammoCell),extractPowerUp(ammoCell), Model.getMap().cellToCoord(ammoCell));
+        UpdateClass updateClass = new CachedAmmoCell(extractAmmoList((AmmoCell) object),extractPowerUp((AmmoCell) object), Model.getMap().cellToCoord((AmmoCell) object));
 
         // send the update to the selected player's virtual View
 

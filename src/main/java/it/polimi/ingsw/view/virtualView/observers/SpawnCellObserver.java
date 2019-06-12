@@ -12,20 +12,15 @@ import java.util.stream.Collectors;
 
 public class SpawnCellObserver implements Observer {
 
-    private SpawnCell spawnCell;
     private Observers observers;
 
 
     @Override
     public void update(Object object) {
 
-        // cast the Object in its dynamic type
-
-        this.spawnCell = (SpawnCell) object;
-
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames(spawnCell), Model.getMap().cellToCoord(spawnCell));
+        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames((SpawnCell) object), Model.getMap().cellToCoord((SpawnCell) object));
 
         // send the update to the Virtual View
 
@@ -40,13 +35,9 @@ public class SpawnCellObserver implements Observer {
     @Override
     public void updateSinge(int playerId, Object object) {
 
-        // cast the Object in its dynamic type
-
-        this.spawnCell = (SpawnCell) object;
-
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames(spawnCell), Model.getMap().cellToCoord(spawnCell));
+        UpdateClass updateClass = new CachedSpawnCell(extractWeaponsNames((SpawnCell) object), Model.getMap().cellToCoord((SpawnCell) object));
 
         // send the update to the selected player's virtual View
 

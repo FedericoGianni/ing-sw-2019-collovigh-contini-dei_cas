@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 public class AmmoBagObserver implements Observer {
 
-    private AmmoBag ammoBag;
     private final PlayerObserver playerObserver;
 
     public AmmoBagObserver(PlayerObserver up) {
@@ -23,13 +22,9 @@ public class AmmoBagObserver implements Observer {
     @Override
     public void update(Object object) {
 
-        // cast the Object in its dynamic type
-
-        this.ammoBag = (AmmoBag) object;
-
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList(ammoBag),playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList((AmmoBag) object),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
@@ -42,13 +37,9 @@ public class AmmoBagObserver implements Observer {
     @Override
     public void updateSinge(int playerId, Object object) {
 
-        // cast the Object in its dynamic type
-
-        this.ammoBag = (AmmoBag) object;
-
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList(ammoBag),playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedAmmoBag(extractAmmoList((AmmoBag) object),playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 

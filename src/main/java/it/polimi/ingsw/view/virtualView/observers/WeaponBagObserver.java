@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class WeaponBagObserver implements Observer {
 
-    private WeaponBag weaponBag;
     private final PlayerObserver playerObserver;
 
     public WeaponBagObserver(PlayerObserver playerObserver) {
@@ -21,13 +20,9 @@ public class WeaponBagObserver implements Observer {
     @Override
     public void update(Object object) {
 
-        // cast the Object in its dynamic type
-
-        this.weaponBag = (WeaponBag) object;
-
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedWeaponBag(extractWeaponsName(weaponBag), extractLoaded(weaponBag), playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedWeaponBag(extractWeaponsName((WeaponBag) object), extractLoaded((WeaponBag) object), playerObserver.getPlayerId());
 
         // send the update to all the Virtual Views
 
@@ -40,13 +35,9 @@ public class WeaponBagObserver implements Observer {
     @Override
     public void updateSinge(int playerId, Object object) {
 
-        // cast the Object in its dynamic type
-
-        this.weaponBag = (WeaponBag) object;
-
         // encapsulate the update in the update Class
 
-        UpdateClass updateClass = new CachedWeaponBag(extractWeaponsName(weaponBag), extractLoaded(weaponBag), playerObserver.getPlayerId());
+        UpdateClass updateClass = new CachedWeaponBag(extractWeaponsName((WeaponBag) object), extractLoaded((WeaponBag) object), playerObserver.getPlayerId());
 
         // send the update to the Virtual View
 
