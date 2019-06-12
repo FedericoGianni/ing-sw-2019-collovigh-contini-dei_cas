@@ -393,10 +393,13 @@ public class ActionPhase {
             return true;
 
         }else {
+
             //default CANNOT_PAY_WEAPON
+
             String s = DEFAULT_CANNOT_BUY_WEAPON;
             LOGGER.log(Level.WARNING, () -> LOG_START + controller.getCurrentPlayer() + s);
             controller.getVirtualView(controller.getCurrentPlayer()).show(s);
+
             return false;
         }
     }

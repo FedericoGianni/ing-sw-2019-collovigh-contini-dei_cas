@@ -135,6 +135,15 @@ public class PowerUpPhase {
 
         int currentPlayer = controller.getCurrentPlayer();
 
+        if (newtonAction.getTargetPlayerId() == currentPlayer){
+
+            LOGGER.warning("[CONTROLLER - PowerUp] player tried to use Newton on himself");
+
+            controller.getVirtualView(currentPlayer).show(" player tried to use Newton on himself ");
+
+            handlePowerUp();
+        }
+
         LOGGER.log(level,"[CONTROLLER - PowerUp] calling useNewton on player w/ id: {0}",currentPlayer);
 
         try {
