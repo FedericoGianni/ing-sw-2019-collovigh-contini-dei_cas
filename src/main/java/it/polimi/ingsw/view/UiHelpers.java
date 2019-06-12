@@ -125,4 +125,103 @@ public class UiHelpers {
         return finalPos;
     }
 
-}
+    /**
+     * Useful method to translate weapon names from EN to IT (since we use EN weapon names in json)
+     * @param weapon name of the weapon to be translated
+     * @return the weapon name in italian
+     */
+    public static String weaponTranslator(String weapon){
+
+        String translate;
+
+        switch (weapon) {
+
+            case "LOCK RIFLE":
+                translate = "DISTRUTTORE";
+                break;
+
+            case "MACHINE GUN":
+                translate = "MITRAGLIATRICE";
+                break;
+
+            case "ELECTROSCYTHE":
+                translate = "FALCE PROTONICA";
+                break;
+
+            case "TRACTOR BEAM":
+                translate = "RAGGIO TRAENTE";
+                break;
+
+            case "THOR":
+                translate = "TORPEDINE";
+                break;
+
+            case "VORTEX CANNON":
+                translate = "CANNONE VORTEX";
+                break;
+
+            case "PLASMA GUN":
+                translate = "FUCILE AL PLASMA";
+                break;
+
+            case "FURNACE":
+                translate = "VULCANIZZATORE";
+                break;
+
+            case "HEAT SEEKER":
+                translate = "RAZZO TERMICO";
+                break;
+
+            case "WHISPERER":
+                translate = "FUCILE DI PRECISIONE";
+                break;
+
+            case "HELLION":
+                translate = "RAGGIO SOLARE";
+                break;
+
+            case "FLAME THROWER":
+                translate = "LANCIAFIAMME";
+                break;
+
+            case "GRENADE LAUNCHER":
+                translate = "LANCIAGRANATE";
+                break;
+
+            case "SHOTGUN":
+                translate = "FUCILE A POMPA";
+                break;
+
+            case "ROCKET LAUNCHER":
+                translate = "LANCIARAZZI";
+                break;
+
+            case "POWER GLOVE":
+                translate = "CYBERGUANTO";
+                break;
+
+            case "RAYLGUN":
+                translate = "FUCILE LASER";
+                break;
+
+            case "SHOCKWAVE":
+                translate = "ONDA D'URTO";
+                break;
+
+            case "CYBERBLADE":
+                translate = "SPADA FOTONICA";
+                break;
+
+            case "SLEDGEHAMMER":
+                translate = "MARTELLO IONICO";
+                break;
+
+            default:
+                translate = weapon;
+
+            }
+
+        return translate;
+
+        }
+    }
