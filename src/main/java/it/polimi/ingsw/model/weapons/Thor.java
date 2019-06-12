@@ -55,8 +55,7 @@ public class Thor extends Weapon {
     }
 
     @Override
-    public void shoot(ArrayList<ArrayList<Player>> targetLists, ArrayList<Integer> effects, ArrayList<Cell> cells) throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
-
+    public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
 
         for(int i=0;i<effects.size();i++)//checks that i can actually shoot
         {
@@ -80,17 +79,17 @@ public class Thor extends Weapon {
         for(int i=0;i<effects.size();i++)
         {
 
-                            if(i==0)//first macroeffect
-                            {
-                                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),2);
-                            }else if(i==1)//second macroeffect
-                            {
-                                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),1);
-                            }
-                            else if(i==2)//third macroeffect
-                            {
-                                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),2);
-                            }
+            if(i==0)//first macroeffect
+            {
+                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),2);
+            }else if(i==1)//second macroeffect
+            {
+                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),1);
+            }
+            else if(i==2)//third macroeffect
+            {
+                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),2);
+            }
         }
     }
 

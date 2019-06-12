@@ -119,7 +119,7 @@ public class Marker extends MicroEffect {
      * @throws NotCorrectPlayerNumberException
      */
     @Override
-    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException {
+    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException {
         if (differentPlayer==true)//only one case
         {
             if(w.getFirstTarget()!=playerList.get(0))//weapons that requires precedent players always have one target
@@ -182,7 +182,7 @@ public class Marker extends MicroEffect {
      * @throws PlayerInDifferentCellException
      * @throws NotCorrectPlayerNumberException
      */
-    private void sameCellCheck(Player p,ArrayList<Player> playerList) throws PlayerInDifferentCellException, NotCorrectPlayerNumberException {
+    private void sameCellCheck(Player p,List<Player> playerList) throws PlayerInDifferentCellException, NotCorrectPlayerNumberException {
         if(!playerList.containsAll(p.getCurrentPosition().getPlayers())){//non all the player are in the number
             throw new NotCorrectPlayerNumberException();
         }

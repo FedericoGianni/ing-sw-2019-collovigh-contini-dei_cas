@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * //TODO
@@ -52,6 +53,6 @@ public abstract class MicroEffect {
      * @throws DifferentPlayerNeededException
      * @throws NotCorrectPlayerNumberException
      */
-    public abstract void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, DifferentPlayerNeededException, NotCorrectPlayerNumberException;
+    public abstract void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, DifferentPlayerNeededException, NotCorrectPlayerNumberException;
     public abstract boolean moveBefore();
 }

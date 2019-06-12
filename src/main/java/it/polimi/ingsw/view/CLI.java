@@ -1224,7 +1224,12 @@ public class CLI implements UserInterface {
         //let the user retry the shoot specifiying why shoot has failed
 
         //just to test a basic shoot
-        view.doAction(new ShootAction(targetList, effects, cells));
+
+        //TODO specify the weapon name
+
+        String weaponName = null;
+
+        view.doAction(new ShootAction(weaponName,targetList, effects, cells));
 
     }
 

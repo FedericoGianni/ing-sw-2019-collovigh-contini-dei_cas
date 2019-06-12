@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -65,9 +66,9 @@ class ThorTest {
 
 
 
-        ArrayList <ArrayList<Player>> targetsLists =new ArrayList<>();
-        ArrayList <Player> targets1=new ArrayList<>();
-        ArrayList <Player> targets2=new ArrayList<>();
+        List <List<Player>> targetsLists =new ArrayList<>();
+        List <Player> targets1=new ArrayList<>();
+        List <Player> targets2=new ArrayList<>();
         targets1.add(p2);
         targets2.add(p3);
         targetsLists.add(targets1);

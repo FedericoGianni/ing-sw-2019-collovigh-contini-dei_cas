@@ -65,9 +65,9 @@ class NormalWeaponTest {
 
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
-        ArrayList targets=new ArrayList();
+        List targets=new ArrayList();
         targets.add(target1);
-        ArrayList<ArrayList<Player>>targetsLists=new ArrayList<>();
+        List<List<Player>>targetsLists=new ArrayList<>();
         targetsLists.add(targets);
         shooter.addWeapon(weapons.get(0));//not how it works but easy
 
@@ -133,9 +133,9 @@ class NormalWeaponTest {
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
         shooter.addWeapon(weapons.get(0));//not how it works but easy
-        ArrayList targets0=new ArrayList();
-        ArrayList targets1=new ArrayList();
-        ArrayList<ArrayList<Player>> targetLists = new ArrayList<>();
+        List targets0=new ArrayList();
+        List targets1=new ArrayList();
+        List<List<Player>> targetLists = new ArrayList<>();
         targets0.add(target1);
         targets1.add(target2);
         targetLists.add(targets0);
@@ -204,8 +204,8 @@ class NormalWeaponTest {
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));//one only for evitating null Pointer
         shooter.addWeapon(weapons.get(0));//not how it works but easy
-        ArrayList targets=new ArrayList();
-        ArrayList<ArrayList <Player>>targetsLists=new ArrayList<>();
+        List <Player> targets = new ArrayList();
+        List <List <Player>>targetsLists=new ArrayList<>();
         targets.add(target1);
         targetsLists.add(targets);
         try{
@@ -268,14 +268,14 @@ class NormalWeaponTest {
 
         shooter.addWeapon(weapons.get(5));//not actually how it works but easy
         //adding targets to the targets lists
-        ArrayList targets1=new ArrayList();
-        ArrayList targets2=new ArrayList();
-        ArrayList<ArrayList<Player>>targetsLists=new ArrayList<>();
+        List<Player> targets1=new ArrayList<>();
+        List<Player> targets2=new ArrayList<>();
+        List<List<Player>>targetsLists=new ArrayList<>();
         targets1.add(target1);
         targets2.add(target1);
         targetsLists.add(targets1);
         targetsLists.add(targets2);
-        ArrayList<Cell> cells=new ArrayList<>();
+        List<Cell> cells=new ArrayList<>();
         //first traget don't move
         cells.add(null);
         cells.add(shooter.getCurrentPosition());

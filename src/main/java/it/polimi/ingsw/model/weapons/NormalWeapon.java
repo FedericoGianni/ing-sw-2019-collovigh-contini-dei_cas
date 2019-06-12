@@ -21,8 +21,8 @@ public class NormalWeapon extends Weapon{
 
     private String name;
     private boolean isLoaded;
-    private ArrayList<AmmoCube> cost;
-    private ArrayList<MacroEffect> effects;
+    private List<AmmoCube> cost;
+    private List<MacroEffect> effects;
 
 
     public boolean isMoveBefore() {
@@ -44,14 +44,14 @@ public class NormalWeapon extends Weapon{
         this.name = name;
     }
 
-    public void setCost(ArrayList<AmmoCube> cost) {
+    public void setCost(List<AmmoCube> cost) {
         this.cost = cost;
     }
     /**
      *
      * @return
      */
-    public ArrayList<AmmoCube> getBuyCost()//tell me how much it costs to buy that weapon(reloadCost-first ammo cube)
+    public List<AmmoCube> getBuyCost()//tell me how much it costs to buy that weapon(reloadCost-first ammo cube)
     {
         ArrayList <AmmoCube> bC=new ArrayList();
         for(int i=1;i<this.cost.size();i++)
@@ -88,7 +88,7 @@ public class NormalWeapon extends Weapon{
      * effects are not filled in the creator
      */
 
-    public NormalWeapon(String name, ArrayList<AmmoCube> cost, ArrayList<MacroEffect>l) {
+    public NormalWeapon(String name, List<AmmoCube> cost, List<MacroEffect>l) {
 
         this.name = name;
         this.isLoaded = true;
@@ -125,8 +125,6 @@ public class NormalWeapon extends Weapon{
     }
 
 
-
-
     /**
      * @return the cost of buying this NormalWeapon so the cost of recharge without the first cube
      */
@@ -148,7 +146,7 @@ public class NormalWeapon extends Weapon{
      *
      * @return the list of macro-effects
      */
-    public ArrayList<MacroEffect> getEffects() {
+    public List<MacroEffect> getEffects() {
         return effects;
     }
 
@@ -168,7 +166,7 @@ public class NormalWeapon extends Weapon{
      * @deprecated
      */
     @Deprecated
-    public static  ArrayList<NormalWeapon>  weaponsCreator()
+    public static  List<NormalWeapon>  weaponsCreator()
     {
         //----------------microEffects ecc creator
         Damage.populator();
@@ -248,7 +246,7 @@ public class NormalWeapon extends Weapon{
      * @deprecated
      */
     @Deprecated
-    public static ArrayList<AmmoCube> ammoAnalizer(ArrayList<AmmoCube> wpCost,String type)
+    public static List<AmmoCube> ammoAnalizer(List<AmmoCube> wpCost,String type)
     {
             if(type=="BLUE")
             {
@@ -269,7 +267,7 @@ public class NormalWeapon extends Weapon{
      * @deprecated
      */
     @Deprecated
-    public static ArrayList<MacroEffect> effectsAnalizer (ArrayList<MacroEffect> mf,int typeEncoded)
+    public static List<MacroEffect> effectsAnalizer (List<MacroEffect> mf,int typeEncoded)
     {
         mf.add(MacroEffect.getMacroEffects().get(typeEncoded));
         return mf;
@@ -288,7 +286,8 @@ public class NormalWeapon extends Weapon{
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public void shoot(ArrayList<ArrayList<Player>>targetLists, ArrayList<Integer> effect, ArrayList<Cell> cells)throws PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException
+    @Override
+    public void shoot(List<List<Player>>targetLists, List<Integer> effect, List<Cell> cells)throws PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException
     {
         try{
             if(!this.isLoaded())//if actual weapon is not loaded

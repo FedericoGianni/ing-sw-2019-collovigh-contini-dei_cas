@@ -166,8 +166,8 @@ public class Damage extends MicroEffect {
         return this;
     }
 
-
-    public void microEffectApplicator(ArrayList<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, NotCorrectPlayerNumberException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
+    @Override
+    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, NotCorrectPlayerNumberException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
         if(alreadyTargeted==true && differentPlayer==false)
         {
             w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);//playerId=0 bcz only one player the same as the first shot
@@ -264,7 +264,7 @@ public class Damage extends MicroEffect {
         }
     }
 
-    private void differentCellsCheck(Player p,ArrayList<Player> playerList) throws PlayerInSameCellException
+    private void differentCellsCheck(Player p,List<Player> playerList) throws PlayerInSameCellException
     {
         for(Player item:playerList)
         {
@@ -273,7 +273,7 @@ public class Damage extends MicroEffect {
         }
     }
 
-    private void sameCellCheck(Player p,ArrayList<Player> playerList) throws PlayerInDifferentCellException, NotCorrectPlayerNumberException {
+    private void sameCellCheck(Player p,List<Player> playerList) throws PlayerInDifferentCellException, NotCorrectPlayerNumberException {
         if(!playerList.containsAll(p.getCurrentPosition().getPlayers())){//non all the player are in the number
             throw new NotCorrectPlayerNumberException();
         }
