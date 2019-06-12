@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 import java.util.logging.Level;

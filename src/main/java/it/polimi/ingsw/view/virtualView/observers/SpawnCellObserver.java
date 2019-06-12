@@ -12,16 +12,11 @@ import java.util.stream.Collectors;
 
 public class SpawnCellObserver implements Observer {
 
-    private SpawnCell spawnCell;
     private Observers observers;
 
 
     @Override
     public void update(Object object) {
-
-        // cast the Object in its dynamic type
-
-        this.spawnCell = (SpawnCell) object;
 
         // encapsulate the update in the update Class
 
@@ -39,10 +34,6 @@ public class SpawnCellObserver implements Observer {
 
     @Override
     public void updateSinge(int playerId, Object object) {
-
-        // cast the Object in its dynamic type
-
-        this.spawnCell = (SpawnCell) object;
 
         // encapsulate the update in the update Class
 
