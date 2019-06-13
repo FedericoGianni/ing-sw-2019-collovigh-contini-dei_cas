@@ -8,10 +8,7 @@ import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
-import it.polimi.ingsw.view.actions.GrabAction;
-import it.polimi.ingsw.view.actions.JsonAction;
-import it.polimi.ingsw.view.actions.Move;
-import it.polimi.ingsw.view.actions.ShootAction;
+import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
@@ -72,6 +69,8 @@ public class Controller {
     private PowerUpPhase powerUpPhase = new PowerUpPhase(this);
 
     private ActionPhase actionPhase = new ActionPhase(this);
+
+    private Timer timer = new Timer(this);
 
 
 
@@ -304,10 +303,16 @@ public class Controller {
 
     public void handleTurnPhase(){
 
+        // stops the timer
+
+        timer.stopTimer();
+
         switch(turnPhase){
+
             //once the virtual wiev has done the action the controller sets the next turnPhase to the next turnphase
             //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
             //the last phase (ACTION) will increment roundNumber
+
             case SPAWN:
 
                 spawnPhase.handleSpawn();
@@ -600,6 +605,27 @@ public class Controller {
         //now i should have a list of integer (playerIds) oredered by top dmg to low dmg
         return dmgCounter;
 
+    }
+
+    /**
+     * This method will send default answer if the timer for the action ended
+     */
+    public void defaultAnswer(){
+
+        if (turnPhase.equals(SPAWN)){
+
+            // if the phase is spawn perform a spawn action
+
+            this.spawnPhase.defaultSpawn();
+
+        }else {
+
+            // else perform a skip action
+
+            this.doAction(new SkipAction());
+        }
+
+        //TODO notify view
     }
 
     /**
