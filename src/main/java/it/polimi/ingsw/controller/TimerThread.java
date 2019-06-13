@@ -16,19 +16,20 @@ public class TimerThread implements Runnable {
 
     private boolean active = true;
 
-    private final Timer timer;
+    private final Timer timerClass;
 
     public TimerThread(Timer timer, int timerStart) {
 
-        this.timer = timer;
+        this.timerClass = timer;
 
         this.timerStart = timerStart;
 
-        this.timerCount = timerStart;
     }
 
     @Override
     public void run() {
+
+        timerCount = timerStart;
 
         active = true;
 
@@ -49,7 +50,7 @@ public class TimerThread implements Runnable {
 
                     LOGGER.log(Level.INFO,() -> LOG_START + " sending default answer");
 
-                    timer.defaultAnswer();
+                    timerClass.defaultAnswer();
 
                     //ends thread
 
