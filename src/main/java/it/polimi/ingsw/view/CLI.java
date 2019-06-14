@@ -1344,6 +1344,17 @@ public class CLI implements UserInterface {
     }
 
     /**
+     * This method will show the end game screen
+     */
+    @Override
+    public void endGame() {
+
+        System.out.println(" GAME OVER ");
+
+        // TODO implement
+    }
+
+    /**
      * Show informations needed by the user to play his turn i.e. other players stats, weapons...
      */
     private void showInfo(){

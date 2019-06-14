@@ -353,11 +353,6 @@ public class RMIClient extends Client {
     }
 
     @Override
-    public void useMarker(Color color, int playerId) {
-        //TODO forward this function to view to handle useMarker function invocation
-    }
-
-    @Override
     public void doAction(JsonAction jsonAction) {
 
         try {

@@ -27,7 +27,9 @@ public class ToViewImpl implements ToView {
 
     // Updates
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendUpdate(UpdateClass update) {
 
@@ -44,7 +46,9 @@ public class ToViewImpl implements ToView {
 
     // Game Handling
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startSpawn() {
 
@@ -62,6 +66,9 @@ public class ToViewImpl implements ToView {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startPowerUp() {
 
@@ -77,6 +84,9 @@ public class ToViewImpl implements ToView {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startAction() {
 
@@ -92,6 +102,9 @@ public class ToViewImpl implements ToView {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startReload() {
 
@@ -107,6 +120,9 @@ public class ToViewImpl implements ToView {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void askGrenade() {
 
@@ -122,6 +138,9 @@ public class ToViewImpl implements ToView {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame() {
         try {
@@ -131,6 +150,9 @@ public class ToViewImpl implements ToView {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void show(String s) {
         try {
@@ -138,5 +160,23 @@ public class ToViewImpl implements ToView {
         } catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void endGame() {
+
+        try {
+
+            client.endGame();
+
+        }catch (RemoteException e){
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+
+        }
+
     }
 }

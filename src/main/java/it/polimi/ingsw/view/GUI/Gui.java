@@ -294,6 +294,12 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
+    public void endGame() {
+
+        // TODO implement
+    }
+
+    @Override
     public void setValidMove(boolean b) {
         if(b){
             guiMapController.setValidMove(1);

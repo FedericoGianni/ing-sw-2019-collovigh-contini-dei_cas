@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.utils.Color;
+
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -60,12 +60,6 @@ public interface ViewInterface {
      */
     void startAction();
 
-    /**
-     *
-     * @param color
-     * @param playerId
-     */
-    void useMarker(Color color, int playerId);
 
     /**
      * This helper method is used to let the client ask if a single direction is valid, so it doesn't have to
@@ -100,4 +94,8 @@ public interface ViewInterface {
      */
     void doAction(JsonAction jsonAction);
 
+    /**
+     * This method will show the end game screen
+     */
+    void endGame();
 }

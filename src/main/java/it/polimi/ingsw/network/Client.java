@@ -65,7 +65,6 @@ public abstract class Client {
     public abstract void spawn(CachedPowerUp powerUp);
 
     //SHOOT
-    public abstract void useMarker(Color color, int playerId);
 
     /**
      * will be used for both powerUp and Actions

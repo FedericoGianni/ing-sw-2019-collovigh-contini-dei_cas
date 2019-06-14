@@ -171,8 +171,9 @@ public class VirtualView implements ViewInterface {
      * {@inheritDoc}
      */
     @Override
-    public void useMarker(Color color, int playerId) {
+    public void endGame() {
 
+        view.endGame();
     }
 
     /**

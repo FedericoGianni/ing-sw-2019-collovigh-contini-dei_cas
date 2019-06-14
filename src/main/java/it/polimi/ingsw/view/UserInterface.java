@@ -87,6 +87,9 @@ public interface UserInterface {
      */
     void startReload();
 
-
+    /**
+     * This method will show the end game screen
+     */
+    void endGame();
 
 }

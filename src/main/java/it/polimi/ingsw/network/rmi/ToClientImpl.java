@@ -61,8 +61,7 @@ public class ToClientImpl implements ToClient {
     }
 
     /**
-     * @param gameId is the id of the game
-     * @throws RemoteException
+     * {@inheritDoc}
      */
     @Override
     public void initGame(int gameId) throws RemoteException {
@@ -73,7 +72,9 @@ public class ToClientImpl implements ToClient {
 
     //Updates
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendUpdate(UpdateClass update) throws RemoteException {
 
@@ -85,7 +86,7 @@ public class ToClientImpl implements ToClient {
     // methods from ToView interface ( game handling)
 
     /**
-     * This methods starts the spawn Phase on the client ( 0)
+     * {@inheritDoc}
      */
     @Override
     public void startSpawn() {
@@ -96,7 +97,7 @@ public class ToClientImpl implements ToClient {
     }
 
     /**
-     * This method starts the "use power Up" phase ( 1, 3, 5)
+     * {@inheritDoc}
      */
     @Override
     public void startPowerUp() {
@@ -106,7 +107,7 @@ public class ToClientImpl implements ToClient {
     }
 
     /**
-     * This method starts the action phase on the client ( 2, 4)
+     * {@inheritDoc}
      */
     @Override
     public void startAction() {
@@ -116,7 +117,7 @@ public class ToClientImpl implements ToClient {
     }
 
     /**
-     * This method starts the reload phase of the turn ( 6)
+     * {@inheritDoc}
      */
     @Override
     public void startReload() {
@@ -126,7 +127,7 @@ public class ToClientImpl implements ToClient {
     }
 
     /**
-     * This method will be called on a player if he/she was shot in the previous phase and has grenades
+     * {@inheritDoc}
      */
     @Override
     public void askGrenade() {
@@ -135,13 +136,29 @@ public class ToClientImpl implements ToClient {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame() throws RemoteException {
         client.getView().startGame();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void show(String s) throws RemoteException {
         client.getView().show(s);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void endGame() throws RemoteException {
+
+        client.getView().endGame();
+
     }
 }

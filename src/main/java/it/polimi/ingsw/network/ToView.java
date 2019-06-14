@@ -43,4 +43,9 @@ public interface ToView  {
      */
     void show(String s);
 
+    /**
+     * This method will show the end game screen
+     */
+    void endGame();
+
 }

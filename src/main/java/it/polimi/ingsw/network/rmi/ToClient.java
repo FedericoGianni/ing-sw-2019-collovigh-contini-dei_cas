@@ -45,27 +45,63 @@ public interface ToClient extends  Remote {
 
     //Updates
 
+    /**
+     * This method will notify the inactive players that the game has started
+     * @throws RemoteException
+     */
     void startGame() throws RemoteException;
 
+    /**
+     * this method is used to send updates to client's cacheModel
+     * @param update is the update class
+     * @throws RemoteException
+     */
     void sendUpdate(UpdateClass update) throws RemoteException;
 
 
     // Turn Handling
 
+    /**
+     * This method will start the spawn Phase on the client
+     * @throws RemoteException
+     */
     void startSpawn() throws RemoteException;
 
-
+    /**
+     * This method will start the power Up Phase on the client
+     * @throws RemoteException
+     */
     void startPowerUp() throws RemoteException;
 
-
+    /**
+     * This method will start the action Phase on the client
+     * @throws RemoteException
+     */
     void startAction() throws RemoteException;
 
-
+    /**
+     * This method will start the reload Phase on the client
+     * @throws RemoteException
+     */
     void startReload()throws RemoteException;
 
-
+    /**
+     * This method will start the grenade Phase on the client
+     * @throws RemoteException
+     */
     void askGrenade()throws RemoteException;
 
+    /**
+     * This method will call the show method on the view
+     * @param s is the message to show
+     * @throws RemoteException
+     */
     void show(String s) throws RemoteException;
+
+    /**
+     * This method will notify the client of the end game
+     * @throws RemoteException
+     */
+    void endGame() throws RemoteException;
 
 }

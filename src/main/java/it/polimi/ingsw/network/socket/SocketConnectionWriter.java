@@ -20,8 +20,16 @@ public class SocketConnectionWriter extends Thread implements ToView {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = INFO;
 
-    Gson gson = new Gson();
-    UpdateClass update;
+    private Gson gson = new Gson();
+
+    private static final String END_GAME = "endGame";
+    private static final String START_GAME = "startGame";
+    private static final String START_SPAWN = "startSpawn";
+    private static final String START_POWER_UP = "startPowerUp";
+    private static final String START_ACTION = "startAction";
+    private static final String START_RELOAD = "startReload";
+    private static final String ASK_GRENADE = "askGrenade";
+    private static final String SHOW = "showMessage";
 
     /**
      * Reference to the socket representing the communication stream, passed as a parameter to the constructor
@@ -101,25 +109,25 @@ public class SocketConnectionWriter extends Thread implements ToView {
     @Override
     public void startSpawn() {
         LOGGER.info("Sending startSpawn string to connected client");
-        send("startSpawn");
+        send(START_SPAWN);
     }
 
     @Override
     public void startPowerUp() {
         LOGGER.info("Sending startPowerUp string to connected client");
-        send("startPowerUp");
+        send(START_POWER_UP);
     }
 
     @Override
     public void startAction() {
         LOGGER.info("Sending startAction string to connected client");
-        send("startAction");
+        send(START_ACTION);
     }
 
     @Override
     public void startReload() {
         LOGGER.info("sending startReload string to connected client");
-        send("startReload");
+        send(START_RELOAD);
     }
 
     /**
@@ -128,7 +136,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
     @Override
     public void askGrenade() {
         LOGGER.log(level, "[Socket-Conn-Writer] sending askGrenade string to client ");
-        send("askGrenade");
+        send(ASK_GRENADE);
     }
 
     @Override
@@ -140,14 +148,26 @@ public class SocketConnectionWriter extends Thread implements ToView {
     @Override
     public void startGame() {
         LOGGER.info("sending initGame to conneted client");
-        send("startGame");
+        send(START_GAME);
     }
 
     @Override
     public void show(String s) {
         LOGGER.info("sending show to connected client");
-        String msg = "showMessage\f" + s;
+        String msg = SHOW + "\f" + s;
         send(msg);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void endGame() {
+
+        LOGGER.log(level,"sending endGame to connected client");
+
+        send(END_GAME);
+
     }
 
     public void disconnect(){

@@ -82,12 +82,6 @@ public class SocketClientWriter extends Client implements Runnable {
 
 
     @Override
-    public void useMarker(Color color, int playerId) {
-        //TODO string to forward to SocketConnectionReader to handle useNewton function invocation
-        //send();
-    }
-
-    @Override
     public void doAction(JsonAction jsonAction) {
 
         gson = new Gson();

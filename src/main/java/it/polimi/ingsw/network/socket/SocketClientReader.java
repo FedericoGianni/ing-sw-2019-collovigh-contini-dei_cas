@@ -37,7 +37,16 @@ public class SocketClientReader extends Thread {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = FINE;
 
-    Gson gson = new Gson();
+    private Gson gson = new Gson();
+
+    private static final String END_GAME = "endGame";
+    private static final String START_GAME = "startGame";
+    private static final String START_SPAWN = "startSpawn";
+    private static final String START_POWER_UP = "startPowerUp";
+    private static final String START_ACTION = "startAction";
+    private static final String START_RELOAD = "startReload";
+    private static final String ASK_GRENADE = "askGrenade";
+    private static final String SHOW = "showMessage";
 
     /**
      * Attribute representing a BufferedReader to manage input stream from socket
@@ -373,7 +382,7 @@ public class SocketClientReader extends Thread {
         });
 
         //initGame
-        headersMap.put("startGame", (commands) -> {
+        headersMap.put(START_GAME, (commands) -> {
             System.out.println("[DEBUG] Ricevuto initGame dal server");
             RunClient.getView().startGame();
         });
@@ -381,31 +390,31 @@ public class SocketClientReader extends Thread {
 
 
         //startSpawn
-        headersMap.put("startSpawn", (commands) -> {
+        headersMap.put(START_SPAWN, (commands) -> {
             System.out.println("[DEBUG] Ricevuto startSpawn dal server");
             RunClient.getView().startSpawn();
         });
 
         //startPowerUp
-        headersMap.put("startPowerUp", (commands) -> {
+        headersMap.put(START_POWER_UP, (commands) -> {
             System.out.println("[DEBUG] Ricevuto startPowerUp dal server");
             RunClient.getView().startPowerUp();
         });
 
         //startAction
-        headersMap.put("startAction", (commands) -> {
+        headersMap.put(START_ACTION, (commands) -> {
             System.out.println("[DEBUG] Ricevuto startAction dal server");
             RunClient.getView().startAction();
         });
 
         //reload
-        headersMap.put("startReload", (commands) -> {
+        headersMap.put(START_RELOAD, (commands) -> {
             System.out.println("[DEBUG] Ricevuto startReload dal server");
             RunClient.getView().startReload();
         });
 
         //askGrenade
-        headersMap.put("askGrenade", (commands) -> {
+        headersMap.put(ASK_GRENADE, (commands) -> {
             LOGGER.log(level,"[Socket-Client-Reader] received askGrenade by server");
             RunClient.getView().askGrenade();
         });
@@ -421,9 +430,15 @@ public class SocketClientReader extends Thread {
         });
 
         //show
-        headersMap.put("showMessage", (commands) -> {
+        headersMap.put(SHOW, (commands) -> {
             LOGGER.log(level,() -> "[Socket-Client-Reader] received show by server " + Arrays.toString(commands));
             RunClient.getView().show(commands[1]);
+        });
+
+        //endGame
+        headersMap.put(END_GAME,(commands) -> {
+            LOGGER.log(level,() -> "[Socket-Client-Reader] received endGame by server ");
+            RunClient.getView().endGame();
         });
     }
 

@@ -276,6 +276,16 @@ public class View implements ViewInterface {
      * {@inheritDoc}
      */
     @Override
+    public void endGame() {
+
+        userInterface.endGame();
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void startGame() {
         userInterface.startGame();
     }
@@ -295,14 +305,6 @@ public class View implements ViewInterface {
         LOGGER.log(level, "[View] send spawn command to server with PowerUp: {0}", powerUp);
         clientToVView.spawn(powerUp);
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void useMarker(Color color, int playerId) {
-        clientToVView.useMarker(color, playerId);
     }
 
     /**

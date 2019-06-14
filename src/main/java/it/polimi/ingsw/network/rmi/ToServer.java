@@ -39,6 +39,11 @@ public interface ToServer extends Remote {
 
     //SPAWN
 
+    /**
+     *
+     * @param powerUp is the powerUp to discard for spawn
+     * @throws RemoteException
+     */
      void spawn(CachedPowerUp powerUp) throws RemoteException;
 
     //POWERUP
@@ -46,6 +51,8 @@ public interface ToServer extends Remote {
      void doAction(JsonAction jsonAction) throws RemoteException;
 
      boolean askMoveValid(int row, int column, Directions direction) throws RemoteException;
+
+
 
 
 }
