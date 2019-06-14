@@ -4,6 +4,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.player.Skull;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
@@ -16,10 +17,7 @@ import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -69,6 +67,8 @@ public class Controller {
     private PowerUpPhase powerUpPhase = new PowerUpPhase(this);
 
     private ActionPhase actionPhase = new ActionPhase(this);
+
+    private PointCounter pointCounter = new PointCounter(this);
 
     private Timer timer = new Timer(this);
 
@@ -364,10 +364,9 @@ public class Controller {
                 //this 2 commands should be called by reload method, not here
                 if(hasSomeoneDied){
                     //TODO calculate points
-                    calculatePoints();
-
-                    //TODO add death in model? reset dmgboards? check how to handle this
+                    pointCounter.calculateTurnPoints();
                 }
+
                 //TODO when a virtual view reloads don't call increment phase -> it should be done here so that it calc points
                 incrementPhase();
                 break;
@@ -494,119 +493,6 @@ public class Controller {
         }
     }
 
-    //TODO find a way to test this method (@Dav maybe with saved games?)
-    private void calculatePoints(){
-        //for each player who has died this turn
-        //+1 point for the player who did him the first dmg
-        //deaths: 1 -> 8 6 4 4 2 1 1 -> switch case 0
-        //deaths: 2 -> 6 4 4 2 1 1 -> case 1
-        //deaths: 3 -> 4 4 2 1 1 -> case 2
-        //deaths: 4 -> 4 2 1 1 -> case 3
-        //deaths: 5 -> 2 1 1 -> case 4
-        //deaths: 6 -> 1 1 -> case 5
-        //deaths: 7 -> 1 -> case 6
-
-        for (int i = 0; i < Model.getGame().getPlayers().size(); i++) {
-            if(Model.getPlayer(i).getStats().getDmgTaken().size() >= 11){
-
-                //+1 for the player who did the first dmg
-                Model.getPlayer(Model.getPlayer(i).getStats().getDmgTaken().get(0)).addScore(1);
-
-                List<Integer> dmgList = calcDmgList(i);
-
-                switch (Model.getPlayer(i).getStats().getDeaths()){
-
-                    //TODO check if first death here is 0 or already 1
-                    case 1:
-                        Model.getPlayer(dmgList.get(0)).addScore(8);
-                        Model.getPlayer(dmgList.get(1)).addScore(6);
-                        Model.getPlayer(dmgList.get(2)).addScore(4);
-                        Model.getPlayer(dmgList.get(3)).addScore(2);
-                        Model.getPlayer(dmgList.get(4)).addScore(2);
-                        break;
-
-                    case 2:
-                        Model.getPlayer(dmgList.get(0)).addScore(6);
-                        Model.getPlayer(dmgList.get(1)).addScore(4);
-                        Model.getPlayer(dmgList.get(2)).addScore(2);
-                        Model.getPlayer(dmgList.get(3)).addScore(2);
-                        Model.getPlayer(dmgList.get(4)).addScore(1);
-                        break;
-
-                    case 3:
-                        Model.getPlayer(dmgList.get(0)).addScore(4);
-                        Model.getPlayer(dmgList.get(1)).addScore(2);
-                        Model.getPlayer(dmgList.get(2)).addScore(2);
-                        Model.getPlayer(dmgList.get(3)).addScore(1);
-                        Model.getPlayer(dmgList.get(4)).addScore(1);
-                        break;
-
-                    case 4:
-                        Model.getPlayer(dmgList.get(0)).addScore(2);
-                        Model.getPlayer(dmgList.get(1)).addScore(2);
-                        Model.getPlayer(dmgList.get(2)).addScore(1);
-                        Model.getPlayer(dmgList.get(3)).addScore(1);
-                        break;
-
-                    case 5:
-                        Model.getPlayer(dmgList.get(0)).addScore(2);
-                        Model.getPlayer(dmgList.get(1)).addScore(1);
-                        Model.getPlayer(dmgList.get(2)).addScore(1);
-                        break;
-
-                    case 6:
-                        Model.getPlayer(dmgList.get(0)).addScore(1);
-                        Model.getPlayer(dmgList.get(1)).addScore(1);
-                        break;
-
-                    case 7:
-                        Model.getPlayer(dmgList.get(0)).addScore(1);
-                        break;
-
-                    default:
-                        //TODO no more points! (or only 1 to the first dmg?)
-
-                }
-
-                // reset the damage list
-
-                Model.getPlayer(i).resetDmg();
-
-            }
-        }
-    }
-
-    /**
-     *
-     * @param playerId dead player
-     * @return a list ordered by players who did dmg to the dead player, from top to lowest
-     */
-    private List<Integer> calcDmgList(int playerId){
-        List<Integer> playerDmgBoard = Model.getPlayer(playerId).getStats().getDmgTaken();
-        List<Integer> dmgCounter = new ArrayList<>();
-
-        //list initialization (all at 0)
-        for (int j = 0; j < players.size(); j++) {
-            dmgCounter.add(-1);
-        }
-
-        //calc playerid occurency in playerboard and add them in dmgCounter
-        for (int i = 0; i < playerDmgBoard.size(); i++) {
-            dmgCounter.add(playerDmgBoard.get(i),dmgCounter.get(i) + 1);
-        }
-
-        //System.out.println("DEBUG playerDmgBoard: ");
-        //System.out.println(playerDmgBoard);
-        //TODO this list contain dmgCount ordered by playerId, i should find the id of the top to the bottom of more dmg done
-        //now i have to order the dmgCounter from top dmg to lowest dmg done by playerid
-        Collections.sort(dmgCounter);
-        Collections.reverse(dmgCounter);
-
-        //now i should have a list of integer (playerIds) oredered by top dmg to low dmg
-        return dmgCounter;
-
-    }
-
     /**
      * This method will send default answer if the timer for the action ended
      */
@@ -640,6 +526,7 @@ public class Controller {
 
         Model.getPlayer(playerId).setPlayerPos(null);
 
+        Model.getGame().getKillShotTrack().add(new Skull(getCurrentPlayer(),false));
     }
 
     /**
@@ -654,9 +541,13 @@ public class Controller {
 
         Model.getPlayer(playerId).setPlayerPos(null);
 
+        Model.getGame().getKillShotTrack().add(new Skull(getCurrentPlayer(),true));
+
     }
 
     public void endGame(){
+
+        pointCounter.calcGamePoints();
 
         //TODO implement
     }
