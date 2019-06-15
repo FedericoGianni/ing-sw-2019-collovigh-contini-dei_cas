@@ -304,10 +304,6 @@ public class Controller {
 
     public void handleTurnPhase(){
 
-        // stops the timer
-
-        timer.stopTimer();
-
         switch(turnPhase){
 
             //once the virtual wiev has done the action the controller sets the next turnPhase to the next turnphase
@@ -393,7 +389,14 @@ public class Controller {
 
     // Spawn Phase
 
-    public void spawn(PowerUpType type, Color color){ spawnPhase.spawn(type,color); }
+    public void spawn(PowerUpType type, Color color){
+
+        // stops the timer
+
+        timer.stopTimer();
+
+        spawnPhase.spawn(type,color);
+    }
 
 
     // Power Up
@@ -405,6 +408,10 @@ public class Controller {
     public void discardPowerUp(PowerUpType type, Color color){ powerUpPhase.discardPowerUp(type,color);}
 
     public void doAction(JsonAction jsonAction) {
+
+        // stops the timer
+
+        timer.stopTimer();
 
         LOGGER.log(level,"[Controller] Received do action of type: {0}", jsonAction.getType());
 
