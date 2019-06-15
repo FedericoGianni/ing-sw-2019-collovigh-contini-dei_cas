@@ -33,6 +33,8 @@ public class PowerUpPhase {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
+    private static final int TIMER_POWER_UP = 10;
+
     // Controller reference
 
     private final Controller controller;
@@ -55,6 +57,7 @@ public class PowerUpPhase {
             // if the player is not online skips the turn
 
             controller.incrementPhase();
+
         }else if(!hasPowerUpPhase()){
 
             //if current player hasn't got any usable PowerUp in hand  ( Newton or Teleporter ) -> skip this phase
@@ -64,6 +67,10 @@ public class PowerUpPhase {
         }else{
 
             controller.getVirtualView(currentPlayer).startPowerUp();
+
+            // start the timer
+
+            controller.getTimer().startTimer(TIMER_POWER_UP);
 
         }
     }
@@ -77,6 +84,10 @@ public class PowerUpPhase {
             if (hasGrenade(playerId)) {
 
                 controller.getVirtualView(playerId).askGrenade();
+
+                // start the timer
+
+                controller.getTimer().startTimer(TIMER_POWER_UP);
 
             }else {
 
@@ -95,6 +106,8 @@ public class PowerUpPhase {
     // Client -> Server flow
 
     public void usePowerUp(PowerUpAction powerUpAction){
+
+        controller.getTimer().stopTimer();
 
         switch (powerUpAction.getPowerUpType()){
 
@@ -279,7 +292,7 @@ public class PowerUpPhase {
 
     }
 
-    public Boolean hasGrenade(int playerId){
+    private Boolean hasGrenade(int playerId){
 
         List<PowerUp> list = Model
                 .getPlayer(playerId)
@@ -292,7 +305,7 @@ public class PowerUpPhase {
         return !(list.isEmpty());
     }
 
-    public Boolean hasPowerUpPhase(){
+    private Boolean hasPowerUpPhase(){
 
         List<Player> spawned = Model
                 .getGame()

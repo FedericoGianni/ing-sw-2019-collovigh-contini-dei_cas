@@ -557,7 +557,13 @@ public class Controller {
 
         pointCounter.calcGamePoints();
 
-        //TODO implement
+        for (int i = 0; i < players.size(); i++) {
+
+            if (isPlayerOnline(i)){
+
+                getVirtualView(i).endGame();
+            }
+        }
     }
 
 

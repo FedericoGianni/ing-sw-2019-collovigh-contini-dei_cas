@@ -15,6 +15,8 @@ public class SpawnPhase {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
+    private static final int TIMER_SPAWN = 10;
+
     // Controller reference
 
     private final Controller controller;
@@ -62,7 +64,7 @@ public class SpawnPhase {
 
             // start timer
 
-            controller.getTimer().startTimer(10);
+            controller.getTimer().startTimer(TIMER_SPAWN);
 
         } else {
 
@@ -75,7 +77,7 @@ public class SpawnPhase {
 
             // start timer
 
-            controller.getTimer().startTimer(10);
+            controller.getTimer().startTimer(TIMER_SPAWN);
         }
     }
 

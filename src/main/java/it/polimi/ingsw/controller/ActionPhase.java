@@ -31,6 +31,8 @@ public class ActionPhase {
     private static final String LOG_START_GRAB = "[Controller-GrabAction] Player w/ id: ";
     private static final String LOG_START_SHOOT = "[Controller-ShootAction]";
 
+    private static final int TIMER_ACTION = 30;
+
     //Grab
 
     private static final int MAX_GRAB_MOVES = 1;
@@ -63,6 +65,10 @@ public class ActionPhase {
             // sends the startPhase command to the virtual view
 
             controller.getVirtualView(currentPlayer).startAction();
+
+            // start the timer
+
+            controller.getTimer().startTimer(TIMER_ACTION);
         }
     }
 
@@ -606,18 +612,6 @@ public class ActionPhase {
             }catch (FrenzyActivatedException e){
 
                 LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " player w/ id: " + e.getPlayerId() + " activated frenzy ");
-
-                // set hasSomeoneDied check to true
-
-                controller.setHasSomeoneDied(true);
-
-                //set the frenzy check to true
-
-                controller.setFrenzy(true);
-
-                // set the frenzyStarter
-
-                controller.setFrenzyStarter(e.getPlayerId());
             }
 
             controller.incrementPhase();
