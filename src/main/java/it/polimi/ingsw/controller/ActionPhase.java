@@ -20,8 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_ALREADY_PICKED_AMMO_HERE;
-import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
+import static it.polimi.ingsw.utils.DefaultReplies.*;
 
 public class ActionPhase {
 
@@ -291,7 +290,9 @@ public class ActionPhase {
 
             if (grabAction.getDirection().size() > MAX_GRAB_MOVES_PLUS){
 
-                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + playerId + " tried to more than max movements");
+                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + playerId + " tried to move more than max movements");
+
+                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
 
                 return false;
             }
@@ -299,6 +300,8 @@ public class ActionPhase {
             if ((grabAction.getDirection().size() > MAX_GRAB_MOVES) && (Model.getPlayer(playerId).getDmg().size() < DMG_FOR_PLUS)){
 
                 LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + playerId + " tried to move more than one but has only damage : " + Model.getPlayer(playerId).getDmg().size() );
+
+                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_TRIED_TO_MOVE_ENHANCED_BUT_CANT);
 
                 return false;
             }
@@ -349,6 +352,8 @@ public class ActionPhase {
 
             LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " tried to buy a weapon but did not specify the name ");
 
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_BUY_WEAPON_BUT_NO_NAME_SPECIFIED);
+
             return false;
 
         } else {
@@ -357,6 +362,8 @@ public class ActionPhase {
 
                 LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " the specified weapon was not found in the cell : " + grabAction.getNewWeaponName());
 
+                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_SPAWN);
+
                 return false;
 
             } else {
@@ -364,6 +371,8 @@ public class ActionPhase {
                 if ((Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS) && (grabAction.getDiscardedWeapon() == null)) {
 
                     LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " tried to buy a weapon but has already max weapon and did not specify weapon to delete");
+
+                    controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_HAS_MAX_WEAPON_BUT_NOT_SPECIFIED_DISCARD);
 
                     return false;
                 }
@@ -541,73 +550,57 @@ public class ActionPhase {
 
                 LOGGER.log(Level.WARNING, weaponNonLoadedException.getMessage(), weaponNonLoadedException);
 
-                controller.getVirtualView(playerId).show("player tried to shoot with unloaded weapon !");
+                controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_LOADED);
 
             }catch (PlayerInSameCellException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show("player tried to shoot to player in same cell !");
+                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
 
             }catch (PlayerInDifferentCellException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show("player tried to shoot to player in different cell !");
+                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_DIFFERENT_CELL);
 
             }catch (UncorrectDistanceException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show("player tried to shoot to player with illegal distance !");
+                controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
 
             }catch (SeeAblePlayerException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show("player tried to shoot to seeable player ? !");
+                controller.getVirtualView(playerId).show(DEFAULT_SEEABLE_PLAYER);
 
             }catch (UncorrectEffectsException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show("player tried to shoot with illegal effects !");
+                controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
 
             }catch (NotCorrectPlayerNumberException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show("player tried to shoot with illegal target number specified !");
+                controller.getVirtualView(playerId).show(DEFAULT_NOT_CORRECT_PLAYER_NUMBER);
 
             }catch (PlayerNotSeeableException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show("player tried to shoot to target that can not see !");
+                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
 
             }catch (DeadPlayerException e){
 
                 LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " player w/ id: " + e.getPlayerId() + " has been killed ");
 
-                // set hasSomeoneDied check to true
-
-                controller.setHasSomeoneDied(true);
-
-                // remove the player from the map
-
-                Model.getPlayer(e.getPlayerId()).setPlayerPos(null);
-
             }catch (OverKilledPlayerException e){
 
                 LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " player w/ id: " + e.getPlayerId() + " has been overkilled ");
-
-                // set hasSomeoneDied check to true
-
-                controller.setHasSomeoneDied(true);
-
-                // remove the player from the map
-
-                Model.getPlayer(e.getPlayerId()).setPlayerPos(null);
 
             }catch (FrenzyActivatedException e){
 
@@ -619,6 +612,8 @@ public class ActionPhase {
         }else {
 
             LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " weapon not found ");
+
+            controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
             handleAction();
         }

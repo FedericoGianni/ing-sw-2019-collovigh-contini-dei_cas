@@ -35,6 +35,11 @@ public class PowerUpPhase {
 
     private static final int TIMER_POWER_UP = 10;
 
+    private static final String DEFAULT_PLAYER_USED_NEWTON_ON_HIMSELF = "PLAYER_USED_NEWTON_ON_HIMSELF";
+    private static final String DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP = "PLAYER_DOES_NOT_POSSESS_POWERUP";
+    private static final String DEFAULT_CELL_NOT_EXISTENT = "CELL_NOT_EXISTENT";
+
+
     // Controller reference
 
     private final Controller controller;
@@ -152,7 +157,7 @@ public class PowerUpPhase {
 
             LOGGER.warning("[CONTROLLER - PowerUp] player tried to use Newton on himself");
 
-            controller.getVirtualView(currentPlayer).show(" player tried to use Newton on himself ");
+            controller.getVirtualView(currentPlayer).show(DEFAULT_PLAYER_USED_NEWTON_ON_HIMSELF);
 
             handlePowerUp();
         }
@@ -221,9 +226,17 @@ public class PowerUpPhase {
 
             LOGGER.log(Level.WARNING, "[CONTROLLER - PowerUp] player do not possess given powerUp ");
 
+            // send show message
+
+            controller.getVirtualView(currentPlayer).show(DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP);
+
         } catch (CellNonExistentException e){
 
             LOGGER.log(Level.WARNING, "[CONTROLLER - PowerUp] cell does not exist ");
+
+            // send show message
+
+            controller.getVirtualView(currentPlayer).show(DEFAULT_CELL_NOT_EXISTENT);
         }
     }
 
@@ -273,6 +286,11 @@ public class PowerUpPhase {
             } catch (Exception e) {
 
                 LOGGER.log(Level.WARNING, "[CONTROLLER - PowerUp] player w/ id {0} try to use a grenade but do not possess it", grenadeAction.getPossessorId());
+
+                // send show message
+
+                controller.getVirtualView(currentPlayer).show(DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP);
+
                 LOGGER.log(Level.WARNING, e.getMessage(), e);
             }
 
