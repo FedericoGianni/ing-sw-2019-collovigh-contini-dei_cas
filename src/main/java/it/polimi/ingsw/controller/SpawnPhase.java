@@ -60,6 +60,10 @@ public class SpawnPhase {
             LOGGER.log(level, spawnString);
             controller.getVirtualView(controller.getCurrentPlayer()).startSpawn();
 
+            // start timer
+
+            controller.getTimer().startTimer(10);
+
         } else {
 
             //if currentPlayer already has more then 0 -> draw only 1
@@ -68,6 +72,10 @@ public class SpawnPhase {
             controller.drawPowerUp();
             LOGGER.log(level, spawnString);
             controller.getVirtualView(controller.getCurrentPlayer()).startSpawn();
+
+            // start timer
+
+            controller.getTimer().startTimer(10);
         }
     }
 

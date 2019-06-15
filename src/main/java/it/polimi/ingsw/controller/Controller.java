@@ -285,6 +285,7 @@ public class Controller {
 
     public Boolean isPlayerOnline(int playerId){ return Model.getPlayer(playerId).getStats().getOnline(); }
 
+    public Timer getTimer() { return timer; }
 
     // Turn Management
 
