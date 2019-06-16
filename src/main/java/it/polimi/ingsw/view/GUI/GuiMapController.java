@@ -6,6 +6,7 @@ import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.Move;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,7 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -24,27 +27,40 @@ public class GuiMapController {
 
     private static Gui gui;
     private int rows=3,col=4;
-    private  Button map[][]=new Button[rows][col];
+    private  VBox map[][]=new VBox[rows][col];
     public static void setGui(Gui g) {
         gui = g;
     }
     private ArrayList <Directions> movementDirections;
     private int validMove=-1;
+    private Point currPos;
+
+
     @FXML
     BorderPane pane;
     @FXML
     TextArea log;
     @FXML
     GridPane innerMap;
+
     @FXML
-    Button b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;
+    VBox b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;;
     @FXML
     ImageView powerUp1,powerUp2,powerUp3;
+
     @FXML
     Button stopMov;
 
+
     @FXML
     public void initialize() {
+
+    }
+
+    private Point getPlayerPosFromServer(int id)
+    {
+        return new Point(gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX(),gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY());
+
 
     }
 
@@ -56,13 +72,17 @@ public class GuiMapController {
             case 1: {
                 innerMap.setStyle("-fx-background-image: url('/images/Map1in.png')");//use this for sample fot he
                 buttonCreator();
-                 b03.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override public void handle(ActionEvent e) {
-                            unClickAble();
-                        }
+                 b03.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+                     @Override
+                     public void handle(MouseEvent mouseEvent) {
+                         unClickAble();
+                     }
                  });
-                b20.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override public void handle(ActionEvent e) {
+                b20.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
                         unClickAble();
                     }
                 });
@@ -72,8 +92,10 @@ public class GuiMapController {
             case 2: {
                 buttonCreator();
                 innerMap.setStyle("-fx-background-image: url('/images/Map2in.png')");//use this for sample fot he maps everytime
-                b20.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override public void handle(ActionEvent e) {
+                b20.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
                         unClickAble();
                     }
                 });
@@ -86,18 +108,24 @@ public class GuiMapController {
             }
 
         }
-        b02.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        b02.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 spawn();
             }
         });
-        b10.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        b10.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 spawn();
             }
         });
-        b23.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        b23.setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+            @Override
+            public void handle(MouseEvent mouseEvent) {
                 spawn();
             }
         });
@@ -143,6 +171,7 @@ public class GuiMapController {
         b21.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         b22.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         b23.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
         map[0][0]=b00;
         map[0][1]=b01;
         map[0][2]=b02;
@@ -185,12 +214,14 @@ public class GuiMapController {
 
         //buttons here enable the movements in adjacent cells
         if(y<3)
-        {map[x][y+1].setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        {map[x][y+1].setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent mouseevent) {
                 if(moveValidator("EAST",x,y)) {
                     movementDirections.add(Directions.EAST);
-                    map[x][y].setStyle("-fx-background-image: null");
-                    map[x][y+1].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    playerRemover(gui.getView().getPlayerId(),x,y);
+                    fromIDtoIMG(gui.getView().getPlayerId(),map[x][y+1]);
                     eventMover(x,y+1,M);
                 }
                 else{
@@ -199,12 +230,13 @@ public class GuiMapController {
             }
         });}
         if(x<2)
-        {map[x+1][y].setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        {map[x+1][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseevent) {
                 if(moveValidator("SOUTH",x,y))
                 {   movementDirections.add(Directions.SOUTH);
-                    map[x][y].setStyle("-fx-background-image: null");
-                    map[x+1][y].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    playerRemover(gui.getView().getPlayerId(),x,y);
+                    fromIDtoIMG(gui.getView().getPlayerId(),map[x+1][y]);
                     eventMover(x+1,y,M);
                 }
                 else{
@@ -213,12 +245,13 @@ public class GuiMapController {
             }
         });}
         if(y-1>=0)
-        {map[x][y-1].setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        {map[x][y-1].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseevent) {
                 if(moveValidator("WEST",x,y)) {
                     movementDirections.add(Directions.WEST);
-                    map[x][y].setStyle("-fx-background-image: null");
-                    map[x][y-1].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    playerRemover(gui.getView().getPlayerId(),x,y);
+                    fromIDtoIMG(gui.getView().getPlayerId(),map[x][y-1]);
                     eventMover(x,y-1,M);
                 }
                 else{
@@ -227,12 +260,13 @@ public class GuiMapController {
             }
         });}
         if(x-1>=0)
-        {map[x-1][y].setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        {map[x-1][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseevent) {
                 if(moveValidator("NORTH",x,y)) {
                     movementDirections.add(Directions.NORTH);
-                    map[x][y].setStyle("-fx-background-image: null");
-                    map[x-1][y].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    playerRemover(gui.getView().getPlayerId(),x,y);
+                    fromIDtoIMG(gui.getView().getPlayerId(),map[x-1][y]);
                     eventMover(x-1,y,M);
                 }
                 else{
@@ -248,9 +282,9 @@ public class GuiMapController {
         {
             for(int j=0;j<col;j++)
             {
-                map[i][j].setOnAction(new EventHandler<ActionEvent>() {
+                map[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
-                    public void handle(ActionEvent actionEvent) {
+                    public void handle(MouseEvent mouseevent) {
 
                     }
 
@@ -272,9 +306,9 @@ public class GuiMapController {
         {
             for(int j=0;j<col;j++)
             {
-                map[i][j].setOnAction(new EventHandler<ActionEvent>() {
+                map[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
-                    public void handle(ActionEvent actionEvent) {
+                    public void handle(MouseEvent mouseevent) {
 
                     }
 
@@ -284,13 +318,14 @@ public class GuiMapController {
         int M=m-1;
         //buttons here enable the movements in adjacent cells
         if(y<3)
-        {map[x][y+1].setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        {map[x][y+1].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseevent) {
                 if(moveValidator("EAST",x,y)) {
                     movementDirections.add(Directions.EAST);
-                    map[x][y].setStyle("-fx-background-image: null");
-                    map[x][y+1].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
-                    map[x][y+1].setStyle("-fx-background-repeat: no-repeat;");
+                    playerRemover(gui.getView().getPlayerId(),x,y);
+                    fromIDtoIMG(gui.getView().getPlayerId(),map[x][y+1]);
+
                     eventMover(x,y+1,M);
                 }
                 else{
@@ -299,12 +334,13 @@ public class GuiMapController {
             }
         });}
         if(x<2)
-        {map[x+1][y].setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        {map[x+1][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseevent) {
                 if(moveValidator("SOUTH",x,y))
                 {   movementDirections.add(Directions.SOUTH);
-                    map[x][y].setStyle("-fx-background-image: null");
-                    map[x+1][y].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    playerRemover(gui.getView().getPlayerId(),x,y);
+                    fromIDtoIMG(gui.getView().getPlayerId(),map[x+1][y]);
                     eventMover(x+1,y,M);
                 }
                 else{
@@ -313,12 +349,13 @@ public class GuiMapController {
             }
         });}
         if(y-1>=0)
-        {map[x][y-1].setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        {map[x][y-1].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseevent) {
                 if(moveValidator("WEST",x,y)) {
                     movementDirections.add(Directions.WEST);
-                    map[x][y].setStyle("-fx-background-image: null");
-                    map[x][y-1].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    playerRemover(gui.getView().getPlayerId(),x,y);
+                    fromIDtoIMG(gui.getView().getPlayerId(),map[x][y-1]);
                     eventMover(x,y-1,M);
                 }
                 else{
@@ -327,12 +364,13 @@ public class GuiMapController {
             }
         });}
         if(x-1>=0)
-        {map[x-1][y].setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+        {map[x-1][y].setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseevent) {
                 if(moveValidator("NORTH",x,y)) {
                     movementDirections.add(Directions.NORTH);
-                    map[x][y].setStyle("-fx-background-image: null");
-                    map[x-1][y].setStyle(fromIDtoIMG(gui.getView().getPlayerId()));
+                    playerRemover(gui.getView().getPlayerId(),x,y);
+                   fromIDtoIMG(gui.getView().getPlayerId(), map[x-1][y]);
                     eventMover(x-1,y,M);
                 }
                 else{
@@ -347,21 +385,70 @@ public class GuiMapController {
      * @param id
      * @return
      */
-    private String fromIDtoIMG(int id)
+    private void fromIDtoIMG(int id,VBox b)
     {
+        if(b.getChildren().size()==0 || b.getChildren().size()==3)
+        {
+            Platform.runLater(() ->  {
+                b.getChildren().add(new HBox());
+                inserter(id, (HBox) b.getChildren().get(0));
+            });
+            return;
+        }
+        if(b.getChildren().size()<=3)
+        {
+            Platform.runLater(() ->  {inserter(id, (HBox) b.getChildren().get(0));});
+            return;
+        }
+        Platform.runLater(() ->  {inserter(id, (HBox) b.getChildren().get(1));});
+
+    }
+
+    private void playerRemover(int id,int x,int y)
+    {
+        if(map[x][y].getChildren().size()==1)//primo HBOX
+        {
+            int j=0;
+
+            while(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))!=0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+            {
+                j++;
+            }
+            ((HBox)map[x][y].getChildren().get(0)).getChildren().remove(j);
+        }else{//secondo HBox stessa procedure di prima
+            int j=0;
+
+            while(((HBox)map[x][y].getChildren().get(1)).getChildren().get(j).getId().compareTo(Integer.toString(id))!=0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+            {
+                j++;
+            }
+            ((HBox)map[x][y].getChildren().get(1)).getChildren().remove(j);
+        }
+    }
+    private void inserter(int id,HBox h)
+    {
+        ImageView img=new ImageView();
+        Image image;
         switch (id) {
             case 0:
-                return "-fx-background-image: url('/images/player0.png')";
+                image=new Image("/images/player0.png");
+                img.setImage(image);
+                img.setId("0");
+                h.getChildren().add(img);
+
+                break;
             case 1:
-                return "-fx-background-image: url('/images/player1.png')";
+                image=new Image("/images/player0.png");
+                img.setImage(image);
+                h.getChildren().add(img);
+                break;
             case 2:
-                return "-fx-background-image: url('/images/player2.png')";
+                break;
             case 3:
-                return "-fx-background-image: url('/images/player3.png')";
+                break;
             case 4:
-                return "-fx-background-image: url('/images/player4.png')";
+                break;
         }
-        return null;
     }
 
     public void setValidMove(int validMove) {
@@ -446,23 +533,41 @@ public class GuiMapController {
         a.show();
         powerUp1.setOnMouseClicked((e) -> {//eliminate the effect
             powerUp1.setImage(null);
+            Color c=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0).getColor();
             gui.getView().spawn(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0));
-            });
+            mapPos(colorToCord(c).x,colorToCord(c).y,gui.getView().getPlayerId());
+        });
         powerUp2.setOnMouseClicked((e) -> {
             powerUp2.setImage(null);
+            Color c=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1).getColor();
             gui.getView().spawn(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1));
-            });
+            mapPos(colorToCord(c).x,colorToCord(c).y,gui.getView().getPlayerId());
+        });
         powerUp3.setOnMouseClicked((e) -> {
             powerUp3.setImage(null);
+            Color c=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2).getColor();
             gui.getView().spawn(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2));
-            });
+            mapPos(colorToCord(c).x,colorToCord(c).y,gui.getView().getPlayerId());
+        });
     }
 
     private void mapPos(int r,int c,int id)
     {
-            System.out.println("riga: "+r+"colonna :"+c);
-            map[r][c].setStyle(fromIDtoIMG(id));
-            log.appendText("\n Placed player "+id+" in cell "+r+c);
+            //System.out.println("riga: "+r+"colonna :"+c);
+            ;
+            boolean found=false;
+            if( map[r][c].getChildren().size()!=0 && ((HBox)map[r][c].getChildren().get(0)).getChildren()!=null)
+            {for(int j=0;j<((HBox)map[r][c].getChildren().get(0)).getChildren().size();j++)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+             {
+                 if(((HBox)map[r][c].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
+                 {
+                     found=true;
+                 }
+
+             }
+             if(found)return;}
+             fromIDtoIMG(id, map[r][c]);
+             log.appendText("\n Placed player "+id+" in cell "+r+c);
 
 
         //eliminating the powerups effects after the beginning
@@ -481,6 +586,28 @@ public class GuiMapController {
 
     }
 
+    private Point colorToCord(Color c)
+    {
+        Point p=new Point();
+           if(c==Color.BLUE)
+           {
+               p.x=0;
+               p.y=2;
+               return p;
+           }
+           if(c==Color.RED)
+           {
+               p.x=1;
+               p.y=0;
+               return p;
+           }
+           if(c==Color.YELLOW)
+           {
+               p.x=2;
+               p.y=3;
+               return p;
+           }return p;
+    }
 
     public void powerUpDisplayer()
     {
