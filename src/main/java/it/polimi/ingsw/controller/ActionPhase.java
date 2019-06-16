@@ -7,7 +7,6 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
-import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.ShootAction;
@@ -41,8 +40,13 @@ public class ActionPhase {
 
     private final Controller controller;
 
+    private final UtilityMethods utilityMethods;
+
     public ActionPhase(Controller controller) {
+
         this.controller = controller;
+
+        this.utilityMethods = controller.getUtilityMethods();
     }
 
 
@@ -97,7 +101,7 @@ public class ActionPhase {
 
             // moves the current player in the directions specified in the list
 
-            move(moveAction.getMoves());
+            utilityMethods.move(moveAction.getMoves());
 
             // notify other player
 
@@ -109,112 +113,6 @@ public class ActionPhase {
         }
 
     }
-
-    /**
-     * this method moves the current player
-     * @param directionsList is the list of the directions the player wants to move
-     */
-    private void move(List<Directions> directionsList){
-
-        // gets the final position
-
-        Cell finalPosition = simulateMovement(directionsList);
-
-        // moves the player
-
-        Model.getPlayer(controller.getCurrentPlayer()).setPlayerPos(finalPosition);
-
-    }
-
-    /**
-     * This method simulate the actual movement and return the cell the player would reach if he moves
-     * @param directions is the list of movements the player wants to do
-     * @return the final cell the player would reach if he moves
-     */
-    private Cell simulateMovement(List<Directions> directions){
-
-        Cell cell = Model.getPlayer(controller.getCurrentPlayer()).getCurrentPosition();
-
-        for (Directions direction : directions){
-
-            cell = getNextCell(direction,cell);
-        }
-
-        return cell;
-    }
-
-    /**
-     * This method move the player in the given direction
-     * @param direction the player wants to move to
-     */
-    private void moveCurrentPlayer(Directions direction) {
-
-        // gets the id of the current player
-
-        int playerId = controller.getCurrentPlayer();
-
-        //gets the current position
-
-        Cell position = Model.getPlayer(playerId).getCurrentPosition();
-
-        // change the position var in the direction given
-
-        position = (getNextCell(direction,position) != null) ? getNextCell(direction,position) : position;
-
-        // sets the player in the new position
-
-        Model.getPlayer(playerId).setPlayerPos(position);
-
-        // logs the position change
-
-        LOGGER.log(level, () -> LOG_START_GRAB + playerId + " moved " + direction + " in cell : " + Model.getMap().cellToCoord(Model.getPlayer(playerId).getCurrentPosition()));
-    }
-
-    /**
-     *  This method compute the next cell given a direction
-     * @param direction is the direction to move
-     * @param startPoint is the cell from which starts
-     * @return the cell in the direction specified
-     */
-    private Cell getNextCell(Directions direction, Cell startPoint){
-
-        if (startPoint != null) {
-
-            switch (direction) {
-
-                case NORTH:
-
-                    if (startPoint.getNorth() != null) return startPoint.getNorth();
-
-                    break;
-
-                case EAST:
-
-                    if (startPoint.getEast() != null) return startPoint.getEast();
-
-                    break;
-
-                case WEST:
-
-                    if (startPoint.getWest() != null) return startPoint.getWest();
-
-                    break;
-
-                case SOUTH:
-
-                    if (startPoint.getSouth() != null) return startPoint.getSouth();
-
-                    break;
-
-                default:
-
-                    break;
-            }
-        }
-
-        return null;
-    }
-
 
 
     // GRAB_ACTION
@@ -231,11 +129,11 @@ public class ActionPhase {
 
         // check if the actions are possible
 
-        if (checkGrabMove(grabAction) && checkGrab(grabAction, simulateMovement(grabAction.getDirection()))){
+        if (checkGrabMove(grabAction) && checkGrab(grabAction, utilityMethods.simulateMovement(grabAction.getDirection()))){
 
             // moves the player
 
-            move(grabAction.getDirection());
+            utilityMethods.move(grabAction.getDirection());
 
             // gets the type of the cell the player is in
 
@@ -358,7 +256,7 @@ public class ActionPhase {
 
         } else {
 
-            if (findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell) == null) {
+            if (utilityMethods.findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell) == null) {
 
                 LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " the specified weapon was not found in the cell : " + grabAction.getNewWeaponName());
 
@@ -377,45 +275,12 @@ public class ActionPhase {
                     return false;
                 }
 
-                return currentPlayerCanBuyWeapon(findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell));
+                return currentPlayerCanBuyWeapon(utilityMethods.findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell));
             }
         }
     }
 
-    /**
-     * This method will return the weapon instance if there is a weapon with given name in the specified spawn or null
-     * @param weaponName is the name specified
-     * @param spawnCell is the Spawn Cell specified
-     * @return the weapon instance or null if not found
-     */
-    private Weapon findWeaponInSpawnCell(String weaponName, SpawnCell spawnCell){
 
-        List<Weapon> weaponList = spawnCell
-                .getWeapons()
-                .stream()
-                .filter( x -> x.getName().equalsIgnoreCase(weaponName))
-                .collect(Collectors.toList());
-
-        return weaponList.isEmpty() ? null : weaponList.get(0);
-    }
-
-    /**
-     * This method will return the weapon instance if there is a weapon with given name in the specified player's weaponBag or null
-     * @param weaponName is the name of the weapon
-     * @param playerId is the id of the player
-     * @return the weapon instance or null if not found
-     */
-    private Weapon findWeaponInWeaponBag(String weaponName, int playerId){
-
-        List<Weapon> weaponList = Model.getPlayer(playerId)
-                .getCurrentWeapons()
-                .getList()
-                .stream()
-                .filter(x -> x.getName().equalsIgnoreCase(weaponName))
-                .collect(Collectors.toList());
-
-        return weaponList.isEmpty() ? null : weaponList.get(0);
-    }
 
     /**
      *
@@ -474,7 +339,7 @@ public class ActionPhase {
 
         try{
 
-            Model.getPlayer(controller.getCurrentPlayer()).buy(findWeaponInSpawnCell(grabAction.getNewWeaponName(), position));
+            Model.getPlayer(controller.getCurrentPlayer()).buy(utilityMethods.findWeaponInSpawnCell(grabAction.getNewWeaponName(), position));
 
             LOGGER.log(level, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " bought a new weapon: " + grabAction.getNewWeaponName() );
 
@@ -510,7 +375,7 @@ public class ActionPhase {
 
         // gets the specified weapon
 
-        Weapon selected = findWeaponInWeaponBag(shootAction.getWeaponName(),playerId);
+        Weapon selected = utilityMethods.findWeaponInWeaponBag(shootAction.getWeaponName(),playerId);
 
         // check if weapon exist
 
@@ -622,49 +487,5 @@ public class ActionPhase {
 
     // UTILS
 
-    public boolean askMoveValid(int row, int column, Directions direction) {
 
-        //LOG
-
-        LOGGER.log(level, () -> "[CONTROLLER] receiveed askMove valid from pos: " + row + ", " + column + " and direction : " + direction);
-
-        if (Model.getMap().getCell(row, column) == null) {
-            return false;
-        }
-
-        Cell startCell = Model.getMap().getCell(row, column);
-
-        switch (direction){
-
-            case NORTH:
-
-                if (startCell.getNorth() != null ) return true;
-
-                break;
-
-            case EAST:
-
-                if (startCell.getEast() != null ) return true;
-
-                break;
-
-            case WEST:
-
-                if (startCell.getWest() != null ) return true;
-
-                break;
-
-            case SOUTH:
-
-                if (startCell.getSouth() != null ) return true;
-
-                break;
-
-            default:
-
-                break;
-        }
-
-        return false;
-    }
 }

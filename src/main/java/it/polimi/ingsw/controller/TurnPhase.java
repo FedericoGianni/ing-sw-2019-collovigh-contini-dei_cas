@@ -8,6 +8,7 @@ public enum TurnPhase {
     POWERUP2,
     ACTION2,
     POWERUP3,
-    RELOAD;
+    RELOAD,
+    END;
 
 }

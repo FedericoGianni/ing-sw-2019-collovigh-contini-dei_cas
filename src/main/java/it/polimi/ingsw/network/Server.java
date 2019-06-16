@@ -67,11 +67,15 @@ public class Server  {
             clients = new LinkedHashMap<>();
 
         }catch (GameNonExistentException e){
-            e.printStackTrace();
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
         try {
+
             ip_address = Inet4Address.getLocalHost().getHostAddress();
-            Logger.getLogger("infoLogging").info("RemoteServer is up and running on ip " + ip_address);
+
+            LOGGER.info(() -> "RemoteServer is up and running on ip " + ip_address);
+
         } catch(UnknownHostException e){
             e.getMessage();
         }
@@ -311,8 +315,11 @@ public class Server  {
         }
 
         System.out.println("[SERVER] DEBUG new map: ");
+
         for (int i = 0; i < clients.size() +1 ; i++) {
+
             System.out.println("Client: " + i + " " + clients.get(i));
+
         }
     }
 }

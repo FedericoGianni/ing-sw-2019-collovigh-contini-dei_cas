@@ -352,6 +352,12 @@ public class SocketConnectionReader extends Thread {
 
                 break;
 
+            case "{\"actionType\":\"RELOAD\"}":
+
+                jsonAction = gson.fromJson(message,ReloadAction.class);
+
+                break;
+
             default:
 
                 LOGGER.log(WARNING,"[SOCKET-CONN-READER] Unknown Action Type ");
@@ -361,7 +367,7 @@ public class SocketConnectionReader extends Thread {
 
         LOGGER.log(level,"[SOCKET-CONN-READER] Forwarding Action to controller : {0}  ", jsonAction.getType() );
 
-        Server.getController().doAction(jsonAction);
+        Server.getController().getVirtualView(id).doAction(jsonAction);
     }
 
 }

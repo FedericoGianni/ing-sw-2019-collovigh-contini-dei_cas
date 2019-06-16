@@ -22,8 +22,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.controller.TurnPhase.RELOAD;
-import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
+import static it.polimi.ingsw.controller.TurnPhase.*;
+import static it.polimi.ingsw.utils.DefaultReplies.*;
 
 
 /**
@@ -48,7 +48,7 @@ public class Controller {
 
     //used for TagBackGrenade (check if it is necessary)
 
-    private List<Integer> shotPlayerThisTurn;
+    private List<Integer> shotPlayerThisTurn; // TODO add to shoot
 
     private TurnPhase turnPhase = SPAWN;
 
@@ -62,6 +62,8 @@ public class Controller {
 
     // Methods Classes
 
+    private UtilityMethods utilityMethods = new UtilityMethods(this);
+
     private SpawnPhase spawnPhase = new SpawnPhase(this);
 
     private PowerUpPhase powerUpPhase = new PowerUpPhase(this);
@@ -69,6 +71,8 @@ public class Controller {
     private ActionPhase actionPhase = new ActionPhase(this);
 
     private PointCounter pointCounter = new PointCounter(this);
+
+    private ReloadPhase reloadPhase = new ReloadPhase(this);
 
     private Timer timer = new Timer(this);
 
@@ -198,6 +202,10 @@ public class Controller {
 
     public void setFrenzyStarter(int frenzyStarter) {
         this.frenzyStarter = frenzyStarter;
+    }
+
+    public UtilityMethods getUtilityMethods() {
+        return utilityMethods;
     }
 
     // management Methods
@@ -350,29 +358,36 @@ public class Controller {
 
             case RELOAD:
 
-                //TODO handle last turn phase. reload and increment round number
-
-                handleReload();
-
                 // replaces the empty ammoCard
 
                 Model.getMap().ReplaceAmmoCard();
 
-                //this 2 commands should be called by reload method, not here
+                // calls the method on the virtual view
+
+                reloadPhase.handleReload();
+
+                break;
+
+            case END:
+
                 if(hasSomeoneDied){
-                    //TODO calculate points
+
                     pointCounter.calculateTurnPoints();
+
                 }
 
-                //TODO when a virtual view reloads don't call increment phase -> it should be done here so that it calc points
+                // if frenzy is activated check if game has ended
+
+                if (frenzy && frenzyStarter == getCurrentPlayer()) endGame();
+
                 incrementPhase();
-                break;
+
         }
     }
 
 
     public void incrementPhase(){
-        if(turnPhase == RELOAD){
+        if(turnPhase == END){
             turnPhase = SPAWN;
             roundNumber++;
             LOGGER.log(level, "[CONTROLLER] switch to phase: {0}", turnPhase);
@@ -425,11 +440,15 @@ public class Controller {
 
             case MOVE:
 
+                checkActionIsNotFrenzy();
+
                 actionPhase.moveAction((Move)jsonAction);
 
                 break;
 
             case GRAB:
+
+                checkActionIsNotFrenzy();
 
                 actionPhase.grabAction((GrabAction) jsonAction);
 
@@ -437,11 +456,15 @@ public class Controller {
 
             case SHOOT:
 
+                checkActionIsNotFrenzy();
+
                 actionPhase.shootAction((ShootAction) jsonAction);
 
                 break;
 
             case FRENZY_MOVE:
+
+                checkActionIsFrenzy();
 
                 //TODO frenzyGrab
 
@@ -449,13 +472,23 @@ public class Controller {
 
             case FRENZY_GRAB:
 
+                checkActionIsFrenzy();
+
                 //TODO frenzyGrab
 
                 break;
 
             case FRENZY_SHOOT:
 
+                checkActionIsFrenzy();
+
                 //TODO frenzyShoot
+
+                break;
+
+            case RELOAD:
+
+                // TODO reloadPhase
 
                 break;
 
@@ -471,16 +504,26 @@ public class Controller {
         }
     }
 
-    public boolean askMoveValid(int row, int column, Directions direction){
-        return actionPhase.askMoveValid(row,column,direction);
-    }
+    private void checkActionIsFrenzy(){
 
+        if (!frenzy){
 
-    public void handleReload(){
-        if(!(Model.getGame().getPlayers().get(getCurrentPlayer()).getWeapons().isEmpty())){
-            players.get(getCurrentPlayer()).startReload();
+            getVirtualView(getCurrentPlayer()).show(DEFAULT_RECEIVED_NORMAL_BUT_EXPECTED_FRENZY);
         }
     }
+
+    private void checkActionIsNotFrenzy(){
+
+        if (frenzy){
+
+            getVirtualView(getCurrentPlayer()).show(DEFAULT_RECEIVED_FRENZY_BUT_EXPECTED_NORMAL);
+        }
+    }
+
+    public boolean askMoveValid(int row, int column, Directions direction){
+        return utilityMethods.askMoveValid(row,column,direction);
+    }
+
 
 
     //ACTIONS

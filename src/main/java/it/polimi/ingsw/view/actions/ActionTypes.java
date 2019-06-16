@@ -9,6 +9,7 @@ public enum ActionTypes {
     FRENZY_GRAB,
     FRENZY_SHOOT,
     SKIP,
-    POWER_UP;
+    POWER_UP,
+    RELOAD;
 
 }

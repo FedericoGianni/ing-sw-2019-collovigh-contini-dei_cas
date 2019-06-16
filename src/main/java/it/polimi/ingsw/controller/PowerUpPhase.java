@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.PowerUpType.*;
+import static it.polimi.ingsw.utils.DefaultReplies.*;
 
 public class PowerUpPhase {
 
@@ -34,10 +35,6 @@ public class PowerUpPhase {
     private static Level level = Level.FINE;
 
     private static final int TIMER_POWER_UP = 10;
-
-    private static final String DEFAULT_PLAYER_USED_NEWTON_ON_HIMSELF = "PLAYER_USED_NEWTON_ON_HIMSELF";
-    private static final String DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP = "PLAYER_DOES_NOT_POSSESS_POWERUP";
-    private static final String DEFAULT_CELL_NOT_EXISTENT = "CELL_NOT_EXISTENT";
 
 
     // Controller reference
