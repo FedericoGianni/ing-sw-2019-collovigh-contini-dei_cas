@@ -68,15 +68,32 @@ public class NormalWeapon extends Weapon{
         return isLoaded;
     }
 
-    public void reload()throws NotAbleToReloadException
-    {
-        if(this.canBeReloaded())
-            this.isLoaded=true;
-        else{
+    public void reload()throws NotAbleToReloadException {
+
+        // check if the player can reload the weapon
+
+        if(this.canBeReloaded()) {
+
+            // try to pay the cost
+
+            try {
+
+                isPossessedBy().pay(cost);
+
+            }catch (CardNotPossessedException e){
+
+                throw new NotAbleToReloadException();
+            }
+
+            // if everything went fine set the weapon to loaded
+
+            this.isLoaded = true;
+
+        }else{
+
             throw new NotAbleToReloadException();
         }
-        for(int i=0;i<this.getCost().size();i++)
-            isPossessedBy().getAmmoBag().getList().remove(this.getCost().get(i));
+
     }
 
 
@@ -115,13 +132,11 @@ public class NormalWeapon extends Weapon{
 
     /**
      * @return true only if the player has enough ammo for reloading the NormalWeapon and if it's not reloaded
+     *
      */
-    public boolean canBeReloaded() {
-        if(this.isLoaded==false && canPay(this.getCost(),isPossessedBy().getAmmoBag()))
-        {
-           return true;
-        }else
-        {return false;}
+    private boolean canBeReloaded() {
+
+        return isPossessedBy().canPay(cost);
     }
 
 
@@ -131,6 +146,14 @@ public class NormalWeapon extends Weapon{
     public List<AmmoCube> getCost() {
 
         return cost.subList(1,cost.size());
+
+    }
+
+    @Override
+    public List<AmmoCube> getReloadCost() {
+
+        return new ArrayList<>(cost);
+
     }
 
     /**

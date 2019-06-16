@@ -36,22 +36,31 @@ public class Thor extends Weapon {
 
     @Override
     public void reload() throws NotAbleToReloadException {
-        if(this.canBeReloaded())
-            this.isLoaded=true;
-        else{
-            throw new NotAbleToReloadException();
-        }
-        for(int i=0;i<this.getCost().size();i++)
-            isPossessedBy().getAmmoBag().getList().remove(this.weaponCost.get(i));
 
+        if(this.canBeReloaded()) {
+
+            try {
+
+                isPossessedBy().pay(weaponCost);
+
+            } catch (CardNotPossessedException e) {
+
+                throw new NotAbleToReloadException();
+            }
+
+            this.isLoaded = true;
+
+        } else{
+
+            throw new NotAbleToReloadException();
+
+        }
     }
 
-    @Override
-    public boolean canBeReloaded() {
-        if(canPay(this.weaponCost,this.isPossessedBy().getAmmoBag())&&this.isLoaded==false)
-        {
-            return true;
-        }return false;
+
+    private boolean canBeReloaded() {
+
+        return isPossessedBy().canPay(weaponCost);
     }
 
     @Override
@@ -105,7 +114,14 @@ public class Thor extends Weapon {
 
     @Override
     public List<AmmoCube> getCost() {
+        return this.weaponCost.subList(1,weaponCost.size());
+    }
+
+    @Override
+    public List<AmmoCube> getReloadCost() {
+
         return this.weaponCost;
+
     }
 
     public void setUnloaded()

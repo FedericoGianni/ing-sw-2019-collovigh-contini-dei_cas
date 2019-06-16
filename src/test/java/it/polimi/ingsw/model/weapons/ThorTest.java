@@ -35,7 +35,7 @@ class ThorTest {
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         shooter.getAmmoBag().addItem(new AmmoCube(Color.BLUE));
         shooter.addWeapon(w);
-        assertTrue(w.canBeReloaded());
+        assertTrue(shooter.canPay(w.getReloadCost()));
         w.reload();
         assertTrue(w.isLoaded());
     }

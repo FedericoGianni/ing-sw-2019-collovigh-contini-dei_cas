@@ -238,7 +238,7 @@ public class UtilityMethods {
      * @return an instance of a PowerUp contained in the list that match the Cached parameters
      * @throws CardNotPossessedException if the powerUp is not found
      */
-    public PowerUp CachedToRealPowerUp(CachedPowerUp cachedPowerUp, List<PowerUp> powerUpList) throws CardNotPossessedException {
+    public PowerUp cachedToRealPowerUp(CachedPowerUp cachedPowerUp, List<PowerUp> powerUpList) throws CardNotPossessedException {
 
         List<PowerUp> matching = powerUpList
                 .stream()

@@ -30,12 +30,8 @@ public abstract class Weapon {
      */
     public abstract void reload() throws NotAbleToReloadException ;
 
-    /**
-     * every weapon type need to say if it can be reloaded in its own way
-     *
-     * @return true if the weapon can be reloaded
-     */
-    public abstract boolean canBeReloaded();
+
+
     public Player getFirstTarget() {
         return firstTarget;
     }//useful when you have to target  different target
@@ -104,5 +100,7 @@ public abstract class Weapon {
     public abstract String getName();
 
     public abstract List<AmmoCube> getCost();
+
+    public abstract List<AmmoCube> getReloadCost();
 
 }

@@ -38,4 +38,6 @@ public class DefaultReplies {
     public static final String DEFAULT_RECEIVED_FRENZY_BUT_EXPECTED_NORMAL = "RECEIVED_FRENZY_BUT_EXPECTED_NORMAL";
     public static final String DEFAULT_RECEIVED_NORMAL_BUT_EXPECTED_FRENZY = "RECEIVED_NORMAL_BUT_EXPECTED_FRENZY";
 
+    public static final String DEFAULT_NO_ENOUGH_AMMO = "NO_ENOUGH_AMMO";
+
 }
