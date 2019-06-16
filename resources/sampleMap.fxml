@@ -33,20 +33,20 @@
     </left>
     <center>
         <GridPane  fx:id="innerMap" xmlns:fx="http://javafx.com/fxml" alignment="center"  styleClass ="mapin" prefHeight="300" prefWidth="600">
-                    <Button  fx:id="b00" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="butun"></Button>
-                    <Button  fx:id="b01" GridPane.rowIndex="0" GridPane.columnIndex="1"  styleClass="butun"></Button>
-                    <Button  fx:id="b02" GridPane.rowIndex="0" GridPane.columnIndex="2"   styleClass="butunSpawn"></Button>
-                    <Button  fx:id="b03" GridPane.rowIndex="0" GridPane.columnIndex="3"  styleClass="butun"></Button>
+                    <VBox  fx:id="b00" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="butun"></VBox>
+                    <VBox  fx:id="b01" GridPane.rowIndex="0" GridPane.columnIndex="1"  styleClass="butun"></VBox>
+                    <VBox  fx:id="b02" GridPane.rowIndex="0" GridPane.columnIndex="2"   styleClass="butunSpawn"></VBox>
+                    <VBox fx:id="b03" GridPane.rowIndex="0" GridPane.columnIndex="3"  styleClass="butun"></VBox>
 
-                    <Button  fx:id="b10" GridPane.rowIndex="1" GridPane.columnIndex="0"   styleClass="butunSpawn"></Button>
-                    <Button  fx:id="b11" GridPane.rowIndex="1" GridPane.columnIndex="1"   styleClass="butun"></Button>
-                    <Button  fx:id="b12" GridPane.rowIndex="1" GridPane.columnIndex="2"   styleClass="butun"></Button>
-                    <Button  fx:id="b13" GridPane.rowIndex="1" GridPane.columnIndex="3"   styleClass="butun"></Button>
+                    <VBox  fx:id="b10" GridPane.rowIndex="1" GridPane.columnIndex="0"   styleClass="butunSpawn"></VBox>
+                    <VBox  fx:id="b11" GridPane.rowIndex="1" GridPane.columnIndex="1"   styleClass="butun"></VBox>
+                    <VBox  fx:id="b12" GridPane.rowIndex="1" GridPane.columnIndex="2"   styleClass="butun"></VBox>
+                    <VBox  fx:id="b13" GridPane.rowIndex="1" GridPane.columnIndex="3"   styleClass="butun"></VBox>
 
-                    <Button  fx:id="b20" GridPane.rowIndex="2" GridPane.columnIndex="0"   styleClass="butun"></Button>
-                    <Button  fx:id="b21" GridPane.rowIndex="2" GridPane.columnIndex="1"   styleClass="butun"></Button>
-                    <Button  fx:id="b22" GridPane.rowIndex="2" GridPane.columnIndex="2"   styleClass="butun"></Button>
-                    <Button  fx:id="b23" GridPane.rowIndex="2" GridPane.columnIndex="3"   styleClass="butunSpawn"></Button>
+                    <VBox  fx:id="b20" GridPane.rowIndex="2" GridPane.columnIndex="0"   styleClass="butun"></VBox>
+                    <VBox  fx:id="b21" GridPane.rowIndex="2" GridPane.columnIndex="1"   styleClass="butun"></VBox>
+                    <VBox  fx:id="b22" GridPane.rowIndex="2" GridPane.columnIndex="2"   styleClass="butun"></VBox>
+                    <VBox  fx:id="b23" GridPane.rowIndex="2" GridPane.columnIndex="3"   styleClass="butunSpawn"></VBox>
         </GridPane>
     </center>
     <right>
