@@ -1,6 +1,8 @@
 package it.polimi.ingsw.utils;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.controller.Parser;
+import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -43,11 +45,11 @@ public class JsonExampleMaker {
 
         writeDamageList();
 
-         */
-
         writeWeapons();
 
+        writeMap();
 
+         */
     }
 
     public static void writeWeapons(){
@@ -130,7 +132,9 @@ public class JsonExampleMaker {
 
         try {
 
-            Stats stats = new Stats(cell);
+            Stats stats = new Stats();
+
+            stats.setCurrentPosition(cell);
 
             stats.setDeaths(2);
             stats.setScore(10);
@@ -364,6 +368,48 @@ public class JsonExampleMaker {
             FileWriter writer = new FileWriter("resources/json/weapons/damageList.json");
 
             gson.toJson(damageList, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    private static void writeSaveMap(){
+
+        List<String> names = new ArrayList<>();
+
+        names.add("Jerry");
+        names.add("Frank");
+        names.add("Tom");
+
+        List<PlayerColor> colors = new ArrayList<>();
+
+        colors.add(PlayerColor.BLUE);
+        colors.add(PlayerColor.YELLOW);
+        colors.add(PlayerColor.GREEN);
+
+        Model model = new Model(names,colors,2,8);
+
+        Parser.saveMap();
+    }
+
+    private static void writeMap(){
+
+        SavedMap savedMap = new SavedMap(3);
+
+        Gson gson = new Gson();
+
+        try{
+
+
+
+            FileWriter writer = new FileWriter("resources/json/maps/map_03.json");
+
+            gson.toJson(savedMap, writer);
 
             writer.flush();
             writer.close();

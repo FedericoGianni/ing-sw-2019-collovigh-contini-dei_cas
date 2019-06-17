@@ -15,6 +15,8 @@ import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
 
 class JsonMapTest {
 
+    /*
+
     @Test
     void jsonMapRead(){
         JsonMap jsonMap = new JsonMap();
@@ -41,7 +43,7 @@ class JsonMapTest {
         jsonMap.populateJson();
         gson.toJson(jsonMap);
         System.out.println(gson.toJson(jsonMap));
-        */
+
 
 
         Gson gson = new Gson();
@@ -108,5 +110,7 @@ class JsonMapTest {
 
         assert (jsonMap.getCell(0,0).getAdjEast().equals(new Point(0,1)));
     }
+
+     */
 }
 

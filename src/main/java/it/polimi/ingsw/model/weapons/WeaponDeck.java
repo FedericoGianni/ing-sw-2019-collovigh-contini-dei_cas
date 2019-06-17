@@ -20,8 +20,7 @@ public class WeaponDeck implements Deck<Weapon> {
     private WeaponDeck() {
 
         this.weaponList = new ArrayList<>();
-        weaponList.addAll(Parser.normalWeaponReader());//create and return all the normal weapons
-        //then add special weapons
+        weaponList.addAll(Parser.getFullWeaponList()); //create and return all the weapons (also the special ones)
     }
 
 

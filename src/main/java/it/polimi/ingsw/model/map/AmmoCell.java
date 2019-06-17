@@ -1,11 +1,13 @@
 package it.polimi.ingsw.model.map;
 
+import it.polimi.ingsw.controller.saveutils.SavedCell;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
 import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,8 +24,6 @@ public class AmmoCell extends Cell {
     public AmmoCell() {
 
         super();
-
-        setAmmoCell(true);
 
         // Place the AmmoCard
 
@@ -72,9 +72,24 @@ public class AmmoCell extends Cell {
         return tempAmmo;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Weapon> getWeapons() {
+        return null;
+    }
+
     @Override
     public Weapon buy(Weapon w, Player player) throws NotEnoughAmmoException {
         return null;
+    }
+
+    @Override
+    public SavedCell getSaveVersionOfCell() {
+
+        return new SavedCell(this);
+
     }
 
     public void generateAmmoCard(){
@@ -83,6 +98,15 @@ public class AmmoCell extends Cell {
 
         updateAll(this);
 
+    }
+
+    /**
+     * This method will be used only for save purposes
+     * @param ammoCard is the ammoCard to set
+     */
+    public void setAmmoPlaced(AmmoCard ammoCard){
+
+        this.ammoPlaced = ammoCard;
     }
 
 

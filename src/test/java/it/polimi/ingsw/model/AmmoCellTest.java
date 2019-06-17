@@ -19,7 +19,7 @@ class AmmoCellTest {
     @Test
     void getColor() {
         //Map m = Map.genMap(2);
-        Map m = new Map(JsonMap.genJsonMap(2));
+        Map m = new Map(2);
 
         assertEquals(m.getCell(0, 0).getColor(), CellColor.BLUE);
     }
@@ -27,7 +27,7 @@ class AmmoCellTest {
     @Test
     void getAmmoPlaced() {
         //Map m = Map.genMap(2);
-        Map m = new Map(JsonMap.genJsonMap(2));
+        Map m = new Map(2);
 
         AmmoCard card = AmmoCard.generateRandCard();
 
@@ -38,7 +38,7 @@ class AmmoCellTest {
     @Test
     void pickAmmoPlaced() {
         //Map m = Map.genMap(1);
-        Map m = new Map(JsonMap.genJsonMap(1));
+        Map m = new Map(1);
 
         AmmoCard c1;
         AmmoCard c2;

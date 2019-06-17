@@ -7,12 +7,15 @@ import it.polimi.ingsw.customsexceptions.OverMaxMarkException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.map.Cell;
+
+import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Stats extends Subject {
+public class Stats extends Subject implements Serializable {
 
     private static final int MAX_DMG = 12;
     private static final int MAX_MARKS = 3;
@@ -27,17 +30,17 @@ public class Stats extends Subject {
      * this is an ArrayList which contains max MAX_DMG Integer (Overkill) each one representing the id of the offending player
      */
     private List<Integer> dmgTaken = new ArrayList<>();
-    private Cell currentPosition;
+    private Point currentPosition;
     private Boolean online;
 
     /**
      *
      * @param currentPosition is the position in which the player starts
      */
-    public Stats(Cell currentPosition) {
+    public Stats() {
         this.score = 0;
         this.deaths = 0;
-        this.currentPosition = currentPosition;
+        this.currentPosition =  null;
         this.online = true;
     }
 
@@ -224,7 +227,7 @@ public class Stats extends Subject {
      * @return current position of the player
      */
     public Cell getCurrentPosition() {
-        return currentPosition;
+        return Model.getMap().getCell(currentPosition.x,currentPosition.y);
     }
 
     /**
@@ -239,7 +242,7 @@ public class Stats extends Subject {
 
         // sets the new position in the stats
 
-        this.currentPosition = currentPosition;
+        this.currentPosition = Model.getMap().cellToCoord(currentPosition);
 
         // sets the player in the cell if not null
 

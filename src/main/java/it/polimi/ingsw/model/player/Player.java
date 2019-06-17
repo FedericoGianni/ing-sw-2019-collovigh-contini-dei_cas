@@ -31,7 +31,7 @@ public class Player {
         this.id = id;
         this.color = color;
 
-        this.stats = new Stats(null);
+        this.stats = new Stats();
         if (Observers.isInitialized()) this.stats.addObserver(Observers.getStatsObserver(id));
 
         this.currentPowerUps = new PowerUpBag();

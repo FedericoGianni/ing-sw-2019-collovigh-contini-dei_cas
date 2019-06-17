@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.map;
 
+import it.polimi.ingsw.controller.saveutils.SavedCell;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCard;
@@ -16,28 +17,31 @@ import java.util.List;
 public class SpawnCell extends Cell {
 
 
-    /**
-     * attribute useful for canSee method, which need to check if the cell has already been visited or not
-     */
-    private boolean visit;
+
     private List<Weapon> weapons;
 
     /**
      * Default constructor
      */
     public SpawnCell() {
-        this.visit=false;
+
         this.weapons = new ArrayList<>();
 
         // add observer to the class
         if (Observers.isInitialized()) addObserver(Observers.getSpawnCellObserver());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmmoCard getAmmoPlaced() {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmmoCard pickAmmoPlaced() {
         return null;
@@ -73,11 +77,12 @@ public class SpawnCell extends Cell {
 
 
     /**
-     * @return a list of Weapons who are available for sell inside this SpawnCell
+     * {@inheritDoc}
      */
+    @Override
     public List<Weapon> getWeapons() {
         if (this.weapons.isEmpty()) this.populateWeapon();
-        return weapons;
+        return new ArrayList<>(weapons);
     }
 
 
@@ -99,6 +104,21 @@ public class SpawnCell extends Cell {
 
 
         }else throw new NotEnoughAmmoException();
+
+    }
+
+    /**
+     * This method is meant for save only
+     * @param weapons is a list of weapon to add
+     */
+    public void setWeapons(List<Weapon> weapons) {
+        this.weapons = weapons;
+    }
+
+    @Override
+    public SavedCell getSaveVersionOfCell() {
+
+        return new SavedCell(this);
 
     }
 

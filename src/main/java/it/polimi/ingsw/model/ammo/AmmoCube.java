@@ -3,11 +3,13 @@ package it.polimi.ingsw.model.ammo;
 
 import it.polimi.ingsw.utils.Color;
 
+import java.io.Serializable;
+
 /**
  * this class represents the single cube that the game use for representing ammo
  * it has only one attribute that specify the color of it
  */
-public class AmmoCube {
+public class AmmoCube implements Serializable {
 
     private final Color color;
 

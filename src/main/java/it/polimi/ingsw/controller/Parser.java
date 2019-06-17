@@ -1,18 +1,26 @@
 package it.polimi.ingsw.controller;
 
+import com.google.gson.Gson;
+import it.polimi.ingsw.controller.saveutils.SavedMap;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.weapons.*;
+import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.jsonconfig.Config;
 import it.polimi.ingsw.utils.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class Parser {
 
@@ -30,11 +38,19 @@ public class Parser {
     private static final String MARKER_PATH = "resources/json/MarkerTypes";
     private static final String MOVER_PATH = "resources/json/mover";
     private static final String NORMAL_WEAPON_PATH = "resources/json/Weaponary";
+    private static final String SAVED_MAP_RELATIVE_PATH = "/map/Map.json";
+    private static final String MAP_ONE_PATH = "resources/json/maps/map_01.json";
+    private static final String MAP_TWO_PATH = "resources/json/maps/map_02.json";
+    private static final String MAP_THREE_PATH = "resources/json/maps/map_03.json";
 
 
     // Json Simple
 
     private static JSONParser jsonParser = new JSONParser();
+
+    // GSON
+
+    private static Gson gson = new Gson();
 
     private Parser() {
 
@@ -496,6 +512,156 @@ public class Parser {
         return mf;
     }
 
+    /**
+     * This method will create a list of special weapons
+     * @return a list of special weapons
+     */
+    private static List<Weapon> generateSpecialWeapon(){
 
+        List<Weapon> specialWeaponList = new ArrayList<>();
+
+        specialWeaponList.add(new Thor());
+
+        //TODO add all the special weapons
+
+        return specialWeaponList;
+    }
+
+    /**
+     * This method will generate the full weapon list
+     * @return the full weapon list
+     */
+    public static List<Weapon> getFullWeaponList(){
+
+        List<Weapon> weaponList = new ArrayList<>();
+
+        weaponList.addAll(normalWeaponReader());
+
+        weaponList.addAll(generateSpecialWeapon());
+
+        return weaponList;
+    }
+
+    /**
+     * This method gets a real instance of a weapon from his name
+     * @param weaponName is the weaponName
+     * @return an instance of the requested weapon or null;
+     */
+    public static Weapon getWeaponByName(String weaponName){
+
+        List<Weapon> matchingWeaponList = getFullWeaponList()
+                .stream()
+                .filter( weapon -> weapon.getName().equalsIgnoreCase(weaponName))
+                .collect(Collectors.toList());
+
+        return (matchingWeaponList.isEmpty()) ? null : matchingWeaponList.get(0);
+
+    }
+
+    public static SavedMap readSavedMap(){
+
+        String gamePath = "resources/json/game000";
+
+        SavedMap savedMap = null;
+
+        try {
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader(new FileReader(new File(gamePath + SAVED_MAP_RELATIVE_PATH).getAbsolutePath()));
+
+            // load the Config File
+
+            savedMap = gson.fromJson(br, SavedMap.class);
+
+            // LOG the load
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved map ");
+        }
+
+        return savedMap;
+    }
+
+
+    public static void saveMap(){
+
+        String gamePath = "resources/json/game000";
+
+        SavedMap savedMap = new SavedMap(Model.getMap().getMatrix());
+
+        try {
+
+            // creates a reader for the file
+
+            FileWriter writer = new FileWriter(gamePath + SAVED_MAP_RELATIVE_PATH);
+
+            // load the Config File
+
+            gson.toJson(savedMap,writer);
+
+            // LOG the load
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved map ");
+        }
+    }
+
+
+    public static SavedMap getMap(int mapType){
+
+        String path;
+
+        switch (mapType){
+
+            case 1:
+
+                path = MAP_ONE_PATH;
+
+                break;
+
+            case 2:
+
+                path = MAP_TWO_PATH;
+
+                break;
+
+            case 3:
+
+                path = MAP_THREE_PATH;
+
+                break;
+
+            default:
+
+                path = MAP_TWO_PATH;
+
+                break;
+
+        }
+
+        SavedMap savedMap = null;
+
+        try {
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader(new FileReader(new File(path).getAbsolutePath()));
+
+            // load the Config File
+
+            savedMap = gson.fromJson(br, SavedMap.class);
+
+            // LOG the load
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the specified map ");
+        }
+
+        return savedMap;
+    }
 
 }

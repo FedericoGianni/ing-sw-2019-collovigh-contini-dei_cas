@@ -1,11 +1,14 @@
 package it.polimi.ingsw.model.map;
 
+import it.polimi.ingsw.controller.Parser;
+import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 
 import java.awt.*;
+import java.io.Serializable;
 
 import static java.lang.Math.abs;
 
@@ -47,64 +50,16 @@ public class Map {
 
     /**
      * Generates a new Map from a jsonMap
-     * @param jsonMap simplified map which can be read/stored in a .json file
+     * @param mapType is the mapType specified
      */
-    public Map(JsonMap jsonMap){
+    public Map(int mapType){
 
-        this.mapType = jsonMap.getMapType();
-        this.matrix = new Cell[MAP_R][MAP_C];
+        this.mapType = mapType;
 
-        //recreating cells by readign type from json
-        for (int i = 0; i < MAP_R; i++) {
-            for (int j = 0; j < MAP_C; j++) {
-                if(jsonMap.getCell(i,j) != null){
-                    if(jsonMap.getCell(i,j).getCellType().equals(CellType.AMMO)) {
-                        this.matrix[i][j] = new AmmoCell();
-                    } else {
-                        this.matrix[i][j] = new SpawnCell();
-                    }
-                } else {
-                    this.matrix[i][j] = null;
-                }
-            }
-        }
-
-        setAdjacencesFromJson(jsonMap);
+        this.matrix = Parser.getMap(mapType).getRealMap();
     }
 
-    public void setAdjacencesFromJson(JsonMap jsonMap){
 
-        //setting adjacences from jsonMap to Map
-        for (int i = 0; i < MAP_R; i++) {
-            for (int j = 0; j < MAP_C; j++) {
-                if(this.matrix[i][j] != null){
-                    if(jsonMap.getCell(i,j).getAdjNorth() != null)
-                        this.matrix[i][j].setAdjNorth(this.getCell(jsonMap.getCell(i,j).getAdjNorth().x, jsonMap.getCell(i,j).getAdjNorth().y));
-                    else
-                        this.matrix[i][j].setAdjNorth(null);
-
-                    if(jsonMap.getCell(i,j).getAdjSouth() != null)
-                        this.matrix[i][j].setAdjSouth(this.getCell(jsonMap.getCell(i, j).getAdjSouth().x, jsonMap.getCell(i, j).getAdjSouth().y));
-                    else
-                        this.matrix[i][j].setAdjSouth(null);
-
-                    if(jsonMap.getCell(i,j).getAdjEast() != null)
-                        this.matrix[i][j].setAdjEast(this.getCell(jsonMap.getCell(i, j).getAdjEast().x, jsonMap.getCell(i, j).getAdjEast().y));
-                    else
-                        this.matrix[i][j].setAdjEast(null);
-
-                    if(jsonMap.getCell(i,j).getAdjWest() != null)
-                        this.matrix[i][j].setAdjWest(this.getCell(jsonMap.getCell(i, j).getAdjWest().x, jsonMap.getCell(i, j).getAdjWest().y));
-                    else
-                        this.matrix[i][j].setAdjWest(null);
-
-                    this.matrix[i][j].setColor(jsonMap.getCell(i,j).getColor());
-                    this.matrix[i][j].setVisited(jsonMap.getCell(i,j).isVisit());
-                    this.matrix[i][j].setAmmoCell(jsonMap.getCell(i,j).isAmmoCell());
-                }
-            }
-        }
-    }
 
     /**
      *

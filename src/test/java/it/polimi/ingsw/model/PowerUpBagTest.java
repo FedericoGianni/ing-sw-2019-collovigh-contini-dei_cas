@@ -22,7 +22,7 @@ class PowerUpBagTest {
 
     @Test
     void addItemShoudAddItemToPowerUpBag() {
-        Map m = new Map(JsonMap.genJsonMap(2));
+        Map m = new Map(2);
         //Map m = Map.genMap(2);
 
         Player p = new Player("test", 0, PlayerColor.BLUE);
@@ -50,7 +50,7 @@ class PowerUpBagTest {
     void getItemShouldRemovePowerUpFromPowerUpBag() {
 
         //Map m = Map.genMap(2);
-        Map m = new Map(JsonMap.genJsonMap(2));
+        Map m = new Map(2);
 
         Player p = new Player("test", 1, PlayerColor.BLUE);
 

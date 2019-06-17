@@ -8,13 +8,13 @@ import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.Color;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class Weapon {
+public abstract class Weapon implements Serializable {
 
-    private Player firstTarget;//first target of every shot , useful for checking  if we need to retarget players or similar
+    private Integer firstTarget;//first target of every shot , useful for checking  if we need to retarget players or similar
 
     /**
      * Abstract class, no constructor
@@ -32,11 +32,9 @@ public abstract class Weapon {
 
 
 
-    public Player getFirstTarget() {
-        return firstTarget;
-    }//useful when you have to target  different target
+    public Player getFirstTarget() { return Model.getPlayer(firstTarget); }//useful when you have to target  different target
     public void setFirstTarget(Player firstTarget) {
-        this.firstTarget = firstTarget;
+        this.firstTarget = firstTarget.getPlayerId();
     }
 
     public final Player isPossessedBy(){

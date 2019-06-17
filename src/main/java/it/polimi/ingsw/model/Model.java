@@ -21,8 +21,7 @@ public class Model {
      */
     public Model(List<String> playerNames, List<PlayerColor> playerColors, int mapType, int skulls) {
 
-        Map map = new Map(JsonMap.genJsonMap(mapType));
-        //Map map = Map.genMap(mapType);
+        Map map = new Map(mapType);
 
         List<Player> playerList = new ArrayList<>();
         for (int i = 0; i < playerNames.size(); i++) {
@@ -39,6 +38,8 @@ public class Model {
     public static CurrentGame getGame() {
         return game;
     }
+
+    public static void setGame(CurrentGame game) { Model.game = game;}
 
     public static Map getMap() {
         return getGame().getMap();

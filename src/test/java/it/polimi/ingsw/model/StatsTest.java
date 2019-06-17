@@ -18,7 +18,9 @@ class StatsTest {
     void setMarks() {
 
         Cell cell = new AmmoCell();
-        Stats stats = new Stats(cell);
+        Stats stats = new Stats();
+
+        stats.setCurrentPosition(cell);
 
         List<Integer> list = new ArrayList<>();
 
@@ -49,7 +51,9 @@ class StatsTest {
     void getMarks(){
 
         Cell cell = new AmmoCell();
-        Stats stats = new Stats(cell);
+        Stats stats = new Stats();
+
+        stats.setCurrentPosition(cell);
 
         List<Integer> list = stats.getMarks();
 
@@ -71,7 +75,9 @@ class StatsTest {
     void addMarks() {
 
         Cell cell = new AmmoCell();
-        Stats stats = new Stats(cell);
+        Stats stats = new Stats();
+
+        stats.setCurrentPosition(cell);
 
         for (int i = 0; i < 10; i++) {
 
@@ -91,7 +97,9 @@ class StatsTest {
     void setDmgTaken() {
 
         Cell cell = new AmmoCell();
-        Stats stats = new Stats(cell);
+        Stats stats = new Stats();
+
+        stats.setCurrentPosition(cell);
 
         List<Integer> list = new ArrayList<>();
 
@@ -129,7 +137,9 @@ class StatsTest {
     void getDmgTaken(){
 
         Cell cell = new AmmoCell();
-        Stats stats = new Stats(cell);
+        Stats stats = new Stats();
+
+        stats.setCurrentPosition(cell);
 
         List<Integer> list = stats.getDmgTaken();
 

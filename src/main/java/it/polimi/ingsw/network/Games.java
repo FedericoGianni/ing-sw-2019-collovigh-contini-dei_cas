@@ -70,6 +70,10 @@ public class Games {
 
     }
 
+    private HashMap<Integer, String> getHashMap() {
+        return hashMap;
+    }
+
     /**
      * add a new game to the hashmap and saves
      */

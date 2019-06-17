@@ -1,28 +1,32 @@
 package it.polimi.ingsw.model.map;
 
+import it.polimi.ingsw.controller.saveutils.SavedCell;
 import it.polimi.ingsw.customsexceptions.NotEnoughAmmoException;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.CellColor;
 
+import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
  */
-public abstract class Cell extends Subject {
+public abstract class Cell extends Subject implements Serializable {
 
     private CellColor color;
     private boolean visit;
-    private boolean isAmmoCell;
-    private Cell adjNorth;
-    private Cell adjSouth;
-    private Cell adjEast;
-    private Cell adjWest;
-    private List<Player> playersHere;
+    private Point adjNorth;
+    private Point adjSouth;
+    private Point adjEast;
+    private Point adjWest;
+    private List<Integer> playersHere;
 
     /**
      * Default constructor
@@ -40,7 +44,7 @@ public abstract class Cell extends Subject {
      * @param adjEast a Cell adjacent to the east of the Cell which is going to be constructed, null if there are none
      * @param adjWest a Cell adjacent to the west of the Cell which is going to be constructed, null if there are none
      */
-    public Cell(CellColor color, Cell adjNorth, Cell adjSouth, Cell adjEast, Cell adjWest) {
+    public Cell(CellColor color, Point adjNorth, Point adjSouth, Point adjEast, Point adjWest) {
         this.color = color;
         this.adjNorth = adjNorth;
         this.adjSouth = adjSouth;
@@ -71,19 +75,19 @@ public abstract class Cell extends Subject {
         return color;
     }
 
-    public void setAdjNorth(Cell adjNorth) {
+    public void setAdjNorth(Point adjNorth) {
         this.adjNorth = adjNorth;
     }
 
-    public void setAdjSouth(Cell adjSouth) {
+    public void setAdjSouth(Point adjSouth) {
         this.adjSouth = adjSouth;
     }
 
-    public void setAdjEast(Cell adjEast) {
+    public void setAdjEast(Point adjEast) {
         this.adjEast = adjEast;
     }
 
-    public void setAdjWest(Cell adjWest) {
+    public void setAdjWest(Point adjWest) {
         this.adjWest = adjWest;
     }
 
@@ -92,40 +96,56 @@ public abstract class Cell extends Subject {
     }
 
     /**
+     * THis method will be used in load from save
+     * @param cell is the cell from whom copy the parameters
+     */
+    public void copyParamFrom(Cell cell){
+
+        this.color = cell.color;
+
+        this.adjNorth = cell.adjNorth;
+        this.adjSouth = cell.adjSouth;
+        this.adjWest = cell.adjWest;
+        this.adjEast = cell.adjEast;
+
+        this.playersHere = cell.playersHere;
+    }
+
+    /**
      * @return North adjacent Cell of current Cell instance
      */
     public Cell getNorth() {
-        return this.adjNorth;
+        return (adjNorth == null) ? null :Model.getMap().getCell(adjNorth.x,adjNorth.y);
     }
 
     /**
      * @return South adjacent Cell of current Cell instance
      */
-    public Cell getSouth() {
-        return this.adjSouth;
-    }
+    public Cell getSouth() { return (adjSouth == null) ? null :Model.getMap().getCell(adjSouth.x,adjSouth.y); }
 
     /**
      * @return East adjacent Cell of current Cell instance
      */
     public Cell getEast() {
-        return this.adjEast;
+        return (adjEast == null) ? null : Model.getMap().getCell(adjEast.x,adjEast.y);
     }
 
     /**
      * @return West adjacent Cell of current Cell instance
      */
     public Cell getWest() {
-        return this.adjWest;
+        return (adjWest == null) ? null : Model.getMap().getCell(adjWest.x,adjWest.y);
     }
 
     /**
      *
      * @return a list of Players who are currently inside this Cell
      */
-    public List<Player> getPlayers()
-    {
-        return this.playersHere;
+    public List<Player> getPlayers(){
+        return this.playersHere
+                    .stream()
+                    .map( playerId -> Model.getPlayer(playerId))
+                    .collect(Collectors.toList());
     }
 
     /**
@@ -134,7 +154,7 @@ public abstract class Cell extends Subject {
      */
     public void addPlayerHere(Player p)
     {
-        this.playersHere.add(p);
+        this.playersHere.add(p.getPlayerId());
     }
 
     /**
@@ -143,7 +163,7 @@ public abstract class Cell extends Subject {
      */
     public void removePlayerFromHere(Player p)
     {
-        this.playersHere.remove(p);
+        this.playersHere.remove(Integer.valueOf(p.getPlayerId()));
     }
 
 
@@ -170,21 +190,17 @@ public abstract class Cell extends Subject {
 
     @Override
     public String toString(){
-         return "Cella: colroe: " + color;
+         return "Cella: colore: " + color;
      }
-
-    public void setAmmoCell(boolean ammoCell) {
-        isAmmoCell = ammoCell;
-    }
 
     public Boolean isAmmoCell(){
 
-        return isAmmoCell;
+        return this.getWeapons() == null;
     }
 
     public void generateAmmoCard(){
 
-        if (isAmmoCell){
+        if (this.isAmmoCell()){
 
             AmmoCell cell = (AmmoCell) this;
 
@@ -210,12 +226,24 @@ public abstract class Cell extends Subject {
 
     /**
      *
+     * @return the list of weapon contained in the cell, that will be empty if the cell has no weapon, or null if the cell is not a spawn cell
+     */
+    public abstract List<Weapon> getWeapons();
+
+    /**
+     *
      * @param w is the weapon reference
      * @param player is the player that wants to buy it
      * @return the weapon's reference if the cell is Spawn or null otherwise
      * @throws NotEnoughAmmoException if the player can not pay for it
      */
     public abstract Weapon buy(Weapon w, Player player) throws NotEnoughAmmoException;
+
+    /**
+     * This method will be used to handle save
+     * @return a savable version of the cell
+     */
+    public abstract SavedCell getSaveVersionOfCell();
 
 
 }

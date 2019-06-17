@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.ammo;
 
 import it.polimi.ingsw.utils.Color;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,7 +17,7 @@ import java.util.Random;
  * This class is also intended to not permit the modification of an instance after its creation so it has no setter methods.
  *
  */
-public class AmmoCard {
+public class AmmoCard implements Serializable {
 
 
     private final AmmoCube ammoCube1;

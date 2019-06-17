@@ -17,14 +17,14 @@ class MapTest {
 
     @Test
     void getMapTypeShouldReturnActualMapType() {
-        Map m = new Map(JsonMap.genJsonMap(2));
+        Map m = new Map(2);
         assertEquals(2, m.getMapType());
     }
 
     @Test
     void generateCellsShouldGenerateRightCellColor() {
         //Map m = Map.genMap(1);
-        Map m = new Map(JsonMap.genJsonMap(1));
+        Map m = new Map(1);
 
 
         assert (m.getCell(0, 0).getColor() == CellColor.BLUE);
@@ -44,7 +44,7 @@ class MapTest {
 
         //Now changing to MapType 2 to check if colors are different as it should be
         //m = Map.genMap(2);
-        m = new Map(JsonMap.genJsonMap(2));
+        m = new Map(2);
 
         assert (m.getCell(0, 0).getColor() == CellColor.BLUE);
         assert (m.getCell(0, 1).getColor() == CellColor.BLUE);
@@ -62,7 +62,7 @@ class MapTest {
         assert (m.getCell(2, 3).getColor() == CellColor.YELLOW);
 
         //Now changing mapType to 3 to check if colors change as they should
-        m = new Map(JsonMap.genJsonMap(3));
+        m = new Map(3);
 
         assert (m.getCell(0, 0).getColor() == CellColor.RED);
         assert (m.getCell(0, 1).getColor() == CellColor.BLUE);
@@ -84,10 +84,14 @@ class MapTest {
     @Test
     void getAdjShouldReturnRightCell() {
         //Map m = Map.genMap(1);
-        Map m = new Map(JsonMap.genJsonMap(1));
+
+
+        Model model = new Model(new ArrayList<>(),new ArrayList<>(),1,8);
+
+        Map m = Model.getMap();
 
         assert (m.getCell(0, 0).getNorth() == null);
-        assert (m.getCell(0, 0).getSouth() == m.getCell(1, 0));
+        assertEquals (m.getCell(0, 0).getSouth(), m.getCell(1, 0));
         assert (m.getCell(0, 0).getEast() == m.getCell(0, 1));
         assert (m.getCell(0, 0).getWest() == null);
 
@@ -104,9 +108,10 @@ class MapTest {
         assert (m.getCell(0, 3) == null);
 
         //Now changing Map type to 2 and checking if Cell[0][3] is not null anymore
-        m = new Map(JsonMap.genJsonMap(2));
-        //m.genMap(2);
-        //m.generateCells(2);
+
+        model = new Model(new ArrayList<>(),new ArrayList<>(),2,8);
+
+        m = Model.getMap();
 
         assert (m.getCell(0, 3).getNorth() == null);
         assert (m.getCell(0, 3).getSouth() == m.getCell(1, 3));
@@ -117,7 +122,7 @@ class MapTest {
     @Test
     void cellToCoord() {
         //Map m = Map.genMap(1);
-        Map m = new Map(JsonMap.genJsonMap(1));
+        Map m = new Map(1);
 
         assertEquals(m.cellToCoord(m.getCell(0, 0)), new Point(0, 0));
         assertEquals(m.cellToCoord(m.getCell(1, 2)), new Point(1, 2));

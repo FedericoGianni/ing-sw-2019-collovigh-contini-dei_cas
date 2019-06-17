@@ -29,7 +29,7 @@ class CurrentGameTest {
         players.add(p3);
 
         //Map m = Map.genMap(1);
-        Map m = new Map(JsonMap.genJsonMap(1));
+        Map m = new Map(1);
 
         CurrentGame c = new CurrentGame(players, m,8);
 
@@ -47,7 +47,7 @@ class CurrentGameTest {
         players.add(p3);
 
         //Map m = Map.genMap(1);
-        Map m = new Map(JsonMap.genJsonMap(1));
+        Map m = new Map(1);
 
         CurrentGame c = new CurrentGame(players, m,8);
         PowerUp teleport = new Teleporter(Color.YELLOW);
@@ -85,7 +85,7 @@ class CurrentGameTest {
         players.add(p3);
 
         //Map m = Map.genMap(1);
-        Map m = new Map(JsonMap.genJsonMap(1));
+        Map m = new Map(1);
 
         CurrentGame c = new CurrentGame(players, m,8);
         for (int id = 0; id < 3; id++) {
@@ -105,7 +105,7 @@ class CurrentGameTest {
         players.add(p1);
 
         //Map m = Map.genMap(1);
-        Map m = new Map(JsonMap.genJsonMap(1));
+        Map m = new Map(1);
 
         CurrentGame c = new CurrentGame(players, m,8);
         assertEquals(p1.getPlayerId(), c.playerToId(p1));
@@ -123,7 +123,7 @@ class CurrentGameTest {
         players.add(p3);
 
         //Map m = Map.genMap(1);
-        Map m = new Map(JsonMap.genJsonMap(1));
+        Map m = new Map(1);
 
         CurrentGame c = new CurrentGame(players, m,8);
         assertEquals(c.getPlayers() , players);
