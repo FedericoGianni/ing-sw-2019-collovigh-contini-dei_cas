@@ -221,6 +221,9 @@ public class Gui extends Application implements UserInterface {
             case POWERUP_BAG:
                     guiMapController.powerUpDisplayer();
                 break;
+            case AMMO_CELL:
+                    guiMapController.ammoPlacer();
+                break;
 
             default:
                 break;

@@ -1,11 +1,14 @@
 package it.polimi.ingsw.view.GUI;
 
 
+import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,8 +22,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 
-import java.awt.*;
+
+import java.awt.Point;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class GuiMapController {
@@ -387,15 +393,26 @@ public class GuiMapController {
      */
     private void fromIDtoIMG(int id,VBox b)
     {
-        if(b.getChildren().size()==0 || b.getChildren().size()==3)
+        if(b.getChildren().size()==0 )
         {
             Platform.runLater(() ->  {
                 b.getChildren().add(new HBox());
+
                 inserter(id, (HBox) b.getChildren().get(0));
+
             });
             return;
         }
-        if(b.getChildren().size()<=3)
+        if( ((HBox)b.getChildren().get(0)).getChildren().size()==3)
+        {
+            Platform.runLater(() ->  {
+                b.getChildren().add(new HBox());
+                inserter(id, (HBox) b.getChildren().get(1));
+            });
+            return;
+        }
+
+        if(((HBox)b.getChildren().get(0)).getChildren().size()<=3)
         {
             Platform.runLater(() ->  {inserter(id, (HBox) b.getChildren().get(0));});
             return;
@@ -689,5 +706,198 @@ public class GuiMapController {
         }
     }
 
+    public void ammoPlacer()
+    {
+        //neeed to remove everything before!!!
+        for(int r=0;r<rows;r++)
+        {
+            for(int c=0;c<col;c++)
+            {
+                if(gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c)!=null)
+                {
+                    if(gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c).getCellType().equals(CellType.AMMO))
+                    {
+                        final int rr=r,cc=c;
+                        Platform.runLater(new Runnable() {
+                            @Override public void run() {
+                                if(!containsAmmo(map[rr][cc]))
+                                    placer(((CachedAmmoCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(rr,cc)).getAmmoList(),map[rr][cc] );
+                            }
+                        });
+
+
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void imageCreator(String imgUrl,HBox h)//ammo doesn't have id so if you want to cìget them you can check if hbox.child.getId==null
+    {
+        ImageView img=new ImageView();
+
+        Image image = new Image(imgUrl);
+        img.setImage(image);
+        img.setId("img");
+        h.getChildren().add(img);
+    }
+
+    private boolean containsAmmo(VBox b)
+    {
+        for(int i=0;i<b.getChildren().size();i++)
+        {
+            for(int j=0;j<((HBox)b.getChildren().get(i)).getChildren().size();j++)
+            {
+
+                if(((HBox)b.getChildren().get(i)).getChildren().get(j).getId().compareTo("img")==0)
+                    return true;
+            }
+        }
+        return false;
+    }
+    private void placer ( List<Color> a, VBox b)
+    {
+        String url;
+        url=fromAmmoCubetoIMG(a);
+        if(b.getChildren().size()==0  )//if i don't have the hbox
+        {
+
+                b.getChildren().add(new HBox());
+                System.out.println("Creo il primo HBox ");
+                imageCreator(url, (HBox) b.getChildren().get(0));
+                System.out.println("contenuto primo hbox in runlater : "+b.getChildren().size());
+
+
+            System.out.println("contenuto primo hbox dopo metodo runlater : "+b.getChildren().size());
+            return;
+        }
+
+        if(((HBox)b.getChildren().get(0)).getChildren().size()==3){ //if the first Hbox is full
+
+                b.getChildren().add(new HBox());
+                System.out.println("creo seconddo Hbox");
+                imageCreator(url, (HBox) b.getChildren().get(1));
+
+            return;
+        }
+        if(((HBox)b.getChildren().get(0)).getChildren().size()<=3) //use the second HBox
+        {
+            imageCreator(url, (HBox) b.getChildren().get(0));
+            return;
+        }
+       imageCreator(url, (HBox) b.getChildren().get(1));
+    }
+    //maybe qui fa casino
+    private String fromAmmoCubetoIMG(List<Color> a)//idea, nome è sigla: crb.png=cartaRossoBlu
+    {
+        ArrayList <Color> card=new ArrayList<>();
+        card.add(Color.BLUE);
+        card.add(Color.RED);
+        card.add(Color.RED);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/brr.png";
+        }
+        card.removeAll(card);
+
+        card.add(Color.BLUE);
+        card.add(Color.YELLOW);
+        card.add(Color.YELLOW);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/byy.png";
+        }
+        card.removeAll(card);
+
+
+        card.add(Color.BLUE);
+        card.add(Color.BLUE);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/cbb.png";
+        }
+        card.removeAll(card);
+
+        card.add(Color.RED);
+        card.add(Color.BLUE);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/crb.png";
+        }
+        card.removeAll(card);
+
+        card.add(Color.RED);
+        card.add(Color.RED);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/crr.png";
+        }
+        card.removeAll(card);
+
+
+        card.add(Color.YELLOW);
+        card.add(Color.BLUE);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/cyb.png";
+        }
+        card.removeAll(card);
+
+        card.add(Color.YELLOW);
+        card.add(Color.RED);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/cyr.png";
+        }
+        card.removeAll(card);
+
+        card.add(Color.YELLOW);
+        card.add(Color.YELLOW);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/cyy.png";
+        }
+        card.removeAll(card);
+
+        card.add(Color.RED);
+        card.add(Color.BLUE);
+        card.add(Color.BLUE);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/rbb.png";
+        }
+        card.removeAll(card);
+
+        card.add(Color.RED);
+        card.add(Color.YELLOW);
+        card.add(Color.YELLOW);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/ryy.png";
+        }
+        card.removeAll(card);
+
+        card.add(Color.YELLOW);
+        card.add(Color.BLUE);
+        card.add(Color.BLUE);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/ybb.png";
+        }
+        card.removeAll(card);
+
+        card.add(Color.YELLOW);
+        card.add(Color.RED);
+        card.add(Color.RED);
+        if(a.equals(card))//brr type
+        {
+            return "/images/ammo/yrr.png";
+        }
+        card.removeAll(card);
+
+
+        return null;
+    }
 
 }

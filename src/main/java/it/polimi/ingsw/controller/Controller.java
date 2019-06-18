@@ -549,7 +549,7 @@ public class Controller {
      */
     public void defaultAnswer(){
 
-        if (turnPhase.equals(SPAWN)){
+        /*if (turnPhase.equals(SPAWN)){
 
             // if the phase is spawn perform a spawn action
 
@@ -562,7 +562,7 @@ public class Controller {
             this.doAction(new SkipAction());
         }
 
-        //TODO notify view
+        //TODO notify view*/
     }
 
     /**
