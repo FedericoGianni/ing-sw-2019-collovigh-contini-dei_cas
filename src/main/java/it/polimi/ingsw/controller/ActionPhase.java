@@ -7,10 +7,7 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
-import it.polimi.ingsw.view.actions.FrenzyMove;
-import it.polimi.ingsw.view.actions.GrabAction;
-import it.polimi.ingsw.view.actions.Move;
-import it.polimi.ingsw.view.actions.ShootAction;
+import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 
@@ -42,8 +39,11 @@ public class ActionPhase {
 
     private static final int MAX_GRAB_MOVES = 1;
     private static final int MAX_GRAB_MOVES_PLUS = 2;
+    private static final int MAX_GRAB_FRENZY_MOVES_ENHANCED = 2;
+    private static final int MAX_GRAB_FRENZY_MOVES = 3;
     private static final int DMG_FOR_PLUS = 2;
     private static final int MAX_WEAPONS = 3;
+
 
     private final Controller controller;
 
@@ -139,38 +139,15 @@ public class ActionPhase {
 
         // check if the actions are possible
 
-        if (checkGrabMove(grabAction) && checkGrab(grabAction, utilityMethods.simulateMovement(grabAction.getDirection()))){
+        if (checkGrabMove(grabAction) && checkGrab(grabAction.getNewWeaponName(),grabAction.getDiscardedWeapon(), utilityMethods.simulateMovement(grabAction.getDirection()))){
 
             // moves the player
 
             utilityMethods.move(grabAction.getDirection());
 
-            // gets the type of the cell the player is in
+            // grabs
 
-            if (Model.getPlayer(controller.getCurrentPlayer()).getCurrentPosition().isAmmoCell()){
-
-                grabAmmoFromCurrPosition();
-
-                // update the inactive players
-
-                controller.updateInactivePlayers(new GrabTurnUpdate(controller.getCurrentPlayer()));
-
-                // increment the phase
-
-                controller.incrementPhase();
-
-            }else {
-
-                grabWeaponFromCurrPosition(grabAction);
-
-                // update the inactive players
-
-                controller.updateInactivePlayers(new GrabTurnUpdate(controller.getCurrentPlayer(),grabAction.getNewWeaponName()));
-
-                // increment the phase
-
-                controller.incrementPhase();
-            }
+            grab(grabAction.getNewWeaponName(),grabAction.getDiscardedWeapon());
 
         }else {
 
@@ -180,6 +157,36 @@ public class ActionPhase {
 
             handleAction();
 
+        }
+    }
+
+    private void grab(String newWeaponName,String discardedWeaponName) {
+
+        // gets the type of the cell the player is in
+
+        if (Model.getPlayer(controller.getCurrentPlayer()).getCurrentPosition().isAmmoCell()){
+
+            grabAmmoFromCurrPosition();
+
+            // update the inactive players
+
+            controller.updateInactivePlayers(new GrabTurnUpdate(controller.getCurrentPlayer()));
+
+            // increment the phase
+
+            controller.incrementPhase();
+
+        }else {
+
+            grabWeaponFromCurrPosition(newWeaponName,discardedWeaponName);
+
+            // update the inactive players
+
+            controller.updateInactivePlayers(new GrabTurnUpdate(controller.getCurrentPlayer(),newWeaponName));
+
+            // increment the phase
+
+            controller.incrementPhase();
         }
     }
 
@@ -220,17 +227,18 @@ public class ActionPhase {
 
     /**
      * this method will check if the player can grab in the specified cell
-     * @param grabAction is the class containing the names of the weapon to buy or to discard
+     * @param newWeaponName is the name of the weapon to buy
+     * @param discardedWeaponName is the name of the weapon to discard
      * @param cell is the specified cell
      * @return true if the player can grab false otherwise
      */
-    private Boolean checkGrab(GrabAction grabAction, Cell cell){
+    private Boolean checkGrab(String newWeaponName,String discardedWeaponName, Cell cell){
 
         if (cell == null) return false;
 
         if (!cell.isAmmoCell()) {
 
-            return checkWeaponGrab(grabAction,cell);
+            return checkWeaponGrab(newWeaponName,discardedWeaponName,cell);
 
         }else {
 
@@ -248,13 +256,14 @@ public class ActionPhase {
 
     /**
      * this method will check if the player can grab a weapon in the specified cell
-     * @param grabAction is the class containing the names of the weapon to buy or to discard
+     * @param newWeaponName is the name of the weapon to buy
+     * @param discardedWeaponName is the name of the weapon to discard
      * @param cell is the specified cell
      * @return true if the player can grab false otherwise
      */
-    private Boolean checkWeaponGrab(GrabAction grabAction, Cell cell){
+    private Boolean checkWeaponGrab(String newWeaponName,String discardedWeaponName, Cell cell){
 
-        if (grabAction.getNewWeaponName() == null) {
+        if (newWeaponName == null) {
 
             // if the player did not specify the weapon to buy -> false
 
@@ -266,9 +275,9 @@ public class ActionPhase {
 
         } else {
 
-            if (utilityMethods.findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell) == null) {
+            if (utilityMethods.findWeaponInSpawnCell(newWeaponName, (SpawnCell) cell) == null) {
 
-                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " the specified weapon was not found in the cell : " + grabAction.getNewWeaponName());
+                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " the specified weapon was not found in the cell : " + newWeaponName);
 
                 controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_SPAWN);
 
@@ -276,7 +285,7 @@ public class ActionPhase {
 
             } else {
 
-                if ((Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS) && (grabAction.getDiscardedWeapon() == null)) {
+                if ((Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS) && (discardedWeaponName == null)) {
 
                     LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " tried to buy a weapon but has already max weapon and did not specify weapon to delete");
 
@@ -285,7 +294,7 @@ public class ActionPhase {
                     return false;
                 }
 
-                return currentPlayerCanBuyWeapon(utilityMethods.findWeaponInSpawnCell(grabAction.getNewWeaponName(), (SpawnCell) cell));
+                return currentPlayerCanBuyWeapon(utilityMethods.findWeaponInSpawnCell(newWeaponName, (SpawnCell) cell));
             }
         }
     }
@@ -333,9 +342,10 @@ public class ActionPhase {
     /**
      * This method will buy the specified weapon from the current cell
      *
-     * @param grabAction is the class containing the weapon requested
+     * @param newWeaponName is the name of the weapon to buy
+     * @param discardedWeaponName is the name of the weapon to discard
      */
-    private void grabWeaponFromCurrPosition(GrabAction grabAction){
+    private void grabWeaponFromCurrPosition(String newWeaponName,String discardedWeaponName){
 
         // gets the id of the current player
 
@@ -349,9 +359,9 @@ public class ActionPhase {
 
         try{
 
-            Model.getPlayer(controller.getCurrentPlayer()).buy(utilityMethods.findWeaponInSpawnCell(grabAction.getNewWeaponName(), position));
+            Model.getPlayer(controller.getCurrentPlayer()).buy(utilityMethods.findWeaponInSpawnCell(newWeaponName, position));
 
-            LOGGER.log(level, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " bought a new weapon: " + grabAction.getNewWeaponName() );
+            LOGGER.log(level, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " bought a new weapon: " + newWeaponName );
 
             if (Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS ){
 
@@ -359,12 +369,12 @@ public class ActionPhase {
                         .getCurrentWeapons()
                         .getList()
                         .stream()
-                        .filter( x-> x.getName().equalsIgnoreCase(grabAction.getDiscardedWeapon()))
+                        .filter( x-> x.getName().equalsIgnoreCase(discardedWeaponName))
                         .collect(Collectors.toList());
 
                 Model.getPlayer(controller.getCurrentPlayer()).delWeapon(weaponList.get(0));
 
-                LOGGER.log(level, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " discarded a weapon: " + grabAction.getDiscardedWeapon() );
+                LOGGER.log(level, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " discarded a weapon: " + discardedWeaponName );
 
             }
 
@@ -497,6 +507,10 @@ public class ActionPhase {
 
     // FRENZY
 
+    /**
+     * This function will make the player do a "frenzy move" action
+     * @param frenzyMove is the class containing the requested parameters
+     */
     public void frenzyMoveAction(FrenzyMove frenzyMove){
 
         // look if the player is before the first player (0,1,2,3,4)
@@ -551,6 +565,77 @@ public class ActionPhase {
     }
 
 
+    /**
+     * This function will make the player do a "frenzy grab" action
+     * @param frenzyGrab is the class containing the requested parameters
+     */
+    public void frenzyGrabAction(FrenzyGrab frenzyGrab){
+
+        // logs the action
+
+        LOGGER.log(level, () -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + " calling FrenzyGrab");
+
+        // check if the actions are possible
+
+        if (checkFrenzyGrabMove(frenzyGrab) && checkGrab(frenzyGrab.getNewWeaponName(),frenzyGrab.getDiscardedWeapon(), utilityMethods.simulateMovement(frenzyGrab.getDirections()))){
+
+            // moves the player
+
+            utilityMethods.move(frenzyGrab.getDirections());
+
+            // grab
+
+            grab(frenzyGrab.getNewWeaponName(),frenzyGrab.getDiscardedWeapon());
+
+        }else {
+
+            // if the checks fails recalls handleAction methods
+
+            LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " failed grab Action ");
+
+            handleAction();
+
+        }
+    }
+
+
+    /**
+     * This method will check if the player can do the specified moves
+     * @param frenzyGrab is the class containing the list of moves
+     * @return true if the moves are legal or false otherwise
+     */
+    private Boolean checkFrenzyGrabMove(FrenzyGrab frenzyGrab){
+
+        // gets the id of the current player
+
+        int playerId = controller.getCurrentPlayer();
+
+        // look if the player is before the first player (0,1,2,3,4)
+
+        boolean frenzyEnhanced = playerId > controller.getFrenzyStarter();
+
+        if (!frenzyGrab.getDirections().isEmpty()) {
+
+            if (frenzyGrab.getDirections().size() > MAX_FRENZY_MOVES){
+
+                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + playerId + " tried to move more than " + MAX_GRAB_FRENZY_MOVES + " movements");
+
+                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
+
+                return false;
+
+            } else if ((frenzyEnhanced) && (frenzyGrab.getDirections().size() > MAX_GRAB_FRENZY_MOVES_ENHANCED)){
+
+                LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + playerId + " tried to move more than " + MAX_GRAB_FRENZY_MOVES_ENHANCED + " but is before the first player " );
+
+                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
+
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 
 }

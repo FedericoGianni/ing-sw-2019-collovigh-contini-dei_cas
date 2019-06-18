@@ -16,6 +16,10 @@ public class PointCounter {
 
     private final Controller controller;
 
+    private boolean frenzy;
+
+    private boolean frenzyForTest = false;
+
     public PointCounter(Controller controller) {
         this.controller = controller;
     }
@@ -24,6 +28,8 @@ public class PointCounter {
      * This method will cycle through all dead players and assigns points for the kills
      */
     public void calculateTurnPoints(){
+
+        frenzy = (controller == null ) ? frenzyForTest : controller.getFrenzy();
 
         //for each player who has died this turn
         //+1 point for the player who did him the first dmg
@@ -43,7 +49,7 @@ public class PointCounter {
 
                 //+1 for the player who did the first dmg ( if not has frenzy dmg board )
 
-                if (Model.getPlayer(i).getStats().isFrenzyBoard()) Model.getPlayer(Model.getPlayer(i).getStats().getDmgTaken().get(0)).addScore(1);
+                if (!Model.getPlayer(i).getStats().isFrenzyBoard()) Model.getPlayer(Model.getPlayer(i).getStats().getDmgTaken().get(0)).addScore(1);
 
                 // gets the list of the player ordered by how much damage they have made
 
@@ -67,7 +73,7 @@ public class PointCounter {
 
                 // if the player is in frenzy set the player dmg board to frenzy
 
-                Model.getPlayer(i).getStats().setFrenzyBoard(controller.getFrenzy());
+                Model.getPlayer(i).getStats().setFrenzyBoard(frenzy);
 
             }
         }
@@ -199,5 +205,9 @@ public class PointCounter {
             Model.getPlayer(sortedPlayerList.get(j)).addScore(points);
         }
 
+    }
+
+    public void setFrenzyForTest(boolean frenzyForTest) {
+        this.frenzyForTest = frenzyForTest;
     }
 }

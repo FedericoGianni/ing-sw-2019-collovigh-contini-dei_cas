@@ -359,10 +359,6 @@ public class Controller {
 
             case RELOAD:
 
-                // replaces the empty ammoCard
-
-                Model.getMap().ReplaceAmmoCard();
-
                 // calls the method on the virtual view
 
                 reloadPhase.handleReload();
@@ -370,6 +366,10 @@ public class Controller {
                 break;
 
             case END:
+
+                // replaces the empty ammoCard
+
+                Model.getMap().ReplaceAmmoCard();
 
                 if(hasSomeoneDied){
 
@@ -475,7 +475,7 @@ public class Controller {
 
                 checkActionIsFrenzy();
 
-                //TODO frenzyGrab
+                actionPhase.frenzyGrabAction((FrenzyGrab) jsonAction);
 
                 break;
 
@@ -489,7 +489,7 @@ public class Controller {
 
             case RELOAD:
 
-                // TODO reloadPhase
+                reloadPhase.reload((ReloadAction) jsonAction);
 
                 break;
 
