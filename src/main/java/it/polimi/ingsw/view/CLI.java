@@ -726,7 +726,7 @@ public class CLI implements UserInterface {
 
     private void useTeleporter(CachedPowerUp teleporter){
 
-        Boolean validChoice;
+        boolean validChoice;
         int r;
         int c;
 
@@ -777,11 +777,12 @@ public class CLI implements UserInterface {
      * {@inheritDoc}
      */
     @Override
-    public void startAction() {
+    public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //TODO consume scanner buffer if user type random numbers when waiting for its tur
 
-        Boolean valid;
+        boolean valid;
         int choice = -1;
+        int playerDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
 
         List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA", "SKIP"));
 
@@ -826,15 +827,51 @@ public class CLI implements UserInterface {
             switch (choice) {
 
                 case 0:
-                    startMove();
+                    if(isFrenzy){
+                        if(isBeforeFrenzyStarter){
+                            startMove(DEFAULT_MAX_FRENZY_MOVES);
+                        } else {
+                            System.out.println("[!] Azione non disponibile: sei dopo il Frenzy Starter!");
+                            startAction(isFrenzy, isBeforeFrenzyStarter);
+                        }
+                    } else {
+                        startMove(DEFAULT_MAX_NORMAL_MOVES);
+                    }
                     break;
 
                 case 1:
-                    startGrab();
+                    if(isFrenzy){
+                        if(isBeforeFrenzyStarter){
+                            startGrab(DEFAULT_MOVES_WITH_FRENZY);
+                        } else {
+                            startGrab(DEFAULT_MOVES_WITH_ENHANCED_FRENZY);
+                        }
+
+                    } else {
+                        //grab -> if player has more than 2 dmg -> 2 moves else -> only 1 move
+                        if(playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB){
+                            startGrab(DEFAULT_ENHANCED_MOVES_WITH_GRAB);
+                        } else {
+                            startGrab(DEFAULT_MOVES_WITH_GRAB);
+                        }
+                    }
                     break;
 
                 case 2:
-                    startShoot();
+                    if(isFrenzy){
+                        if(isBeforeFrenzyStarter){
+                            //startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
+                        } else {
+                            //startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
+                        }
+                    } else {
+
+                        if(playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT){
+                            startShoot(DEFAULT_ENHANCED_MOVES_WITH_SHOOT);
+                        } else {
+                            startShoot(0);
+                        }
+                    }
                     break;
 
                 case 3:
@@ -843,17 +880,17 @@ public class CLI implements UserInterface {
 
                 case 7:
                     FileRead.showBattlefield();
-                    startAction();
+                    startAction(isFrenzy, isBeforeFrenzyStarter);
                     break;
 
                 case 8:
                     showInfo();
-                    startAction();
+                    startAction(isFrenzy, isBeforeFrenzyStarter);
                     break;
 
                 case 9:
                     showWeapInSpawnCells();
-                    startAction();
+                    startAction(isFrenzy, isBeforeFrenzyStarter);
                     break;
 
                 default:
@@ -862,6 +899,7 @@ public class CLI implements UserInterface {
                     break;
                 }
     }
+
 
     private List <Directions> handleMove(int maxMoves){
 
@@ -958,7 +996,7 @@ public class CLI implements UserInterface {
 
 
 
-    public void startMove(){
+    public void startMove(int maxMoves){
 
         int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
         int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
@@ -966,14 +1004,14 @@ public class CLI implements UserInterface {
 
 
         //move -> always max 3 movements
-        List<Directions> directionsList = handleMove(DEFAULT_MAX_NORMAL_MOVES);
+        List<Directions> directionsList = handleMove(maxMoves);
         Point finalPos = genPointFromDirections(directionsList, startingPoint);
 
         //System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
         view.doAction(new Move(directionsList, finalPos));
     }
 
-    private void startGrab(){
+    private void startGrab(int maxMoves){
 
         int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
         int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
@@ -983,9 +1021,9 @@ public class CLI implements UserInterface {
 
         //grab -> if player has more than 2 dmg -> 2 moves else -> only 1 move
         if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB){
-            directionsList = handleMove(DEFAULT_ENHANCED_MOVES_WITH_GRAB);
+            directionsList = handleMove(maxMoves);
         } else {
-            directionsList = handleMove(DEFAULT_MOVES_WITH_GRAB);
+            directionsList = handleMove(maxMoves);
         }
 
         Point finalPos = genPointFromDirections(directionsList, startingPoint);
@@ -1145,7 +1183,7 @@ public class CLI implements UserInterface {
     }
 
 
-    private void startShoot(){
+    private void startShoot(int maxMoves){
 
         boolean valid = false;
         int choice = -1;
@@ -1160,14 +1198,13 @@ public class CLI implements UserInterface {
         //weapon checks
         int targets = -1; //number of targets needed by the weapons (reads this from json CachedFullWeapons)
         boolean needCell = false; //if this weapon needs a Cell for movements related to the shoot
-        //second and third effect type -> ECLUSIVE/CONCATENABLE need an enum class for this
-
-        int playerDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
+        //second and third effect type -> ECLUSIVE/CONCATENABLE need an enum class for thisx
 
         //if player has > 5 dmg he can do one movement, otherwise no moves
-        if(playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT){
-            directionsList = handleMove(DEFAULT_ENHANCED_MOVES_WITH_SHOOT);
+        if(maxMoves > 0){
+            directionsList = handleMove(maxMoves);
         }
+
 
         Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
         Point finalPos = genPointFromDirections(directionsList, startingPoint);

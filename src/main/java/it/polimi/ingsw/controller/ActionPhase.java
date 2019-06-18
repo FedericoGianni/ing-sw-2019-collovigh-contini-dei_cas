@@ -67,7 +67,7 @@ public class ActionPhase {
 
             // sends the startPhase command to the virtual view
 
-            controller.getVirtualView(currentPlayer).startAction();
+            controller.getVirtualView(currentPlayer).startAction(false, false);
 
             // start the timer
 

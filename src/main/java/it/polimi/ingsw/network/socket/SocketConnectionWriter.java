@@ -119,9 +119,9 @@ public class SocketConnectionWriter extends Thread implements ToView {
     }
 
     @Override
-    public void startAction() {
+    public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         LOGGER.info("Sending startAction string to connected client");
-        send(START_ACTION);
+        send(START_ACTION  + "\f" + isFrenzy + "\f" + isBeforeFrenzyStarter);
     }
 
     @Override

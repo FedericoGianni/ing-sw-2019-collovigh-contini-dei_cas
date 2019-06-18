@@ -287,7 +287,7 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
-    public void startAction() {
+    public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
 
     }
 

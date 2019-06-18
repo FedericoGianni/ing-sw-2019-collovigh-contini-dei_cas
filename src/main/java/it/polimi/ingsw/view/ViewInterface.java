@@ -58,7 +58,7 @@ public interface ViewInterface {
     /**
      * Forward the startAction method invocation to the client
      */
-    void startAction();
+    void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter);
 
 
     /**

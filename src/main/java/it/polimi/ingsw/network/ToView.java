@@ -25,7 +25,7 @@ public interface ToView  {
     /**
      * This method starts the action phase on the client ( 2, 4)
      */
-    void startAction();
+    void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter);
 
     /**
      * This method starts the reload phase of the turn ( 6)

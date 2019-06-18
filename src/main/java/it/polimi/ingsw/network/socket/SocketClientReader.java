@@ -404,7 +404,7 @@ public class SocketClientReader extends Thread {
         //startAction
         headersMap.put(START_ACTION, (commands) -> {
             System.out.println("[DEBUG] Ricevuto startAction dal server");
-            RunClient.getView().startAction();
+            RunClient.getView().startAction(Boolean.valueOf(commands[1]), Boolean.valueOf(commands[2]));
         });
 
         //reload

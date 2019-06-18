@@ -16,11 +16,16 @@ import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
 public class UiHelpers {
 
     public static final int DEFAULT_MAX_NORMAL_MOVES = 3;
+    public static final int DEFAULT_MAX_FRENZY_MOVES = 4;
     public static final int DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT = 6;
     public static final int DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB = 3;
     public static final int DEFAULT_MOVES_WITH_GRAB = 1;
     public static final int DEFAULT_ENHANCED_MOVES_WITH_GRAB = 2;
+    public static final int DEFAULT_MOVES_WITH_FRENZY = 2;
+    public static final int DEFAULT_MOVES_WITH_ENHANCED_FRENZY = 3;
     public static final int DEFAULT_ENHANCED_MOVES_WITH_SHOOT = 1;
+    public static final int DEFAULT_MOVES_WITH_FRENZY_SHOOT = 1;
+    public static final int DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT = 2;
 
     /**
      * Helper method to translate cardinal directions from IT to EN
