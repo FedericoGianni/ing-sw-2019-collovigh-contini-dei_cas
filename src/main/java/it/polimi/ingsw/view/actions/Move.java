@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Move extends JsonAction  {
 
-
     /**
      * this is a list of char that with the following symbols 'n' = 1 move up, 's' = one move down, w , e
      */

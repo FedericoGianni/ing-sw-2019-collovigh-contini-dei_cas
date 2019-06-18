@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.view.actions.FrenzyMove;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.ShootAction;
@@ -28,8 +29,14 @@ public class ActionPhase {
 
     private static final String LOG_START_GRAB = "[Controller-GrabAction] Player w/ id: ";
     private static final String LOG_START_SHOOT = "[Controller-ShootAction]";
+    private static final String LOG_START_MOVE = "[Controller-MoveAction]";
 
     private static final int TIMER_ACTION = 30;
+
+    //Move
+
+    private static final int MAX_MOVES = 3;
+    private static final int MAX_FRENZY_MOVES = 4;
 
     //Grab
 
@@ -57,9 +64,11 @@ public class ActionPhase {
 
         int currentPlayer = controller.getCurrentPlayer();
 
-        if (!controller.isPlayerOnline(currentPlayer)) {
+        boolean frenzyEnhanced = controller.getCurrentPlayer() > controller.getFrenzyStarter();
 
-            // if the player is not online skips the turn
+        if ((!controller.isPlayerOnline(currentPlayer)) || (controller.getFrenzy() && !frenzyEnhanced && (controller.getTurnPhase() == TurnPhase.ACTION2)) ) {
+
+            // if the player is not online, or is after the first player in the frenzy round and has already done the first action, skips the turn
 
             controller.incrementPhase();
 
@@ -72,6 +81,7 @@ public class ActionPhase {
             // start the timer
 
             controller.getTimer().startTimer(TIMER_ACTION);
+
         }
     }
 
@@ -89,11 +99,11 @@ public class ActionPhase {
 
         LOGGER.log(level, () -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + "calling move");
 
-        if (moveAction.getMoves().size() > 3) {
+        if (moveAction.getMoves().size() > MAX_MOVES) {
 
             // if the player tried to move more than 3 steps recalls the action
 
-            LOGGER.log(level, () -> "[Controller-MovePhase] received illegal Move Action Request # of moves req:" + moveAction.getMoves().size());
+            LOGGER.log(level, () -> LOG_START_MOVE + " received illegal Move Action Request # of moves req:" + moveAction.getMoves().size());
 
             handleAction();
 
@@ -486,6 +496,59 @@ public class ActionPhase {
 
 
     // FRENZY
+
+    public void frenzyMoveAction(FrenzyMove frenzyMove){
+
+        // look if the player is before the first player (0,1,2,3,4)
+
+        boolean frenzyEnhanced = controller.getCurrentPlayer() > controller.getFrenzyStarter();
+
+        if ( frenzyMove.getMoves().size() > MAX_FRENZY_MOVES ){
+
+            //log
+
+            LOGGER.log(Level.WARNING, () -> LOG_START_MOVE + " player tried to move more than " + MAX_FRENZY_MOVES + " in frenzy ");
+
+            // show
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
+
+            // ask action again
+
+            handleAction();
+
+        } else if ((!frenzyEnhanced) && (frenzyMove.getMoves().size() > MAX_MOVES)){
+
+
+            //log
+
+            LOGGER.log(Level.WARNING, () -> LOG_START_MOVE + " player tried to move more than " + MAX_MOVES + " in frenzy, but was after first player ");
+
+            // show
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_TRIED_TO_MOVE_ENHANCED_BUT_CANT);
+
+            // ask action again
+
+            handleAction();
+
+
+        } else {
+
+            // moves the current player in the directions specified in the list
+
+            utilityMethods.move(frenzyMove.getMoves());
+
+            // notify other player
+
+            controller.updateInactivePlayers(new MoveTurnUpdate(controller.getCurrentPlayer()));
+
+            // increment the phase
+
+            controller.incrementPhase();
+
+        }
+    }
 
 
 

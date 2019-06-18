@@ -35,7 +35,7 @@ public class Stats extends Subject implements Serializable {
 
     /**
      *
-     * @param currentPosition is the position in which the player starts
+     * default constructor
      */
     public Stats() {
         this.score = 0;
@@ -227,7 +227,7 @@ public class Stats extends Subject implements Serializable {
      * @return current position of the player
      */
     public Cell getCurrentPosition() {
-        return Model.getMap().getCell(currentPosition.x,currentPosition.y);
+        return (currentPosition == null) ? null : Model.getMap().getCell(currentPosition.x,currentPosition.y);
     }
 
     /**

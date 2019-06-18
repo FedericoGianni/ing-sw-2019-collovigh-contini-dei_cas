@@ -466,7 +466,7 @@ public class Controller {
 
                 checkActionIsFrenzy();
 
-                //TODO frenzyGrab
+                actionPhase.frenzyMoveAction((FrenzyMove) jsonAction);
 
                 break;
 
