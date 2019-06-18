@@ -32,10 +32,11 @@ public class Stats extends Subject implements Serializable {
     private List<Integer> dmgTaken = new ArrayList<>();
     private Point currentPosition;
     private Boolean online;
+    private boolean frenzyBoard = false;
 
     /**
      *
-     * @param currentPosition is the position in which the player starts
+     * default constructor
      */
     public Stats() {
         this.score = 0;
@@ -227,7 +228,7 @@ public class Stats extends Subject implements Serializable {
      * @return current position of the player
      */
     public Cell getCurrentPosition() {
-        return Model.getMap().getCell(currentPosition.x,currentPosition.y);
+        return (currentPosition == null) ? null : Model.getMap().getCell(currentPosition.x,currentPosition.y);
     }
 
     /**
@@ -300,5 +301,13 @@ public class Stats extends Subject implements Serializable {
         // sends Game
 
         Model.getGame().updateSingle(Model.getGame(),playerId);
+    }
+
+    public boolean isFrenzyBoard() {
+        return frenzyBoard;
+    }
+
+    public void setFrenzyBoard(boolean frenzyBoard) {
+        this.frenzyBoard = frenzyBoard;
     }
 }

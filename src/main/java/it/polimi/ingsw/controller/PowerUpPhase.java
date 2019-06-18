@@ -52,6 +52,10 @@ public class PowerUpPhase {
      */
     public void handlePowerUp(){
 
+        // if someone has been shot ask them to use grenades
+
+        askGrenadeToShot();
+
         int currentPlayer = controller.getCurrentPlayer();
 
         if (!controller.isPlayerOnline(currentPlayer)){
@@ -83,7 +87,7 @@ public class PowerUpPhase {
 
             int playerId = controller.getShotPlayerThisTurn().get(0);
 
-            if (hasGrenade(playerId)) {
+            if ( ( controller.isPlayerOnline(playerId) ) && ( hasGrenade(playerId) ) ) {
 
                 controller.getVirtualView(playerId).askGrenade();
 
@@ -101,7 +105,6 @@ public class PowerUpPhase {
             }
 
         }
-
 
     }
 

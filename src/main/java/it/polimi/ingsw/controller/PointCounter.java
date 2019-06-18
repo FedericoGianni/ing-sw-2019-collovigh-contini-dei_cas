@@ -12,7 +12,13 @@ public class PointCounter {
 
     private static final int[] pointVect = {8,6,4,2,2,1,1};
 
+    private static final int[] pointFrenzyVect = {2,1,1,1};
+
     private final Controller controller;
+
+    private boolean frenzy;
+
+    private boolean frenzyForTest = false;
 
     public PointCounter(Controller controller) {
         this.controller = controller;
@@ -22,6 +28,8 @@ public class PointCounter {
      * This method will cycle through all dead players and assigns points for the kills
      */
     public void calculateTurnPoints(){
+
+        frenzy = (controller == null ) ? frenzyForTest : controller.getFrenzy();
 
         //for each player who has died this turn
         //+1 point for the player who did him the first dmg
@@ -37,9 +45,11 @@ public class PointCounter {
 
             if(Model.getPlayer(i).getStats().getDmgTaken().size() >= 11){
 
-                //+1 for the player who did the first dmg
+                int[] vect = (Model.getPlayer(i).getStats().isFrenzyBoard()) ? pointFrenzyVect : pointVect;
 
-                Model.getPlayer(Model.getPlayer(i).getStats().getDmgTaken().get(0)).addScore(1);
+                //+1 for the player who did the first dmg ( if not has frenzy dmg board )
+
+                if (!Model.getPlayer(i).getStats().isFrenzyBoard()) Model.getPlayer(Model.getPlayer(i).getStats().getDmgTaken().get(0)).addScore(1);
 
                 // gets the list of the player ordered by how much damage they have made
 
@@ -51,8 +61,8 @@ public class PointCounter {
 
                 // modify the vector to keep count of deaths
 
-                int[] actualPointVect = IntStream.range(deaths - 1 ,pointVect.length)
-                        .map( index -> pointVect[index])
+                int[] actualPointVect = IntStream.range(deaths - 1 ,vect.length)
+                        .map( index -> vect[index])
                         .toArray();
 
                 assignPoints(actualPointVect,dmgList);
@@ -60,6 +70,10 @@ public class PointCounter {
                 // reset the damage list
 
                 Model.getPlayer(i).resetDmg();
+
+                // if the player is in frenzy set the player dmg board to frenzy
+
+                Model.getPlayer(i).getStats().setFrenzyBoard(frenzy);
 
             }
         }
@@ -191,5 +205,9 @@ public class PointCounter {
             Model.getPlayer(sortedPlayerList.get(j)).addScore(points);
         }
 
+    }
+
+    public void setFrenzyForTest(boolean frenzyForTest) {
+        this.frenzyForTest = frenzyForTest;
     }
 }

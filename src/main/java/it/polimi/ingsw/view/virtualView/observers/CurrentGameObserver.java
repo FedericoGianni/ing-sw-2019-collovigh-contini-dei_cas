@@ -102,13 +102,9 @@ public class CurrentGameObserver implements Observer {
 
         if ((previous.getKillShotTrack().size() < previous.getSkulls()) && (game.getKillShotTrack().size() >= previous.getSkulls())){
 
-            // set the frenzy starter
+            // activate frenzy mode
 
-            observers.getController().setFrenzyStarter(game.getKillShotTrack().get(game.getKillShotTrack().size() -1).getKillerId());
-
-            // set the frenzy check to true
-
-            observers.getController().setFrenzy(true);
+            observers.getController().activateFrenzy();
         }
     }
 

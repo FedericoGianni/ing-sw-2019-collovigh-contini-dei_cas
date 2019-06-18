@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 
+import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -358,10 +359,6 @@ public class Controller {
 
             case RELOAD:
 
-                // replaces the empty ammoCard
-
-                Model.getMap().ReplaceAmmoCard();
-
                 // calls the method on the virtual view
 
                 reloadPhase.handleReload();
@@ -369,6 +366,10 @@ public class Controller {
                 break;
 
             case END:
+
+                // replaces the empty ammoCard
+
+                Model.getMap().ReplaceAmmoCard();
 
                 if(hasSomeoneDied){
 
@@ -466,7 +467,7 @@ public class Controller {
 
                 checkActionIsFrenzy();
 
-                //TODO frenzyGrab
+                actionPhase.frenzyMoveAction((FrenzyMove) jsonAction);
 
                 break;
 
@@ -474,7 +475,7 @@ public class Controller {
 
                 checkActionIsFrenzy();
 
-                //TODO frenzyGrab
+                actionPhase.frenzyGrabAction((FrenzyGrab) jsonAction);
 
                 break;
 
@@ -488,7 +489,7 @@ public class Controller {
 
             case RELOAD:
 
-                // TODO reloadPhase
+                reloadPhase.reload((ReloadAction) jsonAction);
 
                 break;
 
@@ -578,6 +579,9 @@ public class Controller {
         Model.getPlayer(playerId).setPlayerPos(null);
 
         Model.getGame().getKillShotTrack().add(new Skull(getCurrentPlayer(),false));
+
+        shotPlayerThisTurn.add(playerId);
+
     }
 
     /**
@@ -592,10 +596,46 @@ public class Controller {
 
         Model.getPlayer(playerId).setPlayerPos(null);
 
+        // add skull to killShotTrack
+
         Model.getGame().getKillShotTrack().add(new Skull(getCurrentPlayer(),true));
+
+        // set revenge Mark
+
+        Model.getPlayer(getCurrentPlayer()).getStats().addMarks(playerId);
+
+        shotPlayerThisTurn.add(playerId);
 
     }
 
+    /**
+     * This method activate Frenzy Mode
+     */
+    public void activateFrenzy(){
+
+        // get the current game
+
+        CurrentGame game = Model.getGame();
+
+        // set the frenzy starter
+
+        observers.getController().setFrenzyStarter(game.getKillShotTrack().get(game.getKillShotTrack().size() -1).getKillerId());
+
+        // set the frenzy check to true
+
+        observers.getController().setFrenzy(true);
+
+        // set the damage boards to frenzy if empty
+
+        for (Player player : game.getPlayers()){
+
+            if (player.getStats().getDmgTaken().isEmpty()) player.getStats().setFrenzyBoard(true);
+        }
+    }
+
+    /**
+     * This method ends the game
+     */
     public void endGame(){
 
         pointCounter.calcGamePoints();
