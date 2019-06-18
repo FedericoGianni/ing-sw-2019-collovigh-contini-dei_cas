@@ -26,8 +26,8 @@ public class FrenzyGrab extends JsonAction {
     }
 
     /**
-     *
-     * @param directions
+     * Constructor for grabbing ammo
+     * @param directions is a list of movement
      */
     public FrenzyGrab( List<Directions> directions) {
         super(ActionTypes.FRENZY_GRAB);
@@ -35,5 +35,17 @@ public class FrenzyGrab extends JsonAction {
 
         this.newWeaponName = null;
         this.discardedWeapon = null;
+    }
+
+    public List<Directions> getDirections() {
+        return directions;
+    }
+
+    public String getNewWeaponName() {
+        return newWeaponName;
+    }
+
+    public String getDiscardedWeapon() {
+        return discardedWeapon;
     }
 }

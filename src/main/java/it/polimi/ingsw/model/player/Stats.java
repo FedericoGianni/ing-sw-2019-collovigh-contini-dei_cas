@@ -32,6 +32,7 @@ public class Stats extends Subject implements Serializable {
     private List<Integer> dmgTaken = new ArrayList<>();
     private Point currentPosition;
     private Boolean online;
+    private boolean frenzyBoard = false;
 
     /**
      *
@@ -300,5 +301,13 @@ public class Stats extends Subject implements Serializable {
         // sends Game
 
         Model.getGame().updateSingle(Model.getGame(),playerId);
+    }
+
+    public boolean isFrenzyBoard() {
+        return frenzyBoard;
+    }
+
+    public void setFrenzyBoard(boolean frenzyBoard) {
+        this.frenzyBoard = frenzyBoard;
     }
 }
