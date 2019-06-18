@@ -35,6 +35,11 @@ public class AmmoCell extends Cell {
 
     }
 
+    @Override
+    public Boolean isAmmoCell() {
+        return true;
+    }
+
     /**
      * This constructor is used to return a copy of the AmmoCell passed as a parameter
      * @param clone AmmoCell to be cloned

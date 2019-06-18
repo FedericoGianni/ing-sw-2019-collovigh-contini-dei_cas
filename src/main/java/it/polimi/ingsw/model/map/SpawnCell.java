@@ -18,17 +18,20 @@ public class SpawnCell extends Cell {
 
 
 
-    private List<Weapon> weapons;
+    private List<Weapon> weapons = new ArrayList<>();
 
     /**
      * Default constructor
      */
     public SpawnCell() {
 
-        this.weapons = new ArrayList<>();
-
         // add observer to the class
         if (Observers.isInitialized()) addObserver(Observers.getSpawnCellObserver());
+    }
+
+    @Override
+    public Boolean isAmmoCell() {
+        return false;
     }
 
     /**

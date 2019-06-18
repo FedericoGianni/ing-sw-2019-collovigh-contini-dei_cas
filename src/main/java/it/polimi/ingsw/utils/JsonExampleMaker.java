@@ -50,6 +50,8 @@ public class JsonExampleMaker {
         writeMap();
 
          */
+
+        writeSaveMap();
     }
 
     public static void writeWeapons(){
@@ -404,8 +406,6 @@ public class JsonExampleMaker {
         Gson gson = new Gson();
 
         try{
-
-
 
             FileWriter writer = new FileWriter("resources/json/maps/map_03.json");
 

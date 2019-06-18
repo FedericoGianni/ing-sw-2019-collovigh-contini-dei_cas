@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
@@ -36,7 +37,6 @@ public class WaitingRoom {
     private List<PlayerColor> colors;
     private Boolean active;
     private int activeGame;
-    private Games games;
     private int mapType = 0;
 
 
@@ -48,7 +48,6 @@ public class WaitingRoom {
 
         // things to do for both loaded games and new ones
         this.active = true;
-        this.games = new Games();
 
         // -1 = new game
         if (gameId == -1) {
@@ -58,7 +57,7 @@ public class WaitingRoom {
 
             LOGGER.log(Level.FINE,"[OK] Started Waiting Room for new Game");
         }else{
-            if (!games.contains(gameId)) throw new GameNonExistentException();
+            if (!Parser.containsGame(gameId)) throw new GameNonExistentException();
             activeGame = gameId;
             // need to catch all saved games and start the correspondent one
 
@@ -78,7 +77,7 @@ public class WaitingRoom {
      */
     public synchronized void initGame(){
 
-        activeGame = games.addGame();
+        activeGame = Parser.addGame();
 
         if(this.mapType == 0) {
             Server.setController(new Controller(this.players, this.colors, this.activeGame, skulls));
@@ -251,10 +250,6 @@ public class WaitingRoom {
     public int size(){
 
         return this.players.size();
-    }
-
-    public Games getGames() {
-        return games;
     }
 
     public synchronized void setSkulls(int skulls){

@@ -193,10 +193,7 @@ public abstract class Cell extends Subject implements Serializable {
          return "Cella: colore: " + color;
      }
 
-    public Boolean isAmmoCell(){
-
-        return this.getWeapons() == null;
-    }
+    public abstract Boolean isAmmoCell();
 
     public void generateAmmoCard(){
 

@@ -5,18 +5,15 @@ import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.weapons.*;
-import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.jsonconfig.Config;
+import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.utils.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,10 +35,12 @@ public class Parser {
     private static final String MARKER_PATH = "resources/json/MarkerTypes";
     private static final String MOVER_PATH = "resources/json/mover";
     private static final String NORMAL_WEAPON_PATH = "resources/json/Weaponary";
-    private static final String SAVED_MAP_RELATIVE_PATH = "/map/Map.json";
+    private static final String SAVED_MAP_RELATIVE_PATH = "_Map.json";
     private static final String MAP_ONE_PATH = "resources/json/maps/map_01.json";
     private static final String MAP_TWO_PATH = "resources/json/maps/map_02.json";
     private static final String MAP_THREE_PATH = "resources/json/maps/map_03.json";
+
+    private static final String GAMES_PATH = "resources/json/savegames";
 
 
     // Json Simple
@@ -558,58 +557,11 @@ public class Parser {
 
     }
 
-    public static SavedMap readSavedMap(){
-
-        String gamePath = "resources/json/game000";
-
-        SavedMap savedMap = null;
-
-        try {
-
-            // creates a reader for the file
-
-            BufferedReader br = new BufferedReader(new FileReader(new File(gamePath + SAVED_MAP_RELATIVE_PATH).getAbsolutePath()));
-
-            // load the Config File
-
-            savedMap = gson.fromJson(br, SavedMap.class);
-
-            // LOG the load
-
-        }catch (Exception e){
-
-            LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved map ");
-        }
-
-        return savedMap;
-    }
-
-
-    public static void saveMap(){
-
-        String gamePath = "resources/json/game000";
-
-        SavedMap savedMap = new SavedMap(Model.getMap().getMatrix());
-
-        try {
-
-            // creates a reader for the file
-
-            FileWriter writer = new FileWriter(gamePath + SAVED_MAP_RELATIVE_PATH);
-
-            // load the Config File
-
-            gson.toJson(savedMap,writer);
-
-            // LOG the load
-
-        }catch (Exception e){
-
-            LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved map ");
-        }
-    }
-
-
+    /**
+     * This method will load a map of the specified type
+     * @param mapType is the type of map requested
+     * @return an instance of SavedMap containing the map cell
+     */
     public static SavedMap getMap(int mapType){
 
         String path;
@@ -663,5 +615,257 @@ public class Parser {
 
         return savedMap;
     }
+
+
+    // SAVES LOGIC
+
+
+    //      EX-GAMES
+
+    /**
+     * @return the hashmap from a json to know if games were saved
+     */
+    private static HashMap<Integer,String> getGames(){
+
+        List<String> pathList = new ArrayList<>();
+
+        try{
+
+            BufferedReader br = new BufferedReader( new FileReader( new File(GAMES_PATH  + "/games.json").getAbsolutePath()));
+
+            // load the HashMap
+
+            pathList.addAll( gson.fromJson(br,List.class));
+
+            LOGGER.log(level,()-> LOG_START + " [OK] games list loaded");
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, ()-> LOG_START + " error while trying to load games list ");
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+
+        }
+
+        return buildHashMapFromList(pathList);
+    }
+
+    /**
+     * This method will get a list of path and turn it into a Hashmap
+     * @param pathList is a list of string
+     * @return a hashmap containing the paths linked with the id
+     */
+    private static HashMap<Integer,String> buildHashMapFromList(List<String> pathList){
+
+        HashMap<Integer,String> hashMap = new HashMap<>();
+
+        if (pathList.isEmpty()){
+
+            pathList.add("defaultPath");
+
+        }
+
+        for (int i = 0; i < pathList.size(); i++) {
+
+            hashMap.put(i- 1 ,pathList.get(i));
+
+        }
+
+        return hashMap;
+    }
+
+    /**
+     * This method saves the list of games paired with the base path to save
+     * @param games is the hashMap to save
+     */
+    private static void saveGamesList(HashMap<Integer,String> games){
+
+        try {
+
+            FileWriter writer = new FileWriter(GAMES_PATH + "/games.json");
+
+            gson.toJson(getGameListToSave(games), writer);
+
+            writer.flush();
+            writer.close();
+
+            int size = games.size() -1;
+
+            LOGGER.log(level,() -> LOG_START + " [OK] game list saved w/ " + size + " effective games "  );
+
+        }catch(IOException e){
+
+            LOGGER.log(Level.WARNING, ()-> LOG_START + " error while trying to write games list ");
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
+
+    }
+
+    private static List<String> getGameListToSave(HashMap<Integer,String> games){
+
+        List<String> pathlist = new ArrayList<>();
+
+        for (int i = -1 ; i < games.size() - 1 ; i++) {
+
+            pathlist.add(games.get(i));
+        }
+
+        return pathlist;
+    }
+
+    /**
+     *
+     * @return the number of games
+     */
+    public static int getGamesSize(){
+
+        HashMap<Integer,String> hashMap = getGames();
+
+        return hashMap.size() - 1;
+
+    }
+
+    /**
+     *
+     * @param gameId is the id of the new game
+     * @return a string containing the new save path for the new game
+     */
+    private static String genSavePath(int gameId){
+
+        return GAMES_PATH + "/" + "GameId" + gameId;
+    }
+
+    /**
+     *
+     * @param gameId is the id of the asked game
+     * @return true if the asked game exist
+     */
+    public static Boolean containsGame(int gameId){
+
+        HashMap<Integer,String> hashMap = new HashMap<>();
+
+        hashMap.putAll(getGames());
+
+        return hashMap.containsKey(gameId);
+
+    }
+
+    /**
+     * add a new game to the hashmap and saves
+     */
+    public static int addGame(){
+
+        HashMap<Integer,String> hashMap = getGames();
+
+        int gameId = hashMap.size() - 1; // the size is 1 by default
+
+        hashMap.putIfAbsent(gameId, genSavePath(gameId));
+
+        LOGGER.log(level, () -> LOG_START + " [OK] added game w/ id: " + gameId);
+
+        saveGamesList(hashMap);
+
+        return gameId;
+    }
+
+    /**
+     *
+     * @param gameid is the id of the game to remove from the map
+     */
+    public static void closeGame(int gameid) throws GameNonExistentException {
+
+        HashMap<Integer,String> hashMap = getGames();
+
+        if (!hashMap.containsKey(gameid)) throw  new GameNonExistentException();
+
+        hashMap.remove(gameid);
+
+        saveGamesList(hashMap);
+
+    }
+
+    /**
+     * This method deletes all of the games from the map
+     */
+    public static void clearGames(){
+
+        HashMap<Integer,String> hashMap = getGames();
+
+        hashMap.clear();
+
+        hashMap.put(-1,"InitPath");
+
+        saveGamesList(hashMap);
+    }
+
+
+    //          map
+
+
+    /**
+     * This method will read a saved Map
+     * @return an instance of SavedMap containing the map cell
+     */
+    public static SavedMap readSavedMap(){
+
+        String gamePath = "resources/json/savegames/game_00";
+
+        SavedMap savedMap = null;
+
+        try {
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader(new FileReader(new File(gamePath + SAVED_MAP_RELATIVE_PATH).getAbsolutePath()));
+
+            // load the Config File
+
+            savedMap = gson.fromJson(br, SavedMap.class);
+
+            // LOG the load
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved map ");
+        }
+
+        return savedMap;
+    }
+
+    /**
+     * This method will save the map currently used in the model
+     */
+    public static void saveMap(){
+
+        String gamePath = "resources/json/savegames/game_00";
+
+        SavedMap savedMap = new SavedMap(Model.getMap().getMatrix());
+
+        try {
+
+            // creates a reader for the file
+
+            FileWriter writer = new FileWriter(gamePath + SAVED_MAP_RELATIVE_PATH);
+
+            // write the file
+
+            gson.toJson(savedMap,writer);
+
+            writer.flush();
+            writer.close();
+
+            // LOG the load
+
+        }catch (IOException e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not write the map ");
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
+    }
+
+
+
 
 }

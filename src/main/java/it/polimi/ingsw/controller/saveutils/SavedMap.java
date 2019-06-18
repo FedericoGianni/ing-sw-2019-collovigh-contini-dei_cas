@@ -34,7 +34,7 @@ public class SavedMap implements Serializable {
 
             for (int j = 0; j < MAP_C; j++) {
 
-                this.matrix[i][j] = map[i][j].getSaveVersionOfCell();
+                this.matrix[i][j] = (map[i][j] == null) ? null : map[i][j].getSaveVersionOfCell();
 
             }
         }

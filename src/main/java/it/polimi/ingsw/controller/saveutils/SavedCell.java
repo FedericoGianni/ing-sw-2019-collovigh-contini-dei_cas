@@ -8,10 +8,13 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SavedCell extends Cell {
+public class SavedCell extends Cell implements Serializable {
 
     private final AmmoCard ammoCard;
 
@@ -31,7 +34,6 @@ public class SavedCell extends Cell {
                 .collect(Collectors.toList());
 
 
-
     }
 
     public SavedCell(AmmoCell cell) {
@@ -42,6 +44,11 @@ public class SavedCell extends Cell {
 
         this.weaponList = null;
 
+    }
+
+    @Override
+    public Boolean isAmmoCell() {
+        return (ammoCard != null);
     }
 
     @Override
@@ -76,7 +83,7 @@ public class SavedCell extends Cell {
 
         Cell finalCell;
 
-        if (this.weaponList == null){
+        if (this.ammoCard != null){
 
             AmmoCell cell = new AmmoCell();
 
@@ -88,10 +95,13 @@ public class SavedCell extends Cell {
 
             SpawnCell cell = new SpawnCell();
 
+
             List<Weapon> weapons = this.weaponList
                     .stream()
                     .map( name -> Parser.getWeaponByName(name))
                     .collect(Collectors.toList());
+
+
 
             cell.setWeapons(weapons);
 
