@@ -104,6 +104,8 @@ class ParserTest {
 
         Model.getPlayer(0).setPlayerPos(Model.getMap().getCell(2,2));
 
+        Parser.addGame();
+
         Parser.saveMap();
 
         assertNotNull(Parser.readSavedMap().getRealMap());
@@ -133,6 +135,8 @@ class ParserTest {
 
             System.out.println("\n");
         }
+
+        Parser.clearGames();
     }
 
 

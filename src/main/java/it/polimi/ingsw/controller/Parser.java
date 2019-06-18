@@ -51,6 +51,10 @@ public class Parser {
 
     private static Gson gson = new Gson();
 
+    // saves
+
+    private static int currentGame;
+
     private Parser() {
 
     }
@@ -645,6 +649,8 @@ public class Parser {
 
             LOGGER.log(Level.WARNING,e.getMessage(),e);
 
+            //TODO create directory if not present
+
         }
 
         return buildHashMapFromList(pathList);
@@ -733,7 +739,7 @@ public class Parser {
      */
     private static String genSavePath(int gameId){
 
-        return GAMES_PATH + "/" + "GameId" + gameId;
+        return GAMES_PATH + "/" + "game_Id_" + gameId;
     }
 
     /**
@@ -765,6 +771,8 @@ public class Parser {
         LOGGER.log(level, () -> LOG_START + " [OK] added game w/ id: " + gameId);
 
         saveGamesList(hashMap);
+
+        currentGame = gameId;
 
         return gameId;
     }
@@ -809,7 +817,7 @@ public class Parser {
      */
     public static SavedMap readSavedMap(){
 
-        String gamePath = "resources/json/savegames/game_00";
+        String gamePath = getGames().get(currentGame);
 
         SavedMap savedMap = null;
 
@@ -838,7 +846,7 @@ public class Parser {
      */
     public static void saveMap(){
 
-        String gamePath = "resources/json/savegames/game_00";
+        String gamePath = getGames().get(currentGame);
 
         SavedMap savedMap = new SavedMap(Model.getMap().getMatrix());
 
