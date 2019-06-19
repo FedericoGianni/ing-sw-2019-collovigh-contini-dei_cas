@@ -2,21 +2,21 @@
   "matrix":
   [
     [
-      {"ammoCard":{"ammoCube1":{"color":"YELLOW"},"ammoCube2":{"color":"YELLOW"},"powerUp":true},"color":"RED","visit":false,"adjSouth":{"x":1,"y":0},"adjEast":{"x":0,"y":1},"playersHere":[],"observers":[]},
-      {"ammoCard":{"ammoCube1":{"color":"YELLOW"},"ammoCube2":{"color":"RED"},"ammoCube3":{"color":"RED"},"powerUp":false},"color":"BLUE","visit":false,"adjSouth":{"x":1,"y":1},"adjEast":{"x":0,"y":2},"adjWest":{"x":0,"y":0},"playersHere":[],"observers":[]},
+      {"color":"RED","visit":false,"adjSouth":{"x":1,"y":0},"adjEast":{"x":0,"y":1},"playersHere":[],"observers":[]},
+      {"color":"BLUE","visit":false,"adjSouth":{"x":1,"y":1},"adjEast":{"x":0,"y":2},"adjWest":{"x":0,"y":0},"playersHere":[],"observers":[]},
       {"weaponList":[],"color":"BLUE","visit":false,"adjSouth":{"x":1,"y":2},"adjEast":{"x":0,"y":3},"adjWest":{"x":0,"y":1},"playersHere":[],"observers":[]},
-      {"ammoCard":{"ammoCube1":{"color":"RED"},"ammoCube2":{"color":"YELLOW"},"ammoCube3":{"color":"YELLOW"},"powerUp":false},"color":"GREEN","visit":false,"adjSouth":{"x":1,"y":3},"adjWest":{"x":0,"y":2},"playersHere":[],"observers":[]}
+      {"color":"GREEN","visit":false,"adjSouth":{"x":1,"y":3},"adjWest":{"x":0,"y":2},"playersHere":[],"observers":[]}
     ],
     [
       {"weaponList":[],"color":"RED","visit":false,"adjNorth":{"x":0,"y":0},"adjSouth":{"x":2,"y":0},"playersHere":[],"observers":[]},
-      {"ammoCard":{"ammoCube1":{"color":"YELLOW"},"ammoCube2":{"color":"BLUE"},"powerUp":true},"color":"PURPLE","visit":false,"adjNorth":{"x":0,"y":1},"adjSouth":{"x":2,"y":1},"playersHere":[],"observers":[]},
-      {"ammoCard":{"ammoCube1":{"color":"RED"},"ammoCube2":{"color":"BLUE"},"ammoCube3":{"color":"BLUE"},"powerUp":false},"color":"YELLOW","visit":false,"adjNorth":{"x":0,"y":2},"adjSouth":{"x":2,"y":2},"adjEast":{"x":1,"y":3},"playersHere":[],"observers":[]},
-      {"ammoCard":{"ammoCube1":{"color":"YELLOW"},"ammoCube2":{"color":"BLUE"},"ammoCube3":{"color":"BLUE"},"powerUp":false},"color":"YELLOW","visit":false,"adjNorth":{"x":0,"y":3},"adjSouth":{"x":2,"y":3},"adjWest":{"x":1,"y":2},"playersHere":[],"observers":[]}
+      {"color":"PURPLE","visit":false,"adjNorth":{"x":0,"y":1},"adjSouth":{"x":2,"y":1},"playersHere":[],"observers":[]},
+      {"color":"YELLOW","visit":false,"adjNorth":{"x":0,"y":2},"adjSouth":{"x":2,"y":2},"adjEast":{"x":1,"y":3},"playersHere":[],"observers":[]},
+      {"color":"YELLOW","visit":false,"adjNorth":{"x":0,"y":3},"adjSouth":{"x":2,"y":3},"adjWest":{"x":1,"y":2},"playersHere":[],"observers":[]}
     ],
     [
-      {"ammoCard":{"ammoCube1":{"color":"YELLOW"},"ammoCube2":{"color":"RED"},"powerUp":true},"color":"GREY","visit":false,"adjNorth":{"x":1,"y":0},"adjEast":{"x":2,"y":1},"playersHere":[],"observers":[]},
-      {"ammoCard":{"ammoCube1":{"color":"YELLOW"},"ammoCube2":{"color":"RED"},"ammoCube3":{"color":"RED"},"powerUp":false},"color":"GREY","visit":false,"adjNorth":{"x":1,"y":1},"adjEast":{"x":2,"y":2},"adjWest":{"x":2,"y":0},"playersHere":[],"observers":[]},
-      {"ammoCard":{"ammoCube1":{"color":"YELLOW"},"ammoCube2":{"color":"YELLOW"},"powerUp":true},"color":"YELLOW","visit":false,"adjNorth":{"x":1,"y":2},"adjEast":{"x":2,"y":3},"adjWest":{"x":2,"y":1},"playersHere":[],"observers":[]},
+      {"color":"GREY","visit":false,"adjNorth":{"x":1,"y":0},"adjEast":{"x":2,"y":1},"playersHere":[],"observers":[]},
+      {"color":"GREY","visit":false,"adjNorth":{"x":1,"y":1},"adjEast":{"x":2,"y":2},"adjWest":{"x":2,"y":0},"playersHere":[],"observers":[]},
+      {"color":"YELLOW","visit":false,"adjNorth":{"x":1,"y":2},"adjEast":{"x":2,"y":3},"adjWest":{"x":2,"y":1},"playersHere":[],"observers":[]},
       {"weaponList":[],"color":"YELLOW","visit":false,"adjNorth":{"x":1,"y":3},"adjWest":{"x":2,"y":2},"playersHere":[],"observers":[]}
     ]
   ]

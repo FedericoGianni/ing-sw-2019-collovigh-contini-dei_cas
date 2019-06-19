@@ -75,6 +75,8 @@ class ParserTest {
 
                 System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
 
+                if (matrix[i][j].isAmmoCell()) assertNotNull(matrix[i][j].getAmmoPlaced());
+
             }
         }
     }

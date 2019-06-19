@@ -369,7 +369,7 @@ public class Controller {
 
                 // replaces the empty ammoCard
 
-                Model.getMap().ReplaceAmmoCard();
+                Model.getMap().replaceAmmoCard();
 
                 if(hasSomeoneDied){
 
