@@ -47,6 +47,25 @@ public abstract class Weapon implements Serializable {
     }
 
     /**
+     * this method checks if the shoot action can be done
+     * a list of itnegers who enumbers the effects (0 to 3) for every effects you have a list of targets
+     * cells because you may move a target with move microEffects
+     * @param targetLists
+     * @param effects
+     * @param cells
+     * @throws WeaponNotLoadedException
+     * @throws OverKilledPlayerException
+     * @throws DeadPlayerException
+     * @throws PlayerInSameCellException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     * @throws FrenzyActivatedException
+     */
+    public abstract Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException;//may need to be changed
+
+
+    /**
      * this method is the method that leads all weapons to the shooting action
      * a list of itnegers who enumbers the effects (0 to 3) for every effects you have a list of targets
      * cells because you may move a target with move microEffects
@@ -62,7 +81,7 @@ public abstract class Weapon implements Serializable {
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public abstract void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException;//may need to be changed
+    public abstract void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException;//may need to be changed
 
     /**
      * @param cost

@@ -53,6 +53,6 @@ public abstract class MicroEffect {
      * @throws DifferentPlayerNeededException
      * @throws NotCorrectPlayerNumberException
      */
-    public abstract void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, DifferentPlayerNeededException, NotCorrectPlayerNumberException;
+    public abstract void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException;
     public abstract boolean moveBefore();
 }

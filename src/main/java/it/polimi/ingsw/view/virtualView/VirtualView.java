@@ -4,7 +4,6 @@ package it.polimi.ingsw.view.virtualView;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.network.Server;
 import it.polimi.ingsw.network.ToView;
-import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.ViewInterface;
 import it.polimi.ingsw.view.actions.JsonAction;
@@ -73,13 +72,13 @@ public class VirtualView implements ViewInterface {
      * {@inheritDoc}
      */
     @Override
-    public void startAction() {
+    public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
 
         // refresh the ToClient reference
 
         this.view = Server.getClient(playerId);
 
-        view.startAction();
+        view.startAction(isFrenzy, isBeforeFrenzyStarter);
 
         LOGGER.log(level,"[Virtual View] id {0} received startAction and forwarding it to the real view",playerId);
     }

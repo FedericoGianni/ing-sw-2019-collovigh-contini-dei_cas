@@ -64,7 +64,7 @@ public class Mover extends MicroEffect {
     }
 
     @Override
-    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException {
+    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws   PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException {
 
         if(facoltative==true)
         {

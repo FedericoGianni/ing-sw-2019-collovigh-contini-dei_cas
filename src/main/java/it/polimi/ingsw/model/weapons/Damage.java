@@ -167,7 +167,7 @@ public class Damage extends MicroEffect {
     }
 
     @Override
-    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws OverKilledPlayerException, DeadPlayerException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, FrenzyActivatedException, NotCorrectPlayerNumberException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
+    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
         if(alreadyTargeted==true && differentPlayer==false)
         {
             w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);//playerId=0 bcz only one player the same as the first shot
@@ -227,7 +227,7 @@ public class Damage extends MicroEffect {
         return false;
     }
 
-    private void distance(Player target,Player shooter) throws UncorrectDistanceException, SeeAblePlayerException, OverKilledPlayerException, DeadPlayerException, FrenzyActivatedException//distance, called for every player
+    private void distance(Player target,Player shooter) throws UncorrectDistanceException, SeeAblePlayerException //distance, called for every player
     {
         if(melee==true)
         {

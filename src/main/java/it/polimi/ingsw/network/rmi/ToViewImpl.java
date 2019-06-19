@@ -88,11 +88,11 @@ public class ToViewImpl implements ToView {
      * {@inheritDoc}
      */
     @Override
-    public void startAction() {
+    public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
 
         try {
 
-            client.startAction();
+            client.startAction(isFrenzy, isBeforeFrenzyStarter);
 
             LOGGER.log(level,"[RMI-SERVER] sent startAction to player with address :{0}", ipAddress);
 

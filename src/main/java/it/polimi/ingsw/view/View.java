@@ -5,7 +5,6 @@ import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.network.rmi.RMIClient;
 import it.polimi.ingsw.network.socket.SocketClient;
-import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.GUI.Gui;
 import it.polimi.ingsw.view.actions.JsonAction;
@@ -244,8 +243,8 @@ public class View implements ViewInterface {
      * {@inheritDoc}
      */
     @Override
-    public void startAction() {
-        userInterface.startAction();
+    public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
+        userInterface.startAction(isFrenzy, isBeforeFrenzyStarter);
     }
 
     /**

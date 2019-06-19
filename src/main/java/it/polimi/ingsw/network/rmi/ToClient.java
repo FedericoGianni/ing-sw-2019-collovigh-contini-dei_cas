@@ -77,7 +77,7 @@ public interface ToClient extends  Remote {
      * This method will start the action Phase on the client
      * @throws RemoteException
      */
-    void startAction() throws RemoteException;
+    void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) throws RemoteException;
 
     /**
      * This method will start the reload Phase on the client

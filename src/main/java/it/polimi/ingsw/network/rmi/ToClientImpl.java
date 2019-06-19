@@ -110,9 +110,9 @@ public class ToClientImpl implements ToClient {
      * {@inheritDoc}
      */
     @Override
-    public void startAction() {
+    public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
 
-        client.getView().startAction();
+        client.getView().startAction(isFrenzy, isBeforeFrenzyStarter);
 
     }
 

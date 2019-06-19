@@ -135,7 +135,6 @@ public class CurrentGame extends Subject{
      * This method is used with multiple kills in one turn
      * @param killerId is the id of the player who shoot
      * @param overkill is a list of Boolean that are true if the player gets overkilled
-     * @throws FrenzyActivatedException if the killShotTrack is empty
      */
     public void addkills(int killerId, List<Boolean> overkill) {
 
@@ -152,7 +151,6 @@ public class CurrentGame extends Subject{
      * This method is used with multiple kills in one turn
      * @param killerId is the id of the player who shoot
      * @param overkill is a list of Boolean that are true if the player gets overkilled
-     * @throws FrenzyActivatedException if the killShotTrack is empty
      */
     public void addkills(int killerId, Boolean overkill) {
 

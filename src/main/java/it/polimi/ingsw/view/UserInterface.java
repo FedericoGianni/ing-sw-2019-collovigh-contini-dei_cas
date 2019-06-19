@@ -79,8 +79,10 @@ public interface UserInterface {
 
     /**
      * StartAction method, in which the user can choose between the game actions: move, move&grab, shoot
+     * @param isFrenzy if is set to true start Frenzy methods, otherwise normal actions
+     * @param isBeforeFrenzyStarter if true -> current player is before frenzy starter, otherwise false
      */
-    void startAction();
+    void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter);
 
     /**
      * Last turn phase, in which the user is asked if he wants to reload one or more of his weapons
