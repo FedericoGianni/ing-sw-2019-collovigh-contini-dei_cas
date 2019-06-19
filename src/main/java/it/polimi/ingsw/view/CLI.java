@@ -2,6 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.utils.Protocol;
@@ -1303,9 +1304,14 @@ public class CLI implements UserInterface {
                     try {
                         read = scanner.nextInt();
 
-                        if(read >= 0 && read <= view.getCacheModel().getCachedPlayers().size()){
+                        if(read >= 0 && read <= view.getCacheModel().getCachedPlayers().size() && read != view.getPlayerId()){
                             valid = true;
                             tempTargetList.add(read);
+                        }
+
+                        if(read == view.getPlayerId()){
+                            System.out.println("Non puoi selezionarti come bersaglio! Riprova >>> ");
+                            scanner.nextLine();
                         }
 
                     } catch (InputMismatchException e) {
@@ -1344,40 +1350,156 @@ public class CLI implements UserInterface {
      */
     @Override
     public void startReload() {
-        boolean validChoice = false;
-        int read = -1;
 
+        boolean isDone = false;
+        boolean canReloadAgain = false;
+        int reloadCount = 0;
         List<String> weapons = new ArrayList<>();
+
 
         if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
             weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
         }
 
-        //TODO user can reload every weapons he can in a single reload phase!
+        //local copy of the powerups and ammo inside cachemodel, needed to handle local checks if user can pay
+        List<CachedPowerUp> cachedPowerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
+                .getPowerUpBag().getPowerUpList();
+        List<Color> cachedAmmoCubes = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
+                .getAmmoBag().getAmmoList();
 
-        do{
+        //powerups and ammocubes needed to forward reload action to the controller
+        List<String> weaponsToReload = new ArrayList<>();
+        List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
+        List<Color> ammoCubesToDiscard = new ArrayList<>();
+
+        System.out.println("FASE DI RICARICA");
+        System.out.println("Digita -> 9 per saltare la fase di ricarica");
+        System.out.println("\t-> Un tasto qualsiasi per cominciare la fase di ricarica");
+
+        int choice = -1;
+
+        try {
+            choice = scanner.nextInt();
+
+            if(choice == 9){
+                isDone = true;
+                view.doAction(new SkipAction());
+                return;
+            }
+
+        } catch (InputMismatchException e) {
+            scanner.nextLine();
+        }
+
+        //TODO user can reload every weapons he can in a single reload phase!
+        while(!isDone && reloadCount < weapons.size()) {
+
+            String weapToAdd = handleWeaponReload(weapons, cachedPowerUps, cachedAmmoCubes, powerUpsToDiscard, ammoCubesToDiscard);
+
+            if(weapToAdd != null){
+                weaponsToReload.add(weapToAdd);
+            }
+
+            for(String w : weapons){
+                if (canReload(w, cachedAmmoCubes, cachedPowerUps)) {
+                    canReloadAgain = true;
+                }
+            }
+
+            if(!canReloadAgain){
+                isDone = true;
+            }
+        }
+
+        //TODO forward RELOAD action to the view
+        view.doAction(new ReloadAction(weaponsToReload, powerUpsToDiscard));
+    }
+
+    private String handleWeaponReload(List<String> weapons, List<CachedPowerUp> cachedPowerUps, List<Color> cachedAmmoCubes,
+                                    List<CachedPowerUp> powerUpsToDiscard, List<Color> ammoCubesToDiscard){
+
+        int read = -1;
+        boolean validChoice = false;
+
+
+        do {
             System.out.println("Vuoi ricaricare? Le tue armi sono: ");
             showCurrWeapons();
-            System.out.println("9 -> non ricaricare.");
+            System.out.println("9 -> fine");
 
             System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
             try {
                 read = scanner.nextInt();
 
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 scanner.nextLine();
                 System.out.println("Non è un numero! Riprova >>> ");
             }
 
-            if((read >= 0 && read <= weapons.size()) || read == 9) validChoice = true;
+            if ((read >= 0 && read <= weapons.size()) || read == 9) validChoice = true;
 
-        }while(!validChoice);
+            if(read == 9){
+                validChoice = true;
+                return null;
+            }
 
-        if(read == 9){
-            view.doAction(new SkipAction());
+        } while (!validChoice);
+
+        if(canReload(weapons.get(read), cachedAmmoCubes, cachedPowerUps)){
+            try {
+                CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(read));
+                //TODO check if this works
+                //TODO add checks for powerups
+                cachedAmmoCubes.removeAll(w.getFirstEffectCost());
+            } catch (WeaponNotFoundException e){
+
+            }
         }
 
-        //TODO forward RELOAD action to the view
+        return weapons.get(read);
+
+
+
+    }
+
+    /**
+     *
+     * @param weapon name of the weapon to be checked
+     * @param ammoCubes list of ammocubes copied from cachemodel (can be modified by methods)
+     * @param powerUps list of powerups copied from cachemodel (can be modified by methods, to track local changes)
+     * @return true if the weapon can be reloaded with current powerups and ammo, false otherwise
+     */
+    private boolean canReload(String weapon, List<Color> ammoCubes, List<CachedPowerUp> powerUps){
+
+        CachedFullWeapon w = null;
+
+        try {
+            w = view.getCacheModel().getWeaponInfo(weapon);
+        } catch (WeaponNotFoundException e){
+
+        }
+
+        //TODO check if ammocubes and powerups are enough to pay reload
+        w.getFirstEffectCost();
+
+        if(canPay(w.getFirstEffectCost(), ammoCubes)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean canPay(List<Color> cost, List<Color> ammo){
+
+        for(Color c : cost){
+            if(ammo.contains(c)){
+                ammo.remove(c);
+            } else {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
