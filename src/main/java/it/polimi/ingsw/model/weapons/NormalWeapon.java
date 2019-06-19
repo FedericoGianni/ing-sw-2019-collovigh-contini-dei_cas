@@ -317,8 +317,7 @@ public class NormalWeapon extends Weapon{
      * @throws FrenzyActivatedException
      */
     @Override
-    public void shoot(List<List<Player>>targetLists, List<Integer> effect, List<Cell> cells)throws PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException
-    {
+    public void shoot(List<List<Player>>targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, PlayerNotSeeableException {
         try{
             if(!this.isLoaded())//if actual weapon is not loaded
             {
@@ -327,7 +326,7 @@ public class NormalWeapon extends Weapon{
 
             for(int macroCont=0;macroCont<effect.size();macroCont++)//iterate macroeffect
             {
-                //System.out.println(this.getEffects().get(macroCont).getName());
+
                 if(this.getEffects().get(macroCont).getEffectCost()!=null)//if the effect costs 0 i don't need to pay
                 {
                     if(canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(),this.isPossessedBy().getAmmoBag())==true)

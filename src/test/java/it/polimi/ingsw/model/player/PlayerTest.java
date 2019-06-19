@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
@@ -79,7 +80,37 @@ class PlayerTest {
         });
 
         assertEquals(4, player.getAmmoBag().getList().size());
+    }
+
+    @Test
+    void canSee() {
+
+        List<String>  names=new ArrayList<>();
+        names.add("shooter");
+        names.add("target");
+        names.add("target1");
+        names.add("target2");
+        List<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.YELLOW);
+        pc.add(PlayerColor.GREY);
+        Model m=new Model(names,pc,2,8);
+
+        Player shooter= Model.getGame().getPlayers().get(0);
+        Player target1=Model.getGame().getPlayers().get(1);
+        Player target2=Model.getGame().getPlayers().get(2);
+        Player target3=Model.getGame().getPlayers().get(3);
+        shooter.setPlayerPos(Model.getMap().getCell(1,1));
+        target1.setPlayerPos(Model.getMap().getCell(0,0));
+        target2.setPlayerPos(Model.getMap().getCell(2,2));
+        target3.setPlayerPos(Model.getMap().getCell(1,1));
 
 
+
+        for(int i=0;i<shooter.canSee().size();i++)
+        {
+            System.out.println(shooter.canSee().get(i).getPlayerName());
+        }
     }
 }
