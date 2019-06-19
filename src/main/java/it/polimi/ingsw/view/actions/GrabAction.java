@@ -67,7 +67,7 @@ public class GrabAction extends JsonAction {
 
     }
 
-    public List<Directions> getDirection() { return directions; }
+    public List<Directions> getDirections() { return directions; }
 
     public String getNewWeaponName() { return newWeaponName; }
 

@@ -76,7 +76,7 @@ public class ActionPhase {
 
             // sends the startPhase command to the virtual view
 
-            controller.getVirtualView(currentPlayer).startAction(false, false);
+            controller.getVirtualView(currentPlayer).startAction(controller.getFrenzy(), frenzyEnhanced);
 
             // start the timer
 
@@ -139,11 +139,11 @@ public class ActionPhase {
 
         // check if the actions are possible
 
-        if (checkGrabMove(grabAction) && checkGrab(grabAction.getNewWeaponName(),grabAction.getDiscardedWeapon(), utilityMethods.simulateMovement(grabAction.getDirection()))){
+        if (checkGrabMove(grabAction) && checkGrab(grabAction.getNewWeaponName(),grabAction.getDiscardedWeapon(), utilityMethods.simulateMovement(grabAction.getDirections()))){
 
             // moves the player
 
-            utilityMethods.move(grabAction.getDirection());
+            utilityMethods.move(grabAction.getDirections());
 
             // grabs
 
@@ -201,9 +201,9 @@ public class ActionPhase {
 
         int playerId = controller.getCurrentPlayer();
 
-        if (!grabAction.getDirection().isEmpty()) {
+        if (!grabAction.getDirections().isEmpty()) {
 
-            if (grabAction.getDirection().size() > MAX_GRAB_MOVES_PLUS){
+            if (grabAction.getDirections().size() > MAX_GRAB_MOVES_PLUS){
 
                 LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + playerId + " tried to move more than max movements");
 
@@ -212,7 +212,7 @@ public class ActionPhase {
                 return false;
             }
 
-            if ((grabAction.getDirection().size() > MAX_GRAB_MOVES) && (Model.getPlayer(playerId).getDmg().size() < DMG_FOR_PLUS)){
+            if ((grabAction.getDirections().size() > MAX_GRAB_MOVES) && (Model.getPlayer(playerId).getDmg().size() < DMG_FOR_PLUS)){
 
                 LOGGER.log(Level.WARNING, () -> LOG_START_GRAB + playerId + " tried to move more than one but has only damage : " + Model.getPlayer(playerId).getDmg().size() );
 
@@ -479,17 +479,6 @@ public class ActionPhase {
 
                 controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
 
-            }catch (DeadPlayerException e){
-
-                LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " player w/ id: " + e.getPlayerId() + " has been killed ");
-
-            }catch (OverKilledPlayerException e){
-
-                LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " player w/ id: " + e.getPlayerId() + " has been overkilled ");
-
-            }catch (FrenzyActivatedException e){
-
-                LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " player w/ id: " + e.getPlayerId() + " activated frenzy ");
             }
 
             controller.incrementPhase();
@@ -511,7 +500,7 @@ public class ActionPhase {
      * This function will make the player do a "frenzy move" action
      * @param frenzyMove is the class containing the requested parameters
      */
-    public void frenzyMoveAction(FrenzyMove frenzyMove){
+    public void frenzyMoveAction(Move frenzyMove){
 
         // look if the player is before the first player (0,1,2,3,4)
 
@@ -569,7 +558,7 @@ public class ActionPhase {
      * This function will make the player do a "frenzy grab" action
      * @param frenzyGrab is the class containing the requested parameters
      */
-    public void frenzyGrabAction(FrenzyGrab frenzyGrab){
+    public void frenzyGrabAction(GrabAction frenzyGrab){
 
         // logs the action
 
@@ -604,7 +593,7 @@ public class ActionPhase {
      * @param frenzyGrab is the class containing the list of moves
      * @return true if the moves are legal or false otherwise
      */
-    private Boolean checkFrenzyGrabMove(FrenzyGrab frenzyGrab){
+    private Boolean checkFrenzyGrabMove(GrabAction frenzyGrab){
 
         // gets the id of the current player
 

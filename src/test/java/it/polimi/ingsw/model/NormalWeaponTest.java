@@ -79,13 +79,9 @@ class NormalWeaponTest {
         }
         catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
             e.printStackTrace();
-        } catch (DeadPlayerException e) {
-            e.printStackTrace();
         } catch (UncorrectDistanceException uncorrectDistanceException) {
             uncorrectDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (OverKilledPlayerException e) {
             e.printStackTrace();
         } catch (PlayerInDifferentCellException e) {
             e.printStackTrace();
@@ -160,13 +156,9 @@ class NormalWeaponTest {
         catch(WeaponNotLoadedException e){ e.printStackTrace();}
         catch (PlayerInSameCellException e) {
             e.printStackTrace();
-        } catch (DeadPlayerException e) {
-            e.printStackTrace();
         } catch (UncorrectDistanceException uncorrectDistanceException) {
             uncorrectDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (OverKilledPlayerException e) {
             e.printStackTrace();
         } catch (PlayerInDifferentCellException e) {
             e.printStackTrace();
@@ -218,13 +210,9 @@ class NormalWeaponTest {
         }
         catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
             e.printStackTrace();
-        } catch (DeadPlayerException e) {
-            e.printStackTrace();
         } catch (UncorrectDistanceException uncorrectDistanceException) {
             uncorrectDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (OverKilledPlayerException e) {
             e.printStackTrace();
         } catch (PlayerInDifferentCellException e) {
             e.printStackTrace();
@@ -295,13 +283,9 @@ class NormalWeaponTest {
         }
         catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
             e.printStackTrace();
-        } catch (DeadPlayerException e) {
-            e.printStackTrace();
         } catch (UncorrectDistanceException uncorrectDistanceException) {
             uncorrectDistanceException.printStackTrace();
         } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (OverKilledPlayerException e) {
             e.printStackTrace();
         } catch (PlayerInDifferentCellException e) {
             e.printStackTrace();
