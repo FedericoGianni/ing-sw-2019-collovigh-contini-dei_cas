@@ -96,6 +96,13 @@ public class NormalWeapon extends Weapon{
 
     }
 
+    @Override
+    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
+
+        // TODO implement
+
+        return false;
+    }
 
 
     /**
@@ -310,7 +317,7 @@ public class NormalWeapon extends Weapon{
      * @throws FrenzyActivatedException
      */
     @Override
-    public void shoot(List<List<Player>>targetLists, List<Integer> effect, List<Cell> cells)throws PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException,FrenzyActivatedException
+    public void shoot(List<List<Player>>targetLists, List<Integer> effect, List<Cell> cells)throws PlayerInSameCellException,PlayerInDifferentCellException, UncorrectDistanceException,SeeAblePlayerException
     {
         try{
             if(!this.isLoaded())//if actual weapon is not loaded
@@ -359,11 +366,7 @@ public class NormalWeapon extends Weapon{
         }catch(WeaponNotLoadedException e){e.printStackTrace();}
         catch (CardNotPossessedException e) { e.printStackTrace(); }
         catch(NotEnoughAmmoException e){ e.printStackTrace();}
-        catch (OverKilledPlayerException e) {
-            e.printStackTrace();
-        } catch (DeadPlayerException e) {
-            e.printStackTrace();
-        } catch (NotCorrectPlayerNumberException e) {
+        catch (NotCorrectPlayerNumberException e) {
             e.printStackTrace();
         } catch (DifferentPlayerNeededException e) {
             e.printStackTrace();

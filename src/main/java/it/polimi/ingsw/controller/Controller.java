@@ -441,17 +441,17 @@ public class Controller {
 
             case MOVE:
 
-                checkActionIsNotFrenzy();
+                if (frenzy) actionPhase.frenzyMoveAction((Move)jsonAction);
 
-                actionPhase.moveAction((Move)jsonAction);
+                else actionPhase.moveAction((Move)jsonAction);
 
                 break;
 
             case GRAB:
 
-                checkActionIsNotFrenzy();
+                if (frenzy) actionPhase.frenzyGrabAction((GrabAction) jsonAction);
 
-                actionPhase.grabAction((GrabAction) jsonAction);
+                else actionPhase.grabAction((GrabAction) jsonAction);
 
                 break;
 
@@ -465,17 +465,13 @@ public class Controller {
 
             case FRENZY_MOVE:
 
-                checkActionIsFrenzy();
-
-                actionPhase.frenzyMoveAction((FrenzyMove) jsonAction);
+                //TODO delete
 
                 break;
 
             case FRENZY_GRAB:
 
-                checkActionIsFrenzy();
-
-                actionPhase.frenzyGrabAction((FrenzyGrab) jsonAction);
+                //TODO delete
 
                 break;
 
@@ -580,8 +576,6 @@ public class Controller {
 
         Model.getGame().getKillShotTrack().add(new Skull(getCurrentPlayer(),false));
 
-        shotPlayerThisTurn.add(playerId);
-
     }
 
     /**
@@ -603,8 +597,6 @@ public class Controller {
         // set revenge Mark
 
         Model.getPlayer(getCurrentPlayer()).getStats().addMarks(playerId);
-
-        shotPlayerThisTurn.add(playerId);
 
     }
 
