@@ -355,6 +355,8 @@ public class Player {
                     .filter( ammoCube -> ammoCube.getColor().equals(ammocube) )
                     .collect(Collectors.toList());
 
+            if (matchingPossessed.isEmpty()) throw new CardNotPossessedException();
+
             // delete the first one
 
             this.ammo.getItem(matchingPossessed.get(0));
@@ -509,20 +511,37 @@ public class Player {
      */
     public Boolean canPay(List<AmmoCube> cost) {
 
-        List<Color> possessed = this
-                .ammo
+        List<Color> possessed = this.ammo
                 .getList()
                 .stream()
                 .map(AmmoCube::getColor)
                 .collect(Collectors.toList());
+
+        // gets the list of the color to pay
 
         List<Color> required = cost
                 .stream()
                 .map(AmmoCube::getColor)
                 .collect(Collectors.toList());
 
+        // fo each element of the above list
 
-        return possessed.containsAll(required);
+        for (Color ammocube : required) {
+
+            // gets the cubes that are possessed which match the required color
+
+            List<Color> matchingPossessed = possessed
+                    .stream()
+                    .filter( x -> x.equals(ammocube))
+                    .collect(Collectors.toList());
+
+            if (matchingPossessed.isEmpty()) return false;
+
+            possessed.remove(matchingPossessed.get(0));
+
+        }
+
+        return true;
     }
 
 
