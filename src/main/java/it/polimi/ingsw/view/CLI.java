@@ -1038,7 +1038,7 @@ public class CLI implements UserInterface {
 
             case SPAWN:
                 List<String> weapons = handleWeaponGrab(finalPos);
-                view.doAction(new GrabAction(directionsList, weapons.get(0), weapons.get(1)));
+                view.doAction(new GrabAction(directionsList, weapons.get(0), weapons.get(1), new ArrayList<>()));
                 break;
         }
     }
@@ -1273,7 +1273,7 @@ public class CLI implements UserInterface {
 
         //just to test a basic shoot
 
-        view.doAction(new ShootAction("LOCK RIFLE", targetList, effects, cells));
+        view.doAction(new ShootAction("LOCK RIFLE", targetList, effects, cells, null));
 
     }
 

@@ -243,7 +243,7 @@ public class Stats extends Subject implements Serializable {
 
         // sets the new position in the stats
 
-        this.currentPosition = Model.getMap().cellToCoord(currentPosition);
+        this.currentPosition = (currentPosition == null) ? null : Model.getMap().cellToCoord(currentPosition);
 
         // sets the player in the cell if not null
 

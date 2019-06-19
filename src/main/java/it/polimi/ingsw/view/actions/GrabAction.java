@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.actions;
 
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,8 @@ public class GrabAction extends JsonAction {
     // max movement are 2 ( 2 if player has more than 2 damage )
 
     private final List<Directions> directions;
+
+    private final List<CachedPowerUp> powerUpsForPay;
 
     private final String newWeaponName;
 
@@ -27,6 +30,8 @@ public class GrabAction extends JsonAction {
 
         this.discardedWeapon = null;
 
+        this.powerUpsForPay = null;
+
     }
 
     //AMMO GRAB without moves
@@ -39,10 +44,12 @@ public class GrabAction extends JsonAction {
         this.newWeaponName = null;
 
         this.discardedWeapon = null;
+
+        this.powerUpsForPay = null;
     }
 
     //SPAWN GRAB with moves (discardedWeapon only if he has already 3 weapons, otherwise null)
-    public GrabAction( List<Directions> directions, String discardedWeapon, String newWeaponName) {
+    public GrabAction( List<Directions> directions, String discardedWeapon, String newWeaponName, List<CachedPowerUp> powerUpsForPay) {
 
         super(ActionTypes.GRAB);
 
@@ -52,10 +59,12 @@ public class GrabAction extends JsonAction {
 
         this.discardedWeapon = discardedWeapon;
 
+        this.powerUpsForPay = powerUpsForPay;
+
     }
 
     //SPAWN GRAB without moves (discardedWeapon only if he has already 3 weapons, otherwise null)
-    public GrabAction( String discardedWeapon, String newWeaponName) {
+    public GrabAction( String discardedWeapon, String newWeaponName,List<CachedPowerUp> powerUpsForPay) {
 
         super(ActionTypes.GRAB);
 
@@ -65,6 +74,8 @@ public class GrabAction extends JsonAction {
 
         this.discardedWeapon = discardedWeapon;
 
+        this.powerUpsForPay = powerUpsForPay;
+
     }
 
     public List<Directions> getDirections() { return directions; }
@@ -72,4 +83,6 @@ public class GrabAction extends JsonAction {
     public String getNewWeaponName() { return newWeaponName; }
 
     public String getDiscardedWeapon() { return discardedWeapon; }
+
+    public List<CachedPowerUp> getPowerUpsForPay() { return powerUpsForPay; }
 }
