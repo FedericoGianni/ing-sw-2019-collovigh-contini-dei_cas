@@ -49,7 +49,7 @@ public class Controller {
 
     //used for TagBackGrenade (check if it is necessary)
 
-    private List<Integer> shotPlayerThisTurn; // TODO add to shoot
+    private List<Integer> shotPlayerThisTurn = new ArrayList<>(); // TODO add to shoot
 
     private TurnPhase turnPhase = SPAWN;
 
