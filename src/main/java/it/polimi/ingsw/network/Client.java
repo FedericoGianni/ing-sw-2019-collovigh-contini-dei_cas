@@ -34,7 +34,7 @@ public abstract class Client {
      * @param name is the name chosen
      * @return the player id or -1 if something went wrong
      */
-    //public abstract int reconnect(String name);
+    public abstract int reconnect(String name);
 
 
     // Getter

@@ -47,6 +47,7 @@ public class SocketClientReader extends Thread {
     private static final String START_RELOAD = "startReload";
     private static final String ASK_GRENADE = "askGrenade";
     private static final String SHOW = "showMessage";
+    private static final String SET_INT_ANSWER = "setIntAnswer";
 
     /**
      * Attribute representing a BufferedReader to manage input stream from socket
@@ -372,6 +373,8 @@ public class SocketClientReader extends Thread {
                 RunClient.getView().show(commands[1]);
             }
             RunClient.getView().setPlayerId(Integer.parseInt(commands[2]));
+
+            scw.setIntAnswer(Integer.parseInt(commands[2]));
         });
 
 
@@ -439,6 +442,15 @@ public class SocketClientReader extends Thread {
         headersMap.put(END_GAME,(commands) -> {
             LOGGER.log(level,() -> "[Socket-Client-Reader] received endGame by server ");
             RunClient.getView().endGame();
+        });
+
+        //setIntAnswer
+        headersMap.put(SET_INT_ANSWER,(commands) -> {
+
+            LOGGER.log(level,() -> "[Socket-Client-Reader] received setIntAnswer by server ");
+
+            scw.setIntAnswer(Integer.parseInt(commands[1]));
+
         });
     }
 

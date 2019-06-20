@@ -24,6 +24,8 @@ public class RMIClient extends Client {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
+    private static final String LOG_START = "[RMI-Client] ";
+
     //attributes relative to client -> server flow
     private final String remoteObjectName = "rmi_server";
     private Registry remoteRegistry;
@@ -295,7 +297,7 @@ public class RMIClient extends Client {
      * @param name is the name chosen
      * @return the player id
      */
-
+    @Override
     public int reconnect(String name) {
 
         try {
@@ -310,11 +312,25 @@ public class RMIClient extends Client {
 
             // register the ip of the client rmiRegistry to the server
 
+            int playerId = server.reconnect(name, localIp, localName );
 
-            return server.reconnect(name, localIp, localName );
+            //set the pid parameter of the class
+
+            this.setPlayerId(playerId);
+            this.getView().setPlayerId(playerId);
+
+            // temp x gui
+
+            view.show(DEFAULT_LOGIN_OK_REPLY);
+
+            //return the playerId
+
+            return playerId;
 
 
         } catch (GameNonExistentException e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + "player tried to reconnect but no game is active at the moment ");
 
             LOGGER.log(Level.WARNING, e.getMessage(), e);
 

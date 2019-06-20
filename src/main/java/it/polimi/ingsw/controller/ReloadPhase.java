@@ -47,6 +47,8 @@ public class ReloadPhase {
 
             controller.getVirtualView(playerId).startReload();
 
+            controller.setExpectingAnswer(true);
+
         }else {
 
             LOGGER.log(level,()->LOG_START + " player w/ id:  " + playerId + " skipped reload bc has no weapons ");

@@ -75,6 +75,8 @@ class ParserTest {
 
                 System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
 
+                if (matrix[i][j].isAmmoCell()) assertNotNull(matrix[i][j].getAmmoPlaced());
+
             }
         }
     }
@@ -103,6 +105,8 @@ class ParserTest {
         Model.getPlayer(0).setPlayerPos(Model.getMap().getCell(1,1));
 
         Model.getPlayer(0).setPlayerPos(Model.getMap().getCell(2,2));
+
+        Parser.addGame();
 
         Parser.saveMap();
 
@@ -133,6 +137,8 @@ class ParserTest {
 
             System.out.println("\n");
         }
+
+        Parser.clearGames();
     }
 
 

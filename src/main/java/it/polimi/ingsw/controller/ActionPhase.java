@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.actions.*;
+import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 
@@ -79,6 +80,8 @@ public class ActionPhase {
             controller.getVirtualView(currentPlayer).startAction(controller.getFrenzy(), frenzyEnhanced);
 
             // start the timer
+
+            controller.setExpectingAnswer(true);
 
             controller.getTimer().startTimer(TIMER_ACTION);
 
@@ -387,6 +390,10 @@ public class ActionPhase {
 
     // SHOOT_ACTION
 
+    /**
+     * This method will make the player do a "shoot" action
+     * @param shootAction is the class containing the list of moves
+     */
     public void shootAction(ShootAction shootAction) {
 
         // gets the id of the current player
@@ -397,38 +404,15 @@ public class ActionPhase {
 
         Weapon selected = utilityMethods.findWeaponInWeaponBag(shootAction.getWeaponName(),playerId);
 
-        // check if weapon exist
+        if (!checkShoot(shootAction)) {
 
-        if (selected != null){
+            handleAction();
 
-            try {
+        }
 
-                // translate the list of point in a list of cell
+        try {
 
-                List<Cell> cells = shootAction
-                        .getCells()
-                        .stream()
-                        .map( x -> Model.getMap().getCell(x.x,x.y))
-                        .collect(Collectors.toList());
-
-                List<List<Player>> targets = new ArrayList<>();
-
-                // translate the lists of Integer in lists of Players
-
-                for (int i = 0; i < shootAction.getTargetIds().size() ; i++) {
-
-                    List<Player> temp = new ArrayList<>();
-
-                    for (Integer id : shootAction.getTargetIds().get(i)){
-
-                        temp.add(Model.getPlayer(id));
-                    }
-
-                    targets.add(temp);
-                }
-
-
-                selected.shoot(targets,shootAction.getEffects(),cells);
+            shoot(shootAction);
 
 
             }catch (WeaponNotLoadedException weaponNonLoadedException){
@@ -437,11 +421,15 @@ public class ActionPhase {
 
                 controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_LOADED);
 
+                handleAction();
+
             }catch (PlayerInSameCellException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
                 controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
+
+                handleAction();
 
             }catch (PlayerInDifferentCellException e){
 
@@ -449,11 +437,15 @@ public class ActionPhase {
 
                 controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_DIFFERENT_CELL);
 
+                handleAction();
+
             }catch (UncorrectDistanceException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
                 controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
+
+                handleAction();
 
             }catch (SeeAblePlayerException e){
 
@@ -461,11 +453,15 @@ public class ActionPhase {
 
                 controller.getVirtualView(playerId).show(DEFAULT_SEEABLE_PLAYER);
 
+                handleAction();
+
             }catch (UncorrectEffectsException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
                 controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
+
+                handleAction();
 
             }catch (NotCorrectPlayerNumberException e){
 
@@ -473,24 +469,109 @@ public class ActionPhase {
 
                 controller.getVirtualView(playerId).show(DEFAULT_NOT_CORRECT_PLAYER_NUMBER);
 
+                handleAction();
+
             }catch (PlayerNotSeeableException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
                 controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
 
+                handleAction();
+
+            }catch (WeaponNotFoundException e){
+
+                LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " weapon not found ");
+
+                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+
+                handleAction();
+            } catch (CardNotPossessedException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
+        }
+
+        controller.incrementPhase();
+
+
+    }
+
+    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {
+
+        // gets the selected weapon
+
+        Weapon selected = utilityMethods.findWeaponInWeaponBag(shootAction.getWeaponName(),controller.getCurrentPlayer());
+
+        if (selected != null) {
+
+            // translate the list of point in a list of cell
+
+            List<Cell> cells = shootAction
+                    .getCells()
+                    .stream()
+                    .map(x -> Model.getMap().getCell(x.x, x.y))
+                    .collect(Collectors.toList());
+
+            List<List<Player>> targets = new ArrayList<>();
+
+            // translate the lists of Integer in lists of Players
+
+            for (int i = 0; i < shootAction.getTargetIds().size(); i++) {
+
+                List<Player> temp = new ArrayList<>();
+
+                for (Integer id : shootAction.getTargetIds().get(i)) {
+
+                    temp.add(Model.getPlayer(id));
+                }
+
+                targets.add(temp);
             }
 
-            controller.incrementPhase();
+
+            selected.shoot(targets, shootAction.getEffects(), cells);
 
         }else {
 
-            LOGGER.log( Level.INFO, () -> LOG_START_SHOOT + " weapon not found ");
-
-            controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
-
-            handleAction();
+            throw new WeaponNotFoundException();
         }
+    }
+
+    /**
+     * This method will check if the parameter the player specified are suitable for shooting
+     * @param shootAction is the class containing the list of moves
+     * @return true if the action is doable
+     */
+    private Boolean checkShoot(ShootAction shootAction){
+
+        // gets the id of the current player
+
+        int playerId = controller.getCurrentPlayer();
+
+        // gets the specified weapon
+
+        Weapon selected = utilityMethods.findWeaponInWeaponBag(shootAction.getWeaponName(),playerId);
+
+        boolean returnValue = true;
+
+        if(selected == null){
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+
+            returnValue = false;
+        }
+
+        if (!selected.isLoaded()){
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_LOADED);
+
+            returnValue = false;
+        }
+
+        return returnValue;
     }
 
 

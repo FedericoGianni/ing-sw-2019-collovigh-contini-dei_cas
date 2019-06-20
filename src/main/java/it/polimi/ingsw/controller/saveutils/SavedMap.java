@@ -56,7 +56,7 @@ public class SavedMap implements Serializable {
         return realMap;
     }
 
-    private void generateCells(int mapType) {
+    private void generateCells(int mapType) {  // TODO delete
 
         switch (mapType){
 

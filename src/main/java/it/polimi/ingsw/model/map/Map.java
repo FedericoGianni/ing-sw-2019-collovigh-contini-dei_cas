@@ -57,6 +57,7 @@ public class Map {
         this.mapType = mapType;
 
         this.matrix = Parser.getMap(mapType).getRealMap();
+
     }
 
 
@@ -132,7 +133,7 @@ public class Map {
 
     }
 
-    public void ReplaceAmmoCard(){
+    public void replaceAmmoCard(){
 
         AmmoCell cell;
 

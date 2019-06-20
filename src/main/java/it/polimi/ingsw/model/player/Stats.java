@@ -140,6 +140,14 @@ public class Stats extends Subject implements Serializable {
     }
 
     /**
+     * USed for markers in shooting tests
+     * @param marks
+     */
+    public void setMarksCopy(List<Integer> marks){
+            this.marks = new ArrayList<>(marks);
+    }
+
+    /**
      *
      * @param playerId is the id of the player who placed the marks if the marks are already three the function will do nothing
      */
@@ -172,6 +180,16 @@ public class Stats extends Subject implements Serializable {
             updateAll(this);
         }
         else throw new OverMaxDmgException();
+
+    }
+
+    /**
+     * Used for the copyes for shoot controls
+     * @param dmgTaken
+     */
+    public void setDmgTakenCopy(List<Integer> dmgTaken){
+
+            this.dmgTaken = new ArrayList<>(dmgTaken);
 
     }
 
@@ -231,6 +249,11 @@ public class Stats extends Subject implements Serializable {
         return (currentPosition == null) ? null : Model.getMap().getCell(currentPosition.x,currentPosition.y);
     }
 
+    public Cell getCurrentPositionCopy()
+    {
+        return Model.getMap().getCell(currentPosition.x,currentPosition.y);
+    }
+
     /**
      *
      * @param currentPosition of the player
@@ -243,7 +266,7 @@ public class Stats extends Subject implements Serializable {
 
         // sets the new position in the stats
 
-        this.currentPosition = Model.getMap().cellToCoord(currentPosition);
+        this.currentPosition = (currentPosition == null) ? null : Model.getMap().cellToCoord(currentPosition);
 
         // sets the player in the cell if not null
 
@@ -252,6 +275,15 @@ public class Stats extends Subject implements Serializable {
         // updates the observers
 
         updateAll(this);
+    }
+
+    /**
+     * Used for the copyes for preshoot tests
+     * @param currentPosition
+     */
+    public void setCurrentPositionCopy(Cell currentPosition){
+        this.currentPosition =  Model.getMap().cellToCoord(currentPosition);
+
     }
 
     public Boolean getOnline() {

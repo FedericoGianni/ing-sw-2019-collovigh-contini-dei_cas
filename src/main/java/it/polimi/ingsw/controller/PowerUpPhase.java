@@ -72,11 +72,15 @@ public class PowerUpPhase {
 
         }else{
 
-            controller.getVirtualView(currentPlayer).startPowerUp();
-
             // start the timer
 
             controller.getTimer().startTimer(TIMER_POWER_UP);
+
+            controller.setExpectingAnswer(true);
+
+            // sends the action
+
+            controller.getVirtualView(currentPlayer).startPowerUp();
 
         }
     }
@@ -95,6 +99,8 @@ public class PowerUpPhase {
 
                 controller.getTimer().startTimer(TIMER_POWER_UP);
 
+                controller.setExpectingAnswer(true);
+
             }else {
 
                 // if the player does not have the grenades it gets removed from the list and skipped
@@ -112,7 +118,11 @@ public class PowerUpPhase {
 
     public void usePowerUp(PowerUpAction powerUpAction){
 
+        // stop timer
+
         controller.getTimer().stopTimer();
+
+        controller.setExpectingAnswer(false);
 
         switch (powerUpAction.getPowerUpType()){
 

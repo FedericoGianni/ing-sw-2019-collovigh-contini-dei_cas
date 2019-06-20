@@ -53,6 +53,10 @@ public abstract class MicroEffect {
      * @throws DifferentPlayerNeededException
      * @throws NotCorrectPlayerNumberException
      */
-    public abstract void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException;
+    public abstract void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException, PlayerNotSeeableException;
+
+    //devo fare una copia di tutte le stats e cosi da usare qui!!!
+   // public abstract void microEffectApplicatorFake(List<Player> playerList, Weapon w, Cell c) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException, PlayerNotSeeableException;
+
     public abstract boolean moveBefore();
 }

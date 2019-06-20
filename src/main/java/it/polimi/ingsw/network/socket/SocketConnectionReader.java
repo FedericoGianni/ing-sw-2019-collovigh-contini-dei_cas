@@ -3,14 +3,8 @@ package it.polimi.ingsw.network.socket;
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.GameAlreadyStartedException;
-import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
-import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
-import it.polimi.ingsw.utils.Color;
-import it.polimi.ingsw.utils.Directions;
-import it.polimi.ingsw.utils.PowerUpType;
-import it.polimi.ingsw.utils.Protocol;
+import it.polimi.ingsw.network.networkexceptions.*;
+import it.polimi.ingsw.utils.*;
 import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
@@ -28,8 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static java.util.logging.Level.INFO;
-import static java.util.logging.Level.WARNING;
+import static java.util.logging.Level.*;
 
 /**
  * This class handles the socket input stream server-side. A new SocketConnectionReader thread is started for every
@@ -42,8 +35,11 @@ import static java.util.logging.Level.WARNING;
 public class SocketConnectionReader extends Thread {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = FINE;
 
-    private static Level level = WARNING;
+    private static final String LOG_START = "[Socket-Connection-R] ";
+
+    private static final String RECONNECTION_MESSAGE_START = "reconnect";
 
     /**
      * Reference to the socket to be handled, which is passed as a parameter to the constructor
@@ -231,6 +227,25 @@ public class SocketConnectionReader extends Thread {
             }catch (GameAlreadyStartedException e){
                 socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_GAME_ALREADY_STARTED_REPLY);
             }
+        });
+
+        //reconnect
+
+        headersMap.put(RECONNECTION_MESSAGE_START, (commands) -> {
+
+            try {
+
+                LOGGER.log(level, () -> LOG_START + "Client sent reconnect w/ name: " + commands[1]);
+
+                int playerId = Server.reconnect(commands[1], socketConnectionWriter);
+
+                socketConnectionWriter.setIntAnswer(playerId);
+
+            }catch (GameNonExistentException e ){
+
+                socketConnectionWriter.show(DefaultReplies.DEFAULT_GAME_NON_EXISTENT);
+            }
+
         });
 
         //ping
