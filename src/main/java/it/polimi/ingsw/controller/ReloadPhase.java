@@ -75,7 +75,7 @@ public class ReloadPhase {
 
             try{
 
-                List<PowerUp> toDiscard = getSpecifiedPowerUp(reloadAction.getPowerUps());
+                List<PowerUp> toDiscard = controller.getUtilityMethods().getSpecifiedPowerUp(reloadAction.getPowerUps());
 
                 for (PowerUp powerUp: toDiscard){
 
@@ -146,67 +146,7 @@ public class ReloadPhase {
         }
     }
 
-    /**
-     *  THis method will check if the specified powerUps belongs to the player
-     * @param powerUps is a list of cachedPowerUp received from the view
-     * @return true if the player effectively has them
-     */
-    private Boolean checkIfPlayerPossessPowerUps(List<CachedPowerUp> powerUps){
 
-        Boolean returnValue = true;
-
-        try{
-
-            getSpecifiedPowerUp(powerUps);
-
-        }catch (CardNotPossessedException e){
-
-            // log
-
-            LOGGER.log(Level.WARNING,() -> LOG_START + " player does not possess all powerUps he declared ");
-
-            // show
-
-            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP);
-
-            return false;
-        }
-
-        return returnValue;
-    }
-
-    /**
-     * This method will get a list of PowerUp from a list of CachedPowerUp
-     * @param powerUps is a list of cachedPowerUp
-     * @return a list of PowerUp
-     * @throws CardNotPossessedException if a powerUp was not found
-     */
-    private List<PowerUp> getSpecifiedPowerUp(List<CachedPowerUp> powerUps) throws CardNotPossessedException {
-
-        // declare a list of powerUp
-
-        List<PowerUp> powerUpList = new ArrayList<>();
-
-        // get a copy of the list of the powerUp possessed by the model
-
-        List<PowerUp> possessed = Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().getList();
-
-        // for each cachedPowerUp gets the correspondent one from the model and adds it to the new list
-
-        for (CachedPowerUp cachedPowerUp : powerUps){
-
-            PowerUp toRemove = controller.getUtilityMethods().cachedToRealPowerUp(cachedPowerUp,possessed);
-
-            powerUpList.add(toRemove);
-
-            // then removes it from the original list so that can not be picked again
-
-            possessed.remove(toRemove);
-
-        }
-
-        return powerUpList;
-    }
 
     /**
      * This method will check if the player can pay the reload cost with the parameters he specified
@@ -262,7 +202,7 @@ public class ReloadPhase {
 
         // check if player possess the specified powerUps
 
-        returnValue =  checkIfPlayerPossessPowerUps(reloadAction.getPowerUps());
+        returnValue =  controller.getUtilityMethods().checkIfPlayerPossessPowerUps(reloadAction.getPowerUps());
 
         // gets the weapon if them are correct
 
@@ -287,7 +227,7 @@ public class ReloadPhase {
 
         try{
 
-            possessed.addAll(controller.getUtilityMethods().powerUpToAmmoList(getSpecifiedPowerUp(reloadAction.getPowerUps())));
+            possessed.addAll(controller.getUtilityMethods().powerUpToAmmoList(controller.getUtilityMethods().getSpecifiedPowerUp(reloadAction.getPowerUps())));
 
             possessed.addAll(Model.getPlayer(controller.getCurrentPlayer()).getAmmoBag().getList());
 

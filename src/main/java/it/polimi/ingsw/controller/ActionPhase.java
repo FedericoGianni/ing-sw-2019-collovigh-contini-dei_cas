@@ -3,11 +3,15 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.actions.*;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
@@ -28,6 +32,7 @@ public class ActionPhase {
     private static final String LOG_START_GRAB = "[Controller-GrabAction] Player w/ id: ";
     private static final String LOG_START_SHOOT = "[Controller-ShootAction]";
     private static final String LOG_START_MOVE = "[Controller-MoveAction]";
+    private static final String LOG_START_ID = "[CONTROLLER] player id ";
 
     private static final int TIMER_ACTION = 30;
 
@@ -100,7 +105,7 @@ public class ActionPhase {
 
         // logs the action
 
-        LOGGER.log(level, () -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + "calling move");
+        LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + "calling move");
 
         if (moveAction.getMoves().size() > MAX_MOVES) {
 
@@ -138,15 +143,28 @@ public class ActionPhase {
 
         // logs the action
 
-        LOGGER.log(level, () -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + " calling Grab");
+        LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + " calling Grab");
 
         // check if the actions are possible
 
-        if (checkGrabMove(grabAction) && checkGrab(grabAction.getNewWeaponName(),grabAction.getDiscardedWeapon(), utilityMethods.simulateMovement(grabAction.getDirections()))){
+        if (checkGrabMove(grabAction) && checkGrab(grabAction.getNewWeaponName(),grabAction.getDiscardedWeapon(), utilityMethods.simulateMovement(grabAction.getDirections()),grabAction.getPowerUpsForPay())){
 
             // moves the player
 
             utilityMethods.move(grabAction.getDirections());
+
+            // sells the specified powerUps
+
+            if ( (grabAction.getPowerUpsForPay() != null ) && (!grabAction.getPowerUpsForPay().isEmpty()) ){
+
+                for (CachedPowerUp cachedPowerUp : grabAction.getPowerUpsForPay()){
+
+                    PowerUp powerUp = Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().findItem(cachedPowerUp.getType(), cachedPowerUp.getColor());
+
+                    Model.getPlayer(controller.getCurrentPlayer()).sellPowerUp(powerUp);
+
+                }
+            }
 
             // grabs
 
@@ -235,13 +253,13 @@ public class ActionPhase {
      * @param cell is the specified cell
      * @return true if the player can grab false otherwise
      */
-    private Boolean checkGrab(String newWeaponName,String discardedWeaponName, Cell cell){
+    private Boolean checkGrab(String newWeaponName,String discardedWeaponName, Cell cell, List<CachedPowerUp> powerUpList){
 
         if (cell == null) return false;
 
         if (!cell.isAmmoCell()) {
 
-            return checkWeaponGrab(newWeaponName,discardedWeaponName,cell);
+            return checkWeaponGrab(newWeaponName,discardedWeaponName,cell, powerUpList);
 
         }else {
 
@@ -264,7 +282,7 @@ public class ActionPhase {
      * @param cell is the specified cell
      * @return true if the player can grab false otherwise
      */
-    private Boolean checkWeaponGrab(String newWeaponName,String discardedWeaponName, Cell cell){
+    private Boolean checkWeaponGrab(String newWeaponName,String discardedWeaponName, Cell cell, List<CachedPowerUp> powerUpList){
 
         if (newWeaponName == null) {
 
@@ -297,7 +315,7 @@ public class ActionPhase {
                     return false;
                 }
 
-                return currentPlayerCanBuyWeapon(utilityMethods.findWeaponInSpawnCell(newWeaponName, (SpawnCell) cell));
+                return currentPlayerCanBuyWeapon(utilityMethods.findWeaponInSpawnCell(newWeaponName, (SpawnCell) cell),powerUpList);
             }
         }
     }
@@ -309,10 +327,24 @@ public class ActionPhase {
      * @param weapon is the weapon to buy
      * @return true if the player can buy it
      */
-    private Boolean currentPlayerCanBuyWeapon(Weapon weapon){
+    private Boolean currentPlayerCanBuyWeapon(Weapon weapon, List<CachedPowerUp> powerUpList){
+
+        List<AmmoCube> possessed = new ArrayList<>();
+
+        try{
+
+            possessed.addAll(controller.getUtilityMethods().powerUpToAmmoList(controller.getUtilityMethods().getSpecifiedPowerUp(powerUpList)));
+
+            possessed.addAll(Model.getPlayer(controller.getCurrentPlayer()).getAmmoBag().getList());
 
 
-        if ((weapon != null) && (Model.getPlayer(controller.getCurrentPlayer()).canPay(weapon.getCost()))){
+        }catch (CardNotPossessedException e){
+
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
+        }
+
+
+        if ((weapon != null) && (checkIfPlayerCanPayWeapon(possessed,weapon))){
 
             return true;
 
@@ -326,6 +358,49 @@ public class ActionPhase {
 
             return false;
         }
+    }
+
+    /**
+     * This method will check if the player can pay the reload cost with the parameters he specified
+     * @param ammoCubeList is a list of ammoCubes
+     * @param weapon is the weapon to buy
+     * @return true if yes, false otherwise
+     */
+    private Boolean checkIfPlayerCanPayWeapon(List<AmmoCube> ammoCubeList, Weapon weapon){
+
+        Boolean returnValue = true;
+
+        List<Color> required = new ArrayList<>();
+
+
+
+        required.addAll(weapon
+                .getCost()
+                .stream()
+                .map(AmmoCube::getColor)
+                .collect(Collectors.toList()));
+
+
+
+        List<Color> possessed = ammoCubeList
+                .stream()
+                .map(AmmoCube::getColor)
+                .collect(Collectors.toList());
+
+        if( ! possessed.containsAll(required)){
+
+            returnValue = false;
+
+            // log
+
+            LOGGER.log(Level.WARNING, ()->  "[Controller] player tried to buy weapon but did not have enough ammo");
+
+            // show
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_NO_ENOUGH_AMMO);
+        }
+
+        return returnValue;
     }
 
     /**
@@ -400,9 +475,6 @@ public class ActionPhase {
 
         int playerId = controller.getCurrentPlayer();
 
-        // gets the specified weapon
-
-        Weapon selected = utilityMethods.findWeaponInWeaponBag(shootAction.getWeaponName(),playerId);
 
         if (!checkShoot(shootAction)) {
 
@@ -415,7 +487,7 @@ public class ActionPhase {
             shoot(shootAction);
 
 
-            }catch (WeaponNotLoadedException weaponNonLoadedException){
+        }catch (WeaponNotLoadedException weaponNonLoadedException){
 
                 LOGGER.log(Level.WARNING, weaponNonLoadedException.getMessage(), weaponNonLoadedException);
 
@@ -423,7 +495,7 @@ public class ActionPhase {
 
                 handleAction();
 
-            }catch (PlayerInSameCellException e){
+        }catch (PlayerInSameCellException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
@@ -431,7 +503,7 @@ public class ActionPhase {
 
                 handleAction();
 
-            }catch (PlayerInDifferentCellException e){
+        }catch (PlayerInDifferentCellException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
@@ -439,7 +511,7 @@ public class ActionPhase {
 
                 handleAction();
 
-            }catch (UncorrectDistanceException e){
+        }catch (UncorrectDistanceException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
@@ -447,7 +519,7 @@ public class ActionPhase {
 
                 handleAction();
 
-            }catch (SeeAblePlayerException e){
+        }catch (SeeAblePlayerException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
@@ -455,7 +527,7 @@ public class ActionPhase {
 
                 handleAction();
 
-            }catch (UncorrectEffectsException e){
+        }catch (UncorrectEffectsException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
@@ -463,7 +535,7 @@ public class ActionPhase {
 
                 handleAction();
 
-            }catch (NotCorrectPlayerNumberException e){
+        }catch (NotCorrectPlayerNumberException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
@@ -471,7 +543,7 @@ public class ActionPhase {
 
                 handleAction();
 
-            }catch (PlayerNotSeeableException e){
+        }catch (PlayerNotSeeableException e){
 
                 LOGGER.log( Level.WARNING, e.getMessage(),e);
 
@@ -479,19 +551,38 @@ public class ActionPhase {
 
                 handleAction();
 
-            }catch (WeaponNotFoundException e){
+        }catch (WeaponNotFoundException e){
 
                 LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " weapon not found ");
 
                 controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
                 handleAction();
-            } catch (CardNotPossessedException e) {
-            e.printStackTrace();
+
+        } catch (CardNotPossessedException e) {
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " card not found ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+
+            handleAction();
+
         } catch (NotEnoughAmmoException e) {
-            e.printStackTrace();
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " not enough ammo ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_NO_ENOUGH_AMMO);
+
+            handleAction();
+
         } catch (DifferentPlayerNeededException e) {
-            e.printStackTrace();
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + "DifferentPlayerNeededException ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+
+            handleAction();
+
         }
 
         controller.incrementPhase();
@@ -562,9 +653,8 @@ public class ActionPhase {
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
             returnValue = false;
-        }
 
-        if (!selected.isLoaded()){
+        } else if (!selected.isLoaded()){
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_LOADED);
 
@@ -643,11 +733,11 @@ public class ActionPhase {
 
         // logs the action
 
-        LOGGER.log(level, () -> "[CONTROLLER] player id " + controller.getCurrentPlayer() + " calling FrenzyGrab");
+        LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + " calling FrenzyGrab");
 
         // check if the actions are possible
 
-        if (checkFrenzyGrabMove(frenzyGrab) && checkGrab(frenzyGrab.getNewWeaponName(),frenzyGrab.getDiscardedWeapon(), utilityMethods.simulateMovement(frenzyGrab.getDirections()))){
+        if (checkFrenzyGrabMove(frenzyGrab) && checkGrab(frenzyGrab.getNewWeaponName(),frenzyGrab.getDiscardedWeapon(), utilityMethods.simulateMovement(frenzyGrab.getDirections()), frenzyGrab.getPowerUpsForPay())){
 
             // moves the player
 

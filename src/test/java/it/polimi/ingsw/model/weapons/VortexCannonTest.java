@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.weapons;
 
 import it.polimi.ingsw.customsexceptions.NotAbleToReloadException;
+import it.polimi.ingsw.customsexceptions.UncorrectDistanceException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
@@ -102,7 +103,7 @@ class VortexCannonTest {
     }
 
     @Test
-    void preShoot() {
+    void preShootPlayerNotSpawn() {
 
         List<String> names = new ArrayList<>();
 
@@ -150,14 +151,12 @@ class VortexCannonTest {
 
         cellList.add(vortex);
 
-        try {
+        assertThrows(UncorrectDistanceException.class, () -> {
 
             vortexCannon.preShoot(targetListList, effectlist, cellList);
 
-        }catch (Exception e){
+        });
 
-            e.printStackTrace();
-        }
     }
 
     @Test
