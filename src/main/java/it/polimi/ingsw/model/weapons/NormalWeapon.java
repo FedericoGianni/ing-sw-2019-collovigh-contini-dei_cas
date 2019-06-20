@@ -374,131 +374,139 @@ public class NormalWeapon extends Weapon{
 
     public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException {
 
-        List<Player> players = new ArrayList<>();
-        for (List<Player> item : targetLists) {
-            for (Player p : item) {
-                Player tmp = new Player(p.getPlayerName(), p.getPlayerId(), p.getColor());
-                for (AmmoCube a : p.getAmmoBag().getList()) {
-                    tmp.getAmmoBag().addItem(a);
-                }
-                players.add(tmp);
-            }
-        }
-        //now i sort the players in order with playerID
-        Collections.sort(players, new Sorter());
-        ArrayList<String> playerNames=new ArrayList<>();
-        ArrayList<PlayerColor> pc=new ArrayList<>();
-        for(Player p:players)
-        {
-            playerNames.add(p.getPlayerName());
-            pc.add(p.getColor());
-        }
-        Model m=new Model(playerNames,pc,2,12);//skulls are uninportant
-
-        List<List<Player>> fakeTargetsLists=new ArrayList<>();//manca possessore weapon?
+        List<List<Player>> targetsCopy=new ArrayList<>();
         //now i create the fake players
         for (List<Player> item : targetLists) {
             List<Player> pl=new ArrayList<>();
             for (Player p : item) {
-                Player tmp = Model.getGame().getPlayers().get(p.getPlayerId());
+                Player tmp=new Player(p.getPlayerName(),p.getPlayerId(),p.getColor());
                 for (AmmoCube a : p.getAmmoBag().getList()) {
                     tmp.getAmmoBag().addItem(a);
                 }
-                tmp.setPlayerPos(p.getCurrentPosition());
+                tmp.getStats().setDmgTakenCopy(p.getStats().getDmgTaken());
+                tmp.getStats().setMarksCopy(p.getStats().getMarks());
+                tmp.setPlayerPosCopy(p.getCurrentPosition());
                 pl.add(tmp);
             }
             //now i sort the players in order with playerID
-            fakeTargetsLists.add(pl);
+            targetsCopy.add(pl);
         }
 
+      try {
+          if (!this.isLoaded())//if actual weapon is not loaded
+          {
+              throw new WeaponNotLoadedException();//weapon not loaded
+          }
 
-         /*List<List<Player>> fakeTargets= new ArrayList<>();//targets now
-        for(List<Player> item: targetLists)
-        {
-            List<Player> fakeList=new ArrayList<>();
-            for(Player p : item)
-            {
-                Player tmp=new Player(p.getPlayerName(),p.getPlayerId(),p.getColor());
-                tmp.setPlayerPos(p.getCurrentPosition());
-                for(AmmoCube a :p.getAmmoBag().getList())
-                {
-                    tmp.getAmmoBag().addItem(a);
-                }
-                fakeList.add(tmp);
+          for (int macroCont = 0; macroCont < effect.size(); macroCont++)//iterate macroeffect
+          {
 
-            }
-            fakeTargets.add(fakeList);
-        }*/
+              if (this.getEffects().get(macroCont).getEffectCost() != null)//if the effect costs 0 i don't need to pay
+              {
+                  if (canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(), this.isPossessedBy().getAmmoBag()) == true)//----need to add effects as payment
+                  {
+                      for (AmmoCube ammo : this.getEffects().get(effect.get(macroCont)).getEffectCost()) {
+                          this.isPossessedBy().pay(ammo.getColor());//pays the effects cost need to be modified
+                      }
 
-        /*if(!this.isLoaded())//if actual weapon is not loaded
-        {
-            throw new WeaponNotLoadedException();//weapon not loaded
-        }
-
-        for(int macroCont=0;macroCont<effect.size();macroCont++)//iterate macroeffect
-        {
-
-            if (this.getEffects().get(macroCont).getEffectCost() != null)//if the effect costs 0 i don't need to pay
-            {
-                if (canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(), this.isPossessedBy().getAmmoBag()) == true)//----need to add effects as payment
-                {
-                    for (AmmoCube ammo : this.getEffects().get(effect.get(macroCont)).getEffectCost()) {
-                        this.isPossessedBy().pay(ammo.getColor());//pays the effects cost need to be modified
-                    }
-
-                } else {
-                    throw new NotEnoughAmmoException();
-                }
-            }
-            //here i can shoot for real
+                  } else {
+                      throw new NotEnoughAmmoException();
+                  }
+              }
+              //here i can shoot for real
 
 
-            for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
-            {
+              for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
+              {
 
-                if (micro.moveBefore() == true && moveBefore)//if i need to move before shooting
-                {
-                    micro.microEffectApplicator(fakeTargets.get(macroCont), this, cells.get(macroCont));//contatore appostio forse perchè sposta gli ordini??
-                    this.getEffects().get(macroCont).getMicroEffects().remove(micro);
+                  if (micro.moveBefore() == true && moveBefore)//if i need to move before shooting
+                  {
+                      micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont));//contatore appostio forse perchè sposta gli ordini??
+                      this.getEffects().get(macroCont).getMicroEffects().remove(micro);
 
-                }
+                  }
 
-            }
+              }
 
-            for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
-            {
-                if (cells != null && !cells.isEmpty())//if you also have mover effects
-                {
-                    micro.microEffectApplicator(fakeTargets.get(macroCont), this, cells.get(macroCont));
-                }//the method that applies the effects
-                else {
-                    try{ micro.microEffectApplicator(fakeTargets.get(macroCont), this, null);}
-                    catch(PlayerNotSeeableException e){
-                        throw new PlayerNotSeeableException();
+              for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
+              {
+                  if (cells != null && !cells.isEmpty())//if you also have mover effects
+                  {
+                      micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont));
+                  }//the method that applies the effects
+                  else {
+                      try {
+                          micro.microEffectApplicator(targetLists.get(macroCont), this, null);
+                      } catch (PlayerNotSeeableException e) {
+                          throw new PlayerNotSeeableException();
 
-                    }
-                }
-            }
+                      }
+                  }
+              }
 
+
+          }
 
         }
+      catch(PlayerInSameCellException e)
+      {
 
-
-        */return true;
+      } catch (NotEnoughAmmoException e) {
+          restore(targetsCopy,targetLists);
+          throw new NotEnoughAmmoException();
+      } catch (WeaponNotLoadedException e) {
+          restore(targetsCopy,targetLists);
+          throw new WeaponNotLoadedException();
+      } catch (PlayerInDifferentCellException e) {
+          restore(targetsCopy,targetLists);
+          throw new PlayerInDifferentCellException();
+      } catch (CardNotPossessedException e) {
+          restore(targetsCopy,targetLists);
+          throw new CardNotPossessedException();
+      } catch (UncorrectDistanceException e) {
+          restore(targetsCopy,targetLists);
+          throw new UncorrectDistanceException();
+      } catch (PlayerNotSeeableException e) {
+          restore(targetsCopy,targetLists);
+          throw new PlayerNotSeeableException();
+      } catch (NotCorrectPlayerNumberException e) {
+          restore(targetsCopy,targetLists);
+          throw new NotCorrectPlayerNumberException();
+      } catch (DifferentPlayerNeededException e) {
+          restore(targetsCopy,targetLists);
+          throw new DifferentPlayerNeededException();
+      } catch (SeeAblePlayerException e) {
+          restore(targetsCopy,targetLists);
+          throw new SeeAblePlayerException();
+      }
+        return true;
     }
 
 
-
-
-        class Sorter implements Comparator<Player>
+    /**
+     * in case of failed shoot restores everything as before the shoot attempt
+     * @param targetsCopy
+     * @param targetLists
+     */
+    private void restore(List<List<Player>> targetsCopy,List<List<Player>> targetLists)
+    {
+        for (int i=0;i<targetLists.size();i++)
         {
-            // Used for sorting in ascending order of
-            // roll number
-            public int compare(Player a, Player b)
+            for(int j=0;j<targetLists.get(i).size();j++)
             {
-                return a.getPlayerId() - b.getPlayerId();
+                targetLists.get(i).get(j).setPlayerPos(targetsCopy.get(i).get(j).getCurrentPositionCopy());
+                try {
+                    targetLists.get(i).get(j).getStats().setMarks(targetsCopy.get(i).get(j).getMarks());
+                    targetLists.get(i).get(j).getStats().setDmgTaken(targetsCopy.get(i).get(j).getDmg());
+                } catch (OverMaxMarkException e) {//this shit can't occur NEVER in this specifial case
+                    e.printStackTrace();
+                } catch (OverMaxDmgException e) {
+                    e.printStackTrace();
+                }
+
             }
         }
+    }
         public void print()
     {
 

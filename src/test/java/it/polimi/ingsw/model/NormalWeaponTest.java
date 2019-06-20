@@ -97,7 +97,8 @@ class NormalWeaponTest {
 
     @Test
     void shoot2() throws FrenzyActivatedException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
-        // 2 damages and 1 mark
+        // 2 damages and 1 mark to target 1
+        // 1 mark to target2
         //-----------------creates microEffects ecc
         Damage.populator();
         Marker.populator();
@@ -120,13 +121,13 @@ class NormalWeaponTest {
 
         //generate a player with a name and its starting position
         Player shooter = Model.getPlayer(0);
-        shooter.setPlayerPos(Model.getMap().getCell(0,3));
+        shooter.setPlayerPos(Model.getMap().getCell(1,1));
 
         Player target1 = Model.getPlayer(1);
-        target1.setPlayerPos(Model.getMap().getCell(1,3));
+        target1.setPlayerPos(Model.getMap().getCell(1,1));
 
         Player target2 = Model.getPlayer(2);
-        target2.setPlayerPos(Model.getMap().getCell(1,3));
+        target2.setPlayerPos(Model.getMap().getCell(0,0));
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
         shooter.addWeapon(weapons.get(0));//not how it works but easy
@@ -144,7 +145,7 @@ class NormalWeaponTest {
             mEf.add(0);
             mEf.add(1);
 
-            shooter.getWeapons().get(0).shoot(targetLists,mEf,null);
+            shooter.getWeapons().get(0).preShoot(targetLists,mEf,null);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
             System.out.println(target1.getStats().getMarks());
@@ -200,13 +201,14 @@ class NormalWeaponTest {
         List <Player> targets = new ArrayList();
         List <List <Player>>targetsLists=new ArrayList<>();
         targets.add(target1);
+
         targetsLists.add(targets);
         try{
             ArrayList <Integer> mEf=new ArrayList<>();
             mEf.add(0);
             //mEf.add(1);//costs 1 red AmmoCube
 
-            shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
+            shooter.getWeapons().get(0).preShoot(targetsLists,mEf,null);
 
         }
         catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
@@ -348,6 +350,7 @@ class NormalWeaponTest {
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         List targets=new ArrayList();
         targets.add(target1);
+        System.out.println(target1.getCurrentPosition());
         List<List<Player>>targetsLists=new ArrayList<>();
         targetsLists.add(targets);
         shooter.addWeapon(weapons.get(0));//not how it works but easy

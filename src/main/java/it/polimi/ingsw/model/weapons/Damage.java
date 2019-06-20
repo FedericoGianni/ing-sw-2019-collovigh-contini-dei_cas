@@ -191,7 +191,7 @@ public class Damage extends MicroEffect {
                     throw new PlayerNotSeeableException();
             }
         }
-            System.out.println("ssssssssssssssssss");
+            
          if(playerNum==100)
         {
             for(Player item : playerList)//check that everyone is in the same cells

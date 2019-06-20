@@ -65,6 +65,10 @@ public class Player {
         return this.stats.getCurrentPosition();
     }
 
+    public Cell getCurrentPositionCopy()
+    {
+        return this.stats.getCurrentPositionCopy();
+    }
 
     /**
      * @param c set the player's position in the map
@@ -131,6 +135,15 @@ public class Player {
 
        this.ammo.addItem(this.currentPowerUps.sellItem(powerUp));
 
+    }
+
+    /**
+     * used for the copies
+     * @param c
+     */
+    public void setPlayerPosCopy(Cell c)
+    {
+        this.stats.setCurrentPositionCopy(c);
     }
 
     /**
