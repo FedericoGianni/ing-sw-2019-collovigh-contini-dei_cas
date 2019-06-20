@@ -47,6 +47,8 @@ public class Controller {
 
     private Boolean hasSomeoneDied = false;
 
+    private Boolean expectingAnswer = false;
+
     //used for TagBackGrenade (check if it is necessary)
 
     private List<Integer> shotPlayerThisTurn = new ArrayList<>(); // TODO add to shoot
@@ -209,6 +211,10 @@ public class Controller {
         return utilityMethods;
     }
 
+    public Boolean getExpectingAnswer() { return expectingAnswer;}
+
+    public void setExpectingAnswer(Boolean expectingAnswer) { this.expectingAnswer = expectingAnswer; }
+
     // management Methods
 
     /**
@@ -284,13 +290,19 @@ public class Controller {
     }
 
 
-    public void setPlayerOnline(int playerId){
+    public void setPlayerOnline(int playerId){ Model.getPlayer(playerId).getStats().setOnline(true); }
 
-        Model.getPlayer(playerId).getStats().setOnline(true);
+    public void setPlayerOffline(int playerId){
 
+        Model.getPlayer(playerId).getStats().setOnline(false);
+
+        if ((playerId == getCurrentPlayer()) && (expectingAnswer)){
+
+            timer.stopTimer();
+
+            defaultAnswer();
+        }
     }
-
-    public void setPlayerOffline(int playerId){ Model.getPlayer(playerId).getStats().setOnline(false); }
 
     public Boolean isPlayerOnline(int playerId){ return Model.getPlayer(playerId).getStats().getOnline(); }
 
@@ -428,6 +440,8 @@ public class Controller {
         // stops the timer
 
         timer.stopTimer();
+
+        expectingAnswer = false;
 
         LOGGER.log(level,"[Controller] Received do action of type: {0}", jsonAction.getType());
 

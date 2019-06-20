@@ -81,6 +81,8 @@ public class ActionPhase {
 
             // start the timer
 
+            controller.setExpectingAnswer(true);
+
             controller.getTimer().startTimer(TIMER_ACTION);
 
         }

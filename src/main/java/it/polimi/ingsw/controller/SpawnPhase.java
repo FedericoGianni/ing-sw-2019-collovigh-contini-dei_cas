@@ -51,33 +51,36 @@ public class SpawnPhase {
 
 
 
-        } else if (Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().getList().isEmpty()) {
+        } else {
 
             //if currentPlayer already has 0 powerups in hand -> draw 2
 
+            if (Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().getList().isEmpty()){
+
+                LOGGER.log(level, drawString);
+
+                controller.drawPowerUp();
+
+            }
+
             LOGGER.log(level, drawString);
+
             controller.drawPowerUp();
-            LOGGER.log(level, drawString);
-            controller.drawPowerUp();
+
             LOGGER.log(level, spawnString);
-            controller.getVirtualView(controller.getCurrentPlayer()).startSpawn();
 
             // start timer
 
             controller.getTimer().startTimer(TIMER_SPAWN);
 
-        } else {
+            controller.setExpectingAnswer(true);
 
-            //if currentPlayer already has more then 0 -> draw only 1
+            // sends the action
 
-            LOGGER.log(level, drawString);
-            controller.drawPowerUp();
-            LOGGER.log(level, spawnString);
             controller.getVirtualView(controller.getCurrentPlayer()).startSpawn();
 
-            // start timer
 
-            controller.getTimer().startTimer(TIMER_SPAWN);
+
         }
     }
 
@@ -105,11 +108,18 @@ public class SpawnPhase {
 
         int currentPlayer = controller.getCurrentPlayer();
 
+        controller.setExpectingAnswer(false);
+
         LOGGER.log(level,"[CONTROLLER - Spawn] accessing Model to discard PowerUp for player: {0} ", currentPlayer );
+
         controller.discardPowerUp(type, color);
+
         Model.getPlayer(currentPlayer).setPlayerPos(Model.getMap().getSpawnCell(color));
+
         LOGGER.log(level, "[CONTROLLER - Spawn] incrementingGamePhase: {0} ", controller.getTurnPhase() );
+
         controller.incrementPhase();
+
         LOGGER.log(level,"[CONTROLLER - Spawn] new Phase: {0} ", controller.getTurnPhase());
     }
 }
