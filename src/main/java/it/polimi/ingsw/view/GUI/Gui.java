@@ -299,7 +299,6 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void endGame() {
 
-        // TODO implement
     }
 
     @Override

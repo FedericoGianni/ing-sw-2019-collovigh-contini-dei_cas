@@ -30,6 +30,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
     private static final String START_RELOAD = "startReload";
     private static final String ASK_GRENADE = "askGrenade";
     private static final String SHOW = "showMessage";
+    private static final String SET_INT_ANSWER = "setIntAnswer";
 
     /**
      * Reference to the socket representing the communication stream, passed as a parameter to the constructor
@@ -156,6 +157,13 @@ public class SocketConnectionWriter extends Thread implements ToView {
         LOGGER.info("sending show to connected client");
         String msg = SHOW + "\f" + s;
         send(msg);
+    }
+
+    public void setIntAnswer(int intAnswer){
+
+        LOGGER.log(level, "[Socket-Conn-Writer] sending setIntAnswer string to client ");
+
+        send(SET_INT_ANSWER + "/f" + intAnswer);
     }
 
     /**

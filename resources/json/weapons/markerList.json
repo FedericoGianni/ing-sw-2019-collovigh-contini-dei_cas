@@ -1,8 +1,0 @@
-[
-  {"playerNum":1,"seeAbleTargetNeeded":true,"markers":1,"differentPlayer":false},
-  {"playerNum":1,"seeAbleTargetNeeded":true,"markers":1,"differentPlayer":false},
-  {"playerNum":100,"seeAbleTargetNeeded":true,"markers":1,"differentPlayer":false},
-  {"playerNum":100,"seeAbleTargetNeeded":true,"markers":2,"differentPlayer":false},
-  {"playerNum":3000,"seeAbleTargetNeeded":true,"markers":1,"differentPlayer":false},
-  {"playerNum":1,"seeAbleTargetNeeded":false,"markers":2,"differentPlayer":false}
-]

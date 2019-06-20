@@ -5,6 +5,10 @@ import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_YELLOW;
 
 public class DefaultReplies {
 
+    //reload
+
+    public static final String DEFAULT_GAME_NON_EXISTENT = "GAME_NON_EXISTENT";
+
     // powerUp phase
 
     public static final String DEFAULT_PLAYER_USED_NEWTON_ON_HIMSELF = "PLAYER_USED_NEWTON_ON_HIMSELF";
