@@ -75,6 +75,11 @@ public class SocketClientWriter extends Client implements Runnable {
     }
 
     @Override
+    public int reconnect(String name) {
+        return 0;
+    }
+
+    @Override
     public void spawn(CachedPowerUp powerUp) {
         //TODO string to send PowerUp chosen by the player to discard at SPAWN phase
         send("spawn"+"\f"+powerUp.getType()+"\f"+powerUp.getColor());

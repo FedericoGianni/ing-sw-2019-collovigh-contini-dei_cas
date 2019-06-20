@@ -8,10 +8,8 @@ import it.polimi.ingsw.network.socket.SocketServer;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
-import java.util.LinkedHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,18 +21,10 @@ public class Server  {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
+    private static final String LOG_START = "[Server] ";
+
     private static final int MIN_PLAYER_CONNECTED = 3;
     private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = false;
-
-    /**
-     * IP Address of the Server
-     */
-    private static String ip_address;
-
-    /**
-     * Port of the Socket Server
-     */
-    private static int port;
 
     /**
      * Reference to controller
@@ -46,41 +36,38 @@ public class Server  {
      */
     private static WaitingRoom waitingRoom;
 
-    private static LinkedHashMap<Integer, ToView> clients;
-
-    private static AtomicInteger clientsNum = new AtomicInteger(0);
+    private static ConcurrentHashMap<Integer, ToView> clients = new ConcurrentHashMap<>();
 
     private final RMIServer rmiServer;
 
     /**
      * Constructor
      * Initialize the main Server by first creating a WaitingRoom, then getting its local host address and assigning it to
-     * the attribute ip_address and finally starting the two type of Server.
+     * the attribute ipAddress and finally starting the two type of Server.
      */
-    public Server(int port) {
-
-        this.port = port;
+    public Server(int socketPort) {
 
         try {
-            waitingRoom = new WaitingRoom(-1);  // NOTE: this need to be changed: this can only create a new game but load a saved one
 
-            clients = new LinkedHashMap<>();
+            waitingRoom = new WaitingRoom(-1);  // TODO this need to be changed: this can only create a new game but load a saved one
+
 
         }catch (GameNonExistentException e){
 
             LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
+
         try {
 
-            ip_address = Inet4Address.getLocalHost().getHostAddress();
+            String ipAddress = Inet4Address.getLocalHost().getHostAddress();
 
-            LOGGER.info(() -> "RemoteServer is up and running on ip " + ip_address);
+            LOGGER.info(() -> "RemoteServer is up and running on ip " + ipAddress);
 
         } catch(UnknownHostException e){
             e.getMessage();
         }
 
-        Thread socketHandler = new Thread(new SocketServer(port));
+        Thread socketHandler = new Thread(new SocketServer(socketPort));
         socketHandler.start();
 
         this.rmiServer = new RMIServer();
@@ -90,28 +77,38 @@ public class Server  {
      * Constructor w/ rmi ports
      *
      * Initialize the main Server by first creating a WaitingRoom, then getting its local host address and assigning it to
-     * the attribute ip_address and finally starting the two type of Server.
+     * the attribute ipAddress and finally starting the two type of Server.
+     *
+     * @param clientPort is the port for the client rmi registry
+     * @param serverPort is the port for the server rmi registry
+     *
+     * @param socketPort is the port used for creating the socket server
      */
-    public Server(int port,  int serverPort, int clientPort) {
+    public Server(int socketPort,  int serverPort, int clientPort) {
 
-        this.port = port;
 
         try {
+
             waitingRoom = new WaitingRoom(-1);  // NOTE: this need to be changed: this can only create a new game but load a saved one
 
-            clients = new LinkedHashMap<>();
+
 
         }catch (GameNonExistentException e){
-            e.printStackTrace();
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+
         }
         try {
-            ip_address = Inet4Address.getLocalHost().getHostAddress();
-            Logger.getLogger("infoLogging").info("RemoteServer is up and running on ip " + ip_address);
+
+            String ipAddress = Inet4Address.getLocalHost().getHostAddress();
+
+            LOGGER.info(() -> "RemoteServer is up and running on ip " + ipAddress);
+
         } catch(UnknownHostException e){
             e.getMessage();
         }
 
-        Thread socketHandler = new Thread(new SocketServer(port));
+        Thread socketHandler = new Thread(new SocketServer(socketPort));
         socketHandler.start();
 
         this.rmiServer = new RMIServer(serverPort,clientPort);
@@ -136,13 +133,13 @@ public class Server  {
 
             int playerId =  waitingRoom.addPlayer(name,playerColor);
 
-            System.out.println("[DEBUG] Added player w/ id: " + playerId +" and name: " + name + " and color : " + playerColor);
+            LOGGER.log(level, ()-> LOG_START + "Added player w/ id: " + playerId +" and name: " + name + " and color : " + playerColor);
 
             // Puts the new Player in the hashMap
 
             clients.put(playerId, toView);
 
-            System.out.println("[DEBUG] bounded player w/ id : " + playerId + " and toView: " + toView);
+            LOGGER.log(level, ()-> LOG_START + "Bounded player w/ id : " + playerId + " and toView: " + toView);
 
             // notify All Players
 
@@ -150,7 +147,6 @@ public class Server  {
 
             // Returns the PlayerId
 
-            //updateHashMap();
 
             return playerId;
 
@@ -163,22 +159,42 @@ public class Server  {
     }
 
     /**
-     * This function is used to add players to the HashMap but without forwarding anything to the WaitingRoom
+     * This function will be used for reconnection
      *
-     * Will be also used for reconnections
      * @param name is the name of the player
      * @param toView is the interface to reach him
+     *
+     * @throws GameNonExistentException if no games are running
+     * @return the player id if found or -1
      */
 
-    public static int reconnect(String name, ToView toView){
+    public static int reconnect(String name, ToView toView) throws GameNonExistentException {
+
+        // if no games are on throws exception
+
+        if (controller == null) throw new GameNonExistentException();
+
+        // find the player id by the given name
 
         int playerId = controller.findPlayerByName(name);
 
-        clients.put(playerId,toView);
+        // if the player is found
 
-        String message = "[DEBUG] reconnected player w/ id :" + playerId + "to View: " +toView;
+        if (playerId != -1) {
 
-        LOGGER.log(level,message);
+            // puts the player in the clients table
+
+            clients.put(playerId, toView);
+
+            // sets the player online in the controller
+
+            controller.setPlayerOnline(playerId);
+
+            // logs the reconnection
+
+            LOGGER.log(level, () -> LOG_START + "Reconnected player w/ id : " + playerId + " to View: " + toView);
+
+        }
 
         return playerId;
 
@@ -193,27 +209,19 @@ public class Server  {
      */
     public static void removePlayer(int playerId){
 
+        // removes the player
 
-        System.out.println("SERVER DEBUG removePlayer hashmap BEFORE removePlayer");
-        for (ToView client : clients.values()){
-            System.out.println("Client: " + client.toString());
-        }
         clients.remove(playerId);
 
         if ((waitingRoom.isActive()) && (WaitingRoom.getTimerCount() > 1)){
 
             // LOG the disconnection
 
-            LOGGER.log(level, "Player {0} left the game", waitingRoom.getName(playerId));
+            LOGGER.log(level, () -> LOG_START + "Player " + waitingRoom.getName(playerId) + " left the game" ) ;
 
             // remove the player from the waitingRoom
 
             waitingRoom.removePlayer(playerId);
-
-            System.out.println("SERVER DEBUG removePlayer hashmap AFTER removePlayer");
-            for (ToView client : clients.values()){
-                System.out.println("Client: " + client.toString());
-            }
 
             //updates the hashmap
 
@@ -225,6 +233,8 @@ public class Server  {
 
             do{
 
+                LOGGER.log(Level.FINER, () -> LOG_START + "Waiting for waiting room to start the game ");
+
             }while (waitingRoom.isActive());
 
             // sets the player to offline
@@ -233,32 +243,20 @@ public class Server  {
 
             if ( (ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < MIN_PLAYER_CONNECTED) ){
 
+                LOGGER.log(Level.WARNING, () -> LOG_START + "Connected player are less than " + MIN_PLAYER_CONNECTED + " the game will be terminated " );
+
                 controller.endGame();
             }
 
             // LOG the player disconnection
 
-            LOGGER.log(level, "Player {0} left the game", playerId);
+            LOGGER.log(level, () -> LOG_START + "Player " + playerId + " left the game" ) ;
 
         }
 
     }
 
-    /**
-     *
-     * @return the current number of clients connected to the WaitingRoom
-     */
-    public static AtomicInteger getClientsNum() {
-        return clientsNum;
-    }
 
-    /**
-     *
-     * @return current ip_address of the Server
-     */
-    public static String getIp_address() {
-        return ip_address;
-    }
 
     /**
      *
@@ -292,12 +290,15 @@ public class Server  {
         return new ConcurrentHashMap<>(clients);
     }
 
+    public RMIServer getRmiServer() {
+        return rmiServer;
+    }
+
     private static void updateHashMap(){
 
-        LOGGER.log(level, "[Server] hasmap before update {0}", clients);
+        LOGGER.log(level, () -> LOG_START + "hasMap before update: " + clients);
 
         for (int i = 0; i < clients.size(); i++) {
-
 
             if(clients.get(i) == null){
 
@@ -314,12 +315,6 @@ public class Server  {
             }
         }
 
-        System.out.println("[SERVER] DEBUG new map: ");
-
-        for (int i = 0; i < clients.size() +1 ; i++) {
-
-            System.out.println("Client: " + i + " " + clients.get(i));
-
-        }
+        LOGGER.log(level, () -> LOG_START + "hasMap after update: " + clients);
     }
 }

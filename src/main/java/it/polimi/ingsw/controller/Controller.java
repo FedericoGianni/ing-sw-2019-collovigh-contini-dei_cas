@@ -260,7 +260,7 @@ public class Controller {
                             .collect(Collectors.toList())
                             .get(0));
 
-        }catch (NullPointerException e){
+        }catch ( NullPointerException | IndexOutOfBoundsException e){
 
             return -1;
         }

@@ -99,13 +99,13 @@ public class ToServerImpl implements ToServer{
      * @return the id assigned to it
      */
     @Override
-    public int reconnect(String name, String address, String remoteName) throws GameNonExistentException{
+    public int reconnect(String name, String address, String remoteName) throws RemoteException, GameNonExistentException{
 
         try {
 
             // connect to the remote registry
 
-            remote = LocateRegistry.getRegistry(address, 2021);
+            remote = LocateRegistry.getRegistry(address, rmiClientPort);
 
             // create the Remote Object
 
@@ -117,14 +117,14 @@ public class ToServerImpl implements ToServer{
 
             // starts the pinger
 
-            RMIPinger pinger = new RMIPinger(client);
-            pinger.run();
+            new Thread(new RMIPinger(client)).start();
 
             // Return the id
 
             return playerId;
 
-        }catch (Exception e){
+        }catch (NotBoundException  e){
+
             LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
 
