@@ -167,6 +167,7 @@ public class Marker extends MicroEffect {
                 {
 
                     throw new PlayerNotSeeableException();
+
                 }
             }
             for(Player item : playerList)

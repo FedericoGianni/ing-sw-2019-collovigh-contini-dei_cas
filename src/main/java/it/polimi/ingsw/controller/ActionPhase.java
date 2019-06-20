@@ -486,14 +486,20 @@ public class ActionPhase {
                 controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
                 handleAction();
-            }
+            } catch (CardNotPossessedException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
+        }
 
-            controller.incrementPhase();
+        controller.incrementPhase();
 
 
     }
 
-    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException {
+    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {
 
         // gets the selected weapon
 
