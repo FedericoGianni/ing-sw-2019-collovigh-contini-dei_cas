@@ -167,7 +167,7 @@ public class Damage extends MicroEffect {
     }
 
     @Override
-    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
+    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException, PlayerNotSeeableException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
         if(alreadyTargeted==true && differentPlayer==false)
         {
             w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);//playerId=0 bcz only one player the same as the first shot
@@ -183,6 +183,15 @@ public class Damage extends MicroEffect {
             }
             return;
         }
+        if(seeAbleTargetNeeded)
+        {
+            for(Player item : playerList)//check that everyone is in the same cells
+            {
+                if(!w.isPossessedBy().canSee().contains(item))
+                    throw new PlayerNotSeeableException();
+            }
+        }
+            System.out.println("ssssssssssssssssss");
          if(playerNum==100)
         {
             for(Player item : playerList)//check that everyone is in the same cells

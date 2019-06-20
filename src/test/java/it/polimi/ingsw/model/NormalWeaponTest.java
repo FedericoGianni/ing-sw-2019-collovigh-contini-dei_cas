@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,7 +35,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void shoot1() throws FrenzyActivatedException {//one shot, one effect, one target, free effect---the most basic possible
+    void shoot1() throws FrenzyActivatedException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//one shot, one effect, one target, free effect---the most basic possible
         //-----------------creates microEffects ecc
         Damage.populator();
         Marker.populator();
@@ -95,7 +96,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void shoot2() throws FrenzyActivatedException{//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
+    void shoot2() throws FrenzyActivatedException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
         // 2 damages and 1 mark
         //-----------------creates microEffects ecc
         Damage.populator();
@@ -192,7 +193,7 @@ class NormalWeaponTest {
         Player shooter= Model.getGame().getPlayers().get(0);
         Player target1=Model.getGame().getPlayers().get(1);
         shooter.setPlayerPos(Model.getMap().getCell(1,1));
-        target1.setPlayerPos(Model.getMap().getCell(2,1));
+        target1.setPlayerPos(Model.getMap().getCell(0,0));
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));//one only for evitating null Pointer
         shooter.addWeapon(weapons.get(0));//not how it works but easy
@@ -222,7 +223,15 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (UncorrectEffectsException e) {
             e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (CardNotPossessedException e) {
+            e.printStackTrace();
         }
+
+        assert(target1.getStats().getDmgTaken().size() == 0);
     }
 
     @Test
@@ -295,8 +304,85 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (UncorrectEffectsException e) {
             e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (CardNotPossessedException e) {
+            e.printStackTrace();
         }
     }
 
+    @Test
+    public void Shoot5()throws FrenzyActivatedException
+    {
+        //-----------------creates microEffects ecc
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
+
+        //--------------creates Players ecc
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target");
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.BLUE);
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2,8);
+
+
+        //generate a player with a name and its starting position
+        //Player p1 = new Player("Shooter",map.getCell(1,3));
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(1,1));
+
+        //Player p2 = new Player("Visible",map.getCell(0,3));
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(0,0));
+
+
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        List targets=new ArrayList();
+        targets.add(target1);
+        List<List<Player>>targetsLists=new ArrayList<>();
+        targetsLists.add(targets);
+        shooter.addWeapon(weapons.get(0));//not how it works but easy
+
+        try{
+            ArrayList <Integer>mEf=new ArrayList<>();
+            mEf.add(0);
+            shooter.getWeapons().get(0).preShoot(targetsLists,mEf,null);
+
+            //assert(target1.getStats().getDmgTaken().size() == 0);
+        }
+        catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (CardNotPossessedException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
+        }
+
+
+        assert(target1.getStats().getDmgTaken().size() == 0);
+    }
 }
 

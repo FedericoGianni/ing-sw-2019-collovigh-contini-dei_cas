@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.weapons;
 
 import it.polimi.ingsw.customsexceptions.*;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -14,6 +16,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -96,13 +100,7 @@ public class NormalWeapon extends Weapon{
 
     }
 
-    @Override
-    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
 
-        // TODO implement
-
-        return false;
-    }
 
 
     /**
@@ -317,8 +315,8 @@ public class NormalWeapon extends Weapon{
      * @throws FrenzyActivatedException
      */
     @Override
-    public void shoot(List<List<Player>>targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, PlayerNotSeeableException {
-        try{
+    public void shoot(List<List<Player>>targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, PlayerNotSeeableException, WeaponNotLoadedException, NotEnoughAmmoException, CardNotPossessedException, DifferentPlayerNeededException, NotCorrectPlayerNumberException {
+
             if(!this.isLoaded())//if actual weapon is not loaded
             {
                 throw new WeaponNotLoadedException();//weapon not loaded
@@ -327,54 +325,181 @@ public class NormalWeapon extends Weapon{
             for(int macroCont=0;macroCont<effect.size();macroCont++)//iterate macroeffect
             {
 
-                if(this.getEffects().get(macroCont).getEffectCost()!=null)//if the effect costs 0 i don't need to pay
+                if (this.getEffects().get(macroCont).getEffectCost() != null)//if the effect costs 0 i don't need to pay
                 {
-                    if(canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(),this.isPossessedBy().getAmmoBag())==true)
+                    if (canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(), this.isPossessedBy().getAmmoBag()) == true)//----need to add effects as payment
                     {
-                        for (AmmoCube ammo : this.getEffects().get(effect.get(macroCont)).getEffectCost())
-                        {
-                            this.isPossessedBy().pay(ammo.getColor());//pays the effects cost
+                        for (AmmoCube ammo : this.getEffects().get(effect.get(macroCont)).getEffectCost()) {
+                            this.isPossessedBy().pay(ammo.getColor());//pays the effects cost need to be modified
                         }
 
-                    }else{throw new NotEnoughAmmoException();}}
+                    } else {
+                        throw new NotEnoughAmmoException();
+                    }
+                }
                 //here i can shoot for real
 
 
-
-                for(MicroEffect micro: this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
+                for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
                 {
 
-                    if(micro.moveBefore()==true && moveBefore)//if i need to move before shooting
+                    if (micro.moveBefore() == true && moveBefore)//if i need to move before shooting
                     {
-                        micro.microEffectApplicator(targetLists.get(macroCont),this,cells.get(macroCont));//contatore appostio forse perchè sposta gli ordini??
+                        micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont));//contatore appostio forse perchè sposta gli ordini??
                         this.getEffects().get(macroCont).getMicroEffects().remove(micro);
 
                     }
 
                 }
 
-                for(MicroEffect micro: this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
+                for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
                 {
-                    if(cells!=null && !cells.isEmpty())//if you also have mover effects
-                    {micro.microEffectApplicator(targetLists.get(macroCont),this,cells.get(macroCont));}//the method that applies the effects
-                    else{
-                        micro.microEffectApplicator(targetLists.get(macroCont),this,null);
+                    if (cells != null && !cells.isEmpty())//if you also have mover effects
+                    {
+                        micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont));
+                    }//the method that applies the effects
+                    else {
+                       try{ micro.microEffectApplicator(targetLists.get(macroCont), this, null);}
+                       catch(PlayerNotSeeableException e){
+                           throw new PlayerNotSeeableException();
+
+                       }
                     }
                 }
-            }
-        }catch(WeaponNotLoadedException e){e.printStackTrace();}
-        catch (CardNotPossessedException e) { e.printStackTrace(); }
-        catch(NotEnoughAmmoException e){ e.printStackTrace();}
-        catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (DifferentPlayerNeededException e) {
-            e.printStackTrace();
-        }
 
+
+            }
         this.isLoaded=false;
     }
 
-    public void print()
+    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException {
+
+        List<Player> players = new ArrayList<>();
+        for (List<Player> item : targetLists) {
+            for (Player p : item) {
+                Player tmp = new Player(p.getPlayerName(), p.getPlayerId(), p.getColor());
+                for (AmmoCube a : p.getAmmoBag().getList()) {
+                    tmp.getAmmoBag().addItem(a);
+                }
+                players.add(tmp);
+            }
+        }
+        //now i sort the players in order with playerID
+        Collections.sort(players, new Sorter());
+        ArrayList<String> playerNames=new ArrayList<>();
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        for(Player p:players)
+        {
+            playerNames.add(p.getPlayerName());
+            pc.add(p.getColor());
+        }
+        Model m=new Model(playerNames,pc,2,12);//skulls are uninportant
+
+        List<List<Player>> fakeTargetsLists=new ArrayList<>();//manca possessore weapon?
+        //now i create the fake players
+        for (List<Player> item : targetLists) {
+            List<Player> pl=new ArrayList<>();
+            for (Player p : item) {
+                Player tmp = Model.getGame().getPlayers().get(p.getPlayerId());
+                for (AmmoCube a : p.getAmmoBag().getList()) {
+                    tmp.getAmmoBag().addItem(a);
+                }
+                tmp.setPlayerPos(p.getCurrentPosition());
+                pl.add(tmp);
+            }
+            //now i sort the players in order with playerID
+            fakeTargetsLists.add(pl);
+        }
+
+
+         /*List<List<Player>> fakeTargets= new ArrayList<>();//targets now
+        for(List<Player> item: targetLists)
+        {
+            List<Player> fakeList=new ArrayList<>();
+            for(Player p : item)
+            {
+                Player tmp=new Player(p.getPlayerName(),p.getPlayerId(),p.getColor());
+                tmp.setPlayerPos(p.getCurrentPosition());
+                for(AmmoCube a :p.getAmmoBag().getList())
+                {
+                    tmp.getAmmoBag().addItem(a);
+                }
+                fakeList.add(tmp);
+
+            }
+            fakeTargets.add(fakeList);
+        }*/
+
+        /*if(!this.isLoaded())//if actual weapon is not loaded
+        {
+            throw new WeaponNotLoadedException();//weapon not loaded
+        }
+
+        for(int macroCont=0;macroCont<effect.size();macroCont++)//iterate macroeffect
+        {
+
+            if (this.getEffects().get(macroCont).getEffectCost() != null)//if the effect costs 0 i don't need to pay
+            {
+                if (canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(), this.isPossessedBy().getAmmoBag()) == true)//----need to add effects as payment
+                {
+                    for (AmmoCube ammo : this.getEffects().get(effect.get(macroCont)).getEffectCost()) {
+                        this.isPossessedBy().pay(ammo.getColor());//pays the effects cost need to be modified
+                    }
+
+                } else {
+                    throw new NotEnoughAmmoException();
+                }
+            }
+            //here i can shoot for real
+
+
+            for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
+            {
+
+                if (micro.moveBefore() == true && moveBefore)//if i need to move before shooting
+                {
+                    micro.microEffectApplicator(fakeTargets.get(macroCont), this, cells.get(macroCont));//contatore appostio forse perchè sposta gli ordini??
+                    this.getEffects().get(macroCont).getMicroEffects().remove(micro);
+
+                }
+
+            }
+
+            for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
+            {
+                if (cells != null && !cells.isEmpty())//if you also have mover effects
+                {
+                    micro.microEffectApplicator(fakeTargets.get(macroCont), this, cells.get(macroCont));
+                }//the method that applies the effects
+                else {
+                    try{ micro.microEffectApplicator(fakeTargets.get(macroCont), this, null);}
+                    catch(PlayerNotSeeableException e){
+                        throw new PlayerNotSeeableException();
+
+                    }
+                }
+            }
+
+
+        }
+
+
+        */return true;
+    }
+
+
+
+
+        class Sorter implements Comparator<Player>
+        {
+            // Used for sorting in ascending order of
+            // roll number
+            public int compare(Player a, Player b)
+            {
+                return a.getPlayerId() - b.getPlayerId();
+            }
+        }
+        public void print()
     {
 
             System.out.println(this.getName());
