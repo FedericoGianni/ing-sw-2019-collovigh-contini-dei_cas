@@ -1,6 +1,7 @@
-package it.polimi.ingsw.network.rmi;
+package it.polimi.ingsw.network.serveronly.rmi;
 
 import it.polimi.ingsw.network.ToView;
+import it.polimi.ingsw.network.rmi.ToClient;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.rmi.RemoteException;

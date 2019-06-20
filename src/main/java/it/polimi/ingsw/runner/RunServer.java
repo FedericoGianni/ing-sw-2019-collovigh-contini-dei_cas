@@ -1,9 +1,8 @@
 package it.polimi.ingsw.runner;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.jsonconfig.Config;
-import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.network.serveronly.Server;
+import it.polimi.ingsw.network.Config;
 
 import java.io.*;
 import java.util.logging.Level;

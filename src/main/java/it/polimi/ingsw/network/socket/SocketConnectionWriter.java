@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.socket;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.view.updates.UpdateClass;
 

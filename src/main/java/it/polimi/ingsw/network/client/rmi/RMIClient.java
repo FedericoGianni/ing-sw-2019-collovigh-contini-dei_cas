@@ -1,10 +1,10 @@
-package it.polimi.ingsw.network.rmi;
+package it.polimi.ingsw.network.client.rmi;
 
 
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.networkexceptions.*;
-import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.network.rmi.ToServer;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.JsonAction;

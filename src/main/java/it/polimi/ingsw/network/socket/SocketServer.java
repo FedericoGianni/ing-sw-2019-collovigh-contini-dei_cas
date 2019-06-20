@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.socket;
 
-import it.polimi.ingsw.network.WaitingRoom;
+import it.polimi.ingsw.network.serveronly.WaitingRoom;
 
 import java.io.IOException;
 import java.net.ServerSocket;

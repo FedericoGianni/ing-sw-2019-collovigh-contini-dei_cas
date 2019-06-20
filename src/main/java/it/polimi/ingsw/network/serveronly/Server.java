@@ -1,9 +1,10 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.serveronly;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.*;
-import it.polimi.ingsw.network.rmi.RMIServer;
+import it.polimi.ingsw.network.serveronly.rmi.RMIServer;
 import it.polimi.ingsw.network.socket.SocketServer;
 
 import java.net.Inet4Address;

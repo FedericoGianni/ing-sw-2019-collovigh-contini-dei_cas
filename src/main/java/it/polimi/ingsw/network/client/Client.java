@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Color;
