@@ -1,7 +1,7 @@
-package it.polimi.ingsw.network.rmi;
+package it.polimi.ingsw.network.serveronly.rmi;
 
-import it.polimi.ingsw.network.Server;
-import it.polimi.ingsw.network.networkexceptions.LostClientException;
+import it.polimi.ingsw.network.rmi.ToClient;
+import it.polimi.ingsw.network.serveronly.Server;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

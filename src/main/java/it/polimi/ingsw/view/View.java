@@ -1,9 +1,9 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.ProtocolType;
-import it.polimi.ingsw.network.rmi.RMIClient;
+import it.polimi.ingsw.network.client.rmi.RMIClient;
 import it.polimi.ingsw.network.socket.SocketClient;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.GUI.Gui;

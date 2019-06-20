@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.virtualView;
 
 
 import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.ViewInterface;

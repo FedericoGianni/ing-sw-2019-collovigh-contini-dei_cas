@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.rmi;
+package it.polimi.ingsw.network.serveronly.rmi;
 
 
 
@@ -25,7 +25,7 @@ public class RMIServer {
     private ToServerImpl skeleton;
 
     //attributes relative to server -> client flow
-    private static ConcurrentHashMap<Integer,ToViewImpl> remoteViews = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Integer, ToViewImpl> remoteViews = new ConcurrentHashMap<>();
     private Registry remote;
     private final int clientPort;
 

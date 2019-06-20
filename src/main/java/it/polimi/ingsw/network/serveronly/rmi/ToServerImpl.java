@@ -1,8 +1,10 @@
-package it.polimi.ingsw.network.rmi;
+package it.polimi.ingsw.network.serveronly.rmi;
 
 
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.network.Server;
+import it.polimi.ingsw.network.rmi.ToClient;
+import it.polimi.ingsw.network.rmi.ToServer;
+import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.JsonAction;
@@ -16,7 +18,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ToServerImpl implements ToServer{
+public class ToServerImpl implements ToServer {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;

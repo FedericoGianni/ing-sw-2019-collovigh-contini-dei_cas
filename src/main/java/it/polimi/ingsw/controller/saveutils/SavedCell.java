@@ -87,9 +87,7 @@ public class SavedCell extends Cell implements Serializable {
 
             AmmoCell cell = new AmmoCell();
 
-            cell.setAmmoPlaced(this.ammoCard);
-
-            if (this.ammoCard == null) cell.generateAmmoCard();
+            cell.setAmmoPlaced((this.ammoCard == null) ? AmmoCard.generateRandCard() : this.ammoCard);
 
             finalCell = cell;
 

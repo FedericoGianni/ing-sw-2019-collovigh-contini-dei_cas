@@ -4,11 +4,7 @@ package it.polimi.ingsw.runner;
 //inizio direttamente dalla schermata di login del giocatore
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.network.jsonconfig.Config;
-import it.polimi.ingsw.network.rmi.RMIClient;
-import it.polimi.ingsw.network.socket.SocketClient;
-import it.polimi.ingsw.view.CLI;
-import it.polimi.ingsw.view.UserInterface;
+import it.polimi.ingsw.network.Config;
 import it.polimi.ingsw.view.View;
 
 import java.io.*;

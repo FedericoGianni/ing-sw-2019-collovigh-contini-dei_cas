@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.jsonconfig;
+package it.polimi.ingsw.network;
 
 import java.io.Serializable;
 import java.net.Inet4Address;
