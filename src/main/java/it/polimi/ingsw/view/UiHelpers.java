@@ -26,6 +26,7 @@ public class UiHelpers {
     public static final int DEFAULT_ENHANCED_MOVES_WITH_SHOOT = 1;
     public static final int DEFAULT_MOVES_WITH_FRENZY_SHOOT = 1;
     public static final int DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT = 2;
+    public static final int DEFAULT_MAX_WEAPONS = 3;
 
     /**
      * Helper method to translate cardinal directions from IT to EN
@@ -143,7 +144,7 @@ public class UiHelpers {
         switch (weapon) {
 
             case "LOCK RIFLE":
-                translate = "FUCILE DI PRECISIONE";
+                translate = "DISTRUTTORE";
                 break;
 
             case "MACHINE GUN":
@@ -179,7 +180,7 @@ public class UiHelpers {
                 break;
 
             case "WHISPERER":
-                translate = "DISTRUTTORE";
+                translate = "FUCILE DI PRECISIONE";
                 break;
 
             case "HELLION":

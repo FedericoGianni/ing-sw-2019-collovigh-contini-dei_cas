@@ -21,16 +21,22 @@ import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.updates.otherplayerturn.PowerUpTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
+import static it.polimi.ingsw.utils.PowerUpType.TAG_BACK_GRENADE;
 import static it.polimi.ingsw.view.UiHelpers.*;
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 import static java.lang.Thread.sleep;
@@ -372,12 +378,15 @@ public class CLI implements UserInterface {
 
     private void notifyTurnUpdate(TurnUpdate turnUpdate){
 
+        PowerUpTurnUpdate t;
+
         switch (turnUpdate.getActionType()){
 
             case POWERUP:
-
                 //TODO
-
+                t = (PowerUpTurnUpdate) turnUpdate;
+                System.out.println("[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        "ha usato il powerUp " + t.getPowerUp());
                 break;
 
             case SHOOT:
@@ -531,7 +540,7 @@ public class CLI implements UserInterface {
                     .getPowerUpBag()
                     .getPowerUpList()
                     .stream()
-                    .filter( x -> (( x.getType() != PowerUpType.TAG_BACK_GRENADE ) && ( x.getType() != PowerUpType.TARGETING_SCOPE )))
+                    .filter( x -> (( x.getType() != TAG_BACK_GRENADE ) && ( x.getType() != PowerUpType.TARGETING_SCOPE )))
                     .collect(Collectors.toList());
 
 
@@ -553,7 +562,7 @@ public class CLI implements UserInterface {
             while(read == -1) {
                 try {
                     read = scanner.nextInt();
-                    //scanner.nextLine();
+                    scanner.nextLine();
                 } catch (InputMismatchException e) {
                     System.out.println("Non è un numero! Riprova");
                     scanner.nextLine();
@@ -594,7 +603,7 @@ public class CLI implements UserInterface {
                 .getPowerUpBag()
                 .getPowerUpList()
                 .stream()
-                .filter( x ->  x.getType().equals(PowerUpType.TAG_BACK_GRENADE))
+                .filter( x ->  x.getType().equals(TAG_BACK_GRENADE))
                 .collect(Collectors.toList());
 
         do {
@@ -1093,7 +1102,7 @@ public class CLI implements UserInterface {
             currWeap = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
         }
 
-        if(currWeap.size() >= 3){
+        if(currWeap.size() >= DEFAULT_MAX_WEAPONS){
             System.out.println("Hai già 3 armi. Scegli un arma da scartare >>>");
 
             showCurrWeapons();
@@ -1164,6 +1173,126 @@ public class CLI implements UserInterface {
                 //this cannot happen since we control valid number before switch case
                 System.out.println("Scelta non valida!");
         }
+
+        //TODO if player has powerups, let him choose if he wants to use it instead of ammo
+        try{
+
+        CopyOnWriteArrayList<Color> ammo = new CopyOnWriteArrayList<>();
+        CopyOnWriteArrayList<Color> cost = new CopyOnWriteArrayList<>();
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
+            ammo.addAll(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag().getAmmoList());
+
+        List<Color> powerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
+        List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
+        CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(2));
+        //System.out.println("Debug carico costo effetti dell'arma.............");
+        cost.addAll(w.getFirstEffectCost());
+
+        for(Color c : cost){
+            if(ammo.contains(c) && powerUps.contains(c)){
+                //TODO let him choose which one to discard
+                System.out.println("Puoi pagare usando un PowerUp: ");
+                String powerUpOrAmmo = null;
+                boolean validPowerUpChoice = false;
+                do {
+                    System.out.println("Vuoi usare un PowerUp per pagare al posto delle munizioni? (si/no)");
+                    powerUpOrAmmo = scanner.nextLine();
+
+                    if (powerUpOrAmmo.toUpperCase().equals("SI") || powerUpOrAmmo.toUpperCase().equals("NO")) {
+                        validPowerUpChoice = true;
+                    }
+                } while(!validPowerUpChoice);
+
+                if(powerUpOrAmmo.toUpperCase().equals("SI")){
+
+                    //TODO fargli scegliere quale powerup scartare (2 tipi != ma stesso colore)
+                    List<CachedPowerUp> powerUpChoiceList = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
+                            .getPowerUpBag()
+                            .getPowerUpList()
+                            .stream()
+                            .filter(x -> x.getColor().equals(c))
+                            .collect(Collectors.toList());
+
+                    System.out.println("Scegli quale PowerUp scartare al posto della munizione: ");
+
+                    for (int i = 0; i < powerUpChoiceList.size(); i++) {
+                        System.out.println(i + " : " + powerUpChoiceList.get(i));
+                    }
+
+                    valid = false;
+                    int powerUpToDiscardChoice = -1;
+
+                    do{
+                        try{
+                            powerUpToDiscardChoice = scanner.nextInt();
+                        } catch (InputMismatchException e){
+                            System.out.println("Non è un numero! Riprova: ");
+                            scanner.nextLine();
+                        }
+
+                        if(powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()){
+                            valid = true;
+                        } else {
+                            System.out.println("Scelta non valida! Riprova: ");
+                        }
+
+                    } while(!valid);
+
+                    CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(powerUpToDiscardChoice);
+                    powerUpsToDiscard.add(powerUpToDiscard);
+                    cost.remove(c);
+                }
+
+            } else if(powerUps.contains(c) && !ammo.contains(c)){
+                //TODO tell him if he wants to drop a powerup to buy
+                System.out.println("Puoi pagare solamente con un PowerUp: ");
+                List<CachedPowerUp> powerUpChoiceList = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
+                        .getPowerUpBag()
+                        .getPowerUpList()
+                        .stream()
+                        .filter(x -> x.getColor().equals(c))
+                        .collect(Collectors.toList());
+
+                for (int i = 0; i < powerUpChoiceList.size(); i++) {
+                    System.out.println(i + " : " + powerUpChoiceList.get(i));
+                }
+
+                valid = false;
+                int powerUpToDiscardChoice = -1;
+
+                do{
+                    try{
+                        powerUpToDiscardChoice = scanner.nextInt();
+                    } catch (InputMismatchException e){
+                        System.out.println("Non è un numero! Riprova: ");
+                        scanner.nextLine();
+                    }
+
+                    if(powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()){
+                        valid = true;
+                    } else {
+                        System.out.println("Scelta non valida! Riprova: ");
+                    }
+
+                } while(!valid);
+
+                CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(powerUpToDiscardChoice);
+                powerUpsToDiscard.add(powerUpToDiscard);
+                cost.remove(c);
+
+
+            } else if(ammo.contains(c) && !powerUps.contains(c)){
+                ammo.remove(c);
+                cost.remove(c);
+            } else {
+                //this shouldn't do anythign , just forward the choice and then controller will
+                //reply back that player hasn't got enough ammo
+            }
+        }
+        } catch (WeaponNotFoundException e){
+            //this shouldn't happen
+        }
+
 
 
         return choice;
@@ -1335,7 +1464,37 @@ public class CLI implements UserInterface {
      */
     private List<Integer> chooseEffects(CachedFullWeapon w){
 
+        boolean valid = false;
         List<Integer> effects = new ArrayList<>();
+        effects.add(0);
+        List<Integer> choice;
+
+        System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
+        System.out.println("Effetto base già incluso");
+        System.out.println("1 -> effetto base + effetto principale 1");
+        System.out.println("2 -> effetto base + effetto 2");
+        System.out.println("1, 2 -> tutti gli effetti");
+
+        try {
+
+            do {
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                String lines = br.readLine();
+
+                String[] strs = lines.trim().split("\\s+");
+                choice = new ArrayList<>(strs.length);
+
+                for (int i = 0; i < strs.length; i++) {
+                    choice.set(i, Integer.parseInt(strs[i]));
+                }
+
+
+            } while (!valid);
+
+        } catch (IOException e){
+
+        }
 
         //TODO ask the player to choose which weapon effect to activate
         //TODO check if effects are exclusive/concatenable
@@ -1364,7 +1523,9 @@ public class CLI implements UserInterface {
         //local copy of the powerups and ammo inside cachemodel, needed to handle local checks if user can pay
         List<CachedPowerUp> cachedPowerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
                 .getPowerUpBag().getPowerUpList();
-        List<Color> cachedAmmoCubes = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
+        List<Color> cachedAmmoCubes = new ArrayList<>();
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
+                view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
                 .getAmmoBag().getAmmoList();
 
         //powerups and ammocubes needed to forward reload action to the controller
@@ -1373,8 +1534,9 @@ public class CLI implements UserInterface {
         List<Color> ammoCubesToDiscard = new ArrayList<>();
 
         System.out.println("FASE DI RICARICA");
-        System.out.println("Digita -> 9 per saltare la fase di ricarica");
-        System.out.println("\t-> Un tasto qualsiasi per cominciare la fase di ricarica");
+        System.out.println("Digita: ");
+        System.out.println("9 -> per saltare la fase di ricarica");
+        System.out.println("Un tasto qualsiasi -> per cominciare la fase di ricarica");
 
         int choice = -1;
 
@@ -1406,6 +1568,15 @@ public class CLI implements UserInterface {
                 }
             }
 
+            System.out.println("Vuoi ricaricare ancora? si/no");
+            String s = scanner.nextLine();
+
+            if(s.toUpperCase().equals("SI")){
+                isDone = false;
+            } else {
+                isDone = true;
+            }
+
             if(!canReloadAgain){
                 isDone = true;
             }
@@ -1423,13 +1594,14 @@ public class CLI implements UserInterface {
 
 
         do {
-            System.out.println("Vuoi ricaricare? Le tue armi sono: ");
+            System.out.println("Le tue armi sono: ");
             showCurrWeapons();
             System.out.println("9 -> fine");
 
             System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
             try {
                 read = scanner.nextInt();
+                scanner.nextLine();
 
             } catch (InputMismatchException e) {
                 scanner.nextLine();
