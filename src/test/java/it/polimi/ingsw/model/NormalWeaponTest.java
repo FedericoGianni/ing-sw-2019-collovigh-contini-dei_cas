@@ -191,8 +191,8 @@ class NormalWeaponTest {
 
         Player shooter= Model.getGame().getPlayers().get(0);
         Player target1=Model.getGame().getPlayers().get(1);
-        shooter.setPlayerPos(Model.getMap().getCell(0,3));
-        target1.setPlayerPos(Model.getMap().getCell(1,3));
+        shooter.setPlayerPos(Model.getMap().getCell(1,1));
+        target1.setPlayerPos(Model.getMap().getCell(2,1));
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));//one only for evitating null Pointer
         shooter.addWeapon(weapons.get(0));//not how it works but easy
@@ -203,7 +203,7 @@ class NormalWeaponTest {
         try{
             ArrayList <Integer> mEf=new ArrayList<>();
             mEf.add(0);
-            mEf.add(1);//costs 1 red AmmoCube
+            //mEf.add(1);//costs 1 red AmmoCube
 
             shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
 

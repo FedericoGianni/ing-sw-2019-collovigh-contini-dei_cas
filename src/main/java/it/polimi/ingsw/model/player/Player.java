@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class Player {
 
     }
 
-    private  String name;
+    private String name;
     private int id;
     private PlayerColor color;
     private Stats stats;
@@ -197,7 +198,7 @@ public class Player {
             visibili=runner(visibili,c);
             c=d;
         }
-        if(c.getEast() !=null && !c.getEast().alreadyVisited() )
+        if(c.getEast() !=null && !c.getEast().alreadyVisited() )//devo fare !c.getEast().alreadyvisitd
         {
             c.setVisited();
             c=c.getEast();
@@ -232,7 +233,7 @@ public class Player {
      */
 
 //useful differentiate because the first check can change the color, after the first one thc eoclor must be all the same
-    private List<Player> runner(List<Player> visibili,Cell c)
+    public List<Player> runner(List<Player> visibili,Cell c)
     {
         if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor() && !c.getNorth().alreadyVisited())//if the color is different you change the room, so you can't see other players
         {
@@ -268,6 +269,7 @@ public class Player {
         }
         return visibili;
     }
+
 
     /**
      * @return visible players at this time of the research
