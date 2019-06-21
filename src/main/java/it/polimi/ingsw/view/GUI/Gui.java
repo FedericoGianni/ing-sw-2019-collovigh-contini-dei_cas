@@ -291,6 +291,7 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
+        guiMapController.actionButtonsEnabler();
         //view.doAction(new Move(view.doAction(new Move(directionsList, finalPos));));----->
         //view.doAction(new GrabAction(directionsList, weapons.get(0), weapons.get(1)));
         //view.doAction(new ShootAction("LOCK RIFLE", targetList, effects, cells));

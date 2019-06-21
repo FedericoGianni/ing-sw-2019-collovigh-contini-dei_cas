@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -39,8 +40,6 @@ public class GuiMapController {
     }
     private ArrayList <Directions> movementDirections;
     private int validMove=-1;
-    private Point currPos;
-
 
     @FXML
     BorderPane pane;
@@ -52,10 +51,10 @@ public class GuiMapController {
     @FXML
     VBox b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;;
     @FXML
-    ImageView powerUp1,powerUp2,powerUp3;
+    ImageView powerUp1,powerUp2,powerUp3,weapon1,weapon2,weapon3;
 
     @FXML
-    Button stopMov;
+    Button stopMov,moveButton;
 
 
     @FXML
@@ -79,7 +78,6 @@ public class GuiMapController {
                 innerMap.setStyle("-fx-background-image: url('/images/Map1in.png')");//use this for sample fot he
                 buttonCreator();
                  b03.setOnMouseClicked(new EventHandler<MouseEvent>(){
-
                      @Override
                      public void handle(MouseEvent mouseEvent) {
                          unClickAble();
@@ -118,21 +116,24 @@ public class GuiMapController {
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                spawn();
+                spawnCellWeaponShow(0,2);
             }
         });
+
+
+
         b10.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                spawn();
+                spawnCellWeaponShow(1,0);
             }
         });
         b23.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                spawn();
+                spawnCellWeaponShow(2,3);
             }
         });
     }
@@ -141,10 +142,87 @@ public class GuiMapController {
         log.appendText("\n Not in the map");
     }
 
-    private void spawn()
+    private void spawnCellWeaponShow(int r,int c)
     {
-        log.appendText("\n spawn cell");
+        //prima di tutto quali sono le immagini
+
+        for(int i=0;i<((CachedSpawnCell)gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c)).getWeaponNames().size();i++)
+        {
+            String url=fromWNameToUrl(((CachedSpawnCell)gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c)).getWeaponNames().get(i));
+            weaponDisplayer(url,i);
+        }
     }
+
+    private String fromWNameToUrl(String name)
+    {
+        switch(name)
+        {
+            case "LOCK RIFLE":
+                return "/images/weapons/distruttore.png";
+            case "MACHINE GUN":
+                return "/images/weapons/mitragliatrice.png";
+            case "ELECTROSCYTHE":
+                return "/images/weapons/falceProtonica.png";
+            case "TRACTOR BEAM":
+                return "/images/weapons/raggioTraente.png";
+            case "T.H.O.R.":
+                return "/images/weapons/torpedine.png";
+            case "PLASMA GUN":
+                return "/images/weapons/fucilePlasma.png";
+            case "WHISPER":
+                return "/images/weapons/fucilePrecisione.png";
+            case "VORTEX CANNON":
+                return "/images/weapons/cannoneVortex.png";
+            case "FURNACE":
+                return "/images/weapons/vulcanizzatore.png";
+            case "HEAT SEEKER":
+                return "/images/weapons/razzoTermico.png";
+            case "HELLION":
+                return "/images/weapons/raggioSolare.png";
+            case "FLAMETHROWER":
+                return "/images/weapons/lanciaFiamme.png";
+            case "GRENADE LAUNCHER":
+                return "/images/weapons/lanciaGranate.png";
+            case "ROCKET LAUNCHER":
+                return "/images/weapons/lanciaMissili.png";
+            case "RAILGUN":
+                return "/images/weapons/fucileLaser.png";
+            case "CYBERBLADE":
+                return "/images/weapons/spadaFotonica.png";
+            case "ZX-2":
+                return "/images/weapons/zx2.png";
+            case "SHOTGUN":
+                return "/images/weapons/fucilepompa.png";
+            case "POWER GLOVE":
+                return "/images/weapons/cyberGuanto.png";
+            case "SHOCKWAVE":
+                return "/images/weapons/ondaUrto.png";
+            case "SLEDGEHAMMER":
+                return "/images/weapons/martelloIonico.png";
+
+        }
+        return null;
+    }
+
+    private void  weaponDisplayer(String url,int weapon)
+    {
+        Image img=new Image(url);
+        switch (weapon)
+        {
+            case 1:
+                weapon1.setImage(img);
+                break;
+            case 2:
+                weapon2.setImage(img);
+                break;
+            case 3:
+                weapon3.setImage(img);
+                break;
+        }
+
+    }
+
+
 
     private void buttonCreator()
     {
@@ -204,6 +282,34 @@ public class GuiMapController {
         handleMovement(x,y,3,movementDirections);
     }
 
+    @FXML
+    public void actionButtonsEnabler()
+    {
+        moveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                move();
+            }
+        });
+    }
+
+    @FXML
+    public void actionButtonDisable()//disable action buttons
+    {
+        moveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+        stopMov.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+    }
+
     private void handleMovement(int x,int y,int m,ArrayList<Directions> movementDirections)//called from move,do stuff for real
     {
         Alert a=new Alert(Alert.AlertType.CONFIRMATION);
@@ -215,6 +321,7 @@ public class GuiMapController {
         stopMov.setOnAction(new EventHandler<ActionEvent>() {//stop button
             @Override public void handle(ActionEvent e) {
                 gui.getView().doAction(new Move(movementDirections,new Point(x,y)));
+                actionButtonDisable();
             }
         });
 
@@ -306,8 +413,10 @@ public class GuiMapController {
             a.setContentText("No more movements left. Moving...");
             a.show();
             gui.getView().doAction(new Move(movementDirections,new Point(x,y)));
+            actionButtonDisable();
             return;
         }
+
         for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
         {
             for(int j=0;j<col;j++)

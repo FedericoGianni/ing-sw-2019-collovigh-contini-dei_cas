@@ -21,8 +21,15 @@
     <left>
         <VBox>
             <Label text="Dynamic screen"></Label>
+            <VBox>
+                <children>
+                    <Label text="Weapons "></Label>
+                    <ImageView fx:id="weapon1"></ImageView>
+                    <ImageView fx:id="weapon2"></ImageView>
+                    <ImageView fx:id="weapon3"></ImageView>
+                </children>
+            </VBox>
             <Label text="Movement button"></Label>
-
                 <HBox alignment="CENTER">
                     <Button  fx:id="stopMov"   prefHeight="100" prefWidth="100"  alignment="CENTER" text="STOP movements"></Button>
                 </HBox>
@@ -65,7 +72,7 @@
         <HBox>
             <Label text="Plancia e my weapons"></Label>
             <HBox>
-            <Button text="Move" onAction="#move" fx:id="moveButton"></Button>
+            <Button text="Move"  fx:id="moveButton"></Button>
             <Button text="Shoot"></Button>
             <Button text="Reload"></Button>
             </HBox>
