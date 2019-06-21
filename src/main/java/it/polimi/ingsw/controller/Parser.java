@@ -493,12 +493,12 @@ public class Parser {
     private static List<AmmoCube> ammoAnalizer(List<AmmoCube> wpCost,String type)
     {
 
-        if(type.compareTo("BLUE")==0)
+        if(type.equals(String.valueOf(Color.BLUE)))
         {
             wpCost.add(new AmmoCube(Color.BLUE));
-        }else if(type.compareTo("RED")==0) {
+        }else if(type.equals(String.valueOf(Color.RED))) {
             wpCost.add(new AmmoCube(Color.RED));
-        }else{
+        }else if(type.equals(String.valueOf(Color.YELLOW))){
             wpCost.add(new AmmoCube(Color.YELLOW));
         }
         return wpCost;
