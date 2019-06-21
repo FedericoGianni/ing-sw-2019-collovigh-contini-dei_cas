@@ -543,7 +543,7 @@ public class CLI implements UserInterface {
                     .filter(x -> ((x.getType() != TAG_BACK_GRENADE) && (x.getType() != PowerUpType.TARGETING_SCOPE)))
                     .collect(Collectors.toList());
 
-
+            read = -1;
             System.out.println("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
@@ -570,7 +570,11 @@ public class CLI implements UserInterface {
             }
 
             if ((read >= 0 && read < usablePowerUps.size()) || read == 9) validChoice = true;
-            else scanner.nextLine();
+            else {
+                System.out.println("Scelta non valida! Riprova");
+                scanner.reset();
+                scanner.nextLine();
+            }
 
         } while (!validChoice);
 
@@ -1174,21 +1178,27 @@ public class CLI implements UserInterface {
     private List<CachedPowerUp> checkPayWithPowerUp(List<Color> cost) {
 
         boolean valid = false;
-
+        //List<Color> powerUpsColor = new ArrayList<>();
+        List<CachedPowerUp> powerUps = new ArrayList<>();
         CopyOnWriteArrayList<Color> ammo = new CopyOnWriteArrayList<>();
-        if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
-            ammo.addAll(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag().getAmmoList());
-        List<Color> powerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
         List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
 
+        if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
+            ammo.addAll(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag().getAmmoList());
+
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag() != null) {
+            powerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList();
+            //powerUpsColor = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
+        }
+
         for (Color c : cost) {
-            if (ammo.contains(c) && powerUps.contains(c)) {
+            if (ammo.contains(c) && powerUps.contains(new CachedPowerUp(null, c))) {
                 //TODO let him choose which one to discard
                 System.out.println("Puoi pagare usando un PowerUp o con una munizione.");
                 String powerUpOrAmmo = null;
                 boolean validPowerUpChoice = false;
+                System.out.println("Vuoi usare un PowerUp per pagare al posto delle munizioni? (si/no)");
                 do {
-                    System.out.println("Vuoi usare un PowerUp per pagare al posto delle munizioni? (si/no)");
                     powerUpOrAmmo = scanner.nextLine();
 
                     if (powerUpOrAmmo.toUpperCase().equals("SI") || powerUpOrAmmo.toUpperCase().equals("NO")) {
@@ -1199,9 +1209,7 @@ public class CLI implements UserInterface {
                 if (powerUpOrAmmo.toUpperCase().equals("SI")) {
 
                     //TODO fargli scegliere quale powerup scartare (2 tipi != ma stesso colore)
-                    List<CachedPowerUp> powerUpChoiceList = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
-                            .getPowerUpBag()
-                            .getPowerUpList()
+                    List<CachedPowerUp> powerUpChoiceList = powerUps
                             .stream()
                             .filter(x -> x.getColor().equals(c))
                             .collect(Collectors.toList());
@@ -1232,16 +1240,15 @@ public class CLI implements UserInterface {
                     } while (!valid);
 
                     CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(powerUpToDiscardChoice);
+                    powerUps.remove(powerUpToDiscard);
                     powerUpsToDiscard.add(powerUpToDiscard);
-                    cost.remove(c);
+                    //cost.remove(c);
                 }
 
-            } else if (powerUps.contains(c) && !ammo.contains(c)) {
+            } else if (powerUps.contains(new CachedPowerUp(null, c)) && !ammo.contains(c)) {
                 //TODO tell him if he wants to drop a powerup to buy
                 System.out.println("Puoi pagare solamente con un PowerUp: ");
-                List<CachedPowerUp> powerUpChoiceList = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
-                        .getPowerUpBag()
-                        .getPowerUpList()
+                List<CachedPowerUp> powerUpChoiceList = powerUps
                         .stream()
                         .filter(x -> x.getColor().equals(c))
                         .collect(Collectors.toList());
@@ -1270,19 +1277,21 @@ public class CLI implements UserInterface {
                 } while (!valid);
 
                 CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(powerUpToDiscardChoice);
+                powerUps.remove(powerUpToDiscard);
                 powerUpsToDiscard.add(powerUpToDiscard);
-                cost.remove(c);
+                //cost.remove(c);
 
 
-            } else if (ammo.contains(c) && !powerUps.contains(c)) {
+            } else if (ammo.contains(c) && !powerUps.contains(new CachedPowerUp(null, c))) {
                 ammo.remove(c);
-                cost.remove(c);
+                //cost.remove(c);
             } else {
                 //this shouldn't do anythign , just forward the choice and then controller will
                 //reply back that player hasn't got enough ammo
             }
         }
 
+        System.out.println("[DEBUG] PowerUp da scartare scelti: " + powerUpsToDiscard);
         return powerUpsToDiscard;
     }
 
@@ -1381,8 +1390,9 @@ public class CLI implements UserInterface {
 
         //TODO method which takes effect type as parameter (or CachedFullWeapon) and returns List<Int> with effects chosen
         //TODO also checks if he can pay this effects (w/ ammo/powerUps)
-        //effects = chooseEffects();
-        effects.add(0);
+        //effects.add(0);
+
+        effects = chooseEffects(weapon);
         targetList = chooseTargets(1,1);
 
 
@@ -1391,7 +1401,10 @@ public class CLI implements UserInterface {
 
         //just to test a basic shoot
 
-        view.doAction(new ShootAction("LOCK RIFLE", targetList, effects, cells, null));
+        //TODO check if player has TargetingScope and ask him if he wants to use it
+        //TODO ! don't consider powerup which player has chosen to discard to pay!
+
+        view.doAction(new ShootAction(weapon.getName(), targetList, effects, cells, null));
 
     }
 
@@ -1409,6 +1422,7 @@ public class CLI implements UserInterface {
 
             List<Integer> tempTargetList = new ArrayList<>();
 
+            System.out.println("Seleziona i bersagli a cui vuoi sparare: ");
             System.out.println("Effetto: " + i);
 
             for (int j = 0; j < targetsNum; j++) {
@@ -1474,7 +1488,7 @@ public class CLI implements UserInterface {
                 choice = new ArrayList<>(strs.length);
 
                 for (int i = 0; i < strs.length; i++) {
-                    choice.set(i, Integer.parseInt(strs[i]));
+                    choice.add(i, Integer.parseInt(strs[i]));
                 }
 
 
@@ -1650,7 +1664,7 @@ public class CLI implements UserInterface {
     }
 
     private boolean canPay(List<Color> cost, List<Color> ammo){
-
+        //TODO also check he can pay with powerups
         for(Color c : cost){
             if(ammo.contains(c)){
                 ammo.remove(c);
@@ -1721,9 +1735,10 @@ public class CLI implements UserInterface {
                             try {
                                 CachedFullWeapon w = view.getCacheModel().getWeaponInfo(spawnCell.getWeaponNames().get(k));
                                 System.out.println("Arma " + k + " : " + UiHelpers.weaponTranslator(spawnCell.getWeaponNames().get(k)) +
-                                        " Costo: " + UiHelpers.ammoTranslator(w.getFirstEffectCost()));
+                                        " Costo: " + UiHelpers.ammoTranslator(w.getBuyEffect()));
                             } catch (WeaponNotFoundException e){
-
+                                //TODO check if it ever catch this Exception -> means there is a wrong weapon name
+                                System.out.println("[DEBUG] Weapon not found! " + e.getMessage());
                             }
 
 
