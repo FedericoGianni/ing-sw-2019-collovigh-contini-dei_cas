@@ -301,19 +301,7 @@ public class NormalWeapon extends Weapon{
         return mf;
     }
 
-    /**
-     *
-     * @param targetLists
-     * @param cells
-     * @throws WeaponNotLoadedException
-     * @throws OverKilledPlayerException
-     * @throws DeadPlayerException
-     * @throws PlayerInSameCellException
-     * @throws PlayerInDifferentCellException
-     * @throws UncorrectDistanceException
-     * @throws SeeAblePlayerException
-     * @throws FrenzyActivatedException
-     */
+   /*
     @Override
     public void shoot(List<List<Player>>targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, PlayerNotSeeableException, WeaponNotLoadedException, NotEnoughAmmoException, CardNotPossessedException, DifferentPlayerNeededException, NotCorrectPlayerNumberException {
 
@@ -370,9 +358,25 @@ public class NormalWeapon extends Weapon{
 
             }
         this.isLoaded=false;
-    }
+    }*/
 
-    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException {
+    /**
+     * Shoot and if the shoot doesn't go well restores the old state
+     * @param targetLists
+     * @param effect
+     * @param cells
+     * @throws PlayerInSameCellException
+     * @throws DifferentPlayerNeededException
+     * @throws SeeAblePlayerException
+     * @throws PlayerNotSeeableException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws NotCorrectPlayerNumberException
+     * @throws CardNotPossessedException
+     * @throws WeaponNotLoadedException
+     * @throws NotEnoughAmmoException
+     */
+    public void shoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException {
 
         List<List<Player>> targetsCopy=new ArrayList<>();
         //now i create the fake players
@@ -410,6 +414,7 @@ public class NormalWeapon extends Weapon{
                       }
 
                   } else {
+                      restore(targetsCopy,targetLists);
                       throw new NotEnoughAmmoException();
                   }
               }
@@ -435,12 +440,7 @@ public class NormalWeapon extends Weapon{
                       micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont));
                   }//the method that applies the effects
                   else {
-                      try {
                           micro.microEffectApplicator(targetLists.get(macroCont), this, null);
-                      } catch (PlayerNotSeeableException e) {
-                          throw new PlayerNotSeeableException();
-
-                      }
                   }
               }
 
@@ -479,7 +479,7 @@ public class NormalWeapon extends Weapon{
           restore(targetsCopy,targetLists);
           throw new SeeAblePlayerException();
       }
-        return true;
+        this.isLoaded=false;
     }
 
 

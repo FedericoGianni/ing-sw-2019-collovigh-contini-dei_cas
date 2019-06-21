@@ -145,7 +145,7 @@ class NormalWeaponTest {
             mEf.add(0);
             mEf.add(1);
 
-            shooter.getWeapons().get(0).preShoot(targetLists,mEf,null);
+            shooter.getWeapons().get(0).shoot(targetLists,mEf,null);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
             System.out.println(target1.getStats().getMarks());
@@ -208,7 +208,7 @@ class NormalWeaponTest {
             mEf.add(0);
             //mEf.add(1);//costs 1 red AmmoCube
 
-            shooter.getWeapons().get(0).preShoot(targetsLists,mEf,null);
+            shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
 
         }
         catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
@@ -358,7 +358,7 @@ class NormalWeaponTest {
         try{
             ArrayList <Integer>mEf=new ArrayList<>();
             mEf.add(0);
-            shooter.getWeapons().get(0).preShoot(targetsLists,mEf,null);
+            shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
 
             //assert(target1.getStats().getDmgTaken().size() == 0);
         }
