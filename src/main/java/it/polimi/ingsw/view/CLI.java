@@ -50,6 +50,7 @@ public class CLI implements UserInterface {
 
     /**
      * Default constructor
+     *
      * @param view is the view
      */
     public CLI(View view) {
@@ -61,12 +62,12 @@ public class CLI implements UserInterface {
      * {@inheritDoc}
      */
     public void setValidMove(boolean validMove) {
-        if(validMove){
+        if (validMove) {
             this.validMove = 1;
         } else {
             this.validMove = 0;
         }
-        synchronized(this) {
+        synchronized (this) {
             this.notifyAll();
         }
     }
@@ -91,15 +92,15 @@ public class CLI implements UserInterface {
 
             try {
                 connectionType = scanner.nextInt();
-            }catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Valore non valido. Riprova!");
             }
 
             scanner.nextLine();
 
-        }while (!(connectionType == 1 || connectionType == 2));
+        } while (!(connectionType == 1 || connectionType == 2));
 
-        switch (connectionType){
+        switch (connectionType) {
 
             case 1:
                 chooseNetProtocol(ProtocolType.SOCKET);
@@ -126,7 +127,6 @@ public class CLI implements UserInterface {
     }
 
 
-
     // game initialization functions
 
     /**
@@ -144,15 +144,15 @@ public class CLI implements UserInterface {
             try {
                 choice = scanner.nextInt();
                 scanner.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Non è un numero! Riprova: ");
                 scanner.nextLine();
             }
 
-        }while (!(choice == 1 || choice == 2 || choice == 3));
+        } while (!(choice == 1 || choice == 2 || choice == 3));
 
 
-        switch (choice){
+        switch (choice) {
 
             case 1:
                 login();
@@ -191,7 +191,7 @@ public class CLI implements UserInterface {
         do {
             playerColor = scanner.nextLine().toUpperCase();
 
-            if(playerColor.equals("VERDE") || playerColor.equals("GRIGIO") ||
+            if (playerColor.equals("VERDE") || playerColor.equals("GRIGIO") ||
                     playerColor.equals("GIALLO") || playerColor.equals("VIOLA") ||
                     playerColor.equals("BLU")) {
                 validColorChoice = true;
@@ -199,7 +199,7 @@ public class CLI implements UserInterface {
                 System.out.println("Colore non valido. Riprova:  ");
             }
 
-        }while(!validColorChoice);
+        } while (!validColorChoice);
 
         //System.out.println("[DEBUG] PlayerName:  " + playerName);
         //System.out.println("[DEBUG] PlayerColor: " + playerColor);
@@ -213,7 +213,7 @@ public class CLI implements UserInterface {
      */
     @Override
     public void retryLogin(String error) {
-        switch (error){
+        switch (error) {
             case Protocol.DEFAULT_NAME_ALREADY_TAKEN_REPLY:
                 System.out.println(ANSI_YELLOW.escape() + "[!] Nome già preso." + ANSI_RESET.escape());
                 break;
@@ -249,17 +249,17 @@ public class CLI implements UserInterface {
     /**
      * {@inheritDoc}
      */
-    public synchronized void show(String s){
+    public synchronized void show(String s) {
 
-            System.out.println(s);
+        System.out.println(s);
 
-            //if weapon buy has failed, re-sync the local cli map with real player position
-            if (s.equals(DEFAULT_CANNOT_BUY_WEAPON)) {
-                FileRead.removePlayer(view.getPlayerId());
-                Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
-                FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
-                FileRead.showBattlefield();
-            }
+        //if weapon buy has failed, re-sync the local cli map with real player position
+        if (s.equals(DEFAULT_CANNOT_BUY_WEAPON)) {
+            FileRead.removePlayer(view.getPlayerId());
+            Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+            FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
+            FileRead.showBattlefield();
+        }
     }
 
     /**
@@ -268,7 +268,7 @@ public class CLI implements UserInterface {
     @Override
     public void notifyUpdate(UpdateType updateType, int playerId) {
 
-        switch (updateType){
+        switch (updateType) {
 
             case LOBBY:
 
@@ -293,7 +293,7 @@ public class CLI implements UserInterface {
                 //TODO mostrare i cambiamenti di danni subiti e disconnessioni
                 //System.out.println("[DEBUG] Ricevuto STATS update!");
 
-                if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
+                if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
                     //new positions
                     System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è spostato!" + ANSI_RESET.escape());
                     int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
@@ -305,11 +305,11 @@ public class CLI implements UserInterface {
                 }
 
                 //player disconnected
-                if(!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()){
+                if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
                     show(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
                 }
 
-                if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null){
+                if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null) {
                     //TODO show dmg updates or let the user sees them from player info?
                 }
 
@@ -322,14 +322,14 @@ public class CLI implements UserInterface {
             case WEAPON_BAG:
                 System.out.println("[NOTIFICA] WEAPON_BAG update ricevuto!");
                 //show update only on the player who has bought the weapon
-                if(playerId == view.getPlayerId()) {
+                if (playerId == view.getPlayerId()) {
                     System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag());
                 }
                 break;
 
             case AMMO_BAG:
                 //System.out.println("[NOTIFICA] AMMO_BAG update ricevuto!");
-                if(playerId == view.getPlayerId()) {
+                if (playerId == view.getPlayerId()) {
                     System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag());
                 }
                 break;
@@ -349,10 +349,10 @@ public class CLI implements UserInterface {
                         if (view.getCacheModel().getCachedMap().getCachedCell(i, j) != null) {
                             if (view.getCacheModel().getCachedMap().getCachedCell(i, j).getCellType().equals(CellType.AMMO)) {
 
-                                FileRead.removeAmmoCard(i,j);
+                                FileRead.removeAmmoCard(i, j);
 
                                 //if ammoCell has been picked up don't show it on map
-                                if(!((CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i,j)).getAmmoList().isEmpty()) {
+                                if (!((CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i, j)).getAmmoList().isEmpty()) {
                                     FileRead.insertAmmoCard(i, j, (CachedAmmoCell) view.getCacheModel().getCachedMap().getCachedCell(i, j));
                                 }
 
@@ -376,11 +376,11 @@ public class CLI implements UserInterface {
 
     }
 
-    private void notifyTurnUpdate(TurnUpdate turnUpdate){
+    private void notifyTurnUpdate(TurnUpdate turnUpdate) {
 
         PowerUpTurnUpdate t;
 
-        switch (turnUpdate.getActionType()){
+        switch (turnUpdate.getActionType()) {
 
             case POWERUP:
                 //TODO
@@ -420,18 +420,18 @@ public class CLI implements UserInterface {
     public void startGame() {
         System.out.println("Gioco iniziato!");
 
-        while(view.getCacheModel().getCachedMap() == null){
+        while (view.getCacheModel().getCachedMap() == null) {
             System.out.println("Attendi ricezione del tipo di mappa...");
-            try{
+            try {
                 sleep(200);
-            } catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
 
         try {
             FileRead.populateMatrixFromFile(view.getCacheModel().getMapType());
-        } catch(InvalidMapTypeException e){
+        } catch (InvalidMapTypeException e) {
             System.out.println("[DEBUG] Errore nel caricamento della mappa: \n" + e.getMessage());
         }
 
@@ -453,19 +453,19 @@ public class CLI implements UserInterface {
 
         System.out.println("SPAWN PHASE");
 
-        do{
+        do {
 
-            while(view.getCacheModel().getCachedPlayers().size() <= 0) {
+            while (view.getCacheModel().getCachedPlayers().size() <= 0) {
                 System.out.println("Attendi ricezione dell'update iniziale...");
 
                 try {
                     sleep(200);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
-            while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()){
+            while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()) {
 
                 System.out.println("Attendi ricezione dei PowerUp pescati...");
             }
@@ -481,7 +481,7 @@ public class CLI implements UserInterface {
             System.out.println("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
-                System.out.println( i + " " + powerUps.get(i).toString());
+                System.out.println(i + " " + powerUps.get(i).toString());
 
             }
 
@@ -490,7 +490,7 @@ public class CLI implements UserInterface {
             try {
                 read = scanner.nextInt();
                 scanner.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Non è un numero! Riprova: ");
                 scanner.nextLine();
                 read = -1;
@@ -499,7 +499,7 @@ public class CLI implements UserInterface {
             if (read >= 0 && read < powerUps.size()) validChoice = true;
 
 
-        }while(!validChoice);
+        } while (!validChoice);
 
         view.spawn(powerUps.get(read));
 
@@ -509,7 +509,7 @@ public class CLI implements UserInterface {
      * {@inheritDoc}
      */
     @Override
-    public void startPowerUp(){
+    public void startPowerUp() {
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
 
         //System.out.println("[DEBUG] startPowerUp");
@@ -522,7 +522,7 @@ public class CLI implements UserInterface {
         int read = -1;
         scanner.reset();
 
-        do{
+        do {
 
             powerUps = view
                     .getCacheModel()
@@ -540,14 +540,14 @@ public class CLI implements UserInterface {
                     .getPowerUpBag()
                     .getPowerUpList()
                     .stream()
-                    .filter( x -> (( x.getType() != TAG_BACK_GRENADE ) && ( x.getType() != PowerUpType.TARGETING_SCOPE )))
+                    .filter(x -> ((x.getType() != TAG_BACK_GRENADE) && (x.getType() != PowerUpType.TARGETING_SCOPE)))
                     .collect(Collectors.toList());
 
 
             System.out.println("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
-                System.out.println( i + " :" + powerUps.get(i).toString());
+                System.out.println(i + " :" + powerUps.get(i).toString());
             }
 
             System.out.println("Puoi usare uno di questi:");
@@ -559,7 +559,7 @@ public class CLI implements UserInterface {
             scanner.reset();
             System.out.println("Scegli un powerUp da usare: ");
 
-            while(read == -1) {
+            while (read == -1) {
                 try {
                     read = scanner.nextInt();
                     scanner.nextLine();
@@ -572,13 +572,13 @@ public class CLI implements UserInterface {
             if ((read >= 0 && read < usablePowerUps.size()) || read == 9) validChoice = true;
             else scanner.nextLine();
 
-        }while(!validChoice);
+        } while (!validChoice);
 
-        if ( read == 9){
+        if (read == 9) {
             // if the user types 9 -> end of powerUp phase
             view.doAction(new SkipAction());
 
-        }else if(read == 8){
+        } else if (read == 8) {
             showInfo();
         } else {
             usePowerUp(usablePowerUps.get(read));
@@ -603,7 +603,7 @@ public class CLI implements UserInterface {
                 .getPowerUpBag()
                 .getPowerUpList()
                 .stream()
-                .filter( x ->  x.getType().equals(TAG_BACK_GRENADE))
+                .filter(x -> x.getType().equals(TAG_BACK_GRENADE))
                 .collect(Collectors.toList());
 
         do {
@@ -614,7 +614,7 @@ public class CLI implements UserInterface {
 
             for (int i = 0; i < grenades.size(); i++) {
 
-                System.out.println( i + grenades.get(i).toString());
+                System.out.println(i + grenades.get(i).toString());
 
             }
 
@@ -622,28 +622,27 @@ public class CLI implements UserInterface {
 
             try {
                 choice = scanner.nextInt();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Non è un numero! Riprova: ");
                 scanner.nextLine();
             }
 
-            if (choice == 9 || (choice >= 0 && choice < 3 )) valid = true;
+            if (choice == 9 || (choice >= 0 && choice < 3)) valid = true;
 
 
-        }while (!valid);
+        } while (!valid);
 
         // if the player choose not to use grenades a grenadeAction will be also sent, but will have color null
 
-        if (choice == 9) view.doAction(new GrenadeAction(null,view.getPlayerId()));
-        else view.doAction(new GrenadeAction(grenades.get(choice).getColor(),view.getPlayerId()));
-
+        if (choice == 9) view.doAction(new GrenadeAction(null, view.getPlayerId()));
+        else view.doAction(new GrenadeAction(grenades.get(choice).getColor(), view.getPlayerId()));
 
 
     }
 
-    private void usePowerUp(CachedPowerUp powerUp){
+    private void usePowerUp(CachedPowerUp powerUp) {
 
-        switch (powerUp.getType()){
+        switch (powerUp.getType()) {
 
             case NEWTON:
                 useNewton(powerUp);
@@ -666,7 +665,7 @@ public class CLI implements UserInterface {
 
     }
 
-    private void useNewton(CachedPowerUp newton){
+    private void useNewton(CachedPowerUp newton) {
 
         String retryMessage = "Scelta non valida. Riprova.";
 
@@ -684,15 +683,14 @@ public class CLI implements UserInterface {
             player = scanner.nextInt();
             scanner.nextLine();
 
-            if(player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
+            if (player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
                 validChoice = true;
             else
                 System.out.println(retryMessage);
-        }while(!validChoice);
+        } while (!validChoice);
 
 
-
-        do{
+        do {
 
             validChoice = false;
 
@@ -700,22 +698,22 @@ public class CLI implements UserInterface {
             direction = scanner.next().toUpperCase();
             scanner.nextLine();
 
-            if(direction.equals("NORD") || direction.equals("SUD")
+            if (direction.equals("NORD") || direction.equals("SUD")
                     || direction.equals("EST") || direction.equals("OVEST"))
                 validChoice = true;
             else
                 System.out.println(retryMessage);
-        }while(!validChoice);
+        } while (!validChoice);
 
 
-        do{
+        do {
             validChoice = false;
 
             System.out.println("Di quanto vuoi muovere il player? (1,2) >>> ");
             amount = scanner.nextInt();
             scanner.nextLine();
 
-            if(amount == 1 || amount == 2 )
+            if (amount == 1 || amount == 2)
 
                 validChoice = true;
 
@@ -723,24 +721,24 @@ public class CLI implements UserInterface {
 
                 System.out.println(retryMessage);
 
-        }while(!validChoice);
+        } while (!validChoice);
 
         // Create a NewtonAction object
 
-        NewtonAction newtonAction = new NewtonAction(newton.getColor(),player,amount,directionTranslator(direction));
+        NewtonAction newtonAction = new NewtonAction(newton.getColor(), player, amount, directionTranslator(direction));
 
         // sends it to the Virtual view
 
         view.doAction(newtonAction);
     }
 
-    private void useTeleporter(CachedPowerUp teleporter){
+    private void useTeleporter(CachedPowerUp teleporter) {
 
         boolean validChoice;
         int r;
         int c;
 
-        do{
+        do {
 
             validChoice = false;
 
@@ -762,7 +760,7 @@ public class CLI implements UserInterface {
                 scanner.nextLine();
             } while (c < 0 || c > 3);
 
-            if(view.getCacheModel().getCachedMap().getCachedCell(r,c) == null){
+            if (view.getCacheModel().getCachedMap().getCachedCell(r, c) == null) {
 
                 System.out.println("Cella non esistente. Riprova: ");
 
@@ -772,11 +770,10 @@ public class CLI implements UserInterface {
 
             }
 
-        }while(!validChoice);
+        } while (!validChoice);
 
 
-
-        JsonAction jsonAction = new TeleporterAction(teleporter.getColor(),new Point(c,r));
+        JsonAction jsonAction = new TeleporterAction(teleporter.getColor(), new Point(c, r));
 
         view.doAction(jsonAction);
 
@@ -794,124 +791,124 @@ public class CLI implements UserInterface {
         int choice = -1;
         int playerDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
 
-        List<String> actions =   new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA", "SKIP"));
+        List<String> actions = new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA", "SKIP"));
 
-            do {
+        do {
 
-                valid = false;
+            valid = false;
 
-                //NOTE: startAction uses show instead of system.out.println because there's a chance that
-                //when the controller reply back with a message the showBattlefield method and the startAction method
-                //and the map won't be displayed correctly
+            //NOTE: startAction uses show instead of system.out.println because there's a chance that
+            //when the controller reply back with a message the showBattlefield method and the startAction method
+            //and the map won't be displayed correctly
 
-                show("SELEZIONA UN AZIONE:");
+            show("SELEZIONA UN AZIONE:");
 
-                for (int i = 0; i < actions.size(); i++) {
-                    System.out.println(i + ": " + actions.get(i));
+            for (int i = 0; i < actions.size(); i++) {
+                System.out.println(i + ": " + actions.get(i));
+            }
+
+            show("7: mostra mappa");
+            show("8: mostra info sui giocatori");
+            show("9: mostra armi nelle celle di spawn");
+
+            try {
+                scanner.reset();
+                choice = scanner.nextInt();
+                scanner.nextLine();
+
+            } catch (InputMismatchException e) {
+                System.out.println("Non è un numero: Riprova!");
+                scanner.nextLine();
+            }
+
+
+            if ((choice >= 0 && choice < actions.size()) || choice == 7 || choice == 8 || choice == 9) {
+                valid = true;
+
+            } else {
+                System.out.println(" Scelta non valida: Riprova");
+            }
+
+        } while (!valid);
+
+        switch (choice) {
+
+            case 0:
+                if (isFrenzy) {
+                    if (isBeforeFrenzyStarter) {
+                        startMove(DEFAULT_MAX_FRENZY_MOVES);
+                    } else {
+                        System.out.println("[!] Azione non disponibile: sei dopo il Frenzy Starter!");
+                        startAction(isFrenzy, isBeforeFrenzyStarter);
+                    }
+                } else {
+                    startMove(DEFAULT_MAX_NORMAL_MOVES);
                 }
+                break;
 
-                show("7: mostra mappa");
-                show("8: mostra info sui giocatori");
-                show("9: mostra armi nelle celle di spawn");
-
-                try {
-                    scanner.reset();
-                    choice = scanner.nextInt();
-                    scanner.nextLine();
-
-                } catch (InputMismatchException e) {
-                    System.out.println("Non è un numero: Riprova!");
-                    scanner.nextLine();
-                }
-
-
-                if ((choice >= 0 && choice < actions.size()) || choice == 7 || choice == 8 || choice == 9) {
-                    valid = true;
+            case 1:
+                if (isFrenzy) {
+                    if (isBeforeFrenzyStarter) {
+                        startGrab(DEFAULT_MOVES_WITH_FRENZY);
+                    } else {
+                        startGrab(DEFAULT_MOVES_WITH_ENHANCED_FRENZY);
+                    }
 
                 } else {
-                    System.out.println(" Scelta non valida: Riprova");
+                    //grab -> if player has more than 2 dmg -> 2 moves else -> only 1 move
+                    if (playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB) {
+                        startGrab(DEFAULT_ENHANCED_MOVES_WITH_GRAB);
+                    } else {
+                        startGrab(DEFAULT_MOVES_WITH_GRAB);
+                    }
                 }
+                break;
 
-            } while (!valid);
-
-            switch (choice) {
-
-                case 0:
-                    if(isFrenzy){
-                        if(isBeforeFrenzyStarter){
-                            startMove(DEFAULT_MAX_FRENZY_MOVES);
-                        } else {
-                            System.out.println("[!] Azione non disponibile: sei dopo il Frenzy Starter!");
-                            startAction(isFrenzy, isBeforeFrenzyStarter);
-                        }
+            case 2:
+                if (isFrenzy) {
+                    if (isBeforeFrenzyStarter) {
+                        //startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
                     } else {
-                        startMove(DEFAULT_MAX_NORMAL_MOVES);
+                        //startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
                     }
-                    break;
+                } else {
 
-                case 1:
-                    if(isFrenzy){
-                        if(isBeforeFrenzyStarter){
-                            startGrab(DEFAULT_MOVES_WITH_FRENZY);
-                        } else {
-                            startGrab(DEFAULT_MOVES_WITH_ENHANCED_FRENZY);
-                        }
-
+                    if (playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT) {
+                        startShoot(DEFAULT_ENHANCED_MOVES_WITH_SHOOT);
                     } else {
-                        //grab -> if player has more than 2 dmg -> 2 moves else -> only 1 move
-                        if(playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB){
-                            startGrab(DEFAULT_ENHANCED_MOVES_WITH_GRAB);
-                        } else {
-                            startGrab(DEFAULT_MOVES_WITH_GRAB);
-                        }
+                        startShoot(0);
                     }
-                    break;
-
-                case 2:
-                    if(isFrenzy){
-                        if(isBeforeFrenzyStarter){
-                            //startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
-                        } else {
-                            //startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
-                        }
-                    } else {
-
-                        if(playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT){
-                            startShoot(DEFAULT_ENHANCED_MOVES_WITH_SHOOT);
-                        } else {
-                            startShoot(0);
-                        }
-                    }
-                    break;
-
-                case 3:
-                    view.doAction(new SkipAction());
-                    break;
-
-                case 7:
-                    FileRead.showBattlefield();
-                    startAction(isFrenzy, isBeforeFrenzyStarter);
-                    break;
-
-                case 8:
-                    showInfo();
-                    startAction(isFrenzy, isBeforeFrenzyStarter);
-                    break;
-
-                case 9:
-                    showWeapInSpawnCells();
-                    startAction(isFrenzy, isBeforeFrenzyStarter);
-                    break;
-
-                default:
-
-                    System.out.println("Azione non esistente");
-                    break;
                 }
+                break;
+
+            case 3:
+                view.doAction(new SkipAction());
+                break;
+
+            case 7:
+                FileRead.showBattlefield();
+                startAction(isFrenzy, isBeforeFrenzyStarter);
+                break;
+
+            case 8:
+                showInfo();
+                startAction(isFrenzy, isBeforeFrenzyStarter);
+                break;
+
+            case 9:
+                showWeapInSpawnCells();
+                startAction(isFrenzy, isBeforeFrenzyStarter);
+                break;
+
+            default:
+
+                System.out.println("Azione non esistente");
+                break;
+        }
     }
 
 
-    private List <Directions> handleMove(int maxMoves){
+    private List<Directions> handleMove(int maxMoves) {
 
         int moves = 0;
         List<Directions> directionsList = new ArrayList<>();
@@ -920,48 +917,41 @@ public class CLI implements UserInterface {
         Point temp_moves;
         int x;
         int y;
-        List <Directions> previous = new ArrayList<>();
+        List<Directions> previous = new ArrayList<>();
 
-        do{
+        do {
 
-            System.out.println("In che direzione ti vuoi muovere? Ti restano " + (maxMoves-moves) + " movimenti.");
+            System.out.println("In che direzione ti vuoi muovere? Ti restano " + (maxMoves - moves) + " movimenti.");
             System.out.println("Inserisci una direzione (Nord, Sud, Ovest, Est, Stop per fermarti qui) >>> ");
 
-            do{
+            do {
                 choice = scanner.nextLine();
                 choice = choice.toUpperCase();
 
                 x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
                 y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
-                temp_moves = new Point(x,y);
+                temp_moves = new Point(x, y);
 
-                //TODO check for walls ecc.
                 if (choice.equals("STOP")) {
                     return directionsList;
                 }
 
-
-                if((choice.equals("NORD") || choice.equals("SUD") || choice.equals("EST") || choice.equals("OVEST"))){
-
-                    //validMove = -1;
-                    //p =view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+                if ((choice.equals("NORD") || choice.equals("SUD") || choice.equals("EST") || choice.equals("OVEST"))) {
 
                     //System.out.println("[CLI] ask to server if move: " + directionTranslator(choice) + " from pos: " +  x + ", "  + y);
-
                     //System.out.println( "[CLI] cell: " + view.getCacheModel().getCachedMap().getCachedCell( p.x, p.y).getCellType() );
 
                     Directions d = directionTranslator(choice);
 
-                    Point start = new Point(x,y);
+                    Point start = new Point(x, y);
                     Point finalPos = genPointFromDirections(previous, start);
 
                     validMove = -1;
                     view.askMoveValid(finalPos.x, finalPos.y, d);
 
-                    while(validMove == -1){
-                        try
-                        {
-                            synchronized(this) {
+                    while (validMove == -1) {
+                        try {
+                            synchronized (this) {
                                 //System.out.println("Waiting to receive validMove reply...");
                                 this.wait();
                             }
@@ -973,7 +963,7 @@ public class CLI implements UserInterface {
                     }
 
                     //System.out.println("[DEBUG] controllo valid Move...");
-                    if(validMove == 1) {
+                    if (validMove == 1) {
                         System.out.println("Direzione valida!");
                         valid = true;
                         previous.add(d);
@@ -986,51 +976,48 @@ public class CLI implements UserInterface {
                         FileRead.insertPlayer(temp_moves.x, temp_moves.y, Character.forDigit(view.getPlayerId(), 10));
                         FileRead.showBattlefield();
 
-                    }else if (validMove == 0){
+                    } else if (validMove == 0) {
 
                         System.out.println("Direzione non valida! Riprova >>> ");
                         valid = false;
                     }
 
-                } else{
+                } else {
                     System.out.println("Scrivi correttamente la direzione dei punti cardinali! Riprova");
                 }
 
-            } while(!valid);
+            } while (!valid);
 
-        } while(moves < maxMoves);
+        } while (moves < maxMoves);
 
         return directionsList;
     }
 
 
-
-
-    public void startMove(int maxMoves){
+    public void startMove(int maxMoves) {
 
         int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
         int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
-        Point startingPoint = new Point(x,y);
+        Point startingPoint = new Point(x, y);
 
 
         //move -> always max 3 movements
         List<Directions> directionsList = handleMove(maxMoves);
         Point finalPos = genPointFromDirections(directionsList, startingPoint);
 
-        //System.out.println("[DEBUG] MOVE Preso. chiamo doACTION per inoltrare l'azione al controllelr");
         view.doAction(new Move(directionsList, finalPos));
     }
 
-    private void startGrab(int maxMoves){
+    private void startGrab(int maxMoves) {
 
         int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
         int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
-        Point startingPoint = new Point(x,y);
+        Point startingPoint = new Point(x, y);
 
         List<Directions> directionsList;
 
         //grab -> if player has more than 2 dmg -> 2 moves else -> only 1 move
-        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB){
+        if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB) {
             directionsList = handleMove(maxMoves);
         } else {
             directionsList = handleMove(maxMoves);
@@ -1040,7 +1027,7 @@ public class CLI implements UserInterface {
 
         CellType cellType = view.getCacheModel().getCachedMap().getCachedCell(finalPos.x, finalPos.y).getCellType();
 
-        switch (cellType){
+        switch (cellType) {
 
             case AMMO:
                 view.doAction(new GrabAction(directionsList));
@@ -1048,18 +1035,25 @@ public class CLI implements UserInterface {
 
             case SPAWN:
                 List<String> weapons = handleWeaponGrab(finalPos);
-                view.doAction(new GrabAction(directionsList, weapons.get(0), weapons.get(1), new ArrayList<>()));
+                List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
+                try {
+                    CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(1));
+                    powerUpsToDiscard = checkPayWithPowerUp(w.getFirstEffectCost());
+                } catch (WeaponNotFoundException e) {
+                }
+                view.doAction(new GrabAction(directionsList, weapons.get(0), weapons.get(1), powerUpsToDiscard));
                 break;
         }
     }
 
     /**
      * Handle weapons grab: if player has already 3 weapons he has to choose 1 to discard
+     *
      * @param pos current spawn cell from where he wants to buy the weapon
      * @return a List of String representing the name of the weapon to buy and, if needed, the one to discard
      */
     //TODO i need to check that he buy weap when i have more ammo and that it let me choose one to discard when i have already 3
-    private List<String> handleWeaponGrab(Point pos){
+    private List<String> handleWeaponGrab(Point pos) {
 
         CachedSpawnCell cell = (CachedSpawnCell) view.getCacheModel().getCachedMap().getCachedCell(pos.x, pos.y);
 
@@ -1083,7 +1077,7 @@ public class CLI implements UserInterface {
             try {
                 buy = scanner.nextInt();
 
-                if(buy >= 0 && buy <= weapons.size()) {
+                if (buy >= 0 && buy <= weapons.size()) {
                     valid = true;
                 } else {
                     System.out.println("Numero non valido! Riprova >>> ");
@@ -1097,12 +1091,12 @@ public class CLI implements UserInterface {
         } while (!valid);
 
         //if the player has already 3 weapons he has to choose one to discard to buy another one
-        List <String> currWeap = new ArrayList<>();
-        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
+        List<String> currWeap = new ArrayList<>();
+        if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null) {
             currWeap = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
         }
 
-        if(currWeap.size() >= DEFAULT_MAX_WEAPONS){
+        if (currWeap.size() >= DEFAULT_MAX_WEAPONS) {
             System.out.println("Hai già 3 armi. Scegli un arma da scartare >>>");
 
             showCurrWeapons();
@@ -1118,7 +1112,7 @@ public class CLI implements UserInterface {
                 try {
                     discard = scanner.nextInt();
 
-                    if(discard >= 0 && discard <= currWeap.size()){
+                    if (discard >= 0 && discard <= currWeap.size()) {
                         valid = true;
                     } else {
                         System.out.println("Numero non valido! Riprova >>> ");
@@ -1128,9 +1122,9 @@ public class CLI implements UserInterface {
                     System.out.println("Non è un numero! Riprova >>> ");
                 }
 
-            }while (!valid);
+            } while (!valid);
 
-            switch (discard){
+            switch (discard) {
 
                 case 0:
                     choice.add(currWeap.get(0));
@@ -1155,7 +1149,7 @@ public class CLI implements UserInterface {
         }
 
 
-        switch (buy){
+        switch (buy) {
 
             case 0:
                 choice.add(weapons.get(0));
@@ -1174,24 +1168,23 @@ public class CLI implements UserInterface {
                 System.out.println("Scelta non valida!");
         }
 
-        //TODO if player has powerups, let him choose if he wants to use it instead of ammo
-        try{
+        return choice;
+    }
+
+    private List<CachedPowerUp> checkPayWithPowerUp(List<Color> cost) {
+
+        boolean valid = false;
 
         CopyOnWriteArrayList<Color> ammo = new CopyOnWriteArrayList<>();
-        CopyOnWriteArrayList<Color> cost = new CopyOnWriteArrayList<>();
-        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
+        if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
             ammo.addAll(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag().getAmmoList());
-
         List<Color> powerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
         List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
-        CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(2));
-        //System.out.println("Debug carico costo effetti dell'arma.............");
-        cost.addAll(w.getFirstEffectCost());
 
-        for(Color c : cost){
-            if(ammo.contains(c) && powerUps.contains(c)){
+        for (Color c : cost) {
+            if (ammo.contains(c) && powerUps.contains(c)) {
                 //TODO let him choose which one to discard
-                System.out.println("Puoi pagare usando un PowerUp: ");
+                System.out.println("Puoi pagare usando un PowerUp o con una munizione.");
                 String powerUpOrAmmo = null;
                 boolean validPowerUpChoice = false;
                 do {
@@ -1201,9 +1194,9 @@ public class CLI implements UserInterface {
                     if (powerUpOrAmmo.toUpperCase().equals("SI") || powerUpOrAmmo.toUpperCase().equals("NO")) {
                         validPowerUpChoice = true;
                     }
-                } while(!validPowerUpChoice);
+                } while (!validPowerUpChoice);
 
-                if(powerUpOrAmmo.toUpperCase().equals("SI")){
+                if (powerUpOrAmmo.toUpperCase().equals("SI")) {
 
                     //TODO fargli scegliere quale powerup scartare (2 tipi != ma stesso colore)
                     List<CachedPowerUp> powerUpChoiceList = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
@@ -1222,28 +1215,28 @@ public class CLI implements UserInterface {
                     valid = false;
                     int powerUpToDiscardChoice = -1;
 
-                    do{
-                        try{
+                    do {
+                        try {
                             powerUpToDiscardChoice = scanner.nextInt();
-                        } catch (InputMismatchException e){
+                        } catch (InputMismatchException e) {
                             System.out.println("Non è un numero! Riprova: ");
                             scanner.nextLine();
                         }
 
-                        if(powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()){
+                        if (powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()) {
                             valid = true;
                         } else {
                             System.out.println("Scelta non valida! Riprova: ");
                         }
 
-                    } while(!valid);
+                    } while (!valid);
 
                     CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(powerUpToDiscardChoice);
                     powerUpsToDiscard.add(powerUpToDiscard);
                     cost.remove(c);
                 }
 
-            } else if(powerUps.contains(c) && !ammo.contains(c)){
+            } else if (powerUps.contains(c) && !ammo.contains(c)) {
                 //TODO tell him if he wants to drop a powerup to buy
                 System.out.println("Puoi pagare solamente con un PowerUp: ");
                 List<CachedPowerUp> powerUpChoiceList = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
@@ -1260,28 +1253,28 @@ public class CLI implements UserInterface {
                 valid = false;
                 int powerUpToDiscardChoice = -1;
 
-                do{
-                    try{
+                do {
+                    try {
                         powerUpToDiscardChoice = scanner.nextInt();
-                    } catch (InputMismatchException e){
+                    } catch (InputMismatchException e) {
                         System.out.println("Non è un numero! Riprova: ");
                         scanner.nextLine();
                     }
 
-                    if(powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()){
+                    if (powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()) {
                         valid = true;
                     } else {
                         System.out.println("Scelta non valida! Riprova: ");
                     }
 
-                } while(!valid);
+                } while (!valid);
 
                 CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(powerUpToDiscardChoice);
                 powerUpsToDiscard.add(powerUpToDiscard);
                 cost.remove(c);
 
 
-            } else if(ammo.contains(c) && !powerUps.contains(c)){
+            } else if (ammo.contains(c) && !powerUps.contains(c)) {
                 ammo.remove(c);
                 cost.remove(c);
             } else {
@@ -1289,15 +1282,10 @@ public class CLI implements UserInterface {
                 //reply back that player hasn't got enough ammo
             }
         }
-        } catch (WeaponNotFoundException e){
-            //this shouldn't happen
-        }
 
-
-
-        return choice;
-
+        return powerUpsToDiscard;
     }
+
 
     private void showCurrWeapons(){
 
@@ -1711,7 +1699,7 @@ public class CLI implements UserInterface {
                 CachedCell c = view.getCacheModel().getCachedMap().getCachedCell(i, j);
                 if(c != null){
                     if(c.getCellType().equals(CellType.SPAWN)){
-                         c = (CachedSpawnCell) c;
+                         CachedSpawnCell spawnCell = (CachedSpawnCell) c;
 
                         //need only row index to determine which spawn cell we are in
                         switch ((int) c.getPosition().getX()){
@@ -1728,8 +1716,17 @@ public class CLI implements UserInterface {
                                 break;
 
                         }
-                        for (int k = 0; k < ((CachedSpawnCell) c).getWeaponNames().size(); k++) {
-                            System.out.println("Arma " + k + " : " + UiHelpers.weaponTranslator(((CachedSpawnCell) c).getWeaponNames().get(k)));
+
+                        for (int k = 0; k < spawnCell.getWeaponNames().size(); k++) {
+                            try {
+                                CachedFullWeapon w = view.getCacheModel().getWeaponInfo(spawnCell.getWeaponNames().get(k));
+                                System.out.println("Arma " + k + " : " + UiHelpers.weaponTranslator(spawnCell.getWeaponNames().get(k)) +
+                                        " Costo: " + UiHelpers.ammoTranslator(w.getFirstEffectCost()));
+                            } catch (WeaponNotFoundException e){
+
+                            }
+
+
                         }
                     }
                 }

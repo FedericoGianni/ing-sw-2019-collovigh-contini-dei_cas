@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
+import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 
 /**
  * This class contains helper methods needed by both UserInterfaces (cli/gui)
@@ -253,5 +255,35 @@ public class UiHelpers {
 
         System.out.println("[DEBUG] PlayerColor not valid!");
         return AsciiColor.ANSI_WHITE;
+    }
+
+    public static String ammoTranslator(List<Color> ammoList){
+
+        String s = new String();
+
+        for (Color c : ammoList) {
+
+            switch (c){
+
+                case BLUE:
+                    s = s.concat(ANSI_BLUE.escape());
+                    break;
+
+                case RED:
+                    s = s.concat(ANSI_RED.escape());
+                    break;
+
+                case YELLOW:
+                    s = s.concat(ANSI_YELLOW.escape());
+                    break;
+
+                default:
+                    s = s.concat(ANSI_WHITE.escape());
+            }
+
+            s = s.concat("°" + ANSI_RESET.escape());
+        }
+
+        return s;
     }
 }

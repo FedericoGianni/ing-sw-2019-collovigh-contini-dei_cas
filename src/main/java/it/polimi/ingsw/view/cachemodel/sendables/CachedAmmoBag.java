@@ -1,12 +1,11 @@
 package it.polimi.ingsw.view.cachemodel.sendables;
 
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.view.UiHelpers;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.util.List;
-
-import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 
 public class CachedAmmoBag extends UpdateClass {
 
@@ -32,6 +31,9 @@ public class CachedAmmoBag extends UpdateClass {
 
         if(ammoList != null) {
 
+            s = UiHelpers.ammoTranslator(ammoList);
+
+            /*
             for (Color c : ammoList) {
 
                 switch (c){
@@ -53,7 +55,7 @@ public class CachedAmmoBag extends UpdateClass {
                 }
 
                 s = s.concat("°" + ANSI_RESET.escape());
-            }
+            }*/
 
         } else {
             s = s.concat("nessuna");
