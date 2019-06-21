@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class CacheModelParser {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.INFO;
+    private static Level level = Level.FINE;
 
     private static final String CACHED_FULL_WEAPON_PATH = "resources/json/cachedmodel/weapons.json";
 

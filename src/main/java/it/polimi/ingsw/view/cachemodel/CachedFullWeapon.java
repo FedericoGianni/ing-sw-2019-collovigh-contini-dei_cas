@@ -48,4 +48,9 @@ public class CachedFullWeapon implements Serializable {
     public List<EffectRequirements> getEffectRequirements() { return effectRequirements; }
 
     public List<String> getEffectsDescriptions() { return effectsDescriptions; }
+
+    public List<Color> getBuyEffect(){
+
+        return firstEffectCost.subList(1,firstEffectCost.size());
+    }
 }
