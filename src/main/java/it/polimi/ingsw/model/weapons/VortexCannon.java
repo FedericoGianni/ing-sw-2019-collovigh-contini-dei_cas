@@ -187,15 +187,17 @@ public class VortexCannon extends Weapon{
     @Override
     public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException {
 
-        preShoot(targetLists,effects,cells);
+        if (preShoot(targetLists,effects,cells)) {
 
-        // do the basic shot
+            // do the basic shot
 
-        baseEffect(targetLists.get(0).get(0), cells.get(0));
+            baseEffect(targetLists.get(0).get(0), cells.get(0));
 
-        if (effects.contains(1)) secondEffect(targetLists.get(1),cells.get(0));
+            if (effects.contains(1)) secondEffect(targetLists.get(1), cells.get(0));
 
-        this.loaded = false;
+            this.loaded = false;
+
+        }
     }
 
     /**

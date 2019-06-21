@@ -5,12 +5,16 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.CacheModelParser;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ThorTest {
@@ -92,6 +96,24 @@ class ThorTest {
             System.out.println(p3.getStats().getDmgTaken());
 
 
+    }
+
+    @Test
+    void checkLinkCacheModel() {
+
+        Thor thor = new Thor();
+
+        List<CachedFullWeapon> weaponList = CacheModelParser.readCachedFullWeaponsFromList();
+
+        CachedFullWeapon vortex = weaponList
+                .stream()
+                .filter( x -> x.getName().equalsIgnoreCase(thor.getName() ))
+                .collect(Collectors.toList())
+                .get(0);
+
+        assertEquals( thor.getReloadCost().stream().map(AmmoCube::getColor).collect(Collectors.toList()), vortex.getFirstEffectCost());
+
+        assertEquals( thor.getCost().stream().map(AmmoCube::getColor).collect(Collectors.toList()) , vortex.getFirstEffectCost().subList(1, vortex.getFirstEffectCost().size()));
     }
 
 }

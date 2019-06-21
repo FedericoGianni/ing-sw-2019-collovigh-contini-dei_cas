@@ -1,12 +1,16 @@
 package it.polimi.ingsw.model.weapons;
 
+import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.AmmoBag;
+import it.polimi.ingsw.utils.CacheModelParser;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -33,5 +37,24 @@ class WeaponTest {
 
         assertTrue(weapon.canPay(cost,bag));
 
+    }
+
+    @Test
+    void checkCacheModelFullWeapon(){
+
+        List<Weapon> weaponList = Parser.getFullWeaponList();
+
+        List<String> cachedFullWeaponList = CacheModelParser
+                .readCachedFullWeaponsFromList()
+                .stream()
+                .map(CachedFullWeapon::getName)
+                .collect(Collectors.toList());
+
+        for (Weapon weapon : weaponList){
+
+            System.out.println(weapon.getName());
+
+            assertTrue(cachedFullWeaponList.contains(weapon.getName()));
+        }
     }
 }
