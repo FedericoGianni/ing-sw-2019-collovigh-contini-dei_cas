@@ -3,9 +3,11 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
@@ -285,5 +287,22 @@ public class UiHelpers {
         }
 
         return s;
+    }
+
+    public static String ammoTranslator(Color c){
+        List<Color> list = new ArrayList<>();
+        list.add(c);
+
+        return ammoTranslator(list);
+    }
+
+    public static List<Color> genColorListFromPowerUps(List<CachedPowerUp> powerUps){
+        List<Color> colorList = new ArrayList<>();
+
+        for(CachedPowerUp p : powerUps){
+            colorList.add(p.getColor());
+        }
+
+        return  colorList;
     }
 }

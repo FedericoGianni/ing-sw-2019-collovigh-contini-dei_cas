@@ -25,9 +25,6 @@ import it.polimi.ingsw.view.updates.otherplayerturn.PowerUpTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -512,6 +509,7 @@ public class CLI implements UserInterface {
     public void startPowerUp() {
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
 
+
         //System.out.println("[DEBUG] startPowerUp");
         System.out.println("POWERUP PHASE");
 
@@ -789,7 +787,7 @@ public class CLI implements UserInterface {
      */
     @Override
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
-        //TODO consume scanner buffer if user type random numbers when waiting for its tur
+        //TODO consume scanner buffer if user type random numbers when waiting for its turn
 
         boolean valid;
         int choice = -1;
@@ -817,7 +815,9 @@ public class CLI implements UserInterface {
 
             try {
                 scanner.reset();
-                choice = scanner.nextInt();
+                if(scanner.hasNextInt()) {
+                    choice = scanner.nextInt();
+                }
                 scanner.nextLine();
 
             } catch (InputMismatchException e) {
@@ -869,19 +869,30 @@ public class CLI implements UserInterface {
                 break;
 
             case 2:
-                if (isFrenzy) {
-                    if (isBeforeFrenzyStarter) {
-                        //startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
+                if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null) {
+                    if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons().isEmpty()) {
+                        System.out.println("[!] Non hai armi per sparare!");
+                        startAction(isFrenzy, isBeforeFrenzyStarter);
                     } else {
-                        //startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
-                    }
-                } else {
 
-                    if (playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT) {
-                        startShoot(DEFAULT_ENHANCED_MOVES_WITH_SHOOT);
-                    } else {
-                        startShoot(0);
+                        if (isFrenzy) {
+                            if (isBeforeFrenzyStarter) {
+                                //startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
+                            } else {
+                                //startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
+                            }
+                        } else {
+
+                            if (playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT) {
+                                startShoot(DEFAULT_ENHANCED_MOVES_WITH_SHOOT);
+                            } else {
+                                startShoot(0);
+                            }
+                        }
                     }
+                } else if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() == null) {
+                    System.out.println("[!] Non hai armi per sparare!");
+                    startAction(isFrenzy, isBeforeFrenzyStarter);
                 }
                 break;
 
@@ -1042,7 +1053,7 @@ public class CLI implements UserInterface {
                 List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
                 try {
                     CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(1));
-                    powerUpsToDiscard = checkPayWithPowerUp(w.getFirstEffectCost());
+                    powerUpsToDiscard = checkPayWithPowerUp(w.getBuyEffect());
                 } catch (WeaponNotFoundException e) {
                 }
                 view.doAction(new GrabAction(directionsList, weapons.get(0), weapons.get(1), powerUpsToDiscard));
@@ -1066,7 +1077,13 @@ public class CLI implements UserInterface {
 
         System.out.println("ARMI IN VENDITA: ");
         for (int i = 0; i < cell.getWeaponNames().size(); i++) {
-            System.out.println("Arma " + i + " : " + UiHelpers.weaponTranslator(cell.getWeaponNames().get(i)));
+            try {
+                CachedFullWeapon w = view.getCacheModel().getWeaponInfo(cell.getWeaponNames().get(i));
+                System.out.println("Arma " + i + " : " + UiHelpers.weaponTranslator(cell.getWeaponNames().get(i)) +
+                        " Costo: " + UiHelpers.ammoTranslator(w.getBuyEffect()));
+            } catch (WeaponNotFoundException e){
+                System.out.println("[DEBUG] Weapon not found! " + e.getMessage());
+            }
         }
 
         System.out.println("Digita il numero dell'arma che vuoi acquistare >>> ");
@@ -1192,9 +1209,9 @@ public class CLI implements UserInterface {
         }
 
         for (Color c : cost) {
-            if (ammo.contains(c) && powerUps.contains(new CachedPowerUp(null, c))) {
-                //TODO let him choose which one to discard
-                System.out.println("Puoi pagare usando un PowerUp o con una munizione.");
+            if (ammo.contains(c) && hasPowerUpOfColor(powerUps, c)){
+
+                System.out.println("Puoi pagare " + UiHelpers.ammoTranslator(c) + " usando un PowerUp o con una munizione.");
                 String powerUpOrAmmo = null;
                 boolean validPowerUpChoice = false;
                 System.out.println("Vuoi usare un PowerUp per pagare al posto delle munizioni? (si/no)");
@@ -1245,9 +1262,10 @@ public class CLI implements UserInterface {
                     //cost.remove(c);
                 }
 
-            } else if (powerUps.contains(new CachedPowerUp(null, c)) && !ammo.contains(c)) {
+            } else if (hasPowerUpOfColor(powerUps, c) && !ammo.contains(c)) {
+
                 //TODO tell him if he wants to drop a powerup to buy
-                System.out.println("Puoi pagare solamente con un PowerUp: ");
+                System.out.println("Puoi pagare " + UiHelpers.ammoTranslator(c) + " solamente con un PowerUp: ");
                 List<CachedPowerUp> powerUpChoiceList = powerUps
                         .stream()
                         .filter(x -> x.getColor().equals(c))
@@ -1282,7 +1300,7 @@ public class CLI implements UserInterface {
                 //cost.remove(c);
 
 
-            } else if (ammo.contains(c) && !powerUps.contains(new CachedPowerUp(null, c))) {
+            } else if (ammo.contains(c)) {
                 ammo.remove(c);
                 //cost.remove(c);
             } else {
@@ -1291,8 +1309,18 @@ public class CLI implements UserInterface {
             }
         }
 
-        System.out.println("[DEBUG] PowerUp da scartare scelti: " + powerUpsToDiscard);
+        //System.out.println("[DEBUG] PowerUp da scartare scelti: " + powerUpsToDiscard);
         return powerUpsToDiscard;
+    }
+
+    private boolean hasPowerUpOfColor(List<CachedPowerUp> powerUps, Color c){
+        List<CachedPowerUp> result = powerUps
+        .stream()
+        .filter(x -> x.getColor().equals(c))
+        .collect(Collectors.toList());
+
+        return  !result.isEmpty();
+
     }
 
 
@@ -1390,9 +1418,10 @@ public class CLI implements UserInterface {
 
         //TODO method which takes effect type as parameter (or CachedFullWeapon) and returns List<Int> with effects chosen
         //TODO also checks if he can pay this effects (w/ ammo/powerUps)
-        //effects.add(0);
+        effects.add(0);
+        effects.add(1);
+        //effects = chooseEffects(weapon);
 
-        effects = chooseEffects(weapon);
         targetList = chooseTargets(1,1);
 
 
@@ -1467,36 +1496,56 @@ public class CLI implements UserInterface {
     private List<Integer> chooseEffects(CachedFullWeapon w){
 
         boolean valid = false;
+        boolean isDone = false;
+
         List<Integer> effects = new ArrayList<>();
         effects.add(0);
-        List<Integer> choice;
+        //List<Integer> choice = new ArrayList<>();
 
-        System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
-        System.out.println("Effetto base già incluso");
-        System.out.println("1 -> effetto base + effetto principale 1");
-        System.out.println("2 -> effetto base + effetto 2");
-        System.out.println("1, 2 -> tutti gli effetti");
+        do {
 
-        try {
+            System.out.println(w.getEffectsDescriptions());
+            System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare, uno alla volta, + 9 quando hai finito");
+            System.out.println("Effetto base già incluso (premi invio per usare solo questo)");
+            System.out.println("1 -> effetto base + effetto 1");
+            System.out.println("2 -> effetto base + effetto 2");
+            System.out.println("1, INVIO,  2 -> effetto base + effetto 1 + effetto 2");
 
-            do {
+            while(scanner.hasNextInt() && !isDone){
+                try{
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                String lines = br.readLine();
+                    List<Integer> tempList = new ArrayList<>();
+                    int temp = scanner.nextInt();
 
-                String[] strs = lines.trim().split("\\s+");
-                choice = new ArrayList<>(strs.length);
+                    if(temp == 9){
+                        isDone = true;
+                    } else if (temp >= 0 && temp < 3){
+                        tempList.add(temp);
+                    } else {
+                        System.out.println("Non valido!");
+                    }
 
-                for (int i = 0; i < strs.length; i++) {
-                    choice.add(i, Integer.parseInt(strs[i]));
+                    valid = true;
+
+                    for (int i = 0; i < tempList.size(); i++) {
+                        if(!tempList.get(i).equals(i)){
+                            valid = false;
+                        }
+                    }
+
+                    if(valid){
+                        effects = tempList;
+                    }
+
+                } catch (InputMismatchException e){
+                    System.out.println("Non è un numero! Riprova >>> ");
+                    scanner.nextLine();
                 }
+            }
+
+        } while (!valid);
 
 
-            } while (!valid);
-
-        } catch (IOException e){
-
-        }
 
         //TODO ask the player to choose which weapon effect to activate
         //TODO check if effects are exclusive/concatenable
@@ -1505,12 +1554,12 @@ public class CLI implements UserInterface {
         return effects;
     }
 
-
     /**
      * {@inheritDoc}
      */
     @Override
     public void startReload() {
+
 
         boolean isDone = false;
         boolean canReloadAgain = false;
@@ -1519,33 +1568,33 @@ public class CLI implements UserInterface {
 
 
         if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
-            weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
+            weapons = new ArrayList<>(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons());
         }
 
         //local copy of the powerups and ammo inside cachemodel, needed to handle local checks if user can pay
-        List<CachedPowerUp> cachedPowerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
-                .getPowerUpBag().getPowerUpList();
+        List<CachedPowerUp> cachedPowerUps = new ArrayList<>(view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
+                .getPowerUpBag().getPowerUpList());
+
         List<Color> cachedAmmoCubes = new ArrayList<>();
         if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
-                view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
-                .getAmmoBag().getAmmoList();
+            cachedAmmoCubes = new ArrayList<>(view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
+                    .getAmmoBag().getAmmoList());
 
         //powerups and ammocubes needed to forward reload action to the controller
         List<String> weaponsToReload = new ArrayList<>();
         List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
-        List<Color> ammoCubesToDiscard = new ArrayList<>();
 
         System.out.println("FASE DI RICARICA");
         System.out.println("Digita: ");
-        System.out.println("9 -> per saltare la fase di ricarica");
         System.out.println("Un tasto qualsiasi -> per cominciare la fase di ricarica");
+        System.out.println("9 -> per saltare la fase di ricarica");
 
         int choice = -1;
 
         try {
             choice = scanner.nextInt();
 
-            if(choice == 9){
+            if (choice == 9) {
                 isDone = true;
                 view.doAction(new SkipAction());
                 return;
@@ -1558,10 +1607,11 @@ public class CLI implements UserInterface {
         //TODO user can reload every weapons he can in a single reload phase!
         while(!isDone && reloadCount < weapons.size()) {
 
-            String weapToAdd = handleWeaponReload(weapons, cachedPowerUps, cachedAmmoCubes, powerUpsToDiscard, ammoCubesToDiscard);
+            String weapToAdd = handleWeaponReload(weapons, cachedPowerUps, cachedAmmoCubes, powerUpsToDiscard);
 
             if(weapToAdd != null){
                 weaponsToReload.add(weapToAdd);
+                weapons.remove(weapToAdd);
             }
 
             for(String w : weapons){
@@ -1570,13 +1620,15 @@ public class CLI implements UserInterface {
                 }
             }
 
-            System.out.println("Vuoi ricaricare ancora? si/no");
-            String s = scanner.nextLine();
+            if(!weapons.isEmpty() && canReloadAgain){
+                System.out.println("Vuoi ricaricare ancora? si/no");
+                String s = scanner.nextLine();
 
-            if(s.toUpperCase().equals("SI")){
-                isDone = false;
-            } else {
-                isDone = true;
+                if(s.toUpperCase().equals("SI")){
+                    isDone = false;
+                } else {
+                    isDone = true;
+                }
             }
 
             if(!canReloadAgain){
@@ -1589,7 +1641,7 @@ public class CLI implements UserInterface {
     }
 
     private String handleWeaponReload(List<String> weapons, List<CachedPowerUp> cachedPowerUps, List<Color> cachedAmmoCubes,
-                                    List<CachedPowerUp> powerUpsToDiscard, List<Color> ammoCubesToDiscard){
+                                    List<CachedPowerUp> powerUpsToDiscard){
 
         int read = -1;
         boolean validChoice = false;
@@ -1597,7 +1649,9 @@ public class CLI implements UserInterface {
 
         do {
             System.out.println("Le tue armi sono: ");
-            showCurrWeapons();
+            for (int i = 0; i < weapons.size(); i++) {
+
+            }
             System.out.println("9 -> fine");
 
             System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
@@ -1624,16 +1678,22 @@ public class CLI implements UserInterface {
                 CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(read));
                 //TODO check if this works
                 //TODO add checks for powerups
-                cachedAmmoCubes.removeAll(w.getFirstEffectCost());
+                powerUpsToDiscard = checkPayWithPowerUp(w.getFirstEffectCost());
+
+                //TODO update local powerups and ammo to calc
+                cachedPowerUps.removeAll(powerUpsToDiscard);
+                List<Color> weaponReloadCost = new ArrayList<>(w.getFirstEffectCost());
+                for(Color c : UiHelpers.genColorListFromPowerUps(cachedPowerUps)){
+                    weaponReloadCost.remove(c);
+                }
+                cachedAmmoCubes.removeAll(weaponReloadCost);
+
             } catch (WeaponNotFoundException e){
 
             }
         }
 
         return weapons.get(read);
-
-
-
     }
 
     /**
@@ -1653,21 +1713,22 @@ public class CLI implements UserInterface {
 
         }
 
-        //TODO check if ammocubes and powerups are enough to pay reload
         w.getFirstEffectCost();
 
-        if(canPay(w.getFirstEffectCost(), ammoCubes)){
+        if(canPay(w.getFirstEffectCost(), ammoCubes, UiHelpers.genColorListFromPowerUps(powerUps))){
             return true;
         } else {
             return false;
         }
     }
 
-    private boolean canPay(List<Color> cost, List<Color> ammo){
+    private boolean canPay(List<Color> cost, List<Color> ammo, List<Color> powerUps){
         //TODO also check he can pay with powerups
         for(Color c : cost){
             if(ammo.contains(c)){
                 ammo.remove(c);
+            } else if (powerUps.contains(c)){
+                powerUps.remove(c);
             } else {
                 return false;
             }

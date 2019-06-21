@@ -71,7 +71,7 @@
   },
   {
     "Weapon": {
-      "name": "WHISPERER",
+      "name": "WHISPER",
       "cost": [
         {
           "ammoC": "BLUE"
@@ -295,4 +295,4 @@
 
 
 
-]
+] 
