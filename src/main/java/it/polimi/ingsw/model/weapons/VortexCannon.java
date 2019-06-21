@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class VortexCannon extends Weapon{
 
-    private final String name = "VORTEX CANNON";
+    private static final String NAME = "VORTEX CANNON";
 
     private final List<AmmoCube> costBaseEffect;
 
@@ -64,13 +64,13 @@ public class VortexCannon extends Weapon{
 
             }catch (CardNotPossessedException e){
 
-                e.printStackTrace();
+                throw new NotAbleToReloadException();
             }
         }
     }
 
     @Override
-    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
+    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException {
 
         // if the player shoot with effect 2 but no effect 1 throw exception
 
@@ -108,7 +108,9 @@ public class VortexCannon extends Weapon{
 
     }
 
-    private void checkSecondEffect(List<Player> targets, Cell vortex)throws  NotCorrectPlayerNumberException, UncorrectDistanceException{
+    private void checkSecondEffect(List<Player> targets, Cell vortex)throws  NotCorrectPlayerNumberException, UncorrectDistanceException, NotEnoughAmmoException{
+
+        if (!isPossessedBy().canPay(costSecondEffect)) throw new NotEnoughAmmoException();
 
         if (targets == null) throw new NotCorrectPlayerNumberException();
 
@@ -137,7 +139,7 @@ public class VortexCannon extends Weapon{
     }
 
     @Override
-    public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
+    public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException {
 
         preShoot(targetLists,effects,cells);
 
@@ -187,7 +189,7 @@ public class VortexCannon extends Weapon{
 
     @Override
     public String getName() {
-        return name;
+        return NAME;
     }
 
     @Override

@@ -525,6 +525,8 @@ public class Parser {
 
         specialWeaponList.add(new Thor());
 
+        specialWeaponList.add(new VortexCannon());
+
         //TODO add all the special weapons
 
         return specialWeaponList;

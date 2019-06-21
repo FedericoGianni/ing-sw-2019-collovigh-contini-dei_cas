@@ -10,15 +10,20 @@ import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP;
+
 public class UtilityMethods {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
+
+    private static final String LOG_START = "[Controller] ";
 
     private final Controller controller;
 
@@ -250,5 +255,66 @@ public class UtilityMethods {
     }
 
 
+    /**
+     *  THis method will check if the specified powerUps belongs to the player
+     * @param powerUps is a list of cachedPowerUp received from the view
+     * @return true if the player effectively has them
+     */
+    public Boolean checkIfPlayerPossessPowerUps(List<CachedPowerUp> powerUps){
+
+        Boolean returnValue = true;
+
+        try{
+
+            getSpecifiedPowerUp(powerUps);
+
+        }catch (CardNotPossessedException e){
+
+            // log
+
+            LOGGER.log(Level.WARNING,() -> LOG_START + " player does not possess all powerUps he declared ");
+
+            // show
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP);
+
+            return false;
+        }
+
+        return returnValue;
+    }
+
+    /**
+     * This method will get a list of PowerUp from a list of CachedPowerUp
+     * @param powerUps is a list of cachedPowerUp
+     * @return a list of PowerUp
+     * @throws CardNotPossessedException if a powerUp was not found
+     */
+    public List<PowerUp> getSpecifiedPowerUp(List<CachedPowerUp> powerUps) throws CardNotPossessedException {
+
+        // declare a list of powerUp
+
+        List<PowerUp> powerUpList = new ArrayList<>();
+
+        // get a copy of the list of the powerUp possessed by the model
+
+        List<PowerUp> possessed = Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().getList();
+
+        // for each cachedPowerUp gets the correspondent one from the model and adds it to the new list
+
+        for (CachedPowerUp cachedPowerUp : powerUps){
+
+            PowerUp toRemove = controller.getUtilityMethods().cachedToRealPowerUp(cachedPowerUp,possessed);
+
+            powerUpList.add(toRemove);
+
+            // then removes it from the original list so that can not be picked again
+
+            possessed.remove(toRemove);
+
+        }
+
+        return powerUpList;
+    }
 
 }
