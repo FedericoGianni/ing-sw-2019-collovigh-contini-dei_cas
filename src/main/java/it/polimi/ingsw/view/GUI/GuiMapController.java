@@ -49,7 +49,7 @@ public class GuiMapController {
     GridPane innerMap;
 
     @FXML
-    VBox b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;;
+    VBox b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;
     @FXML
     ImageView powerUp1,powerUp2,powerUp3,weapon1,weapon2,weapon3;
 
@@ -57,7 +57,7 @@ public class GuiMapController {
     Button stopMov,moveButton;
 
 
-    //-------------------------------------------------------MAP CREATION and gestion
+    //-------------------------------------------------------MAP CREATION and gestion methods
     @FXML
     public void initialize() {
 
@@ -113,6 +113,10 @@ public class GuiMapController {
             }
 
         }
+        weaponSeeEventEnabler();
+    }
+    private void weaponSeeEventEnabler()
+    {
         b02.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
             @Override
@@ -141,8 +145,107 @@ public class GuiMapController {
             }
         });
     }
+    private void buttonCreator()
+    {
+        for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
+            RowConstraints rc = new RowConstraints();
+            rc.setVgrow(Priority.ALWAYS) ; // allow row to grow
+            rc.setFillHeight(true); // ask nodes to fill height for row
 
+            innerMap.getRowConstraints().add(rc);
+        }
+        for (int colIndex = 0; colIndex < 4; colIndex++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setHgrow(Priority.ALWAYS) ; // allow column to grow
+            cc.setFillWidth(true); // ask nodes to fill space for column
 
+            innerMap.getColumnConstraints().add(cc);
+        }
+
+        b00.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        b01.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        b02.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        b03.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        b10.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        b11.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        b12.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        b13.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        b20.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        b21.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        b22.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        b23.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        map[0][0]=b00;
+        map[0][1]=b01;
+        map[0][2]=b02;
+        map[0][3]=b03;
+
+        map[1][0]=b10;
+        map[1][1]=b11;
+        map[1][2]=b12;
+        map[1][3]=b13;
+
+        map[2][0]=b20;
+        map[2][1]=b21;
+        map[2][2]=b22;
+        map[2][3]=b23;
+    }
+
+    @FXML
+    public void actionButtonsEnabler()
+    {
+        moveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                move();
+            }
+        });
+    }
+
+    @FXML
+    public void actionButtonDisable()//disable action buttons
+    {
+        moveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+        stopMov.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+        mapEventDeleter();
+    }
+
+    private void mapEventDeleter()//disable map events except for spawn see, it renables it
+    {
+        for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
+        {
+            for(int j=0;j<col;j++)
+            {
+                map[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseevent) {
+
+                    }
+
+                });
+            }
+        }
+        weaponSeeEventEnabler();
+    }
+
+    public void printLog(String s)
+    {
+        log.appendText("\n"+s);
+    }
+
+    //------------------------------------------------------------Weapons show methods
     private void spawnCellWeaponShow(int r,int c)
     {
         //prima di tutto quali sono le immagini
@@ -232,54 +335,7 @@ public class GuiMapController {
 
 
 
-    private void buttonCreator()
-    {
-        for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
-            RowConstraints rc = new RowConstraints();
-            rc.setVgrow(Priority.ALWAYS) ; // allow row to grow
-            rc.setFillHeight(true); // ask nodes to fill height for row
-
-            innerMap.getRowConstraints().add(rc);
-        }
-        for (int colIndex = 0; colIndex < 4; colIndex++) {
-            ColumnConstraints cc = new ColumnConstraints();
-            cc.setHgrow(Priority.ALWAYS) ; // allow column to grow
-            cc.setFillWidth(true); // ask nodes to fill space for column
-
-            innerMap.getColumnConstraints().add(cc);
-        }
-
-        b00.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        b01.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        b02.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        b03.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
-        b10.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        b11.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        b12.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        b13.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
-        b20.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        b21.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        b22.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        b23.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
-        map[0][0]=b00;
-        map[0][1]=b01;
-        map[0][2]=b02;
-        map[0][3]=b03;
-
-        map[1][0]=b10;
-        map[1][1]=b11;
-        map[1][2]=b12;
-        map[1][3]=b13;
-
-        map[2][0]=b20;
-        map[2][1]=b21;
-        map[2][2]=b22;
-        map[2][3]=b23;
-    }
-
+    //-------------------------------------------------------------movements
     @FXML
     private void move()
     {
@@ -290,32 +346,39 @@ public class GuiMapController {
         handleMovement(x,y,3,movementDirections);
     }
 
-    @FXML
-    public void actionButtonsEnabler()
+    private void mapPos(int r,int c,int id)
     {
-        moveButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                move();
+        //System.out.println("riga: "+r+"colonna :"+c);
+        ;
+        boolean found=false;
+        if( map[r][c].getChildren().size()!=0 && ((HBox)map[r][c].getChildren().get(0)).getChildren()!=null)
+        {for(int j=0;j<((HBox)map[r][c].getChildren().get(0)).getChildren().size();j++)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+        {
+            if(((HBox)map[r][c].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
+            {
+                found=true;
             }
-        });
-    }
 
-    @FXML
-    public void actionButtonDisable()//disable action buttons
-    {
-        moveButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        }
+            if(found)return;}
+        fromIDtoIMG(id, map[r][c]);
+        log.appendText("\n Placed player "+id+" in cell "+r+c);
 
-            }
-        });
-        stopMov.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
 
-            }
+        //eliminating the powerups effects after the beginning
+        powerUp1.setOnMouseClicked((e) -> {
+
         });
+        powerUp2.setOnMouseClicked((e) -> {
+
+        });
+        powerUp3.setOnMouseClicked((e) -> {
+
+        });
+
+        //afetr move i delete moving things
+        mapEventDeleter();
+
     }
 
     private void handleMovement(int x,int y,int m,ArrayList<Directions> movementDirections)//called from move,do stuff for real
@@ -397,22 +460,7 @@ public class GuiMapController {
         });}
     }
 
-    private void mapEventDeleter()
-    {
-        for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
-        {
-            for(int j=0;j<col;j++)
-            {
-                map[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseevent) {
 
-                    }
-
-                });
-            }
-        }
-    }
     private void eventMover(int x,int y,int m)
     {
         if(m==0)
@@ -622,7 +670,7 @@ public class GuiMapController {
     }
 
 
-
+//-------------------------------------------------------------loign methods and matche beginning
     @FXML
     public void loginUpdater(String name, int id, PlayerColor color)
     {
@@ -648,13 +696,6 @@ public class GuiMapController {
         });
 
 
-    }
-
-
-
-    public void printLog(String s)
-    {
-        log.appendText("\n"+s);
     }
 
     public void startSpawn()
@@ -685,41 +726,7 @@ public class GuiMapController {
         });
     }
 
-    private void mapPos(int r,int c,int id)
-    {
-            //System.out.println("riga: "+r+"colonna :"+c);
-            ;
-            boolean found=false;
-            if( map[r][c].getChildren().size()!=0 && ((HBox)map[r][c].getChildren().get(0)).getChildren()!=null)
-            {for(int j=0;j<((HBox)map[r][c].getChildren().get(0)).getChildren().size();j++)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
-             {
-                 if(((HBox)map[r][c].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
-                 {
-                     found=true;
-                 }
-
-             }
-             if(found)return;}
-             fromIDtoIMG(id, map[r][c]);
-             log.appendText("\n Placed player "+id+" in cell "+r+c);
-
-
-        //eliminating the powerups effects after the beginning
-        powerUp1.setOnMouseClicked((e) -> {
-
-        });
-        powerUp2.setOnMouseClicked((e) -> {
-
-        });
-        powerUp3.setOnMouseClicked((e) -> {
-
-        });
-
-        //afetr move i delete moving things
-       mapEventDeleter();
-
-    }
-
+    //------------------------------------------------------------powerUp  gestion
     private Point colorToCord(Color c)
     {
         Point p=new Point();
@@ -823,6 +830,7 @@ public class GuiMapController {
         }
     }
 
+    //--------------------------------------------------------------ammo gestion
     public void ammoPlacer()
     {
         //neeed to remove everything before!!!
