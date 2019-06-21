@@ -38,11 +38,17 @@ public class VortexCannon extends Weapon{
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isLoaded() {
         return loaded;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reload() throws NotAbleToReloadException {
 
@@ -69,8 +75,24 @@ public class VortexCannon extends Weapon{
         }
     }
 
-    @Override
-    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException {
+    /**
+     * This method will check if the player can shoot
+     *
+     * @param targetLists is a list of list of target for each effect of the weapon
+     * @param effects is a list containing int correspondents to which effect will be used
+     * @param cells is a list of cell
+     * @return true if the shoot can be preformed, false otherwise
+     * @throws WeaponNotLoadedException
+     * @throws PlayerInSameCellException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     * @throws UncorrectEffectsException
+     * @throws NotCorrectPlayerNumberException
+     * @throws PlayerNotSeeableException
+     * @throws NotEnoughAmmoException
+     */
+    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, UncorrectDistanceException, UncorrectEffectsException, NotCorrectPlayerNumberException, NotEnoughAmmoException {
 
         // if the player shoot with effect 2 but no effect 1 throw exception
 
@@ -100,6 +122,14 @@ public class VortexCannon extends Weapon{
         return true;
     }
 
+
+    /**
+     * This method check if parameters given are good for base effect
+     * @param target is the player targeted
+     * @param vortex is the cell containing the vortex
+     * @throws NotCorrectPlayerNumberException if there is no target specified
+     * @throws UncorrectDistanceException if the target is not in the vortex radius
+     */
     private void checkBaseEffect(Player target, Cell vortex)throws  NotCorrectPlayerNumberException, UncorrectDistanceException{
 
         if (target == null) throw new NotCorrectPlayerNumberException();
@@ -108,6 +138,14 @@ public class VortexCannon extends Weapon{
 
     }
 
+    /**
+     * This method check if parameters given are good for second effect
+     * @param targets are the player targeted
+     * @param vortex is the cell containing the vortex
+     * @throws NotCorrectPlayerNumberException if targets are not 1 nor 2
+     * @throws UncorrectDistanceException if the targets are not in the vortex radius
+     * @throws NotEnoughAmmoException if the player can not pay the effect
+     */
     private void checkSecondEffect(List<Player> targets, Cell vortex)throws  NotCorrectPlayerNumberException, UncorrectDistanceException, NotEnoughAmmoException{
 
         if (!isPossessedBy().canPay(costSecondEffect)) throw new NotEnoughAmmoException();
@@ -124,6 +162,11 @@ public class VortexCannon extends Weapon{
 
     }
 
+    /**
+     *
+     * @param vortex is the vortex center
+     * @return a list of cell that are in the vortex radius
+     */
     private List<Cell> genVortexSurrounding(Cell vortex){
 
         List<Cell> vortexSurrounding = new ArrayList<>();
@@ -138,6 +181,9 @@ public class VortexCannon extends Weapon{
         return vortexSurrounding;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException {
 
@@ -152,6 +198,11 @@ public class VortexCannon extends Weapon{
         this.loaded = false;
     }
 
+    /**
+     * This method will perform the base effect shoot
+     * @param target  is the player targeted
+     * @param vortex is the cell containing the vortex
+     */
     private void baseEffect(Player target, Cell vortex){
 
         if (!target.getCurrentPosition().equals(vortex)){
@@ -166,6 +217,11 @@ public class VortexCannon extends Weapon{
 
     }
 
+    /**
+     * This method will perform the second effect shoot
+     * @param targets  are the player targeted
+     * @param vortex is the cell containing the vortex
+     */
     private void secondEffect(List<Player> targets, Cell vortex) {
 
         for (Player target : targets){
@@ -182,21 +238,35 @@ public class VortexCannon extends Weapon{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void print() {
 
+        throw new UnsupportedOperationException();
+
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return NAME;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<AmmoCube> getCost() {
         return costBaseEffect.subList(1,costBaseEffect.size());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<AmmoCube> getReloadCost() {
         return costBaseEffect;

@@ -57,14 +57,6 @@ public class Thor extends Weapon {
         }
     }
 
-    @Override
-    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
-
-        //TODO implement
-
-        return false;
-    }
-
 
     private boolean canBeReloaded() {
 
