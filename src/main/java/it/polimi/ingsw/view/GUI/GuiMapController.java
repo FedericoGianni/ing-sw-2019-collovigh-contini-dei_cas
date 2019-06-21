@@ -57,6 +57,7 @@ public class GuiMapController {
     Button stopMov,moveButton;
 
 
+    //-------------------------------------------------------MAP CREATION and gestion
     @FXML
     public void initialize() {
 
@@ -80,14 +81,14 @@ public class GuiMapController {
                  b03.setOnMouseClicked(new EventHandler<MouseEvent>(){
                      @Override
                      public void handle(MouseEvent mouseEvent) {
-                         unClickAble();
+
                      }
                  });
                 b20.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
                     @Override
                     public void handle(MouseEvent mouseEvent) {
-                        unClickAble();
+
                     }
                 });
 
@@ -100,7 +101,7 @@ public class GuiMapController {
 
                     @Override
                     public void handle(MouseEvent mouseEvent) {
-                        unClickAble();
+
                     }
                 });
                 break;
@@ -116,6 +117,7 @@ public class GuiMapController {
 
             @Override
             public void handle(MouseEvent mouseEvent) {
+
                 spawnCellWeaponShow(0,2);
             }
         });
@@ -126,6 +128,7 @@ public class GuiMapController {
 
             @Override
             public void handle(MouseEvent mouseEvent) {
+
                 spawnCellWeaponShow(1,0);
             }
         });
@@ -133,19 +136,22 @@ public class GuiMapController {
 
             @Override
             public void handle(MouseEvent mouseEvent) {
+
                 spawnCellWeaponShow(2,3);
             }
         });
     }
-    private void unClickAble()
-    {
-        log.appendText("\n Not in the map");
-    }
+
 
     private void spawnCellWeaponShow(int r,int c)
     {
         //prima di tutto quali sono le immagini
-
+        weapon1.setFitHeight(156);
+        weapon1.setFitWidth(100);
+        weapon2.setFitHeight(156);
+        weapon2.setFitWidth(100);
+        weapon3.setFitHeight(156);
+        weapon3.setFitWidth(100);
         for(int i=0;i<((CachedSpawnCell)gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c)).getWeaponNames().size();i++)
         {
             String url=fromWNameToUrl(((CachedSpawnCell)gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c)).getWeaponNames().get(i));
@@ -155,6 +161,7 @@ public class GuiMapController {
 
     private String fromWNameToUrl(String name)
     {
+        System.out.println(name);
         switch(name)
         {
             case "LOCK RIFLE":
@@ -184,7 +191,7 @@ public class GuiMapController {
             case "GRENADE LAUNCHER":
                 return "/images/weapons/lanciaGranate.png";
             case "ROCKET LAUNCHER":
-                return "/images/weapons/lanciaMissili.png";
+                return "/images/weapons/lanciaRazzi.png";
             case "RAILGUN":
                 return "/images/weapons/fucileLaser.png";
             case "CYBERBLADE":
@@ -192,7 +199,7 @@ public class GuiMapController {
             case "ZX-2":
                 return "/images/weapons/zx2.png";
             case "SHOTGUN":
-                return "/images/weapons/fucilepompa.png";
+                return "/images/weapons/fucilePompa.png";
             case "POWER GLOVE":
                 return "/images/weapons/cyberGuanto.png";
             case "SHOCKWAVE":
@@ -207,15 +214,16 @@ public class GuiMapController {
     private void  weaponDisplayer(String url,int weapon)
     {
         Image img=new Image(url);
+
         switch (weapon)
         {
-            case 1:
+            case 0:
                 weapon1.setImage(img);
                 break;
-            case 2:
+            case 1:
                 weapon2.setImage(img);
                 break;
-            case 3:
+            case 2:
                 weapon3.setImage(img);
                 break;
         }

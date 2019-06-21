@@ -21,7 +21,7 @@
     <left>
         <VBox>
             <Label text="Dynamic screen"></Label>
-            <VBox>
+            <VBox >
                 <children>
                     <Label text="Weapons "></Label>
                     <ImageView fx:id="weapon1"></ImageView>
