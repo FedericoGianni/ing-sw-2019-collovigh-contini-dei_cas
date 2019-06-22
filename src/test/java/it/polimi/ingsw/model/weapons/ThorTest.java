@@ -84,11 +84,7 @@ class ThorTest {
             shooter.addWeapon(w);
         try {
             shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
-        } catch (NotEnoughAmmoException e) {
-            e.printStackTrace();
-        } catch (CardNotPossessedException e) {
-            e.printStackTrace();
-        } catch (DifferentPlayerNeededException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

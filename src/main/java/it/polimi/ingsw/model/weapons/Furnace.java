@@ -91,6 +91,8 @@ public class Furnace  extends SpecialWeapons{
     @Override
     public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CellNonExistentException {
 
+        if (cells.isEmpty()) throw new CellNonExistentException();
+
         if (effects.contains(0) && !effects.contains(1)){
 
             return checkBaseEffect(cells.get(0));
@@ -101,7 +103,7 @@ public class Furnace  extends SpecialWeapons{
 
         } else {
 
-            return false;
+            throw new UncorrectEffectsException();
         }
     }
 
@@ -150,7 +152,7 @@ public class Furnace  extends SpecialWeapons{
 
             for (int j = 0; j < Map.MAP_C; j++) {
 
-                if(Model.getMap().getCell(i,j).getColor().equals(color)) roomCells.add(Model.getMap().getCell(i,j));
+                if( (Model.getMap().getCell(i,j) != null ) && (Model.getMap().getCell(i,j).getColor().equals(color)) ) roomCells.add(Model.getMap().getCell(i,j));
             }
         }
 

@@ -79,17 +79,7 @@ class NormalWeaponTest {
         }
         catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
             e.printStackTrace();
-        } catch (UncorrectDistanceException uncorrectDistanceException) {
-            uncorrectDistanceException.printStackTrace();
-        } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (PlayerInDifferentCellException e) {
-            e.printStackTrace();
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        } catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (UncorrectEffectsException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -155,19 +145,7 @@ class NormalWeaponTest {
         }
 
         catch(WeaponNotLoadedException e){ e.printStackTrace();}
-        catch (PlayerInSameCellException e) {
-            e.printStackTrace();
-        } catch (UncorrectDistanceException uncorrectDistanceException) {
-            uncorrectDistanceException.printStackTrace();
-        } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (PlayerInDifferentCellException e) {
-            e.printStackTrace();
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        } catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (UncorrectEffectsException e) {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -212,25 +190,7 @@ class NormalWeaponTest {
             shooter.getWeapons().get(0).shoot(targetsLists,mEf,null);
 
         }
-        catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
-            e.printStackTrace();
-        } catch (UncorrectDistanceException uncorrectDistanceException) {
-            uncorrectDistanceException.printStackTrace();
-        } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (PlayerInDifferentCellException e) {
-            e.printStackTrace();
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        } catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (UncorrectEffectsException e) {
-            e.printStackTrace();
-        } catch (DifferentPlayerNeededException e) {
-            e.printStackTrace();
-        } catch (NotEnoughAmmoException e) {
-            e.printStackTrace();
-        } catch (CardNotPossessedException e) {
+        catch(Exception e){
             e.printStackTrace();
         }
 
@@ -294,25 +254,7 @@ class NormalWeaponTest {
             assertEquals(shooter.getCurrentPosition(),target1.getCurrentPosition());
 
         }
-        catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
-            e.printStackTrace();
-        } catch (UncorrectDistanceException uncorrectDistanceException) {
-            uncorrectDistanceException.printStackTrace();
-        } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (PlayerInDifferentCellException e) {
-            e.printStackTrace();
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        } catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (UncorrectEffectsException e) {
-            e.printStackTrace();
-        } catch (DifferentPlayerNeededException e) {
-            e.printStackTrace();
-        } catch (NotEnoughAmmoException e) {
-            e.printStackTrace();
-        } catch (CardNotPossessedException e) {
+        catch(Exception e){
             e.printStackTrace();
         }
     }
@@ -365,25 +307,7 @@ class NormalWeaponTest {
 
             //assert(target1.getStats().getDmgTaken().size() == 0);
         }
-        catch(WeaponNotLoadedException e){ e.printStackTrace();} catch (PlayerInSameCellException e) {
-            e.printStackTrace();
-        } catch (UncorrectDistanceException uncorrectDistanceException) {
-
-        } catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (PlayerInDifferentCellException e) {
-            e.printStackTrace();
-        } catch (UncorrectEffectsException e) {
-            e.printStackTrace();
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        } catch (CardNotPossessedException e) {
-            e.printStackTrace();
-        } catch (NotEnoughAmmoException e) {
-            e.printStackTrace();
-        } catch (DifferentPlayerNeededException e) {
+        catch(Exception e){
             e.printStackTrace();
         }
 
@@ -436,12 +360,12 @@ class NormalWeaponTest {
         targetLists.add(targets1);
         Model.getMap().setUnvisited();
 
-        try{
-            ArrayList <Integer>mEf=new ArrayList<>();
+        try {
+            ArrayList<Integer> mEf = new ArrayList<>();
             mEf.add(0);
             mEf.add(1);
 
-            shooter.getWeapons().get(0).shoot(targetLists,mEf,null);
+            shooter.getWeapons().get(0).shoot(targetLists, mEf, null);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
             System.out.println(target1.getStats().getMarks());
@@ -449,22 +373,8 @@ class NormalWeaponTest {
             System.out.println(target2.getPlayerName());
             System.out.println(target2.getStats().getDmgTaken());
             System.out.println(target2.getStats().getMarks());
-        }
 
-        catch(WeaponNotLoadedException e){ e.printStackTrace();}
-        catch (PlayerInSameCellException e) {
-            e.printStackTrace();
-        } catch (UncorrectDistanceException uncorrectDistanceException) {
-            uncorrectDistanceException.printStackTrace();
-        } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (PlayerInDifferentCellException e) {
-            e.printStackTrace();
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        } catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (UncorrectEffectsException e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -541,24 +451,11 @@ class NormalWeaponTest {
             System.out.println(target2.getPlayerName());
             System.out.println(target2.getStats().getDmgTaken());
             System.out.println(target2.getStats().getMarks());
+
+        } catch(Exception e){
+            e.printStackTrace();
         }
 
-        catch(WeaponNotLoadedException e){ e.printStackTrace();}
-        catch (PlayerInSameCellException e) {
-            e.printStackTrace();
-        } catch (UncorrectDistanceException uncorrectDistanceException) {
-            uncorrectDistanceException.printStackTrace();
-        } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (PlayerInDifferentCellException e) {
-            e.printStackTrace();
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        } catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (UncorrectEffectsException e) {
-            e.printStackTrace();
-        }
 
         assert(target1.getStats().getDmgTaken().size() == 2);
         //assert(target2.getStats().getDmgTaken().size() == 2);
@@ -637,22 +534,8 @@ class NormalWeaponTest {
             System.out.println(target2.getPlayerName());
             System.out.println(target2.getStats().getDmgTaken());
             System.out.println(target2.getStats().getMarks());
-        }
 
-        catch(WeaponNotLoadedException e){ e.printStackTrace();}
-        catch (PlayerInSameCellException e) {
-            e.printStackTrace();
-        } catch (UncorrectDistanceException uncorrectDistanceException) {
-            uncorrectDistanceException.printStackTrace();
-        } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (PlayerInDifferentCellException e) {
-            e.printStackTrace();
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        } catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (UncorrectEffectsException e) {
+        }catch(Exception e){
             e.printStackTrace();
         }
 
@@ -806,26 +689,7 @@ class NormalWeaponTest {
 
             assertEquals(shooter.getCurrentPosition(),target1.getCurrentPosition());
 
-        }
-        catch(WeaponNotLoadedException e){} catch (PlayerInSameCellException e) {
-            e.printStackTrace();
-        } catch (UncorrectDistanceException uncorrectDistanceException) {
-            uncorrectDistanceException.printStackTrace();
-        } catch (SeeAblePlayerException e) {
-            e.printStackTrace();
-        } catch (PlayerInDifferentCellException e) {
-            e.printStackTrace();
-        } catch (PlayerNotSeeableException e) {
-            e.printStackTrace();
-        } catch (NotCorrectPlayerNumberException e) {
-            e.printStackTrace();
-        } catch (UncorrectEffectsException e) {
-            e.printStackTrace();
-        } catch (DifferentPlayerNeededException e) {
-            e.printStackTrace();
-        } catch (NotEnoughAmmoException e) {
-            e.printStackTrace();
-        } catch (CardNotPossessedException e) {
+        } catch(Exception e){
             e.printStackTrace();
         }
     }
