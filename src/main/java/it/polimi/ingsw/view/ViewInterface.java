@@ -71,6 +71,11 @@ public interface ViewInterface {
      */
     boolean askMoveValid(int row, int column, Directions direction);
 
+    /**
+     * This method will ask the player to redo just the shoot part of the FrenzyShoot
+     */
+    void reDoFrenzyAtomicShoot();
+
     //RELOAD
 
     /**

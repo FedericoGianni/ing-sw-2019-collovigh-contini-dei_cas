@@ -48,6 +48,7 @@ public class SocketClientReader extends Thread {
     private static final String ASK_GRENADE = "askGrenade";
     private static final String SHOW = "showMessage";
     private static final String SET_INT_ANSWER = "setIntAnswer";
+    private static final String REDO_FRENZY_SHOOT = "reDoFrenzyAtomicShoot";
 
     /**
      * Attribute representing a BufferedReader to manage input stream from socket
@@ -430,6 +431,12 @@ public class SocketClientReader extends Thread {
             } else if(commands[1].equals("false")){
                 RunClient.getView().setValidMove(false);
             }
+        });
+
+        //reDoFrenzyAtomicShoot
+        headersMap.put(REDO_FRENZY_SHOOT, (commands) -> {
+            LOGGER.log(level,"[Socket-Client-Reader] received reDoFrenzyAtomicShoot by server");
+            RunClient.getView().reDoFrenzyAtomicShoot();
         });
 
         //show

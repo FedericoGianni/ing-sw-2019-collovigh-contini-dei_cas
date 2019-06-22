@@ -911,6 +911,11 @@ public class CLI implements UserInterface {
         }
     }
 
+    @Override
+    public void reDoFrenzyAtomicShoot() {
+        // TODO
+    }
+
 
     private List<Directions> handleMove(int maxMoves) {
 

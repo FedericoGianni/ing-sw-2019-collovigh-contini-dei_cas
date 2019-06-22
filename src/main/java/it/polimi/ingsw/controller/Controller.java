@@ -211,7 +211,7 @@ public class Controller {
         return utilityMethods;
     }
 
-    public Boolean getExpectingAnswer() { return expectingAnswer;}
+    public ReloadPhase getReloadPhase() { return reloadPhase; }
 
     public void setExpectingAnswer(Boolean expectingAnswer) { this.expectingAnswer = expectingAnswer; }
 
@@ -477,23 +477,11 @@ public class Controller {
 
                 break;
 
-            case FRENZY_MOVE:
-
-                //TODO delete
-
-                break;
-
-            case FRENZY_GRAB:
-
-                //TODO delete
-
-                break;
-
             case FRENZY_SHOOT:
 
                 checkActionIsFrenzy();
 
-                //TODO frenzyShoot
+                actionPhase.frenzyShootAction((FrenzyShoot) jsonAction);
 
                 break;
 
@@ -520,6 +508,8 @@ public class Controller {
         if (!frenzy){
 
             getVirtualView(getCurrentPlayer()).show(DEFAULT_RECEIVED_NORMAL_BUT_EXPECTED_FRENZY);
+
+            actionPhase.handleAction();
         }
     }
 
@@ -528,6 +518,8 @@ public class Controller {
         if (frenzy){
 
             getVirtualView(getCurrentPlayer()).show(DEFAULT_RECEIVED_FRENZY_BUT_EXPECTED_NORMAL);
+
+            actionPhase.handleAction();
         }
     }
 

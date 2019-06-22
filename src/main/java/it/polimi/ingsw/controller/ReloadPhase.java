@@ -42,19 +42,23 @@ public class ReloadPhase {
 
         int playerId = controller.getCurrentPlayer();
 
-        if((!(Model.getGame().getPlayers().get(playerId).getWeapons().isEmpty())) && (playerHasReloadPhase())){
+        if (controller.getTurnPhase().equals(TurnPhase.RELOAD)) {
 
-            controller.getVirtualView(playerId).startReload();
+            if ((!(Model.getGame().getPlayers().get(playerId).getWeapons().isEmpty())) && (playerHasReloadPhase())) {
 
-            controller.setExpectingAnswer(true);
+                controller.getVirtualView(playerId).startReload();
 
-        }else {
+                controller.setExpectingAnswer(true);
 
-            LOGGER.log(level,()->LOG_START + " player w/ id:  " + playerId + " skipped reload bc has no weapons ");
+            } else {
 
-            // if the player has no weapon the phase get skipped automatically
+                LOGGER.log(level, () -> LOG_START + " player w/ id:  " + playerId + " skipped reload bc has no weapons ");
 
-            controller.incrementPhase();
+                // if the player has no weapon the phase get skipped automatically
+
+                controller.incrementPhase();
+            }
+
         }
     }
 
@@ -105,7 +109,7 @@ public class ReloadPhase {
 
             // increment phase
 
-            controller.incrementPhase();
+            if (controller.getTurnPhase().equals(TurnPhase.RELOAD)) controller.incrementPhase();
 
         }else {
 
@@ -195,7 +199,9 @@ public class ReloadPhase {
      * @param reloadAction is the action submitted by the client
      * @return true if verified, false otherwise
      */
-    private Boolean checkIfReloadIsValid(ReloadAction reloadAction){
+    public Boolean checkIfReloadIsValid(ReloadAction reloadAction){
+
+        if (reloadAction.getWeapons().isEmpty()) return true;
 
         Boolean returnValue;
 
@@ -267,7 +273,12 @@ public class ReloadPhase {
 
         // declare a boolean var
 
-        Boolean returnValue = false;
+        boolean returnValue = false;
+
+        for (Weapon weapon : Model.getPlayer(playerId).getCurrentWeapons().getList()){
+
+            returnValue = returnValue || !weapon.isLoaded();
+        }
 
         // gets the whole potential ( real + converted powerUp) ammoList the player owns
 

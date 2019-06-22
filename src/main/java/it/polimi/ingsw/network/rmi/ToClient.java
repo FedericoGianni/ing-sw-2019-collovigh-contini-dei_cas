@@ -80,6 +80,11 @@ public interface ToClient extends  Remote {
     void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) throws RemoteException;
 
     /**
+     * This method will ask the player to redo just the shoot part of the FrenzyShoot
+     */
+    void reDoFrenzyAtomicShoot() throws RemoteException;
+
+    /**
      * This method will start the reload Phase on the client
      * @throws RemoteException
      */

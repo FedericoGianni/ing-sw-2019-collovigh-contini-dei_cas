@@ -319,6 +319,14 @@ public class View implements ViewInterface {
      * {@inheritDoc}
      */
     @Override
+    public void reDoFrenzyAtomicShoot() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setValidMove(boolean b) {
         userInterface.setValidMove(b);
     }

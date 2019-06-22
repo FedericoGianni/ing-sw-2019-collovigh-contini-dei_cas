@@ -15,7 +15,8 @@ import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
-
+import it.polimi.ingsw.view.updates.otherplayerturn.ShootTurnUpdate;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,6 +34,7 @@ public class ActionPhase {
     private static final String LOG_START_SHOOT = "[Controller-ShootAction]";
     private static final String LOG_START_MOVE = "[Controller-MoveAction]";
     private static final String LOG_START_ID = "[CONTROLLER] player id ";
+    private static final String LOG_START_FRENZY_S = "[Controller-FrenzyShootAction] ";
 
     private static final int TIMER_ACTION = 30;
 
@@ -50,10 +52,17 @@ public class ActionPhase {
     private static final int DMG_FOR_PLUS = 2;
     private static final int MAX_WEAPONS = 3;
 
+    // frenzyShoot
+
+    private static final int MAX_FRENZY_SHOOT_ENHANCED_MOVES = 1;
+    private static final int MAX_FRENZY_SHOOT_MOVES = 2;
+
 
     private final Controller controller;
 
     private final UtilityMethods utilityMethods;
+
+    private FrenzyShoot frenzyShootTemp = null;
 
     public ActionPhase(Controller controller) {
 
@@ -107,7 +116,19 @@ public class ActionPhase {
 
         LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + "calling move");
 
-        if (moveAction.getMoves().size() > MAX_MOVES) {
+        if (moveAction.getMoves() == null){
+
+            //log
+
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move but did not specify any direction ");
+
+            // show
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+            handleAction();
+
+        }else if (moveAction.getMoves().size() > MAX_MOVES) {
 
             // if the player tried to move more than 3 steps recalls the action
 
@@ -475,16 +496,13 @@ public class ActionPhase {
 
         int playerId = controller.getCurrentPlayer();
 
-
-        if (!checkShoot(shootAction)) {
-
-            handleAction();
-
-        }
-
         try {
 
             shoot(shootAction);
+
+            // notify other players
+
+            notifyShotToOtherPlayer(shootAction);
 
 
         }catch (WeaponNotLoadedException weaponNonLoadedException){
@@ -495,6 +513,8 @@ public class ActionPhase {
 
             handleAction();
 
+            return;
+
         }catch (PlayerInSameCellException e){
 
             LOGGER.log( Level.WARNING, e.getMessage(),e);
@@ -502,6 +522,8 @@ public class ActionPhase {
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
 
             handleAction();
+
+            return;
 
         }catch (PlayerInDifferentCellException e){
 
@@ -511,6 +533,8 @@ public class ActionPhase {
 
             handleAction();
 
+            return;
+
         }catch (UncorrectDistanceException e){
 
             LOGGER.log( Level.WARNING, e.getMessage(),e);
@@ -518,6 +542,8 @@ public class ActionPhase {
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
 
             handleAction();
+
+            return;
 
         }catch (SeeAblePlayerException e){
 
@@ -527,6 +553,8 @@ public class ActionPhase {
 
             handleAction();
 
+            return;
+
         }catch (UncorrectEffectsException e){
 
             LOGGER.log( Level.WARNING, e.getMessage(),e);
@@ -534,6 +562,8 @@ public class ActionPhase {
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
 
             handleAction();
+
+            return;
 
         }catch (NotCorrectPlayerNumberException e){
 
@@ -543,6 +573,8 @@ public class ActionPhase {
 
             handleAction();
 
+            return;
+
         }catch (PlayerNotSeeableException e){
 
             LOGGER.log( Level.WARNING, e.getMessage(),e);
@@ -550,6 +582,8 @@ public class ActionPhase {
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
 
             handleAction();
+
+            return;
 
         }catch (WeaponNotFoundException e){
 
@@ -559,6 +593,8 @@ public class ActionPhase {
 
             handleAction();
 
+            return;
+
         } catch (CardNotPossessedException e) {
 
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " card not found ");
@@ -566,6 +602,8 @@ public class ActionPhase {
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
             handleAction();
+
+            return;
 
         } catch (NotEnoughAmmoException e) {
 
@@ -575,22 +613,45 @@ public class ActionPhase {
 
             handleAction();
 
+            return;
+
         } catch (DifferentPlayerNeededException e) {
 
-            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + "DifferentPlayerNeededException ");
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " DifferentPlayerNeededException ");
 
-            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_DIFFERENT_PLAYER_NEEDED);
 
             handleAction();
 
+            return;
+
+        } catch (ArgsNotValidatedException e){
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " ArgsNotValidatedException ");
+
+            handleAction();
+
+            return;
         }
+
 
         controller.incrementPhase();
 
 
     }
 
-    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {
+    /**
+     * This method will do the atomic action shoot
+     * forward exception if them are thrown in shoot
+     *
+     * @param shootAction is the class containing the list of moves
+     * @throws ArgsNotValidatedException if the controller checks fails
+     */
+    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException {
+
+        // perform pre-check
+
+        if (!checkShoot(shootAction)) throw new ArgsNotValidatedException();
 
         // gets the selected weapon
 
@@ -600,13 +661,15 @@ public class ActionPhase {
 
             // translate the list of point in a list of cell
 
-            List<Cell> cells = shootAction
+            List<Cell> cells = (shootAction.getCells() == null ) ? new ArrayList<>() : shootAction
                     .getCells()
                     .stream()
                     .map(x -> Model.getMap().getCell(x.x, x.y))
                     .collect(Collectors.toList());
 
             List<List<Player>> targets = new ArrayList<>();
+
+            List<Integer> targetplainList = new ArrayList<>();
 
             // translate the lists of Integer in lists of Players
 
@@ -617,6 +680,8 @@ public class ActionPhase {
                 for (Integer id : shootAction.getTargetIds().get(i)) {
 
                     temp.add(Model.getPlayer(id));
+
+                    targetplainList.add(id);
                 }
 
                 targets.add(temp);
@@ -624,6 +689,13 @@ public class ActionPhase {
 
 
             selected.shoot(targets, shootAction.getEffects(), cells);
+
+            // add player shots to the ShotPlayerList
+
+            for (Integer target : targetplainList){
+
+                controller.getShotPlayerThisTurn().add(target);
+            }
 
         }else {
 
@@ -661,7 +733,116 @@ public class ActionPhase {
             returnValue = false;
         }
 
+        returnValue = returnValue && checkShootTarget(shootAction.getTargetIds());
+
+        returnValue = returnValue &&checkShootCells(shootAction.getCells());
+
+
+
         return returnValue;
+    }
+
+    /**
+     * This method will check if the player list of targets is valid
+     * @param targetsIds is a list of list of target ids
+     * @return true if the list is valid
+     */
+    private Boolean checkShootTarget(List<List<Integer>> targetsIds) {
+
+        boolean returnValue = true;
+
+        if (targetsIds == null || targetsIds.isEmpty()) {
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_NO_TARGETS_SPECIFIED);
+
+            return false;
+
+        }
+
+
+        for (int i = 0; i < targetsIds.size(); i++) {
+
+            for (Integer id : targetsIds.get(i)) {
+
+                try {
+
+                    Player player = Model.getPlayer(id);
+
+                    if (player == null) returnValue = false;
+
+
+                } catch (Exception e) {
+
+                    LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+                    returnValue = false;
+                }
+            }
+
+        }
+
+        if (!returnValue){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START_SHOOT + " player specified players that were not found ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_INEXISTENT_TARGETS);
+
+        }
+
+        return returnValue;
+    }
+
+    /**
+     * This method will check if the cell list is valid
+     * @param cells is a list of points representing cell
+     * @return true if the list is valid
+     */
+    private Boolean checkShootCells(List<Point> cells){
+
+        if (!cells.isEmpty()){
+
+            for (Point cell : cells){
+
+                try {
+
+                    Cell realCell = Model.getMap().getCell(cell.x, cell.y);
+
+                    if (realCell == null){
+
+                        LOGGER.log(Level.WARNING, () -> LOG_START_SHOOT + " Player specified non existent cell ");
+
+                        controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+                        return false;
+                    }
+
+                }catch (Exception e){
+
+                    LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+                    LOGGER.log(Level.WARNING, () -> LOG_START_SHOOT + " Player specified non existent cell ");
+
+                    controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    private void notifyShotToOtherPlayer(ShootAction shootAction){
+
+        for (List<Integer> targetIdList : shootAction.getTargetIds()) {
+
+            for (Integer targetId : targetIdList) {
+
+                controller.updateInactivePlayers(new ShootTurnUpdate(controller.getCurrentPlayer(), targetId, shootAction.getWeaponName()));
+
+            }
+        }
     }
 
 
@@ -673,11 +854,27 @@ public class ActionPhase {
      */
     public void frenzyMoveAction(Move frenzyMove){
 
+        // logs the action
+
+        LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + " calling Move in frenzy mode ");
+
         // look if the player is before the first player (0,1,2,3,4)
 
         boolean frenzyEnhanced = controller.getCurrentPlayer() > controller.getFrenzyStarter();
 
-        if ( frenzyMove.getMoves().size() > MAX_FRENZY_MOVES ){
+        if (frenzyMove.getMoves() == null){
+
+            //log
+
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move but did not specify any direction ");
+
+            // show
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+            handleAction();
+
+        }else if ( frenzyMove.getMoves().size() > MAX_FRENZY_MOVES ){
 
             //log
 
@@ -733,7 +930,7 @@ public class ActionPhase {
 
         // logs the action
 
-        LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + " calling FrenzyGrab");
+        LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + " calling Grab in frenzy mode ");
 
         // check if the actions are possible
 
@@ -801,9 +998,255 @@ public class ActionPhase {
      * This function will make the player do a "frenzy shoot" action
      * @param frenzyShoot is the class containing the requested parameters
      */
-    private void frenzyShootAction(FrenzyShoot frenzyShoot){
+    public void frenzyShootAction(FrenzyShoot frenzyShoot){
 
+        // logs the action
+
+        LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + " calling Move in frenzy mode ");
+
+        this.frenzyShootTemp = frenzyShootTemp.addPart(frenzyShoot);
+
+        if (!checkFrenzyShootMove(frenzyShoot.getMoveAction())){
+
+            handleAction();
+
+            return;
+        }
+
+        if ((this.frenzyShootTemp.isFirstPartFull()) && (!frenzyShootTemp.getFieldsNonNull().contains(3))){
+
+            if(!controller.getReloadPhase().checkIfReloadIsValid(frenzyShootTemp.getReloadAction())){
+
+                handleAction();
+
+                return;
+
+            }else{
+
+                doFirstPartFrenzyShoot(frenzyShoot);
+            }
+        }
+
+        if (this.frenzyShootTemp.isFirstPartFull() && frenzyShootTemp.getFieldsNonNull().contains(3)){
+
+            doShootPartFrenzyShoot(frenzyShoot);
+        }
 
     }
 
+    /**
+     * This method checks the move part of the frenzy shoot
+     * @param movePart is the move action contained in the FrenzyShoot Action
+     * @return true if validated or false otherwise
+     */
+    private Boolean checkFrenzyShootMove(Move movePart){
+
+        // look if the player is before the first player (0,1,2,3,4)
+
+        boolean frenzyEnhanced = controller.getCurrentPlayer() > controller.getFrenzyStarter();
+
+        if (movePart.getMoves() == null){
+
+            //log
+
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move but did not specify any direction ");
+
+            // show
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+            return false;
+
+        } else if (movePart.getMoves().size() > MAX_FRENZY_SHOOT_MOVES){
+
+            //log
+
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move more than " + MAX_FRENZY_SHOOT_MOVES + " in frenzy ");
+
+            // show
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
+
+            return false;
+
+        } else if ( (movePart.getMoves().size() > MAX_FRENZY_SHOOT_ENHANCED_MOVES) && (frenzyEnhanced)){
+
+            //log
+
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move more than " + MAX_FRENZY_SHOOT_ENHANCED_MOVES + " in frenzy but was before first player ");
+
+            // show
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * This method will perform the first part of the frenzy shoot action ( move + reload )
+     * @param frenzyShoot is a class containing the information needed
+     */
+    private void doFirstPartFrenzyShoot(FrenzyShoot frenzyShoot){
+
+        // does the move part
+
+        utilityMethods.move(frenzyShoot.getMoveAction().getMoves());
+
+        // does the reload part
+
+        controller.getReloadPhase().reload(frenzyShoot.getReloadAction());
+
+    }
+
+    /**
+     * This method will perform the second part of the frenzy shoot action ( shoot )
+     * @param jsonAction is a class containing the information needed
+     */
+    private void doShootPartFrenzyShoot(JsonAction jsonAction){
+
+        if (!jsonAction.getType().equals(ActionTypes.SKIP)){
+
+            ShootAction shootAction = (ShootAction) jsonAction;
+
+            if(!frenzyAtomicShoot(shootAction)){
+
+                // ask the player to redo only the shooting part
+
+                controller.getVirtualView(controller.getCurrentPlayer()).reDoFrenzyAtomicShoot();
+
+            }
+        }
+
+        controller.incrementPhase();
+    }
+
+    /**
+     * This method will perform the atomic frenzy shoot action
+     * @param shootAction is a class containing the information needed
+     */
+    private Boolean frenzyAtomicShoot(ShootAction shootAction){
+
+        // gets the id of the current player
+
+        int playerId = controller.getCurrentPlayer();
+
+        try {
+
+            shoot(shootAction);
+
+            // notify other players
+
+            notifyShotToOtherPlayer(shootAction);
+
+            this.frenzyShootTemp = null;
+
+
+        }catch (WeaponNotLoadedException weaponNonLoadedException){
+
+            LOGGER.log(Level.WARNING, weaponNonLoadedException.getMessage(), weaponNonLoadedException);
+
+            controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_LOADED);
+
+            return false;
+
+        }catch (PlayerInSameCellException e){
+
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+            controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
+
+            return false;
+
+        }catch (PlayerInDifferentCellException e){
+
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+            controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_DIFFERENT_CELL);
+
+            return false;
+
+        }catch (UncorrectDistanceException e){
+
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+            controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
+
+            return false;
+
+        }catch (SeeAblePlayerException e){
+
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+            controller.getVirtualView(playerId).show(DEFAULT_SEEABLE_PLAYER);
+
+            return false;
+
+        }catch (UncorrectEffectsException e){
+
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+            controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
+
+            return false;
+
+        }catch (NotCorrectPlayerNumberException e){
+
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+            controller.getVirtualView(playerId).show(DEFAULT_NOT_CORRECT_PLAYER_NUMBER);
+
+            return false;
+
+        }catch (PlayerNotSeeableException e){
+
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
+
+            controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
+
+            return false;
+
+        }catch (WeaponNotFoundException e){
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " weapon not found ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+
+            return false;
+
+        } catch (CardNotPossessedException e) {
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " card not found ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+
+            return false;
+
+        } catch (NotEnoughAmmoException e) {
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " not enough ammo ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_NO_ENOUGH_AMMO);
+
+            return false;
+
+        } catch (DifferentPlayerNeededException e) {
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " DifferentPlayerNeededException ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_DIFFERENT_PLAYER_NEEDED);
+
+            return false;
+
+        } catch (ArgsNotValidatedException e){
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " ArgsNotValidatedException ");
+
+            return false;
+        }
+
+        return true;
+    }
 }

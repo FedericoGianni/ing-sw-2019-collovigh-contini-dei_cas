@@ -31,6 +31,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
     private static final String ASK_GRENADE = "askGrenade";
     private static final String SHOW = "showMessage";
     private static final String SET_INT_ANSWER = "setIntAnswer";
+    private static final String REDO_FRENZY_SHOOT = "reDoFrenzyAtomicShoot";
 
     /**
      * Reference to the socket representing the communication stream, passed as a parameter to the constructor
@@ -123,6 +124,12 @@ public class SocketConnectionWriter extends Thread implements ToView {
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         LOGGER.info("Sending startAction string to connected client");
         send(START_ACTION  + "\f" + isFrenzy + "\f" + isBeforeFrenzyStarter);
+    }
+
+    @Override
+    public void reDoFrenzyAtomicShoot() {
+        LOGGER.info("Sending reDoFrenzyAtomicShoot string to connected client");
+        send(REDO_FRENZY_SHOOT);
     }
 
     @Override

@@ -28,6 +28,11 @@ public interface ToView  {
     void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter);
 
     /**
+     * This method will ask the player to redo just the shoot part of the FrenzyShoot
+     */
+    void reDoFrenzyAtomicShoot();
+
+    /**
      * This method starts the reload phase of the turn ( 6)
      */
     void startReload();

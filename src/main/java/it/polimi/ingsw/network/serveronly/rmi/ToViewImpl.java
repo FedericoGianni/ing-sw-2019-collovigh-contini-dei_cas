@@ -103,6 +103,19 @@ public class ToViewImpl implements ToView {
 
     }
 
+    @Override
+    public void reDoFrenzyAtomicShoot() {
+
+        try{
+
+            client.reDoFrenzyAtomicShoot();
+
+        }catch (RemoteException e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
+        }
+    }
+
     /**
      * {@inheritDoc}
      */

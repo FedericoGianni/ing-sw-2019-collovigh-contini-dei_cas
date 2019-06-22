@@ -297,6 +297,11 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
+    public void reDoFrenzyAtomicShoot() {
+        //TODO
+    }
+
+    @Override
     public void startReload() {
 
     }

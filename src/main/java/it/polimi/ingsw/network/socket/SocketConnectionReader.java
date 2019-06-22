@@ -349,18 +349,6 @@ public class SocketConnectionReader extends Thread {
 
                 break;
 
-            case "{\"actionType\":\"FRENZY_MOVE\"}":
-
-                jsonAction = gson.fromJson(message,FrenzyMove.class);
-
-                break;
-
-            case "{\"actionType\":\"FRENZY_GRAB\"}":
-
-                jsonAction = gson.fromJson(message,FrenzyGrab.class);
-
-                break;
-
             case "{\"actionType\":\"FRENZY_SHOOT\"}":
 
                 jsonAction = gson.fromJson(message,FrenzyShoot.class);

@@ -188,6 +188,15 @@ public class VirtualView implements ViewInterface {
      * {@inheritDoc}
      */
     @Override
+    public void reDoFrenzyAtomicShoot() {
+
+        view.reDoFrenzyAtomicShoot();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setValidMove(boolean b) {
         //i don't need this method here
     }

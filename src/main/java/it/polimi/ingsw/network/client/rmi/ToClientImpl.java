@@ -120,6 +120,15 @@ public class ToClientImpl implements ToClient {
      * {@inheritDoc}
      */
     @Override
+    public void reDoFrenzyAtomicShoot() {
+
+        client.getView().reDoFrenzyAtomicShoot();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void startReload() {
 
         client.getView().startReload();

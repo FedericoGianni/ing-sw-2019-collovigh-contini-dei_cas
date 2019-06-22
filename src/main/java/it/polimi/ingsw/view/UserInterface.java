@@ -85,6 +85,11 @@ public interface UserInterface {
     void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter);
 
     /**
+     * This method will ask the player to redo just the shoot part of the FrenzyShoot
+     */
+    void reDoFrenzyAtomicShoot();
+
+    /**
      * Last turn phase, in which the user is asked if he wants to reload one or more of his weapons
      */
     void startReload();
