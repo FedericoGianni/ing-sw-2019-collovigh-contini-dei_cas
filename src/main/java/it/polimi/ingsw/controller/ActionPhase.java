@@ -489,75 +489,75 @@ public class ActionPhase {
 
         }catch (WeaponNotLoadedException weaponNonLoadedException){
 
-                LOGGER.log(Level.WARNING, weaponNonLoadedException.getMessage(), weaponNonLoadedException);
+            LOGGER.log(Level.WARNING, weaponNonLoadedException.getMessage(), weaponNonLoadedException);
 
-                controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_LOADED);
+            controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_LOADED);
 
-                handleAction();
+            handleAction();
 
         }catch (PlayerInSameCellException e){
 
-                LOGGER.log( Level.WARNING, e.getMessage(),e);
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
+            controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
 
-                handleAction();
+            handleAction();
 
         }catch (PlayerInDifferentCellException e){
 
-                LOGGER.log( Level.WARNING, e.getMessage(),e);
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_DIFFERENT_CELL);
+            controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_DIFFERENT_CELL);
 
-                handleAction();
+            handleAction();
 
         }catch (UncorrectDistanceException e){
 
-                LOGGER.log( Level.WARNING, e.getMessage(),e);
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
+            controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
 
-                handleAction();
+            handleAction();
 
         }catch (SeeAblePlayerException e){
 
-                LOGGER.log( Level.WARNING, e.getMessage(),e);
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show(DEFAULT_SEEABLE_PLAYER);
+            controller.getVirtualView(playerId).show(DEFAULT_SEEABLE_PLAYER);
 
-                handleAction();
+            handleAction();
 
         }catch (UncorrectEffectsException e){
 
-                LOGGER.log( Level.WARNING, e.getMessage(),e);
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
+            controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
 
-                handleAction();
+            handleAction();
 
         }catch (NotCorrectPlayerNumberException e){
 
-                LOGGER.log( Level.WARNING, e.getMessage(),e);
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show(DEFAULT_NOT_CORRECT_PLAYER_NUMBER);
+            controller.getVirtualView(playerId).show(DEFAULT_NOT_CORRECT_PLAYER_NUMBER);
 
-                handleAction();
+            handleAction();
 
         }catch (PlayerNotSeeableException e){
 
-                LOGGER.log( Level.WARNING, e.getMessage(),e);
+            LOGGER.log( Level.WARNING, e.getMessage(),e);
 
-                controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
+            controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
 
-                handleAction();
+            handleAction();
 
         }catch (WeaponNotFoundException e){
 
-                LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " weapon not found ");
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " weapon not found ");
 
-                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
-                handleAction();
+            handleAction();
 
         } catch (CardNotPossessedException e) {
 
@@ -797,5 +797,13 @@ public class ActionPhase {
         return true;
     }
 
+    /**
+     * This function will make the player do a "frenzy shoot" action
+     * @param frenzyShoot is the class containing the requested parameters
+     */
+    private void frenzyShootAction(FrenzyShoot frenzyShoot){
+
+
+    }
 
 }

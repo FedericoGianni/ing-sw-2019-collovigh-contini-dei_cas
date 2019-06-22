@@ -8,7 +8,6 @@ import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.actions.ReloadAction;
-import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 
 import java.util.ArrayList;
@@ -138,7 +137,7 @@ public class ReloadPhase {
 
             if (weaponList.contains(null)) throw new WeaponNotFoundException();
 
-            return (weaponList.contains(null)) ? null : weaponList;
+            return (weaponList.contains(null)) ? new ArrayList<>() : weaponList;
 
         }catch (Exception e){
 
@@ -221,6 +220,18 @@ public class ReloadPhase {
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
             return false;
+        }
+
+        for (Weapon weapon : weaponList){
+
+            if (weapon.isLoaded()){
+
+                LOGGER.log(Level.WARNING, () -> LOG_START + " player tried to reload a loaded weapon: " + weapon.getName() );
+
+                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_ALREADY_LOADED);
+
+                return false;
+            }
         }
 
         // gets the player Ammo + the powerUp he decided to discard

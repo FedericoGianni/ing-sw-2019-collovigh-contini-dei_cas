@@ -275,7 +275,7 @@
   },
   {
     "Weapon": {
-      "name": "SLEDEGEHAMMER",
+      "name": "SLEDGEHAMMER",
       "cost": [
         {
           "ammoC": "YELLOW"
