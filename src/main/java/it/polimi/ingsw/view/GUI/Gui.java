@@ -284,6 +284,7 @@ public class Gui extends Application implements UserInterface {
     public void startPowerUp() {
         //here i need to let them use power ups, devo eliminare tutti gli effetti all'inziio di start action
         guiMapController.actionButtonDisable();
+        guiMapController.powerUpEnable();
     }
 
     @Override
