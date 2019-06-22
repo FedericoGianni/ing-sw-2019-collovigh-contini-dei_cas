@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -355,6 +354,7 @@ class NormalWeaponTest {
         targetsLists.add(targets);
         shooter.addWeapon(weapons.get(0));//not how it works but easy
 
+
         try{
             ArrayList <Integer>mEf=new ArrayList<>();
             mEf.add(0);
@@ -387,5 +387,545 @@ class NormalWeaponTest {
 
         assert(target1.getStats().getDmgTaken().size() == 0);
     }
+
+    @Test
+    public void electroshyteTest(){
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
+
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target1");
+        playerNames.add("target2");
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.GREEN);
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2,8);
+
+        //generate a player with a name and its starting position
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(1,1));
+
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(1,1));
+
+        Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(1,1));
+
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.BLUE));
+        shooter.addWeapon(weapons.get(4));//Electrohyte = falce protonica
+        List targets0=new ArrayList();
+        List targets1=new ArrayList();
+        List<List<Player>> targetLists = new ArrayList<>();
+        targets0.add(target1);
+        targets1.add(target2);
+        targetLists.add(targets0);
+        targetLists.add(targets1);
+        Model.getMap().setUnvisited();
+        System.out.println("Weapon " + weapons.get(4).getName());
+
+        try {
+            //NOTE This weapon has EXCLUSIVE effect types
+            ArrayList<Integer> mEf = new ArrayList<>();
+            mEf.add(0);
+            mEf.add(1);
+            List<Cell> cells = new ArrayList<>();
+            cells.add(Model.getMap().getCell(1,1));
+            shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
+            System.out.println(target1.getPlayerName());
+            System.out.println(target1.getStats().getDmgTaken());
+            System.out.println(target1.getStats().getMarks());
+
+            System.out.println(target2.getPlayerName());
+            System.out.println(target2.getStats().getDmgTaken());
+            System.out.println(target2.getStats().getMarks());
+        }
+
+        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+        catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.getMessage();
+        }
+
+        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
+        assert(target1.getStats().getDmgTaken().size() ==1);
+        assert(target2.getStats().getDmgTaken().size() ==1);
+    }
+
+    @Test
+    public void heatSeekerTest(){
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
+
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target1");
+        playerNames.add("target2");
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.GREEN);
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2,8);
+
+        //generate a player with a name and its starting position
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(2,3));
+
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(1,1));
+
+        Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(1,1));
+
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.BLUE));
+        shooter.addWeapon(weapons.get(6));//Heat seeker 1 target you can't see 3 dmg
+        System.out.println("weapon name: "+ weapons.get(6).getName());
+        List targets0=new ArrayList();
+        List targets1=new ArrayList();
+        List<List<Player>> targetLists = new ArrayList<>();
+        targets0.add(target1);
+        //targets0.add(target2);
+        //targets1.add(target2);
+        targetLists.add(targets0);
+        //targetLists.add(targets1);
+        Model.getMap().setUnvisited();
+
+        try {
+            ArrayList<Integer> mEf = new ArrayList<>();
+            mEf.add(0);
+            mEf.add(1);
+            //List<Cell> cells = new ArrayList<>();
+            //cells.add(Model.getMap().getCell(1,1));
+            shooter.getWeapons().get(0).shoot(targetLists, mEf, null);
+            System.out.println(target1.getPlayerName());
+            System.out.println(target1.getStats().getDmgTaken());
+            System.out.println(target1.getStats().getMarks());
+
+            System.out.println(target2.getPlayerName());
+            System.out.println(target2.getStats().getDmgTaken());
+            System.out.println(target2.getStats().getMarks());
+        }
+
+        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+        catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.getMessage();
+        }
+
+        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
+        assert(target1.getStats().getDmgTaken().size() ==3);
+        //assert(target2.getStats().getDmgTaken().size() ==2);
+    }
+
+    @Test
+    public void plasmaGunTest(){
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
+
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target1");
+        playerNames.add("target2");
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.GREEN);
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2,8);
+
+        //generate a player with a name and its starting position
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(1,1));
+
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(1,1));
+
+        Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(1,1));
+
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.BLUE));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
+        shooter.addWeapon(weapons.get(2));//Plasma Gun
+        System.out.println("Weapon name: " +weapons.get(2).getName());
+        List targets0=new ArrayList();
+        List targets1=new ArrayList();
+        List<List<Player>> targetLists = new ArrayList<>();
+        targets0.add(target1);
+        //targets0.add(target2);
+        targetLists.add(targets0);
+        //targetLists.add(targets1);
+        Model.getMap().setUnvisited();
+
+        try {
+            ArrayList<Integer> mEf = new ArrayList<>();
+            mEf.add(0);
+            mEf.add(2);
+            //List<Cell> cells = new ArrayList<>();
+            //cells.add(Model.getMap().getCell(1,1));
+            shooter.getWeapons().get(0).shoot(targetLists, mEf, null);
+            System.out.println(target1.getPlayerName());
+            System.out.println(target1.getStats().getDmgTaken());
+            System.out.println(target1.getStats().getMarks());
+
+            System.out.println(target2.getPlayerName());
+            System.out.println(target2.getStats().getDmgTaken());
+            System.out.println(target2.getStats().getMarks());
+        }
+
+        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+        catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.getMessage();
+        }
+        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
+        assert(target1.getStats().getDmgTaken().size() ==1);
+        //assert(target2.getStats().getDmgTaken().size() ==2);
+
+        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
+        assert(target1.getStats().getDmgTaken().size() ==2);
+        //assert(target2.getStats().getDmgTaken().size() ==2);
+    }
+
+    @Test
+    public void grenadeLauncherTest(){
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
+
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target1");
+        playerNames.add("target2");
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.GREEN);
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2,8);
+
+        //generate a player with a name and its starting position
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(1,1));
+
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(1,1));
+
+        Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(1,1));
+
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.BLUE));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
+        shooter.addWeapon(weapons.get(7));//Grendae launcher
+        System.out.println("Weapon name: " +weapons.get(7).getName());
+        List targets0=new ArrayList();
+        List targets1=new ArrayList();
+        List<List<Player>> targetLists = new ArrayList<>();
+        targets0.add(target1);
+        targets1.add(target2);
+        //targets0.add(target2);
+        targetLists.add(targets0);
+        targetLists.add(targets1);
+        Model.getMap().setUnvisited();
+
+        try {
+            ArrayList<Integer> mEf = new ArrayList<>();
+            mEf.add(0);
+            mEf.add(1);
+
+            List<Cell> cells = new ArrayList<>();
+            cells.add(Model.getMap().getCell(1,1));
+            shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
+            System.out.println(target1.getPlayerName());
+            System.out.println(target1.getStats().getDmgTaken());
+            System.out.println(target1.getStats().getMarks());
+
+            System.out.println(target2.getPlayerName());
+            System.out.println(target2.getStats().getDmgTaken());
+            System.out.println(target2.getStats().getMarks());
+        }
+
+        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+        catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.getMessage();
+        }
+        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
+        assert(target1.getStats().getDmgTaken().size() ==1);
+        assert(target2.getStats().getDmgTaken().size() ==1);
+    }
+
+    @Test
+    public void rocketLauncherTest(){
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
+
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target1");
+        playerNames.add("target2");
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.GREEN);
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2,8);
+
+        //generate a player with a name and its starting position
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(0,1));
+
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(0,2));
+
+        Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(0,2));
+
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.BLUE));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
+        shooter.addWeapon(weapons.get(8));
+        System.out.println("Weapon name: " +weapons.get(8).getName());
+        List targets0=new ArrayList();
+        List targets1=new ArrayList();
+        List<List<Player>> targetLists = new ArrayList<>();
+        targets0.add(target1);
+        //targets1.add(target2);
+        //targets0.add(target2);
+        targetLists.add(targets0);
+        //targetLists.add(targets1);
+        Model.getMap().setUnvisited();
+
+        try {
+            ArrayList<Integer> mEf = new ArrayList<>();
+            mEf.add(0);
+            //mEf.add(1);
+            System.out.println("position before" + target1.getStats().getCurrentPosition());
+
+            List<Cell> cells = new ArrayList<>();
+            cells.add(Model.getMap().getCell(0,3));
+            shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
+            System.out.println(target1.getPlayerName());
+            System.out.println(target1.getStats().getDmgTaken());
+            System.out.println(target1.getStats().getMarks());
+
+            System.out.println(target2.getPlayerName());
+            System.out.println(target2.getStats().getDmgTaken());
+            System.out.println(target2.getStats().getMarks());
+        }
+
+        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+        catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.getMessage();
+        }
+        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
+        assert(target1.getStats().getDmgTaken().size() ==2);
+        System.out.println("position after" + target1.getStats().getCurrentPosition());
+        assert(target1.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,3)));
+        //assert(target2.getStats().getDmgTaken().size() ==1);
+    }
+
+    @Test
+    public void cyberBladeTest(){
+        Damage.populator();
+        Marker.populator();
+        Mover.populator();
+        MacroEffect.effectCreator();
+        ArrayList <NormalWeapon> weapons=new ArrayList<>();
+        weapons.addAll(NormalWeapon.weaponsCreator());
+
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target1");
+        playerNames.add("target2");
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.GREEN);
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2,8);
+
+        //generate a player with a name and its starting position
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(1,1));
+
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(1,1));
+
+        Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(1,1));
+
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.BLUE));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
+        shooter.addWeapon(weapons.get(9));
+        System.out.println("Weapon name: " +weapons.get(9).getName());
+        List targets0=new ArrayList();
+        List targets1=new ArrayList();
+        List targets2 = new ArrayList();
+        List<List<Player>> targetLists = new ArrayList<>();
+        targets0.add(target1);
+        targets1.add(target1);
+        targets2.add(target1);
+
+        //targets0.add(target2);
+        targetLists.add(targets0);
+        targetLists.add(targets1);
+        targetLists.add(targets2);
+        Model.getMap().setUnvisited();
+
+        try {
+            ArrayList<Integer> mEf = new ArrayList<>();
+            mEf.add(0);
+            mEf.add(2);
+            //System.out.println("position before" + target1.getStats().getCurrentPosition());
+
+            //List<Cell> cells = new ArrayList<>();
+            //cells.add(Model.getMap().getCell(0,3));
+            shooter.getWeapons().get(0).shoot(targetLists, mEf, null);
+            System.out.println(target1.getPlayerName());
+            System.out.println(target1.getStats().getDmgTaken());
+            System.out.println(target1.getStats().getMarks());
+
+            System.out.println(target2.getPlayerName());
+            System.out.println(target2.getStats().getDmgTaken());
+            System.out.println(target2.getStats().getMarks());
+        }
+
+        catch(WeaponNotLoadedException e){ e.printStackTrace();}
+        catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.getMessage();
+        }
+        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
+        assert(target1.getStats().getDmgTaken().size() ==2);
+        //assert(target2.getStats().getDmgTaken().size() ==2);
+    }
+
+
 }
+
 
