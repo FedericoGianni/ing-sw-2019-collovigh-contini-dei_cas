@@ -8,8 +8,12 @@ import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.actions.SkipAction;
+import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import javafx.application.Platform;
@@ -198,15 +202,18 @@ public class GuiMapController {
         moveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                actionButtonDisable();//i need to disable everything else
                 move();
+
             }
         });
 
         grabButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+               actionButtonDisable();//i need to disable everything else
                 grabHere();
-                System.out.println("Azionato moviemnto");
+
             }
         });
     }
@@ -221,6 +228,12 @@ public class GuiMapController {
             }
         });
         stopMov.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+        grabButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
@@ -271,7 +284,7 @@ public class GuiMapController {
 
     private String fromWNameToUrl(String name)
     {
-        System.out.println(name);
+
         switch(name)
         {
             case "LOCK RIFLE":
@@ -402,13 +415,12 @@ public class GuiMapController {
         movementDirections=new ArrayList<>();
         int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
         int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
-        handleMovement(x,y,3,movementDirections);
+        Platform.runLater(() ->  {handleMovement(x,y,3,movementDirections);});
     }
 
     private void mapPos(int r,int c,int id)
     {
-        //System.out.println("riga: "+r+"colonna :"+c);
-        ;
+
         boolean found=false;
         if( map[r][c].getChildren().size()!=0 && ((HBox)map[r][c].getChildren().get(0)).getChildren()!=null)
         {for(int j=0;j<((HBox)map[r][c].getChildren().get(0)).getChildren().size();j++)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
@@ -619,29 +631,29 @@ public class GuiMapController {
     {
         if(b.getChildren().size()==0 )
         {
-            Platform.runLater(() ->  {
+
                 b.getChildren().add(new HBox());
 
                 inserter(id, (HBox) b.getChildren().get(0));
 
-            });
+
             return;
         }
         if( ((HBox)b.getChildren().get(0)).getChildren().size()==3)
         {
-            Platform.runLater(() ->  {
+
                 b.getChildren().add(new HBox());
                 inserter(id, (HBox) b.getChildren().get(1));
-            });
+
             return;
         }
 
         if(((HBox)b.getChildren().get(0)).getChildren().size()<=3)
         {
-            Platform.runLater(() ->  {inserter(id, (HBox) b.getChildren().get(0));});
+          inserter(id, (HBox) b.getChildren().get(0));
             return;
         }
-        Platform.runLater(() ->  {inserter(id, (HBox) b.getChildren().get(1));});
+        inserter(id, (HBox) b.getChildren().get(1));
 
     }
 
@@ -651,8 +663,9 @@ public class GuiMapController {
         {
             int j=0;
 
-            while(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))!=0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+            while(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))!=0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
             {
+                System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
                 j++;
             }
             ((HBox)map[x][y].getChildren().get(0)).getChildren().remove(j);
@@ -676,11 +689,11 @@ public class GuiMapController {
                 img.setImage(image);
                 img.setId("0");
                 h.getChildren().add(img);
-
                 break;
             case 1:
-                image=new Image("/images/player0.png");
+                image=new Image("/images/player1.png");
                 img.setImage(image);
+                img.setId("1");
                 h.getChildren().add(img);
                 break;
             case 2:
@@ -706,7 +719,7 @@ public class GuiMapController {
             try
             {
                 synchronized(this) {
-                    //System.out.println("Waiting to receive validMove reply...");
+
                     this.wait();
                 }
 
@@ -736,26 +749,29 @@ public class GuiMapController {
         log.appendText("\nSi è collegato: "+name+" con l'id: "+id+" ed il colore: "+color);
     }
 
-    public void statsUpdater(int id)
-    {//the player is removed from its postion before the update
+    public void statsUpdater(int id) {//the player is removed from its postion before the update
 
-        if(!gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getOnline())
-        {
-            log.appendText("\nIl giocatore "+id+" si è scollegato.");
+        if (!gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getOnline()) {
+            log.appendText("\nIl giocatore " + id + " si è scollegato.");
 
             return;
         }
-        log.appendText("\nUpdated stats del player: "+id);
-        int r=gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX();
-        int c=gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY();
-        mapPos(r,c,id);
-        stopMov.setOnAction(new EventHandler<ActionEvent>() {
+        log.appendText("\nUpdated stats del player: " + id);
+        int r = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX();
+        int c = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY();
+        Platform.runLater(new Runnable() {
             @Override
-            public void handle(ActionEvent actionEvent) { }
+            public void run() {
+                mapPos(r, c, id);
+                stopMov.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                    }
+                });
+            }
         });
-
-
     }
+
 
     public void startSpawn()
     {
@@ -784,6 +800,8 @@ public class GuiMapController {
             mapPos(colorToCord(c).x,colorToCord(c).y,gui.getView().getPlayerId());
         });
     }
+
+
 
     //------------------------------------------------------------powerUp  gestion
     private Point colorToCord(Color c)
@@ -889,6 +907,138 @@ public class GuiMapController {
         }
     }
 
+
+    public void powerUpEnable()
+    {
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Puoi usare un potenziamento di tipo Teletrasporto o Newton, vuoi?", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.NO) {
+            gui.getView().doAction(new SkipAction());
+            return;
+        }
+        if(alert.getResult()==ButtonType.YES)
+        {
+            alert = new Alert(Alert.AlertType.CONFIRMATION, "Clicca sulla destra sul potenziamento da usare");
+            alert.show();
+        }
+        int i=0;
+        for (CachedPowerUp item: gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList())
+        {
+            if(item.getType()==PowerUpType.TELEPORTER)
+            {
+
+                switch (i)
+                {
+                    case 0:
+                        powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                teleporterAction(0);
+                            }
+                        });
+                        break;
+                    case 1:
+                        powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                teleporterAction(1);
+                            }
+                        });
+                        break;
+                    case 2:
+                        powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                teleporterAction(2);
+                            }
+                        });
+                        break;
+                }
+            }
+            else if(item.getType()==PowerUpType.NEWTON)
+            {
+                switch (i)
+                {
+                    case 0:
+                        powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                newtonAction(0);
+                            }
+                        });
+                        break;
+                    case 1:
+                        powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                newtonAction(1);
+                            }
+                        });
+                        break;
+                    case 2:
+                        powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                newtonAction(2);
+                            }
+                        });
+                        break;
+                }
+            }
+            i++;
+        }
+            }
+        });
+    }
+
+    private void teleporterAction(int n)
+    {
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Teletrasporto! Clicca la cella dove vuoi muoverti");
+        a.show();
+        for(int i=0;i<rows;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                int ii=i;
+                int jj=j;
+                map[i][j].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
+                    int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
+                    playerRemover(gui.getView().getPlayerId(),x,y);
+
+                    gui.getView().doAction(new TeleporterAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(n), new Point(jj, ii)));
+                    powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                        }
+                    });
+                    powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                        }
+                    });
+                    powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                        }
+                    });
+                    mapEventDeleter();
+                }
+            });
+            }
+        }
+    }
+
+    private void newtonAction(int n)
+    {
+        System.out.println("Usa newton");
+    }
     //--------------------------------------------------------------ammo gestion
     public void ammoPlacer()
     {
@@ -919,12 +1069,12 @@ public class GuiMapController {
 
     private void imageCreator(String imgUrl,HBox h)//ammo Id="ammo"
     {
-        ImageView img=new ImageView();
-
+        if(imgUrl!=null)
+        {ImageView img=new ImageView();
         Image image = new Image(imgUrl);
         img.setImage(image);
         img.setId("ammo");
-        h.getChildren().add(img);
+        h.getChildren().add(img);}
     }
 
     private boolean containsAmmo(VBox b)
@@ -948,19 +1098,19 @@ public class GuiMapController {
         {
 
                 b.getChildren().add(new HBox());
-                System.out.println("Creo il primo HBox ");
+
                 imageCreator(url, (HBox) b.getChildren().get(0));
-                System.out.println("contenuto primo hbox in runlater : "+b.getChildren().size());
 
 
-            System.out.println("contenuto primo hbox dopo metodo runlater : "+b.getChildren().size());
+
+
             return;
         }
 
         if(((HBox)b.getChildren().get(0)).getChildren().size()==3){ //if the first Hbox is full
 
                 b.getChildren().add(new HBox());
-                System.out.println("creo seconddo Hbox");
+
                 imageCreator(url, (HBox) b.getChildren().get(1));
 
             return;
@@ -1096,8 +1246,7 @@ public class GuiMapController {
             grabAmmoCard(x,y);
         }
         else{//spawn cell
-            //se arma : abilita il click su un arma, se puoi pagare bella, sennò mandalo a fare in culo
-            System.out.println("Spawn cell");
+            //se arma : abilita il click su un arma, se puoi pagare bella
             grabWeapon(x,y);
         }
 
@@ -1120,6 +1269,7 @@ public class GuiMapController {
                 if(((HBox)b.getChildren().get(i)).getChildren().get(j).getId().compareTo("ammo")==0)
                 {
                     ((ImageView)((HBox)b.getChildren().get(i)).getChildren().get(j)).setImage(null);//remove the ammoImage
+                    //((HBox)b.getChildren().get(i)).getChildren().remove((((HBox)b.getChildren().get(i)).getChildren().get(j)));
                     List <Directions> dir=new ArrayList<>();//empty directions
                     gui.getView().doAction(new GrabAction(dir));
                 }
@@ -1233,7 +1383,7 @@ public class GuiMapController {
         spawnCellWeaponShow(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX(),gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY());
         //show the cost in toolTip
         costDisplay(x,y);
-        System.out.println("-------------------------aaaaaaaaaaaaaaaa--------------");
+
         weapon1.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent mouseEvent) {
