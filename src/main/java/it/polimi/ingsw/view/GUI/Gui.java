@@ -228,7 +228,6 @@ public class Gui extends Application implements UserInterface {
 
             case AMMO_BAG:
                 //need to add ammos to my control board
-                System.out.println("------------Ammo ad-------");
                 break;
             default:
                 break;
@@ -258,7 +257,7 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
-    public void startSpawn() {
+    public void startSpawn() {//pox: 1) rosso e giallo non fanno bene lo spawn 2) blu non fa bene lo spawn
         while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()){
 
             guiMapController.printLog("Attendi ricezione dei PowerUp pescati...");
@@ -296,6 +295,7 @@ public class Gui extends Application implements UserInterface {
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
         //this method enables the action buttons to do something
+        System.out.println("enables actions");
         guiMapController.actionButtonsEnabler();
 
         //view.doAction(new Move(view.doAction(new Move(directionsList, finalPos));));----->
