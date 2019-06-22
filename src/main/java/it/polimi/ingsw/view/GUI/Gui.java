@@ -226,6 +226,10 @@ public class Gui extends Application implements UserInterface {
                     guiMapController.ammoPlacer();
                 break;
 
+            case AMMO_BAG:
+                //need to add ammos to my control board
+                System.out.println("------------Ammo ad-------");
+                break;
             default:
                 break;
         }
@@ -280,7 +284,7 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startPowerUp() {
         //here i need to let them use power ups, devo eliminare tutti gli effetti all'inziio di start action
-
+        guiMapController.actionButtonDisable();
     }
 
     @Override
@@ -291,7 +295,9 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
+        //this method enables the action buttons to do something
         guiMapController.actionButtonsEnabler();
+
         //view.doAction(new Move(view.doAction(new Move(directionsList, finalPos));));----->
         //view.doAction(new GrabAction(directionsList, weapons.get(0), weapons.get(1)));
         //view.doAction(new ShootAction("LOCK RIFLE", targetList, effects, cells));

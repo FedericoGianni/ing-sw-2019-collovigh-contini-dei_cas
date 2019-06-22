@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
+import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
@@ -54,7 +55,7 @@ public class GuiMapController {
     ImageView powerUp1,powerUp2,powerUp3,weapon1,weapon2,weapon3;
 
     @FXML
-    Button stopMov,moveButton;
+    Button stopMov,moveButton,grabButton;
 
 
     //-------------------------------------------------------MAP CREATION and gestion methods
@@ -202,6 +203,13 @@ public class GuiMapController {
                 move();
             }
         });
+
+        grabButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                grabHere();
+            }
+        });
     }
 
     @FXML
@@ -335,7 +343,7 @@ public class GuiMapController {
 
 
 
-    //-------------------------------------------------------------movements
+    //-------------------------------------------------------------movements things
     @FXML
     private void move()
     {
@@ -858,13 +866,13 @@ public class GuiMapController {
         }
     }
 
-    private void imageCreator(String imgUrl,HBox h)//ammo doesn't have id so if you want to cìget them you can check if hbox.child.getId==null
+    private void imageCreator(String imgUrl,HBox h)//ammo Id="ammo"
     {
         ImageView img=new ImageView();
 
         Image image = new Image(imgUrl);
         img.setImage(image);
-        img.setId("img");
+        img.setId("ammo");
         h.getChildren().add(img);
     }
 
@@ -875,7 +883,7 @@ public class GuiMapController {
             for(int j=0;j<((HBox)b.getChildren().get(i)).getChildren().size();j++)
             {
 
-                if(((HBox)b.getChildren().get(i)).getChildren().get(j).getId().compareTo("img")==0)
+                if(((HBox)b.getChildren().get(i)).getChildren().get(j).getId().compareTo("ammo")==0)
                     return true;
             }
         }
@@ -1024,5 +1032,51 @@ public class GuiMapController {
 
         return null;
     }
+
+    //------------------------------------------------------------ grab
+    private void grabHere()//----called from the button grab
+    {
+        //se questa cella è spawn o ammo
+        int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
+        int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
+        if(gui.getView().getCacheModel().getCachedMap().getCachedCell(x,y).getCellType()==CellType.AMMO)
+        {
+            //se ammo aggiungi quelle munizie alle nostre/ powerUp
+            grabAmmoCard(x,y);
+        }
+        else{//spawn cell
+            //se arma : abilita il click su un arma, se puoi pagare bella, sennò mandalo a fare in culo
+            //grabWeapon();
+        }
+
+
+    }
+
+    private void grabAmmoCard(int x,int y)
+    {
+        if(!containsAmmo(map[x][y]))
+        {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Non ci sono munizioni in questa cella, scegli un'altra azione");
+            alert.show();
+            return;
+        }
+        VBox b=map[x][y];
+        for(int i=0;i<b.getChildren().size();i++)
+        {
+            for(int j=0;j<((HBox)b.getChildren().get(i)).getChildren().size();j++)
+            {
+                if(((HBox)b.getChildren().get(i)).getChildren().get(j).getId().compareTo("ammo")==0)
+                {
+                    ((ImageView)((HBox)b.getChildren().get(i)).getChildren().get(j)).setImage(null);//remove the ammoImage
+                    List <Directions> dir=new ArrayList<>();//empty directions
+                    gui.getView().doAction(new GrabAction(dir));
+                }
+            }
+        }
+
+    }
+
+
+    //------------------------------------------------------------ move and grab
 
 }

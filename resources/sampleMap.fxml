@@ -72,9 +72,11 @@
         <HBox>
             <Label text="Plancia e my weapons"></Label>
             <HBox>
-            <Button text="Move"  fx:id="moveButton"></Button>
-            <Button text="Shoot"></Button>
-            <Button text="Reload"></Button>
+            <Button text="Moovi"  fx:id="moveButton"></Button>
+            <Button text="Spara"></Button>
+            <Button text="Muovi e raccogli"></Button>
+            <Button text="Raccogli dove sei " fx:id="grabButton"></Button>
+            <Button text="Ricarica"></Button>
             </HBox>
         </HBox>
     </bottom>
