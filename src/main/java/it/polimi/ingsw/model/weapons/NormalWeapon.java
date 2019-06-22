@@ -450,7 +450,8 @@ public class NormalWeapon extends Weapon{
         }
       catch(PlayerInSameCellException e)
       {
-
+          restore(targetsCopy,targetLists);
+          throw  new PlayerInSameCellException();
       } catch (NotEnoughAmmoException e) {
           restore(targetsCopy,targetLists);
           throw new NotEnoughAmmoException();

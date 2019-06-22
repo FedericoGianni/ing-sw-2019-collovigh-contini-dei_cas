@@ -6,16 +6,17 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
+import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
+import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
+import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -39,8 +40,6 @@ public class GuiMapController {
     }
     private ArrayList <Directions> movementDirections;
     private int validMove=-1;
-    private Point currPos;
-
 
     @FXML
     BorderPane pane;
@@ -50,14 +49,15 @@ public class GuiMapController {
     GridPane innerMap;
 
     @FXML
-    VBox b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;;
+    VBox b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;
     @FXML
-    ImageView powerUp1,powerUp2,powerUp3;
+    ImageView powerUp1,powerUp2,powerUp3,weapon1,weapon2,weapon3;
 
     @FXML
-    Button stopMov;
+    Button stopMov,moveButton,grabButton;
 
 
+    //-------------------------------------------------------MAP CREATION and gestion methods
     @FXML
     public void initialize() {
 
@@ -79,17 +79,16 @@ public class GuiMapController {
                 innerMap.setStyle("-fx-background-image: url('/images/Map1in.png')");//use this for sample fot he
                 buttonCreator();
                  b03.setOnMouseClicked(new EventHandler<MouseEvent>(){
-
                      @Override
                      public void handle(MouseEvent mouseEvent) {
-                         unClickAble();
+
                      }
                  });
                 b20.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
                     @Override
                     public void handle(MouseEvent mouseEvent) {
-                        unClickAble();
+
                     }
                 });
 
@@ -102,7 +101,7 @@ public class GuiMapController {
 
                     @Override
                     public void handle(MouseEvent mouseEvent) {
-                        unClickAble();
+
                     }
                 });
                 break;
@@ -114,38 +113,37 @@ public class GuiMapController {
             }
 
         }
+        weaponSeeEventEnabler();
+    }
+    private void weaponSeeEventEnabler()
+    {
         b02.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                spawn();
+
+                spawnCellWeaponShow(0,2);
             }
         });
+
         b10.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                spawn();
+
+                spawnCellWeaponShow(1,0);
             }
         });
         b23.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
             @Override
             public void handle(MouseEvent mouseEvent) {
-                spawn();
+
+                spawnCellWeaponShow(2,3);
             }
         });
-    }
-    private void unClickAble()
-    {
-        log.appendText("\n Not in the map");
-    }
 
-    private void spawn()
-    {
-        log.appendText("\n spawn cell");
     }
-
     private void buttonCreator()
     {
         for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
@@ -195,6 +193,209 @@ public class GuiMapController {
     }
 
     @FXML
+    public void actionButtonsEnabler()
+    {
+        moveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                move();
+            }
+        });
+
+        grabButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                grabHere();
+                System.out.println("Azionato moviemnto");
+            }
+        });
+    }
+
+    @FXML
+    public void actionButtonDisable()//disable action buttons
+    {
+        moveButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+        stopMov.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+        mapEventDeleter();
+    }
+
+    private void mapEventDeleter()//disable map events except for spawn see, it renables it
+    {
+        for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
+        {
+            for(int j=0;j<col;j++)
+            {
+                map[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseevent) {
+
+                    }
+
+                });
+            }
+        }
+        weaponSeeEventEnabler();
+    }
+
+    public void printLog(String s)
+    {
+        log.appendText("\n"+s);
+    }
+
+    //------------------------------------------------------------Weapons show methods
+    private void spawnCellWeaponShow(int r,int c)
+    {
+        //prima di tutto quali sono le immagini
+        weapon1.setFitHeight(156);
+        weapon1.setFitWidth(100);
+        weapon2.setFitHeight(156);
+        weapon2.setFitWidth(100);
+        weapon3.setFitHeight(156);
+        weapon3.setFitWidth(100);
+        for(int i=0;i<((CachedSpawnCell)gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c)).getWeaponNames().size();i++)
+        {
+            String url=fromWNameToUrl(((CachedSpawnCell)gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c)).getWeaponNames().get(i));
+            weaponDisplayer(url,i);
+        }
+    }
+
+    private String fromWNameToUrl(String name)
+    {
+        System.out.println(name);
+        switch(name)
+        {
+            case "LOCK RIFLE":
+                return "/images/weapons/distruttore.png";
+            case "MACHINE GUN":
+                return "/images/weapons/mitragliatrice.png";
+            case "ELECTROSCYTHE":
+                return "/images/weapons/falceProtonica.png";
+            case "TRACTOR BEAM":
+                return "/images/weapons/raggioTraente.png";
+            case "T.H.O.R.":
+                return "/images/weapons/torpedine.png";
+            case "PLASMA GUN":
+                return "/images/weapons/fucilePlasma.png";
+            case "WHISPER":
+                return "/images/weapons/fucilePrecisione.png";
+            case "VORTEX CANNON":
+                return "/images/weapons/cannoneVortex.png";
+            case "FURNACE":
+                return "/images/weapons/vulcanizzatore.png";
+            case "HEAT SEEKER":
+                return "/images/weapons/razzoTermico.png";
+            case "HELLION":
+                return "/images/weapons/raggioSolare.png";
+            case "FLAMETHROWER":
+                return "/images/weapons/lanciaFiamme.png";
+            case "GRENADE LAUNCHER":
+                return "/images/weapons/lanciaGranate.png";
+            case "ROCKET LAUNCHER":
+                return "/images/weapons/lanciaRazzi.png";
+            case "RAILGUN":
+                return "/images/weapons/fucileLaser.png";
+            case "CYBERBLADE":
+                return "/images/weapons/spadaFotonica.png";
+            case "ZX-2":
+                return "/images/weapons/zx2.png";
+            case "SHOTGUN":
+                return "/images/weapons/fucilePompa.png";
+            case "POWER GLOVE":
+                return "/images/weapons/cyberGuanto.png";
+            case "SHOCKWAVE":
+                return "/images/weapons/ondaUrto.png";
+            case "SLEDGEHAMMER":
+                return "/images/weapons/martelloIonico.png";
+
+        }
+        return null;
+    }
+
+    private void  weaponDisplayer(String url,int weapon)
+    {
+        Image img=new Image(url);
+
+        switch (weapon)
+        {
+            case 0:
+                weapon1.setImage(img);
+                break;
+            case 1:
+                weapon2.setImage(img);
+                break;
+            case 2:
+                weapon3.setImage(img);
+                break;
+        }
+
+    }
+    private void costDisplay(int x,int y)//display in a tootltip the cost of the pointed weapon
+    {
+         String cost1="";
+        String cost2="";
+        String cost3="";
+
+            try {
+                for(int i=0;i<gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect().size();i++) {
+                    if (gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect().size() != 0) {
+                        if (gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect().get(i) != null)
+                            cost1 = cost1 + fromACtoString(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect().get(i));
+                    }
+                }
+                for(int i=0;i<gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1)).getBuyEffect().size();i++) {
+                    if (gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1)).getBuyEffect().size() != 0) {
+                        if (gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1)).getBuyEffect().get(i) != null)
+                            cost2 = cost2 + fromACtoString(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1)).getBuyEffect().get(i));
+                    }
+                }
+                for(int i=0;i<gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2)).getBuyEffect().size();i++) {
+                    if (gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2)).getBuyEffect().size() != 0) {
+                        if (gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2)).getBuyEffect().get(i) != null)
+                            cost3 = cost3 + fromACtoString(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2)).getBuyEffect().get(i));
+                    }
+                }
+            }
+            catch(WeaponNotFoundException e)//can't happend in this special case
+            {
+                System.out.println("-----------weapon not found in weaponTooltip---------");
+            }
+        Tooltip t1 = new Tooltip("Costo "+cost1);
+        Tooltip t2 = new Tooltip("Costo "+cost2);
+        Tooltip t3 = new Tooltip("Costo "+cost3);
+        Tooltip.install(weapon1, t1);
+        Tooltip.install(weapon2, t2);
+        Tooltip.install(weapon3, t3);
+
+    }
+    private String fromACtoString(Color c)
+    {
+        if(c==Color.RED)
+        {
+            return " 1 Ammo rossa";
+        }
+        if(c==Color.BLUE)
+        {
+            return " 1 Ammo blu";
+        }
+        if(c==Color.YELLOW)
+        {
+            return " 1 Ammo gialla";
+        }
+        return " non pervenuto";
+    }
+
+    //-------------------------------------------------------------movements things
+    @FXML
     private void move()
     {
 
@@ -202,6 +403,41 @@ public class GuiMapController {
         int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
         int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
         handleMovement(x,y,3,movementDirections);
+    }
+
+    private void mapPos(int r,int c,int id)
+    {
+        //System.out.println("riga: "+r+"colonna :"+c);
+        ;
+        boolean found=false;
+        if( map[r][c].getChildren().size()!=0 && ((HBox)map[r][c].getChildren().get(0)).getChildren()!=null)
+        {for(int j=0;j<((HBox)map[r][c].getChildren().get(0)).getChildren().size();j++)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+        {
+            if(((HBox)map[r][c].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
+            {
+                found=true;
+            }
+
+        }
+            if(found)return;}
+        fromIDtoIMG(id, map[r][c]);
+        log.appendText("\n Placed player "+id+" in cell "+r+c);
+
+
+        //eliminating the powerups effects after the beginning
+        powerUp1.setOnMouseClicked((e) -> {
+
+        });
+        powerUp2.setOnMouseClicked((e) -> {
+
+        });
+        powerUp3.setOnMouseClicked((e) -> {
+
+        });
+
+        //afetr move i delete moving things
+        mapEventDeleter();
+
     }
 
     private void handleMovement(int x,int y,int m,ArrayList<Directions> movementDirections)//called from move,do stuff for real
@@ -215,6 +451,7 @@ public class GuiMapController {
         stopMov.setOnAction(new EventHandler<ActionEvent>() {//stop button
             @Override public void handle(ActionEvent e) {
                 gui.getView().doAction(new Move(movementDirections,new Point(x,y)));
+                actionButtonDisable();
             }
         });
 
@@ -282,22 +519,7 @@ public class GuiMapController {
         });}
     }
 
-    private void mapEventDeleter()
-    {
-        for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
-        {
-            for(int j=0;j<col;j++)
-            {
-                map[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseevent) {
 
-                    }
-
-                });
-            }
-        }
-    }
     private void eventMover(int x,int y,int m)
     {
         if(m==0)
@@ -306,8 +528,10 @@ public class GuiMapController {
             a.setContentText("No more movements left. Moving...");
             a.show();
             gui.getView().doAction(new Move(movementDirections,new Point(x,y)));
+            actionButtonDisable();
             return;
         }
+
         for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
         {
             for(int j=0;j<col;j++)
@@ -505,7 +729,7 @@ public class GuiMapController {
     }
 
 
-
+//-------------------------------------------------------------loign methods and matche beginning
     @FXML
     public void loginUpdater(String name, int id, PlayerColor color)
     {
@@ -531,13 +755,6 @@ public class GuiMapController {
         });
 
 
-    }
-
-
-
-    public void printLog(String s)
-    {
-        log.appendText("\n"+s);
     }
 
     public void startSpawn()
@@ -568,41 +785,7 @@ public class GuiMapController {
         });
     }
 
-    private void mapPos(int r,int c,int id)
-    {
-            //System.out.println("riga: "+r+"colonna :"+c);
-            ;
-            boolean found=false;
-            if( map[r][c].getChildren().size()!=0 && ((HBox)map[r][c].getChildren().get(0)).getChildren()!=null)
-            {for(int j=0;j<((HBox)map[r][c].getChildren().get(0)).getChildren().size();j++)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
-             {
-                 if(((HBox)map[r][c].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
-                 {
-                     found=true;
-                 }
-
-             }
-             if(found)return;}
-             fromIDtoIMG(id, map[r][c]);
-             log.appendText("\n Placed player "+id+" in cell "+r+c);
-
-
-        //eliminating the powerups effects after the beginning
-        powerUp1.setOnMouseClicked((e) -> {
-
-        });
-        powerUp2.setOnMouseClicked((e) -> {
-
-        });
-        powerUp3.setOnMouseClicked((e) -> {
-
-        });
-
-        //afetr move i delete moving things
-       mapEventDeleter();
-
-    }
-
+    //------------------------------------------------------------powerUp  gestion
     private Point colorToCord(Color c)
     {
         Point p=new Point();
@@ -706,6 +889,7 @@ public class GuiMapController {
         }
     }
 
+    //--------------------------------------------------------------ammo gestion
     public void ammoPlacer()
     {
         //neeed to remove everything before!!!
@@ -733,13 +917,13 @@ public class GuiMapController {
         }
     }
 
-    private void imageCreator(String imgUrl,HBox h)//ammo doesn't have id so if you want to cìget them you can check if hbox.child.getId==null
+    private void imageCreator(String imgUrl,HBox h)//ammo Id="ammo"
     {
         ImageView img=new ImageView();
 
         Image image = new Image(imgUrl);
         img.setImage(image);
-        img.setId("img");
+        img.setId("ammo");
         h.getChildren().add(img);
     }
 
@@ -750,7 +934,7 @@ public class GuiMapController {
             for(int j=0;j<((HBox)b.getChildren().get(i)).getChildren().size();j++)
             {
 
-                if(((HBox)b.getChildren().get(i)).getChildren().get(j).getId().compareTo("img")==0)
+                if(((HBox)b.getChildren().get(i)).getChildren().get(j).getId().compareTo("ammo")==0)
                     return true;
             }
         }
@@ -899,5 +1083,177 @@ public class GuiMapController {
 
         return null;
     }
+
+    //------------------------------------------------------------ grab
+    private void grabHere()//----called from the button grab
+    {
+        //se questa cella è spawn o ammo
+        int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
+        int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
+        if(gui.getView().getCacheModel().getCachedMap().getCachedCell(x,y).getCellType()==CellType.AMMO)
+        {
+            //se ammo aggiungi quelle munizie alle nostre/ powerUp
+            grabAmmoCard(x,y);
+        }
+        else{//spawn cell
+            //se arma : abilita il click su un arma, se puoi pagare bella, sennò mandalo a fare in culo
+            System.out.println("Spawn cell");
+            grabWeapon(x,y);
+        }
+
+
+    }
+
+    private void grabAmmoCard(int x,int y)
+    {
+        if(!containsAmmo(map[x][y]))
+        {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Non ci sono munizioni in questa cella, scegli un'altra azione");
+            alert.show();
+            return;
+        }
+        VBox b=map[x][y];
+        for(int i=0;i<b.getChildren().size();i++)
+        {
+            for(int j=0;j<((HBox)b.getChildren().get(i)).getChildren().size();j++)
+            {
+                if(((HBox)b.getChildren().get(i)).getChildren().get(j).getId().compareTo("ammo")==0)
+                {
+                    ((ImageView)((HBox)b.getChildren().get(i)).getChildren().get(j)).setImage(null);//remove the ammoImage
+                    List <Directions> dir=new ArrayList<>();//empty directions
+                    gui.getView().doAction(new GrabAction(dir));
+                }
+            }
+        }
+
+    }
+
+    private void grabWeapon(int x,int y)
+    {
+        List<String> weapons=new ArrayList<>();
+        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()!=null &&gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons()!=null) {
+            if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size() == 3) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Hai gia 3 armi , se vuoi comprare devi scartarne una, vuoi scartare?", ButtonType.YES, ButtonType.NO);
+                alert.showAndWait();
+
+                if (alert.getResult() == ButtonType.YES) {
+                    alert = new Alert(Alert.AlertType.CONFIRMATION, "Clicca a sinistra quale arma scartare dopodichè procedi all'acquisto");
+                    alert.show();
+                    //discard weapon clicked and disbale discarder
+
+                    weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
+
+                            weapon1.setImage(null);
+                            weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });//remove discard effects
+                            weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                            weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                        }
+                    });
+                    weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1));
+                            weapon2.setImage(null);
+
+                            weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });//remove discard effects
+                            weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                            weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                        }
+                    });
+                    weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2));
+                            weapon3.setImage(null);
+                            weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });//remove discard effects
+                            weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                            weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                        }
+                    });
+
+
+                }
+                if (alert.getResult() == ButtonType.NO) {
+                    return;
+                }
+
+            }
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Scegli un' arma da acquistare nella schermata sinistra");
+        alert.show();
+        //show the current spawn cell weapons
+        spawnCellWeaponShow(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX(),gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY());
+        //show the cost in toolTip
+        costDisplay(x,y);
+        System.out.println("-------------------------aaaaaaaaaaaaaaaa--------------");
+        weapon1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println("Buy first weapon");
+            }
+        });
+        weapon2.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println("Buy second weapon");
+            }
+        });
+
+        weapon3.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println("Buy third weapon");
+            }
+        });
+    }
+    //------------------------------------------------------------ move and grab
 
 }

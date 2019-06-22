@@ -27,13 +27,14 @@ public class FileRead {
 
     public static void main(String args[]) {
         try {
-            populateMatrixFromFile(3);
+            populateMatrixFromFile(1);
 
         }catch (Exception e){
             e.getMessage();
         }
 
         showWelcome();
+
         playerColorList.add(ANSI_BLUE);
         playerColorList.add(ANSI_PURPLE);
         playerColorList.add(ANSI_WHITE);

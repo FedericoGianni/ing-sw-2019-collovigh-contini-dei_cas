@@ -226,6 +226,9 @@ public class Gui extends Application implements UserInterface {
                     guiMapController.ammoPlacer();
                 break;
 
+            case AMMO_BAG:
+                //need to add ammos to my control board
+                break;
             default:
                 break;
         }
@@ -254,7 +257,7 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
-    public void startSpawn() {
+    public void startSpawn() {//pox: 1) rosso e giallo non fanno bene lo spawn 2) blu non fa bene lo spawn
         while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()){
 
             guiMapController.printLog("Attendi ricezione dei PowerUp pescati...");
@@ -280,7 +283,7 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startPowerUp() {
         //here i need to let them use power ups, devo eliminare tutti gli effetti all'inziio di start action
-
+        guiMapController.actionButtonDisable();
     }
 
     @Override
@@ -291,6 +294,10 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
+        //this method enables the action buttons to do something
+        System.out.println("enables actions");
+        guiMapController.actionButtonsEnabler();
+
         //view.doAction(new Move(view.doAction(new Move(directionsList, finalPos));));----->
         //view.doAction(new GrabAction(directionsList, weapons.get(0), weapons.get(1)));
         //view.doAction(new ShootAction("LOCK RIFLE", targetList, effects, cells));
