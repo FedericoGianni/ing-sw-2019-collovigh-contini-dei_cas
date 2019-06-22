@@ -11,19 +11,18 @@ import java.util.List;
 
 public class Thor extends SpecialWeapons {
 
-    private static final String THOR = "T.H.O.R.";
+    private static final String THOR_NAME = "T.H.O.R.";
 
-    private ArrayList<AmmoCube> weaponCost;//cost of the weapon
-    private ArrayList<AmmoCube> effectsCost;//only this beacuse every effects cst 1 ammoCube so get(0)->second effect cost and get(1) is the second
-    private boolean isLoaded;
+    private List<AmmoCube> weaponCost;//cost of the weapon
+    private List<AmmoCube> effectsCost;//only this beacuse every effects cst 1 ammoCube so get(0)->second effect cost and get(1) is the second
 
-    public  ArrayList<AmmoCube> getEffectsCost()
+    public  List<AmmoCube> getEffectsCost()
     {
         return this.effectsCost;
     }
     public Thor() {
 
-        super(THOR);
+        super(THOR_NAME);
 
         weaponCost=new ArrayList<>();
         effectsCost=new ArrayList<>();
@@ -31,7 +30,6 @@ public class Thor extends SpecialWeapons {
         this.weaponCost.add(new AmmoCube(Color.RED));
         effectsCost.add(new AmmoCube(Color.BLUE));
         effectsCost.add(new AmmoCube(Color.BLUE));
-        this.isLoaded = true;
     }
 
     /**

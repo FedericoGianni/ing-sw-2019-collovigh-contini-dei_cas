@@ -130,7 +130,9 @@ public class Furnace  extends SpecialWeapons{
      * @throws CellNonExistentException if the cell is not specified or is null in the model
      * @throws PlayerInSameCellException if the player is in the specified cell
      */
-    private Boolean checkSecondEffect(Cell cell) throws CellNonExistentException, PlayerInSameCellException{
+    private Boolean checkSecondEffect(Cell cell) throws CellNonExistentException, PlayerInSameCellException, NotEnoughAmmoException{
+
+        if (!isPossessedBy().canPay(costSecondEffect)) throw new NotEnoughAmmoException();
 
         if ( ( cell == null ) || (!Model.getMap().hasCell(cell)) ) throw new CellNonExistentException();
 
