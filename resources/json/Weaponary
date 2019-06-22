@@ -128,7 +128,7 @@
   },
   {
     "Weapon": {
-      "name": "HEAT SEEKER",
+      "name": "HEATSEEKER",
       "cost": [
         {
           "ammoC": "RED"

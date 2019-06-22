@@ -632,6 +632,16 @@ public class ActionPhase {
             handleAction();
 
             return;
+
+        } catch (CellNonExistentException e){
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " cell specified in effect is null in model ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+            handleAction();
+
+            return;
         }
 
 
@@ -647,7 +657,7 @@ public class ActionPhase {
      * @param shootAction is the class containing the list of moves
      * @throws ArgsNotValidatedException if the controller checks fails
      */
-    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException {
+    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException, CellNonExistentException {
 
         // perform pre-check
 
@@ -1243,6 +1253,16 @@ public class ActionPhase {
         } catch (ArgsNotValidatedException e){
 
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " ArgsNotValidatedException ");
+
+            return false;
+
+        }catch (CellNonExistentException e){
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " cell specified in effect is null in model ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+            handleAction();
 
             return false;
         }

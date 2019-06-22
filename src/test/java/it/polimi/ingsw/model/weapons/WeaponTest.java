@@ -55,7 +55,7 @@ class WeaponTest {
 
         for (Weapon weapon : weaponList){
 
-            //System.out.println(weapon.getName());
+            System.out.println(weapon.getName());
 
             assertTrue(cachedFullWeaponNames.contains(weapon.getName()));
 

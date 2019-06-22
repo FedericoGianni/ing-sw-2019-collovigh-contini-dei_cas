@@ -28,7 +28,7 @@ class ThorTest {
     @Test
     void reload() throws NotAbleToReloadException {//tests that if the thor is not loaded it can be reloaded with the correct amount of ammos
         Thor w=new Thor();
-        w.setUnloaded();
+        w.setLoaded(false);
         assertTrue(!w.isLoaded());
         ArrayList<String> playerNames=new ArrayList<>();
         playerNames.add("shooter");

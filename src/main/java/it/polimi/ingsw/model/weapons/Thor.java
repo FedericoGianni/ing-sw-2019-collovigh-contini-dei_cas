@@ -9,7 +9,9 @@ import it.polimi.ingsw.utils.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Thor extends Weapon {
+public class Thor extends SpecialWeapons {
+
+    private static final String THOR = "T.H.O.R.";
 
     private ArrayList<AmmoCube> weaponCost;//cost of the weapon
     private ArrayList<AmmoCube> effectsCost;//only this beacuse every effects cst 1 ammoCube so get(0)->second effect cost and get(1) is the second
@@ -20,6 +22,9 @@ public class Thor extends Weapon {
         return this.effectsCost;
     }
     public Thor() {
+
+        super(THOR);
+
         weaponCost=new ArrayList<>();
         effectsCost=new ArrayList<>();
         this.weaponCost.add(new AmmoCube(Color.BLUE));
@@ -29,40 +34,9 @@ public class Thor extends Weapon {
         this.isLoaded = true;
     }
 
-    @Override
-    public boolean isLoaded() {
-        return this.isLoaded;
-    }
-
-    @Override
-    public void reload() throws NotAbleToReloadException {
-
-        if(this.canBeReloaded()) {
-
-            try {
-
-                isPossessedBy().pay(weaponCost);
-
-            } catch (CardNotPossessedException e) {
-
-                throw new NotAbleToReloadException();
-            }
-
-            this.isLoaded = true;
-
-        } else{
-
-            throw new NotAbleToReloadException();
-
-        }
-    }
-
-
-    private boolean canBeReloaded() {
-
-        return isPossessedBy().canPay(weaponCost);
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
 
@@ -102,30 +76,13 @@ public class Thor extends Weapon {
         }
     }
 
-    @Override
-    public void print() {
-        System.out.println(this.getName());
-    }
-
-    @Override
-    public String getName() {
-        return "T.H.O.R.";
-    }
-
-    @Override
-    public List<AmmoCube> getCost() {
-        return this.weaponCost.subList(1,weaponCost.size());
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<AmmoCube> getReloadCost() {
 
         return this.weaponCost;
 
-    }
-
-    public void setUnloaded()
-    {
-        this.isLoaded=false;
     }
 }

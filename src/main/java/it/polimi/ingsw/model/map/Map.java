@@ -18,8 +18,8 @@ import static java.lang.Math.abs;
  */
 public class Map {
 
-    private static final int MAP_R = 3;
-    private static final int MAP_C = 4;
+    public static final int MAP_R = 3;
+    public static final int MAP_C = 4;
 
 
     private Cell[][] matrix;

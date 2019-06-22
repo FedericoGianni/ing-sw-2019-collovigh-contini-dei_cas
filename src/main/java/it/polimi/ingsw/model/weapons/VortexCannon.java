@@ -11,17 +11,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class VortexCannon extends Weapon{
+public class VortexCannon extends SpecialWeapons{
 
-    private static final String NAME = "VORTEX CANNON";
+    private static final String VORTEX_CANNON = "VORTEX CANNON";
 
     private final List<AmmoCube> costBaseEffect;
 
     private final List<AmmoCube> costSecondEffect;
 
-    private boolean loaded = true;
 
     public VortexCannon() {
+
+        super(VORTEX_CANNON);
 
         List<AmmoCube> cost = new ArrayList<>();
 
@@ -38,67 +39,18 @@ public class VortexCannon extends Weapon{
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isLoaded() {
-        return loaded;
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void reload() throws NotAbleToReloadException {
-
-        // checks if the player who owns the weapon can pay the reload
-
-        if (!this.isPossessedBy().canPay(costBaseEffect)) throw new NotAbleToReloadException();
-
-        else {
-
-            try {
-
-                // the player pays
-
-                this.isPossessedBy().pay(costBaseEffect);
-
-                // the weapon is set to loaded
-
-                loaded = true;
-
-            }catch (CardNotPossessedException e){
-
-                throw new NotAbleToReloadException();
-            }
-        }
-    }
-
-    /**
-     * This method will check if the player can shoot
-     *
-     * @param targetLists is a list of list of target for each effect of the weapon
-     * @param effects is a list containing int correspondents to which effect will be used
-     * @param cells is a list of cell
-     * @return true if the shoot can be preformed, false otherwise
-     * @throws WeaponNotLoadedException
-     * @throws PlayerInSameCellException
-     * @throws PlayerInDifferentCellException
-     * @throws UncorrectDistanceException
-     * @throws SeeAblePlayerException
-     * @throws UncorrectEffectsException
-     * @throws NotCorrectPlayerNumberException
-     * @throws PlayerNotSeeableException
-     * @throws NotEnoughAmmoException
-     */
     public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, UncorrectDistanceException, UncorrectEffectsException, NotCorrectPlayerNumberException, NotEnoughAmmoException {
 
         // if the player shoot with effect 2 but no effect 1 throw exception
 
         if (effects.contains(1) && !effects.contains(0)) throw new UncorrectEffectsException();
 
-        if (!this.loaded) throw new WeaponNotLoadedException();
+        if (!this.isLoaded()) throw new WeaponNotLoadedException();
 
         List<Player> targets = new ArrayList<>();
 
@@ -195,7 +147,7 @@ public class VortexCannon extends Weapon{
 
             if (effects.contains(1)) secondEffect(targetLists.get(1), cells.get(0));
 
-            this.loaded = false;
+            this.setLoaded(false);
 
         }
     }
@@ -244,33 +196,7 @@ public class VortexCannon extends Weapon{
      * {@inheritDoc}
      */
     @Override
-    public void print() {
-
-        throw new UnsupportedOperationException();
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<AmmoCube> getCost() {
-        return costBaseEffect.subList(1,costBaseEffect.size());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public List<AmmoCube> getReloadCost() {
-        return costBaseEffect;
+        return new ArrayList<>(costBaseEffect);
     }
 }
