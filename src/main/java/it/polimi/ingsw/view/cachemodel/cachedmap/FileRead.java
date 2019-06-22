@@ -34,7 +34,7 @@ public class FileRead {
         }
 
         showWelcome();
-        /*
+
         playerColorList.add(ANSI_BLUE);
         playerColorList.add(ANSI_PURPLE);
         playerColorList.add(ANSI_WHITE);
@@ -72,7 +72,6 @@ public class FileRead {
         insertAmmoCard(2,3,v);
 
         removeAmmoCard(2,3,v);
-         */
         showBattlefield();
 
     }

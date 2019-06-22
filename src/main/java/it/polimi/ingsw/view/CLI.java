@@ -12,6 +12,7 @@ import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+import it.polimi.ingsw.view.cachemodel.EffectType;
 import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CachedCell;
@@ -1408,8 +1409,6 @@ public class CLI implements UserInterface {
             System.out.println("Weapon not found "+ e.getMessage());
         }
 
-        //System.out.println(ANSI_BLUE.escape() + "[DEBUG] ARMA SCELTA: " + weapon.getName() + ANSI_RESET.escape());
-
         // PRE-SHOOT PHASE choose wep effects, checks if he can pay
         // choose target/s and additional info needed to shoot with a particular weapon
         //TODO user needs to choose weapons effect to use (check if he can pay w/ ammo/powerups
@@ -1422,7 +1421,16 @@ public class CLI implements UserInterface {
         effects.add(1);
         //effects = chooseEffects(weapon);
 
-        targetList = chooseTargets(1,1);
+        targetList = chooseTargets(weapon.getEffectRequirements().get(0).getNumberOfTargets(),effects.size());
+        for (int i = 0; i < effects.size(); i++) {
+            //e is the number inside the effect array i.e. i could have effect 2 in index 0 of array effects
+            int e = effects.get(i);
+            if(weapon.getEffectRequirements().get(e).getCellRequired()){
+                CachedCell c = askCell(weapon, e);
+            }
+
+        }
+
 
 
         //forward the shoot action to the controller -> if shoot fails it won't do the shoot and
@@ -1437,12 +1445,19 @@ public class CLI implements UserInterface {
 
     }
 
+    private CachedCell askCell(CachedFullWeapon w, int e){
+        //TODO
+        return null;
+    }
+
+
+
     /**
      * Helper method needed by startShoot to collect target/s to be shot
      * @return a List of List<Integer> representing the targets for each of the weapon effect
      * (index 0 -> base effect, index 1 -> second effect, index 2 -> third effect)
      */
-    private List<List<Integer>> chooseTargets(int targetsNum, int effectsNum){
+    private List<List<Integer>> chooseTargets(List<Integer> targetsNum, int effectsNum){
 
         List<List<Integer>> targetsList = new ArrayList<>();
         boolean valid = false;
@@ -1454,19 +1469,29 @@ public class CLI implements UserInterface {
             System.out.println("Seleziona i bersagli a cui vuoi sparare: ");
             System.out.println("Effetto: " + i);
 
-            for (int j = 0; j < targetsNum; j++) {
+            for (int j = 0; j < targetsNum.get(i); j++) {
 
                 do {
 
                     int read = -1;
+                    int cont = 0;
                     System.out.println("Seleziona un bersaglio (ID) >>> ");
 
                     try {
+                        if(cont >= 1){
+                            System.out.println("9 -> per selezionare solo questi bersagli.");
+                        }
+
                         read = scanner.nextInt();
 
                         if(read >= 0 && read <= view.getCacheModel().getCachedPlayers().size() && read != view.getPlayerId()){
                             valid = true;
                             tempTargetList.add(read);
+                            cont++;
+                        } else if(read == 9){
+                            //TODO check if it works, should let him target up to max target (min 1) instead of exactly max
+                            valid = true;
+                            j = targetsNum.get(i);
                         }
 
                         if(read == view.getPlayerId()){
@@ -1483,6 +1508,7 @@ public class CLI implements UserInterface {
             }
 
             targetsList.add(tempTargetList);
+
         }
 
         return targetsList;
@@ -1496,59 +1522,84 @@ public class CLI implements UserInterface {
     private List<Integer> chooseEffects(CachedFullWeapon w){
 
         boolean valid = false;
-        boolean isDone = false;
-
         List<Integer> effects = new ArrayList<>();
-        effects.add(0);
-        //List<Integer> choice = new ArrayList<>();
+        int read = -1;
 
         do {
 
             System.out.println(w.getEffectsDescriptions());
-            System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare, uno alla volta, + 9 quando hai finito");
-            System.out.println("Effetto base già incluso (premi invio per usare solo questo)");
-            System.out.println("1 -> effetto base + effetto 1");
-            System.out.println("2 -> effetto base + effetto 2");
-            System.out.println("1, INVIO,  2 -> effetto base + effetto 1 + effetto 2");
+            if(w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)) {
+                System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
+                System.out.println("[0] -> Effetto base");
+                System.out.println("[1] -> effetto base + effetto 1");
+                System.out.println("[2] -> effetto base + effetto 2");
+                System.out.println("[12] -> effetto base + effetto 1 + effetto 2");
+                System.out.println("Inserisci il numero che rappresenta la combinazione di effetti scelta: ");
+            } else if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)){
+                System.out.println("Per quest'arma puoi scegliere solo o l'effetto base o l'effetto alternativo.");
+                System.out.println("Seleziona l'effetto che vuoi utilizzare: ");
+                System.out.println("[0] -> effetto base");
+                System.out.println("[1] -> effetto 1 (alternativo)");
+            }
 
-            while(scanner.hasNextInt() && !isDone){
-                try{
+            //TODO check if effects are exclusive/concatenable
+            try{
+                read = scanner.nextInt();
 
-                    List<Integer> tempList = new ArrayList<>();
-                    int temp = scanner.nextInt();
+                if(w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)){
 
-                    if(temp == 9){
-                        isDone = true;
-                    } else if (temp >= 0 && temp < 3){
-                        tempList.add(temp);
+                    if((read >= 0 && read <3) || read == 12){
+                        valid = true;
                     } else {
-                        System.out.println("Non valido!");
+                        System.out.println("Scelta effetti non valida! Riprova");
                     }
 
-                    valid = true;
+                } else if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)){
 
-                    for (int i = 0; i < tempList.size(); i++) {
-                        if(!tempList.get(i).equals(i)){
-                            valid = false;
-                        }
+                    if((read == 0 || read == 1)){
+                        valid = true;
+                    } else{
+                        System.out.println("Scelta effetti non valida! Riprova");
                     }
-
-                    if(valid){
-                        effects = tempList;
-                    }
-
-                } catch (InputMismatchException e){
-                    System.out.println("Non è un numero! Riprova >>> ");
-                    scanner.nextLine();
                 }
+
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova!");
+                scanner.nextLine();
             }
 
         } while (!valid);
 
+        switch (read){
 
+            case 0:
+                effects.add(0);
+                break;
 
-        //TODO ask the player to choose which weapon effect to activate
-        //TODO check if effects are exclusive/concatenable
+            case 1:
+                if(w.getEffectTypes().equals(EffectType.ESCLUSIVE))
+                    effects.add(1);
+                else{
+                    effects.add(0);
+                    effects.add(1);
+                }
+                break;
+
+            case 2:
+                effects.add(0);
+                effects.add(2);
+                break;
+
+            case 12:
+                effects.add(0);
+                effects.add(1);
+                effects.add(2);
+                break;
+        }
+
+        //System.out.println("valid!");
+        System.out.println("[DEBUG] RISULTATO: " + effects);
+
         //TODO check if player can pay for the effects chosen w/ ammo/powerups
 
         return effects;
@@ -1687,6 +1738,7 @@ public class CLI implements UserInterface {
                     weaponReloadCost.remove(c);
                 }
                 cachedAmmoCubes.removeAll(weaponReloadCost);
+                weapons.remove(w.getName());
 
             } catch (WeaponNotFoundException e){
 
