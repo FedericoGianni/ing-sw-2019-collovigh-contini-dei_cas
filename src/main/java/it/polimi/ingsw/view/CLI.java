@@ -1422,18 +1422,27 @@ public class CLI implements UserInterface {
 
         //TODO method which takes effect type as parameter (or CachedFullWeapon) and returns List<Int> with effects chosen
         //TODO also checks if he can pay this effects (w/ ammo/powerUps)
-        effects.add(0);
-        effects.add(1);
-        //effects = chooseEffects(weapon);
 
-        targetList = chooseTargets(weapon.getEffectRequirements().get(0).getNumberOfTargets(),effects.size());
+        effects = chooseEffects(weapon);
+
+        targetList = chooseTargets(weapon.getEffectRequirements().get(0).getNumberOfTargets(), effects.size());
+
+        boolean cellRequired = false;
+
         for (int i = 0; i < effects.size(); i++) {
             //e is the number inside the effect array i.e. i could have effect 2 in index 0 of array effects
             int e = effects.get(i);
             if(weapon.getEffectRequirements().get(e).getCellRequired()){
-                CachedCell c = askCell(weapon, e);
+                Point p = askCell(weapon, e);
+                cells.add(p);
+                cellRequired = true;
+            } else {
+                cells.add(null);
             }
+        }
 
+        if(!cellRequired){
+            cells = null;
         }
 
 
@@ -1450,7 +1459,7 @@ public class CLI implements UserInterface {
 
     }
 
-    private CachedCell askCell(CachedFullWeapon w, int e){
+    private Point askCell(CachedFullWeapon w, int e){
         //TODO
         return null;
     }
