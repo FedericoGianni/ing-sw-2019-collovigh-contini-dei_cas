@@ -10,8 +10,6 @@ import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -131,10 +129,13 @@ public class Player {
      *
      * @param powerUp is the power up that needs to be turn into AmmoCubes
      */
-    public void sellPowerUp(PowerUp powerUp){
+    public AmmoCube sellPowerUp(PowerUp powerUp){
 
-       this.ammo.addItem(this.currentPowerUps.sellItem(powerUp));
+        AmmoCube revenue = this.currentPowerUps.sellItem(powerUp);
 
+       this.ammo.addItem(revenue);
+
+        return revenue;
     }
 
     /**
