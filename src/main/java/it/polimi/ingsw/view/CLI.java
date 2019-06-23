@@ -1455,7 +1455,9 @@ public class CLI implements UserInterface {
         //TODO check if player has TargetingScope and ask him if he wants to use it
         //TODO ! don't consider powerup which player has chosen to discard to pay!
 
-        view.doAction(new ShootAction(weapon.getName(), targetList, effects, cells, null));
+        List<CachedPowerUp> powerUpList = new ArrayList<>(); // TODO
+
+        view.doAction(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpList, null ));
 
     }
 

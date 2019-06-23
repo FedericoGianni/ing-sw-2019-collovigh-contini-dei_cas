@@ -46,6 +46,20 @@ public class Stats extends Subject implements Serializable {
     }
 
     /**
+     * Clone constructor
+     * @param clone is the class from whom copy all the data
+     */
+    public Stats(Stats clone) {
+        this.score = clone.score;
+        this.deaths = clone.deaths;
+        this.marks = clone.marks;
+        this.dmgTaken = clone.dmgTaken;
+        this.currentPosition = clone.currentPosition;
+        this.online = clone.online;
+        this.frenzyBoard = clone.frenzyBoard;
+    }
+
+    /**
      *
      * @return the current score
      */

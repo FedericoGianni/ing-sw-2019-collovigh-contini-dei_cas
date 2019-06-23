@@ -10,7 +10,9 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.*;
+import it.polimi.ingsw.view.actions.usepowerup.ScopeAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
@@ -18,6 +20,7 @@ import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.ShootTurnUpdate;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,6 +64,9 @@ public class ActionPhase {
     private final Controller controller;
 
     private final UtilityMethods utilityMethods;
+
+    private List<PowerUp> discardedPowerUpForRestore = new ArrayList<>();
+    private List<AmmoCube> ammoCubeForRestore = new ArrayList<>();
 
     private FrenzyShoot frenzyShootTemp = null;
 
@@ -511,6 +517,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_LOADED);
 
+            restoreSellPowerUp();
+
             handleAction();
 
             return;
@@ -520,6 +528,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
+
+            restoreSellPowerUp();
 
             handleAction();
 
@@ -531,6 +541,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_DIFFERENT_CELL);
 
+            restoreSellPowerUp();
+
             handleAction();
 
             return;
@@ -540,6 +552,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
+
+            restoreSellPowerUp();
 
             handleAction();
 
@@ -551,6 +565,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_SEEABLE_PLAYER);
 
+            restoreSellPowerUp();
+
             handleAction();
 
             return;
@@ -560,6 +576,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
+
+            restoreSellPowerUp();
 
             handleAction();
 
@@ -571,6 +589,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_NOT_CORRECT_PLAYER_NUMBER);
 
+            restoreSellPowerUp();
+
             handleAction();
 
             return;
@@ -580,6 +600,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
+
+            restoreSellPowerUp();
 
             handleAction();
 
@@ -591,6 +613,8 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
+            restoreSellPowerUp();
+
             handleAction();
 
             return;
@@ -600,6 +624,8 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " card not found ");
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+
+            restoreSellPowerUp();
 
             handleAction();
 
@@ -611,6 +637,8 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_NO_ENOUGH_AMMO);
 
+            restoreSellPowerUp();
+
             handleAction();
 
             return;
@@ -621,6 +649,8 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_DIFFERENT_PLAYER_NEEDED);
 
+            restoreSellPowerUp();
+
             handleAction();
 
             return;
@@ -628,6 +658,8 @@ public class ActionPhase {
         } catch (ArgsNotValidatedException e){
 
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " ArgsNotValidatedException ");
+
+            restoreSellPowerUp();
 
             handleAction();
 
@@ -638,6 +670,8 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " cell specified in effect is null in model ");
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+            restoreSellPowerUp();
 
             handleAction();
 
@@ -667,6 +701,10 @@ public class ActionPhase {
 
         Weapon selected = utilityMethods.findWeaponInWeaponBag(shootAction.getWeaponName(),controller.getCurrentPlayer());
 
+        // discard selected powerUps
+
+        discardPowerUpShoot(shootAction.getPowerUpList());
+
         if (selected != null) {
 
             // translate the list of point in a list of cell
@@ -679,8 +717,6 @@ public class ActionPhase {
 
             List<List<Player>> targets = new ArrayList<>();
 
-            List<Integer> targetplainList = new ArrayList<>();
-
             // translate the lists of Integer in lists of Players
 
             for (int i = 0; i < shootAction.getTargetIds().size(); i++) {
@@ -690,8 +726,6 @@ public class ActionPhase {
                 for (Integer id : shootAction.getTargetIds().get(i)) {
 
                     temp.add(Model.getPlayer(id));
-
-                    targetplainList.add(id);
                 }
 
                 targets.add(temp);
@@ -700,12 +734,9 @@ public class ActionPhase {
 
             selected.shoot(targets, shootAction.getEffects(), cells);
 
-            // add player shots to the ShotPlayerList
+            // apply targeting Scope if requested
 
-            for (Integer target : targetplainList){
-
-                controller.getShotPlayerThisTurn().add(target);
-            }
+            targetingScope(shootAction.getTargetingScope());
 
         }else {
 
@@ -809,7 +840,7 @@ public class ActionPhase {
      */
     private Boolean checkShootCells(List<Point> cells){
 
-        if (!cells.isEmpty()){
+        if ( (cells != null ) && (!cells.isEmpty()) ){
 
             for (Point cell : cells){
 
@@ -842,7 +873,50 @@ public class ActionPhase {
         return true;
     }
 
+    /**
+     * This method apply a targetingScope on a target if the player have been shot
+     * @param scopeAction is the class containing the parameters for the action
+     */
+    private void  targetingScope(ScopeAction scopeAction){
 
+        if (scopeAction != null) {
+
+            if (controller.getShotPlayerThisTurn().contains(scopeAction.getTargetId())) {
+
+                try {
+
+                    // delete the targetingScope if found
+
+                    Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().getItem(controller.getUtilityMethods().getSpecifiedPowerUp(Arrays.asList(new CachedPowerUp(PowerUpType.TARGETING_SCOPE, scopeAction.getColor()))).get(0));
+
+                    // do the action
+
+                    Model.getPlayer(scopeAction.getTargetId()).addDmg(controller.getCurrentPlayer(), 1);
+
+                    // logs the action
+
+                    LOGGER.log(level, () -> LOG_START_SHOOT + " used Targeting Scope on player: " + scopeAction.getTargetId());
+
+                }catch (CardNotPossessedException e){
+
+                    LOGGER.log(Level.WARNING,e.getMessage(),e);
+                }
+
+            } else {
+
+                LOGGER.log(Level.WARNING, () -> LOG_START_SHOOT + " tried to use TargetingScope on player not targeted ");
+
+                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_TARGETING_SCOPE_ON_NON_TARGETED_PLAYER);
+            }
+
+        }
+
+    }
+
+    /**
+     * This method notify the non current player of the shoot action
+     * @param shootAction is the shoot action made
+     */
     private void notifyShotToOtherPlayer(ShootAction shootAction){
 
         for (List<Integer> targetIdList : shootAction.getTargetIds()) {
@@ -853,6 +927,57 @@ public class ActionPhase {
 
             }
         }
+    }
+
+    private void discardPowerUpShoot(List<CachedPowerUp> cachedPowerUpList) throws CardNotPossessedException{
+
+        for (CachedPowerUp cachedPowerUp : cachedPowerUpList){
+
+            try {
+
+                PowerUp toDiscard = utilityMethods.getSpecifiedPowerUp(Arrays.asList(cachedPowerUp)).get(0);
+
+                discardedPowerUpForRestore.add(toDiscard);
+
+                ammoCubeForRestore.add(Model.getPlayer(controller.getCurrentPlayer()).sellPowerUp(toDiscard));
+
+            }catch (CardNotPossessedException e){
+
+                restoreSellPowerUp();
+
+                LOGGER.log(Level.WARNING, () -> LOG_START_SHOOT + " Player tried to discard powerUp he does not possess ");
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+                throw new CardNotPossessedException();
+            }
+        }
+    }
+
+    /**
+     * This method uses the list of PowerUp discarded prior to shoot to restore the initial values if something went wrong
+     */
+    private void restoreSellPowerUp(){
+
+        for (PowerUp powerUp : discardedPowerUpForRestore) {
+
+            Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().addItem(powerUp);
+        }
+
+        for (AmmoCube ammoCube : ammoCubeForRestore){
+
+            try {
+
+                Model.getPlayer(controller.getCurrentPlayer()).pay(ammoCube.getColor());
+
+            }catch ( CardNotPossessedException e){
+
+                LOGGER.log(Level.WARNING,e.getMessage(),e);
+
+            }
+        }
+
+        discardedPowerUpForRestore.clear();
+        ammoCubeForRestore.clear();
     }
 
 
@@ -1016,6 +1141,8 @@ public class ActionPhase {
 
         this.frenzyShootTemp = frenzyShootTemp.addPart(frenzyShoot);
 
+        if ( !frenzyShootTemp.isFull() ) controller.setExpectingAnswer(true);
+
         if (!checkFrenzyShootMove(frenzyShoot.getMoveAction())){
 
             handleAction();
@@ -1160,6 +1287,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_LOADED);
 
+            restoreSellPowerUp();
+
             return false;
 
         }catch (PlayerInSameCellException e){
@@ -1167,6 +1296,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
+
+            restoreSellPowerUp();
 
             return false;
 
@@ -1176,6 +1307,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_DIFFERENT_CELL);
 
+            restoreSellPowerUp();
+
             return false;
 
         }catch (UncorrectDistanceException e){
@@ -1183,6 +1316,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
+
+            restoreSellPowerUp();
 
             return false;
 
@@ -1192,6 +1327,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_SEEABLE_PLAYER);
 
+            restoreSellPowerUp();
+
             return false;
 
         }catch (UncorrectEffectsException e){
@@ -1199,6 +1336,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
+
+            restoreSellPowerUp();
 
             return false;
 
@@ -1208,6 +1347,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_NOT_CORRECT_PLAYER_NUMBER);
 
+            restoreSellPowerUp();
+
             return false;
 
         }catch (PlayerNotSeeableException e){
@@ -1215,6 +1356,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
+
+            restoreSellPowerUp();
 
             return false;
 
@@ -1224,6 +1367,8 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
+            restoreSellPowerUp();
+
             return false;
 
         } catch (CardNotPossessedException e) {
@@ -1231,6 +1376,8 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " card not found ");
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+
+            restoreSellPowerUp();
 
             return false;
 
@@ -1240,6 +1387,8 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_NO_ENOUGH_AMMO);
 
+            restoreSellPowerUp();
+
             return false;
 
         } catch (DifferentPlayerNeededException e) {
@@ -1248,11 +1397,15 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_DIFFERENT_PLAYER_NEEDED);
 
+            restoreSellPowerUp();
+
             return false;
 
         } catch (ArgsNotValidatedException e){
 
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " ArgsNotValidatedException ");
+
+            restoreSellPowerUp();
 
             return false;
 
@@ -1261,6 +1414,8 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " cell specified in effect is null in model ");
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+            restoreSellPowerUp();
 
             handleAction();
 
