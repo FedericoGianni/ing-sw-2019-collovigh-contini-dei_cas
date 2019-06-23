@@ -41,6 +41,7 @@ public class DefaultReplies {
     public static final String DEFAULT_NO_TARGETS_SPECIFIED = "NO_TARGETS_SPECIFIED";
     public static final String DEFAULT_INEXISTENT_TARGETS =  "UNEXISTENT_TARGETS";
     public static final String DEFAULT_DIFFERENT_PLAYER_NEEDED = "DIFFERENT_PLAYER_NEEDED";
+    public static final String DEFAULT_TARGETING_SCOPE_ON_NON_TARGETED_PLAYER = "TARGETING_SCOPE_ON_NON_TARGETED_PLAYER";
 
 
     public static final String DEFAULT_RECEIVED_FRENZY_BUT_EXPECTED_NORMAL = "RECEIVED_FRENZY_BUT_EXPECTED_NORMAL";
@@ -49,5 +50,6 @@ public class DefaultReplies {
     public static final String DEFAULT_NO_ENOUGH_AMMO = "NO_ENOUGH_AMMO";
     public static final String DEFAULT_WEAPON_ALREADY_LOADED = "WEAPON_ALREADY_LOADED";
 
-
+    private DefaultReplies() {
+    }
 }

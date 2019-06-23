@@ -5,10 +5,17 @@ import it.polimi.ingsw.utils.PowerUpType;
 
 public class ScopeAction extends PowerUpAction {
 
-    public ScopeAction(Color color) {
+    private final Integer targetId;
+
+    public ScopeAction(Color color, int targetId) {
 
         super(color, PowerUpType.TARGETING_SCOPE);
 
+        this.targetId = targetId;
+
     }
 
+    public Integer getTargetId() {
+        return targetId;
+    }
 }

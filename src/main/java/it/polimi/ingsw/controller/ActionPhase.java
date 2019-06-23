@@ -11,6 +11,7 @@ import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.actions.*;
+import it.polimi.ingsw.view.actions.usepowerup.ScopeAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
@@ -679,8 +680,6 @@ public class ActionPhase {
 
             List<List<Player>> targets = new ArrayList<>();
 
-            List<Integer> targetplainList = new ArrayList<>();
-
             // translate the lists of Integer in lists of Players
 
             for (int i = 0; i < shootAction.getTargetIds().size(); i++) {
@@ -690,8 +689,6 @@ public class ActionPhase {
                 for (Integer id : shootAction.getTargetIds().get(i)) {
 
                     temp.add(Model.getPlayer(id));
-
-                    targetplainList.add(id);
                 }
 
                 targets.add(temp);
@@ -700,12 +697,9 @@ public class ActionPhase {
 
             selected.shoot(targets, shootAction.getEffects(), cells);
 
-            // add player shots to the ShotPlayerList
+            // apply targeting Scope if requested
 
-            for (Integer target : targetplainList){
-
-                controller.getShotPlayerThisTurn().add(target);
-            }
+            targetingScope(shootAction.getTargetingScope());
 
         }else {
 
@@ -809,7 +803,7 @@ public class ActionPhase {
      */
     private Boolean checkShootCells(List<Point> cells){
 
-        if (!cells.isEmpty()){
+        if ( (cells != null ) && (!cells.isEmpty()) ){
 
             for (Point cell : cells){
 
@@ -842,7 +836,35 @@ public class ActionPhase {
         return true;
     }
 
+    /**
+     * This method apply a targetingScope on a target if the player have been shot
+     * @param scopeAction is the class containing the parameters for the action
+     */
+    private void  targetingScope(ScopeAction scopeAction){
 
+        if (scopeAction != null) {
+
+            if (controller.getShotPlayerThisTurn().contains(scopeAction.getTargetId())) {
+
+                LOGGER.log(level, () -> LOG_START_SHOOT + " used Targeting Scope on player: " + scopeAction.getTargetId());
+
+                Model.getPlayer(scopeAction.getTargetId()).addDmg(controller.getCurrentPlayer(), 1);
+
+            } else {
+
+                LOGGER.log(Level.WARNING, () -> LOG_START_SHOOT + " tried to use TargetingScope on player not targeted ");
+
+                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_TARGETING_SCOPE_ON_NON_TARGETED_PLAYER);
+            }
+
+        }
+
+    }
+
+    /**
+     * This method notify the non current player of the shoot action
+     * @param shootAction is the shoot action made
+     */
     private void notifyShotToOtherPlayer(ShootAction shootAction){
 
         for (List<Integer> targetIdList : shootAction.getTargetIds()) {
@@ -1015,6 +1037,8 @@ public class ActionPhase {
         LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + " calling Move in frenzy mode ");
 
         this.frenzyShootTemp = frenzyShootTemp.addPart(frenzyShoot);
+
+        if ( !frenzyShootTemp.isFull() ) controller.setExpectingAnswer(true);
 
         if (!checkFrenzyShootMove(frenzyShoot.getMoveAction())){
 

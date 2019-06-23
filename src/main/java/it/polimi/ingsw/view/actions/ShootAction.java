@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.actions;
 
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.view.actions.usepowerup.ScopeAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.awt.*;
@@ -11,7 +12,9 @@ public class ShootAction extends JsonAction{
 
     private final Directions move;
 
-    private final CachedPowerUp targetingScope;
+    private final ScopeAction targetingScope;
+
+    private final List<CachedPowerUp> powerUpList;
 
     private final List<List<Integer>> targetIds;
     private final List<Integer> effects;
@@ -19,7 +22,7 @@ public class ShootAction extends JsonAction{
 
     private final String weaponName;
 
-    public ShootAction(String weaponName,List<List<Integer>> targetIds, List<Integer> effects, List<Point> cells,CachedPowerUp targetingScope) {
+    public ShootAction(String weaponName,List<List<Integer>> targetIds, List<Integer> effects, List<Point> cells, List<CachedPowerUp> powerUpList, ScopeAction scopeAction) {
 
         super(ActionTypes.SHOOT);
 
@@ -33,11 +36,13 @@ public class ShootAction extends JsonAction{
 
         this.cells = cells;
 
-        this.targetingScope = targetingScope;
+        this.targetingScope = scopeAction;
+
+        this.powerUpList = powerUpList;
 
     }
 
-    public ShootAction( String weaponName, Directions move, List<List<Integer>> targetIds, List<Integer> effects, List<Point> cells,CachedPowerUp targetingScope ) {
+    public ShootAction( String weaponName, Directions move, List<List<Integer>> targetIds, List<Integer> effects, List<Point> cells, List<CachedPowerUp> powerUpList, ScopeAction scopeAction ) {
 
         super(ActionTypes.SHOOT);
 
@@ -51,7 +56,9 @@ public class ShootAction extends JsonAction{
 
         this.cells = cells;
 
-        this.targetingScope = targetingScope;
+        this.targetingScope = scopeAction;
+
+        this.powerUpList = powerUpList;
     }
 
     public Directions getMove() {
@@ -72,5 +79,13 @@ public class ShootAction extends JsonAction{
 
     public String getWeaponName() {
         return weaponName;
+    }
+
+    public ScopeAction getTargetingScope() {
+        return targetingScope;
+    }
+
+    public List<CachedPowerUp> getPowerUpList() {
+        return powerUpList;
     }
 }

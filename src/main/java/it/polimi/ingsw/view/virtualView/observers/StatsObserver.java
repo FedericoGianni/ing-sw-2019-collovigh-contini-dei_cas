@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.virtualView.observers;
 
+import it.polimi.ingsw.controller.TurnPhase;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
@@ -17,6 +18,7 @@ public class StatsObserver implements Observer {
     private static Level level = Level.FINE;
 
     private final PlayerObserver playerObserver;
+    private Stats previousStats;
     private Stats stats;
 
     public StatsObserver(PlayerObserver up) {
@@ -24,21 +26,16 @@ public class StatsObserver implements Observer {
         this.playerObserver = up;
     }
 
+    /**
+     *
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void update(Object object) {
 
+        // get the update Class
 
-        // cast the Object in its dynamic type
-
-        this.stats = (Stats) object;
-
-        // check if the player is dead
-
-        checkPlayerDead((Stats) object);
-
-        // encapsulate the update in the update Class
-
-        UpdateClass updateClass = new CachedStats(playerObserver.getPlayerId(),stats.getScore(),stats.getDeaths(),stats.getOnline(),stats.getMarks(),stats.getDmgTaken(), Model.getMap().cellToCoord(stats.getCurrentPosition()));
+        UpdateClass updateClass = genUpdateClass(object);
 
         // send the update to the Virtual View
 
@@ -49,20 +46,18 @@ public class StatsObserver implements Observer {
 
     }
 
+    /**
+     *
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void updateSinge(int playerId, Object object) {
 
         LOGGER.log(level,"[Stats-Observer] sending Reconnection DATA to player: {0}", playerId);
 
-        this.stats = (Stats) object;
+        // get the update Class
 
-        // check if the player is dead
-
-        checkPlayerDead((Stats) object);
-
-        // encapsulate the update in the update Class
-
-        UpdateClass updateClass = new CachedStats(playerObserver.getPlayerId(),stats.getScore(),stats.getDeaths(),stats.getOnline(),stats.getMarks(),stats.getDmgTaken(), Model.getMap().cellToCoord(stats.getCurrentPosition()));
+        UpdateClass updateClass = genUpdateClass(object);
 
         // send the update to the Virtual View
 
@@ -97,5 +92,50 @@ public class StatsObserver implements Observer {
             }
 
         }
+    }
+
+    /**
+     * This method perform a check on whether or not the player has been shot and if that is the case notify the controller
+     * @param stats is the stats class received
+     */
+    private void notifyPlayerShotToController(Stats stats){
+
+        // if the player has received dmg or marks in the action phase and is not already in the shotList
+
+        if ( ( playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION1) || playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION2) ) && ( (!previousStats.getDmgTaken().equals(stats.getDmgTaken())) || (!previousStats.getMarks().equals(stats.getMarks())) ) && (! playerObserver.getTopClass().getController().getShotPlayerThisTurn().contains(stats.getPlayerId())) ){
+
+            // adds the player to the list of shot player if not present
+
+            playerObserver.getTopClass().getController().getShotPlayerThisTurn().add(stats.getPlayerId());
+
+        }
+    }
+
+    /**
+     * This method generates the updateClass to send to the Views
+     * @param object is the observable class that has been modified
+     * @return a new UpdateClass containing the updates to send to the view
+     */
+    private UpdateClass genUpdateClass(Object object){
+
+        // stores the previous value
+
+        this.previousStats = stats;
+
+        // cast the Object in its dynamic type  and stores a clone of it
+
+        this.stats = new Stats((Stats) object);
+
+        // check if the player has been shot
+
+        notifyPlayerShotToController((Stats) object);
+
+        // check if the player is dead
+
+        checkPlayerDead((Stats) object);
+
+        // encapsulate the update in the update Class
+
+        return new CachedStats(playerObserver.getPlayerId(),stats.getScore(),stats.getDeaths(),stats.getOnline(),stats.getMarks(),stats.getDmgTaken(), Model.getMap().cellToCoord(stats.getCurrentPosition()));
     }
 }

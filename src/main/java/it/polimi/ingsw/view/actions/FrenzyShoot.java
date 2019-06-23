@@ -116,6 +116,11 @@ public class FrenzyShoot extends JsonAction {
         return ( (moveAction != null) && (reloadAction != null) );
     }
 
+    public Boolean isFull(){
+
+        return ( (moveAction != null) && (reloadAction != null) && (shootAction != null) );
+    }
+
     /**
      * This method merge two frenzyShoot actions into one with more parameters, allowing the possibility of a modular action
      * @param frenzyShoot is the source frenzy shoot action
