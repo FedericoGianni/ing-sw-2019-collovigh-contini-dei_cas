@@ -170,11 +170,20 @@ public class Damage extends MicroEffect {
     }
 
     @Override
-    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException, PlayerNotSeeableException, PrecedentPlayerNeededException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
+    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException, PlayerNotSeeableException, PrecedentPlayerNeededException, DifferentPlayerNeededException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
         System.out.println("------------------------------------");
         System.out.println("Damage Effect!");
        print();
        System.out.println("------------------------------------");
+       for(int i=0;i<playerList.size();i++)//i can't shoot more times to the same target
+       {
+           for(int j=0;j<playerList.size();j++)
+           {
+               if(i!=j && playerList.get(i)== playerList.get(j))
+                   throw new DifferentPlayerNeededException();
+           }
+
+       }
         if(alreadyTargeted==true && differentPlayer==false)//1 target, one of the firstTargets
         {
 
@@ -190,8 +199,11 @@ public class Damage extends MicroEffect {
             {
                 if(p==playerList.get(0))
                 {
+                    System.out.println("!!!!!!! Bersaglio ha subito questi danni: "+playerList.get(0).getStats().getDmgTaken().size());
+                    System.out.println("Il bersaglio subisce "+damage+" danni");
+                    playerList.get(0).addDmg(w.isPossessedBy().getPlayerId(),damage);
+                    System.out.println(" Bersaglio ha subito questi danni: "+playerList.get(0).getStats().getDmgTaken().size()+" !!!!!!!");
 
-                    p.addDmg(w.isPossessedBy().getPlayerId(),damage);
                     w.removeFromFirstTargets(p);
                 }
             }
@@ -241,10 +253,30 @@ public class Damage extends MicroEffect {
             
          if(playerNum==100)
         {
-            for(Player item : playerList)//check that everyone is in the same cells
+
+            if(melee==true)// only electroshyte I e II
             {
+                for(Player p:w.isPossessedBy().getCurrentPosition().getPlayers())
+                {
+                    p.addDmg(w.isPossessedBy().getPlayerId(),damage);
+                }
+                return;
+            }
+            if(c!=null)//Granade launcher 2, has cell different from 0
+            {
+                System.out.println("aaaaaaaaaaaaaaaa");
+                for(Player item : c.getPlayers())
+                {
+                    item.addDmg(w.isPossessedBy().getPlayerId(),damage);
+                }
+                return;
+            }
+            for(Player item : playerList)
+            {
+
                 sameCellCheck(item,playerList);
             }
+            System.out.println("porco pony");
             for(Player item:playerList)
             {
                 distance(item,w.isPossessedBy());
@@ -300,7 +332,10 @@ public class Damage extends MicroEffect {
     {
         if(distMin==0)//no more controls neeeded
         {
+            System.out.println("!!!!!!! Bersaglio ha subito questi danni: "+target.getStats().getDmgTaken().size());
+            System.out.println("Il bersaglio subisce "+damage+" danni");
             target.addDmg(shooter.getPlayerId(),damage);
+            System.out.println(" Bersaglio ha subito questi danni: "+target.getStats().getDmgTaken().size()+" !!!!!!!");
         }
         if(melee==true)
         {

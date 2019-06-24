@@ -27,7 +27,7 @@ public class NormalWeapon extends Weapon{
     private boolean isLoaded;
     private List<AmmoCube> cost;
     private List<MacroEffect> effects;
-
+    private List <String> exclusiveEffect;
 
     public boolean isMoveBefore() {
         return moveBefore;
@@ -117,6 +117,14 @@ public class NormalWeapon extends Weapon{
         this.cost = cost;//rememeber that the firts is already payed
         effects=new ArrayList<>();
         effects=l;
+        exclusiveEffect=new ArrayList<>();
+        exclusiveEffect.add("ELECTROSCYTHE");
+        exclusiveEffect.add("TRACTOR BEAM");
+        exclusiveEffect.add("HEATSEEKER");
+        exclusiveEffect.add("ZX-2");
+        exclusiveEffect.add("SHOTGUN");
+        exclusiveEffect.add("SHOCKWAVE");
+        exclusiveEffect.add("SLEDGEHAMMER");
     }
 
     public NormalWeapon(NormalWeapon clone){
@@ -376,7 +384,7 @@ public class NormalWeapon extends Weapon{
      * @throws WeaponNotLoadedException
      * @throws NotEnoughAmmoException
      */
-    public void shoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException, PrecedentPlayerNeededException {
+    public void shoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException, PrecedentPlayerNeededException, UncorrectEffectsException {
 
         List<List<Player>> targetsCopy=new ArrayList<>();
         //now i create the fake players
@@ -397,6 +405,11 @@ public class NormalWeapon extends Weapon{
         }
 
       try {
+          if(exclusiveEffect.contains(this.getName()))
+          {
+              if(effect.size()>1)
+                  throw new UncorrectEffectsException();
+          }
           if (!this.isLoaded())//if actual weapon is not loaded
           {
               throw new WeaponNotLoadedException();//weapon not loaded
@@ -438,6 +451,7 @@ public class NormalWeapon extends Weapon{
               {
                   if (cells != null && !cells.isEmpty())//if you also have mover effects
                   {
+                      System.out.println(cells.get(macroCont));
                       micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont),macroCont);
                   }//the method that applies the effects
                   else {

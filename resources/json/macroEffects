@@ -113,13 +113,7 @@
         {
           "type": "107"
         }
-      ],
-
-        "cost": [
-          {
-            "ammoC": "YELLOW"
-          }
-        ]
+      ]
     }
   },
   {
@@ -430,12 +424,7 @@
       "name": "basic effect",
       "MicroEff": [
         {
-          "type": "111"
-        }
-      ],
-      "cost": [
-        {
-          "ammoC": "YELLOW"
+          "type": "101"
         }
       ]
     }
