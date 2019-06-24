@@ -598,7 +598,7 @@ class NormalWeaponTest {
         targets0.add(target1);
         targets1.add(target2);
         targetLists.add(targets0);
-        //targetLists.add(targets1);
+        targetLists.add(targets1);
         Model.getMap().setUnvisited();
         System.out.println("Weapon " + weapons.get(4).getName());
 
@@ -606,9 +606,8 @@ class NormalWeaponTest {
             //NOTE This weapon has EXCLUSIVE effect types
             ArrayList<Integer> mEf = new ArrayList<>();
             mEf.add(0);
-            //mEf.add(1);
+           // mEf.add(1);//only one usable effect per shoot
             List<Cell> cells = new ArrayList<>();
-            cells.add(Model.getMap().getCell(1,1));
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
@@ -634,9 +633,18 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (UncorrectEffectsException e) {
             e.printStackTrace();
-        } catch (Exception e){
-            e.getMessage();
+        } catch (CardNotPossessedException e) {
+            e.printStackTrace();
+        } catch (CellNonExistentException e) {
+            e.printStackTrace();
+        } catch (PrecedentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
         }
+
 
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
@@ -686,7 +694,7 @@ class NormalWeaponTest {
         List<Cell> cells=new ArrayList<>();
         //first traget don't move
         cells.add(null);
-        cells.add(shooter.getCurrentPosition());
+        cells.add(shooter.getCurrentPosition());//even "Null" is ok
         try{
             ArrayList <Integer>mEf=new ArrayList<>();
             //mEf.add(0);//tractor beam-- don't move(because you can see it) then 1 dmg
@@ -700,7 +708,31 @@ class NormalWeaponTest {
 
             assertEquals(shooter.getCurrentPosition(),target1.getCurrentPosition());
 
-        } catch(Exception e){
+        } catch(PlayerNotSeeableException e){
+            e.printStackTrace();
+        } catch (PrecedentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (CardNotPossessedException e) {
+            e.printStackTrace();
+        } catch (WeaponNotLoadedException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (CellNonExistentException e) {
+            e.printStackTrace();
+        } catch (SeeAblePlayerException e) {
             e.printStackTrace();
         }
     }
@@ -937,7 +969,8 @@ class NormalWeaponTest {
             mEf.add(1);
 
             List<Cell> cells = new ArrayList<>();
-            cells.add(Model.getMap().getCell(1,1));
+            cells.add(null);
+            cells.add(Model.getMap().getCell(1,0));
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
@@ -969,6 +1002,8 @@ class NormalWeaponTest {
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
         assert(target1.getStats().getDmgTaken().size() ==1);
+        assert(target1.getCurrentPosition().equals(Model.getMap().getCell(1,0)));
+        //assert(shooter.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,0)));
         assert(target2.getStats().getDmgTaken().size() ==1);
     }
 

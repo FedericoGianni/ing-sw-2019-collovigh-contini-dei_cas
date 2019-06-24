@@ -77,10 +77,12 @@ public class Mover extends MicroEffect {
             System.out.println("celleee2");
             if (myCell == true)//tractor beam second
             {      //here the geometrical distance is correct
+                c=w.isPossessedBy().getCurrentPosition();
                 if (playerList.size() > 1 && Map.getDist(w.isPossessedBy().getCurrentPosition(), c) < cellNumber)//tractor beam peculiarities--max 2 targets, in this case is another
                 {
                     playerList.get(1).setPlayerPos(w.isPossessedBy().getCurrentPosition());
                 } else if (Map.getDist(w.isPossessedBy().getCurrentPosition(), c) < cellNumber) {//case same target
+
                     playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
                 } else {
                     throw new UncorrectDistanceException();
