@@ -969,8 +969,8 @@ class NormalWeaponTest {
             mEf.add(1);
 
             List<Cell> cells = new ArrayList<>();
-            cells.add(null);
             cells.add(Model.getMap().getCell(1,0));
+            cells.add(Model.getMap().getCell(1,1));//if cell != null teh second effect fa roba
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
@@ -1050,10 +1050,9 @@ class NormalWeaponTest {
         targets0.add(target1);
         //targets1.add(target2);
         //targets0.add(target2);
-        List<Player> targets2 = new ArrayList<>();
+
         targetLists.add(targets0);
         targetLists.add(targets1);
-        targetLists.add(targets2);
         Model.getMap().setUnvisited();
 
         try {
@@ -1066,6 +1065,7 @@ class NormalWeaponTest {
             List<Cell> cells = new ArrayList<>();
             cells.add(Model.getMap().getCell(0,3));
             cells.add(Model.getMap().getCell(0,0));
+            cells.add(null);//add original cell
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
@@ -1091,17 +1091,25 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (UncorrectEffectsException e) {
             e.printStackTrace();
-        } catch (Exception e){
-            e.getMessage();
+        } catch (CardNotPossessedException e) {
+            e.printStackTrace();
+        } catch (CellNonExistentException e) {
+            e.printStackTrace();
+        } catch (PrecedentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
         }
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
-        assert(target1.getStats().getDmgTaken().size() ==2);
-        System.out.println("position after" + target1.getStats().getCurrentPosition());
-        //assert(target1.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,3)));
+        assert(target1.getStats().getDmgTaken().size() ==3);
+
+        assert(target1.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,3)));
         assert(shooter.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,0)));
         //assert(target2.getStats().getDmgTaken().size() == 1);
-        //assert(target2.getStats().getDmgTaken().size() ==1);
+        assert(target2.getStats().getDmgTaken().size() ==1);
     }
 
     @Test
@@ -1146,8 +1154,8 @@ class NormalWeaponTest {
         List targets2 = new ArrayList();
         List<List<Player>> targetLists = new ArrayList<>();
         targets0.add(target1);
-        targets1.add(target1);
-        targets2.add(target1);
+        targets1.add(target2);
+        targets2.add(target2);
 
         //targets0.add(target2);
         targetLists.add(targets0);
@@ -1188,8 +1196,16 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (UncorrectEffectsException e) {
             e.printStackTrace();
-        } catch (Exception e){
-            e.getMessage();
+        } catch (CardNotPossessedException e) {
+            e.printStackTrace();
+        } catch (CellNonExistentException e) {
+            e.printStackTrace();
+        } catch (PrecedentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
         }
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
@@ -1239,19 +1255,17 @@ class NormalWeaponTest {
         List targets2 = new ArrayList();
         List<List<Player>> targetLists = new ArrayList<>();
         targets0.add(target1);
-        targets1.add(target2);
-        targets1.add(target1);
+        targets0.add(target2);
         //targets2.add(target1);
 
         //targets0.add(target2);
         targetLists.add(targets0);
-        targetLists.add(targets1);
         //targetLists.add(targets2);
         Model.getMap().setUnvisited();
 
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
-            mEf.add(0);
+            //mEf.add(0);
             mEf.add(1);
             //System.out.println("position before" + target1.getStats().getCurrentPosition());
 
@@ -1287,7 +1301,11 @@ class NormalWeaponTest {
         }
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
-        assert(target1.getStats().getDmgTaken().size() ==1);
+        System.out.println("target1 mark" + target1.getStats().getMarks().size());
+        System.out.println("target2 mark" + target2.getStats().getMarks().size());
+
+        assert(target1.getStats().getMarks().size() ==1);
+        assert(target2.getStats().getMarks().size() ==1);
         //assert(target1.getStats().getMarks().size() == 2); not working effect1
         //assert(target1.getStats().getMarks().size() == 1); not working effect2
         //assert(target2.getStats().getMarks().size() == 1);
@@ -1319,7 +1337,7 @@ class NormalWeaponTest {
         shooter.setPlayerPos(Model.getMap().getCell(0,0));
 
         Player target1 = Model.getPlayer(1);
-        target1.setPlayerPos(Model.getMap().getCell(0,1));
+        target1.setPlayerPos(Model.getMap().getCell(0,0));
 
         Player target2 = Model.getPlayer(2);
         target2.setPlayerPos(Model.getMap().getCell(1,1));
@@ -1332,29 +1350,21 @@ class NormalWeaponTest {
         shooter.addWeapon(weapons.get(11));
         System.out.println("Weapon name: " +weapons.get(11).getName());
         List targets0=new ArrayList();
-        List targets1=new ArrayList();
-        List targets2 = new ArrayList();
+
         List<List<Player>> targetLists = new ArrayList<>();
         targets0.add(target1);
-        //targets1.add(target2);
-        //targets1.add(target1);
-        //targets2.add(target1);
 
-        //targets0.add(target2);
         targetLists.add(targets0);
-        //targetLists.add(targets1);
-        //targetLists.add(targets2);
         Model.getMap().setUnvisited();
 
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
-            //mEf.add(0);
-            mEf.add(1);
-            //System.out.println("position before" + target1.getStats().getCurrentPosition());
+            mEf.add(0);
+            //mEf.add(1);
 
             List<Cell> cells = new ArrayList<>();
             cells.add(Model.getMap().getCell(1,0));
-            shooter.getWeapons().get(0).shoot(targetLists, mEf, null);
+            shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
             System.out.println(target1.getStats().getMarks());
@@ -1384,7 +1394,7 @@ class NormalWeaponTest {
         }
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
-        assert(target1.getStats().getDmgTaken().size() ==3);
+        assert(target1.getCurrentPosition().equals(Model.getMap().getCell(1,0)));
         //assert(target1.getStats().getCurrentPosition().equals(Model.getMap().getCell(1,0)));
 
     }

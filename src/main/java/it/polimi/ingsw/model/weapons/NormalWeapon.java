@@ -414,7 +414,12 @@ public class NormalWeapon extends Weapon{
           {
               throw new WeaponNotLoadedException();//weapon not loaded
           }
-
+          if(this.getName().compareTo("ROCKET LAUNCHER")==0 && effect.size()==3)//if you use the third effect of rocket launcher
+          {
+                List <Player>pl=new ArrayList<>();
+                pl.addAll(targetLists.get(0).get(0).getCurrentPosition().getPlayers());
+                targetLists.add(pl);
+          }
           for (int macroCont = 0; macroCont < effect.size(); macroCont++)//iterate macroeffect
           {
 
@@ -451,7 +456,7 @@ public class NormalWeapon extends Weapon{
               {
                   if (cells != null && !cells.isEmpty())//if you also have mover effects
                   {
-                      System.out.println(cells.get(macroCont));
+
                       micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont),macroCont);
                   }//the method that applies the effects
                   else {

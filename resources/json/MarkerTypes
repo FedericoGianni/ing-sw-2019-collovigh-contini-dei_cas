@@ -43,7 +43,7 @@
     "Marker": {
       "markers": "2",
       "playerNum": "1",
-      "seeAbleTargetNeeded": "false",
+      "seeAbleTargetNeeded": "true",
       "differentPlayer": "false"
     }
   },

@@ -166,12 +166,12 @@
   {
     "Damage": {
       "damage": "1",
-      "playerNum": "100",
-      "seeAbleTargetNeeded": "true",
+      "playerNum": "9999999",
+      "seeAbleTargetNeeded": "false",
       "melee": "false",
       "differentPlayer":"false",
       "distMin": "0",
-      "alreadyTargeted": "true"
+      "alreadyTargeted": "false"
 
     }
   },
@@ -217,7 +217,7 @@
       "seeAbleTargetNeeded": "true",
       "melee": "true",
       "differentPlayer":"false",
-      "distMin": "0",
+      "distMin": "9999",
       "alreadyTargeted": "false"
     }
   },

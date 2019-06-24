@@ -124,6 +124,7 @@ public class Marker extends MicroEffect {
      */
     @Override
     public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws  PlayerInDifferentCellException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
+        print();
         if (differentPlayer==true)//only one case
         {
 
@@ -159,6 +160,10 @@ public class Marker extends MicroEffect {
 
             if(playerList.size()>playerNum/1000){
                 throw new NotCorrectPlayerNumberException();
+            }
+            for(Player p:playerList)
+            {
+                p.addMarks(w.isPossessedBy().getPlayerId(),markers);
             }
 
         }else{//player num is what is written
