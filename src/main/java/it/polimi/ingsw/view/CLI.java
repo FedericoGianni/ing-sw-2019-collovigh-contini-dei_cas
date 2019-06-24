@@ -23,8 +23,7 @@ import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.UpdateType;
-import it.polimi.ingsw.view.updates.otherplayerturn.PowerUpTurnUpdate;
-import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
+import it.polimi.ingsw.view.updates.otherplayerturn.*;
 
 import java.awt.*;
 import java.util.List;
@@ -295,7 +294,7 @@ public class CLI implements UserInterface {
 
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
                     //new positions
-                    System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è spostato!" + ANSI_RESET.escape());
+                    //System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è spostato!" + ANSI_RESET.escape());
                     int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                     int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 
@@ -309,6 +308,7 @@ public class CLI implements UserInterface {
                     show(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
                 }
 
+                //damage taken
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null) {
                     //TODO show dmg updates or let the user sees them from player info?
                 }
@@ -364,8 +364,7 @@ public class CLI implements UserInterface {
                 break;
 
             case TURN:
-
-
+                //TODO call notifyTurnUpdate passaing a TurnUpdate as parameter
                 break;
 
             default:
@@ -378,32 +377,41 @@ public class CLI implements UserInterface {
 
     private void notifyTurnUpdate(TurnUpdate turnUpdate) {
 
-        PowerUpTurnUpdate t;
+        PowerUpTurnUpdate powerUpTurnUpdate;
+        ShootTurnUpdate shootTurnUpdate;
+        GrabTurnUpdate grabTurnUpdate;
+        MoveTurnUpdate moveTurnUpdate;
 
         switch (turnUpdate.getActionType()) {
 
             case POWERUP:
-                //TODO
-                t = (PowerUpTurnUpdate) turnUpdate;
-                System.out.println("[!] Il giocatore " + turnUpdate.getPlayerId() +
-                        "ha usato il powerUp " + t.getPowerUp());
+
+                powerUpTurnUpdate = (PowerUpTurnUpdate) turnUpdate;
+                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha usato il powerUp " + powerUpTurnUpdate.getPowerUp() + ANSI_RESET.escape());
                 break;
 
             case SHOOT:
 
-                //TODO
-
+                shootTurnUpdate = (ShootTurnUpdate) turnUpdate;
+                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha sparato con l'arma " + shootTurnUpdate.getWeapon() + " al player con id: " +
+                        shootTurnUpdate.getTargetId() + ANSI_RESET.escape());
                 break;
 
             case GRAB:
 
-                //TODO
+                grabTurnUpdate = (GrabTurnUpdate) turnUpdate;
+                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha raccolto " + grabTurnUpdate.getWeapon() + ANSI_RESET.escape());
 
                 break;
 
             case MOVE:
 
-                //TODO
+                moveTurnUpdate = (MoveTurnUpdate) turnUpdate;
+                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " si è mosso" + ANSI_RESET.escape());
 
                 break;
 
@@ -1069,7 +1077,7 @@ public class CLI implements UserInterface {
             try {
                 buy = scanner.nextInt();
 
-                if (buy >= 0 && buy <= weapons.size()) {
+                if (buy >= 0 && buy < weapons.size()) {
                     valid = true;
                 } else {
                     System.out.println("Numero non valido! Riprova >>> ");
@@ -1192,7 +1200,6 @@ public class CLI implements UserInterface {
 
                 if (powerUpOrAmmo.toUpperCase().equals("SI")) {
 
-                    //TODO fargli scegliere quale powerup scartare (2 tipi != ma stesso colore)
                     List<CachedPowerUp> powerUpChoiceList = powerUps
                             .stream()
                             .filter(x -> x.getColor().equals(c))
@@ -1667,9 +1674,9 @@ public class CLI implements UserInterface {
             System.out.println("Seleziona i bersagli a cui vuoi sparare: ");
             System.out.println("Effetto: " + i);
 
-            for (int j = 0; j < w.getEffectRequirements().get(i).getNumberOfTargets().size(); j++) {
+            int cont = 0;
 
-                int cont = 0;
+            for (int j = 0; j < w.getEffectRequirements().get(i).getNumberOfTargets().size(); j++) {
 
                 do {
 
@@ -1678,6 +1685,7 @@ public class CLI implements UserInterface {
                     System.out.println("Seleziona un bersaglio (ID) >>> ");
 
                     try {
+                        
                         if(cont >= 1){
                             System.out.println("9 -> per selezionare solo questi bersagli.");
                         }
@@ -1687,9 +1695,9 @@ public class CLI implements UserInterface {
                         read = scanner.nextInt();
 
                         if(read >= 0 && read <= view.getCacheModel().getCachedPlayers().size() && read != view.getPlayerId()){
+                            cont++;
                             valid = true;
                             tempTargetList.add(read);
-                            cont++;
                         } else if(read == 9){
                             //TODO check if it works, should let him target up to max target (min 1) instead of exactly max
                             valid = true;
