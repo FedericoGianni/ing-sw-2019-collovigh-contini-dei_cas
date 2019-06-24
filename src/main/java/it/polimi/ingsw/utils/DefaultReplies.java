@@ -13,7 +13,9 @@ public class DefaultReplies {
 
     public static final String DEFAULT_PLAYER_USED_NEWTON_ON_HIMSELF = "PLAYER_USED_NEWTON_ON_HIMSELF";
     public static final String DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP = "PLAYER_DOES_NOT_POSSESS_POWERUP";
-    public static final String DEFAULT_CELL_NOT_EXISTENT = "CELL_NOT_EXISTENT";
+
+    public static final String DEFAULT_CELL_NOT_EXISTENT = ANSI_YELLOW.escape() +
+            "[!] Cella non esistente!" + ANSI_RESET.escape();
 
     // action phase
 
@@ -78,5 +80,5 @@ public class DefaultReplies {
 
     public static final String DEFAULT_WEAPON_ALREADY_LOADED = ANSI_YELLOW.escape() +
             "[!] Arma già carica!" + ANSI_RESET.escape();
-    
+
 }

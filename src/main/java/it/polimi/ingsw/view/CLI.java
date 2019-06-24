@@ -375,6 +375,10 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * Notify update regarding other players actions
+     * @param turnUpdate
+     */
     private void notifyTurnUpdate(TurnUpdate turnUpdate) {
 
         PowerUpTurnUpdate powerUpTurnUpdate;

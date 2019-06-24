@@ -199,42 +199,54 @@ public class CacheModel {
 
     public static String showDmgTaken(int playerId, List<Integer> dmgTaken){
 
-        String s = "Danni: [ ";
+        String header = "Danni";
+        return showColoredIntList(playerId, dmgTaken, header);
+    }
 
-        for (int i = 0; i < dmgTaken.size(); i++) {
-            switch (dmgTaken.get(i)){
+    public static String showMarksTaken(int playerId, List<Integer> playerMarks){
+
+        String header = "Marchi";
+        return showColoredIntList(playerId, playerMarks, header);
+
+    }
+
+    public static String showColoredIntList(int playerId, List<Integer> list, String header){
+        String s = header + ": [";
+
+        for (int i = 0; i < list.size(); i++) {
+            switch (list.get(i)){
                 case 0:
-                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(list.get(i)).getPlayerColor()).escape());
                     s = s.concat("0");
                     s = s.concat(AsciiColor.ANSI_RESET.escape());
                     break;
 
                 case 1:
-                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(list.get(i)).getPlayerColor()).escape());
                     s = s.concat("1");
                     s = s.concat(AsciiColor.ANSI_RESET.escape());
                     break;
 
                 case 2:
-                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(list.get(i)).getPlayerColor()).escape());
                     s = s.concat("2");
                     s = s.concat(AsciiColor.ANSI_RESET.escape());
                     break;
 
                 case 3:
-                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(list.get(i)).getPlayerColor()).escape());
                     s = s.concat("3");
                     s = s.concat(AsciiColor.ANSI_RESET.escape());
                     break;
 
                 case 4:
-                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(list.get(i)).getPlayerColor()).escape());
                     s = s.concat("4");
                     s = s.concat(AsciiColor.ANSI_RESET.escape());
                     break;
 
                 case 5:
-                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(dmgTaken.get(i)).getPlayerColor()).escape());
+                    s = s.concat(UiHelpers.colorAsciiTranslator(players.get(list.get(i)).getPlayerColor()).escape());
                     s = s.concat("5");
                     s = s.concat(AsciiColor.ANSI_RESET.escape());
                     break;
@@ -243,7 +255,7 @@ public class CacheModel {
             s = s.concat(", ");
         }
 
-        s = s.concat(" ]");
+        s = s.concat("]");
 
         return s;
     }

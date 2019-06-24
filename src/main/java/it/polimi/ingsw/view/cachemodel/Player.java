@@ -111,9 +111,9 @@ public class Player {
         s = s.concat("\nNome: " + getName());
 
         if (getStats() != null) {
-            s = s.concat(CacheModel.showDmgTaken(playerId, getStats().getDmgTaken()));
-            s = s.concat("\nMarchi: " + getStats().getMarks());
-            s = s.concat("\nOnline: " + getStats().getOnline());
+            s = s.concat("\n" + CacheModel.showDmgTaken(playerId, getStats().getDmgTaken()));
+            s = s.concat("\n" + CacheModel.showMarksTaken(playerId, getStats().getMarks()));
+            s = s.concat("\nOnline: " + getStats().onlineToString());
         } else {
             s = s.concat("\nDanni" + "[ ]");
             s = s.concat("\nMarchi" + "[ ]");

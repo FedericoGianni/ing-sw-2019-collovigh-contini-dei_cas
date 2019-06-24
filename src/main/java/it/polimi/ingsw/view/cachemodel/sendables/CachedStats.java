@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.cachemodel.sendables;
 
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
+
 import java.awt.*;
 import java.util.List;
 
@@ -57,5 +58,13 @@ public class CachedStats extends UpdateClass {
     @Override
     public String toString() {
         return "position : " + currentPosition + ", online: " + online ;
+    }
+
+    public String onlineToString() {
+        if (getOnline()){
+            return "si";
+        } else {
+            return "no";
+        }
     }
 }
