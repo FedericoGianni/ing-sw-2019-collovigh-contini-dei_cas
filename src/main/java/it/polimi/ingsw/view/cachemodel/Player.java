@@ -79,43 +79,16 @@ public class Player {
 
         String s = new String();
 
-        /*
-        switch (playerColor) {
-
-            case GREY:
-                s = ANSI_WHITE.escape();
-                break;
-
-            case BLUE:
-                s = ANSI_BLUE.escape();
-                break;
-
-            case YELLOW:
-                s = ANSI_YELLOW.escape();
-                break;
-
-            case GREEN:
-                s = ANSI_GREEN.escape();
-                break;
-
-            case PURPLE:
-                s = ANSI_PURPLE.escape();
-                break;
-
-            default:
-                s = "";
-                break;
-        }*/
-
         s = s.concat("\nID: " + getPlayerId());
         s = s.concat("\nNome: " + getName());
 
         if (getStats() != null) {
-            s = s.concat("\n" + CacheModel.showDmgTaken(playerId, getStats().getDmgTaken()));
-            s = s.concat("\n" + CacheModel.showMarksTaken(playerId, getStats().getMarks()));
+            s = s.concat("\n" + CacheModel.showDmgTaken(getStats().getDmgTaken()));
+            s = s.concat("\n" + CacheModel.showMarksTaken(getStats().getMarks()));
             s = s.concat("\nOnline: " + getStats().onlineToString());
             s = s.concat("\nMorti: " + getStats().getDeaths());
             s = s.concat("\nPunti: " + getStats().getScore());
+
         } else {
             s = s.concat("\nDanni" + "[ ]");
             s = s.concat("\nMarchi" + "[ ]");
@@ -130,48 +103,12 @@ public class Player {
 
         if (getAmmoBag() != null) {
             s = s.concat("\nMunizioni: " + getAmmoBag().toString());
-        } else {
+         } else {
             s = s.concat("\nMunizioni: nessuna");
         }
 
         s = s.concat(ANSI_RESET.escape());
 
         return s;
-
-        /*
-
-        if(getStats() != null && getWeaponbag() != null){
-            return s + "ID: " + getStats().getPlayerId() + "\n" +
-                    "Nome: " + getName() + "\n" +
-                    "Danni: " + getStats().getDmgTaken() + "\n" +
-                    "Marchi: " + getStats().getMarks() + "\n" +
-                    "Online: " + getStats().getOnline() + "\n" +
-                    "Armi: " + "\t" + getWeaponbag().toString() + "\n" + ANSI_RESET.escape();
-
-        } else if(getStats() != null) {
-            return s + "ID: " + playerId + "\n" +
-                    "Nome: " + getName() + "\n" +
-                    "Danni: " + getStats().getDmgTaken() + "\n" +
-                    "Marchi: " + getStats().getMarks() + "\n" +
-                    "Online: " + getStats().getOnline() + "\n" +
-                    "Armi : " + " nessuna \n" + ANSI_RESET.escape();
-
-        } else if(getWeaponbag() != null){
-            return s + "ID: " + playerId + "\n" +
-                    "Nome: " + getName() + "\n" +
-                    //"Danni: " + getStats().getDmgTaken() + "\n" +
-                    //"Marchi: " + getStats().getMarks() + "\n" +
-                    //"Online: " + getStats().getOnline() + "\n" +
-                    "Armi : " + "\t" + getWeaponbag().toString() + " \n" + ANSI_RESET.escape();
-        }
-        else {
-            return s + "ID: " + playerId + "\n" +
-                    "Nome: " + getName() + "\n" +
-                    "Danni" + "[ ]" + "\n" +
-                    "Marchi" + "[ ]" + "\n" +
-                    "Online: " + " true" + "\n" +
-                    "Armi : " + " nessuna \n" + ANSI_RESET.escape();
-        }
-    */
     }
 }

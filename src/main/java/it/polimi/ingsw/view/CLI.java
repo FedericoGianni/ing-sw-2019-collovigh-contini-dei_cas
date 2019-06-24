@@ -46,6 +46,7 @@ public class CLI implements UserInterface {
     private final View view;
     private int validMove = -1;
     private Object obj = new Object();
+    boolean isFrenzy = false;
 
     /**
      * Default constructor
@@ -70,6 +71,7 @@ public class CLI implements UserInterface {
             this.notifyAll();
         }
     }
+
 
     // start Ui methods
 
@@ -781,6 +783,13 @@ public class CLI implements UserInterface {
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
 
+        //TODO check if this works
+        if(isFrenzy){
+            this.isFrenzy = true;
+        } else {
+            this.isFrenzy = false;
+        }
+
         boolean valid;
         int choice = -1;
         int playerDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
@@ -869,9 +878,9 @@ public class CLI implements UserInterface {
 
                         if (isFrenzy) {
                             if (isBeforeFrenzyStarter) {
-                                //startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
+                                startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
                             } else {
-                                //startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
+                                startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
                             }
                         } else {
 
@@ -1555,11 +1564,31 @@ public class CLI implements UserInterface {
 
         //forward the shoot action to the controller -> if shoot fails it won't do the shoot and
         //let the user retry the shoot specifiying why shoot has failed
-
-        view.doAction(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpsToDiscard, scopeAction));
-
+        if(isFrenzy){
+            view.doAction(new FrenzyShoot(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpsToDiscard, scopeAction)));
+        } else {
+            view.doAction(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpsToDiscard, scopeAction));
+        }
     }
 
+    private void startFrenzyShoot(int maxMoves){
+
+        List<Directions> directionsList = new ArrayList<>();
+
+        //FORWARD PART 1: MOVE ACTION
+        directionsList = handleMove(maxMoves);
+        Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+        Point finalPos = genPointFromDirections(directionsList, startingPoint);
+
+        view.doAction(new FrenzyShoot(new Move(directionsList, finalPos)));
+
+        //FORWARD PART 2: RELOAD ACTION
+        startReload();
+
+        //FORWARD PART 3: SHOOT ACTION
+        startShoot(0);
+
+    }
 
     private CachedPowerUp handleScopeRequest(List<CachedPowerUp> powerUps){
 
@@ -1877,7 +1906,7 @@ public class CLI implements UserInterface {
         List<String> weaponsToReload = new ArrayList<>();
         List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
 
-        System.out.println("FASE DI RICARICA");
+        System.out.println("RICARICA");
         System.out.println("Digita: ");
         System.out.println("Un tasto qualsiasi -> per cominciare la fase di ricarica");
         System.out.println("9 -> per saltare la fase di ricarica");
@@ -1930,7 +1959,11 @@ public class CLI implements UserInterface {
         }
 
         //TODO forward RELOAD action to the view
-        view.doAction(new ReloadAction(weaponsToReload, powerUpsToDiscard));
+        if(isFrenzy) {
+            view.doAction(new FrenzyShoot(new ReloadAction(weaponsToReload, powerUpsToDiscard)));
+        } else {
+            view.doAction(new ReloadAction(weaponsToReload, powerUpsToDiscard));
+        }
     }
 
     /**
@@ -2074,6 +2107,8 @@ public class CLI implements UserInterface {
     private void showInfo(){
 
         System.out.println("[INFO PARTITA]");
+
+        System.out.println("Teschi: " + view.getCacheModel().showKillShotTrack(view.getCacheModel().getGame().getKillShotTrack()));
 
         System.out.println("Giocatori: ");
 

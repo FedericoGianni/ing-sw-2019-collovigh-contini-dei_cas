@@ -12,6 +12,7 @@ import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -199,20 +200,106 @@ public class CacheModel {
         }else return matchingWeapon.get(0);
     }
 
-    public static String showDmgTaken(int playerId, List<Integer> dmgTaken){
+    public static String showDmgTaken(List<Integer> dmgTaken){
 
         String header = "Danni";
-        return showColoredIntList(playerId, dmgTaken, header);
+        return showColoredIntList(dmgTaken, header);
     }
 
-    public static String showMarksTaken(int playerId, List<Integer> playerMarks){
+    public static String showMarksTaken(List<Integer> playerMarks){
 
         String header = "Marchi";
-        return showColoredIntList(playerId, playerMarks, header);
+        return showColoredIntList(playerMarks, header);
 
     }
 
-    public static String showColoredIntList(int playerId, List<Integer> list, String header){
+    public static String showKillShotTrack(List<Point> killShotTrak){
+        String header = "Teschi: ";
+        return showColoredPointList(killShotTrak, header);
+    }
+
+    public static String showColoredPointList(List<Point> list, String header){
+
+        String s = header + ": [";
+        int cont = 0;
+        int t = 0;
+
+        for (int i = 0; i < list.size(); i++) {
+
+            for (int j = 0; j < 2; j++) {
+                if(cont == 0) {
+                    s = s.concat("[ ID: ");
+                    t = list.get(i).x;
+                    s = s.concat(handleSingleIntShow(t));
+                    cont++;
+                } else if(cont == 1) {
+                    s  = s.concat("SEGNALINI: ");
+                    t = list.get(i).y;
+                    s = s.concat(handleSingleIntShow(t));
+                    s = s.concat("]");
+                    cont = 0;
+                }
+                s = s.concat(", ");
+
+
+            }
+
+
+        }
+        s = s.concat("]");
+        return s;
+    }
+
+    public static String handleSingleIntShow(int t){
+
+        String s = new String();
+
+        switch (t){
+            case 0:
+                s = s.concat(UiHelpers.colorAsciiTranslator(players.get(t).getPlayerColor()).escape());
+                s = s.concat("0");
+                s = s.concat(AsciiColor.ANSI_RESET.escape());
+                break;
+
+            case 1:
+                s = s.concat(UiHelpers.colorAsciiTranslator(players.get(t).getPlayerColor()).escape());
+                s = s.concat("1");
+                s = s.concat(AsciiColor.ANSI_RESET.escape());
+                break;
+
+            case 2:
+                s = s.concat(UiHelpers.colorAsciiTranslator(players.get(t).getPlayerColor()).escape());
+                s = s.concat("2");
+                s = s.concat(AsciiColor.ANSI_RESET.escape());
+                break;
+
+            case 3:
+                s = s.concat(UiHelpers.colorAsciiTranslator(players.get(t).getPlayerColor()).escape());
+                s = s.concat("3");
+                s = s.concat(AsciiColor.ANSI_RESET.escape());
+                break;
+
+            case 4:
+                s = s.concat(UiHelpers.colorAsciiTranslator(players.get(t).getPlayerColor()).escape());
+                s = s.concat("4");
+                s = s.concat(AsciiColor.ANSI_RESET.escape());
+                break;
+
+            case 5:
+                s = s.concat(UiHelpers.colorAsciiTranslator(players.get(t).getPlayerColor()).escape());
+                s = s.concat("5");
+                s = s.concat(AsciiColor.ANSI_RESET.escape());
+                break;
+        }
+
+        return s;
+    }
+
+
+
+
+
+    public static String showColoredIntList(List<Integer> list, String header){
         String s = header + ": [";
 
         for (int i = 0; i < list.size(); i++) {
