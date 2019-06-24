@@ -364,11 +364,7 @@ public class CLI implements UserInterface {
                 break;
 
             case TURN:
-
-                System.out.println("[NOTIFICA] TURN update ricevuto!");
-
                 notifyTurnUpdate(turnUpdate);
-
                 break;
 
             default:
@@ -403,7 +399,7 @@ public class CLI implements UserInterface {
 
                 shootTurnUpdate = (ShootTurnUpdate) turnUpdate;
                 System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
-                        " ha sparato con l'arma " + shootTurnUpdate.getWeapon() + " al player con id: " +
+                        " ha sparato con l'arma " + UiHelpers.weaponTranslator(shootTurnUpdate.getWeapon()) + " al player con id: " +
                         shootTurnUpdate.getTargetId() + ANSI_RESET.escape());
                 break;
 
@@ -411,8 +407,10 @@ public class CLI implements UserInterface {
 
                 grabTurnUpdate = (GrabTurnUpdate) turnUpdate;
                 System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
-                        " ha raccolto " + grabTurnUpdate.getWeapon() + ANSI_RESET.escape());
-
+                        " ha raccolto " + ANSI_RESET.escape());
+                if(grabTurnUpdate.getWeapon() != null){
+                    System.out.print(ANSI_BLUE.escape() + UiHelpers.weaponTranslator(grabTurnUpdate.getWeapon()) + ANSI_RESET.escape());
+                }
                 break;
 
             case MOVE:
@@ -691,9 +689,9 @@ public class CLI implements UserInterface {
         String retryMessage = "Scelta non valida. Riprova.";
 
         Boolean validChoice = false;
-        int player;
+        int player = -1;
         String direction;
-        int amount;
+        int amount = 1;
 
 
         do {
@@ -701,13 +699,19 @@ public class CLI implements UserInterface {
             validChoice = false;
 
             System.out.println("Su quale giocatore vuoi usare Newton? >>> ");
-            player = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                player = scanner.nextInt();
 
-            if (player >= 0 && player <= view.getCacheModel().getCachedPlayers().size())
-                validChoice = true;
-            else
-                System.out.println(retryMessage);
+                if (player >= 0 && player < view.getCacheModel().getCachedPlayers().size())
+                    validChoice = true;
+                else
+                    System.out.println(retryMessage);
+
+            } catch (InputMismatchException e) {
+                System.out.println("Non è un numero! Riprova >>> ");
+                scanner.nextLine();
+            }
+
         } while (!validChoice);
 
 
@@ -731,16 +735,19 @@ public class CLI implements UserInterface {
             validChoice = false;
 
             System.out.println("Di quanto vuoi muovere il player? (1,2) >>> ");
-            amount = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                amount = scanner.nextInt();
 
-            if (amount == 1 || amount == 2)
+                if (amount == 1 || amount == 2)
+                    validChoice = true;
 
-                validChoice = true;
+                else
+                    System.out.println(retryMessage);
 
-            else
-
-                System.out.println(retryMessage);
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova>>> ");
+                scanner.nextLine();
+            }
 
         } while (!validChoice);
 

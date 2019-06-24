@@ -230,16 +230,7 @@ public class ReloadPhase {
 
         for (Weapon weapon : weaponList){
 
-            Weapon w = null;
-
-            //TODO @Dav check this fix by Fede
-            try {
-                w = Model.getGame().getPlayers().get(controller.getCurrentPlayer()).getCurrentWeapons().getItem(weapon);
-            } catch (CardNotPossessedException e){
-
-            }
-
-            if (w.isLoaded()){
+            if (weapon.isLoaded()){
 
                 LOGGER.log(Level.WARNING, () -> LOG_START + " player tried to reload a loaded weapon: " + weapon.getName() );
 

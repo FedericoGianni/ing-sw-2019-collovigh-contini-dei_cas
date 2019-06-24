@@ -180,7 +180,7 @@ public class UiHelpers {
                 translate = "VULCANIZZATORE";
                 break;
 
-            case "HEAT SEEKER":
+            case "HEATSEEKER":
                 translate = "RAZZO TERMICO";
                 break;
 
