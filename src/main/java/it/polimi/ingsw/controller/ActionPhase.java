@@ -676,6 +676,8 @@ public class ActionPhase {
             handleAction();
 
             return;
+        } catch (PrecedentPlayerNeededException e) {
+            e.printStackTrace();
         }
 
 
@@ -691,7 +693,7 @@ public class ActionPhase {
      * @param shootAction is the class containing the list of moves
      * @throws ArgsNotValidatedException if the controller checks fails
      */
-    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException, CellNonExistentException {
+    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException, CellNonExistentException, PrecedentPlayerNeededException {
 
         // perform pre-check
 
@@ -1420,6 +1422,8 @@ public class ActionPhase {
             handleAction();
 
             return false;
+        } catch (PrecedentPlayerNeededException e) {
+            e.printStackTrace();
         }
 
         return true;

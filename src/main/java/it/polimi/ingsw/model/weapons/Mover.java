@@ -64,85 +64,81 @@ public class Mover extends MicroEffect {
     }
 
     @Override
-    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws   PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException {
-
-        if(facoltative==true)
-        {
-            if(playerList==null) {return; }//you can do nothing
+    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws   PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException {
+        print();
+        System.out.println("celleee1");
+        if (facoltative == true) {
+            if (playerList == null) {
+                return;
+            }//you can do nothing
         }
-        if(target==true)//you move the target
+        if (target == true)//you move the target
         {
-            if(myCell==true)//tractor beam second
+            System.out.println("celleee2");
+            if (myCell == true)//tractor beam second
             {      //here the geometrical distance is correct
-                if(playerList.size()>1 && Map.getDist(w.isPossessedBy().getCurrentPosition(),c)<cellNumber)//tractor beam peculiarities--max 2 targets, in this case is another
+                if (playerList.size() > 1 && Map.getDist(w.isPossessedBy().getCurrentPosition(), c) < cellNumber)//tractor beam peculiarities--max 2 targets, in this case is another
                 {
                     playerList.get(1).setPlayerPos(w.isPossessedBy().getCurrentPosition());
-                }else if(Map.getDist(w.isPossessedBy().getCurrentPosition(),c)<cellNumber){//case same target
+                } else if (Map.getDist(w.isPossessedBy().getCurrentPosition(), c) < cellNumber) {//case same target
                     playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
-                }else{
+                } else {
                     throw new UncorrectDistanceException();
                 }
-            }
-            else if(toCell==true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+            } else if (toCell == true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
             {
-
                 playerList.get(0).setPlayerPos(c);
-            }
-            else{ if(c==null)c=playerList.get(0).getCurrentPosition();//may not be enough
-                if(toCell)//move to cell, then check if the distance is correct if the distance is needed and if you can move there for real
-                {
-                    playerList.get(0).setPlayerPos(c);
-                }else {
-                    if(cellNumber>10)//exactly that distance
-                    {
-                        if(Map.getDist(c, playerList.get(0).getCurrentPosition())==cellNumber)//check if the distace is correct
-                        {
-                            playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
-                        }
-                        else{
-                            throw new UncorrectDistanceException();
-                        }
-                    }
-                    else{//cell number is max
-                        if(Map.getDist(c, playerList.get(0).getCurrentPosition())<=cellNumber)//check if the distace is correct
-                        {
-                            playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
-                        }
-                        else{
-                            throw new UncorrectDistanceException();
-                        }
-                    }
+            } else {
+                if (c == null)
+                    c = playerList.get(0).getCurrentPosition();//may not be enough
 
+                if (cellNumber > 10)//exactly that distance
+                {
+                    if (Map.getDist(c, playerList.get(0).getCurrentPosition()) == cellNumber)//check if the distace is correct
+                    {
+                        playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
+                    } else {
+                        throw new UncorrectDistanceException();
+                    }
+                } else {//cell number is max
+                    if (Map.getDist(c, playerList.get(0).getCurrentPosition()) <= cellNumber)//check if the distace is correct
+                    {
+                        System.out.println("celle7");
+                        playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
+                    } else {
+                        throw new UncorrectDistanceException();
+                    }
                 }
+
             }
-        }
-        else//the shooter is moved
-            if(toCell==true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
+        } else {
+            System.out.println("celleee no buono");//the shooter is moved
+            if (toCell == true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
             {
                 w.isPossessedBy().setPlayerPos(c);
-            }else {
-                if(cellNumber>10)//exactly that distance
+            } else {
+                if (c == null)
+                    c = playerList.get(0).getCurrentPosition();//may not be enough
+                if (cellNumber > 10)//exactly that distance
                 {
-                    if(Map.getDist(c, w.isPossessedBy().getCurrentPosition())==cellNumber)//check if the distace is correct
+                    if (Map.getDist(c, w.isPossessedBy().getCurrentPosition()) == cellNumber)//check if the distace is correct
                     {
                         w.isPossessedBy().setPlayerPos(c);
-                    }
-                    else{
+                    } else {
                         throw new UncorrectDistanceException();
                     }
-                }
-                else{//cell number is max
-                    if(Map.getDist(c, w.isPossessedBy().getCurrentPosition())<=cellNumber)//check if the distace is correct
+                } else {//cell number is max
+                    if (Map.getDist(c, w.isPossessedBy().getCurrentPosition()) <= cellNumber)//check if the distace is correct
                     {
                         w.isPossessedBy().setPlayerPos(c);
-                    }
-                    else{
+                    } else {
                         throw new UncorrectDistanceException();
                     }
                 }
 
             }
         }
+    }
 
 
     @Override

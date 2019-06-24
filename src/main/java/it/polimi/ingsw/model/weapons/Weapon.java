@@ -9,12 +9,13 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.Color;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Weapon implements Serializable {
 
-    private Integer firstTarget;//first target of every shot , useful for checking  if we need to retarget players or similar
+    private List<Integer> firstTarget;//first target of every shot , useful for checking  if we need to retarget players or similar
 
     private boolean loaded = true;
 
@@ -66,11 +67,31 @@ public abstract class Weapon implements Serializable {
 
 
 
-    public Player getFirstTarget() { return Model.getPlayer(firstTarget); }//useful when you have to target  different target
-    public void setFirstTarget(Player firstTarget) {
-        this.firstTarget = firstTarget.getPlayerId();
+    public ArrayList<Player> getFirstTargets() {
+        ArrayList <Player>t=new ArrayList();
+        for(int i:firstTarget)
+        {
+            t.add(Model.getPlayer(i));
+        }
+        return t;
+    }//useful when you have to target  different target
+    public void setFirstTarget(List<Player> f) {
+        firstTarget=new ArrayList<>();
+        for(Player item:f)
+        {
+            firstTarget.add(item.getPlayerId());
+        }
     }
 
+    public void removeFromFirstTargets(Player p)
+    {
+        for(int i=0;i<firstTarget.size();i++)
+        {
+            if(firstTarget.get(i)==p.getPlayerId())
+                firstTarget.remove(i);
+        }
+
+    }
     public final Player isPossessedBy(){
 
         List<Player> list = Model.getGame().getPlayers().stream()
@@ -97,7 +118,7 @@ public abstract class Weapon implements Serializable {
      * @throws SeeAblePlayerException
      * @throws FrenzyActivatedException
      */
-    public abstract void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CardNotPossessedException, DifferentPlayerNeededException, CellNonExistentException;//may need to be changed
+    public abstract void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CardNotPossessedException, DifferentPlayerNeededException, CellNonExistentException, PrecedentPlayerNeededException;//may need to be changed
 
     /**
      * @param cost
