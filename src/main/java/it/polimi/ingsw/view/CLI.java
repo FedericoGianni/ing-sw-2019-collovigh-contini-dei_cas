@@ -264,7 +264,7 @@ public class CLI implements UserInterface {
      * {@inheritDoc}
      */
     @Override
-    public void notifyUpdate(UpdateType updateType, int playerId) {
+    public void notifyUpdate(UpdateType updateType, int playerId, TurnUpdate turnUpdate) {
 
         switch (updateType) {
 
@@ -363,6 +363,9 @@ public class CLI implements UserInterface {
 
             case TURN:
 
+                System.out.println("[NOTIFICA] TURN update ricevuto!");
+
+                notifyTurnUpdate(turnUpdate);
 
                 break;
 

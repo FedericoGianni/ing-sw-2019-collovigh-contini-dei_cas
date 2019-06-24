@@ -1,6 +1,8 @@
-package it.polimi.ingsw.network.socket;
+package it.polimi.ingsw.network.serveronly.Socket;
 
+import it.polimi.ingsw.network.serveronly.Socket.SocketConnectionReader;
 import it.polimi.ingsw.network.serveronly.WaitingRoom;
+import it.polimi.ingsw.network.socket.SocketIdentifier;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -34,7 +36,7 @@ public class SocketServer extends Thread {
         socketClients = new ArrayList<>();
     }
 
-    private static ConcurrentHashMap<Integer,SocketIdentifier> clients = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Integer, SocketIdentifier> clients = new ConcurrentHashMap<>();
 
     @Override
     public void run() {

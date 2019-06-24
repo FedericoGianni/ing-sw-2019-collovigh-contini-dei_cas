@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.cachemodel;
 
-import it.polimi.ingsw.utils.CacheModelParser;
 import it.polimi.ingsw.view.UiHelpers;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
@@ -11,6 +10,7 @@ import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public class CacheModel {
 
                 // notify the view
 
-                view.getUserInterface().notifyUpdate(UpdateType.LOBBY, -1);
+                view.getUserInterface().notifyUpdate(UpdateType.LOBBY, -1,null);
 
                 LOGGER.log(level, "[Cache-Model] received LOBBY update w/ players: {0}", cachedLobby.getNames() );
 
@@ -78,7 +78,7 @@ public class CacheModel {
 
                 update((InitialUpdate) updateClass);
 
-                view.getUserInterface().notifyUpdate(UpdateType.INITIAL, updateClass.getPlayerId());
+                view.getUserInterface().notifyUpdate(UpdateType.INITIAL, updateClass.getPlayerId(),null);
 
                 //cli PlayerColors
 
@@ -92,7 +92,7 @@ public class CacheModel {
 
                 players.get(updateClass.getPlayerId()).update((CachedStats) updateClass);
 
-                view.getUserInterface().notifyUpdate(UpdateType.STATS, updateClass.getPlayerId());
+                view.getUserInterface().notifyUpdate(UpdateType.STATS, updateClass.getPlayerId(),null);
 
                 break;
 
@@ -100,7 +100,7 @@ public class CacheModel {
 
                 players.get(updateClass.getPlayerId()).update((CachedAmmoBag) updateClass);
 
-                view.getUserInterface().notifyUpdate(UpdateType.AMMO_BAG, updateClass.getPlayerId());
+                view.getUserInterface().notifyUpdate(UpdateType.AMMO_BAG, updateClass.getPlayerId(),null);
 
                 break;
 
@@ -108,7 +108,7 @@ public class CacheModel {
 
                 players.get(updateClass.getPlayerId()).update((CachedPowerUpBag) updateClass);
 
-                view.getUserInterface().notifyUpdate(UpdateType.POWERUP_BAG, updateClass.getPlayerId());
+                view.getUserInterface().notifyUpdate(UpdateType.POWERUP_BAG, updateClass.getPlayerId(),null);
 
                 break;
 
@@ -116,7 +116,7 @@ public class CacheModel {
 
                 players.get(updateClass.getPlayerId()).update((CachedWeaponBag) updateClass);
 
-                view.getUserInterface().notifyUpdate(UpdateType.WEAPON_BAG, updateClass.getPlayerId());
+                view.getUserInterface().notifyUpdate(UpdateType.WEAPON_BAG, updateClass.getPlayerId(),null);
 
                 break;
 
@@ -124,7 +124,7 @@ public class CacheModel {
 
                 this.game = (CachedGame) updateClass;
 
-                view.getUserInterface().notifyUpdate(UpdateType.GAME, updateClass.getPlayerId());
+                view.getUserInterface().notifyUpdate(UpdateType.GAME, updateClass.getPlayerId(),null);
 
                 break;
 
@@ -132,7 +132,7 @@ public class CacheModel {
 
                 this.cachedMap.update((CachedAmmoCell) updateClass);
 
-                view.getUserInterface().notifyUpdate(UpdateType.AMMO_CELL,updateClass.getPlayerId());
+                view.getUserInterface().notifyUpdate(UpdateType.AMMO_CELL,updateClass.getPlayerId(),null);
 
                 break;
 
@@ -140,13 +140,15 @@ public class CacheModel {
 
                 this.cachedMap.update((CachedSpawnCell) updateClass);
 
-                view.getUserInterface().notifyUpdate(UpdateType.SPAWN_CELL, updateClass.getPlayerId());
+                view.getUserInterface().notifyUpdate(UpdateType.SPAWN_CELL, updateClass.getPlayerId(),null);
 
                 break;
 
             case TURN:
 
+                view.getUserInterface().notifyUpdate(UpdateType.TURN, updateClass.getPlayerId(), (TurnUpdate) updateClass );
 
+                break;
 
             default:
 

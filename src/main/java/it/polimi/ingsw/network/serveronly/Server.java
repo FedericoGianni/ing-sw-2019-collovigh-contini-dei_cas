@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.network.serveronly.rmi.RMIServer;
-import it.polimi.ingsw.network.socket.SocketServer;
+import it.polimi.ingsw.network.serveronly.Socket.SocketServer;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.view.cachemodel.CacheModelParser;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import org.junit.jupiter.api.Test;
 

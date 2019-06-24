@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network.socket;
+package it.polimi.ingsw.network.client.socket;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -43,7 +43,7 @@ public class SocketClientWriter extends Client implements Runnable {
      * Constructor
      * @param socket to be initialized with
      */
-    SocketClientWriter(Socket socket){
+    public SocketClientWriter(Socket socket){
         this.socket = socket;
     }
 

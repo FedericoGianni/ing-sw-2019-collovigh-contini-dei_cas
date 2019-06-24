@@ -1,6 +1,7 @@
-package it.polimi.ingsw.network.socket;
+package it.polimi.ingsw.network.client.socket;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.network.socket.FunctionInterface;
 import it.polimi.ingsw.runner.RunClient;
 import it.polimi.ingsw.view.cachemodel.sendables.*;
 import it.polimi.ingsw.view.updates.InitialUpdate;
@@ -88,7 +89,7 @@ public class SocketClientReader extends Thread {
      * @param socket represent the channel to communicate between client and server, which is created by the
      *               Server when a client tries to connect to the SocketServer
      */
-    SocketClientReader(Socket socket){
+    public SocketClientReader(Socket socket){
         this.socket = socket;
     }
 
