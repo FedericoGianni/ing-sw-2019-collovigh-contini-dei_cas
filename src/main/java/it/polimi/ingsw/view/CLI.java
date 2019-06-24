@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.Protocol;
 import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
+import it.polimi.ingsw.view.actions.usepowerup.ScopeAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -22,8 +23,7 @@ import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.UpdateType;
-import it.polimi.ingsw.view.updates.otherplayerturn.PowerUpTurnUpdate;
-import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
+import it.polimi.ingsw.view.updates.otherplayerturn.*;
 
 import java.awt.*;
 import java.util.List;
@@ -35,6 +35,7 @@ import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
 import static it.polimi.ingsw.utils.PowerUpType.TAG_BACK_GRENADE;
+import static it.polimi.ingsw.utils.PowerUpType.TARGETING_SCOPE;
 import static it.polimi.ingsw.view.UiHelpers.*;
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 import static java.lang.Thread.sleep;
@@ -293,7 +294,7 @@ public class CLI implements UserInterface {
 
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
                     //new positions
-                    System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è spostato!" + ANSI_RESET.escape());
+                    //System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è spostato!" + ANSI_RESET.escape());
                     int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                     int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 
@@ -307,6 +308,7 @@ public class CLI implements UserInterface {
                     show(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
                 }
 
+                //damage taken
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null) {
                     //TODO show dmg updates or let the user sees them from player info?
                 }
@@ -379,32 +381,41 @@ public class CLI implements UserInterface {
 
     private void notifyTurnUpdate(TurnUpdate turnUpdate) {
 
-        PowerUpTurnUpdate t;
+        PowerUpTurnUpdate powerUpTurnUpdate;
+        ShootTurnUpdate shootTurnUpdate;
+        GrabTurnUpdate grabTurnUpdate;
+        MoveTurnUpdate moveTurnUpdate;
 
         switch (turnUpdate.getActionType()) {
 
             case POWERUP:
-                //TODO
-                t = (PowerUpTurnUpdate) turnUpdate;
-                System.out.println("[!] Il giocatore " + turnUpdate.getPlayerId() +
-                        "ha usato il powerUp " + t.getPowerUp());
+
+                powerUpTurnUpdate = (PowerUpTurnUpdate) turnUpdate;
+                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha usato il powerUp " + powerUpTurnUpdate.getPowerUp() + ANSI_RESET.escape());
                 break;
 
             case SHOOT:
 
-                //TODO
-
+                shootTurnUpdate = (ShootTurnUpdate) turnUpdate;
+                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha sparato con l'arma " + shootTurnUpdate.getWeapon() + " al player con id: " +
+                        shootTurnUpdate.getTargetId() + ANSI_RESET.escape());
                 break;
 
             case GRAB:
 
-                //TODO
+                grabTurnUpdate = (GrabTurnUpdate) turnUpdate;
+                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha raccolto " + grabTurnUpdate.getWeapon() + ANSI_RESET.escape());
 
                 break;
 
             case MOVE:
 
-                //TODO
+                moveTurnUpdate = (MoveTurnUpdate) turnUpdate;
+                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " si è mosso" + ANSI_RESET.escape());
 
                 break;
 
@@ -740,49 +751,11 @@ public class CLI implements UserInterface {
 
     private void useTeleporter(CachedPowerUp teleporter) {
 
-        boolean validChoice;
-        int r;
-        int c;
+        Point p = askCell();
 
-        do {
-
-            validChoice = false;
-
-            System.out.println("In quale cella vuoi andare ? >>> ");
-
-            //this way you have to check locally if r,c is ok for every different type of map
-
-            do {
-                System.out.println("riga >>> (0,1,2)");
-
-                r = scanner.nextInt();
-                scanner.nextLine();
-            } while (r < 0 || r > 2);
-
-            do {
-                System.out.println("colonna >>> (0,1,2,3)");
-
-                c = scanner.nextInt();
-                scanner.nextLine();
-            } while (c < 0 || c > 3);
-
-            if (view.getCacheModel().getCachedMap().getCachedCell(r, c) == null) {
-
-                System.out.println("Cella non esistente. Riprova: ");
-
-            } else {
-
-                validChoice = true;
-
-            }
-
-        } while (!validChoice);
-
-
-        JsonAction jsonAction = new TeleporterAction(teleporter.getColor(), new Point(c, r));
+        JsonAction jsonAction = new TeleporterAction(teleporter.getColor(), p);
 
         view.doAction(jsonAction);
-
 
     }
 
@@ -797,7 +770,7 @@ public class CLI implements UserInterface {
         int choice = -1;
         int playerDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
 
-        List<String> actions = new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA", "SKIP"));
+        List<String> actions = new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA"));
 
         do {
 
@@ -812,10 +785,10 @@ public class CLI implements UserInterface {
             for (int i = 0; i < actions.size(); i++) {
                 System.out.println(i + ": " + actions.get(i));
             }
-
-            show("7: mostra mappa");
-            show("8: mostra info sui giocatori");
-            show("9: mostra armi nelle celle di spawn");
+            show("6: mostra mappa");
+            show("7: mostra info giocatori");
+            show("8: mostra armi in vendita nelle celle §");
+            show("9: SKIP");
 
             try {
                 scanner.reset();
@@ -830,7 +803,7 @@ public class CLI implements UserInterface {
             }
 
 
-            if ((choice >= 0 && choice < actions.size()) || choice == 7 || choice == 8 || choice == 9) {
+            if ((choice >= 0 && choice < actions.size()) || choice ==6 || choice == 7 || choice == 8 || choice == 9) {
                 valid = true;
 
             } else {
@@ -900,23 +873,24 @@ public class CLI implements UserInterface {
                 }
                 break;
 
-            case 3:
-                view.doAction(new SkipAction());
-                break;
-
-            case 7:
+            case 6:
                 FileRead.showBattlefield();
                 startAction(isFrenzy, isBeforeFrenzyStarter);
                 break;
 
-            case 8:
+            case 7:
                 showInfo();
                 startAction(isFrenzy, isBeforeFrenzyStarter);
                 break;
 
-            case 9:
+            case 8:
+
                 showWeapInSpawnCells();
                 startAction(isFrenzy, isBeforeFrenzyStarter);
+                break;
+
+            case 9:
+                view.doAction(new SkipAction());
                 break;
 
             default:
@@ -1107,7 +1081,7 @@ public class CLI implements UserInterface {
             try {
                 buy = scanner.nextInt();
 
-                if (buy >= 0 && buy <= weapons.size()) {
+                if (buy >= 0 && buy < weapons.size()) {
                     valid = true;
                 } else {
                     System.out.println("Numero non valido! Riprova >>> ");
@@ -1201,21 +1175,17 @@ public class CLI implements UserInterface {
         return choice;
     }
 
-    private List<CachedPowerUp> checkPayWithPowerUp(List<Color> cost) {
+    /**
+     *
+     * @param cost cost to be checked if payable with powerups
+     * @param powerUps take powerups as parameter because you can remove some of them for partial cost checks
+     * @param ammo take ammo as parameter because you can remove some of them for partial checks
+     * @return a list of CachedPowerUps to discard to pay the needed cost
+     */
+    private List<CachedPowerUp> checkPayWithPowerUp(List<Color> cost, List<CachedPowerUp> powerUps, List<Color> ammo){
 
         boolean valid = false;
-        //List<Color> powerUpsColor = new ArrayList<>();
-        List<CachedPowerUp> powerUps = new ArrayList<>();
-        CopyOnWriteArrayList<Color> ammo = new CopyOnWriteArrayList<>();
         List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
-
-        if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
-            ammo.addAll(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag().getAmmoList());
-
-        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag() != null) {
-            powerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList();
-            //powerUpsColor = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
-        }
 
         for (Color c : cost) {
             if (ammo.contains(c) && hasPowerUpOfColor(powerUps, c)){
@@ -1234,7 +1204,6 @@ public class CLI implements UserInterface {
 
                 if (powerUpOrAmmo.toUpperCase().equals("SI")) {
 
-                    //TODO fargli scegliere quale powerup scartare (2 tipi != ma stesso colore)
                     List<CachedPowerUp> powerUpChoiceList = powerUps
                             .stream()
                             .filter(x -> x.getColor().equals(c))
@@ -1322,6 +1291,32 @@ public class CLI implements UserInterface {
         return powerUpsToDiscard;
     }
 
+    /**
+     * Same as checkPayWithPowerUp but simpler version, which in case you don't need to specify local ammo and powerups
+     * will just read them from cacheModel and then call the main checkPayWithPowerUps method with them as parameters
+     * @param cost to be checked
+     * @return a list of CachedPowerUp to discard to pay the specified cost
+     */
+    private List<CachedPowerUp> checkPayWithPowerUp(List<Color> cost) {
+
+        List<CachedPowerUp> powerUps = new ArrayList<>();
+        CopyOnWriteArrayList<Color> ammo = new CopyOnWriteArrayList<>();
+        List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
+
+        if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
+            ammo.addAll(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag().getAmmoList());
+
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag() != null) {
+            powerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList();
+            //powerUpsColor = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
+        }
+
+        powerUpsToDiscard = checkPayWithPowerUp(cost, powerUps, ammo);
+
+        return powerUpsToDiscard;
+
+    }
+
     private boolean hasPowerUpOfColor(List<CachedPowerUp> powerUps, Color c){
         List<CachedPowerUp> result = powerUps
         .stream()
@@ -1343,21 +1338,51 @@ public class CLI implements UserInterface {
 
         for (int i = 0; i < currWeap.size(); i++) {
             System.out.println("Arma " + i + " " + UiHelpers.weaponTranslator(currWeap.get(i)));
+            try {
+                CachedFullWeapon w = view.getCacheModel().getWeaponInfo(currWeap.get(i));
+                System.out.println("Effetto base: " + w.getEffectsDescriptions().get(0));
+                System.out.println("costo ricarica: " + UiHelpers.ammoTranslator(w.getFirstEffectCost()));
+
+                if (w.getSecondEffectCost() != null) {
+                    System.out.println("Effetto 1: " + w.getEffectsDescriptions().get(1));
+                    System.out.println("costo effetto 1: " + UiHelpers.ammoTranslator(w.getSecondEffectCost()));
+                }
+
+                if (w.getThirdEffectCost() != null) {
+                    System.out.println("Effetto 2: " + w.getEffectsDescriptions().get(2));
+                    System.out.println("costo effetto 2: " + UiHelpers.ammoTranslator(w.getThirdEffectCost()));
+                }
+            } catch (WeaponNotFoundException e){
+                System.out.println("[DEBUG] Weapon Not Found!" + e.getMessage());
+            }
         }
+
     }
+
 
 
     private void startShoot(int maxMoves){
 
+        //INPUT requirements
         boolean valid = false;
         int choice = -1;
-        List<Directions> directionsList = new ArrayList<>();
-        CachedFullWeapon weapon = null;
 
         //SHOOT ACTION requirements
         List<List<Integer>> targetList;
         List<Integer> effects = new ArrayList<>();
         List<Point> cells = new ArrayList<>();
+        List<Directions> directionsList = new ArrayList<>();
+        CachedFullWeapon weapon = null;
+
+        //EFFECT PAYMENT requirements
+        List<CachedPowerUp> localPowerUps = new ArrayList<>();
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag() != null)
+            localPowerUps = new ArrayList<>(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList());
+        List<Color> localAmmo = new ArrayList<>();
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
+            localAmmo = new ArrayList<>(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag().getAmmoList());
+        List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
+
 
         //weapon checks
         int targets = -1; //number of targets needed by the weapons (reads this from json CachedFullWeapons)
@@ -1392,7 +1417,7 @@ public class CLI implements UserInterface {
                 choice = scanner.nextInt();
 
                 int weaponBagSize = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons().size();
-                if(choice >= 0 && choice <= weaponBagSize){
+                if(choice >= 0 && choice < weaponBagSize){
                     valid = true;
 
                 } else {
@@ -1419,45 +1444,219 @@ public class CLI implements UserInterface {
 
         // PRE-SHOOT PHASE choose wep effects, checks if he can pay
         // choose target/s and additional info needed to shoot with a particular weapon
-        //TODO user needs to choose weapons effect to use (check if he can pay w/ ammo/powerups
 
-        //TODO local checks with the attributes read from json (i.e. numtarget, samecell, ...)
+        //EFFECTS REQUESTS and COST check (if user wants to pay with powerups)
+        effects = chooseEffects(weapon);
 
-        //TODO method which takes effect type as parameter (or CachedFullWeapon) and returns List<Int> with effects chosen
-        //TODO also checks if he can pay this effects (w/ ammo/powerUps)
-        effects.add(0);
-        effects.add(1);
-        //effects = chooseEffects(weapon);
+        List<Color> totEffectCost = new ArrayList<>();
+        //TODO check if total effect cost is correct, export it in an outside method
+        for(Integer i : effects){
+            switch (i){
+                case 1:
+                    totEffectCost.addAll(weapon.getSecondEffectCost());
+                    break;
 
-        targetList = chooseTargets(weapon.getEffectRequirements().get(0).getNumberOfTargets(),effects.size());
+                case 2:
+                    totEffectCost.addAll(weapon.getThirdEffectCost());
+                    break;
+
+            }
+        }
+
+        if(canPay(totEffectCost, UiHelpers.genColorListFromPowerUps(localPowerUps), localAmmo)){
+            powerUpsToDiscard = checkPayWithPowerUp(totEffectCost, localPowerUps, localAmmo);
+
+            //update local powerups list with powerups which user has chosen to discard
+            //it will be useful for targeting scope final check before shoot
+            for(CachedPowerUp p : powerUpsToDiscard){
+                localPowerUps.remove(p);
+            }
+
+        } else {
+            System.out.println("[!] Non hai abbastanza munizioni per usare gli effetti selezionati!");
+            //TODO cosa gli faccio fare? per ora skip action
+            view.doAction(new SkipAction());
+        }
+
+        scanner.nextLine();
+
+        //System.out.println("[DEBUG] Number of targets: " + weapon.getEffectRequirements().get(0).getNumberOfTargets());
+        //System.out.println("[DEBUG] Effects size: " + effects.size());
+
+        //TARGETS REQUESTS
+        targetList = chooseTargets(weapon, effects.size());
+
+        //CELL REQUESTS
+        boolean cellRequired = false;
+
         for (int i = 0; i < effects.size(); i++) {
             //e is the number inside the effect array i.e. i could have effect 2 in index 0 of array effects
             int e = effects.get(i);
             if(weapon.getEffectRequirements().get(e).getCellRequired()){
-                CachedCell c = askCell(weapon, e);
+                Point p = askCell(weapon, e);
+                cells.add(p);
+                cellRequired = true;
+            } else {
+                cells.add(null);
             }
-
         }
 
+        if(!cellRequired){
+            cells = null;
+        }
+
+
+        //TARGETING SCOPE
+        ScopeAction scopeAction = null;
+        CachedPowerUp scope = null;
+        int scopeTarget = -1;
+        boolean useScope = false;
+        boolean validScopeChoice = false;
+
+        if(UiHelpers.genTypeListFromPowerUps(localPowerUps).contains(TARGETING_SCOPE)){
+            System.out.println("Puoi usare un mirino, vuoi farlo? (si/no): ");
+            do {
+                String s = scanner.nextLine();
+
+                if(s.toUpperCase().equals("SI") || s.toUpperCase().equals("NO")){
+                    validScopeChoice = true;
+                    if(s.toUpperCase().equals("SI")){
+                        useScope = true;
+                    }
+                } else {
+                    System.out.println("Scelta non valida! Riprova: ");
+                }
+
+            } while(!validScopeChoice);
+
+            if(useScope){
+                scope = handleScopeRequest(localPowerUps);
+                scopeTarget = handleScopeTarget();
+                scopeAction = new ScopeAction(UiHelpers.genColorFromPowerUp(scope), scopeTarget);
+
+            }
+        }
 
 
         //forward the shoot action to the controller -> if shoot fails it won't do the shoot and
         //let the user retry the shoot specifiying why shoot has failed
 
-        //just to test a basic shoot
-
-        //TODO check if player has TargetingScope and ask him if he wants to use it
-        //TODO ! don't consider powerup which player has chosen to discard to pay!
-
-        List<CachedPowerUp> powerUpList = new ArrayList<>(); // TODO
-
-        view.doAction(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpList, null ));
+        view.doAction(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpsToDiscard, scopeAction));
 
     }
 
-    private CachedCell askCell(CachedFullWeapon w, int e){
-        //TODO
-        return null;
+
+    private CachedPowerUp handleScopeRequest(List<CachedPowerUp> powerUps){
+
+        int read = -1;
+        boolean valid = false;
+
+        List<CachedPowerUp> scopePowerUps = powerUps
+                .stream()
+                .filter(x -> (x.getType() == PowerUpType.TARGETING_SCOPE))
+                .collect(Collectors.toList());
+
+        System.out.println("Seleziona un mirino da usare: ");
+
+        for (int i = 0; i < scopePowerUps.size(); i++) {
+            System.out.println(i + ": " + scopePowerUps.get(i));
+        }
+
+        do {
+            try {
+                read = scanner.nextInt();
+
+                if(read >= 0 && read < scopePowerUps.size()){
+                    valid = true;
+                } else {
+                    System.out.println("Scelta non valida! Riprova: ");
+                }
+
+            } catch (InputMismatchException e) {
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
+            }
+
+        } while(!valid);
+
+        return scopePowerUps.get(read);
+    }
+
+    private int handleScopeTarget(){
+
+        boolean validChoice = false;
+        int player = -1;
+
+        do {
+
+            System.out.println("Su quale giocatore vuoi usare il mirino? >>> ");
+            try {
+                player = scanner.nextInt();
+                scanner.nextLine();
+
+                if (player >= 0 && player <= view.getCacheModel().getCachedPlayers().size() && player != view.getPlayerId())
+                    validChoice = true;
+                else
+                    System.out.println("Scelta non valida! Riprova>>> ");
+
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova");
+            }
+
+        } while (!validChoice);
+
+        return player;
+    }
+
+
+
+    private Point askCell(){
+
+        boolean validChoice = false;
+        int r = -1, c = -1;
+
+        do {
+
+            validChoice = false;
+
+            System.out.println("Seleziona cella >>> ");
+
+            //this way you have to check locally if r,c is ok for every different type of map
+
+            do {
+                System.out.println("riga >>> (0,1,2)");
+
+                r = scanner.nextInt();
+                scanner.nextLine();
+            } while (r < 0 || r > 2);
+
+            do {
+                System.out.println("colonna >>> (0,1,2,3)");
+
+                c = scanner.nextInt();
+                scanner.nextLine();
+            } while (c < 0 || c > 3);
+
+            if (view.getCacheModel().getCachedMap().getCachedCell(r, c) == null) {
+
+                System.out.println("Cella non esistente. Riprova: ");
+
+            } else {
+
+                validChoice = true;
+
+            }
+
+        } while (!validChoice);
+
+        return new Point(r,c);
+
+    }
+
+    private Point askCell(CachedFullWeapon w, int e){
+        System.out.println("Cella richiesta per effetto " + e);
+        Point p = askCell();
+        return p;
     }
 
 
@@ -1467,7 +1666,7 @@ public class CLI implements UserInterface {
      * @return a List of List<Integer> representing the targets for each of the weapon effect
      * (index 0 -> base effect, index 1 -> second effect, index 2 -> third effect)
      */
-    private List<List<Integer>> chooseTargets(List<Integer> targetsNum, int effectsNum){
+    private List<List<Integer>> chooseTargets(CachedFullWeapon w, int effectsNum){
 
         List<List<Integer>> targetsList = new ArrayList<>();
         boolean valid = false;
@@ -1479,29 +1678,34 @@ public class CLI implements UserInterface {
             System.out.println("Seleziona i bersagli a cui vuoi sparare: ");
             System.out.println("Effetto: " + i);
 
-            for (int j = 0; j < targetsNum.get(i); j++) {
+            int cont = 0;
+
+            for (int j = 0; j < w.getEffectRequirements().get(i).getNumberOfTargets().size(); j++) {
 
                 do {
 
                     int read = -1;
-                    int cont = 0;
+
                     System.out.println("Seleziona un bersaglio (ID) >>> ");
 
                     try {
+
                         if(cont >= 1){
                             System.out.println("9 -> per selezionare solo questi bersagli.");
                         }
 
+                        scanner.reset();
+                        System.out.println("debug fin qui arrivo dio cristo!!!!!!!!!!!!!!!");
                         read = scanner.nextInt();
 
                         if(read >= 0 && read <= view.getCacheModel().getCachedPlayers().size() && read != view.getPlayerId()){
+                            cont++;
                             valid = true;
                             tempTargetList.add(read);
-                            cont++;
                         } else if(read == 9){
                             //TODO check if it works, should let him target up to max target (min 1) instead of exactly max
                             valid = true;
-                            j = targetsNum.get(i);
+                            j = w.getEffectRequirements().get(i).getNumberOfTargets().size();
                         }
 
                         if(read == view.getPlayerId()){
@@ -1531,6 +1735,8 @@ public class CLI implements UserInterface {
      */
     private List<Integer> chooseEffects(CachedFullWeapon w){
 
+        Scanner scanner = new Scanner(System.in);
+
         boolean valid = false;
         List<Integer> effects = new ArrayList<>();
         int read = -1;
@@ -1538,45 +1744,56 @@ public class CLI implements UserInterface {
         do {
 
             System.out.println(w.getEffectsDescriptions());
-            if(w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)) {
-                System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
-                System.out.println("[0] -> Effetto base");
-                System.out.println("[1] -> effetto base + effetto 1");
-                System.out.println("[2] -> effetto base + effetto 2");
-                System.out.println("[12] -> effetto base + effetto 1 + effetto 2");
-                System.out.println("Inserisci il numero che rappresenta la combinazione di effetti scelta: ");
-            } else if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)){
-                System.out.println("Per quest'arma puoi scegliere solo o l'effetto base o l'effetto alternativo.");
-                System.out.println("Seleziona l'effetto che vuoi utilizzare: ");
-                System.out.println("[0] -> effetto base");
-                System.out.println("[1] -> effetto 1 (alternativo)");
-            }
 
-            //TODO check if effects are exclusive/concatenable
-            try{
-                read = scanner.nextInt();
+            //in this case weapon has only base effect
+            if(w.getEffectTypes() == null){
+                valid = true;
+                read = 0;
+            } else {
 
-                if(w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)){
-
-                    if((read >= 0 && read <3) || read == 12){
-                        valid = true;
-                    } else {
-                        System.out.println("Scelta effetti non valida! Riprova");
-                    }
-
-                } else if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)){
-
-                    if((read == 0 || read == 1)){
-                        valid = true;
-                    } else{
-                        System.out.println("Scelta effetti non valida! Riprova");
-                    }
+                if (w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)) {
+                    System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
+                    System.out.println("[0] -> Effetto base");
+                    System.out.println("[1] -> effetto base + effetto 1");
+                    System.out.println("[2] -> effetto base + effetto 2");
+                    System.out.println("[12] -> effetto base + effetto 1 + effetto 2");
+                    System.out.println("Inserisci il numero che rappresenta la combinazione di effetti scelta: ");
+                } else if (w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)) {
+                    System.out.println("Per quest'arma puoi scegliere solo o l'effetto base o l'effetto alternativo.");
+                    System.out.println("Seleziona l'effetto che vuoi utilizzare: ");
+                    System.out.println("[0] -> effetto base");
+                    System.out.println("[1] -> effetto 1 (alternativo)");
                 }
 
-            } catch (InputMismatchException e){
-                System.out.println("Non è un numero! Riprova!");
-                scanner.nextLine();
+
+                //TODO check if effects are exclusive/concatenable
+                try{
+                    read = scanner.nextInt();
+                    //scanner.nextLine();
+
+                    if(w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)){
+
+                        if((read >= 0 && read <3) || read == 12){
+                            valid = true;
+                        } else {
+                            System.out.println("Scelta effetti non valida! Riprova");
+                        }
+
+                    } else if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)){
+
+                        if((read == 0 || read == 1)){
+                            valid = true;
+                        } else{
+                            System.out.println("Scelta effetti non valida! Riprova");
+                        }
+                    }
+
+                } catch (InputMismatchException e){
+                    System.out.println("Non è un numero! Riprova!");
+                    scanner.nextLine();
+                }
             }
+
 
         } while (!valid);
 
@@ -1701,6 +1918,14 @@ public class CLI implements UserInterface {
         view.doAction(new ReloadAction(weaponsToReload, powerUpsToDiscard));
     }
 
+    /**
+     * Handle a signle weapon reload
+     * @param weapons list of weapons not yet reloaded, which can be reloaded
+     * @param cachedPowerUps list of powerups left in user's hand after previous handleWeaponReload
+     * @param cachedAmmoCubes list of ammo left in user's hand after prevouiouse handleWeaponReload
+     * @param powerUpsToDiscard powerups which the user will use as payment if he wants
+     * @return a String representing the weapon name to be reloaded
+     */
     private String handleWeaponReload(List<String> weapons, List<CachedPowerUp> cachedPowerUps, List<Color> cachedAmmoCubes,
                                     List<CachedPowerUp> powerUpsToDiscard){
 
@@ -1711,21 +1936,29 @@ public class CLI implements UserInterface {
         do {
             System.out.println("Le tue armi sono: ");
             for (int i = 0; i < weapons.size(); i++) {
+                try {
+                    CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(i));
+                    System.out.println(i + ": " + weapons.get(i));
+                    System.out.println("Costo ricarica: " + UiHelpers.ammoTranslator(w.getFirstEffectCost()));
 
+                } catch (WeaponNotFoundException e){
+                    System.out.println("[DEBUG] Weapon Not Found!");
+                }
             }
             System.out.println("9 -> fine");
 
             System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
             try {
                 read = scanner.nextInt();
-                scanner.nextLine();
+                //scanner.nextLine();
 
             } catch (InputMismatchException e) {
                 scanner.nextLine();
                 System.out.println("Non è un numero! Riprova >>> ");
             }
 
-            if ((read >= 0 && read <= weapons.size()) || read == 9) validChoice = true;
+            //TODO check if this if works correctly with weapon size checks
+            if ((read >= 0 && read < weapons.size()) || read == 9) validChoice = true;
 
             if(read == 9){
                 validChoice = true;
@@ -1733,6 +1966,8 @@ public class CLI implements UserInterface {
             }
 
         } while (!validChoice);
+
+        String weaponName = null;
 
         if(canReload(weapons.get(read), cachedAmmoCubes, cachedPowerUps)){
             try {
@@ -1748,6 +1983,7 @@ public class CLI implements UserInterface {
                     weaponReloadCost.remove(c);
                 }
                 cachedAmmoCubes.removeAll(weaponReloadCost);
+                weaponName = weapons.get(read);
                 weapons.remove(w.getName());
 
             } catch (WeaponNotFoundException e){
@@ -1755,7 +1991,7 @@ public class CLI implements UserInterface {
             }
         }
 
-        return weapons.get(read);
+        return weaponName;
     }
 
     /**
@@ -1784,8 +2020,15 @@ public class CLI implements UserInterface {
         }
     }
 
+    /**
+     * Check if the player can pay the specified cost, either with powerups or ammo
+     * @param cost to be checked
+     * @param ammo current ammo in user's hand
+     * @param powerUps current powerups in user's hand
+     * @return
+     */
     private boolean canPay(List<Color> cost, List<Color> ammo, List<Color> powerUps){
-        //TODO also check he can pay with powerups
+
         for(Color c : cost){
             if(ammo.contains(c)){
                 ammo.remove(c);

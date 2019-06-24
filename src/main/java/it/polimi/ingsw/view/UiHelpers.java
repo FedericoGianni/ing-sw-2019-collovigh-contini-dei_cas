@@ -3,6 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
 
@@ -304,5 +305,19 @@ public class UiHelpers {
         }
 
         return  colorList;
+    }
+
+    public static Color genColorFromPowerUp(CachedPowerUp p){
+        return p.getColor();
+    }
+
+    public static List<PowerUpType> genTypeListFromPowerUps(List<CachedPowerUp> powerUps){
+        List<PowerUpType> powerUpTypes = new ArrayList<>();
+
+        for(CachedPowerUp p : powerUps){
+            powerUpTypes.add(p.getType());
+        }
+
+        return powerUpTypes;
     }
 }
