@@ -502,7 +502,7 @@ class NormalWeaponTest {
         Player shooter = Model.getPlayer(0);
         shooter.setPlayerPos(Model.getMap().getCell(2,3));
 
-        Player target1 = Model.getPlayer(1);
+        Player target1 = Model.getPlayer(1); //1,2
         target1.setPlayerPos(Model.getMap().getCell(1,2));
 
         Player target2 = Model.getPlayer(2);
@@ -729,7 +729,7 @@ class NormalWeaponTest {
         Player shooter = Model.getPlayer(0);
         shooter.setPlayerPos(Model.getMap().getCell(2,3));
 
-        Player target1 = Model.getPlayer(1);
+        Player target1 = Model.getPlayer(1); // 1 1
         target1.setPlayerPos(Model.getMap().getCell(1,1));
 
         Player target2 = Model.getPlayer(2);
@@ -839,18 +839,18 @@ class NormalWeaponTest {
         targets2.add(target1);
         targetLists.add(targets0);
         targetLists.add(targets1);
-        targetLists.add(targets2);
+        //targetLists.add(targets2);
         Model.getMap().setUnvisited();
 
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
             mEf.add(0);
             mEf.add(1);
-            mEf.add(2);
+            //mEf.add(2);
             List<Cell> cells = new ArrayList<>();
             cells.add(null);
             cells.add(Model.getMap().getCell(0,0));
-            cells.add(null);
+            //cells.add(null);
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
 
         }

@@ -184,7 +184,7 @@ public class UiHelpers {
                 translate = "RAZZO TERMICO";
                 break;
 
-            case "WHISPERER":
+            case "WHISPER":
                 translate = "FUCILE DI PRECISIONE";
                 break;
 

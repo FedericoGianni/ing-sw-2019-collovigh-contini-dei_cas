@@ -406,11 +406,15 @@ public class CLI implements UserInterface {
             case GRAB:
 
                 grabTurnUpdate = (GrabTurnUpdate) turnUpdate;
-                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
-                        " ha raccolto " + ANSI_RESET.escape());
+
                 if(grabTurnUpdate.getWeapon() != null){
-                    System.out.print(ANSI_BLUE.escape() + UiHelpers.weaponTranslator(grabTurnUpdate.getWeapon()) + ANSI_RESET.escape());
+                    System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                            " ha raccolto " + UiHelpers.weaponTranslator(grabTurnUpdate.getWeapon()) + ANSI_RESET.escape());
+                } else {
+                    System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                            " ha raccolto " + ANSI_RESET.escape());
                 }
+
                 break;
 
             case MOVE:

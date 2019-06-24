@@ -6,9 +6,7 @@ import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 
@@ -74,7 +72,67 @@ public class FileRead {
         removeAmmoCard(2,3,v);
         showBattlefield();
 
+
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> targetsNum = new ArrayList<>();
+        targetsNum.add(1);
+        targetsNum.add(2);
+        int effectsNum = 2;
+
+
+
+        List<List<Integer>> targetsList = new ArrayList<>();
+        boolean valid = false;
+
+            for (int i = 0; i < effectsNum; i++) {
+
+                List<Integer> tempTargetList = new ArrayList<>();
+
+                System.out.println("Seleziona i bersagli a cui vuoi sparare: ");
+                System.out.println("Effetto: " + i);
+
+                for (int j = 0; j < targetsNum.get(i); j++) {
+
+                    do {
+
+                        int read = -1;
+                        int cont = 0;
+                        System.out.println("Seleziona un bersaglio (ID) >>> ");
+
+                        try {
+                            if(cont >= 1){
+                                System.out.println("9 -> per selezionare solo questi bersagli.");
+                            }
+
+                            scanner.reset();
+                            System.out.println("debug fin qui arrivo dio cristo!!!!!!!!!!!!!!!");
+                            read = scanner.nextInt();
+
+                            if(read >= 0 && read <= 5){
+                                valid = true;
+                                tempTargetList.add(read);
+                                cont++;
+                            } else if(read == 9){
+                                //TODO check if it works, should let him target up to max target (min 1) instead of exactly max
+                                valid = true;
+                                j = targetsNum.get(i);
+                            }
+
+                        } catch (InputMismatchException e) {
+                            System.out.println("Non è un numero! Riprova >>> ");
+                            scanner.nextLine();
+                        }
+
+                    } while (!valid);
+                }
+
+                targetsList.add(tempTargetList);
+
+            }
+
+            System.out.println("targetlist:" + targetsList);
     }
+
 
 
     public static void populateMatrixFromFile(int mapType) throws InvalidMapTypeException {

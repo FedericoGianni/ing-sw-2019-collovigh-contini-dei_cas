@@ -52,8 +52,8 @@ public class Stats extends Subject implements Serializable {
     public Stats(Stats clone) {
         this.score = clone.score;
         this.deaths = clone.deaths;
-        this.marks = clone.marks;
-        this.dmgTaken = clone.dmgTaken;
+        this.marks = new ArrayList<>(clone.marks);
+        this.dmgTaken = new ArrayList<>(clone.dmgTaken);
         this.currentPosition = clone.currentPosition;
         this.online = clone.online;
         this.frenzyBoard = clone.frenzyBoard;

@@ -114,10 +114,12 @@ public class Player {
             s = s.concat("\n" + CacheModel.showDmgTaken(playerId, getStats().getDmgTaken()));
             s = s.concat("\n" + CacheModel.showMarksTaken(playerId, getStats().getMarks()));
             s = s.concat("\nOnline: " + getStats().onlineToString());
+            s = s.concat("\nMorti: " + getStats().getDeaths());
+            s = s.concat("\nPunti: " + getStats().getScore());
         } else {
             s = s.concat("\nDanni" + "[ ]");
             s = s.concat("\nMarchi" + "[ ]");
-            s = s.concat("\nOnline: " + " true");
+            s = s.concat("\nOnline: " + " si");
         }
 
         if (getWeaponbag() != null) {
