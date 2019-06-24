@@ -41,4 +41,6 @@ public class AmmoCube implements Serializable {
     public String toString() {
         return "Color = " + color;
     }
+
+
 }

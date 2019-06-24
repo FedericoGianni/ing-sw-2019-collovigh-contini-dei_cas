@@ -12,14 +12,14 @@ public abstract class SpecialWeapons extends Weapon{
 
     private final String name;
 
-    private boolean loaded = true;
+
 
     public SpecialWeapons(String name) {
         this.name = name;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritDoc} //TODO delete if works
      */
     @Override
     public void reload() throws NotAbleToReloadException {
@@ -38,7 +38,7 @@ public abstract class SpecialWeapons extends Weapon{
 
                 // the weapon is set to loaded
 
-                loaded = true;
+                setLoaded(true);
 
             }catch (CardNotPossessedException e){
 
@@ -58,21 +58,7 @@ public abstract class SpecialWeapons extends Weapon{
      */
     public abstract Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException, CellNonExistentException;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isLoaded() {
-        return loaded;
-    }
 
-    /**
-     *
-     * @param loaded is a boolean representing if the weapon is loaded
-     */
-    public void setLoaded(boolean loaded) {
-        this.loaded = loaded;
-    }
 
     /**
      * {@inheritDoc}
