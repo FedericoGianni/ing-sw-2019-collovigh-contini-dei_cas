@@ -5,6 +5,7 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -189,7 +190,7 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
-    public void notifyUpdate(UpdateType updateType, int playerId) {
+    public void notifyUpdate(UpdateType updateType, int playerId, TurnUpdate turnUpdate) {
 
         switch (updateType){
 

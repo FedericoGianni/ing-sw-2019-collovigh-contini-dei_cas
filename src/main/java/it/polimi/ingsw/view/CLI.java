@@ -265,7 +265,7 @@ public class CLI implements UserInterface {
      * {@inheritDoc}
      */
     @Override
-    public void notifyUpdate(UpdateType updateType, int playerId) {
+    public void notifyUpdate(UpdateType updateType, int playerId, TurnUpdate turnUpdate) {
 
         switch (updateType) {
 
@@ -364,7 +364,11 @@ public class CLI implements UserInterface {
                 break;
 
             case TURN:
-                //TODO call notifyTurnUpdate passaing a TurnUpdate as parameter
+
+                System.out.println("[NOTIFICA] TURN update ricevuto!");
+
+                notifyTurnUpdate(turnUpdate);
+
                 break;
 
             default:
@@ -1689,7 +1693,7 @@ public class CLI implements UserInterface {
                     System.out.println("Seleziona un bersaglio (ID) >>> ");
 
                     try {
-                        
+
                         if(cont >= 1){
                             System.out.println("9 -> per selezionare solo questi bersagli.");
                         }

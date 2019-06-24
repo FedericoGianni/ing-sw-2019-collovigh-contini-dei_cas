@@ -53,6 +53,8 @@ public class Furnace  extends SpecialWeapons{
                 shootSecondEffect(cells.get(0));
 
             }
+
+            this.setLoaded(false);
         }
     }
 

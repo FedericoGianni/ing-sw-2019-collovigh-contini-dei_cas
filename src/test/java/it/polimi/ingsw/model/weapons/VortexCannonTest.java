@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.utils.CacheModelParser;
+import it.polimi.ingsw.view.cachemodel.CacheModelParser;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.socket;
 
+import it.polimi.ingsw.network.serveronly.Socket.SocketConnectionWriter;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -39,11 +41,11 @@ public class SocketPing implements Runnable {
      * Constructor
      * @param scw SocketConnectionWriter which represent the connection between SocketServer and one single client
      */
-    SocketPing(SocketConnectionWriter scw){
+    public SocketPing(SocketConnectionWriter scw){
         this.scw = scw;
     }
 
-    SocketPing(BufferedWriter out, SocketConnectionWriter scw){
+    public SocketPing(BufferedWriter out, SocketConnectionWriter scw){
         this.out = out;
         this.scw = scw;
     }

@@ -16,6 +16,8 @@ public abstract class Weapon implements Serializable {
 
     private Integer firstTarget;//first target of every shot , useful for checking  if we need to retarget players or similar
 
+    private boolean loaded = true;
+
     /**
      * Abstract class, no constructor
      */
@@ -23,12 +25,44 @@ public abstract class Weapon implements Serializable {
     /**
      * @return Boolean if the weapon is loaded
      */
-    public abstract boolean isLoaded();
+    public boolean isLoaded(){
+        return loaded;
+    }
+
+    /**
+     * @param loaded is a boolean representing if the weapon is loaded
+     */
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
+    }
 
     /**
      * reloads the weapon
      */
-    public abstract void reload() throws NotAbleToReloadException ;
+    public void reload() throws NotAbleToReloadException{
+
+        // checks if the player who owns the weapon can pay the reload
+
+        if (!this.isPossessedBy().canPay(this.getReloadCost())) throw new NotAbleToReloadException();
+
+        else {
+
+            try {
+
+                // the player pays
+
+                this.isPossessedBy().pay(this.getReloadCost());
+
+                // the weapon is set to loaded
+
+                loaded = true;
+
+            }catch (CardNotPossessedException e){
+
+                throw new NotAbleToReloadException();
+            }
+        }
+    }
 
 
 

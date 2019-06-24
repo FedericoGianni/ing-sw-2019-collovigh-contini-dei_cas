@@ -528,6 +528,8 @@ public class Parser {
 
         specialWeaponList.add(new VortexCannon());
 
+        specialWeaponList.add(new Furnace());
+
         //TODO add all the special weapons
 
         return specialWeaponList;

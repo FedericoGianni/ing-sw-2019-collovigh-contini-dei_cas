@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.view.updates.UpdateType;
+import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
 public interface UserInterface {
 
@@ -21,8 +22,9 @@ public interface UserInterface {
      * Notify that a local client class has been updated inside the cachemodel
      * @param updateType the class which has been updated
      * @param playerId useful in some case to determine which player has been updated (i.e. new position)
+     * @param turnUpdate is the update class if the update is of type Turn
      */
-    void notifyUpdate(UpdateType updateType, int playerId);
+    void notifyUpdate(UpdateType updateType, int playerId, TurnUpdate turnUpdate);
 
     /**
      * Start the game in the selected user interface

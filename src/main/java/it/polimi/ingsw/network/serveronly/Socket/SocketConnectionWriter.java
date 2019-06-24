@@ -1,8 +1,9 @@
-package it.polimi.ingsw.network.socket;
+package it.polimi.ingsw.network.serveronly.Socket;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.ToView;
+import it.polimi.ingsw.network.socket.SocketPing;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.io.BufferedWriter;
