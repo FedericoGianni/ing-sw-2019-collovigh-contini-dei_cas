@@ -376,7 +376,7 @@ public class NormalWeapon extends Weapon{
      * @throws WeaponNotLoadedException
      * @throws NotEnoughAmmoException
      */
-    public void shoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException {
+    public void shoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException, PrecedentPlayerNeededException {
 
         List<List<Player>> targetsCopy=new ArrayList<>();
         //now i create the fake players
@@ -405,7 +405,8 @@ public class NormalWeapon extends Weapon{
           for (int macroCont = 0; macroCont < effect.size(); macroCont++)//iterate macroeffect
           {
 
-              if (this.getEffects().get(macroCont).getEffectCost() != null)//if the effect costs 0 i don't need to pay
+              System.out.println("Uso : " +this.getEffects().get(effect.get(macroCont)).getName());
+              if (this.getEffects().get(effect.get(macroCont)).getEffectCost() != null)//if the effect costs 0 i don't need to pay
               {
                   if (canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(), this.isPossessedBy().getAmmoBag()) == true)//----need to add effects as payment
                   {
@@ -421,26 +422,26 @@ public class NormalWeapon extends Weapon{
               //here i can shoot for real
 
 
-              for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
+              for (MicroEffect micro : this.getEffects().get(effect.get(macroCont)).getMicroEffects())//iterates microEffects
               {
 
                   if (micro.moveBefore() == true && moveBefore)//if i need to move before shooting
                   {
-                      micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont));//contatore appostio forse perchè sposta gli ordini??
+                      micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont),macroCont);//contatore appostio forse perchè sposta gli ordini??
                       this.getEffects().get(macroCont).getMicroEffects().remove(micro);
 
                   }
 
               }
 
-              for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
+              for (MicroEffect micro : this.getEffects().get(effect.get(macroCont)).getMicroEffects())//iterates microEffects
               {
                   if (cells != null && !cells.isEmpty())//if you also have mover effects
                   {
-                      micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont));
+                      micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont),macroCont);
                   }//the method that applies the effects
                   else {
-                          micro.microEffectApplicator(targetLists.get(macroCont), this, null);
+                          micro.microEffectApplicator(targetLists.get(macroCont), this, null,macroCont);
                   }
               }
 
@@ -449,8 +450,7 @@ public class NormalWeapon extends Weapon{
 
         }
       catch(PlayerInSameCellException e)
-      {
-          restore(targetsCopy,targetLists);
+      {   restore(targetsCopy,targetLists);
           throw  new PlayerInSameCellException();
       } catch (NotEnoughAmmoException e) {
           restore(targetsCopy,targetLists);
@@ -479,6 +479,9 @@ public class NormalWeapon extends Weapon{
       } catch (SeeAblePlayerException e) {
           restore(targetsCopy,targetLists);
           throw new SeeAblePlayerException();
+      } catch (PrecedentPlayerNeededException e) {
+          restore(targetsCopy,targetLists);
+          throw new PrecedentPlayerNeededException();
       }
         this.isLoaded=false;
     }

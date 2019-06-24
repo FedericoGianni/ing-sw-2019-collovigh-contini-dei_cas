@@ -28,10 +28,13 @@ public class Damage extends MicroEffect {
     private boolean alreadyTargeted;//sometimes in secondary effects you have to choose between already targeted players of the first effect
     private int distMin;//some effects require a minimum distance, calculated by moves
     //particuarities: if both differentPlayer and alreadyTargeted are true you can choose to apply one or both effects(check machineGun III)
+
     // the player number is 100 you need to target every player in the target's square(check electroshyte-melee-  and grenade launcher)
     //player num is 10 you must target the number/10 every one from different cell
+    //player number pure that number
+    //player number 1000 or more up to playerNum/1000
     //if the minimum distance is over 10 it means maximum distance, like 20 is at maximun distance of 2 (20/10-> 2)(check tractor beam)
-    //if the distance is 1000 is like 1 , no more no less
+    //if the distance is 1000 is like 1 , no more no less,exactly dist/1000
     //if the minimum distance is 100 is an unseeble Player by default, you have to target an unseeable player(check heatseeker)
     //only the damage tag have the distance inside
     private static List <Damage> damages = new ArrayList<>();
@@ -167,19 +170,62 @@ public class Damage extends MicroEffect {
     }
 
     @Override
-    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException, PlayerNotSeeableException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
-        if(alreadyTargeted==true && differentPlayer==false)
+    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException, PlayerNotSeeableException, PrecedentPlayerNeededException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
+        System.out.println("------------------------------------");
+        System.out.println("Damage Effect!");
+       print();
+       System.out.println("------------------------------------");
+        if(alreadyTargeted==true && differentPlayer==false)//1 target, one of the firstTargets
         {
-            w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);//playerId=0 bcz only one player the same as the first shot
+
+
+            if(!(w.getFirstTargets().contains(playerList.get(0))))
+             throw new PrecedentPlayerNeededException();
+
+            for(Player p: playerList ) {
+                if (!w.isPossessedBy().canSee().contains(p))
+                    throw new PlayerNotSeeableException();
+            }
+            for(Player p:w.getFirstTargets())
+            {
+                if(p==playerList.get(0))
+                {
+
+                    p.addDmg(w.isPossessedBy().getPlayerId(),damage);
+                    w.removeFromFirstTargets(p);
+                }
+            }
+
             return;
         }
-        else if(alreadyTargeted && differentPlayer){//MG-3 you must shoot the previous target then you can target whatever you want
+        else if(alreadyTargeted && differentPlayer){//MG-3 you must shoot the previous target and/or you can target whover you want
 
-            w.getFirstTarget().addDmg(w.isPossessedBy().getPlayerId(),damage);
-            playerList.remove(w.getFirstTarget());//shot the previous target
-            for(int i=0;i<=playerList.size();i++)//if there are you can shot other targets now
+            if(w.getFirstTargets().contains(playerList.get(0)) ||w.getFirstTargets().contains(playerList.get(1)))//if i have the previous target shoot him
             {
-                Model.getPlayer(i).addDmg(w.isPossessedBy().getPlayerId(),damage);
+                for(Player p:w.getFirstTargets())
+                {
+                    for(int i=0;i< playerList.size();i++) {
+
+                        if (p == playerList.get(i)) {
+                            p.addDmg(w.isPossessedBy().getPlayerId(), damage);
+                            playerList.remove(p);//shot the previous target
+                        }
+                    }
+                }
+
+            }
+            //then you can target someone else
+
+            for(int i=0;i<playerList.size();i++)//here you can shoot one other target
+            {
+                if(playerList.size()>1)
+                throw new NotCorrectPlayerNumberException();
+
+                if(!w.isPossessedBy().canSee().contains(playerList.get(i)))
+                    throw new PlayerNotSeeableException();
+
+
+                playerList.get(i).addDmg(w.isPossessedBy().getPlayerId(),damage);
             }
             return;
         }
@@ -190,6 +236,7 @@ public class Damage extends MicroEffect {
                 if(!w.isPossessedBy().canSee().contains(item))
                     throw new PlayerNotSeeableException();
             }
+
         }
             
          if(playerNum==100)
@@ -217,7 +264,17 @@ public class Damage extends MicroEffect {
             }
 
         }
-        else {
+         else if(playerNum>=1000)//up to playerNum/1000 targets
+         {
+             if(playerList.size()>playerNum/1000)
+                 throw new NotCorrectPlayerNumberException();
+             for(Player item:playerList)
+             {
+                 distance(item,w.isPossessedBy());
+             }
+         }
+        else {//player number is pure
+
             if(playerList.size()!=playerNum){
                 System.out.println(playerList.size()+" !!"+playerNum);
              throw new NotCorrectPlayerNumberException();
@@ -227,8 +284,11 @@ public class Damage extends MicroEffect {
                 distance(item,w.isPossessedBy());
             }
 
-        }w.setFirstTarget(playerList.get(0));//it can be useful if you need to reshot the shame player otherwise it doesn't count nothing
+        }
+        if(n==0 && playerList.size()!=0) {
 
+            w.setFirstTarget(playerList);//it can be useful if you need to reshot the shame player otherwise it doesn't count nothing
+        }
     }
 
     @Override
@@ -238,18 +298,24 @@ public class Damage extends MicroEffect {
 
     private void distance(Player target,Player shooter) throws UncorrectDistanceException, SeeAblePlayerException //distance, called for every player
     {
+        if(distMin==0)//no more controls neeeded
+        {
+            target.addDmg(shooter.getPlayerId(),damage);
+        }
         if(melee==true)
         {
             if(target.getCurrentPosition()==shooter.getCurrentPosition())
             {
+                System.out.println("aaaaaaa");
                 target.addDmg(shooter.getPlayerId(),damage);
             }else{
                 throw new UncorrectDistanceException();
             }
         }
-        else if(distMin<10)
+        else if(distMin<10 && distMin!=0)//0 means uninportant
         {
             if(Map.getDist(target,shooter)>=distMin){//--------wait
+
                 target.addDmg(shooter.getPlayerId(),damage);
             }else{throw new UncorrectDistanceException();}
 
@@ -265,7 +331,7 @@ public class Damage extends MicroEffect {
             if(!shooter.canSee().contains(target)){
                 target.addDmg(shooter.getPlayerId(),damage);
             }else{throw new SeeAblePlayerException();}
-        }else{
+        }else if(distMin>=1000){
             //a player that is exactly distMin/1000 away
             if(Map.getDist(target,shooter)==(distMin/1000)){
                 target.addDmg(shooter.getPlayerId(),damage);
@@ -300,5 +366,7 @@ public class Damage extends MicroEffect {
         System.out.println("alreadyTargetd: "+alreadyTargeted);
         System.out.println("Different player:" +differentPlayer);
         System.out.println("Minimun distance required:"+distMin);
+        System.out.println("Melee:"+melee);
+        System.out.println("Player number="+playerNum);
     }
 }

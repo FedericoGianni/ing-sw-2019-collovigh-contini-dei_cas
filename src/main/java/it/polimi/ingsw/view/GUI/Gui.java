@@ -223,7 +223,7 @@ public class Gui extends Application implements UserInterface {
             case POWERUP_BAG:
                     guiMapController.powerUpDisplayer();
                 break;
-            case AMMO_CELL:
+            case AMMO_CELL://remember--- at end turn i need to replace everyCell, even if it has something inside!
                     guiMapController.ammoPlacer();
                 break;
 
@@ -297,7 +297,7 @@ public class Gui extends Application implements UserInterface {
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
         //this method enables the action buttons to do something
-        System.out.println("enables actions");
+
         guiMapController.actionButtonsEnabler();
 
         //view.doAction(new Move(view.doAction(new Move(directionsList, finalPos));));----->

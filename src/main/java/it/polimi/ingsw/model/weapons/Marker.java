@@ -100,9 +100,13 @@ public class Marker extends MicroEffect {
     }
 
     @Override
-    public void print() {
-        System.out.println("marker");
-    }
+        public void print() {
+            System.out.println("markers: "+markers);
+            System.out.println("mseeable Target: "+seeAbleTargetNeeded);
+            System.out.println(": "+playerNum);
+            System.out.println("different player: "+differentPlayer);
+        }
+
 
     //i don't need to check distance because if the distance is ok from the damage here is too obv
     /**
@@ -119,12 +123,13 @@ public class Marker extends MicroEffect {
      * @throws NotCorrectPlayerNumberException
      */
     @Override
-    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c) throws  PlayerInDifferentCellException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
+    public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws  PlayerInDifferentCellException, SeeAblePlayerException, DifferentPlayerNeededException, NotCorrectPlayerNumberException, PlayerNotSeeableException {
         if (differentPlayer==true)//only one case
         {
-            if(w.getFirstTarget()!=playerList.get(0))//weapons that requires precedent players always have one target
+
+            if(w.getFirstTargets().get(0)!=playerList.get(0))//lock rfle, just 1 target
             {
-                if(playerList.get(0).canSee().contains(w.getFirstTarget())){
+                if(playerList.get(0).canSee().contains(w.getFirstTargets().get(0))){
                 playerList.get(0).addMarks(w.isPossessedBy().getPlayerId(),markers);}else{
                     throw new SeeAblePlayerException();
                 }
