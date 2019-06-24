@@ -172,14 +172,14 @@ public class Damage extends MicroEffect {
     @Override
     public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException, PlayerNotSeeableException, PrecedentPlayerNeededException, DifferentPlayerNeededException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
         System.out.println("------------------------------------");
-        System.out.println("Damage Effect!");
+        System.out.println("Damage Effect! life now: " +playerList.get(0).getStats().getDmgTaken().size());
        print();
        System.out.println("------------------------------------");
        for(int i=0;i<playerList.size();i++)//i can't shoot more times to the same target
        {
            for(int j=0;j<playerList.size();j++)
            {
-               if(i!=j && playerList.get(i)== playerList.get(j))
+               if(i!=j && playerList.get(i).getPlayerId()== playerList.get(j).getPlayerId())
                    throw new DifferentPlayerNeededException();
            }
 
@@ -199,11 +199,7 @@ public class Damage extends MicroEffect {
             {
                 if(p==playerList.get(0))
                 {
-                    System.out.println("!!!!!!! Bersaglio ha subito questi danni: "+playerList.get(0).getStats().getDmgTaken().size());
-                    System.out.println("Il bersaglio subisce "+damage+" danni");
                     playerList.get(0).addDmg(w.isPossessedBy().getPlayerId(),damage);
-                    System.out.println(" Bersaglio ha subito questi danni: "+playerList.get(0).getStats().getDmgTaken().size()+" !!!!!!!");
-
                     w.removeFromFirstTargets(p);
                 }
             }
@@ -241,6 +237,23 @@ public class Damage extends MicroEffect {
             }
             return;
         }
+        if(differentPlayer && melee)//cyberblade last effect
+        {
+
+            if(playerList.size()!=1)
+                throw new NotCorrectPlayerNumberException();
+            if(w.getFirstTargets().contains(playerList.get(0)))
+                throw new DifferentPlayerNeededException();
+            if(!playerList.get(0).getCurrentPosition().equals(w.isPossessedBy().getCurrentPosition()))
+                throw new PlayerInDifferentCellException();
+
+
+            playerList.get(0).addDmg(w.isPossessedBy().getPlayerId(),damage);
+           return;
+
+        }
+
+
         if(seeAbleTargetNeeded)
         {
             for(Player item : playerList)//check that everyone is in the same cells
@@ -262,9 +275,13 @@ public class Damage extends MicroEffect {
                 }
                 return;
             }
-            if(c!=null)//Granade launcher 2, has cell different from 0
+            if(c!=null)//Granade launcher 2, e rccket launcher has cell different from 0
             {
-                System.out.println("aaaaaaaaaaaaaaaa");
+                if(c.getPlayers().size()==0)
+                    throw new NotCorrectPlayerNumberException();
+                if(!w.isPossessedBy().canSee().contains(c.getPlayers().get(0)))//you cant see the cella nd the ttagets
+                    throw new PlayerNotSeeableException();
+
                 for(Player item : c.getPlayers())
                 {
                     item.addDmg(w.isPossessedBy().getPlayerId(),damage);
@@ -276,7 +293,7 @@ public class Damage extends MicroEffect {
 
                 sameCellCheck(item,playerList);
             }
-            System.out.println("porco pony");
+
             for(Player item:playerList)
             {
                 distance(item,w.isPossessedBy());
@@ -305,10 +322,17 @@ public class Damage extends MicroEffect {
                  distance(item,w.isPossessedBy());
              }
          }
+         else if(playerNum==9999999)//special if you are sure eberything is ok
+         {
+             for(Player item : playerList)
+             {
+                 item.addDmg(w.isPossessedBy().getPlayerId(),damage);
+             }
+         }
         else {//player number is pure
 
             if(playerList.size()!=playerNum){
-                System.out.println(playerList.size()+" !!"+playerNum);
+
              throw new NotCorrectPlayerNumberException();
             }
             for(Player item : playerList)
@@ -328,23 +352,21 @@ public class Damage extends MicroEffect {
         return false;
     }
 
-    private void distance(Player target,Player shooter) throws UncorrectDistanceException, SeeAblePlayerException //distance, called for every player
+    private void distance(Player target,Player shooter) throws UncorrectDistanceException, SeeAblePlayerException, PlayerInDifferentCellException //distance, called for every player
     {
         if(distMin==0)//no more controls neeeded
         {
-            System.out.println("!!!!!!! Bersaglio ha subito questi danni: "+target.getStats().getDmgTaken().size());
-            System.out.println("Il bersaglio subisce "+damage+" danni");
+
             target.addDmg(shooter.getPlayerId(),damage);
-            System.out.println(" Bersaglio ha subito questi danni: "+target.getStats().getDmgTaken().size()+" !!!!!!!");
+            return;
         }
-        if(melee==true)
+        else if(melee)
         {
             if(target.getCurrentPosition()==shooter.getCurrentPosition())
             {
-                System.out.println("aaaaaaa");
                 target.addDmg(shooter.getPlayerId(),damage);
             }else{
-                throw new UncorrectDistanceException();
+                throw new PlayerInDifferentCellException();
             }
         }
         else if(distMin<10 && distMin!=0)//0 means uninportant
@@ -366,7 +388,7 @@ public class Damage extends MicroEffect {
             if(!shooter.canSee().contains(target)){
                 target.addDmg(shooter.getPlayerId(),damage);
             }else{throw new SeeAblePlayerException();}
-        }else if(distMin>=1000){
+        }else if(distMin>=1000 && distMin<9999){
             //a player that is exactly distMin/1000 away
             if(Map.getDist(target,shooter)==(distMin/1000)){
                 target.addDmg(shooter.getPlayerId(),damage);

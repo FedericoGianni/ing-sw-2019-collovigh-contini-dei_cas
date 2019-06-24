@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.weapons;
 import com.google.gson.Gson;
 import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.customsexceptions.*;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
@@ -98,7 +99,7 @@ public class Mover extends MicroEffect {
                 {
                     if (Map.getDist(c, playerList.get(0).getCurrentPosition()) == cellNumber)//check if the distace is correct
                     {
-                        playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
+                        playerList.get(0).setPlayerPos(c);
                     } else {
                         throw new UncorrectDistanceException();
                     }
@@ -106,7 +107,9 @@ public class Mover extends MicroEffect {
                     if (Map.getDist(c, playerList.get(0).getCurrentPosition()) <= cellNumber)//check if the distace is correct
                     {
                         System.out.println("celle7");
-                        playerList.get(0).setPlayerPos(w.isPossessedBy().getCurrentPosition());
+                        if(c== Model.getMap().getCell(1,0))
+                            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                        playerList.get(0).setPlayerPos(c);
                     } else {
                         throw new UncorrectDistanceException();
                     }
@@ -114,7 +117,7 @@ public class Mover extends MicroEffect {
 
             }
         } else {
-            System.out.println("celleee no buono");//the shooter is moved
+            //the shooter is moved
             if (toCell == true)//move to cell, then check if the distance is correft if the distane is neededand if you can move there for real
             {
                 w.isPossessedBy().setPlayerPos(c);
