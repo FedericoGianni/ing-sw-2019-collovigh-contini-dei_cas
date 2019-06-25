@@ -161,6 +161,7 @@ public class CLI implements UserInterface {
 
             case 2:
                 // TODO reconnect
+                view.reconnect("fede");
                 break;
 
             case 3:

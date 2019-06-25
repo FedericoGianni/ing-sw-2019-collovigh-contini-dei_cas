@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.Skull;
@@ -8,7 +7,6 @@ import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.PowerUpDeck;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.model.weapons.WeaponDeck;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedGame;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,6 +61,7 @@ public class CurrentGame extends Subject{
         this.weaponDeck = new WeaponDeck(clone.weaponDeck);
         this.thrashPowerUpDeck = new PowerUpDeck(clone.thrashPowerUpDeck);
         this.skulls = clone.skulls;
+        this.killShotTrack = new ArrayList<>(clone.killShotTrack);
     }
 
 

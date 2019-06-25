@@ -3,7 +3,9 @@ package it.polimi.ingsw.model.weapons;
 import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.model.Deck;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -55,6 +57,7 @@ public class WeaponDeck implements Deck<Weapon> {
      * @return a pointer to a Weapon which will no longer be in the Deck
      */
     public Weapon getRandomCard() {
+
 
         if (this.weaponList == null){ throw new NullPointerException();}
 

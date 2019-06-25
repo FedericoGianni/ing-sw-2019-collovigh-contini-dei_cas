@@ -61,8 +61,8 @@ public class Thor extends SpecialWeapons {
         {
 
             if(i==0)//first macroeffect
-            {
-                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),2);
+            {//TODO modify damage to 2, 10 is just for test purpose
+                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),11);
             }else if(i==1)//second macroeffect
             {
                 targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),1);

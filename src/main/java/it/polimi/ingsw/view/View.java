@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.rmi.RMIClient;
 import it.polimi.ingsw.network.client.socket.SocketClient;
 import it.polimi.ingsw.utils.Directions;
@@ -75,6 +75,7 @@ public class View implements ViewInterface {
 
             this.userInterface = new CLI(this);
             this.userInterface.startUI();
+            //this.userInterface.gameSelection();
         }
 
         if (ui.equals("-gui")) {
@@ -117,6 +118,7 @@ public class View implements ViewInterface {
 
             this.userInterface = new CLI(this);
             this.userInterface.startUI();
+            // this.userInterface.gameSelection();
         }
 
         if (ui.equals("-gui")) {
@@ -185,6 +187,8 @@ public class View implements ViewInterface {
         }
 
         userInterface.login();
+        //TODO uncomment this to have game selection
+        //userInterface.gameSelection();
     }
 
     public void retryLogin(String error){
@@ -349,6 +353,10 @@ public class View implements ViewInterface {
 
         // forward it to the CacheModel
         cacheModel.update(update);
+    }
+
+    public int reconnect(String name){
+        return clientToVView.reconnect(name);
     }
 
 

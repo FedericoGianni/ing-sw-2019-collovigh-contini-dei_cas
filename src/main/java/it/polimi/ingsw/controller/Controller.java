@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.Skull;
 import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
@@ -18,13 +17,17 @@ import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.controller.TurnPhase.*;
-import static it.polimi.ingsw.utils.DefaultReplies.*;
+import static it.polimi.ingsw.controller.TurnPhase.END;
+import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_RECEIVED_FRENZY_BUT_EXPECTED_NORMAL;
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_RECEIVED_NORMAL_BUT_EXPECTED_FRENZY;
 
 
 /**
@@ -578,7 +581,8 @@ public class Controller {
 
         Model.getPlayer(playerId).setPlayerPos(null);
 
-        Model.getGame().getKillShotTrack().add(new Skull(getCurrentPlayer(),false));
+        Model.getGame().addkills(getCurrentPlayer(),false);
+
 
     }
 
@@ -596,7 +600,7 @@ public class Controller {
 
         // add skull to killShotTrack
 
-        Model.getGame().getKillShotTrack().add(new Skull(getCurrentPlayer(),true));
+        Model.getGame().addkills(getCurrentPlayer(),true);
 
         // set revenge Mark
 
