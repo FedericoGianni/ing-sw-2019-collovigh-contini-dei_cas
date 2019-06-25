@@ -1803,7 +1803,7 @@ public class CLI implements UserInterface {
                     System.out.println("[12] -> effetto base + effetto 1 + effetto 2");
                     System.out.println("Inserisci il numero che rappresenta la combinazione di effetti scelta: ");
 
-                } else if(CONCATENABLE_NON_ORD){
+                } else if(w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_NON_ORD)){
 
                     System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
                     System.out.println("[0] -> Effetto base");
