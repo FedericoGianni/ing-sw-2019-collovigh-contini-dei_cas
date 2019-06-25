@@ -59,7 +59,7 @@
       "cellNumber": "2",
       "beforeShooting": "false",
       "afterShooting": "true",
-      "facoltative": "true",
+      "facoltative": "false",
       "toCell": "false",
       "target":"true",
       "mycell": "false"

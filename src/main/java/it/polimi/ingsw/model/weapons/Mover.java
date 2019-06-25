@@ -67,7 +67,7 @@ public class Mover extends MicroEffect {
     @Override
     public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws   PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException {
         print();
-        System.out.println("celleee1");
+
         if (facoltative == true) {
             if (playerList == null) {
                 return;
@@ -75,7 +75,6 @@ public class Mover extends MicroEffect {
         }
         if (target == true)//you move the target
         {
-            System.out.println("celleee2");
             if (myCell == true)//tractor beam second
             {      //here the geometrical distance is correct
                 c=w.isPossessedBy().getCurrentPosition();
@@ -107,8 +106,8 @@ public class Mover extends MicroEffect {
                     if (Map.getDist(c, playerList.get(0).getCurrentPosition()) <= cellNumber)//check if the distace is correct
                     {
                         System.out.println("celle7");
-                        if(c== Model.getMap().getCell(1,0))
-                            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                        if(c== Model.getMap().getCell(1,3))
+                            System.out.println("ssssssssssssssssssssss");
                         playerList.get(0).setPlayerPos(c);
                     } else {
                         throw new UncorrectDistanceException();

@@ -182,7 +182,7 @@
       "seeAbleTargetNeeded": "true",
       "melee": "true",
       "differentPlayer":"false",
-      "distMin": "0",
+      "distMin": "9999",
       "alreadyTargeted": "false"
 
     }
@@ -245,8 +245,8 @@
   },
   {
     "Damage": {
-      "damage": "2",
-      "playerNum": "1",
+      "damage": "1",
+      "playerNum": "9999",
       "seeAbleTargetNeeded": "false",
       "melee": "false",
       "differentPlayer":"false",
@@ -283,7 +283,7 @@
       "seeAbleTargetNeeded": "false",
       "melee": "true",
       "differentPlayer":"false",
-      "distMin": "0",
+      "distMin": "9999",
       "alreadyTargeted": "false"
     }
   },
@@ -294,7 +294,7 @@
       "seeAbleTargetNeeded": "false",
       "melee": "true",
       "differentPlayer":"false",
-      "distMin": "0",
+      "distMin": "9999",
       "alreadyTargeted": "false"
     }
   },
