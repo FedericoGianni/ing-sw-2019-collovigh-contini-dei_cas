@@ -24,7 +24,6 @@ public class Server  {
 
     private static final String LOG_START = "[Server] ";
 
-    private static final int MIN_PLAYER_CONNECTED = 3;
     private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = false;
 
     /**
@@ -214,7 +213,7 @@ public class Server  {
 
         clients.remove(playerId);
 
-        if ((waitingRoom.isActive()) && (WaitingRoom.getTimerCount() > 1)){
+        if ((waitingRoom.isActive()) && (waitingRoom.getTimerCount() > 1)){
 
             // LOG the disconnection
 
@@ -242,9 +241,9 @@ public class Server  {
 
             controller.setPlayerOffline(playerId);
 
-            if ( (ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < MIN_PLAYER_CONNECTED) ){
+            if ( (ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < WaitingRoom.DEFAULT_MIN_PLAYERS) ){
 
-                LOGGER.log(Level.WARNING, () -> LOG_START + "Connected player are less than " + MIN_PLAYER_CONNECTED + " the game will be terminated " );
+                LOGGER.log(Level.WARNING, () -> LOG_START + "Connected player are less than " + WaitingRoom.DEFAULT_MIN_PLAYERS + " the game will be terminated " );
 
                 controller.endGame();
             }

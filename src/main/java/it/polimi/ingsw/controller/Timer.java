@@ -53,6 +53,8 @@ public class Timer {
 
     public void defaultAnswer(){
 
+        LOGGER.log(level, () -> LOG_START + " would have called default Answer");
+
         //controller.defaultAnswer();
     }
 }

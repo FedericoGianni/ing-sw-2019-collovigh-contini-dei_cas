@@ -8,7 +8,6 @@ import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
-import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedLobby;
 
 import java.util.ArrayList;
@@ -25,12 +24,12 @@ import java.util.logging.Logger;
 public class WaitingRoom {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    public static final Level level = Level.INFO;
+    private static final Level level = Level.INFO;
 
     private static final int TIMER = 2;
-    private static int timerCount = TIMER;
+    private int timerCount = TIMER;
 
-    private static final int DEFAULT_MIN_PLAYERS = 1;
+    public static final int DEFAULT_MIN_PLAYERS = 1;
     private static final int DEFAULT_MAX_PLAYERS = 5;
 
     private int skulls = 8;
@@ -187,7 +186,7 @@ public class WaitingRoom {
      *
      * @return the current value of timerCount which is decreased by startTimer() method
      */
-    public static int getTimerCount() {
+    public int getTimerCount() {
         return timerCount;
     }
 

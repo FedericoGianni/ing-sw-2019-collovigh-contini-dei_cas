@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.serveronly.Socket;
 
+import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.serveronly.Socket.SocketConnectionReader;
 import it.polimi.ingsw.network.serveronly.WaitingRoom;
 import it.polimi.ingsw.network.socket.SocketIdentifier;
@@ -42,7 +43,7 @@ public class SocketServer extends Thread {
     public void run() {
         LOGGER.log(INFO, "Starting SocketServer");
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            while (WaitingRoom.getTimerCount() > 0 && clients.size() <= DEFAULT_MAX_CLIENTS) {
+            while (Server.getWaitingRoom().getTimerCount() > 0 && clients.size() <= DEFAULT_MAX_CLIENTS) {
                 //TODO need to check the clientsNum part
                 Socket socket = serverSocket.accept();
                 new SocketConnectionReader(socket).start();

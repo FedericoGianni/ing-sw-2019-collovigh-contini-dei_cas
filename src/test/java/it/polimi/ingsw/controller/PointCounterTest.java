@@ -45,9 +45,9 @@ class PointCounterTest {
 
         pointCounter.calculateTurnPoints();
 
-        System.out.println(player02.getStats().getScore());
+        //System.out.println(player02.getStats().getScore());
 
-        System.out.println(player03.getStats().getScore());
+        //System.out.println(player03.getStats().getScore());
 
         assertEquals(8,player03.getStats().getScore());
 

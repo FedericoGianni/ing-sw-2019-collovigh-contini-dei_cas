@@ -81,4 +81,5 @@ public class DefaultReplies {
     public static final String DEFAULT_WEAPON_ALREADY_LOADED = ANSI_YELLOW.escape() +
             "[!] Arma già carica!" + ANSI_RESET.escape();
 
+    public static final String DEFAULT_PRECEDENT_PLAYER_NEEDED = "PRECEDENT_PLAYER_NEEDED";
 }

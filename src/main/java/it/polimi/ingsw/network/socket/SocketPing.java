@@ -71,7 +71,7 @@ public class SocketPing implements Runnable {
                 out.write("ping\f" + scw.getId());
                 out.newLine();
                 out.flush();
-                LOGGER.log(INFO, "Sending ping message to client.");
+                LOGGER.log(level, "Sending ping message to client.");
             } catch (InterruptedException e) {
                 //this.interrupt();
             } catch (IOException e){
