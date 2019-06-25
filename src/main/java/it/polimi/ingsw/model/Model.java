@@ -30,6 +30,8 @@ public class Model {
 
         game = new CurrentGame(playerList, map, skulls);
 
+        if (Observers.isInitialized()) game.addObserver(Observers.getGameObserver());
+
         if (Observers.isInitialized()) map.updateObserver();
 
         if (Observers.isInitialized()) map.initializeSpawnCell();

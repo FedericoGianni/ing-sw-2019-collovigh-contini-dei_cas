@@ -80,7 +80,7 @@ public class ReloadPhase {
 
 
                 List<PowerUp> toDiscard = controller.getUtilityMethods().getSpecifiedPowerUp(reloadAction.getPowerUps());
-                LOGGER.log(Level.WARNING, "powerUps to discard: " + toDiscard);
+                LOGGER.log(Level.WARNING, () -> "powerUps to discard: " + toDiscard);
 
                 for (PowerUp powerUp: toDiscard){
 
@@ -292,15 +292,19 @@ public class ReloadPhase {
 
         //check if the player can reload any of his weapon
 
-        for (Weapon weapon : Model.getPlayer(playerId).getCurrentWeapons().getList()){
+        if (returnValue == true ) {
 
-            List<Color> required = weapon
-                    .getReloadCost()
-                    .stream()
-                    .map(AmmoCube::getColor)
-                    .collect(Collectors.toList());
+            for (Weapon weapon : Model.getPlayer(playerId).getCurrentWeapons().getList()) {
 
-            returnValue = returnValue || fullAmmoList.containsAll(required);
+                List<Color> required = weapon
+                        .getReloadCost()
+                        .stream()
+                        .map(AmmoCube::getColor)
+                        .collect(Collectors.toList());
+
+                returnValue = returnValue || fullAmmoList.containsAll(required);
+
+            }
 
         }
 

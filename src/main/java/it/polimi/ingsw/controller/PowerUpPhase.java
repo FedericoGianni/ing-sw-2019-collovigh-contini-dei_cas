@@ -91,7 +91,7 @@ public class PowerUpPhase {
 
             int playerId = controller.getShotPlayerThisTurn().get(0);
 
-            if ( ( controller.isPlayerOnline(playerId) ) && ( hasGrenade(playerId) ) ) {
+            if ( ( controller.isPlayerOnline(playerId) ) && ( hasGrenade(playerId) && (playerId != controller.getCurrentPlayer())) ) {
 
                 controller.getVirtualView(playerId).askGrenade();
 

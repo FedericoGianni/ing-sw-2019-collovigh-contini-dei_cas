@@ -305,7 +305,7 @@ public class UtilityMethods {
 
         for (CachedPowerUp cachedPowerUp : powerUps){
 
-            PowerUp toRemove = controller.getUtilityMethods().cachedToRealPowerUp(cachedPowerUp,possessed);
+            PowerUp toRemove = cachedToRealPowerUp(cachedPowerUp,possessed);
 
             powerUpList.add(toRemove);
 

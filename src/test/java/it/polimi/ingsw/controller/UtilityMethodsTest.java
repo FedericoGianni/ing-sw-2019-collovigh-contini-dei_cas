@@ -1,10 +1,18 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.powerup.Newton;
+import it.polimi.ingsw.model.powerup.PowerUp;
+import it.polimi.ingsw.model.powerup.TagbackGrenade;
+import it.polimi.ingsw.model.powerup.TargetingScope;
 import it.polimi.ingsw.model.weapons.Furnace;
 import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PowerUpType;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -51,5 +59,43 @@ class UtilityMethodsTest {
         assertEquals(player.getCurrentWeapons().getList(), Arrays.asList(weapon));
 
 
+    }
+
+    @Test
+    void cachedToRealPowerUp() {
+
+        UtilityMethods utilityMethods = new UtilityMethods(null);
+
+        List<PowerUp> powerUpList = new ArrayList<>();
+        List<PowerUp> selected;
+        List<PowerUp> found = new ArrayList<>();
+
+        powerUpList.add(new TargetingScope(Color.BLUE));
+        powerUpList.add(new Newton(Color.YELLOW));
+
+        selected = new ArrayList<>(powerUpList);
+
+        powerUpList.add(new TagbackGrenade(Color.RED));
+
+
+        List<CachedPowerUp> cachedPowerUpList = new ArrayList<>();
+
+        cachedPowerUpList.add(new CachedPowerUp(PowerUpType.TARGETING_SCOPE, Color.BLUE));
+        cachedPowerUpList.add(new CachedPowerUp(PowerUpType.NEWTON, Color.YELLOW));
+
+        for (CachedPowerUp powerUp : cachedPowerUpList){
+
+            try {
+
+                found.add(utilityMethods.cachedToRealPowerUp(powerUp,powerUpList));
+
+            }catch (CardNotPossessedException e){
+
+                e.printStackTrace();
+
+            }
+        }
+
+        assertEquals(selected,found);
     }
 }
