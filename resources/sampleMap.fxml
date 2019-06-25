@@ -77,6 +77,11 @@
             <Button text="Muovi e raccogli"></Button>
             <Button text="Raccogli dove sei " fx:id="grabButton"></Button>
             <Button text="Ricarica"></Button>
+                <HBox>
+                    <ImageView fx:id="myWeapon1"></ImageView>
+                    <ImageView fx:id="myWeapon2"></ImageView>
+                    <ImageView fx:id="myWeapon3"></ImageView>
+                </HBox>
             </HBox>
         </HBox>
     </bottom>

@@ -297,64 +297,6 @@ public class NormalWeapon extends Weapon{
         return mf;
     }
 
-   /*
-    @Override
-    public void shoot(List<List<Player>>targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, PlayerNotSeeableException, WeaponNotLoadedException, NotEnoughAmmoException, CardNotPossessedException, DifferentPlayerNeededException, NotCorrectPlayerNumberException {
-
-            if(!this.isLoaded())//if actual weapon is not loaded
-            {
-                throw new WeaponNotLoadedException();//weapon not loaded
-            }
-
-            for(int macroCont=0;macroCont<effect.size();macroCont++)//iterate macroeffect
-            {
-
-                if (this.getEffects().get(macroCont).getEffectCost() != null)//if the effect costs 0 i don't need to pay
-                {
-                    if (canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(), this.isPossessedBy().getAmmoBag()) == true)//----need to add effects as payment
-                    {
-                        for (AmmoCube ammo : this.getEffects().get(effect.get(macroCont)).getEffectCost()) {
-                            this.isPossessedBy().pay(ammo.getColor());//pays the effects cost need to be modified
-                        }
-
-                    } else {
-                        throw new NotEnoughAmmoException();
-                    }
-                }
-                //here i can shoot for real
-
-
-                for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
-                {
-
-                    if (micro.moveBefore() == true && moveBefore)//if i need to move before shooting
-                    {
-                        micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont));//contatore appostio forse perchè sposta gli ordini??
-                        this.getEffects().get(macroCont).getMicroEffects().remove(micro);
-
-                    }
-
-                }
-
-                for (MicroEffect micro : this.getEffects().get(macroCont).getMicroEffects())//iterates microEffects
-                {
-                    if (cells != null && !cells.isEmpty())//if you also have mover effects
-                    {
-                        micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont));
-                    }//the method that applies the effects
-                    else {
-                       try{ micro.microEffectApplicator(targetLists.get(macroCont), this, null);}
-                       catch(PlayerNotSeeableException e){
-                           throw new PlayerNotSeeableException();
-
-                       }
-                    }
-                }
-
-
-            }
-        this.isLoaded=false;
-    }*/
 
     /**
      * Shoot and if the shoot doesn't go well restores the old state
@@ -503,6 +445,7 @@ public class NormalWeapon extends Weapon{
                 try {
                     targetLists.get(i).get(j).getStats().setMarks(targetsCopy.get(i).get(j).getMarks());
                     targetLists.get(i).get(j).getStats().setDmgTaken(targetsCopy.get(i).get(j).getDmg());
+
                 } catch (OverMaxMarkException e) {//this shit can't occur NEVER in this specifial case
                     e.printStackTrace();
                 } catch (OverMaxDmgException e) {

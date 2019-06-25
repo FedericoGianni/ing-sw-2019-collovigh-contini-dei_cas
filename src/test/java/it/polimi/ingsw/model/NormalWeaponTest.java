@@ -367,7 +367,28 @@ class NormalWeaponTest {
             shooter.getWeapons().get(0).shoot(targetLists, mEf, null);
 
 
-        }catch (Exception e) {
+        } catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PrecedentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException e) {
+            e.printStackTrace();
+        } catch (WeaponNotLoadedException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (CellNonExistentException e) {
+            e.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch(DifferentPlayerNeededException e)
+        {
             e.printStackTrace();
         }
         System.out.println(target1.getPlayerName());

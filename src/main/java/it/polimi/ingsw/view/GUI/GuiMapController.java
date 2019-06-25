@@ -1,19 +1,21 @@
 package it.polimi.ingsw.view.GUI;
 
 
-import it.polimi.ingsw.model.ammo.AmmoCube;
+import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
+import it.polimi.ingsw.view.UiHelpers;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
+import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
-import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import javafx.application.Platform;
@@ -31,7 +33,10 @@ import javafx.scene.layout.*;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 
 public class GuiMapController {
@@ -55,7 +60,7 @@ public class GuiMapController {
     @FXML
     VBox b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;
     @FXML
-    ImageView powerUp1,powerUp2,powerUp3,weapon1,weapon2,weapon3;
+    ImageView powerUp1,powerUp2,powerUp3,weapon1,weapon2,weapon3,myWeapon1,myWeapon2,myWeapon3;
 
     @FXML
     Button stopMov,moveButton,grabButton;
@@ -305,7 +310,7 @@ public class GuiMapController {
                 return "/images/weapons/cannoneVortex.png";
             case "FURNACE":
                 return "/images/weapons/vulcanizzatore.png";
-            case "HEAT SEEKER":
+            case "HEATSEEKER":
                 return "/images/weapons/razzoTermico.png";
             case "HELLION":
                 return "/images/weapons/raggioSolare.png";
@@ -431,7 +436,7 @@ public class GuiMapController {
             }
 
         }
-            if(found)return;}
+            if(found)return;}//if the player is already here don't re-put it
         fromIDtoIMG(id, map[r][c]);
         log.appendText("\n Placed player "+id+" in cell "+r+c);
 
@@ -659,25 +664,45 @@ public class GuiMapController {
 
     private void playerRemover(int id,int x,int y)
     {
+        System.out.println("Sto guardando cela :"+x+" "+y);
         if(map[x][y].getChildren().size()==1)//primo HBOX
         {
             int j=0;
-
-            while(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))!=0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
+            boolean found=false;
+            while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size()  )//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
             {
                 System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+
+                if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
+                {
+                   found=true; break;
+                }
                 j++;
             }
+            if(found)
             ((HBox)map[x][y].getChildren().get(0)).getChildren().remove(j);
-        }else{//secondo HBox stessa procedure di prima
+        }else if(map[x][y].getChildren().size()==2){//primo e secondo HBOX
             int j=0;
+            boolean found=false;
 
+            while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size())//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
+            {
+                System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+
+                if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0 )
+                {    found=true; break;}
+                j++;
+            }
+            if(found)
+            {((HBox)map[x][y].getChildren().get(0)).getChildren().remove(j); return;}
+            j=0;
             while(((HBox)map[x][y].getChildren().get(1)).getChildren().get(j).getId().compareTo(Integer.toString(id))!=0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
             {
                 j++;
             }
             ((HBox)map[x][y].getChildren().get(1)).getChildren().remove(j);
         }
+
     }
     private void inserter(int id,HBox h)
     {
@@ -753,16 +778,25 @@ public class GuiMapController {
 
         if (!gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getOnline()) {
             log.appendText("\nIl giocatore " + id + " si è scollegato.");
-
             return;
         }
         log.appendText("\nUpdated stats del player: " + id);
-        int r = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX();
-        int c = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY();
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                mapPos(r, c, id);
+        int r = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX();
+        int c = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY();
+
+        for(int i=0;i<rows;i++)//remove player icons from everywhere
+        {
+            for(int j=0;j<col;j++)
+            {
+                    playerRemover(id,i,j);
+            }
+        }
+
+
+                mapPos(r, c, id);//positions the player
                 stopMov.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
@@ -1012,7 +1046,7 @@ public class GuiMapController {
                     int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
                     playerRemover(gui.getView().getPlayerId(),x,y);
 
-                    gui.getView().doAction(new TeleporterAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(n), new Point(jj, ii)));
+                    gui.getView().doAction(new TeleporterAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(n), new Point(ii, jj)));
                     powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>(){
                         @Override
                         public void handle(MouseEvent mouseEvent) {
@@ -1042,39 +1076,63 @@ public class GuiMapController {
     //--------------------------------------------------------------ammo gestion
     public void ammoPlacer()
     {
-        //neeed to remove everything before!!!
-        for(int r=0;r<rows;r++)
-        {
-            for(int c=0;c<col;c++)
-            {
-                if(gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c)!=null)
-                {
-                    if(gui.getView().getCacheModel().getCachedMap().getCachedCell(r,c).getCellType().equals(CellType.AMMO))
-                    {
-                        final int rr=r,cc=c;
-                        Platform.runLater(new Runnable() {
-                            @Override public void run() {
-                                if(!containsAmmo(map[rr][cc]))
-                                    placer(((CachedAmmoCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(rr,cc)).getAmmoList(),map[rr][cc] );
+        //remove every ammo from the table
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+                for (int r = 0; r < rows; r++) {
+                    for (int c = 0; c < col; c++) {
+                        if (gui.getView().getCacheModel().getCachedMap().getCachedCell(r, c) != null) {
+                            if (gui.getView().getCacheModel().getCachedMap().getCachedCell(r, c).getCellType().equals(CellType.AMMO)) {
+                                VBox b = map[r][c];
+                                for (int i = 0; i < b.getChildren().size(); i++) {
+                                    for (int j = 0; j < ((HBox) b.getChildren().get(i)).getChildren().size(); j++) {
+
+                                        if (((HBox) b.getChildren().get(i)).getChildren().get(j).getId().compareTo("ammo") == 0) {
+                                            ((HBox) b.getChildren().get(i)).getChildren().remove((((HBox) b.getChildren().get(i)).getChildren().get(j)));
+                                        }
+
+                                    }
+                                }
                             }
-                        });
-
-
+                        }
                     }
+                }
+                for (int r = 0; r < rows; r++) {
+                    for (int c = 0; c < col; c++) {
+                        if (gui.getView().getCacheModel().getCachedMap().getCachedCell(r, c) != null) {
+                            if (gui.getView().getCacheModel().getCachedMap().getCachedCell(r, c).getCellType().equals(CellType.AMMO)) {
+                                final int rr = r, cc = c;
 
+
+                                if (!containsAmmo(map[rr][cc])) {
+                                    placer(((CachedAmmoCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(rr, cc)).getAmmoList(), map[rr][cc]);
+                                    if(((CachedAmmoCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(rr, cc)).getAmmoList().isEmpty())
+                                    {
+                                        System.out.println("vechiasca");
+                                    }
+                                }
+
+
+                            }
+
+                        }
+                    }
                 }
             }
-        }
+        });
     }
 
     private void imageCreator(String imgUrl,HBox h)//ammo Id="ammo"
     {
+
         if(imgUrl!=null)
         {ImageView img=new ImageView();
         Image image = new Image(imgUrl);
         img.setImage(image);
         img.setId("ammo");
         h.getChildren().add(img);}
+
+
     }
 
     private boolean containsAmmo(VBox b)
@@ -1094,6 +1152,8 @@ public class GuiMapController {
     {
         String url;
         url=fromAmmoCubetoIMG(a);
+
+
         if(b.getChildren().size()==0  )//if i don't have the hbox
         {
 
@@ -1230,7 +1290,7 @@ public class GuiMapController {
         }
         card.removeAll(card);
 
-
+        System.out.println("Returnato NULL!");
         return null;
     }
 
@@ -1387,23 +1447,240 @@ public class GuiMapController {
         weapon1.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("Buy first weapon");
+                try {
+                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect());
+                } catch (WeaponNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
         weapon2.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("Buy second weapon");
+                try {
+                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1)).getBuyEffect());
+                } catch (WeaponNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         weapon3.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println("Buy third weapon");
+                try {
+                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2)).getBuyEffect());
+                } catch (WeaponNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
+
+    /**
+     * Same as checkPayWithPowerUp but simpler version, which in case you don't need to specify local ammo and powerups
+     * will just read them from cacheModel and then call the main checkPayWithPowerUps method with them as parameters
+     * @param cost to be checked
+     * @return a list of CachedPowerUp to discard to pay the specified cost
+     */
+    private List<CachedPowerUp> checkPayWithPowerUp(List<Color> cost) {
+        View view=gui.getView();
+        List<CachedPowerUp> powerUps = new ArrayList<>();
+        CopyOnWriteArrayList<Color> ammo = new CopyOnWriteArrayList<>();
+        List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
+
+        if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
+            ammo.addAll(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag().getAmmoList());
+
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag() != null) {
+            powerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList();
+            //powerUpsColor = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
+        }
+
+        powerUpsToDiscard = checkPayWithPowerUp(cost, powerUps, ammo);
+
+        return powerUpsToDiscard;
+
+    }
+    /**
+     *
+     * @param cost cost to be checked if payable with powerups
+     * @param powerUps take powerups as parameter because you can remove some of them for partial cost checks
+     * @param ammo take ammo as parameter because you can remove some of them for partial checks
+     * @return a list of CachedPowerUps to discard to pay the needed cost
+     */
+    private List<CachedPowerUp> checkPayWithPowerUp(List<Color> cost, List<CachedPowerUp> powerUps, List<Color> ammo){
+
+        boolean valid = false;
+        List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
+
+        for (Color c : cost) {
+            if (ammo.contains(c) && hasPowerUpOfColor(powerUps, c)){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+                alert.setContentText("Puoi pagare " + UiHelpers.ammoTranslator(c) + " usando un PowerUp o con una munizione.");
+                alert.showAndWait();
+                alert = new Alert(Alert.AlertType.CONFIRMATION, "\"Vuoi usare un PowerUp per pagare al posto delle munizioni?", ButtonType.YES, ButtonType.NO);
+                alert.showAndWait();
+
+                if (alert.getResult() == ButtonType.YES)
+                {
+
+                    List<CachedPowerUp> powerUpChoiceList = powerUps
+                            .stream()
+                            .filter(x -> x.getColor().equals(c))
+                            .collect(Collectors.toList());
+
+                     alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setContentText("Clicca sul powerUp da scartare a sinistra: ");
+                    alert.showAndWait();
+
+                   //here get powerup to discard porcodyo
+                    for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size();i++)
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(0);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                    }
+                                });
+                                break;
+                            case 1:
+                                powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(1);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                    }
+                                });
+                                break;
+                            case 2:
+                                powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(2);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                    }
+                                });
+                                break;
+                        }
+                    }
+
+                    //cost.remove(c);
+                }
+
+            } else if (hasPowerUpOfColor(powerUps, c) && !ammo.contains(c)) {//answer is no
+
+                //TODO tell him if he wants to drop a powerup to buy
+
+                Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Puoi pagare " + UiHelpers.ammoTranslator(c) + " solamente con un PowerUp: ");
+                alert.showAndWait();
+                List<CachedPowerUp> powerUpChoiceList = powerUps
+                        .stream()
+                        .filter(x -> x.getColor().equals(c))
+                        .collect(Collectors.toList());
+                int j=0;
+                while(j<powerUpChoiceList.size());
+                {
+                    alert.setContentText("Scegli powerUp da scartare: ");
+                    alert.showAndWait();
+                    for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size();i++)
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(0);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                    }
+                                });
+                                break;
+                            case 1:
+                                powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(1);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                    }
+                                });
+                                break;
+                            case 2:
+                                powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(2);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                    }
+                                });
+                                break;
+                        }
+                    }
+                    j++;
+                }
+
+
+            } else if (ammo.contains(c)) {
+                ammo.remove(c);
+                //cost.remove(c);
+            } else {
+                //this shouldn't do anythign , just forward the choice and then controller will
+                //reply back that player hasn't got enough ammo
+            }
+        }
+
+        System.out.println("[DEBUG] PowerUp da scartare scelti: " + powerUpsToDiscard);
+        return powerUpsToDiscard;
+    }
+
+    private boolean hasPowerUpOfColor(List<CachedPowerUp> powerUps, Color c){
+        List<CachedPowerUp> result = powerUps
+                .stream()
+                .filter(x -> x.getColor().equals(c))
+                .collect(Collectors.toList());
+
+        return  !result.isEmpty();
+
+    }
+
+    /**
+     *
+     * @param weapon name of the weapon to be checked
+     * @param ammoCubes list of ammocubes copied from cachemodel (can be modified by methods)
+     * @param powerUps list of powerups copied from cachemodel (can be modified by methods, to track local changes)
+     * @return true if the weapon can be reloaded with current powerups and ammo, false otherwise
+     */
+    private boolean canReload(String weapon, List<Color> ammoCubes, List<CachedPowerUp> powerUps){
+        View view=gui.getView();
+        CachedFullWeapon w = null;
+        UiHelpers uih=new UiHelpers();
+        try {
+            w = view.getCacheModel().getWeaponInfo(weapon);
+        } catch (WeaponNotFoundException e){
+
+        }
+
+        w.getFirstEffectCost();
+
+        if(uih.canPay(w.getFirstEffectCost(), ammoCubes, UiHelpers.genColorListFromPowerUps(powerUps))){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     //------------------------------------------------------------ move and grab
 
 }
