@@ -171,10 +171,17 @@ public class Damage extends MicroEffect {
 
     @Override
     public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException, PlayerNotSeeableException, PrecedentPlayerNeededException, DifferentPlayerNeededException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
+
+       if(playerList.size()==0 && alreadyTargeted)//plasmaGun effetto opz 2, don't need target
+       {
+           w.getFirstTargets().get(0).addDmg(w.isPossessedBy().getPlayerId(),damage);
+           return;
+       }
+
         System.out.println("------------------------------------");
         System.out.println("Damage Effect! life now: " +playerList.get(0).getStats().getDmgTaken().size());
-       print();
-       System.out.println("------------------------------------");
+        print();
+        System.out.println("------------------------------------");
        for(int i=0;i<playerList.size();i++)//i can't shoot more times to the same target
        {
            for(int j=0;j<playerList.size();j++)
@@ -186,7 +193,6 @@ public class Damage extends MicroEffect {
        }
         if(alreadyTargeted==true && differentPlayer==false)//1 target, one of the firstTargets
         {
-
 
             if(!(w.getFirstTargets().contains(playerList.get(0))))
              throw new PrecedentPlayerNeededException();
