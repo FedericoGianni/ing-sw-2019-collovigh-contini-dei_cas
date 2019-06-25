@@ -2085,7 +2085,7 @@ public class CLI implements UserInterface {
             for (int i = 0; i < weapons.size(); i++) {
                 try {
                     CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(i));
-                    System.out.println(i + ": " + weapons.get(i));
+                    System.out.println(i + ": " + UiHelpers.weaponTranslator(weapons.get(i)));
                     System.out.println("Costo ricarica: " + UiHelpers.ammoTranslator(w.getFirstEffectCost()));
 
                 } catch (WeaponNotFoundException e){
@@ -2190,14 +2190,15 @@ public class CLI implements UserInterface {
             System.out.println(s);
 
             if(p.getStats().getScore() >= maxScore){
-                winners.add(p);
                 maxScore = p.getStats().getScore();
             }
         }
 
-        for(Player p : winners){
-            System.out.println(UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +
-                    "Vincitore: " + p.getPlayerId() + " : " + p.getName());
+        for(Player p : players){
+            if(p.getStats().getScore() == maxScore) {
+                System.out.println(UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +
+                        "Vincitore: " + p.getPlayerId() + " : " + p.getName());
+            }
         }
 
         System.exit(0);
