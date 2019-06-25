@@ -104,6 +104,8 @@ public class StatsObserver implements Observer {
 
         if ( ( playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION1) || playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION2) ) && ( (!previousStats.getDmgTaken().equals(stats.getDmgTaken())) || (!previousStats.getMarks().equals(stats.getMarks())) ) && (! playerObserver.getTopClass().getController().getShotPlayerThisTurn().contains(stats.getPlayerId())) ){
 
+            LOGGER.log(level, "[Stats-Observer] player added to shot list: {0} ", stats.getPlayerId() );
+
             // adds the player to the list of shot player if not present
 
             playerObserver.getTopClass().getController().getShotPlayerThisTurn().add(stats.getPlayerId());

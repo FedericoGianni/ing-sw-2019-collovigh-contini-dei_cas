@@ -552,7 +552,7 @@ public class Controller {
      */
     public void defaultAnswer(){
 
-        /*if (turnPhase.equals(SPAWN)){
+        if (turnPhase.equals(SPAWN)){
 
             // if the phase is spawn perform a spawn action
 
@@ -564,8 +564,6 @@ public class Controller {
 
             this.doAction(new SkipAction());
         }
-
-        //TODO notify view*/
     }
 
     /**
@@ -576,7 +574,7 @@ public class Controller {
 
         hasSomeoneDied = true;
 
-        LOGGER.log(Level.INFO, "[Controller] Player w/ id {0} has been killed ", playerId);
+        LOGGER.log(level, "[Controller] Player w/ id {0} has been killed ", playerId);
 
         Model.getPlayer(playerId).setPlayerPos(null);
 
@@ -592,7 +590,7 @@ public class Controller {
 
         hasSomeoneDied = true;
 
-        LOGGER.log(Level.INFO, "[Controller] Player w/ id {0} has been overKilled ", playerId);
+        LOGGER.log(level, "[Controller] Player w/ id {0} has been overKilled ", playerId);
 
         Model.getPlayer(playerId).setPlayerPos(null);
 
