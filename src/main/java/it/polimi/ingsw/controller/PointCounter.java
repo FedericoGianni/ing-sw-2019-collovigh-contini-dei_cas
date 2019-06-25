@@ -5,10 +5,19 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.Skull;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class PointCounter {
+
+    // logger
+
+    private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    private static Level level = Level.INFO;
+
+    private static final String LOG_START = "[Point-Calc] ";
 
     private static final int[] pointVect = {8,6,4,2,2,1,1};
 
@@ -203,6 +212,10 @@ public class PointCounter {
             int points = (actualPointVect.length > j) ? actualPointVect[j] : 0;
 
             Model.getPlayer(sortedPlayerList.get(j)).addScore(points);
+
+            String log = LOG_START + "added " + points + " to player: " + j;
+
+            LOGGER.log( level, () -> log );
         }
 
     }

@@ -24,16 +24,15 @@ import java.util.logging.Logger;
 public class WaitingRoom {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    public static final Level level = Level.INFO;
+    private static final Level level = Level.INFO;
 
     private static final int TIMER = 2;
-    private static int timerCount = TIMER;
+    private int timerCount = TIMER;
 
-    private static final int DEFAULT_MIN_PLAYERS = 2;
+    public static final int DEFAULT_MIN_PLAYERS = 1;
     private static final int DEFAULT_MAX_PLAYERS = 5;
 
-    //TODO check if it works
-    private int skulls = 1;
+    private int skulls = 8;
 
     private CopyOnWriteArrayList<String> players;
     private List<PlayerColor> colors;
@@ -187,7 +186,7 @@ public class WaitingRoom {
      *
      * @return the current value of timerCount which is decreased by startTimer() method
      */
-    public static int getTimerCount() {
+    public int getTimerCount() {
         return timerCount;
     }
 

@@ -13,14 +13,13 @@ import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.EffectRequirements;
 import it.polimi.ingsw.view.cachemodel.EffectType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;
 import it.polimi.ingsw.view.updates.InitialUpdate;
 import it.polimi.ingsw.view.updates.UpdateClass;
-import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
-import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
-import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
+import it.polimi.ingsw.view.updates.otherplayerturn.*;
 
 import java.awt.*;
 import java.io.FileWriter;
@@ -52,6 +51,8 @@ public class JsonExampleMaker {
 
         writeMoveTurnUpdate();
         writeGrabTurnUpdate();
+        writePowerUpTurnUpdate();
+        writeShootTurnUpdate();
     }
 
     public static void writeWeapons(){
@@ -330,6 +331,28 @@ public class JsonExampleMaker {
 
     }
 
+    public static void writePowerUpTurnUpdate(){
+
+        Gson gson = new Gson();
+
+        try {
+
+            TurnUpdate turnUpdate = new PowerUpTurnUpdate(0,new CachedPowerUp(PowerUpType.TARGETING_SCOPE,Color.BLUE));
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/PowerUpTurnUpdate.json");
+
+            gson.toJson(turnUpdate, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+    }
+
     public static void writeGrabTurnUpdate(){
 
         Gson gson = new Gson();
@@ -353,7 +376,28 @@ public class JsonExampleMaker {
 
     }
 
+    public static void writeShootTurnUpdate(){
 
+        Gson gson = new Gson();
+
+        try {
+
+            TurnUpdate turnUpdate = new ShootTurnUpdate(0,1,"JAMES GUNN");
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/ShootTurnUpdate.json");
+
+
+            gson.toJson(turnUpdate, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+    }
 
     public static void writeDamageList(){
 

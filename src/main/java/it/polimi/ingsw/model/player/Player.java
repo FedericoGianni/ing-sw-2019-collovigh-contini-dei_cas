@@ -128,6 +128,8 @@ public class Player {
      * This action will delete one powerUp from Player's inventory and add it's value to the AmmoBag
      *
      * @param powerUp is the power up that needs to be turn into AmmoCubes
+     *
+     * @return the AmmoCube the player has gained
      */
     public AmmoCube sellPowerUp(PowerUp powerUp){
 

@@ -21,8 +21,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.util.logging.Level.FINE;
-import static java.util.logging.Level.WARNING;
+import static java.util.logging.Level.*;
 
 /**
  * This class handles the socket input stream client-side, allowing to have an async bidirectional communication
@@ -134,7 +133,7 @@ public class SocketClientReader extends Thread {
 
 
         } catch (IOException e) {
-            System.out.println("Client Error: " + e.getMessage());
+            LOGGER.log(WARNING,"Client Error: " + e.getMessage());
         }
     }
 
@@ -174,9 +173,7 @@ public class SocketClientReader extends Thread {
             LOGGER.log(WARNING, "[DEBUG] [CLIENT] ERRORE nella lettura della funzione dalla hashmap!");
         else
             try {
-                new Thread(() -> {
-                    function.execute(message);
-                }).start();
+                new Thread(() ->  function.execute(message) ).start();
             } catch (NumberFormatException e) {
                 LOGGER.log(level, "[DEBUG] [CLIENT] ERRORE nel formato del messaggio socket ricevuto! ");
             }
@@ -301,6 +298,8 @@ public class SocketClientReader extends Thread {
 
     private UpdateClass handleTurnUpdate(String message){
 
+        LOGGER.log(INFO,() -> "[SOCKET_CLIENT_READER] RECEIVED TURN UPDATE : " + message );
+
         // split the gson to get the last parameter (GSON can not detect the superclass)
 
         String[] splitted = message.split(",");
@@ -309,8 +308,10 @@ public class SocketClientReader extends Thread {
 
         UpdateClass updateClass = null;
 
+        String type = (splitted[ splitted.length - 3 ].startsWith("{")) ? splitted[ splitted.length - 3 ].substring(1,splitted[ splitted.length - 3 ].length()) : splitted[ splitted.length - 3 ];
 
-        switch (splitted[ splitted.length - 3 ]){
+
+        switch (type){
 
             case "\"actionType\":\"MOVE\"":
 
@@ -362,13 +363,13 @@ public class SocketClientReader extends Thread {
      * Initialize the Map by binding a String to its related function
      * @throws NumberFormatException
      */
-    private void populateHeadersMap() throws NumberFormatException {
+    private void populateHeadersMap() {
 
         headersMap = new HashMap<>();
 
         // login username
         headersMap.put("login", (commands) -> {
-            System.out.println("[DEBUG] [Server] login reply: " + commands[1]);
+            LOGGER.log(level,() -> "[Socket-Client-Reader] login reply: " + commands[1]);
             if(!(commands[1].equals("OK")))
                 RunClient.getView().retryLogin(commands[1]);
             else{
@@ -388,7 +389,7 @@ public class SocketClientReader extends Thread {
 
         //initGame
         headersMap.put(START_GAME, (commands) -> {
-            System.out.println("[DEBUG] Ricevuto initGame dal server");
+            LOGGER.log(level,"[Socket-Client-Reader] Ricevuto initGame dal server");
             RunClient.getView().startGame();
         });
 
@@ -396,25 +397,25 @@ public class SocketClientReader extends Thread {
 
         //startSpawn
         headersMap.put(START_SPAWN, (commands) -> {
-            System.out.println("[DEBUG] Ricevuto startSpawn dal server");
+            LOGGER.log(level,"[Socket-Client-Reader] Ricevuto startSpawn dal server");
             RunClient.getView().startSpawn();
         });
 
         //startPowerUp
         headersMap.put(START_POWER_UP, (commands) -> {
-            System.out.println("[DEBUG] Ricevuto startPowerUp dal server");
+            LOGGER.log(level,"[Socket-Client-Reader] Ricevuto startPowerUp dal server");
             RunClient.getView().startPowerUp();
         });
 
         //startAction
         headersMap.put(START_ACTION, (commands) -> {
-            System.out.println("[DEBUG] Ricevuto startAction dal server");
+            LOGGER.log(level,"[Socket-Client-Reader] Ricevuto startAction dal server");
             RunClient.getView().startAction(Boolean.valueOf(commands[1]), Boolean.valueOf(commands[2]));
         });
 
         //reload
         headersMap.put(START_RELOAD, (commands) -> {
-            System.out.println("[DEBUG] Ricevuto startReload dal server");
+            LOGGER.log(level,"[Socket-Client-Reader] Ricevuto startReload dal server");
             RunClient.getView().startReload();
         });
 

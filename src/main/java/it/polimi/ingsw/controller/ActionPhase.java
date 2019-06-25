@@ -676,8 +676,18 @@ public class ActionPhase {
             handleAction();
 
             return;
+
         } catch (PrecedentPlayerNeededException e) {
-            e.printStackTrace();
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " PrecedentPlayerNeededException ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PRECEDENT_PLAYER_NEEDED);
+
+            restoreSellPowerUp();
+
+            handleAction();
+
+            return;
         }
 
 
@@ -846,11 +856,24 @@ public class ActionPhase {
 
             for (Point cell : cells){
 
-                try {
+                if (cell != null) {
 
-                    Cell realCell = Model.getMap().getCell(cell.x, cell.y);
+                    try {
 
-                    if (realCell == null){
+                        Cell realCell = Model.getMap().getCell(cell.x, cell.y);
+
+                        if (realCell == null) {
+
+                            LOGGER.log(Level.WARNING, () -> LOG_START_SHOOT + " Player specified non existent cell ");
+
+                            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+                            return false;
+                        }
+
+                    } catch (Exception e) {
+
+                        LOGGER.log(Level.WARNING, e.getMessage(), e);
 
                         LOGGER.log(Level.WARNING, () -> LOG_START_SHOOT + " Player specified non existent cell ");
 
@@ -859,15 +882,6 @@ public class ActionPhase {
                         return false;
                     }
 
-                }catch (Exception e){
-
-                    LOGGER.log(Level.WARNING, e.getMessage(), e);
-
-                    LOGGER.log(Level.WARNING, () -> LOG_START_SHOOT + " Player specified non existent cell ");
-
-                    controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
-
-                    return false;
                 }
             }
         }
@@ -1422,8 +1436,16 @@ public class ActionPhase {
             handleAction();
 
             return false;
+
         } catch (PrecedentPlayerNeededException e) {
-            e.printStackTrace();
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " PrecedentPlayerNeededException ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PRECEDENT_PLAYER_NEEDED);
+
+            restoreSellPowerUp();
+
+            handleAction();
         }
 
         return true;

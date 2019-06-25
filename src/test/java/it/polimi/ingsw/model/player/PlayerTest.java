@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.player;
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
+import it.polimi.ingsw.model.powerup.Newton;
+import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
 
@@ -133,4 +135,35 @@ class PlayerTest {
         assertEquals(3,player.getStats().getDmgTaken().size());
     }
 
+    @Test
+    void sellPowerUp() {
+
+        List<String> names = new ArrayList<>();
+
+        names.add("Jerry");
+        names.add("Frank");
+        names.add("Tom");
+
+        List<PlayerColor> colors = new ArrayList<>();
+
+        colors.add(PlayerColor.BLUE);
+        colors.add(PlayerColor.YELLOW);
+        colors.add(PlayerColor.GREEN);
+
+        Model model = new Model(names,colors,2,8);
+
+        Player player01 = Model.getPlayer(0);
+
+        assertEquals(0,player01.getAmmo().size());
+        assertEquals(0,player01.getPowerUpBag().getList().size());
+
+        player01.addPowerUp(new Newton(Color.BLUE));
+
+        PowerUp powerUp = player01.getPowerUpBag().getList().get(0);
+
+        player01.sellPowerUp(powerUp);
+
+        assertEquals(0,player01.getPowerUpBag().getList().size());
+        assertEquals(1,player01.getAmmo().size());
+    }
 }
