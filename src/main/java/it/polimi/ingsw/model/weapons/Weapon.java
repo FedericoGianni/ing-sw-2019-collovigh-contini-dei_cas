@@ -68,6 +68,10 @@ public abstract class Weapon implements Serializable {
 
 
     public ArrayList<Player> getFirstTargets() {
+        if(firstTarget==null)
+        {
+            return null;
+        }
         ArrayList <Player>t=new ArrayList();
         for(int i:firstTarget)
         {

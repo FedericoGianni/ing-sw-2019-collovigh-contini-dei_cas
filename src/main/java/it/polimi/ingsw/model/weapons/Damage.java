@@ -347,7 +347,7 @@ public class Damage extends MicroEffect {
             }
 
         }
-        if(n==0 && playerList.size()!=0) {
+        if((n==0 && playerList.size()!=0) || (n==1 && w.getFirstTargets()==null)) {
 
             w.setFirstTarget(playerList);//it can be useful if you need to reshot the shame player otherwise it doesn't count nothing
         }

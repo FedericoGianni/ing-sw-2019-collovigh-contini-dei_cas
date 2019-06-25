@@ -244,7 +244,6 @@ class NormalWeaponTest {
             ArrayList <Integer>mEf=new ArrayList<>();
             mEf.add(0);//tractor beam-- don't move(because you can see it) then 1 dmg
             mEf.add(1);//costs 1 red and 1 yellow AmmoCube--move it to my cell then 3dmg
-            weapons.get(5).enableMoveBefore();
 
             shooter.getWeapons().get(0).shoot(targetsLists,mEf,cells);
 
@@ -699,7 +698,7 @@ class NormalWeaponTest {
             ArrayList <Integer>mEf=new ArrayList<>();
             //mEf.add(0);//tractor beam-- don't move(because you can see it) then 1 dmg
             mEf.add(1);//costs 1 red and 1 yellow AmmoCube--move it to my cell then 3dmg
-            weapons.get(5).enableMoveBefore();
+
 
             shooter.getWeapons().get(0).shoot(targetsLists,mEf,cells);
 
@@ -863,24 +862,26 @@ class NormalWeaponTest {
         System.out.println("Weapon name: " + weapons.get(2).getName());
         List targets0=new ArrayList();
         List targets1=new ArrayList();
+        List targets2=new ArrayList();
         List<List<Player>> targetLists = new ArrayList<>();
-        targets0.add(target1);
+        targets1.add(target1);
         //targets0.add(target2);
        // targets1.add(shooter);
 
         targetLists.add(targets0);
         targetLists.add(targets1);
-        //targetLists.add(targets2);
+        targetLists.add(targets2);
         Model.getMap().setUnvisited();
 
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
+            mEf.add(1);
             mEf.add(0);
-            //mEf.add(1);
+
             mEf.add(2);
             List<Cell> cells = new ArrayList<>();
+            cells.add(Model.getMap().getCell(0,0));
             cells.add(null);
-            //cells.add(Model.getMap().getCell(0,0));
             cells.add(null);
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
 
@@ -910,7 +911,7 @@ class NormalWeaponTest {
         }
 
         System.out.println("target1 danni: " + target1.getStats().getDmgTaken().size());
-        //assert(shooter.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,0)));
+        assert(shooter.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,0)));
         assert(target1.getStats().getDmgTaken().size() ==3);
 
     }
@@ -1046,7 +1047,7 @@ class NormalWeaponTest {
         List targets0=new ArrayList();
         List targets1=new ArrayList();
         List<List<Player>> targetLists = new ArrayList<>();
-        targets0.add(target1);
+        targets1.add(target1);
         //targets1.add(target2);
         //targets0.add(target2);
 
@@ -1056,14 +1057,17 @@ class NormalWeaponTest {
 
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
-            mEf.add(0);
             mEf.add(1);
+            mEf.add(0);
+
             mEf.add(2);
             System.out.println("position before" + target1.getStats().getCurrentPosition());
 
             List<Cell> cells = new ArrayList<>();
-            cells.add(Model.getMap().getCell(0,3));
+
             cells.add(Model.getMap().getCell(0,0));
+            cells.add(Model.getMap().getCell(0,3));
+
             cells.add(null);//add original cell
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             System.out.println(target1.getPlayerName());
@@ -1136,10 +1140,10 @@ class NormalWeaponTest {
         shooter.setPlayerPos(Model.getMap().getCell(1,1));
 
         Player target1 = Model.getPlayer(1);
-        target1.setPlayerPos(Model.getMap().getCell(1,1));
+        target1.setPlayerPos(Model.getMap().getCell(1,0));
 
         Player target2 = Model.getPlayer(2);
-        target2.setPlayerPos(Model.getMap().getCell(1,1));
+        target2.setPlayerPos(Model.getMap().getCell(1,0));
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
@@ -1150,24 +1154,28 @@ class NormalWeaponTest {
         System.out.println("Weapon name: " +weapons.get(9).getName());
         List targets0=new ArrayList();
         List targets1=new ArrayList();
+        List targets2=new ArrayList();
         List<List<Player>> targetLists = new ArrayList<>();
-        targets0.add(target1);
-        targets1.add(target2);
+        targets1.add(target1);
 
-        //targets0.add(target2);
+        targets2.add(target2);
         targetLists.add(targets0);
         targetLists.add(targets1);
+        targetLists.add(targets2);
         Model.getMap().setUnvisited();
 
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
+            mEf.add(1);
             mEf.add(0);
             mEf.add(2);
             //System.out.println("position before" + target1.getStats().getCurrentPosition());
 
-            //List<Cell> cells = new ArrayList<>();
-            //cells.add(Model.getMap().getCell(0,3));
-            shooter.getWeapons().get(0).shoot(targetLists, mEf, null);
+            List<Cell> cells = new ArrayList<>();
+            cells.add(Model.getMap().getCell(1,0));
+            cells.add(null);
+            cells.add(null);
+            shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             System.out.println(target1.getPlayerName());
             System.out.println(target1.getStats().getDmgTaken());
             System.out.println(target1.getStats().getMarks());
@@ -1206,7 +1214,7 @@ class NormalWeaponTest {
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
         assert(target1.getStats().getDmgTaken().size() ==2);
-        //assert(target2.getStats().getDmgTaken().size() ==2);
+        assert(shooter.getCurrentPosition().equals(Model.getMap().getCell(1,0)));
     }
 
     @Test
