@@ -29,18 +29,6 @@ public class NormalWeapon extends Weapon{
     private List<MacroEffect> effects;
     private List <String> exclusiveEffect;
 
-    public boolean isMoveBefore() {
-        return moveBefore;
-    }
-
-    public void enableMoveBefore() {
-        this.moveBefore =true;
-    }
-    public void disableMoveBefore() {
-        this.moveBefore =false;
-    }
-
-    private boolean moveBefore;
 
 
 
@@ -410,6 +398,7 @@ public class NormalWeapon extends Weapon{
               if(effect.size()>1)
                   throw new UncorrectEffectsException();
           }
+
           if (!this.isLoaded())//if actual weapon is not loaded
           {
               throw new WeaponNotLoadedException();//weapon not loaded
@@ -417,9 +406,15 @@ public class NormalWeapon extends Weapon{
           if(this.getName().compareTo("ROCKET LAUNCHER")==0 && effect.size()==3)//if you use the third effect of rocket launcher
           {
                 List <Player>pl=new ArrayList<>();
-                pl.addAll(targetLists.get(0).get(0).getCurrentPosition().getPlayers());
+                if(targetLists.get(0).size()!=0)
+                {pl.addAll(targetLists.get(0).get(0).getCurrentPosition().getPlayers());}
+                else //means i move before basic effect
+                {
+                    pl.addAll(targetLists.get(1).get(0).getCurrentPosition().getPlayers());
+                }
                 targetLists.add(pl);
           }
+
           for (int macroCont = 0; macroCont < effect.size(); macroCont++)//iterate macroeffect
           {
 
@@ -438,19 +433,6 @@ public class NormalWeapon extends Weapon{
                   }
               }
               //here i can shoot for real
-
-
-              for (MicroEffect micro : this.getEffects().get(effect.get(macroCont)).getMicroEffects())//iterates microEffects
-              {
-
-                  if (micro.moveBefore() == true && moveBefore)//if i need to move before shooting
-                  {
-                      micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont),macroCont);//contatore appostio forse perchè sposta gli ordini??
-                      this.getEffects().get(macroCont).getMicroEffects().remove(micro);
-
-                  }
-
-              }
 
               for (MicroEffect micro : this.getEffects().get(effect.get(macroCont)).getMicroEffects())//iterates microEffects
               {

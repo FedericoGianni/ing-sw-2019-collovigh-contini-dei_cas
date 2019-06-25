@@ -652,7 +652,7 @@ public class CLI implements UserInterface {
                 scanner.nextLine();
             }
 
-            if (choice == 9 || (choice >= 0 && choice < 3)) valid = true;
+            if (choice == 9 || (choice >= 0 && choice < grenades.size())) valid = true;
 
 
         } while (!valid);
@@ -1796,13 +1796,46 @@ public class CLI implements UserInterface {
             } else {
 
                 if (w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)) {
+
+                    if(w.getThirdEffectCost() != null) {
+
+                        System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
+                        System.out.println("[0] -> Effetto base");
+                        System.out.println("[1] -> effetto base + effetto 1");
+                        System.out.println("[2] -> effetto base + effetto 2");
+                        System.out.println("[12] -> effetto base + effetto 1 + effetto 2");
+                        System.out.println("Inserisci il numero che rappresenta la combinazione di effetti scelta: ");
+
+                    } else {
+                        System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
+                        System.out.println("[0] -> Effetto base");
+                        System.out.println("[1] -> effetto base + effetto 1");
+                    }
+
+                }
+                else if(w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_NON_ORD)){
+
                     System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
-                    System.out.println("[0] -> Effetto base");
-                    System.out.println("[1] -> effetto base + effetto 1");
-                    System.out.println("[2] -> effetto base + effetto 2");
-                    System.out.println("[12] -> effetto base + effetto 1 + effetto 2");
+
+                    if(w.getThirdEffectCost() != null) {
+
+                        System.out.println("[0] -> Effetto base");
+                        System.out.println("[1] -> effetto base + effetto 1");
+                        System.out.println("[2] -> effetto base + effetto 2");
+                        System.out.println("[3] -> effetto 1 + effetto base");
+                        System.out.println("[4] -> effetto 1 + effetto base + effetto 2");
+                        System.out.println("[12] -> effetto base + effetto 1 + effetto 2");
+
+                    } else {
+                        System.out.println("[0] -> Effetto base");
+                        System.out.println("[1] -> effetto base + effetto 1");
+                        System.out.println("[3] -> effetto 1 + effetto base");
+                    }
+
                     System.out.println("Inserisci il numero che rappresenta la combinazione di effetti scelta: ");
+
                 } else if (w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)) {
+
                     System.out.println("Per quest'arma puoi scegliere solo o l'effetto base o l'effetto alternativo.");
                     System.out.println("Seleziona l'effetto che vuoi utilizzare: ");
                     System.out.println("[0] -> effetto base");
@@ -1817,10 +1850,21 @@ public class CLI implements UserInterface {
 
                     if(w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)){
 
-                        if((read >= 0 && read <3) || read == 12){
-                            valid = true;
+                        if(w.getThirdEffectCost() != null) {
+
+                            if ((read >= 0 && read < 3) || read == 12) {
+                                valid = true;
+                            } else {
+                                System.out.println("Scelta effetti non valida! Riprova");
+                            }
+
                         } else {
-                            System.out.println("Scelta effetti non valida! Riprova");
+
+                            if ((read >= 0 && read < 2) || read == 12) {
+                                valid = true;
+                            } else {
+                                System.out.println("Scelta effetti non valida! Riprova");
+                            }
                         }
 
                     } else if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)){
@@ -1829,6 +1873,24 @@ public class CLI implements UserInterface {
                             valid = true;
                         } else{
                             System.out.println("Scelta effetti non valida! Riprova");
+                        }
+                    } else if (w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_NON_ORD)){
+
+                        if(w.getThirdEffectCost() != null) {
+
+                            if ((read >= 0 && read < 5) || read == 12) {
+                                valid = true;
+                            } else {
+                                System.out.println("Scelta effetti non valida! Riprova");
+                            }
+
+                        } else {
+
+                            if ((read == 0 || read == 1 || read == 2 || read == 12)) {
+                                valid = true;
+                            } else {
+                                System.out.println("Scelta effetti non valida! Riprova");
+                            }
                         }
                     }
 
@@ -1843,24 +1905,42 @@ public class CLI implements UserInterface {
 
         switch (read){
 
+            //BASE EFFECT ONLY
             case 0:
                 effects.add(0);
                 break;
 
+            //BASE EFFECT + EFFECT 1 if CONCATENABLE, EFFECT 1 ONLY IF EXCLUSIVE
             case 1:
-                if(w.getEffectTypes().equals(EffectType.ESCLUSIVE))
+                if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)) {
                     effects.add(1);
+                }
                 else{
                     effects.add(0);
                     effects.add(1);
                 }
                 break;
 
+            //BASE EFFECT + EFFECT 2
             case 2:
                 effects.add(0);
                 effects.add(2);
                 break;
 
+            //EFFECT 1 BEFORE BASE EFFECT
+            case 3:
+                effects.add(1);
+                effects.add(0);
+                break;
+
+            //EFFECT 1 BEFORE BASE EFFECT + EFFECT 2
+            case 4:
+                effects.add(1);
+                effects.add(0);
+                effects.add(2);
+                break;
+
+            //BASE EFFECT + EFFECT 1 + EFFECT2
             case 12:
                 effects.add(0);
                 effects.add(1);
@@ -1868,7 +1948,6 @@ public class CLI implements UserInterface {
                 break;
         }
 
-        //System.out.println("valid!");
         System.out.println("[DEBUG] RISULTATO: " + effects);
 
         //TODO check if player can pay for the effects chosen w/ ammo/powerups
