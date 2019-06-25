@@ -307,7 +307,7 @@ public class Stats extends Subject implements Serializable {
         this.online = online;
         updateAll(this);
 
-        getAllMyData();
+        if (online){ getAllMyData(); }
     }
 
     private void getAllMyData(){

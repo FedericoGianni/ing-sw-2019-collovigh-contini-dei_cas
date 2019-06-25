@@ -100,26 +100,19 @@ public class StatsObserver implements Observer {
      */
     private void notifyPlayerShotToController(Stats stats){
 
-        System.out.println("fin qui arrivo dio cristo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(" check Phase : " + ( playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION1) || playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION2)) );
-        if(previousStats != null)
-            System.out.println(" check stats change " + ( (!previousStats.getDmgTaken().equals(stats.getDmgTaken())) || (!previousStats.getMarks().equals(stats.getMarks())) ) );
-        System.out.println( " check in list " + (! playerObserver.getTopClass().getController().getShotPlayerThisTurn().contains(stats.getPlayerId())) );
+        if (previousStats != null) {
 
-        // if the player has received dmg or marks in the action phase and is not already in the shotList
+            // if the player has received dmg or marks in the action phase and is not already in the shotList
 
-        if ( ( playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION1)
-                || playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION2) )
-                && ( (!previousStats.getDmgTaken().equals(stats.getDmgTaken())) || (!previousStats.getMarks().equals(stats.getMarks())) )
-                && (! playerObserver.getTopClass().getController().getShotPlayerThisTurn().contains(stats.getPlayerId())) ){
+            if ((playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION1) || playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION2)) && ((!previousStats.getDmgTaken().equals(stats.getDmgTaken())) || (!previousStats.getMarks().equals(stats.getMarks()))) && (!playerObserver.getTopClass().getController().getShotPlayerThisTurn().contains(stats.getPlayerId()))) {
 
-            LOGGER.log(level, "[Stats-Observer] player added to shot list: {0} ", stats.getPlayerId() );
+                LOGGER.log(level, "[Stats-Observer] player added to shot list: {0} ", stats.getPlayerId());
 
-            LOGGER.log(level, "[Stats-Observer] player added to shot list: {0} ", stats.getPlayerId() );
+                // adds the player to the list of shot player if not present
 
-            // adds the player to the list of shot player if not present
+                playerObserver.getTopClass().getController().getShotPlayerThisTurn().add(stats.getPlayerId());
 
-            playerObserver.getTopClass().getController().getShotPlayerThisTurn().add(stats.getPlayerId());
+            }
 
         }
     }
