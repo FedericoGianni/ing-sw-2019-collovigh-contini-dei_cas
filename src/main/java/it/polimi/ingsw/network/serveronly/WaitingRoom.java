@@ -8,7 +8,6 @@ import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
-import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedLobby;
 
 import java.util.ArrayList;
@@ -30,10 +29,11 @@ public class WaitingRoom {
     private static final int TIMER = 2;
     private static int timerCount = TIMER;
 
-    private static final int DEFAULT_MIN_PLAYERS = 1;
+    private static final int DEFAULT_MIN_PLAYERS = 2;
     private static final int DEFAULT_MAX_PLAYERS = 5;
 
-    private int skulls = 8;
+    //TODO check if it works
+    private int skulls = 1;
 
     private CopyOnWriteArrayList<String> players;
     private List<PlayerColor> colors;

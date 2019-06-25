@@ -67,7 +67,7 @@ public class JsonExampleMaker {
 
         List<EffectType> effectTypes = new ArrayList<>();
 
-        effectTypes.add(EffectType.CONCATENABLE_ORD);
+        effectTypes.add(EffectType.CONCATENABLE);
         effectTypes.add(EffectType.ESCLUSIVE);
 
         List<EffectRequirements> effectRequirements = new ArrayList<>();

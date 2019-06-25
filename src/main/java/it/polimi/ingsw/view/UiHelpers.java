@@ -321,5 +321,26 @@ public class UiHelpers {
         return powerUpTypes;
     }
 
+    /**
+     * Check if the player can pay the specified cost, either with powerups or ammo
+     * @param cost to be checked
+     * @param ammo current ammo in user's hand
+     * @param powerUps current powerups in user's hand
+     * @return
+     */
+    public static boolean canPay(List<Color> cost, List<Color> ammo, List<Color> powerUps){
+
+        for(Color c : cost){
+            if(ammo.contains(c)){
+                ammo.remove(c);
+            } else if (powerUps.contains(c)){
+                powerUps.remove(c);
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 }
