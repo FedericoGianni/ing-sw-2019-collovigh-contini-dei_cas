@@ -806,7 +806,9 @@ public class CLI implements UserInterface {
             //NOTE: startAction uses show instead of system.out.println because there's a chance that
             //when the controller reply back with a message the showBattlefield method and the startAction method
             //and the map won't be displayed correctly
-
+            if(isFrenzy){
+                show("FASE FRENZY");
+            }
             show("SELEZIONA UN AZIONE:");
 
             for (int i = 0; i < actions.size(); i++) {
@@ -2173,9 +2175,32 @@ public class CLI implements UserInterface {
     @Override
     public void endGame() {
 
-        System.out.println(" GAME OVER ");
+        System.out.println(ANSI_RED.escape() + "[!] GIOCO FINITO" + ANSI_RESET.escape());
+        List<Player> players = view.getCacheModel().getCachedPlayers();
+        List<Player> winners = new ArrayList<>();
+        int maxScore = 0;
 
-        // TODO implement
+        for(Player p : players){
+            String s = new String();
+            s = s.concat(UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape());
+            s = s.concat("\tID: " + p.getPlayerId());
+            s = s.concat("\tNome: " + p.getName());
+            s = s.concat("\tPunti: " + p.getStats().getScore());
+
+            System.out.println(s);
+
+            if(p.getStats().getScore() >= maxScore){
+                winners.add(p);
+                maxScore = p.getStats().getScore();
+            }
+        }
+
+        for(Player p : winners){
+            System.out.println(UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +
+                    "Vincitore: " + p.getPlayerId() + " : " + p.getName());
+        }
+
+        System.exit(0);
     }
 
     /**
