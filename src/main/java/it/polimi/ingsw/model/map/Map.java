@@ -1,14 +1,11 @@
 package it.polimi.ingsw.model.map;
 
 import it.polimi.ingsw.controller.Parser;
-import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.Color;
-import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 
 import java.awt.*;
-import java.io.Serializable;
 
 import static java.lang.Math.abs;
 
@@ -70,6 +67,11 @@ public class Map {
      */
     public Cell getCell(int row, int col){
         return this.matrix[row][col];
+    }
+
+    public Cell getCellCopy(int row, int col){
+        Map clone = new Map(this);
+        return clone.getCell(row, col);
     }
 
     /**

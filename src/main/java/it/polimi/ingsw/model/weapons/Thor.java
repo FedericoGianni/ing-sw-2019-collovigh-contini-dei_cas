@@ -72,6 +72,8 @@ public class Thor extends SpecialWeapons {
                 targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),2);
             }
         }
+        //TODO uncomment this just to make quicker tests
+        //this.setLoaded(false);
     }
 
     /**

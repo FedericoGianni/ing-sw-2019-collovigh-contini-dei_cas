@@ -633,6 +633,8 @@ public class CLI implements UserInterface {
 
         do {
 
+            scanner.reset();
+
             valid = false;
 
             System.out.println("Ti hanno sparato: vuoi usare una granata ? \n hai queste granate: ");
@@ -1797,17 +1799,22 @@ public class CLI implements UserInterface {
 
                 if (w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)) {
 
+                    System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
+
                     if(w.getThirdEffectCost() != null) {
 
-                        System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
                         System.out.println("[0] -> Effetto base");
                         System.out.println("[1] -> effetto base + effetto 1");
                         System.out.println("[2] -> effetto base + effetto 2");
                         System.out.println("[12] -> effetto base + effetto 1 + effetto 2");
                         System.out.println("Inserisci il numero che rappresenta la combinazione di effetti scelta: ");
 
+                    } else if(w.getName().equals("T.H.O.R")) {
+
+                        System.out.println("[0] -> Effetto base");
+                        System.out.println("[12] -> effetto base + effetto 1 + effetto 2");
+
                     } else {
-                        System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
                         System.out.println("[0] -> Effetto base");
                         System.out.println("[1] -> effetto base + effetto 1");
                     }
@@ -1844,16 +1851,25 @@ public class CLI implements UserInterface {
 
 
                 //TODO check if effects are exclusive/concatenable
-                try{
+                try {
                     read = scanner.nextInt();
                     //scanner.nextLine();
 
-                    if(w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)){
+                    if (w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)) {
 
-                        if(w.getThirdEffectCost() != null) {
+                        if (w.getThirdEffectCost() != null) {
 
                             if ((read >= 0 && read < 3) || read == 12) {
                                 valid = true;
+                            } else {
+                                System.out.println("Scelta effetti non valida! Riprova");
+                            }
+
+                        } else if (w.getName().equals("T.H.O.R")) {
+
+                            if (read == 0 || read == 12) {
+                                valid = true;
+
                             } else {
                                 System.out.println("Scelta effetti non valida! Riprova");
                             }
@@ -1874,6 +1890,7 @@ public class CLI implements UserInterface {
                         } else{
                             System.out.println("Scelta effetti non valida! Riprova");
                         }
+
                     } else if (w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_NON_ORD)){
 
                         if(w.getThirdEffectCost() != null) {
@@ -2147,27 +2164,7 @@ public class CLI implements UserInterface {
         }
     }
 
-    /**
-     * Check if the player can pay the specified cost, either with powerups or ammo
-     * @param cost to be checked
-     * @param ammo current ammo in user's hand
-     * @param powerUps current powerups in user's hand
-     * @return
-     */
-    private boolean canPay(List<Color> cost, List<Color> ammo, List<Color> powerUps){
 
-        for(Color c : cost){
-            if(ammo.contains(c)){
-                ammo.remove(c);
-            } else if (powerUps.contains(c)){
-                powerUps.remove(c);
-            } else {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     /**
      * This method will show the end game screen

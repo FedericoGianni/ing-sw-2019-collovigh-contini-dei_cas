@@ -263,9 +263,8 @@ public class Stats extends Subject implements Serializable {
         return (currentPosition == null) ? null : Model.getMap().getCell(currentPosition.x,currentPosition.y);
     }
 
-    public Cell getCurrentPositionCopy()
-    {
-        return Model.getMap().getCell(currentPosition.x,currentPosition.y);
+    public Cell getCurrentPositionCopy() {
+        return (currentPosition == null) ? null : Model.getMap().getCellCopy(currentPosition.x,currentPosition.y);
     }
 
     /**
