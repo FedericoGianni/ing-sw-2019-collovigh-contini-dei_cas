@@ -1795,7 +1795,8 @@ public class CLI implements UserInterface {
                 read = 0;
             } else {
 
-                if (w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_ORD)) {
+                if (w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE)) {
+
                     System.out.println("Seleziona gli effetti dell'arma che vuoi utilizzare: ");
                     System.out.println("[0] -> Effetto base");
                     System.out.println("[1] -> effetto base + effetto 1");
@@ -1816,6 +1817,7 @@ public class CLI implements UserInterface {
                     System.out.println("Inserisci il numero che rappresenta la combinazione di effetti scelta: ");
 
                 } else if (w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)) {
+
                     System.out.println("Per quest'arma puoi scegliere solo o l'effetto base o l'effetto alternativo.");
                     System.out.println("Seleziona l'effetto che vuoi utilizzare: ");
                     System.out.println("[0] -> effetto base");
