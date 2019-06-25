@@ -115,6 +115,8 @@ public class StatsObserver implements Observer {
 
             LOGGER.log(level, "[Stats-Observer] player added to shot list: {0} ", stats.getPlayerId() );
 
+            LOGGER.log(level, "[Stats-Observer] player added to shot list: {0} ", stats.getPlayerId() );
+
             // adds the player to the list of shot player if not present
 
             playerObserver.getTopClass().getController().getShotPlayerThisTurn().add(stats.getPlayerId());

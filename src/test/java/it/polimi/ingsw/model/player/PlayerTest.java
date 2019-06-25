@@ -113,4 +113,24 @@ class PlayerTest {
             System.out.println(shooter.canSee().get(i).getPlayerName());
         }
     }
+
+    @Test
+    void addDmg() {
+
+        Player player = new Player("Frank",0,PlayerColor.BLUE);
+
+        assertEquals(0, player.getMarks().size());
+        assertEquals(0,player.getDmg().size());
+
+        player.addDmg(1,2);
+
+        assertEquals(2,player.getDmg().size());
+        assertEquals(2,player.getStats().getDmgTaken().size());
+
+        player.addDmg(2,1);
+
+        assertEquals(3,player.getDmg().size());
+        assertEquals(3,player.getStats().getDmgTaken().size());
+    }
+
 }

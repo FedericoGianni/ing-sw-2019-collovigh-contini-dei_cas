@@ -50,9 +50,15 @@ public class SpawnCellObserver implements Observer {
 
     private List<String> extractWeaponsNames(SpawnCell spawnCell){
 
+        for (Weapon weapon : spawnCell.getWeapons()){
+
+            if (weapon != null ) System.out.println(weapon.getName());
+        }
+
         return spawnCell
                 .getWeapons()
                 .stream()
+                .filter( x-> x != null )
                 .map(Weapon::getName)
                 .collect(Collectors.toList());
     }

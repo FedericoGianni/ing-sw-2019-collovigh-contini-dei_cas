@@ -863,12 +863,11 @@ class NormalWeaponTest {
         System.out.println("Weapon name: " + weapons.get(2).getName());
         List targets0=new ArrayList();
         List targets1=new ArrayList();
-        List targets2=new ArrayList();
         List<List<Player>> targetLists = new ArrayList<>();
         targets0.add(target1);
         //targets0.add(target2);
        // targets1.add(shooter);
-        targets1.add(target1);
+
         targetLists.add(targets0);
         targetLists.add(targets1);
         //targetLists.add(targets2);

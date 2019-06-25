@@ -53,6 +53,6 @@ public class Timer {
 
     public void defaultAnswer(){
 
-        controller.defaultAnswer();
+        //controller.defaultAnswer();
     }
 }

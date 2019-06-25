@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.weapons;
 
 import it.polimi.ingsw.customsexceptions.*;
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
@@ -13,6 +12,10 @@ import java.util.stream.Collectors;
 public class Hellion extends SpecialWeapons {
 
     private static final String HELLION_NAME = "HELLION";
+
+    private static final Integer DMG = 1;
+    private static final Integer BASIC_MODE_MARKS = 1;
+    private static final Integer FIRST_MODE_MARKS = 2;
 
     private List<AmmoCube> baseCost;
     private List<AmmoCube> secondCost;
@@ -39,9 +42,7 @@ public class Hellion extends SpecialWeapons {
 
         if ( (targetLists == null) || (targetLists.stream().flatMap(List::stream).collect(Collectors.toList()).isEmpty()) ) throw new NotCorrectPlayerNumberException();
 
-        if ( (cells == null ) || (cells.isEmpty()) || (!Model.getMap().hasCell(cells.get(0))) ) throw new CellNonExistentException();
-
-        if ( isPossessedBy().getCurrentPosition().equals(cells.get(0)) ) throw new PlayerInSameCellException();
+        if ( isPossessedBy().getCurrentPosition().equals(targetLists.get(0).get(0).getCurrentPosition()) ) throw new PlayerInSameCellException();
 
         if ( effects.contains(1) && ( ! isPossessedBy().canPay(secondCost)) ) throw new NotEnoughAmmoException();
 
@@ -59,13 +60,26 @@ public class Hellion extends SpecialWeapons {
 
         if (preShoot(targetLists,effects,cells)){
 
-            if ( effects.contains(0) ) baseEffect( targetLists.get(0).get(0),cells.get(0) );
+            if ( effects.contains(0) ) baseEffect( targetLists.get(0).get(0) );
+
+            else if ( effects.contains(1) ) secondEffect(targetLists.get(0).get(0));
         }
     }
 
 
-    private void baseEffect( Player mainTarget, Cell cell ){
+    private void baseEffect( Player mainTarget ){
 
+        mainTarget.addDmg(isPossessedBy().getPlayerId(),DMG);
+
+        SpecialWeapons.toAllPlayerInCell(mainTarget.getCurrentPosition(),0,BASIC_MODE_MARKS,isPossessedBy().getPlayerId());
+
+    }
+
+    private void secondEffect( Player mainTarget ){
+
+        mainTarget.addDmg(isPossessedBy().getPlayerId(),DMG);
+
+        SpecialWeapons.toAllPlayerInCell(mainTarget.getCurrentPosition(),0,FIRST_MODE_MARKS,isPossessedBy().getPlayerId());
 
     }
 

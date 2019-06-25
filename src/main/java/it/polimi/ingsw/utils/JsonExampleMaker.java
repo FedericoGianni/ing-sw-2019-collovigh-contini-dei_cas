@@ -40,18 +40,18 @@ public class JsonExampleMaker {
         writeMove();
         writeSkip();
 
-        writeMoveTurnUpdate();
-        writeGrabTurnUpdate();
-
         writeDamageList();
 
         writeWeapons();
 
         writeMap();
 
+        writeSaveMap();
+
          */
 
-        writeSaveMap();
+        writeMoveTurnUpdate();
+        writeGrabTurnUpdate();
     }
 
     public static void writeWeapons(){
@@ -67,7 +67,7 @@ public class JsonExampleMaker {
 
         List<EffectType> effectTypes = new ArrayList<>();
 
-        effectTypes.add(EffectType.CONCATENABLE);
+        effectTypes.add(EffectType.CONCATENABLE_ORD);
         effectTypes.add(EffectType.ESCLUSIVE);
 
         List<EffectRequirements> effectRequirements = new ArrayList<>();
@@ -352,6 +352,8 @@ public class JsonExampleMaker {
         }
 
     }
+
+
 
     public static void writeDamageList(){
 

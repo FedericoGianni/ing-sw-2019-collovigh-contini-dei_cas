@@ -211,7 +211,7 @@ public class PowerUpPhase {
 
         // gets the chosen Cell from the model
 
-        Cell cell = Model.getMap().getCell( newPos.y, newPos.x);
+        Cell cell = Model.getMap().getCell( newPos.x, newPos.y);
 
         try {
 
