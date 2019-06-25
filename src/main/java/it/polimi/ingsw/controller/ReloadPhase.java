@@ -78,7 +78,9 @@ public class ReloadPhase {
 
             try{
 
+
                 List<PowerUp> toDiscard = controller.getUtilityMethods().getSpecifiedPowerUp(reloadAction.getPowerUps());
+                LOGGER.log(Level.WARNING, "powerUps to discard: " + toDiscard);
 
                 for (PowerUp powerUp: toDiscard){
 
