@@ -1528,7 +1528,7 @@ public class GuiMapController {
                 {
                     ((ImageView)((HBox)b.getChildren().get(i)).getChildren().get(j)).setImage(null);//remove the ammoImage
                     //((HBox)b.getChildren().get(i)).getChildren().remove((((HBox)b.getChildren().get(i)).getChildren().get(j)));
-                    System.out.println(dir);
+                    System.out.println("Sto raccogliendo una muniozione e ho fatto questi spotamenti: "+dir);
                     gui.getView().doAction(new GrabAction(dir));
                 }
             }
@@ -1538,7 +1538,7 @@ public class GuiMapController {
 
     private void grabWeapon(int x,int y,List <Directions> dir)
     {
-        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getAmmoBag().getAmmoList()!=null)
+        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getAmmoBag()!=null)
         System.out.println("Tue munizioni: "+gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getAmmoBag().getAmmoList());
 
         List<String> weapons=new ArrayList<>();
@@ -1737,6 +1737,7 @@ public class GuiMapController {
 
         if (costCount == cost.size())// i need to buy at this point!
         {//if it's a grab here dir is empty
+            System.out.println("Provo ad acquistare una arma con queste robe: "+dir+" Acquisto: "+ weaponNames.get(1)+" uso questi pup: "+powerUpsToDiscard+" scarto: "+weaponNames.get(0));
             gui.getView().doAction(new GrabAction(dir, weaponNames.get(0), weaponNames.get(1), powerUpsToDiscard));
             return;
         }
@@ -1964,6 +1965,8 @@ public class GuiMapController {
             }
         });
 
+        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()==null)
+            System.out.println("dovakhiiin");
         for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size();i++)
         {
             String url=fromWNameToUrl(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(i));
