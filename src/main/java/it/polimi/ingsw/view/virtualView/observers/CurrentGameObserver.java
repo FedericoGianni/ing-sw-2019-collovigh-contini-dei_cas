@@ -98,22 +98,13 @@ public class CurrentGameObserver implements Observer {
 
     private void checkFrenzy(CurrentGame game){
 
-        System.out.println("entered checkFrenzy");
-        System.out.println("previous : " + previous);
-        System.out.println("game.getkillshottrak: " + game.getKillShotTrack());
-        System.out.println("game.getskulls: " + game.getSkulls());
+        // if the killShotTrack goes over the max
 
-        if ( (previous == null ) && (game.getKillShotTrack().size() >= game.getSkulls()) ){
+        if ( ( (previous == null ) && (game.getKillShotTrack().size() >= game.getSkulls()) ) || ( (previous != null ) && (previous.getKillShotTrack().size() < previous.getSkulls()) && (game.getKillShotTrack().size() >= previous.getSkulls()))){
 
             // activate frenzy mode
 
-            observers.getController().activateFrenzy();
-
-        } else if ((previous.getKillShotTrack().size() < previous.getSkulls()) && (game.getKillShotTrack().size() >= previous.getSkulls())){
-            // if the killShotTrack goes over the max
-            // activate frenzy mode
-
-            observers.getController().activateFrenzy();
+            observers.getController().setActivateFrenzy(true);
         }
 
 

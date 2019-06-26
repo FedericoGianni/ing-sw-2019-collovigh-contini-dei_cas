@@ -36,7 +36,7 @@ public class Hellion extends SpecialWeapons {
     @Override
     public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CellNonExistentException {
 
-        if ( (effects == null ) || (effects.size() != 1) || (Arrays.asList(1,2).containsAll(effects)) ) throw new UncorrectEffectsException();
+        if ( (effects == null ) || (effects.size() != 1) || (!Arrays.asList(0,1).containsAll(effects)) ) throw new UncorrectEffectsException();
 
         if ( ! this.isLoaded() ) throw new WeaponNotLoadedException();
 
@@ -66,7 +66,10 @@ public class Hellion extends SpecialWeapons {
         }
     }
 
-
+    /**
+     * This method will perform the first effect action
+     * @param mainTarget is the target on which will be given the damage
+     */
     private void baseEffect( Player mainTarget ){
 
         mainTarget.addDmg(isPossessedBy().getPlayerId(),DMG);
@@ -75,6 +78,10 @@ public class Hellion extends SpecialWeapons {
 
     }
 
+    /**
+     * This method will perform the second effect action
+     * @param mainTarget is the target on which will be given the damage
+     */
     private void secondEffect( Player mainTarget ){
 
         mainTarget.addDmg(isPossessedBy().getPlayerId(),DMG);

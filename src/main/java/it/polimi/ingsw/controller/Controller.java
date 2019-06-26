@@ -54,7 +54,7 @@ public class Controller {
 
     //used for TagBackGrenade (check if it is necessary)
 
-    private List<Integer> shotPlayerThisTurn = new ArrayList<>(); // TODO add to shoot
+    private List<Integer> shotPlayerThisTurn = new ArrayList<>();
 
     private TurnPhase turnPhase = SPAWN;
 
@@ -81,6 +81,10 @@ public class Controller {
     private ReloadPhase reloadPhase = new ReloadPhase(this);
 
     private Timer timer = new Timer(this);
+
+    private boolean activateFrenzy = false;
+
+    private Random rand = new Random();
 
 
 
@@ -218,6 +222,8 @@ public class Controller {
 
     public void setExpectingAnswer(Boolean expectingAnswer) { this.expectingAnswer = expectingAnswer; }
 
+    public void setActivateFrenzy(boolean activateFrenzy) { this.activateFrenzy = activateFrenzy; }
+
     // management Methods
 
     /**
@@ -226,8 +232,6 @@ public class Controller {
      * @return a random int representing a random MapType
      */
     private int chooseMap(int playerNumber){
-
-        Random rand = new Random();
 
         switch (playerNumber) {
 
@@ -385,6 +389,13 @@ public class Controller {
                 // replaces the empty ammoCard
 
                 Model.getMap().replaceAmmoCard();
+
+                if (activateFrenzy){
+
+                    activateFrenzy();
+
+                    activateFrenzy = false;
+                }
 
                 if(hasSomeoneDied){
 
@@ -619,11 +630,11 @@ public class Controller {
 
         // set the frenzy starter
 
-        observers.getController().setFrenzyStarter(game.getKillShotTrack().get(game.getKillShotTrack().size() -1).getKillerId());
+        setFrenzyStarter(game.getKillShotTrack().get(game.getKillShotTrack().size() -1).getKillerId());
 
         // set the frenzy check to true
 
-        observers.getController().setFrenzy(true);
+        frenzy = true;
 
         // set the damage boards to frenzy if empty
 
@@ -631,6 +642,8 @@ public class Controller {
 
             if (player.getStats().getDmgTaken().isEmpty()) player.getStats().setFrenzyBoard(true);
         }
+
+        LOGGER.log(Level.INFO, ()-> "[Controller] FRENZY ACTIVATED by player: " + frenzyStarter);
     }
 
     /**

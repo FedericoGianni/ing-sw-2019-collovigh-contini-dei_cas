@@ -113,7 +113,6 @@ public class StatsObserver implements Observer {
                 playerObserver.getTopClass().getController().getShotPlayerThisTurn().add(stats.getPlayerId());
 
             }
-
         }
     }
 

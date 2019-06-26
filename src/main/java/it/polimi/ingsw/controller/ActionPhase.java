@@ -182,13 +182,19 @@ public class ActionPhase {
 
             // sells the specified powerUps
 
-            if ( (grabAction.getPowerUpsForPay() != null ) && (!grabAction.getPowerUpsForPay().isEmpty()) ){
+            List<CachedPowerUp> toSell = grabAction.getPowerUpsForPay();
 
-                for (CachedPowerUp cachedPowerUp : grabAction.getPowerUpsForPay()){
 
-                    PowerUp powerUp = Model.getPlayer(controller.getCurrentPlayer()).getPowerUpBag().findItem(cachedPowerUp.getType(), cachedPowerUp.getColor());
+            if ( (toSell != null ) && ( !toSell.isEmpty()) ){
 
-                    Model.getPlayer(controller.getCurrentPlayer()).sellPowerUp(powerUp);
+                try {
+
+                    toSell = utilityMethods.sellSellablePowerUp(controller.getCurrentPlayer(), toSell);
+
+
+                }catch (CardNotPossessedException e){
+
+                    LOGGER.log(Level.WARNING,e.getMessage(),e);
 
                 }
             }
@@ -196,6 +202,23 @@ public class ActionPhase {
             // grabs
 
             grab(grabAction.getNewWeaponName(),grabAction.getDiscardedWeapon());
+
+            // sell the remaining powerUp
+
+            try{
+
+                LOGGER.log( level,  "powerUps to discard: {0} ", toSell);
+
+                toSell = controller.getUtilityMethods().sellSellablePowerUp(controller.getCurrentPlayer(),toSell);
+
+                String message = LOG_START_GRAB + " controller could not sell this powerUp: " + toSell;
+
+                if (!toSell.isEmpty()) LOGGER.log(Level.WARNING, ()-> message );
+
+            }catch (CardNotPossessedException e){
+
+                LOGGER.log(Level.WARNING,e.getMessage(),e);
+            }
 
         }else {
 
@@ -388,25 +411,20 @@ public class ActionPhase {
     }
 
     /**
-     * This method will check if the player can pay the reload cost with the parameters he specified
+     * This method will check if the player can pay the buy cost with the parameters he specified
      * @param ammoCubeList is a list of ammoCubes
      * @param weapon is the weapon to buy
      * @return true if yes, false otherwise
      */
     private Boolean checkIfPlayerCanPayWeapon(List<AmmoCube> ammoCubeList, Weapon weapon){
 
-        Boolean returnValue = true;
+        boolean returnValue = true;
 
-        List<Color> required = new ArrayList<>();
-
-
-
-        required.addAll(weapon
+        List<Color> required = new ArrayList<>( weapon
                 .getCost()
                 .stream()
                 .map(AmmoCube::getColor)
-                .collect(Collectors.toList()));
-
+                .collect(Collectors.toList()) );
 
 
         List<Color> possessed = ammoCubeList
@@ -715,7 +733,7 @@ public class ActionPhase {
 
         // discard selected powerUps
 
-        discardPowerUpShoot(shootAction.getPowerUpList());
+        List<CachedPowerUp> leftToSell = discardPowerUpShoot(shootAction.getPowerUpList());
 
         if (selected != null) {
 
@@ -749,6 +767,14 @@ public class ActionPhase {
             // apply targeting Scope if requested
 
             targetingScope(shootAction.getTargetingScope());
+
+            // discard the remained powerUp to discard
+
+            leftToSell = utilityMethods.sellSellablePowerUp(controller.getCurrentPlayer(),leftToSell);
+
+            String message = LOG_START_SHOOT + " controller could not sell this powerUp: " + leftToSell;
+
+            if (!leftToSell.isEmpty()) LOGGER.log(Level.WARNING, ()-> message );
 
         }else {
 
@@ -945,17 +971,32 @@ public class ActionPhase {
         }
     }
 
-    private void discardPowerUpShoot(List<CachedPowerUp> cachedPowerUpList) throws CardNotPossessedException{
+    /**
+     * This method is used to sell PowerUp
+     * @param cachedPowerUpList is the list of cachedPowerUp to sell
+     * @return a list of remained powerUp to sell
+     * @throws CardNotPossessedException if a powerUp is not found
+     */
+    private List<CachedPowerUp> discardPowerUpShoot(List<CachedPowerUp> cachedPowerUpList) throws CardNotPossessedException{
+
+        List<CachedPowerUp> leftToDiscard = new ArrayList<>();
 
         for (CachedPowerUp cachedPowerUp : cachedPowerUpList){
 
             try {
 
-                PowerUp toDiscard = utilityMethods.getSpecifiedPowerUp(Arrays.asList(cachedPowerUp)).get(0);
+                if ( utilityMethods.powerUpCanBeSold(controller.getCurrentPlayer(),Arrays.asList(cachedPowerUp)) ) {
 
-                discardedPowerUpForRestore.add(toDiscard);
+                    PowerUp toDiscard = utilityMethods.getSpecifiedPowerUp(Arrays.asList(cachedPowerUp)).get(0);
 
-                ammoCubeForRestore.add(Model.getPlayer(controller.getCurrentPlayer()).sellPowerUp(toDiscard));
+                    discardedPowerUpForRestore.add(toDiscard);
+
+                    ammoCubeForRestore.add(Model.getPlayer(controller.getCurrentPlayer()).sellPowerUp(toDiscard));
+
+                } else {
+
+                    leftToDiscard.add(cachedPowerUp);
+                }
 
             }catch (CardNotPossessedException e){
 
@@ -967,6 +1008,8 @@ public class ActionPhase {
                 throw new CardNotPossessedException();
             }
         }
+
+        return leftToDiscard;
     }
 
     /**
