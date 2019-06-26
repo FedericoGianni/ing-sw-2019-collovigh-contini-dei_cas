@@ -773,14 +773,14 @@ public class GuiMapController {
 
     private void playerRemover(int id,int x,int y)
     {
-        System.out.println("Sto guardando cela :"+x+" "+y);
+       // System.out.println("Sto guardando cela :"+x+" "+y);
         if(map[x][y].getChildren().size()==1)//primo HBOX
         {
             int j=0;
             boolean found=false;
             while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size()  )//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
             {
-                System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+                //System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
 
                 if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
                 {
@@ -796,7 +796,7 @@ public class GuiMapController {
 
             while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size())//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
             {
-                System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+                //System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
 
                 if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0 )
                 {    found=true; break;}
