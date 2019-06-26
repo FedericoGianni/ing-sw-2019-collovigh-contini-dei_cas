@@ -5,13 +5,16 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.SpawnCell;
+import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -316,6 +319,66 @@ public class UtilityMethods {
         }
 
         return powerUpList;
+    }
+
+    /**
+     * This method will check if a list of cachedPowerUp can be sold or if the player would have more than max AmmoCube
+     * @param playerId is the id of the required player
+     * @param cachedPowerUpList is the list of the powerUp to sold
+     * @return true if the cachedPowerUp can be sold
+     */
+    public Boolean powerUpCanBeSold( Integer playerId, List<CachedPowerUp> cachedPowerUpList){
+
+
+        List<Color> colorList = cachedPowerUpList
+            .stream()
+            .map(CachedPowerUp::getColor)
+            .collect(Collectors.toList());
+
+        for (Color color : Color.values() ){
+
+            int requestPowerUpColorNum = (int) colorList
+                    .stream()
+                    .filter( x -> x.equals(color) )
+                    .count();
+
+
+            if ( Model.getPlayer(playerId).getAmmoBag().leftMaxAmmo(color) < requestPowerUpColorNum ) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * This method will sell the sellable powerUp
+     * @param playerId is the id of the player who wants to sell his powerUp
+     * @param cachedPowerUpList is the list of the powerUp
+     * @return a list of the powerUp that can't be sold
+     * @throws CardNotPossessedException if the powerUp is not found
+     */
+    public List<CachedPowerUp> sellSellablePowerUp( Integer playerId, List<CachedPowerUp>  cachedPowerUpList ) throws  CardNotPossessedException{
+
+        List< CachedPowerUp> remainingToSell = new ArrayList<>();
+
+        for (CachedPowerUp cachedPowerUp : cachedPowerUpList){
+
+            List<CachedPowerUp> selectedAsList = new ArrayList<>();
+
+            selectedAsList.add(cachedPowerUp);
+
+            if (powerUpCanBeSold( playerId, selectedAsList )){
+
+                PowerUp selected = getSpecifiedPowerUp( selectedAsList ).get(0);
+
+                Model.getPlayer(playerId).sellPowerUp(selected);
+
+            } else {
+
+                remainingToSell.add(cachedPowerUp);
+            }
+        }
+
+        return remainingToSell;
     }
 
 }

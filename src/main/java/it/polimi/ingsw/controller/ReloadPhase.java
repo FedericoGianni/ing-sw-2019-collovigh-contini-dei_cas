@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.actions.ReloadAction;
+import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 
 import java.util.ArrayList;
@@ -76,17 +77,13 @@ public class ReloadPhase {
 
             // sells the specified powerUps
 
+            List<CachedPowerUp> toSell = reloadAction.getPowerUps();
+
             try{
 
+                LOGGER.log(level,  "powerUps to discard: {0} ", toSell);
 
-                List<PowerUp> toDiscard = controller.getUtilityMethods().getSpecifiedPowerUp(reloadAction.getPowerUps());
-                LOGGER.log(Level.WARNING, () -> "powerUps to discard: " + toDiscard);
-
-                for (PowerUp powerUp: toDiscard){
-
-                    Model.getPlayer(playerId).sellPowerUp(powerUp);
-
-                }
+                toSell = controller.getUtilityMethods().sellSellablePowerUp(playerId,toSell);
 
             }catch (CardNotPossessedException e){
 
@@ -107,6 +104,22 @@ public class ReloadPhase {
                 LOGGER.log(Level.WARNING, () -> LOG_START +" [CRITICAL] player passed all controls for reload but finally could not do it ");
 
                 LOGGER.log(Level.WARNING, e.getMessage(), e);
+            }
+
+            try{
+
+
+                LOGGER.log( level,  "powerUps to discard: {0} ", toSell);
+
+                toSell = controller.getUtilityMethods().sellSellablePowerUp(playerId,toSell);
+
+                String message = LOG_START + " controller could not sell this powerUp: " + toSell;
+
+                if (!toSell.isEmpty()) LOGGER.log(Level.WARNING, ()-> message );
+
+            }catch (CardNotPossessedException e){
+
+                LOGGER.log(Level.WARNING,e.getMessage(),e);
             }
 
             // increment phase

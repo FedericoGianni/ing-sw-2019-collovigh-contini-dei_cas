@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.utils.Color;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class AmmoBag extends Subject implements Bag<AmmoCube> {
 
-    private static final int MAX_FOR_COLOR = 3;
+    public static final int MAX_FOR_COLOR = 3;
 
     /**
      * this is an ArrayList of AmmoCubes sorted by color
@@ -122,5 +123,18 @@ public class AmmoBag extends Subject implements Bag<AmmoCube> {
     public Boolean hasItem(AmmoCube item) {
 
         return this.ammoCubes.contains(item);
+    }
+
+    /**
+     * This method will check if a player has max AmmoCube for a given color
+     * @param powerUpColor is the color of the powerUp
+     * @return the number of AmmoCube left before the given color reaches the max
+     */
+    public int leftMaxAmmo( Color powerUpColor ){
+
+        return (int) ammoCubes
+                .stream()
+                .filter( x -> x.getColor().equals(powerUpColor) )
+                .count();
     }
 }
