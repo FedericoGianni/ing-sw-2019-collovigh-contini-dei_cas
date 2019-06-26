@@ -319,10 +319,6 @@ public class RMIClient extends Client {
             this.setPlayerId(playerId);
             this.getView().setPlayerId(playerId);
 
-            // temp x gui
-
-            view.show(DEFAULT_LOGIN_OK_REPLY);
-
             //return the playerId
 
             return playerId;

@@ -15,6 +15,8 @@ import it.polimi.ingsw.view.updates.UpdateClass;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static it.polimi.ingsw.utils.Protocol.DEFAULT_LOGIN_OK_REPLY;
+import static it.polimi.ingsw.utils.Protocol.DEFAULT_NAME_NOT_FOUND;
 import static java.lang.Thread.sleep;
 
 public class View implements ViewInterface {
@@ -75,7 +77,6 @@ public class View implements ViewInterface {
 
             this.userInterface = new CLI(this);
             this.userInterface.startUI();
-            //this.userInterface.gameSelection();
         }
 
         if (ui.equals("-gui")) {
@@ -83,10 +84,7 @@ public class View implements ViewInterface {
             Gui gui = new Gui();
             gui.setView(this);
             this.userInterface = gui;
-            new Thread(() -> {
-                this.userInterface.startUI();
-            }).start();
-            //this.userInterface.startUI();
+            new Thread(() -> this.userInterface.startUI()).start();
 
 
             //GuiMap guiMap = new GuiMap();
@@ -118,7 +116,6 @@ public class View implements ViewInterface {
 
             this.userInterface = new CLI(this);
             this.userInterface.startUI();
-            // this.userInterface.gameSelection();
         }
 
         if (ui.equals("-gui")) {
@@ -126,10 +123,7 @@ public class View implements ViewInterface {
             Gui gui = new Gui();
             gui.setView(this);
             this.userInterface = gui;
-            new Thread(() -> {
-                this.userInterface.startUI();
-            }).start();
-            //this.userInterface.startUI();
+            new Thread(() -> this.userInterface.startUI()).start();
 
 
             //GuiMap guiMap = new GuiMap();
@@ -172,15 +166,24 @@ public class View implements ViewInterface {
             //scr.start();
 
             try {
+
                 sleep(1000);
+
             } catch (InterruptedException e){
 
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
+
             }
+
             while (sc.getScw() == null){
+
                 try {
+
                     wait();
+
                 } catch (Exception e){
 
+                    LOGGER.log(Level.WARNING, e.getMessage(), e);
                 }
             }
             clientToVView = sc.getScw();
@@ -201,8 +204,7 @@ public class View implements ViewInterface {
      */
     @Override
     public void show(String msg){
-        new Thread( () -> {userInterface.show(msg);}).start();
-        //userInterface.show(msg);
+        new Thread( () -> userInterface.show(msg)).start();
     }
 
     public int getPlayerId() {
@@ -325,6 +327,7 @@ public class View implements ViewInterface {
     @Override
     public void reDoFrenzyAtomicShoot() {
 
+        userInterface.reDoFrenzyAtomicShoot();
     }
 
     /**
@@ -355,8 +358,25 @@ public class View implements ViewInterface {
         cacheModel.update(update);
     }
 
+    /**
+     * This method reconnect the player to an active Game
+     * @param name is the name the player used to log in
+     * @return -1 if the name was not found or the player id if found
+     */
     public int reconnect(String name){
-        return clientToVView.reconnect(name);
+
+        playerId = clientToVView.reconnect(name);
+
+        if (playerId != -1){
+
+            userInterface.show(DEFAULT_LOGIN_OK_REPLY);
+
+        }else {
+
+            userInterface.show(DEFAULT_NAME_NOT_FOUND);
+        }
+
+        return playerId;
     }
 
 

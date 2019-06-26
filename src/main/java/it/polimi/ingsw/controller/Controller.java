@@ -84,6 +84,8 @@ public class Controller {
 
     private boolean activateFrenzy = false;
 
+    private Random rand = new Random();
+
 
 
 
@@ -230,8 +232,6 @@ public class Controller {
      * @return a random int representing a random MapType
      */
     private int chooseMap(int playerNumber){
-
-        Random rand = new Random();
 
         switch (playerNumber) {
 
