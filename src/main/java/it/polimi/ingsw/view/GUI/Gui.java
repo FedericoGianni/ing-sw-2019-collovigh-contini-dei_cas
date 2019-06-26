@@ -226,10 +226,13 @@ public class Gui extends Application implements UserInterface {
             case AMMO_CELL://remember--- at end turn i need to replace everyCell, even if it has something inside!
                     guiMapController.ammoPlacer();
                 break;
-
-            case AMMO_BAG:
-                //need to add ammos to my control board
+            case SPAWN_CELL://weapons changed don't need nothing
+                guiMapController.spawnCellWeaponsUpdate();
                 break;
+            case WEAPON_BAG:
+                guiMapController.changedWeapons();//display my new weapons
+                break;
+
             default:
                 break;
         }

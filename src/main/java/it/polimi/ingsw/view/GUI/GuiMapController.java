@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
@@ -49,7 +50,6 @@ public class GuiMapController {
     }
     private ArrayList <Directions> movementDirections;
     private int validMove=-1;
-
     @FXML
     BorderPane pane;
     @FXML
@@ -69,13 +69,6 @@ public class GuiMapController {
     //-------------------------------------------------------MAP CREATION and gestion methods
     @FXML
     public void initialize() {
-
-    }
-
-    private Point getPlayerPosFromServer(int id)
-    {
-        return new Point(gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX(),gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY());
-
 
     }
 
@@ -270,6 +263,8 @@ public class GuiMapController {
         log.appendText("\n"+s);
     }
 
+    public void spawnCellWeaponsUpdate()
+    {}
     //------------------------------------------------------------Weapons show methods
     private void spawnCellWeaponShow(int r,int c)
     {
@@ -767,7 +762,7 @@ public class GuiMapController {
     }
 
 
-//-------------------------------------------------------------loign methods and matche beginning
+//-------------------------------------------------------------loign methods and match beginning
     @FXML
     public void loginUpdater(String name, int id, PlayerColor color)
     {
@@ -804,6 +799,8 @@ public class GuiMapController {
                 });
             }
         });
+
+
     }
 
 
@@ -1340,6 +1337,9 @@ public class GuiMapController {
 
     private void grabWeapon(int x,int y)
     {
+
+        System.out.println("Tue munizioni: "+gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getAmmoBag().getAmmoList());
+
         List<String> weapons=new ArrayList<>();
         if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()!=null &&gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons()!=null) {
             if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size() == 3) {
@@ -1356,7 +1356,7 @@ public class GuiMapController {
                         public void handle(MouseEvent mouseEvent) {
                             weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
 
-                            weapon1.setImage(null);
+                            myWeapon1.setImage(null);
                             weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                 @Override
                                 public void handle(MouseEvent mouseEvent) {
@@ -1381,7 +1381,7 @@ public class GuiMapController {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
                             weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1));
-                            weapon2.setImage(null);
+                            myWeapon2.setImage(null);
 
                             weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                 @Override
@@ -1407,7 +1407,7 @@ public class GuiMapController {
                         @Override
                         public void handle(MouseEvent mouseEvent) {
                             weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2));
-                            weapon3.setImage(null);
+                            myWeapon3.setImage(null);
                             weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
                                 @Override
                                 public void handle(MouseEvent mouseEvent) {
@@ -1448,7 +1448,15 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect());
+                    if(weapons.size()==0)//no discard
+                    {
+                        weapons.add(null);
+                    }
+                    weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
+
+                    System.out.println("Stai cercndo di acquistare :"+((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
+
+                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect(),weapons);
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -1458,7 +1466,13 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1)).getBuyEffect());
+                    System.out.println("Stai cercndo di acquistare :"+((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
+                    if(weapons.size()==0)//no discard
+                    {
+                        weapons.add(null);
+                    }
+                    weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1));
+                     checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1)).getBuyEffect(),weapons);
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -1469,7 +1483,13 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
-                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2)).getBuyEffect());
+                    System.out.println("Stai cercndo di acquistare :"+((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
+                    if(weapons.size()==0)//no discard
+                    {
+                        weapons.add(null);
+                    }
+                    weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2));
+                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2)).getBuyEffect(),weapons);
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -1481,9 +1501,10 @@ public class GuiMapController {
      * Same as checkPayWithPowerUp but simpler version, which in case you don't need to specify local ammo and powerups
      * will just read them from cacheModel and then call the main checkPayWithPowerUps method with them as parameters
      * @param cost to be checked
+     * @param  weaponNames in position 0 weapon i want to discard, in position 1 weapon iw ant to buy
      * @return a list of CachedPowerUp to discard to pay the specified cost
      */
-    private List<CachedPowerUp> checkPayWithPowerUp(List<Color> cost) {
+    private void checkPayWithPowerUp(List<Color> cost,List <String>weaponNames ) {
         View view=gui.getView();
         List<CachedPowerUp> powerUps = new ArrayList<>();
         CopyOnWriteArrayList<Color> ammo = new CopyOnWriteArrayList<>();
@@ -1497,9 +1518,9 @@ public class GuiMapController {
             //powerUpsColor = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
         }
 
-        powerUpsToDiscard = checkPayWithPowerUp(cost, powerUps, ammo);
+        checkPayWithPowerUp(cost, powerUps, ammo,0,weaponNames,powerUpsToDiscard);//start from zero go to infinite and beyond
 
-        return powerUpsToDiscard;
+
 
     }
     /**
@@ -1507,143 +1528,165 @@ public class GuiMapController {
      * @param cost cost to be checked if payable with powerups
      * @param powerUps take powerups as parameter because you can remove some of them for partial cost checks
      * @param ammo take ammo as parameter because you can remove some of them for partial checks
+     * @param costCount contains the index of which ammo i'm checking
+     * @param weaponNames contains the weapon i want to discrad(0) e the weapon i want to buy (1)
      * @return a list of CachedPowerUps to discard to pay the needed cost
      */
-    private List<CachedPowerUp> checkPayWithPowerUp(List<Color> cost, List<CachedPowerUp> powerUps, List<Color> ammo){
+    private  void checkPayWithPowerUp(List<Color> cost, List<CachedPowerUp> powerUps, List<Color> ammo,int costCount,List <String> weaponNames, List<CachedPowerUp> powerUpsToDiscard) {
 
-        boolean valid = false;
-        List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
-
-        for (Color c : cost) {
-            if (ammo.contains(c) && hasPowerUpOfColor(powerUps, c)){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-
-                alert.setContentText("Puoi pagare " + UiHelpers.ammoTranslator(c) + " usando un PowerUp o con una munizione.");
-                alert.showAndWait();
-                alert = new Alert(Alert.AlertType.CONFIRMATION, "\"Vuoi usare un PowerUp per pagare al posto delle munizioni?", ButtonType.YES, ButtonType.NO);
-                alert.showAndWait();
-
-                if (alert.getResult() == ButtonType.YES)
-                {
-
-                    List<CachedPowerUp> powerUpChoiceList = powerUps
-                            .stream()
-                            .filter(x -> x.getColor().equals(c))
-                            .collect(Collectors.toList());
-
-                     alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("Clicca sul powerUp da scartare a sinistra: ");
-                    alert.showAndWait();
-
-                   //here get powerup to discard porcodyo
-                    for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size();i++)
-                    {
-                        switch (i)
-                        {
-                            case 0:
-                                powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                                    @Override
-                                    public void handle(MouseEvent mouseEvent) {
-                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(0);
-                                        powerUps.remove(powerUpToDiscard);
-                                        powerUpsToDiscard.add(powerUpToDiscard);
-                                    }
-                                });
-                                break;
-                            case 1:
-                                powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                                    @Override
-                                    public void handle(MouseEvent mouseEvent) {
-                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(1);
-                                        powerUps.remove(powerUpToDiscard);
-                                        powerUpsToDiscard.add(powerUpToDiscard);
-                                    }
-                                });
-                                break;
-                            case 2:
-                                powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                                    @Override
-                                    public void handle(MouseEvent mouseEvent) {
-                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(2);
-                                        powerUps.remove(powerUpToDiscard);
-                                        powerUpsToDiscard.add(powerUpToDiscard);
-                                    }
-                                });
-                                break;
-                        }
-                    }
-
-                    //cost.remove(c);
-                }
-
-            } else if (hasPowerUpOfColor(powerUps, c) && !ammo.contains(c)) {//answer is no
-
-                //TODO tell him if he wants to drop a powerup to buy
-
-                Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setContentText("Puoi pagare " + UiHelpers.ammoTranslator(c) + " solamente con un PowerUp: ");
-                alert.showAndWait();
-                List<CachedPowerUp> powerUpChoiceList = powerUps
-                        .stream()
-                        .filter(x -> x.getColor().equals(c))
-                        .collect(Collectors.toList());
-                int j=0;
-                while(j<powerUpChoiceList.size());
-                {
-                    alert.setContentText("Scegli powerUp da scartare: ");
-                    alert.showAndWait();
-                    for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size();i++)
-                    {
-                        switch (i)
-                        {
-                            case 0:
-                                powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                                    @Override
-                                    public void handle(MouseEvent mouseEvent) {
-                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(0);
-                                        powerUps.remove(powerUpToDiscard);
-                                        powerUpsToDiscard.add(powerUpToDiscard);
-                                    }
-                                });
-                                break;
-                            case 1:
-                                powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                                    @Override
-                                    public void handle(MouseEvent mouseEvent) {
-                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(1);
-                                        powerUps.remove(powerUpToDiscard);
-                                        powerUpsToDiscard.add(powerUpToDiscard);
-                                    }
-                                });
-                                break;
-                            case 2:
-                                powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>(){
-                                    @Override
-                                    public void handle(MouseEvent mouseEvent) {
-                                        CachedPowerUp powerUpToDiscard = powerUpChoiceList.get(2);
-                                        powerUps.remove(powerUpToDiscard);
-                                        powerUpsToDiscard.add(powerUpToDiscard);
-                                    }
-                                });
-                                break;
-                        }
-                    }
-                    j++;
-                }
-
-
-            } else if (ammo.contains(c)) {
-                ammo.remove(c);
-                //cost.remove(c);
-            } else {
-                //this shouldn't do anythign , just forward the choice and then controller will
-                //reply back that player hasn't got enough ammo
-            }
+        if (costCount == cost.size())// i need to buy at this point!
+        {
+            gui.getView().doAction(new GrabAction(null, weaponNames.get(0), weaponNames.get(1), powerUpsToDiscard));
+            return;
         }
 
-        System.out.println("[DEBUG] PowerUp da scartare scelti: " + powerUpsToDiscard);
-        return powerUpsToDiscard;
+
+        Color c = cost.get(costCount);
+        if (ammo.contains(c) && hasPowerUpOfColor(powerUps, c)) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+            alert.setContentText("Puoi pagare " + c.toString() + " usando un PowerUp o con una munizione.");
+            alert.showAndWait();
+            alert = new Alert(Alert.AlertType.CONFIRMATION, "\"Vuoi usare un PowerUp per pagare al posto delle munizioni?", ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("Clicca sul powerUp da scartare a destra: ");
+                alert.showAndWait();
+
+                //here get powerup to discard porcodyo
+                for (int i = 0; i < gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size(); i++) {
+                    if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(i).getColor().equals(c)) {
+                        switch (i) {
+                            case 0:
+
+                                powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        System.out.println("-----------------------------------------------------------");
+                                        CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+
+                                    }
+                                });
+                                break;
+                            case 1:
+
+                                powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        System.out.println("-----------------------------------------------------------");
+                                        CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+                                    }
+                                });
+                                break;
+                            case 2:
+
+                                powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        System.out.println("-----------------------------------------------------------");
+                                        CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+                                    }
+                                });
+                                break;
+
+                        }
+                    }
+                }
+
+            }
+
+        }
+        else if (hasPowerUpOfColor(powerUps, c) && !ammo.contains(c))
+        {//answer is no
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Puoi pagare " + c.toString() + " solamente con un PowerUp: ");
+            alert.showAndWait();
+
+
+
+
+            alert.setContentText("Scegli powerUp da scartare: ");//need to wait before iterating---- qui cicla a cacchio
+            alert.showAndWait();
+
+            for (int i = 0; i < gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size(); i++)
+            {
+                if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(i).getColor().equals(c))
+                {
+                    {
+                        switch (i) {
+                            case 0:
+                                powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        System.out.println("-----------------------------------------------------------");
+                                        CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+
+                                    }
+                                });
+                                break;
+                            case 1:
+
+                                powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        System.out.println("-----------------------------------------------------------");
+                                        CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+
+                                    }
+                                });
+                                break;
+                            case 2:
+
+                                powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        System.out.println("-----------------------------------------------------------");
+                                        CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
+                                        powerUps.remove(powerUpToDiscard);
+                                        powerUpsToDiscard.add(powerUpToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+
+                                    }
+                                });
+                                break;
+                        }
+                    }
+                }
+
+
+            }
+        }
+            else if (ammo.contains(c)) {
+                ammo.remove(c);
+                //cost.remove(c);
+            }
+            else {//this shouldn't do anythign , just forward the choice and then controller will
+                //reply back that player hasn't got enough ammo
+            }
+
+
+            System.out.println("[DEBUG] PowerUp da scartare scelti: " + powerUpsToDiscard);
+
     }
+
 
     private boolean hasPowerUpOfColor(List<CachedPowerUp> powerUps, Color c){
         List<CachedPowerUp> result = powerUps
@@ -1682,5 +1725,60 @@ public class GuiMapController {
     }
 
     //------------------------------------------------------------ move and grab
+    //-----------------------------------------------------------plancia
 
+    /**
+     * Show my weapons. called from updates in gui
+     */
+    public void changedWeapons()
+    {
+       //--------display my weapons
+        myWeapon1.setImage(null);
+        myWeapon2.setImage(null);
+        myWeapon3.setImage(null);
+        myWeapon1.setFitHeight(156);
+        myWeapon1.setFitWidth(100);
+        myWeapon2.setFitHeight(156);
+        myWeapon2.setFitWidth(100);
+        myWeapon3.setFitHeight(156);
+        myWeapon3.setFitWidth(100);
+
+        //disable alla effects
+        weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+            }
+        });
+        weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+            }
+        });
+        weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+            }
+        });
+
+        for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size();i++)
+        {
+            String url=fromWNameToUrl(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(i));
+            Image img=new Image(url);
+
+            switch (i)
+            {
+                case 0:
+                    myWeapon1.setImage(img);
+                    break;
+                case 1:
+                    myWeapon2.setImage(img);
+                    break;
+                case 2:
+                    myWeapon3.setImage(img);
+                    break;
+            }
+
+        }
+
+    }
 }

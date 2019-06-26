@@ -57,9 +57,10 @@
         </GridPane>
     </center>
     <right>
+        <HBox><children>
         <VBox>
             <children>
-            <Label text="Weapons "></Label>
+
 
             <Label text="PowerUps Here"></Label>
                 <ImageView fx:id="powerUp1"></ImageView>
@@ -67,6 +68,17 @@
                 <ImageView fx:id="powerUp3"></ImageView>
             </children>
         </VBox>
+            <VBox>
+                <children>
+
+
+                    <Label text="My Weapons Here"></Label>
+                    <ImageView fx:id="myWeapon1"></ImageView>
+                    <ImageView fx:id="myWeapon2"></ImageView>
+                    <ImageView fx:id="myWeapon3"></ImageView>
+                </children>
+            </VBox>
+        </children></HBox>
     </right>
     <bottom>
         <HBox>
@@ -77,11 +89,7 @@
             <Button text="Muovi e raccogli"></Button>
             <Button text="Raccogli dove sei " fx:id="grabButton"></Button>
             <Button text="Ricarica"></Button>
-                <HBox>
-                    <ImageView fx:id="myWeapon1"></ImageView>
-                    <ImageView fx:id="myWeapon2"></ImageView>
-                    <ImageView fx:id="myWeapon3"></ImageView>
-                </HBox>
+
             </HBox>
         </HBox>
     </bottom>
