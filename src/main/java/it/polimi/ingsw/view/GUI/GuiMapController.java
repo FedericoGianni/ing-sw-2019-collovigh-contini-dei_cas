@@ -18,27 +18,28 @@ import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
+import it.polimi.ingsw.view.updates.otherplayerturn.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
-
-import java.awt.Point;
-import java.io.File;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+
+import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_BLUE;
+import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_RESET;
 
 
 public class GuiMapController {
@@ -75,6 +76,62 @@ public class GuiMapController {
     @FXML
     public void initialize() {
 
+    }
+
+    /**
+     * Notify update regarding other players actions
+     * @param turnUpdate
+     */
+    protected void notifyTurnUpdate(TurnUpdate turnUpdate) {
+
+        PowerUpTurnUpdate powerUpTurnUpdate;
+        ShootTurnUpdate shootTurnUpdate;
+        GrabTurnUpdate grabTurnUpdate;
+        MoveTurnUpdate moveTurnUpdate;
+
+        switch (turnUpdate.getActionType()) {
+
+            case POWERUP:
+
+                powerUpTurnUpdate = (PowerUpTurnUpdate) turnUpdate;
+                log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha usato il powerUp " + powerUpTurnUpdate.getPowerUp() + ANSI_RESET.escape());
+                break;
+
+            case SHOOT:
+
+                shootTurnUpdate = (ShootTurnUpdate) turnUpdate;
+                log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha sparato con l'arma " + UiHelpers.weaponTranslator(shootTurnUpdate.getWeapon()) + " al player con id: " +
+                        shootTurnUpdate.getTargetId() + ANSI_RESET.escape());
+                break;
+
+            case GRAB:
+
+                grabTurnUpdate = (GrabTurnUpdate) turnUpdate;
+
+                if(grabTurnUpdate.getWeapon() != null){
+                    log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                            " ha raccolto " + UiHelpers.weaponTranslator(grabTurnUpdate.getWeapon()) + ANSI_RESET.escape());
+                } else {
+                    log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                            " ha raccolto " + ANSI_RESET.escape());
+                }
+
+                break;
+
+            case MOVE:
+
+                moveTurnUpdate = (MoveTurnUpdate) turnUpdate;
+                log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " si è mosso" + ANSI_RESET.escape());
+
+                break;
+
+            default:
+
+                break;
+        }
     }
 
     public void mapCreator()
@@ -397,6 +454,8 @@ public class GuiMapController {
         }
         return null;
     }
+
+
 
     private void  weaponDisplayer(String url,int weapon)
     {

@@ -160,8 +160,7 @@ public class CLI implements UserInterface {
                 break;
 
             case 2:
-                // TODO reconnect
-                view.reconnect("fede");
+                reconnect();
                 break;
 
             case 3:
@@ -245,6 +244,19 @@ public class CLI implements UserInterface {
 
         System.out.println("Login fallito. Riprova");
         login();
+
+    }
+
+    private void reconnect(){
+
+        String name;
+
+        System.out.println("RICONNESSIONE");
+        System.out.println("Inserisci il nome usato: ");
+
+        name = scanner.nextLine();
+
+        view.reconnect(name);
 
     }
 
