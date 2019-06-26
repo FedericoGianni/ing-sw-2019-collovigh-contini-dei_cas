@@ -232,7 +232,9 @@ public class Gui extends Application implements UserInterface {
             case WEAPON_BAG:
                 guiMapController.changedWeapons();//display my new weapons
                 break;
-
+            case AMMO_BAG:
+                guiMapController.changedAmmos();
+                break;
             default:
                 break;
         }
