@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 public class VirtualView implements ViewInterface {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.INFO;
+    private static Level level = Level.FINE;
 
     private int playerId;
     private ToView view;

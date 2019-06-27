@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.ammo.AmmoCard;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.CellColor;
+import it.polimi.ingsw.utils.Directions;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -242,5 +243,56 @@ public abstract class Cell extends Subject implements Serializable {
      */
     public abstract SavedCell getSaveVersionOfCell();
 
+    /**
+     * This method will return the direction in which a given cell is adjacent to this cell
+     * @param cell is another cell
+     * @return null if the cells are not adjacent or the direction if them are
+     */
+    public Directions getAdjacencienceDirection(Cell cell){
 
+        if (cell != null) {
+
+            if ( ( this.adjNorth != null ) && (this.adjNorth.equals(Model.getMap().cellToCoord(cell))) )  return Directions.NORTH;
+
+            if ( ( this.adjSouth != null ) && (this.adjSouth.equals(Model.getMap().cellToCoord(cell))) ) return Directions.SOUTH;
+
+            if ( ( this.adjEast != null ) && (this.adjEast.equals(Model.getMap().cellToCoord(cell))) ) return Directions.EAST;
+
+            if ( ( this.adjWest != null ) && (this.adjWest.equals(Model.getMap().cellToCoord(cell))) ) return Directions.WEST;
+
+        }
+
+        return null;
+    }
+
+    /**
+     * This method do the same as the adj getter but take as input the direction
+     * @param direction is the direction of the adj required
+     * @return the cell adj to this in the given direction
+     */
+    public Cell getCellAdj(Directions direction){
+
+        switch (direction){
+
+            case NORTH:
+
+                return getNorth();
+
+            case SOUTH:
+
+                return getSouth();
+
+            case WEST:
+
+                return getWest();
+
+            case EAST:
+
+                return getEast();
+
+            default:
+
+                return null;
+        }
+    }
 }

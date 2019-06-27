@@ -132,9 +132,11 @@ public class AmmoBag extends Subject implements Bag<AmmoCube> {
      */
     public int leftMaxAmmo( Color powerUpColor ){
 
-        return (int) ammoCubes
+        int actualForColor =  (int) ammoCubes
                 .stream()
                 .filter( x -> x.getColor().equals(powerUpColor) )
                 .count();
+
+        return MAX_FOR_COLOR - actualForColor;
     }
 }

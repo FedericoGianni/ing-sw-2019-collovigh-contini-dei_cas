@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.serveronly.rmi;
 
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.rmi.ToClient;
 import it.polimi.ingsw.network.rmi.ToServer;
 import it.polimi.ingsw.network.serveronly.Server;
@@ -55,7 +56,11 @@ public class ToServerImpl implements ToServer {
 
             // register the client in the waitingRoom and gets the id
 
-            playerId = Server.addPlayer(name, color, new ToViewImpl(address, remoteName, client));
+            ToViewImpl toView = new ToViewImpl(address, remoteName, client);
+
+            playerId = Server.addPlayer(name, color, toView);
+
+            toView.setPlayerId(playerId);
 
             // starts the pinger
 
@@ -115,7 +120,11 @@ public class ToServerImpl implements ToServer {
 
             // register the client in the Server and gets the id
 
-            playerId = Server.reconnect(name, new ToViewImpl(address, remoteName, client));
+            ToViewImpl toView = new ToViewImpl(address, remoteName, client);
+
+            playerId = Server.reconnect(name, toView);
+
+            toView.setPlayerId(playerId);
 
             // starts the pinger
 

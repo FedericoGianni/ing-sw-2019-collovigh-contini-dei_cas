@@ -86,6 +86,8 @@ public class Controller {
 
     private Random rand = new Random();
 
+    private boolean gameEnded = false;
+
 
 
 
@@ -414,19 +416,22 @@ public class Controller {
 
 
     public void incrementPhase(){
-        if(turnPhase == END){
-            turnPhase = SPAWN;
-            roundNumber++;
-            LOGGER.log(level, "[CONTROLLER] switch to phase: {0}", turnPhase);
-            handleTurnPhase();
-        } else {
-            turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
 
-            LOGGER.log(level, "[CONTROLLER] switch to phase: {0}", turnPhase);
+        if (!gameEnded) {
 
-            handleTurnPhase();
+            if (turnPhase == END) {
+                turnPhase = SPAWN;
+                roundNumber++;
+                LOGGER.log(level, "[CONTROLLER] switch to phase: {0}", turnPhase);
+                handleTurnPhase();
+            } else {
+                turnPhase = TurnPhase.values()[turnPhase.ordinal() + 1];
+
+                LOGGER.log(level, "[CONTROLLER] switch to phase: {0}", turnPhase);
+
+                handleTurnPhase();
+            }
         }
-
     }
 
     // Spawn Phase
@@ -660,6 +665,8 @@ public class Controller {
                 getVirtualView(i).endGame();
             }
         }
+
+        gameEnded = true;
     }
 
 

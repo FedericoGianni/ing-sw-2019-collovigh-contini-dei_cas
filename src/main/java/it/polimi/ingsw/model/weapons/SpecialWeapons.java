@@ -5,7 +5,9 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.Directions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SpecialWeapons extends Weapon{
@@ -107,4 +109,48 @@ public abstract class SpecialWeapons extends Weapon{
 
         }
     }
+
+    /**
+     * This method will say if the shooter is is in line with other max 2 players
+     * @param shooter is the shooter
+     * @param targets is a list of 1 or 2 targets
+     * @return true if the specified players are in line, false otherwise
+     */
+    public static Boolean playerAreInLine(Player shooter, List<Player> targets){
+
+        if (targets.size() == 1) return true;
+
+        if (targets.size()==2) {
+
+            Directions adjDir = shooter.getCurrentPosition().getAdjacencienceDirection(targets.get(0).getCurrentPosition());
+
+            if (adjDir == null) return false;
+
+            return  (targets.get(0).getCurrentPosition().getCellAdj(adjDir).equals(targets.get(1).getCurrentPosition())) ;
+
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * @param vortex is the vortex center
+     * @return a list of cell that dist 1 from vortex
+     */
+    public static List<Cell> genCellSurrounding(Cell vortex){
+
+        List<Cell> vortexSurrounding = new ArrayList<>();
+
+        vortexSurrounding.add(vortex);
+
+        vortexSurrounding.add(vortex.getNorth());
+        vortexSurrounding.add(vortex.getEast());
+        vortexSurrounding.add(vortex.getWest());
+        vortexSurrounding.add(vortex.getSouth());
+
+        return vortexSurrounding;
+    }
+
+
 }

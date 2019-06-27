@@ -20,11 +20,11 @@ import java.util.logging.Logger;
 public class Server  {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.FINE;
+    private static Level level = Level.INFO;
 
     private static final String LOG_START = "[Server] ";
 
-    private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = false;
+    private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = true;
 
     /**
      * Reference to controller

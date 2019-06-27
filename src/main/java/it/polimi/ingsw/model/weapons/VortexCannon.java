@@ -86,7 +86,7 @@ public class VortexCannon extends SpecialWeapons{
 
         if (target == null) throw new NotCorrectPlayerNumberException();
 
-        if ((target.getCurrentPosition() == null ) || (!genVortexSurrounding(vortex).contains(target.getCurrentPosition()))) throw new UncorrectDistanceException();
+        if ((target.getCurrentPosition() == null ) || (!genCellSurrounding(vortex).contains(target.getCurrentPosition()))) throw new UncorrectDistanceException();
 
     }
 
@@ -108,30 +108,13 @@ public class VortexCannon extends SpecialWeapons{
 
         for (Player target : targets){
 
-            if ((target.getCurrentPosition() == null ) || (!genVortexSurrounding(vortex).contains(target.getCurrentPosition()))) throw new UncorrectDistanceException();
+            if ((target.getCurrentPosition() == null ) || (!SpecialWeapons.genCellSurrounding(vortex).contains(target.getCurrentPosition()))) throw new UncorrectDistanceException();
 
         }
 
     }
 
-    /**
-     *
-     * @param vortex is the vortex center
-     * @return a list of cell that are in the vortex radius
-     */
-    private List<Cell> genVortexSurrounding(Cell vortex){
 
-        List<Cell> vortexSurrounding = new ArrayList<>();
-
-        vortexSurrounding.add(vortex);
-
-        vortexSurrounding.add(vortex.getNorth());
-        vortexSurrounding.add(vortex.getEast());
-        vortexSurrounding.add(vortex.getWest());
-        vortexSurrounding.add(vortex.getSouth());
-
-        return vortexSurrounding;
-    }
 
     /**
      * {@inheritDoc}

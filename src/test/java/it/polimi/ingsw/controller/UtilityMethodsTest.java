@@ -98,4 +98,30 @@ class UtilityMethodsTest {
 
         assertEquals(selected,found);
     }
+
+    @Test
+    void powerUpCanBeSold() {
+
+        List<String> names = new ArrayList<>();
+
+        names.add("Jerry");
+        names.add("Frank");
+        names.add("Tom");
+        names.add("Stan");
+
+        List<PlayerColor> colors = new ArrayList<>();
+
+        colors.add(PlayerColor.BLUE);
+        colors.add(PlayerColor.YELLOW);
+        colors.add(PlayerColor.GREEN);
+        colors.add(PlayerColor.GREY);
+
+        Model model = new Model(names,colors,2,8);
+
+        UtilityMethods utilityMethods = new UtilityMethods(null);
+
+        assertTrue(utilityMethods.powerUpCanBeSold(0,Arrays.asList(new CachedPowerUp(PowerUpType.NEWTON,Color.BLUE))));
+
+        assertTrue(utilityMethods.powerUpCanBeSold(0,Arrays.asList(new CachedPowerUp(PowerUpType.NEWTON,Color.BLUE), new CachedPowerUp(PowerUpType.NEWTON,Color.BLUE) )));
+    }
 }

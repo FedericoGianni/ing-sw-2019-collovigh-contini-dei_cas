@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.rmi;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
+import java.net.SocketException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -13,27 +14,27 @@ public interface ToClient extends  Remote {
      * @param name is the name that was chosen by the user
      * @throws RemoteException
      */
-    void nameAlreadyTaken(String name) throws RemoteException;
+    void nameAlreadyTaken(String name) throws RemoteException, SocketException;
 
     /**
      * This method notify the user that the color chosen is already taken
      * @param color is the color that was chosen by the user
      * @throws RemoteException
      */
-    void colorAlreadyTaken(PlayerColor color) throws RemoteException;
+    void colorAlreadyTaken(PlayerColor color) throws RemoteException,SocketException;
 
     /**
      *
      * @return always true
      * @throws RemoteException
      */
-    Boolean ping() throws RemoteException;
+    Boolean ping() throws RemoteException,SocketException;
 
     /**
      * @return the player Id of the user
      * @throws RemoteException
      */
-    int getPid() throws RemoteException;
+    int getPid() throws RemoteException,SocketException;
 
 
     /**
@@ -41,7 +42,7 @@ public interface ToClient extends  Remote {
      * @param gameId is the id of the game
      * @throws RemoteException
      */
-    void initGame(int gameId) throws RemoteException;
+    void initGame(int gameId) throws RemoteException,SocketException;
 
     //Updates
 
@@ -49,14 +50,14 @@ public interface ToClient extends  Remote {
      * This method will notify the inactive players that the game has started
      * @throws RemoteException
      */
-    void startGame() throws RemoteException;
+    void startGame() throws RemoteException,SocketException;
 
     /**
      * this method is used to send updates to client's cacheModel
      * @param update is the update class
      * @throws RemoteException
      */
-    void sendUpdate(UpdateClass update) throws RemoteException;
+    void sendUpdate(UpdateClass update) throws RemoteException,SocketException;
 
 
     // Turn Handling
@@ -65,48 +66,48 @@ public interface ToClient extends  Remote {
      * This method will start the spawn Phase on the client
      * @throws RemoteException
      */
-    void startSpawn() throws RemoteException;
+    void startSpawn() throws RemoteException,SocketException;
 
     /**
      * This method will start the power Up Phase on the client
      * @throws RemoteException
      */
-    void startPowerUp() throws RemoteException;
+    void startPowerUp() throws RemoteException,SocketException;
 
     /**
      * This method will start the action Phase on the client
      * @throws RemoteException
      */
-    void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) throws RemoteException;
+    void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) throws RemoteException,SocketException;
 
     /**
      * This method will ask the player to redo just the shoot part of the FrenzyShoot
      */
-    void reDoFrenzyAtomicShoot() throws RemoteException;
+    void reDoFrenzyAtomicShoot() throws RemoteException,SocketException;
 
     /**
      * This method will start the reload Phase on the client
      * @throws RemoteException
      */
-    void startReload()throws RemoteException;
+    void startReload()throws RemoteException, SocketException;
 
     /**
      * This method will start the grenade Phase on the client
      * @throws RemoteException
      */
-    void askGrenade()throws RemoteException;
+    void askGrenade()throws RemoteException,SocketException;
 
     /**
      * This method will call the show method on the view
      * @param s is the message to show
      * @throws RemoteException
      */
-    void show(String s) throws RemoteException;
+    void show(String s) throws RemoteException,SocketException;
 
     /**
      * This method will notify the client of the end game
      * @throws RemoteException
      */
-    void endGame() throws RemoteException;
+    void endGame() throws RemoteException,SocketException;
 
 }
