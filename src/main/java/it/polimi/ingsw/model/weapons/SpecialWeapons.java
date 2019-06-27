@@ -14,6 +14,8 @@ public abstract class SpecialWeapons extends Weapon{
 
     private final String name;
 
+    public static final int KILL_DMG = 10;
+
 
 
     public SpecialWeapons(String name) {
@@ -58,7 +60,7 @@ public abstract class SpecialWeapons extends Weapon{
      * @param cells is a list of cell
      * @return true if the shoot can be preformed, false otherwise
      */
-    public abstract Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException, CellNonExistentException;
+    public abstract Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerAlreadyDeadException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException, CellNonExistentException;
 
 
 

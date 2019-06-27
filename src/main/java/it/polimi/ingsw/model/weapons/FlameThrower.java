@@ -8,7 +8,6 @@ import it.polimi.ingsw.utils.Color;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FlameThrower extends SpecialWeapons{
 
@@ -30,7 +29,15 @@ public class FlameThrower extends SpecialWeapons{
      * {@inheritDoc}
      */
     @Override
-    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CellNonExistentException {
+    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws PlayerAlreadyDeadException, WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CellNonExistentException {
+
+        for (int i = 0; i < effects.size(); i++) {
+            for(Player p : targetLists.get(i)){
+                if(p.getStats().getDmgTaken().size() > KILL_DMG){
+                    throw new PlayerAlreadyDeadException();
+                }
+            }
+        }
 
         if ( (effects == null ) || (effects.size() != 1) || (!Arrays.asList(0,1).containsAll(effects)) ) throw new UncorrectEffectsException();
 

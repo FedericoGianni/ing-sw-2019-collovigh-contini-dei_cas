@@ -36,7 +36,15 @@ public class Thor extends SpecialWeapons {
      * {@inheritDoc}
      */
     @Override
-    public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, CellNonExistentException {
+    public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerAlreadyDeadException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, CellNonExistentException {
+
+        for (int i = 0; i < effects.size(); i++) {
+            for(Player p : targetLists.get(i)){
+                if(p.getStats().getDmgTaken().size() > KILL_DMG){
+                    throw new PlayerAlreadyDeadException();
+                }
+            }
+        }
 
         for(int i=0;i<effects.size();i++)//checks that i can actually shoot
         {

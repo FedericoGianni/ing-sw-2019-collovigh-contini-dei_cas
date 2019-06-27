@@ -1639,7 +1639,7 @@ class NormalWeaponTest {
         } catch (DifferentPlayerNeededException e) {
             e.printStackTrace();
         } catch (PlayerAlreadyDeadException e){
-            
+
         }
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
