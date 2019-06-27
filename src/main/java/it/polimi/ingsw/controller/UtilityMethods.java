@@ -5,16 +5,13 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.SpawnCell;
-import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -360,21 +357,24 @@ public class UtilityMethods {
 
         List< CachedPowerUp> remainingToSell = new ArrayList<>();
 
-        for (CachedPowerUp cachedPowerUp : cachedPowerUpList){
+        if(cachedPowerUpList != null){
 
-            List<CachedPowerUp> selectedAsList = new ArrayList<>();
+            for (CachedPowerUp cachedPowerUp : cachedPowerUpList) {
 
-            selectedAsList.add(cachedPowerUp);
+                List<CachedPowerUp> selectedAsList = new ArrayList<>();
 
-            if (powerUpCanBeSold( playerId, selectedAsList )){
+                selectedAsList.add(cachedPowerUp);
 
-                PowerUp selected = getSpecifiedPowerUp( selectedAsList ).get(0);
+                if (powerUpCanBeSold(playerId, selectedAsList)) {
 
-                Model.getPlayer(playerId).sellPowerUp(selected);
+                    PowerUp selected = getSpecifiedPowerUp(selectedAsList).get(0);
 
-            } else {
+                    Model.getPlayer(playerId).sellPowerUp(selected);
 
-                remainingToSell.add(cachedPowerUp);
+                } else {
+
+                    remainingToSell.add(cachedPowerUp);
+                }
             }
         }
 

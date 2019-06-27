@@ -2,8 +2,8 @@ package it.polimi.ingsw.view.virtualView;
 
 
 import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.ToView;
+import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.ViewInterface;
 import it.polimi.ingsw.view.actions.JsonAction;
@@ -50,8 +50,8 @@ public class VirtualView implements ViewInterface {
         LOGGER.log(level,"[Virtual View] id {0} received startPhase0 and forwarding it to the real view",playerId);
 
         // calls the function on the ToClient interface
-
-        view.startSpawn();
+        if(view != null)
+            view.startSpawn();
 
     }
 
@@ -65,7 +65,9 @@ public class VirtualView implements ViewInterface {
 
         this.view = Server.getClient(playerId);
         LOGGER.log(level,"[Virtual View] id {0} received startPowerUp and forwarding it to the real view", playerId);
-        view.startPowerUp();
+
+        if(view != null)
+            view.startPowerUp();
     }
 
     /**
@@ -77,8 +79,8 @@ public class VirtualView implements ViewInterface {
         // refresh the ToClient reference
 
         this.view = Server.getClient(playerId);
-
-        view.startAction(isFrenzy, isBeforeFrenzyStarter);
+        if(view != null)
+            view.startAction(isFrenzy, isBeforeFrenzyStarter);
 
         LOGGER.log(level,"[Virtual View] id {0} received startAction and forwarding it to the real view",playerId);
     }
@@ -92,8 +94,8 @@ public class VirtualView implements ViewInterface {
         // refresh the ToClient reference
 
         this.view = Server.getClient(playerId);
-
-        view.startReload();
+        if(view != null)
+            view.startReload();
 
         LOGGER.log(level,"[Virtual View] id {0} received startReload and forwarding it to the real view",playerId);
 
@@ -106,7 +108,8 @@ public class VirtualView implements ViewInterface {
     public void askGrenade() {
         this.view = Server.getClient(playerId);
         LOGGER.log(level,"[Virtual View] id {0} forwarding askGrenade to view", playerId);
-        view.askGrenade();
+        if(view != null)
+            view.askGrenade();
     }
 
     /**
@@ -115,7 +118,8 @@ public class VirtualView implements ViewInterface {
     @Override
     public void startGame() {
         this.view = Server.getClient(playerId);
-        view.startGame();
+        if(view != null)
+            view.startGame();
     }
 
     /**
@@ -124,7 +128,8 @@ public class VirtualView implements ViewInterface {
     @Override
     public void show(String s) {
         this.view = Server.getClient(playerId);
-        view.show(s);
+        if(view != null)
+            view.show(s);
     }
 
     /**
@@ -172,7 +177,9 @@ public class VirtualView implements ViewInterface {
     @Override
     public void endGame() {
 
-        view.endGame();
+        if(view != null)
+            view.endGame();
+
     }
 
     /**
@@ -189,8 +196,8 @@ public class VirtualView implements ViewInterface {
      */
     @Override
     public void reDoFrenzyAtomicShoot() {
-
-        view.reDoFrenzyAtomicShoot();
+        if(view != null)
+            view.reDoFrenzyAtomicShoot();
     }
 
     /**

@@ -1,9 +1,8 @@
 package it.polimi.ingsw.view.GUI;
 
 
-import it.polimi.ingsw.model.map.SpawnCell;
+
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
@@ -19,25 +18,28 @@ import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
+import it.polimi.ingsw.view.updates.otherplayerturn.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-
-
-import java.awt.Point;
-import java.io.File;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+
+import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_BLUE;
+import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_RESET;
 
 
 public class GuiMapController {
@@ -60,16 +62,76 @@ public class GuiMapController {
     @FXML
     VBox b00,b01,b02,b03,b10,b11,b12,b13,b20,b21,b22,b23;
     @FXML
+    HBox plance;
+    @FXML
     ImageView powerUp1,powerUp2,powerUp3,weapon1,weapon2,weapon3,myWeapon1,myWeapon2,myWeapon3;
 
     @FXML
-    Button stopMov,moveButton,grabButton;
-
-
+    Button stopMov,moveButton,grabButton,moveGrabButton;
+    private final int NORM_MOV=3;
+    private final int NORM_MOVGRAB=1;
+    private final int DMG3_MOVGRAB=2;
+    private List <String> actionTypes;
     //-------------------------------------------------------MAP CREATION and gestion methods
     @FXML
     public void initialize() {
 
+    }
+
+    /**
+     * Notify update regarding other players actions
+     * @param turnUpdate
+     */
+    protected void notifyTurnUpdate(TurnUpdate turnUpdate) {
+
+        PowerUpTurnUpdate powerUpTurnUpdate;
+        ShootTurnUpdate shootTurnUpdate;
+        GrabTurnUpdate grabTurnUpdate;
+        MoveTurnUpdate moveTurnUpdate;
+
+        switch (turnUpdate.getActionType()) {
+
+            case POWERUP:
+
+                powerUpTurnUpdate = (PowerUpTurnUpdate) turnUpdate;
+                log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha usato il powerUp " + powerUpTurnUpdate.getPowerUp() + ANSI_RESET.escape());
+                break;
+
+            case SHOOT:
+
+                shootTurnUpdate = (ShootTurnUpdate) turnUpdate;
+                log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " ha sparato con l'arma " + UiHelpers.weaponTranslator(shootTurnUpdate.getWeapon()) + " al player con id: " +
+                        shootTurnUpdate.getTargetId() + ANSI_RESET.escape());
+                break;
+
+            case GRAB:
+
+                grabTurnUpdate = (GrabTurnUpdate) turnUpdate;
+
+                if(grabTurnUpdate.getWeapon() != null){
+                    log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                            " ha raccolto " + UiHelpers.weaponTranslator(grabTurnUpdate.getWeapon()) + ANSI_RESET.escape());
+                } else {
+                    log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                            " ha raccolto " + ANSI_RESET.escape());
+                }
+
+                break;
+
+            case MOVE:
+
+                moveTurnUpdate = (MoveTurnUpdate) turnUpdate;
+                log.appendText(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                        " si è mosso" + ANSI_RESET.escape());
+
+                break;
+
+            default:
+
+                break;
+        }
     }
 
     public void mapCreator()
@@ -115,6 +177,49 @@ public class GuiMapController {
             }
 
         }
+        actionTypes=new ArrayList<>();
+        actionTypes.add("MOVE");
+        actionTypes.add("MOVE&GRAB");
+        actionTypes.add("SHOOT");
+
+        //-------plance creator
+        for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().size();i++)
+        {
+            VBox vb = new VBox();
+
+            Label lbl = new Label("Giocatore: "+gui.getView().getCacheModel().getCachedPlayers().get(i).getName());
+            vb.getChildren().add(lbl);
+
+            Label lbl2 = new Label("Danni subiti: 0");
+            vb.getChildren().add(lbl2);
+
+            Label lbl3 = new Label("Marchi ricevuti: 0");
+            vb.getChildren().add(lbl3);
+
+            Label lbl4 = new Label("Punti : 0");
+            vb.getChildren().add(lbl4);
+
+            Label lbl5=new Label("Morti subite: 0");
+            vb.getChildren().add(lbl5);
+
+            Label lbl6=new Label("Armi: Nessuna.");
+            vb.getChildren().add(lbl6);
+            Label lbl7;
+            if(gui.getView().getCacheModel().getCachedPlayers().get(i).getAmmoBag()==null)
+            {
+                 lbl7=new Label("Munizioni: Nessuna.");
+                 vb.getChildren().add(lbl7);
+            }else{
+                lbl7=new Label("Munizioni: "+gui.getView().getCacheModel().getCachedPlayers().get(i).getAmmoBag().getAmmoList());
+                vb.getChildren().add(lbl7);
+            }
+
+
+
+            plance.getChildren().add(vb);
+        }
+
+
         weaponSeeEventEnabler();
     }
     private void weaponSeeEventEnabler()
@@ -201,7 +306,7 @@ public class GuiMapController {
             @Override
             public void handle(ActionEvent event) {
                 actionButtonDisable();//i need to disable everything else
-                move();
+                move("MOVE");
 
             }
         });
@@ -210,10 +315,20 @@ public class GuiMapController {
             @Override
             public void handle(ActionEvent event) {
                actionButtonDisable();//i need to disable everything else
-                grabHere();
+                List <Directions> dir=new ArrayList<>();
+                grabHere(-1,-1,dir);//means grab here
 
             }
         });
+
+        moveGrabButton.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+            actionButtonDisable();//i need to disable everything else
+            move("MOVE&GRAB");
+
+        }
+    });
     }
 
     @FXML
@@ -232,6 +347,12 @@ public class GuiMapController {
             }
         });
         grabButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+        moveGrabButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
@@ -334,6 +455,8 @@ public class GuiMapController {
         return null;
     }
 
+
+
     private void  weaponDisplayer(String url,int weapon)
     {
         Image img=new Image(url);
@@ -409,13 +532,35 @@ public class GuiMapController {
 
     //-------------------------------------------------------------movements things
     @FXML
-    private void move()
+    private void move(String actionType)
     {
 
         movementDirections=new ArrayList<>();
         int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
         int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
-        Platform.runLater(() ->  {handleMovement(x,y,3,movementDirections);});
+        switch(actionType)
+        {
+            case "MOVE":
+                System.out.println("MOVE in move();");
+                //if non frenzy
+                Platform.runLater(() ->  {handleMovement(x,y,NORM_MOV,movementDirections,actionType);});
+                //if frenzy cases here--->
+                //Platform.runLater(() ->  {handleMovement(x,y,FRENZY_MOV,movementDirections);});
+                break;
+            case "MOVE&GRAB":
+                if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size()<3)
+                {
+                    Platform.runLater(() ->  {handleMovement(x,y,NORM_MOVGRAB,movementDirections,actionType);});
+                }
+                else{//one move more here
+                    Platform.runLater(() ->  {handleMovement(x,y,DMG3_MOVGRAB,movementDirections,actionType);});
+                }
+                break;
+            case "SHOOT":
+                break;
+
+        }
+
     }
 
     private void mapPos(int r,int c,int id)
@@ -452,18 +597,34 @@ public class GuiMapController {
 
     }
 
-    private void handleMovement(int x,int y,int m,ArrayList<Directions> movementDirections)//called from move,do stuff for real
+    private void handleMovement(int x,int y,int m,ArrayList<Directions> movementDirections,String actionType)//called from move,do stuff for real
     {
         Alert a=new Alert(Alert.AlertType.CONFIRMATION);
         a.setContentText("Move the Pawn in an adjacent cell click STOP on the left to stop the movements\n Remembre you have "+m+" moves left");
+        a.showAndWait();
+        a.setContentText(" Remembre you have "+m+" moves left");
         a.show();
         int M=m-1;
         //enable button events
 
         stopMov.setOnAction(new EventHandler<ActionEvent>() {//stop button
             @Override public void handle(ActionEvent e) {
-                gui.getView().doAction(new Move(movementDirections,new Point(x,y)));
-                actionButtonDisable();
+                switch(actionType)
+                {
+                    case "MOVE":
+                        System.out.println("MOVE in hanldemovement e stoppo il moviment, mi muovo così : "+movementDirections);
+
+                        gui.getView().doAction(new Move(movementDirections,new Point(x,y)));
+                        actionButtonDisable();
+                        break;
+                    case "MOVE&GRAB":
+                        grabHere(x,y,movementDirections);
+                        break;
+                    case "SHOOT":
+                        break;
+
+                }
+
             }
         });
 
@@ -477,10 +638,10 @@ public class GuiMapController {
                     movementDirections.add(Directions.EAST);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                     fromIDtoIMG(gui.getView().getPlayerId(),map[x][y+1]);
-                    eventMover(x,y+1,M);
+                    eventMover(x,y+1,M,actionType);
                 }
                 else{
-                    eventMover(x,y,m);
+                    eventMover(x,y,m,actionType);
                 }
             }
         });}
@@ -492,10 +653,10 @@ public class GuiMapController {
                 {   movementDirections.add(Directions.SOUTH);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                     fromIDtoIMG(gui.getView().getPlayerId(),map[x+1][y]);
-                    eventMover(x+1,y,M);
+                    eventMover(x+1,y,M,actionType);
                 }
                 else{
-                    eventMover(x,y,m);
+                    eventMover(x,y,m,actionType);
                 }
             }
         });}
@@ -507,10 +668,10 @@ public class GuiMapController {
                     movementDirections.add(Directions.WEST);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                     fromIDtoIMG(gui.getView().getPlayerId(),map[x][y-1]);
-                    eventMover(x,y-1,M);
+                    eventMover(x,y-1,M,actionType);
                 }
                 else{
-                    eventMover(x,y,m);
+                    eventMover(x,y,m,actionType);
                 }
             }
         });}
@@ -522,28 +683,40 @@ public class GuiMapController {
                     movementDirections.add(Directions.NORTH);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                     fromIDtoIMG(gui.getView().getPlayerId(),map[x-1][y]);
-                    eventMover(x-1,y,M);
+                    eventMover(x-1,y,M,actionType);
                 }
                 else{
-                    eventMover(x,y,m);
+                    eventMover(x,y,m,actionType);
                 }
             }
         });}
     }
 
 
-    private void eventMover(int x,int y,int m)
+    private void eventMover(int x,int y,int m,String actionType)
     {
-        if(m==0)
+        if(m==0 && actionType.compareTo("MOVE")==0)//movement
         {
             Alert a=new Alert(Alert.AlertType.INFORMATION);
-            a.setContentText("No more movements left. Moving...");
+            a.setContentText("Movimenti esauriti");
             a.show();
-            gui.getView().doAction(new Move(movementDirections,new Point(x,y)));
+            gui.getView().doAction(new Move(movementDirections,new Point(x,y)));//updates the model for real
             actionButtonDisable();
             return;
         }
-
+        if(m==0 && actionType.compareTo("MOVE&GRAB")==0)//move & grab actions
+        {
+            Alert a=new Alert(Alert.AlertType.INFORMATION);
+            a.setContentText("Movimenti esauriti, raccolgo qui..");
+            a.show();
+            grabHere(x,y,movementDirections);//x and y are my position in the gui, not already in the model
+            return;
+        }
+        if(m==0 && actionType.compareTo("SHOOT")==0)
+        {
+            //shooot things
+            return;
+        }
         for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
         {
             for(int j=0;j<col;j++)
@@ -568,10 +741,10 @@ public class GuiMapController {
                     playerRemover(gui.getView().getPlayerId(),x,y);
                     fromIDtoIMG(gui.getView().getPlayerId(),map[x][y+1]);
 
-                    eventMover(x,y+1,M);
+                    eventMover(x,y+1,M,actionType);
                 }
                 else{
-                    eventMover(x,y,m);
+                    eventMover(x,y,m,actionType);
                 }
             }
         });}
@@ -583,10 +756,10 @@ public class GuiMapController {
                 {   movementDirections.add(Directions.SOUTH);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                     fromIDtoIMG(gui.getView().getPlayerId(),map[x+1][y]);
-                    eventMover(x+1,y,M);
+                    eventMover(x+1,y,M,actionType);
                 }
                 else{
-                    eventMover(x,y,m);
+                    eventMover(x,y,m,actionType);
                 }
             }
         });}
@@ -598,10 +771,10 @@ public class GuiMapController {
                     movementDirections.add(Directions.WEST);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                     fromIDtoIMG(gui.getView().getPlayerId(),map[x][y-1]);
-                    eventMover(x,y-1,M);
+                    eventMover(x,y-1,M,actionType);
                 }
                 else{
-                    eventMover(x,y,m);
+                    eventMover(x,y,m,actionType);
                 }
             }
         });}
@@ -613,10 +786,10 @@ public class GuiMapController {
                     movementDirections.add(Directions.NORTH);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                    fromIDtoIMG(gui.getView().getPlayerId(), map[x-1][y]);
-                    eventMover(x-1,y,M);
+                    eventMover(x-1,y,M,actionType);
                 }
                 else{
-                    eventMover(x,y,m);
+                    eventMover(x,y,m,actionType);
                 }
             }
         });}
@@ -659,14 +832,14 @@ public class GuiMapController {
 
     private void playerRemover(int id,int x,int y)
     {
-        System.out.println("Sto guardando cela :"+x+" "+y);
+       // System.out.println("Sto guardando cela :"+x+" "+y);
         if(map[x][y].getChildren().size()==1)//primo HBOX
         {
             int j=0;
             boolean found=false;
             while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size()  )//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
             {
-                System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+                //System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
 
                 if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
                 {
@@ -682,7 +855,7 @@ public class GuiMapController {
 
             while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size())//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
             {
-                System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+                //System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
 
                 if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0 )
                 {    found=true; break;}
@@ -769,6 +942,85 @@ public class GuiMapController {
         log.appendText("\nSi è collegato: "+name+" con l'id: "+id+" ed il colore: "+color);
     }
 
+
+    public void planciaUpdater()
+    {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {//-----update plance
+                for (int i = 0; i < gui.getView().getCacheModel().getCachedPlayers().size(); i++) {
+                    plance.getChildren().removeAll(plance.getChildren());
+                }
+                for (int i = 0; i < gui.getView().getCacheModel().getCachedPlayers().size(); i++) {
+                    VBox vb = new VBox();
+
+                    Label lbl = new Label("Giocatore: " + gui.getView().getCacheModel().getCachedPlayers().get(i).getName());
+                    vb.getChildren().add(lbl);
+
+                    if (gui.getView().getCacheModel().getCachedPlayers().get(i).getStats() == null) {
+                        Label lbl2 = new Label("Danni subiti: 0");
+                        vb.getChildren().add(lbl2);
+
+                        Label lbl3 = new Label("Marchi ricevuti: 0");
+                        vb.getChildren().add(lbl3);
+
+                        Label lbl4 = new Label("Punti : 0");
+                        vb.getChildren().add(lbl4);
+
+                        Label lbl5 = new Label("Morti subite: 0");
+                        vb.getChildren().add(lbl5);
+                    } else {
+                        Label lbl2;
+                        if (gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getDmgTaken().isEmpty()) {
+                            lbl2 = new Label("Danni subiti: 0");
+                        } else {
+                            lbl2 = new Label("Danni subiti: " + gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getDmgTaken());
+                        }
+                        vb.getChildren().add(lbl2);
+
+
+                        Label lbl3;
+                        if (gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getMarks().isEmpty()) {
+                            lbl3 = new Label("Marchi ricevuti: 0");
+                        } else {
+                            lbl3 = new Label("Marchi ricevuti: " + gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getMarks());
+                        }
+                        vb.getChildren().add(lbl3);
+                        Label lbl4 = new Label("Punti : " + gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getScore());
+                        vb.getChildren().add(lbl4);
+
+                        Label lbl5;
+                        if (gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getDeaths() == 0) {
+                            lbl5 = new Label("Numero di morti : 0");
+                        } else {
+                            lbl5 = new Label("Marchi ricevuti: " + gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getDeaths());
+                        }
+                        vb.getChildren().add(lbl5);
+                    }
+                    //-------weapons display
+                    Label lbl6;
+                    if (gui.getView().getCacheModel().getCachedPlayers().get(i).getWeaponbag() != null) {
+                        lbl6 = new Label("Armi: " + gui.getView().getCacheModel().getCachedPlayers().get(i).getWeaponbag().getWeapons());
+                    } else {
+                        lbl6 = new Label("Armi: Nessuna.");
+                    }
+                    vb.getChildren().add(lbl6);
+
+                    //------ammunitions display
+                    Label lbl7;
+                    if (gui.getView().getCacheModel().getCachedPlayers().get(i).getAmmoBag() == null) {
+                        lbl7 = new Label("Munizioni: Nessuna.");
+                    } else {
+                        lbl7 = new Label("Munizioni: " + gui.getView().getCacheModel().getCachedPlayers().get(i).getAmmoBag().getAmmoList());
+                    }
+                    vb.getChildren().add(lbl7);
+                    plance.getChildren().add(vb);
+                }
+            }
+        });
+    }
+
+
     public void statsUpdater(int id) {//the player is removed from its postion before the update
 
         if (!gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getOnline()) {
@@ -797,10 +1049,11 @@ public class GuiMapController {
                     public void handle(ActionEvent actionEvent) {
                     }
                 });
+
+
             }
         });
-
-
+        planciaUpdater();
     }
 
 
@@ -1291,30 +1544,37 @@ public class GuiMapController {
         return null;
     }
 
+    public void changedAmmos()
+    {
+        planciaUpdater();
+    }
+
     //------------------------------------------------------------ grab
-    private void grabHere()//----called from the button grab
+    private void grabHere(int x,int y, List <Directions> dir)//----called from the button grab
     {
         //se questa cella è spawn o ammo
-        int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
-        int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
+        if(x==-1 && y==-1)//means actual position
+        {x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
+        y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();}
+        int xx=x,yy=y;
         if(gui.getView().getCacheModel().getCachedMap().getCachedCell(x,y).getCellType()==CellType.AMMO)
         {
             //se ammo aggiungi quelle munizie alle nostre/ powerUp
-            grabAmmoCard(x,y);
+            Platform.runLater(() ->  {grabAmmoCard(xx,yy,dir);});
         }
         else{//spawn cell
             //se arma : abilita il click su un arma, se puoi pagare bella
-            grabWeapon(x,y);
+            Platform.runLater(() ->  {grabWeapon(xx,yy,dir);});
         }
 
 
     }
 
-    private void grabAmmoCard(int x,int y)
+    private void grabAmmoCard(int x,int y,List <Directions> dir)
     {
         if(!containsAmmo(map[x][y]))
         {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Non ci sono munizioni in questa cella, scegli un'altra azione");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Non ci sono munizioni in questa cella, scegli un'altra azione");//maybe need to be changed??
             alert.show();
             return;
         }
@@ -1327,7 +1587,7 @@ public class GuiMapController {
                 {
                     ((ImageView)((HBox)b.getChildren().get(i)).getChildren().get(j)).setImage(null);//remove the ammoImage
                     //((HBox)b.getChildren().get(i)).getChildren().remove((((HBox)b.getChildren().get(i)).getChildren().get(j)));
-                    List <Directions> dir=new ArrayList<>();//empty directions
+                    System.out.println("Sto raccogliendo una muniozione e ho fatto questi spotamenti: "+dir);
                     gui.getView().doAction(new GrabAction(dir));
                 }
             }
@@ -1335,9 +1595,9 @@ public class GuiMapController {
 
     }
 
-    private void grabWeapon(int x,int y)
+    private void grabWeapon(int x,int y,List <Directions> dir)
     {
-
+        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getAmmoBag()!=null)
         System.out.println("Tue munizioni: "+gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getAmmoBag().getAmmoList());
 
         List<String> weapons=new ArrayList<>();
@@ -1440,7 +1700,7 @@ public class GuiMapController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Scegli un' arma da acquistare nella schermata sinistra");
         alert.show();
         //show the current spawn cell weapons
-        spawnCellWeaponShow(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX(),gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY());
+        spawnCellWeaponShow(x,y);
         //show the cost in toolTip
         costDisplay(x,y);
 
@@ -1456,7 +1716,7 @@ public class GuiMapController {
 
                     System.out.println("Stai cercndo di acquistare :"+((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
 
-                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect(),weapons);
+                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect(),weapons,dir);
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -1472,7 +1732,7 @@ public class GuiMapController {
                         weapons.add(null);
                     }
                     weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1));
-                     checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1)).getBuyEffect(),weapons);
+                     checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1)).getBuyEffect(),weapons,dir);
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -1489,7 +1749,7 @@ public class GuiMapController {
                         weapons.add(null);
                     }
                     weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2));
-                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2)).getBuyEffect(),weapons);
+                    checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2)).getBuyEffect(),weapons,dir);
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -1504,7 +1764,7 @@ public class GuiMapController {
      * @param  weaponNames in position 0 weapon i want to discard, in position 1 weapon iw ant to buy
      * @return a list of CachedPowerUp to discard to pay the specified cost
      */
-    private void checkPayWithPowerUp(List<Color> cost,List <String>weaponNames ) {
+    private void checkPayWithPowerUp(List<Color> cost,List <String>weaponNames ,List <Directions> dir) {
         View view=gui.getView();
         List<CachedPowerUp> powerUps = new ArrayList<>();
         CopyOnWriteArrayList<Color> ammo = new CopyOnWriteArrayList<>();
@@ -1518,7 +1778,7 @@ public class GuiMapController {
             //powerUpsColor = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
         }
 
-        checkPayWithPowerUp(cost, powerUps, ammo,0,weaponNames,powerUpsToDiscard);//start from zero go to infinite and beyond
+        checkPayWithPowerUp(cost, powerUps, ammo,0,weaponNames,powerUpsToDiscard,dir);//start from zero go to infinite and beyond
 
 
 
@@ -1532,11 +1792,12 @@ public class GuiMapController {
      * @param weaponNames contains the weapon i want to discrad(0) e the weapon i want to buy (1)
      * @return a list of CachedPowerUps to discard to pay the needed cost
      */
-    private  void checkPayWithPowerUp(List<Color> cost, List<CachedPowerUp> powerUps, List<Color> ammo,int costCount,List <String> weaponNames, List<CachedPowerUp> powerUpsToDiscard) {
+    private  void checkPayWithPowerUp(List<Color> cost, List<CachedPowerUp> powerUps, List<Color> ammo,int costCount,List <String> weaponNames, List<CachedPowerUp> powerUpsToDiscard,List <Directions> dir) {
 
         if (costCount == cost.size())// i need to buy at this point!
-        {
-            gui.getView().doAction(new GrabAction(null, weaponNames.get(0), weaponNames.get(1), powerUpsToDiscard));
+        {//if it's a grab here dir is empty
+            System.out.println("Provo ad acquistare una arma con queste robe: "+dir+" Acquisto: "+ weaponNames.get(1)+" uso questi pup: "+powerUpsToDiscard+" scarto: "+weaponNames.get(0));
+            gui.getView().doAction(new GrabAction(dir, weaponNames.get(0), weaponNames.get(1), powerUpsToDiscard));
             return;
         }
 
@@ -1569,7 +1830,7 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir);
 
                                     }
                                 });
@@ -1583,7 +1844,7 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir);
                                     }
                                 });
                                 break;
@@ -1596,7 +1857,7 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir);
                                     }
                                 });
                                 break;
@@ -1606,7 +1867,10 @@ public class GuiMapController {
                 }
 
             }
-
+            else{
+                ammo.remove(c);
+                checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir);
+            }
         }
         else if (hasPowerUpOfColor(powerUps, c) && !ammo.contains(c))
         {//answer is no
@@ -1634,7 +1898,7 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir);
 
                                     }
                                 });
@@ -1648,7 +1912,7 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir);
 
                                     }
                                 });
@@ -1662,7 +1926,7 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir);
 
                                     }
                                 });
@@ -1674,11 +1938,11 @@ public class GuiMapController {
 
             }
         }
-            else if (ammo.contains(c)) {
+        else if (ammo.contains(c)) {
                 ammo.remove(c);
-                //cost.remove(c);
-            }
-            else {//this shouldn't do anythign , just forward the choice and then controller will
+                checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir);
+        }
+        else {//this shouldn't do anythign , just forward the choice and then controller will
                 //reply back that player hasn't got enough ammo
             }
 
@@ -1760,6 +2024,8 @@ public class GuiMapController {
             }
         });
 
+        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()==null)
+            System.out.println("dovakhiiin");
         for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size();i++)
         {
             String url=fromWNameToUrl(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(i));
@@ -1779,6 +2045,6 @@ public class GuiMapController {
             }
 
         }
-
+        planciaUpdater();
     }
 }

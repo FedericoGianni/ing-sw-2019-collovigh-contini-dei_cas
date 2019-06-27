@@ -2,7 +2,7 @@ package it.polimi.ingsw.view.GUI;
 
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
@@ -189,6 +189,10 @@ public class Gui extends Application implements UserInterface {
         });
     }
 
+    public void grab(GrabAction grabAction){
+        view.doAction(grabAction);
+    }
+
     @Override
     public void notifyUpdate(UpdateType updateType, int playerId, TurnUpdate turnUpdate) {
 
@@ -232,7 +236,14 @@ public class Gui extends Application implements UserInterface {
             case WEAPON_BAG:
                 guiMapController.changedWeapons();//display my new weapons
                 break;
+            case AMMO_BAG:
+                guiMapController.changedAmmos();
+                break;
 
+            case TURN:
+                guiMapController.notifyTurnUpdate(turnUpdate);
+                break;
+                
             default:
                 break;
         }

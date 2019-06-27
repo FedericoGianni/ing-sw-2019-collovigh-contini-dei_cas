@@ -81,17 +81,22 @@
         </children></HBox>
     </right>
     <bottom>
-        <HBox>
-            <Label text="Plancia e my weapons"></Label>
-            <HBox>
-            <Button text="Moovi"  fx:id="moveButton"></Button>
-            <Button text="Spara"></Button>
-            <Button text="Muovi e raccogli"></Button>
-            <Button text="Raccogli dove sei " fx:id="grabButton"></Button>
-            <Button text="Ricarica"></Button>
 
-            </HBox>
+        <HBox>
+            <children>
+                <HBox>
+                    <Button text="Moovi"  fx:id="moveButton"></Button>
+                    <Button text="Spara"></Button>
+                    <Button text="Muovi e raccogli" fx:id="moveGrabButton"></Button>
+                    <Button text="Raccogli dove sei " fx:id="grabButton"></Button>
+                    <Button text="Ricarica"></Button>
+                </HBox>
+                <HBox fx:id="plance">
+
+                </HBox>
+            </children>
         </HBox>
+
     </bottom>
 
 </BorderPane>
