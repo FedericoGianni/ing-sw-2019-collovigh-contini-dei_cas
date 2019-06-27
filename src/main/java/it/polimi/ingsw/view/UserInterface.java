@@ -18,6 +18,8 @@ public interface UserInterface {
      */
     void show(String s);
 
+    void close();
+
     /**
      * Notify that a local client class has been updated inside the cachemodel
      * @param updateType the class which has been updated

@@ -21,6 +21,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_TIMER_EXPIRED;
 import static it.polimi.ingsw.utils.Protocol.*;
 import static java.lang.Thread.sleep;
 
@@ -243,7 +244,7 @@ public class Gui extends Application implements UserInterface {
             case TURN:
                 guiMapController.notifyTurnUpdate(turnUpdate);
                 break;
-                
+
             default:
                 break;
         }
@@ -342,5 +343,11 @@ public class Gui extends Application implements UserInterface {
             guiMapController.setValidMove(0);
         }
 
+    }
+
+    @Override
+    public void close() {
+        guiMapController.log.appendText(DEFAULT_TIMER_EXPIRED);
+        System.exit(0);
     }
 }

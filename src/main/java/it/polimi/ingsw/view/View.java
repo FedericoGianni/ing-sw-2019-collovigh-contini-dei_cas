@@ -189,9 +189,9 @@ public class View implements ViewInterface {
             clientToVView = sc.getScw();
         }
 
-        userInterface.login();
+        //userInterface.login();
         //TODO uncomment this to have game selection
-        //userInterface.gameSelection();
+        userInterface.gameSelection();
     }
 
     public void retryLogin(String error){
@@ -356,6 +356,11 @@ public class View implements ViewInterface {
 
         // forward it to the CacheModel
         cacheModel.update(update);
+    }
+
+    @Override
+    public void close() {
+
     }
 
     /**

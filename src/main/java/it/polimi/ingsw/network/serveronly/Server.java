@@ -4,8 +4,8 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.*;
-import it.polimi.ingsw.network.serveronly.rmi.RMIServer;
 import it.polimi.ingsw.network.serveronly.Socket.SocketServer;
+import it.polimi.ingsw.network.serveronly.rmi.RMIServer;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
@@ -24,7 +24,7 @@ public class Server  {
 
     private static final String LOG_START = "[Server] ";
 
-    private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = true;
+    private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = false;
 
     /**
      * Reference to controller
@@ -178,6 +178,8 @@ public class Server  {
 
         int playerId = controller.findPlayerByName(name);
 
+        System.out.println("playerId del player: " + name + " ID: " + playerId);
+
         // if the player is found
 
         if (playerId != -1) {
@@ -186,9 +188,13 @@ public class Server  {
 
             clients.put(playerId, toView);
 
+            System.out.println("DEBUG clients.put" + playerId +" "+ toView);
+
             // sets the player online in the controller
 
             controller.setPlayerOnline(playerId);
+
+            System.out.println("DEBUG controller.setPlayerOnlnie del polayer id " + playerId);
 
             // logs the reconnection
 
@@ -240,6 +246,8 @@ public class Server  {
             // sets the player to offline
 
             controller.setPlayerOffline(playerId);
+
+            LOGGER.log(Level.WARNING, "[DEBUG] playerOnline size: " + controller.getPlayerOnline().size());
 
             if ( (ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < WaitingRoom.DEFAULT_MIN_PLAYERS) ){
 

@@ -110,4 +110,6 @@ public interface ToClient extends  Remote {
      */
     void endGame() throws RemoteException,SocketException;
 
+    void close() throws RemoteException;
+
 }

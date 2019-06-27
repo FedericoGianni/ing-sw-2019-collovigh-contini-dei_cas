@@ -53,4 +53,6 @@ public interface ToView  {
      */
     void endGame();
 
+    void close();
+
 }

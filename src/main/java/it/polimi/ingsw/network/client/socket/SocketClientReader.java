@@ -49,6 +49,7 @@ public class SocketClientReader extends Thread {
     private static final String SHOW = "showMessage";
     private static final String SET_INT_ANSWER = "setIntAnswer";
     private static final String REDO_FRENZY_SHOOT = "reDoFrenzyAtomicShoot";
+    private static final String CLOSE = "close";
 
     /**
      * Attribute representing a BufferedReader to manage input stream from socket
@@ -459,6 +460,15 @@ public class SocketClientReader extends Thread {
             LOGGER.log(level,() -> "[Socket-Client-Reader] received setIntAnswer by server ");
 
             scw.setIntAnswer(Integer.parseInt(commands[1]));
+
+        });
+
+        //close after timer expires
+        headersMap.put(CLOSE,(commands) -> {
+
+            LOGGER.log(level,() -> "[Socket-Client-Reader] received close by server ");
+
+            RunClient.getView().close();
 
         });
     }

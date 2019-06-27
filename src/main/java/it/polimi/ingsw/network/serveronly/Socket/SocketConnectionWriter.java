@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.serveronly.Socket;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.ToView;
+import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.socket.SocketPing;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
@@ -33,6 +33,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
     private static final String SHOW = "showMessage";
     private static final String SET_INT_ANSWER = "setIntAnswer";
     private static final String REDO_FRENZY_SHOOT = "reDoFrenzyAtomicShoot";
+    private static final String CLOSE = "close";
 
     /**
      * Reference to the socket representing the communication stream, passed as a parameter to the constructor
@@ -210,5 +211,14 @@ public class SocketConnectionWriter extends Thread implements ToView {
         } catch (IOException e){
             LOGGER.log(WARNING, "ERROR when trying to close socket stream");
         }
+    }
+
+    @Override
+    public void close() {
+
+        LOGGER.log(level,"sending close to connected client");
+
+        send(CLOSE);
+
     }
 }

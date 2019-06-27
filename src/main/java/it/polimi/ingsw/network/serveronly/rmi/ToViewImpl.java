@@ -250,4 +250,18 @@ public class ToViewImpl implements ToView {
         }
 
     }
+
+    @Override
+    public void close() {
+
+        try{
+
+            client.close();
+
+        } catch (RemoteException e){
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
+
+    }
 }

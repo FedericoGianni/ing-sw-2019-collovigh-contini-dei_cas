@@ -103,4 +103,6 @@ public interface ViewInterface {
      * This method will show the end game screen
      */
     void endGame();
+
+    void close();
 }

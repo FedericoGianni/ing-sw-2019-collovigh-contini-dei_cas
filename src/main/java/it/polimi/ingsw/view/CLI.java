@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_TIMER_EXPIRED;
 import static it.polimi.ingsw.utils.PowerUpType.TAG_BACK_GRENADE;
 import static it.polimi.ingsw.utils.PowerUpType.TARGETING_SCOPE;
 import static it.polimi.ingsw.view.UiHelpers.*;
@@ -322,6 +323,9 @@ public class CLI implements UserInterface {
                 if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
                     show(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
                 }
+
+                //players reconnected
+                //TODO inform the player of other player reconnection
 
                 //damage taken
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null) {
@@ -1751,12 +1755,11 @@ public class CLI implements UserInterface {
 
                     try {
 
-                        if(cont >= 1){
+                        if(cont > 0){
                             System.out.println("9 -> per selezionare solo questi bersagli.");
                         }
 
                         scanner.reset();
-                        System.out.println("debug fin qui arrivo dio cristo!!!!!!!!!!!!!!!");
                         read = scanner.nextInt();
 
                         if(read >= 0 && read <= view.getCacheModel().getCachedPlayers().size() && read != view.getPlayerId()){
@@ -2278,5 +2281,12 @@ public class CLI implements UserInterface {
                 }
             }
         }
+    }
+
+    @Override
+    public void close() {
+
+        System.out.println(DEFAULT_TIMER_EXPIRED);
+        System.exit(0);
     }
 }

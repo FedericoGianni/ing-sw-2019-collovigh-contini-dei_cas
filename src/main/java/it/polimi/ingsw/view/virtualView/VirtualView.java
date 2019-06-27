@@ -208,5 +208,8 @@ public class VirtualView implements ViewInterface {
         //i don't need this method here
     }
 
-
+    @Override
+    public void close() {
+        view.close();
+    }
 }
