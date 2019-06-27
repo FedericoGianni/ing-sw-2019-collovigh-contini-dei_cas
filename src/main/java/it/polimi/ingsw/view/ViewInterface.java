@@ -100,10 +100,13 @@ public interface ViewInterface {
     void doAction(JsonAction jsonAction);
 
     /**
+     * close the view, displaying a default message, used after the action timer has expired to close the client connection
+     */
+    void close();
+
+    /**
      * This method will show the end game screen
      */
     void endGame();
-
-    void close();
 
 }

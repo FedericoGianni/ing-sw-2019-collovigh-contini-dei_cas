@@ -360,6 +360,9 @@ public class View implements ViewInterface {
         cacheModel.update(update);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
         userInterface.close();
@@ -386,6 +389,9 @@ public class View implements ViewInterface {
         return playerId;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     public List<Integer> askMapAndSkulls(){
 
         // pos 0 -> mapType pos 1 -> skull number

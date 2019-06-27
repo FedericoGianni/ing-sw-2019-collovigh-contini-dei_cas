@@ -208,6 +208,9 @@ public class VirtualView implements ViewInterface {
         //i don't need this method here
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
 

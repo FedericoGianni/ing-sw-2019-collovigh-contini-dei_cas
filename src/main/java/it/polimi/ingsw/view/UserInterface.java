@@ -12,6 +12,12 @@ public interface UserInterface {
      */
     void startUI();
 
+    /**
+     * Ask mapType and number of skulls to place in the killshotTrack (only to the first player connected)
+     * @return a list of 2 integers, the first one is the chosen mapType, the second one the chosen number of skulls
+     */
+    List<Integer> askMapAndSkulls();
+
     // Utils
 
     /**
@@ -20,6 +26,9 @@ public interface UserInterface {
      */
     void show(String s);
 
+    /**
+     * Close the UserInterface, after a timer of the current action phase expires
+     */
     void close();
 
     /**
@@ -104,7 +113,5 @@ public interface UserInterface {
      * This method will show the end game screen
      */
     void endGame();
-
-    List<Integer> askMapAndSkulls();
 
 }

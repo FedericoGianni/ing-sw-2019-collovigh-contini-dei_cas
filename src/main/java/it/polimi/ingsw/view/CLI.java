@@ -211,6 +211,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public List<Integer> askMapAndSkulls() {
 
