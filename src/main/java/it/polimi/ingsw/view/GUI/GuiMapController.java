@@ -11,6 +11,7 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
+import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -38,6 +39,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.utils.Directions.*;
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_BLUE;
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_RESET;
 
@@ -384,6 +386,79 @@ public class GuiMapController {
         log.appendText("\n"+s);
     }
 
+    private void playersEffectRemover(){
+        for(int x=0;x<rows;x++)
+        {
+            for(int y=0;y<col;y++)
+            {
+                for(int id=0;id<gui.getView().getCacheModel().getCachedPlayers().size();id++)
+                {
+                    if(map[x][y].getChildren().size()==1)//primo HBOX
+                    {
+                        int j=0;
+                        boolean found=false;
+                        while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size()  )//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
+                        {
+                            //System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+
+                            if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
+                            {
+                                found=true; break;
+                            }
+                            j++;
+                        }
+                        if(found)
+                        {
+
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                        }
+                    }else if(map[x][y].getChildren().size()==2){//primo e secondo HBOX
+                        int j=0;
+                        boolean found=false;
+
+                        while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size())
+                        {
+                            //System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+
+                            if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0 )
+                            {    found=true; break;}
+                            j++;
+                        }
+                        if(found)
+                        {
+
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            }); continue;
+                        }
+                        j=0;
+                        while(((HBox)map[x][y].getChildren().get(1)).getChildren().get(j).getId().compareTo(Integer.toString(id))!=0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+                        {
+                            j++;
+                        }
+                        {
+
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void spawnCellWeaponsUpdate()
     {}
     //------------------------------------------------------------Weapons show methods
@@ -680,7 +755,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseevent) {
                 if(moveValidator("NORTH",x,y)) {
-                    movementDirections.add(Directions.NORTH);
+                    movementDirections.add(NORTH);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                     fromIDtoIMG(gui.getView().getPlayerId(),map[x-1][y]);
                     eventMover(x-1,y,M,actionType);
@@ -783,7 +858,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseevent) {
                 if(moveValidator("NORTH",x,y)) {
-                    movementDirections.add(Directions.NORTH);
+                    movementDirections.add(NORTH);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                    fromIDtoIMG(gui.getView().getPlayerId(), map[x-1][y]);
                     eventMover(x-1,y,M,actionType);
@@ -1054,6 +1129,7 @@ public class GuiMapController {
             }
         });
         planciaUpdater();
+        mapEventDeleter();
     }
 
 
@@ -1321,7 +1397,178 @@ public class GuiMapController {
 
     private void newtonAction(int n)
     {
-        System.out.println("Usa newton");
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Raggio traente! Seleziona il giocatore che vuoi spostare.");
+        a.show();
+
+        for(int x=0;x<rows;x++)//find the plyer IW and set the action listener on him
+        {
+            for(int y=0;y<col;y++)
+            {
+                for (int id = 0; id < gui.getView().getCacheModel().getCachedPlayers().size();id++)//search for every player in every cell
+                {
+                    if (map[x][y].getChildren().size() == 1)//primo HBOX
+                    {
+                        int j = 0;
+                        boolean found = false;
+                        while (j < ((HBox) map[x][y].getChildren().get(0)).getChildren().size())//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
+                        {
+
+
+                            if (((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id)) == 0) {
+                                found = true;
+                                break;
+                            }
+                            j++;
+                        }
+                        if (found)//set the event listener that turn on the moverAction
+                        {
+
+                            int iid=id,xx=x,yy=y;
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    playersEffectRemover();
+                                    newtonMover( iid, xx, yy,n);
+                                }
+                            });
+                        }
+                    }
+                    else if (map[x][y].getChildren().size() == 2) {//primo e secondo HBOX
+                        int j = 0;
+                        boolean found = false;
+
+                        while (j < ((HBox) map[x][y].getChildren().get(0)).getChildren().size())
+                        {
+
+
+                            if (((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id)) == 0) {
+                                found = true;
+                                break;
+                            }
+                            j++;
+                        }
+                        if (found) {
+                            int iid=id,xx=x,yy=y;
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    playersEffectRemover();
+                                    newtonMover( iid, xx, yy,n);
+                                }
+                            }); continue;
+                        }
+                        j = 0;
+                        while (((HBox) map[x][y].getChildren().get(1)).getChildren().get(j).getId().compareTo(Integer.toString(id)) != 0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+                        {
+                            j++;
+                        }
+                        int iid=id,xx=x,yy=y;
+                        ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                playersEffectRemover();
+                                newtonMover( iid, xx, yy,n);
+                            }
+                        });
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    private void newtonMover(int id,int x,int y,int listNum)//position of this player
+    {
+        //set mover Actions here
+        //mapEvent deleter alla fine me recumandi
+        mapEventDeleter();
+        System.out.println("Hai selezionato di newtonare il player: "+id);
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Ora seleziona la cella dove vuoi muoverlo");
+        //----------ask NORTH
+        if(moveValidator("NORTH",x,y)){//check id i can go north
+            map[x-1][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,1, NORTH));
+                    mapEventDeleter();
+                }
+            });
+            if(moveValidator("NORTH",x-1,y))//check north 2 times
+            {
+                map[x-2][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,2, NORTH));
+                        mapEventDeleter();
+                    }
+                });
+            }
+        }
+        //-------------ask East
+        if(moveValidator("EAST",x,y)){//check id i can go north
+            map[x][y+1].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,1, EAST));
+                    mapEventDeleter();
+                }
+            });
+            if(moveValidator("EAST",x,y+1))//check north 2 times
+            {
+                map[x][y+2].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,2, EAST));
+                        mapEventDeleter();
+                    }
+                });
+            }
+        }
+        //----------------------------ask west
+        if(moveValidator("WEST",x,y)){//check id i can go north
+            map[x][y-1].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,1, WEST));
+                    mapEventDeleter();
+                }
+            });
+            if(moveValidator("WEST",x,y-1))//check north 2 times
+            {
+                map[x][y-2].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,2, WEST));
+                        mapEventDeleter();
+                    }
+                });
+            }
+        }
+        //-----------ask south
+        if(moveValidator("SOUTH",x,y)){//check id i can go north
+            map[x+1][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,1, SOUTH));
+                    mapEventDeleter();
+                }
+            });
+            if(moveValidator("SOUTH",x+1,y))//check north 2 times
+            {
+                map[x+2][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,2, SOUTH));
+                        mapEventDeleter();
+                    }
+                });
+            }
+        }
+
+
+
+
     }
     //--------------------------------------------------------------ammo gestion
     public void ammoPlacer()
@@ -2024,26 +2271,24 @@ public class GuiMapController {
             }
         });
 
-        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()==null)
-            System.out.println("dovakhiiin");
-        for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size();i++)
-        {
-            String url=fromWNameToUrl(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(i));
-            Image img=new Image(url);
+        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()!=null) {
+            for (int i = 0; i < gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size(); i++) {
+                String url = fromWNameToUrl(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(i));
+                Image img = new Image(url);
 
-            switch (i)
-            {
-                case 0:
-                    myWeapon1.setImage(img);
-                    break;
-                case 1:
-                    myWeapon2.setImage(img);
-                    break;
-                case 2:
-                    myWeapon3.setImage(img);
-                    break;
+                switch (i) {
+                    case 0:
+                        myWeapon1.setImage(img);
+                        break;
+                    case 1:
+                        myWeapon2.setImage(img);
+                        break;
+                    case 2:
+                        myWeapon3.setImage(img);
+                        break;
+                }
+
             }
-
         }
         planciaUpdater();
     }
