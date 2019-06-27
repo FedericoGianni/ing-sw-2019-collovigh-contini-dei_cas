@@ -1941,7 +1941,7 @@ public class CLI implements UserInterface {
                 }
 
 
-                //TODO check if effects are exclusive/concatenable
+                //TODO check if effects are exclousive/concatenable
                 try {
                     read = scanner.nextInt();
                     //scanner.nextLine();

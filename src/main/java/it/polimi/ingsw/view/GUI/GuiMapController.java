@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUI;
 
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
@@ -11,9 +12,11 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.GrabAction;
 import it.polimi.ingsw.view.actions.Move;
 import it.polimi.ingsw.view.actions.SkipAction;
+import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+import it.polimi.ingsw.view.cachemodel.EffectType;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
@@ -32,12 +35,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
+import javax.lang.model.type.ArrayType;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.utils.Directions.*;
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_BLUE;
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_RESET;
 
@@ -67,10 +73,13 @@ public class GuiMapController {
     ImageView powerUp1,powerUp2,powerUp3,weapon1,weapon2,weapon3,myWeapon1,myWeapon2,myWeapon3;
 
     @FXML
-    Button stopMov,moveButton,grabButton,moveGrabButton;
+    Button stopMov,moveButton,grabButton,moveGrabButton,shootButton;
+
     private final int NORM_MOV=3;
     private final int NORM_MOVGRAB=1;
     private final int DMG3_MOVGRAB=2;
+    private final int NORM_SHOOT=0;
+    private final int DMG6_SHOOT=1;
     private List <String> actionTypes;
     //-------------------------------------------------------MAP CREATION and gestion methods
     @FXML
@@ -310,6 +319,21 @@ public class GuiMapController {
 
             }
         });
+        shootButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()!=null)
+                {
+                    actionButtonDisable();//i need to disable everything else
+                    move("SHOOT");
+                }
+                else{
+                    Alert a=new Alert(Alert.AlertType.CONFIRMATION,"No puoi sparare senza armi");
+                    a.show();
+                }
+
+            }
+        });
 
         grabButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -358,6 +382,12 @@ public class GuiMapController {
 
             }
         });
+        shootButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
         mapEventDeleter();
     }
 
@@ -382,6 +412,79 @@ public class GuiMapController {
     public void printLog(String s)
     {
         log.appendText("\n"+s);
+    }
+
+    private void playersEffectRemover(){
+        for(int x=0;x<rows;x++)
+        {
+            for(int y=0;y<col;y++)
+            {
+                for(int id=0;id<gui.getView().getCacheModel().getCachedPlayers().size();id++)
+                {
+                    if(map[x][y].getChildren().size()==1)//primo HBOX
+                    {
+                        int j=0;
+                        boolean found=false;
+                        while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size()  )//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
+                        {
+                            //System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+
+                            if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0)
+                            {
+                                found=true; break;
+                            }
+                            j++;
+                        }
+                        if(found)
+                        {
+
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                        }
+                    }else if(map[x][y].getChildren().size()==2){//primo e secondo HBOX
+                        int j=0;
+                        boolean found=false;
+
+                        while(j<((HBox)map[x][y].getChildren().get(0)).getChildren().size())
+                        {
+                            //System.out.println("Confronto: "+((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId()+" - "+id);
+
+                            if(((HBox)map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id))==0 )
+                            {    found=true; break;}
+                            j++;
+                        }
+                        if(found)
+                        {
+
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            }); continue;
+                        }
+                        j=0;
+                        while(((HBox)map[x][y].getChildren().get(1)).getChildren().get(j).getId().compareTo(Integer.toString(id))!=0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+                        {
+                            j++;
+                        }
+                        {
+
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void spawnCellWeaponsUpdate()
@@ -534,7 +637,6 @@ public class GuiMapController {
     @FXML
     private void move(String actionType)
     {
-
         movementDirections=new ArrayList<>();
         int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
         int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
@@ -557,6 +659,22 @@ public class GuiMapController {
                 }
                 break;
             case "SHOOT":
+                if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size()<6)
+                {
+                    Platform.runLater(() ->  {shootWeaponChooser(x,y,movementDirections);});
+                }
+                else if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size()>=6)
+                {//one move more here before shoot
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi fare un movimento prima di sparare?", ButtonType.YES, ButtonType.NO);
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.NO) {
+                        Platform.runLater(() ->  {shootWeaponChooser(x,y,movementDirections);});
+                    }
+                    else{
+                        Platform.runLater(() ->  {handleMovement(x,y,DMG6_SHOOT,movementDirections,actionType);});
+                    }
+
+                }//else frenzy shit
                 break;
 
         }
@@ -621,6 +739,8 @@ public class GuiMapController {
                         grabHere(x,y,movementDirections);
                         break;
                     case "SHOOT":
+                        System.out.println("SHOOT in hanldemovement e stoppo il moviment, mi muovo così : "+movementDirections);
+                        shootWeaponChooser(x,y,movementDirections);
                         break;
 
                 }
@@ -680,7 +800,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseevent) {
                 if(moveValidator("NORTH",x,y)) {
-                    movementDirections.add(Directions.NORTH);
+                    movementDirections.add(NORTH);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                     fromIDtoIMG(gui.getView().getPlayerId(),map[x-1][y]);
                     eventMover(x-1,y,M,actionType);
@@ -708,13 +828,13 @@ public class GuiMapController {
         {
             Alert a=new Alert(Alert.AlertType.INFORMATION);
             a.setContentText("Movimenti esauriti, raccolgo qui..");
-            a.show();
+            a.showAndWait();
             grabHere(x,y,movementDirections);//x and y are my position in the gui, not already in the model
             return;
         }
         if(m==0 && actionType.compareTo("SHOOT")==0)
         {
-            //shooot things
+            shootWeaponChooser(x,y,movementDirections);
             return;
         }
         for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
@@ -783,7 +903,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseevent) {
                 if(moveValidator("NORTH",x,y)) {
-                    movementDirections.add(Directions.NORTH);
+                    movementDirections.add(NORTH);
                     playerRemover(gui.getView().getPlayerId(),x,y);
                    fromIDtoIMG(gui.getView().getPlayerId(), map[x-1][y]);
                     eventMover(x-1,y,M,actionType);
@@ -1054,6 +1174,7 @@ public class GuiMapController {
             }
         });
         planciaUpdater();
+        mapEventDeleter();
     }
 
 
@@ -1321,7 +1442,178 @@ public class GuiMapController {
 
     private void newtonAction(int n)
     {
-        System.out.println("Usa newton");
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Raggio traente! Seleziona il giocatore che vuoi spostare.");
+        a.show();
+
+        for(int x=0;x<rows;x++)//find the plyer IW and set the action listener on him
+        {
+            for(int y=0;y<col;y++)
+            {
+                for (int id = 0; id < gui.getView().getCacheModel().getCachedPlayers().size();id++)//search for every player in every cell
+                {
+                    if (map[x][y].getChildren().size() == 1)//primo HBOX
+                    {
+                        int j = 0;
+                        boolean found = false;
+                        while (j < ((HBox) map[x][y].getChildren().get(0)).getChildren().size())//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
+                        {
+
+
+                            if (((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id)) == 0) {
+                                found = true;
+                                break;
+                            }
+                            j++;
+                        }
+                        if (found)//set the event listener that turn on the moverAction
+                        {
+
+                            int iid=id,xx=x,yy=y;
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    playersEffectRemover();
+                                    newtonMover( iid, xx, yy,n);
+                                }
+                            });
+                        }
+                    }
+                    else if (map[x][y].getChildren().size() == 2) {//primo e secondo HBOX
+                        int j = 0;
+                        boolean found = false;
+
+                        while (j < ((HBox) map[x][y].getChildren().get(0)).getChildren().size())
+                        {
+
+
+                            if (((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id)) == 0) {
+                                found = true;
+                                break;
+                            }
+                            j++;
+                        }
+                        if (found) {
+                            int iid=id,xx=x,yy=y;
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    playersEffectRemover();
+                                    newtonMover( iid, xx, yy,n);
+                                }
+                            }); continue;
+                        }
+                        j = 0;
+                        while (((HBox) map[x][y].getChildren().get(1)).getChildren().get(j).getId().compareTo(Integer.toString(id)) != 0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+                        {
+                            j++;
+                        }
+                        int iid=id,xx=x,yy=y;
+                        ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                playersEffectRemover();
+                                newtonMover( iid, xx, yy,n);
+                            }
+                        });
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    private void newtonMover(int id,int x,int y,int listNum)//position of this player
+    {
+        //set mover Actions here
+        //mapEvent deleter alla fine me recumandi
+        mapEventDeleter();
+        System.out.println("Hai selezionato di newtonare il player: "+id);
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Ora seleziona la cella dove vuoi muoverlo");
+        //----------ask NORTH
+        if(moveValidator("NORTH",x,y)){//check id i can go north
+            map[x-1][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,1, NORTH));
+                    mapEventDeleter();
+                }
+            });
+            if(moveValidator("NORTH",x-1,y))//check north 2 times
+            {
+                map[x-2][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,2, NORTH));
+                        mapEventDeleter();
+                    }
+                });
+            }
+        }
+        //-------------ask East
+        if(moveValidator("EAST",x,y)){//check id i can go north
+            map[x][y+1].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,1, EAST));
+                    mapEventDeleter();
+                }
+            });
+            if(moveValidator("EAST",x,y+1))//check north 2 times
+            {
+                map[x][y+2].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,2, EAST));
+                        mapEventDeleter();
+                    }
+                });
+            }
+        }
+        //----------------------------ask west
+        if(moveValidator("WEST",x,y)){//check id i can go north
+            map[x][y-1].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,1, WEST));
+                    mapEventDeleter();
+                }
+            });
+            if(moveValidator("WEST",x,y-1))//check north 2 times
+            {
+                map[x][y-2].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,2, WEST));
+                        mapEventDeleter();
+                    }
+                });
+            }
+        }
+        //-----------ask south
+        if(moveValidator("SOUTH",x,y)){//check id i can go north
+            map[x+1][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,1, SOUTH));
+                    mapEventDeleter();
+                }
+            });
+            if(moveValidator("SOUTH",x+1,y))//check north 2 times
+            {
+                map[x+2][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+                    @Override
+                    public void handle(MouseEvent mouseEvent) {
+                        gui.getView().doAction(new NewtonAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpColorList().get(listNum),id,2, SOUTH));
+                        mapEventDeleter();
+                    }
+                });
+            }
+        }
+
+
+
+
     }
     //--------------------------------------------------------------ammo gestion
     public void ammoPlacer()
@@ -1969,6 +2261,7 @@ public class GuiMapController {
      * @param powerUps list of powerups copied from cachemodel (can be modified by methods, to track local changes)
      * @return true if the weapon can be reloaded with current powerups and ammo, false otherwise
      */
+    //------------------------------------------------------reload
     private boolean canReload(String weapon, List<Color> ammoCubes, List<CachedPowerUp> powerUps){
         View view=gui.getView();
         CachedFullWeapon w = null;
@@ -2024,27 +2317,218 @@ public class GuiMapController {
             }
         });
 
-        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()==null)
-            System.out.println("dovakhiiin");
-        for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size();i++)
-        {
-            String url=fromWNameToUrl(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(i));
-            Image img=new Image(url);
+        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()!=null) {
+            for (int i = 0; i < gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size(); i++) {
+                String url = fromWNameToUrl(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(i));
+                Image img = new Image(url);
 
-            switch (i)
-            {
-                case 0:
-                    myWeapon1.setImage(img);
-                    break;
-                case 1:
-                    myWeapon2.setImage(img);
-                    break;
-                case 2:
-                    myWeapon3.setImage(img);
-                    break;
+                switch (i) {
+                    case 0:
+                        myWeapon1.setImage(img);
+                        break;
+                    case 1:
+                        myWeapon2.setImage(img);
+                        break;
+                    case 2:
+                        myWeapon3.setImage(img);
+                        break;
+                }
+
+            }
+        }
+        planciaUpdater();
+    }
+
+
+
+    //--------------------------------------------------------------------------shoot things
+    private void shootWeaponChooser(int r,int c,List <Directions> dir)
+    {
+        System.out.println("Now you can choose the weapon you want to use");
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Scegli con quale arma sparare");
+        a.show();
+
+        myWeapon1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            String name=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(0);
+            try {
+                CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo( name);
+                shootEffectsChooser(w);
+            } catch (WeaponNotFoundException e) {
+                e.printStackTrace();
             }
 
         }
-        planciaUpdater();
+        });
+        myWeapon2.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                String name=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1);
+                try {
+                    CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo( name);
+                    shootEffectsChooser(w);
+                } catch (WeaponNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        myWeapon3.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                String name=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2);
+                try {
+                    CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo( name);
+                    shootEffectsChooser(w);
+                } catch (WeaponNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void shootEffectsChooser(CachedFullWeapon w)
+    {
+        List <EffectType> effects=new ArrayList<>();
+        if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE))//choose one of the exclusive effects
+        {
+            ButtonType first = new ButtonType("Primo Effetto");
+            ButtonType second = new ButtonType("Secondo Effetto");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Choose one of the effects of "+w.getName(), first, second);
+            alert.showAndWait();
+
+                if (alert.getResult()==first) {
+                    effects.add(w.getEffectTypes().get(0));
+                    shootEffectPay(w,effects);
+                }else{
+                    effects.add(w.getEffectTypes().get(1));
+                    shootEffectPay(w,effects);
+                }
+
+        }
+        else if(w.getEffectTypes().size()==1)//use the only effect
+        {
+            effects.add(w.getEffectTypes().get(0));
+            shootEffectPay(w,effects);
+        }
+        else if(w.getEffectTypes().size()==2 && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_NON_ORD))//2 effects---- options: 1, 2, 1-2,2-1
+        {
+            //ask if first and second or only second
+            //scegli effetti da usare in ordine di utilizzo
+            ButtonType first = new ButtonType("Primo Effetto");
+            //ButtonType second = new ButtonType("Secondo Effetto");
+            ButtonType firstAndSec = new ButtonType("Primo Effetto seguito dal secondo");
+            ButtonType secAndFirst = new ButtonType("Secondo Effetto seguito dal primo");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli gli effetti di "+w.getName(), first, firstAndSec,secAndFirst);
+            alert.showAndWait();
+
+            if (alert.getResult()==first) {//use first effect
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSec){//use first and second effect
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                shootEffectPay(w,effects);
+            }
+            else if(alert.getResult()==secAndFirst)//use second then first effect
+            {
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }
+        }
+        else if(w.getEffectTypes().size()==2 && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE))
+        {//2 effects
+            //ask if first and second or only second
+            //scegli effetti da usare in ordine di utilizzo
+            ButtonType first = new ButtonType("Primo Effetto");
+            ButtonType firstAndSec = new ButtonType("Primo Effetto seguito dal secondo");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli gli effetti di "+w.getName(), first, firstAndSec);
+            alert.showAndWait();
+
+            if (alert.getResult()==first) {//use first effect
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSec){//use first and second effect
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                shootEffectPay(w,effects);
+            }
+        }
+        else if(w.getEffectTypes().size()==3 && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE))
+        {
+            //3 effects, in order
+            ButtonType first = new ButtonType("Primo Effetto");
+            ButtonType firstAndSec = new ButtonType("Primo Effetto seguito dal secondo");
+            ButtonType firstAndSecAndThird = new ButtonType("Primo Effetto seguito dal secondo seguito dal terzo");
+
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli gli effetti di "+w.getName(), first, firstAndSec,firstAndSecAndThird);
+            alert.showAndWait();
+
+            if (alert.getResult()==first) {//use first effect
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSec){//use first and second effect
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                shootEffectPay(w,effects);
+            }else{//first second and third
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(2));
+                shootEffectPay(w,effects);
+            }
+        }
+        else if(w.getEffectTypes().size()==3 && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_NON_ORD))
+        {
+            //3 effects, maybe non in order
+            ButtonType first = new ButtonType("Primo Effetto");
+            ButtonType firstAndSec = new ButtonType("Primo Effetto seguito dal secondo");
+            ButtonType firstAndSecAndThird = new ButtonType("Primo Effetto seguito dal secondo seguito dal terzo");
+            ButtonType firstThird=new ButtonType("Primo Effetto seguito dal terzo");
+            ButtonType secFirst = new ButtonType("Secondo effetto seguito dal primo");
+            ButtonType secFirstThird=new ButtonType("Secondo effetto seguito dal primo seguito dal terzo");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli gli effetti di "+w.getName(), first, firstAndSec,firstAndSecAndThird,firstThird,secFirst,secFirstThird);
+            alert.showAndWait();
+
+            if (alert.getResult()==first) {//use first effect
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSec){//use first and second effect
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSecAndThird)
+            {//first second and third
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(2));
+                shootEffectPay(w,effects);
+            }
+            else if(alert.getResult()==firstThird)
+            {
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(2));
+                shootEffectPay(w,effects);
+            }
+            else if(alert.getResult()==secFirst)
+            {
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }
+            else
+            {
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(2));
+                shootEffectPay(w,effects);
+            }
+        }
+    }
+
+    private void shootEffectPay(CachedFullWeapon w, List <EffectType> effects)
+    {
+        System.out.println("Ho scelto gli effetti: "+effects);
     }
 }
