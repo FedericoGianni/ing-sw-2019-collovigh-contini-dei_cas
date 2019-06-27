@@ -34,7 +34,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void shoot1() throws FrenzyActivatedException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//one shot, one effect, one target, free effect---the most basic possible
+    void shoot1() throws FrenzyActivatedException, PlayerAlreadyDeadException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//one shot, one effect, one target, free effect---the most basic possible
         //-----------------creates microEffects ecc
         Damage.populator();
         Marker.populator();
@@ -85,7 +85,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void shoot2() throws FrenzyActivatedException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
+    void shoot2() throws FrenzyActivatedException, PlayerAlreadyDeadException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
         // 2 damages and 1 mark to target 1
         // 1 mark to target2
         //-----------------creates microEffects ecc
@@ -315,7 +315,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void lockRifleTest() throws FrenzyActivatedException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
+    void lockRifleTest() throws FrenzyActivatedException, DifferentPlayerNeededException, PlayerAlreadyDeadException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
         // 2 damages and 1 mark to target 1
         // 1 mark to target2
         //-----------------creates microEffects ecc
@@ -390,6 +390,8 @@ class NormalWeaponTest {
         } catch(DifferentPlayerNeededException e)
         {
             e.printStackTrace();
+        } catch (PlayerAlreadyDeadException e){
+            e.printStackTrace();
         }
         System.out.println(target1.getPlayerName());
         System.out.println(target1.getStats().getDmgTaken());
@@ -406,7 +408,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void machineGunTest() throws FrenzyActivatedException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
+    void machineGunTest() throws FrenzyActivatedException, PlayerAlreadyDeadException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
 
         //-----------------creates microEffects ecc
         Damage.populator();
@@ -494,7 +496,7 @@ class NormalWeaponTest {
     }
 
     @Test
-    void whisperTest() throws FrenzyActivatedException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
+    void whisperTest() throws FrenzyActivatedException, PlayerAlreadyDeadException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException {//now two effects: 2 dmg and 1 mark to target 1 and 1 mark to target2
 
         //-----------------creates microEffects ecc
         Damage.populator();
@@ -663,6 +665,8 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (DifferentPlayerNeededException e) {
             e.printStackTrace();
+        } catch (PlayerAlreadyDeadException e){
+            e.printStackTrace();
         }
 
 
@@ -754,6 +758,8 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (SeeAblePlayerException e) {
             e.printStackTrace();
+        } catch (PlayerAlreadyDeadException e){
+
         }
     }
 
@@ -1125,7 +1131,10 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (DifferentPlayerNeededException e) {
             e.printStackTrace();
+        } catch (PlayerAlreadyDeadException e){
+            e.printStackTrace();
         }
+
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
         assert(target1.getStats().getDmgTaken().size() ==3);
@@ -1230,6 +1239,8 @@ class NormalWeaponTest {
         } catch (NotEnoughAmmoException e) {
             e.printStackTrace();
         } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (PlayerAlreadyDeadException e){
             e.printStackTrace();
         }
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
@@ -1524,6 +1535,8 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (DifferentPlayerNeededException e) {
             e.printStackTrace();
+        } catch (PlayerAlreadyDeadException e){
+            e.printStackTrace();
         }
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
@@ -1625,6 +1638,8 @@ class NormalWeaponTest {
             e.printStackTrace();
         } catch (DifferentPlayerNeededException e) {
             e.printStackTrace();
+        } catch (PlayerAlreadyDeadException e){
+            
         }
         System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());

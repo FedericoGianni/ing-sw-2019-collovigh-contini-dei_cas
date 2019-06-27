@@ -1,11 +1,9 @@
 package it.polimi.ingsw.model.weapons;
 
 import it.polimi.ingsw.customsexceptions.*;
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -16,8 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -313,8 +309,19 @@ public class NormalWeapon extends Weapon{
      * @throws CardNotPossessedException
      * @throws WeaponNotLoadedException
      * @throws NotEnoughAmmoException
+     * @throws PlayerAlreadyDeadException
      */
-    public void shoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException, PrecedentPlayerNeededException, UncorrectEffectsException {
+    public void shoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, PlayerAlreadyDeadException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException, PrecedentPlayerNeededException, UncorrectEffectsException {
+
+        //TODO @Conte check if this fix is ok
+        for (int i = 0; i < targetLists.size(); i++) {
+            for(Player p : targetLists.get(i)){
+                if(p.getStats().getDmgTaken().size() > 10){
+                    throw new PlayerAlreadyDeadException();
+                }
+            }
+
+        }
 
         List<List<Player>> targetsCopy=new ArrayList<>();
         //now i create the fake players
@@ -426,6 +433,7 @@ public class NormalWeapon extends Weapon{
           restore(targetsCopy,targetLists);
           throw new PrecedentPlayerNeededException();
       }
+
         this.isLoaded=false;
     }
 

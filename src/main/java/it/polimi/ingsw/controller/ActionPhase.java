@@ -708,6 +708,19 @@ public class ActionPhase {
             handleAction();
 
             return;
+
+        } catch (PlayerAlreadyDeadException e){
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " PlayerAlreadyDeadException ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_ALREADY_DEAD);
+
+            restoreSellPowerUp();
+
+            handleAction();
+
+            return;
+
         }
 
 
@@ -723,7 +736,7 @@ public class ActionPhase {
      * @param shootAction is the class containing the list of moves
      * @throws ArgsNotValidatedException if the controller checks fails
      */
-    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException, CellNonExistentException, PrecedentPlayerNeededException {
+    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerAlreadyDeadException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException, CellNonExistentException, PrecedentPlayerNeededException {
 
         // perform pre-check
 
@@ -763,7 +776,8 @@ public class ActionPhase {
                 targets.add(temp);
             }
 
-
+            //TODO @Dav check if ok, I've added PlayerAlreadyDeadException to Alessandro's shoot
+            //TODO write todo's in italian because it has no sense to use english here
             selected.shoot(targets, shootAction.getEffects(), cells);
 
             // apply targeting Scope if requested
@@ -1487,6 +1501,16 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " PrecedentPlayerNeededException ");
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PRECEDENT_PLAYER_NEEDED);
+
+            restoreSellPowerUp();
+
+            handleAction();
+
+        } catch (PlayerAlreadyDeadException e){
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " PlayerAlreadyDeadException ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_ALREADY_DEAD);
 
             restoreSellPowerUp();
 
