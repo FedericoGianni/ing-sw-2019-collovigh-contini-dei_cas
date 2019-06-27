@@ -55,6 +55,8 @@ public class Timer {
 
         LOGGER.log(level, () -> LOG_START + " would have called default Answer");
 
-        //controller.defaultAnswer();
+        controller.getVirtualView(controller.getCurrentPlayer()).close();
+
+        LOGGER.log(Level.INFO, () -> "TIMER fine del metodo default answer");
     }
 }

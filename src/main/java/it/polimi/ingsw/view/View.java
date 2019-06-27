@@ -360,7 +360,7 @@ public class View implements ViewInterface {
 
     @Override
     public void close() {
-
+        userInterface.close();
     }
 
     /**
