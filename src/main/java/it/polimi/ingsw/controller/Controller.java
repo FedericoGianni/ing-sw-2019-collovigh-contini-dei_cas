@@ -130,7 +130,6 @@ public class Controller {
 
         this.observers = new Observers(this, nameList.size()); // needs to stay first
 
-        this.model = new Model(nameList,playerColors,mapType,skulls);
 
         this.roundNumber = 0;
         this.gameId = gameId;
@@ -143,6 +142,7 @@ public class Controller {
         }
 
         sendInitialUpdate( nameList, playerColors, gameId, mapType);
+        this.model = new Model(nameList,playerColors,mapType,skulls);
 
         LOGGER.log(level,"[CONTROLLER] Initialized Model with chosen MapType");
     }

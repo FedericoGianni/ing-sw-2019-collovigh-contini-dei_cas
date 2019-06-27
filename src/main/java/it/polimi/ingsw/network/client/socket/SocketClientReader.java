@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +41,7 @@ public class SocketClientReader extends Thread {
     private Gson gson = new Gson();
 
     private static final String END_GAME = "endGame";
+    private static final String ASK_MAP_AND_SKULLS = "askMapAndSkulls";
     private static final String START_GAME = "startGame";
     private static final String START_SPAWN = "startSpawn";
     private static final String START_POWER_UP = "startPowerUp";
@@ -469,6 +471,17 @@ public class SocketClientReader extends Thread {
             LOGGER.log(level,() -> "[Socket-Client-Reader] received close by server ");
 
             RunClient.getView().close();
+
+        });
+
+        //ask map type and skulls
+        headersMap.put(ASK_MAP_AND_SKULLS,(commands) -> {
+
+            LOGGER.log(level,() -> "[Socket-Client-Reader] received askMapAndSkulls by server ");
+
+            List<Integer> mapAndSkulls = RunClient.getView().askMapAndSkulls();
+
+            scw.send(ASK_MAP_AND_SKULLS + "\f" + mapAndSkulls.get(0) + "\f" + mapAndSkulls.get(1));
 
         });
     }

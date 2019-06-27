@@ -350,4 +350,9 @@ public class Gui extends Application implements UserInterface {
         guiMapController.log.appendText(DEFAULT_TIMER_EXPIRED);
         System.exit(0);
     }
+
+    @Override
+    public List<Integer> askMapAndSkulls() {
+        return null;
+    }
 }

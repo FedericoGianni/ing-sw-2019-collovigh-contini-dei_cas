@@ -3,6 +3,8 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
+import java.util.List;
+
 public interface UserInterface {
 
     /**
@@ -102,5 +104,7 @@ public interface UserInterface {
      * This method will show the end game screen
      */
     void endGame();
+
+    List<Integer> askMapAndSkulls();
 
 }

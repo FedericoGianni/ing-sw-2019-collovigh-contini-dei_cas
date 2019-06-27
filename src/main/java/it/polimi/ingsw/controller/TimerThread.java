@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class TimerThread implements Runnable {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    public static final Level level = Level.FINE;
+    public static final Level level = Level.INFO;
 
     private final int timerStart ;
     private int timerCount;

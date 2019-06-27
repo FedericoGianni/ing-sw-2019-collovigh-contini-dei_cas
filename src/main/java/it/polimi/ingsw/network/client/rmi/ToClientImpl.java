@@ -6,6 +6,7 @@ import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -176,5 +177,10 @@ public class ToClientImpl implements ToClient {
     public void close() throws RemoteException {
 
         client.getView().close();
+    }
+
+    @Override
+    public List<Integer> askMapAndSkulls() throws RemoteException {
+        return client.getView().askMapAndSkulls();
     }
 }

@@ -18,6 +18,7 @@ import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.ShootTurnUpdate;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,6 +96,8 @@ public class ActionPhase {
 
         } else {
 
+            controller.getTimer().startTimer(TIMER_ACTION);
+
             // sends the startPhase command to the virtual view
 
             controller.getVirtualView(currentPlayer).startAction(controller.getFrenzy(), frenzyEnhanced);
@@ -103,7 +106,6 @@ public class ActionPhase {
 
             controller.setExpectingAnswer(true);
 
-            controller.getTimer().startTimer(TIMER_ACTION);
 
         }
     }

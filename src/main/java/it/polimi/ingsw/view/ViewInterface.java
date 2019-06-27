@@ -105,4 +105,5 @@ public interface ViewInterface {
     void endGame();
 
     void close();
+
 }

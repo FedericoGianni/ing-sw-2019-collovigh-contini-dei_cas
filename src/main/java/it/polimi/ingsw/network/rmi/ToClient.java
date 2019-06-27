@@ -6,6 +6,7 @@ import it.polimi.ingsw.view.updates.UpdateClass;
 import java.net.SocketException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public interface ToClient extends  Remote {
 
@@ -111,5 +112,7 @@ public interface ToClient extends  Remote {
     void endGame() throws RemoteException,SocketException;
 
     void close() throws RemoteException;
+
+    List<Integer> askMapAndSkulls() throws RemoteException;
 
 }

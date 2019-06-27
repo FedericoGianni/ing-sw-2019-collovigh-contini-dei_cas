@@ -36,10 +36,11 @@ public class CachedWeaponBag extends UpdateClass {
         if(weapons != null){
             for (int i = 0; i < weapons.size(); i++) {
                 s = s.concat(i + " :" + UiHelpers.weaponTranslator(weapons.get(i)));
-                if(loaded.get(i).equals(true))
+                if(loaded.get(i).equals(true)) {
                     s = s.concat(" carica.\n");
-                else
-                    s =s.concat(" scarica.\n");
+                } else {
+                    s = s.concat(" scarica.\n");
+                }
             }
         }
 

@@ -214,4 +214,6 @@ public class VirtualView implements ViewInterface {
         if(view != null)
             view.close();
     }
+
+
 }

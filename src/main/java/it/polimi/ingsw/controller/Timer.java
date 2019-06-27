@@ -55,8 +55,8 @@ public class Timer {
 
         LOGGER.log(level, () -> LOG_START + " would have called default Answer");
 
-        controller.getVirtualView(controller.getCurrentPlayer()).close();
+        //TODO uncomment this to activate timer disconnections
+        //controller.getVirtualView(controller.getCurrentPlayer()).close();
 
-        LOGGER.log(Level.INFO, () -> "TIMER fine del metodo default answer");
     }
 }

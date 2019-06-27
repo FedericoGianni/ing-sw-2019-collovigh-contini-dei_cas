@@ -2,8 +2,8 @@ package it.polimi.ingsw.network.serveronly.Socket;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.networkexceptions.*;
+import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.socket.FunctionInterface;
 import it.polimi.ingsw.network.socket.SocketIdentifier;
 import it.polimi.ingsw.utils.*;
@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -42,6 +43,7 @@ public class SocketConnectionReader extends Thread {
     private static final String LOG_START = "[Socket-Connection-R] ";
 
     private static final String RECONNECTION_MESSAGE_START = "reconnect";
+    private static final String ASK_MAP_AND_SKULLS = "askMapAndSkulls";
 
     /**
      * Reference to the socket to be handled, which is passed as a parameter to the constructor
@@ -215,6 +217,7 @@ public class SocketConnectionReader extends Thread {
 
 
                 id = Server.addPlayer(commands[1], PlayerColor.valueOf(commands[2].toUpperCase()), socketConnectionWriter);
+
                 if(id >= 0){
                     socketConnectionWriter.send(commands[0] + "\f" + Protocol.DEFAULT_LOGIN_OK_REPLY + "\f"+id);
                 }
@@ -271,6 +274,12 @@ public class SocketConnectionReader extends Thread {
            } else{
                socketConnectionWriter.send(commands[0] + "\ffalse");
            }
+        });
+
+        //askMapAndSkulls
+        headersMap.put(ASK_MAP_AND_SKULLS, (commands) -> {
+            LOGGER.log(INFO, "received askMapAndSkull");
+            socketConnectionWriter.setMapAndSkullsAnswer(Arrays.asList(Integer.parseInt(commands[1]), Integer.parseInt(commands[2])));
         });
     }
 

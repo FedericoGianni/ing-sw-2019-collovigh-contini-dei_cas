@@ -12,6 +12,8 @@ import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -189,9 +191,9 @@ public class View implements ViewInterface {
             clientToVView = sc.getScw();
         }
 
-        //userInterface.login();
+        userInterface.login();
         //TODO uncomment this to have game selection
-        userInterface.gameSelection();
+        //userInterface.gameSelection();
     }
 
     public void retryLogin(String error){
@@ -382,6 +384,14 @@ public class View implements ViewInterface {
         }
 
         return playerId;
+    }
+
+    public List<Integer> askMapAndSkulls(){
+
+        // pos 0 -> mapType pos 1 -> skull number
+        List<Integer> mapAndSkulls = new ArrayList<>();
+
+        return userInterface.askMapAndSkulls();
     }
 
 

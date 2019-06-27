@@ -208,6 +208,78 @@ public class CLI implements UserInterface {
 
 
         view.joinGame(playerName, UiHelpers.colorTranslator(playerColor.toUpperCase()));
+
+    }
+
+    @Override
+    public List<Integer> askMapAndSkulls() {
+
+        List<Integer> mapAndSkulls = new ArrayList<>();
+        int mapChoice = -1;
+        int skullChoice = -1;
+        boolean valid = false;
+
+        for (int i = 1; i <= 3; i++) {
+            System.out.println("Mappa " + i);
+
+            try {
+                FileRead.populateMatrixFromFile(i);
+                FileRead.showBattlefield();
+            } catch (InvalidMapTypeException e){
+
+            }
+
+            System.out.println("");
+        }
+
+        System.out.println("Seleziona il tipo di mappa che vuoi usare: 1/2/3");
+
+        do{
+
+            try{
+
+                mapChoice = scanner.nextInt();
+
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
+            }
+
+            if(mapChoice > 0 && mapChoice < 4){
+                valid = true;
+                mapAndSkulls.add(mapChoice);
+            } else {
+                System.out.println("Scelta non valida! Riprova: ");
+            }
+
+        } while(!valid);
+
+        valid = false;
+
+        do{
+
+            System.out.println("Seleziona il numero di teschi che vuoi posizionare sulla plancia: ");
+
+            try{
+
+                skullChoice = scanner.nextInt();
+
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
+            }
+
+            if(skullChoice > 0 && skullChoice < 9){
+                valid = true;
+                mapAndSkulls.add(skullChoice);
+            } else {
+                System.out.println("Scelta non valida! Riprova: ");
+            }
+
+
+        } while (!valid);
+
+        return mapAndSkulls;
     }
 
     /**
@@ -260,6 +332,7 @@ public class CLI implements UserInterface {
         view.reconnect(name);
 
     }
+
 
     /**
      * {@inheritDoc}
@@ -2211,7 +2284,7 @@ public class CLI implements UserInterface {
 
         for(Player p : players){
             if(p.getStats().getScore() == maxScore) {
-                System.out.println(UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +
+                System.out.println("\n" + "\t" + UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +
                         "Vincitore: " + p.getPlayerId() + " : " + p.getName());
             }
         }
