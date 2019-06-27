@@ -86,7 +86,7 @@
             <children>
                 <HBox>
                     <Button text="Moovi"  fx:id="moveButton"></Button>
-                    <Button text="Spara"></Button>
+                    <Button text="Spara" fx:id="shootButton"></Button>
                     <Button text="Muovi e raccogli" fx:id="moveGrabButton"></Button>
                     <Button text="Raccogli dove sei " fx:id="grabButton"></Button>
                     <Button text="Ricarica"></Button>

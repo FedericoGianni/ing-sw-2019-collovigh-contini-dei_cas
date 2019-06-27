@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUI;
 
 
 import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
@@ -15,6 +16,7 @@ import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+import it.polimi.ingsw.view.cachemodel.EffectType;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
@@ -33,9 +35,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
+import javax.lang.model.type.ArrayType;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -69,10 +73,13 @@ public class GuiMapController {
     ImageView powerUp1,powerUp2,powerUp3,weapon1,weapon2,weapon3,myWeapon1,myWeapon2,myWeapon3;
 
     @FXML
-    Button stopMov,moveButton,grabButton,moveGrabButton;
+    Button stopMov,moveButton,grabButton,moveGrabButton,shootButton;
+
     private final int NORM_MOV=3;
     private final int NORM_MOVGRAB=1;
     private final int DMG3_MOVGRAB=2;
+    private final int NORM_SHOOT=0;
+    private final int DMG6_SHOOT=1;
     private List <String> actionTypes;
     //-------------------------------------------------------MAP CREATION and gestion methods
     @FXML
@@ -312,6 +319,21 @@ public class GuiMapController {
 
             }
         });
+        shootButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()!=null)
+                {
+                    actionButtonDisable();//i need to disable everything else
+                    move("SHOOT");
+                }
+                else{
+                    Alert a=new Alert(Alert.AlertType.CONFIRMATION,"No puoi sparare senza armi");
+                    a.show();
+                }
+
+            }
+        });
 
         grabButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -355,6 +377,12 @@ public class GuiMapController {
             }
         });
         moveGrabButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+        shootButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
 
@@ -609,7 +637,6 @@ public class GuiMapController {
     @FXML
     private void move(String actionType)
     {
-
         movementDirections=new ArrayList<>();
         int x=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosX();
         int y=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosY();
@@ -632,6 +659,22 @@ public class GuiMapController {
                 }
                 break;
             case "SHOOT":
+                if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size()<6)
+                {
+                    Platform.runLater(() ->  {shootWeaponChooser(x,y,movementDirections);});
+                }
+                else if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size()>=6)
+                {//one move more here before shoot
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi fare un movimento prima di sparare?", ButtonType.YES, ButtonType.NO);
+                    alert.showAndWait();
+                    if (alert.getResult() == ButtonType.NO) {
+                        Platform.runLater(() ->  {shootWeaponChooser(x,y,movementDirections);});
+                    }
+                    else{
+                        Platform.runLater(() ->  {handleMovement(x,y,DMG6_SHOOT,movementDirections,actionType);});
+                    }
+
+                }//else frenzy shit
                 break;
 
         }
@@ -696,6 +739,8 @@ public class GuiMapController {
                         grabHere(x,y,movementDirections);
                         break;
                     case "SHOOT":
+                        System.out.println("SHOOT in hanldemovement e stoppo il moviment, mi muovo così : "+movementDirections);
+                        shootWeaponChooser(x,y,movementDirections);
                         break;
 
                 }
@@ -783,13 +828,13 @@ public class GuiMapController {
         {
             Alert a=new Alert(Alert.AlertType.INFORMATION);
             a.setContentText("Movimenti esauriti, raccolgo qui..");
-            a.show();
+            a.showAndWait();
             grabHere(x,y,movementDirections);//x and y are my position in the gui, not already in the model
             return;
         }
         if(m==0 && actionType.compareTo("SHOOT")==0)
         {
-            //shooot things
+            shootWeaponChooser(x,y,movementDirections);
             return;
         }
         for(int i=0;i<rows;i++)//reset buttons on the map to do nothing
@@ -2216,6 +2261,7 @@ public class GuiMapController {
      * @param powerUps list of powerups copied from cachemodel (can be modified by methods, to track local changes)
      * @return true if the weapon can be reloaded with current powerups and ammo, false otherwise
      */
+    //------------------------------------------------------reload
     private boolean canReload(String weapon, List<Color> ammoCubes, List<CachedPowerUp> powerUps){
         View view=gui.getView();
         CachedFullWeapon w = null;
@@ -2291,5 +2337,198 @@ public class GuiMapController {
             }
         }
         planciaUpdater();
+    }
+
+
+
+    //--------------------------------------------------------------------------shoot things
+    private void shootWeaponChooser(int r,int c,List <Directions> dir)
+    {
+        System.out.println("Now you can choose the weapon you want to use");
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Scegli con quale arma sparare");
+        a.show();
+
+        myWeapon1.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            String name=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(0);
+            try {
+                CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo( name);
+                shootEffectsChooser(w);
+            } catch (WeaponNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        }
+        });
+        myWeapon2.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                String name=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1);
+                try {
+                    CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo( name);
+                    shootEffectsChooser(w);
+                } catch (WeaponNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        myWeapon3.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                String name=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2);
+                try {
+                    CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo( name);
+                    shootEffectsChooser(w);
+                } catch (WeaponNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void shootEffectsChooser(CachedFullWeapon w)
+    {
+        List <EffectType> effects=new ArrayList<>();
+        if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE))//choose one of the exclusive effects
+        {
+            ButtonType first = new ButtonType("Primo Effetto");
+            ButtonType second = new ButtonType("Secondo Effetto");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Choose one of the effects of "+w.getName(), first, second);
+            alert.showAndWait();
+
+                if (alert.getResult()==first) {
+                    effects.add(w.getEffectTypes().get(0));
+                    shootEffectPay(w,effects);
+                }else{
+                    effects.add(w.getEffectTypes().get(1));
+                    shootEffectPay(w,effects);
+                }
+
+        }
+        else if(w.getEffectTypes().size()==1)//use the only effect
+        {
+            effects.add(w.getEffectTypes().get(0));
+            shootEffectPay(w,effects);
+        }
+        else if(w.getEffectTypes().size()==2 && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_NON_ORD))//2 effects---- options: 1, 2, 1-2,2-1
+        {
+            //ask if first and second or only second
+            //scegli effetti da usare in ordine di utilizzo
+            ButtonType first = new ButtonType("Primo Effetto");
+            //ButtonType second = new ButtonType("Secondo Effetto");
+            ButtonType firstAndSec = new ButtonType("Primo Effetto seguito dal secondo");
+            ButtonType secAndFirst = new ButtonType("Secondo Effetto seguito dal primo");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli gli effetti di "+w.getName(), first, firstAndSec,secAndFirst);
+            alert.showAndWait();
+
+            if (alert.getResult()==first) {//use first effect
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSec){//use first and second effect
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                shootEffectPay(w,effects);
+            }
+            else if(alert.getResult()==secAndFirst)//use second then first effect
+            {
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }
+        }
+        else if(w.getEffectTypes().size()==2 && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE))
+        {//2 effects
+            //ask if first and second or only second
+            //scegli effetti da usare in ordine di utilizzo
+            ButtonType first = new ButtonType("Primo Effetto");
+            ButtonType firstAndSec = new ButtonType("Primo Effetto seguito dal secondo");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli gli effetti di "+w.getName(), first, firstAndSec);
+            alert.showAndWait();
+
+            if (alert.getResult()==first) {//use first effect
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSec){//use first and second effect
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                shootEffectPay(w,effects);
+            }
+        }
+        else if(w.getEffectTypes().size()==3 && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE))
+        {
+            //3 effects, in order
+            ButtonType first = new ButtonType("Primo Effetto");
+            ButtonType firstAndSec = new ButtonType("Primo Effetto seguito dal secondo");
+            ButtonType firstAndSecAndThird = new ButtonType("Primo Effetto seguito dal secondo seguito dal terzo");
+
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli gli effetti di "+w.getName(), first, firstAndSec,firstAndSecAndThird);
+            alert.showAndWait();
+
+            if (alert.getResult()==first) {//use first effect
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSec){//use first and second effect
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                shootEffectPay(w,effects);
+            }else{//first second and third
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(2));
+                shootEffectPay(w,effects);
+            }
+        }
+        else if(w.getEffectTypes().size()==3 && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_NON_ORD))
+        {
+            //3 effects, maybe non in order
+            ButtonType first = new ButtonType("Primo Effetto");
+            ButtonType firstAndSec = new ButtonType("Primo Effetto seguito dal secondo");
+            ButtonType firstAndSecAndThird = new ButtonType("Primo Effetto seguito dal secondo seguito dal terzo");
+            ButtonType firstThird=new ButtonType("Primo Effetto seguito dal terzo");
+            ButtonType secFirst = new ButtonType("Secondo effetto seguito dal primo");
+            ButtonType secFirstThird=new ButtonType("Secondo effetto seguito dal primo seguito dal terzo");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli gli effetti di "+w.getName(), first, firstAndSec,firstAndSecAndThird,firstThird,secFirst,secFirstThird);
+            alert.showAndWait();
+
+            if (alert.getResult()==first) {//use first effect
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSec){//use first and second effect
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                shootEffectPay(w,effects);
+            }else if(alert.getResult()==firstAndSecAndThird)
+            {//first second and third
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(2));
+                shootEffectPay(w,effects);
+            }
+            else if(alert.getResult()==firstThird)
+            {
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(2));
+                shootEffectPay(w,effects);
+            }
+            else if(alert.getResult()==secFirst)
+            {
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(0));
+                shootEffectPay(w,effects);
+            }
+            else
+            {
+                effects.add(w.getEffectTypes().get(1));
+                effects.add(w.getEffectTypes().get(0));
+                effects.add(w.getEffectTypes().get(2));
+                shootEffectPay(w,effects);
+            }
+        }
+    }
+
+    private void shootEffectPay(CachedFullWeapon w, List <EffectType> effects)
+    {
+        System.out.println("Ho scelto gli effetti: "+effects);
     }
 }
