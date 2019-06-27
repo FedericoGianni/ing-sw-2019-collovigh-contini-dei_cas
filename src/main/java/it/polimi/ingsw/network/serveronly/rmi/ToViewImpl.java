@@ -44,10 +44,6 @@ public class ToViewImpl implements ToView {
 
             client.sendUpdate(update);
 
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
-
         } catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
@@ -71,11 +67,7 @@ public class ToViewImpl implements ToView {
 
             LOGGER.log(level,"[RMI-SERVER] sent startSpawn to player with address :{0}", ipAddress);
 
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
-
-        } catch (RemoteException e){
+        }catch (RemoteException e){
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
 
@@ -95,10 +87,6 @@ public class ToViewImpl implements ToView {
 
             LOGGER.log(level,"[RMI-SERVER] sent startPowerUp to player with address :{0}", ipAddress);
 
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
-
         }catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
@@ -117,10 +105,6 @@ public class ToViewImpl implements ToView {
 
             LOGGER.log(level,"[RMI-SERVER] sent startAction to player with address :{0}", ipAddress);
 
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
-
         }catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
@@ -133,10 +117,6 @@ public class ToViewImpl implements ToView {
         try{
 
             client.reDoFrenzyAtomicShoot();
-
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
 
         }catch (RemoteException e){
 
@@ -156,10 +136,6 @@ public class ToViewImpl implements ToView {
 
             LOGGER.log(level,"[RMI-SERVER] sent startReload to player with address :{0}", ipAddress);
 
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
-
         }catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
@@ -178,10 +154,6 @@ public class ToViewImpl implements ToView {
 
             LOGGER.log(level,"[RMI-SERVER] sent useGrenade to player with address :{0}", ipAddress);
 
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
-
         }catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
         }
@@ -197,10 +169,6 @@ public class ToViewImpl implements ToView {
         try {
 
             client.startGame();
-
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
 
         }catch (RemoteException e){
 
@@ -218,10 +186,6 @@ public class ToViewImpl implements ToView {
 
             client.show(s);
 
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
-
         }catch (RemoteException e){
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
@@ -238,10 +202,6 @@ public class ToViewImpl implements ToView {
         try {
 
             client.endGame();
-
-        }catch (SocketException e){
-
-            Server.removePlayer(playerId);
 
         }catch (RemoteException e){
 

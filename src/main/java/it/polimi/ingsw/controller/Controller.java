@@ -392,22 +392,25 @@ public class Controller {
 
                 Model.getMap().replaceAmmoCard();
 
+                // if someone has died calculates the points
+
+                if(hasSomeoneDied){
+
+                    pointCounter.calculateTurnPoints();
+                }
+
+                // if frenzy is activated check if game has ended
+
+                if (frenzy && frenzyStarter == getCurrentPlayer()) endGame();
+
+                // if frenzy has been activated enable it
+
                 if (activateFrenzy){
 
                     activateFrenzy();
 
                     activateFrenzy = false;
                 }
-
-                if(hasSomeoneDied){
-
-                    pointCounter.calculateTurnPoints();
-
-                }
-
-                // if frenzy is activated check if game has ended
-
-                if (frenzy && frenzyStarter == getCurrentPlayer()) endGame();
 
                 incrementPhase();
 

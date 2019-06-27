@@ -145,7 +145,7 @@ public abstract class Cell extends Subject implements Serializable {
     public List<Player> getPlayers(){
         return this.playersHere
                     .stream()
-                    .map( playerId -> Model.getPlayer(playerId))
+                    .map( Model::getPlayer)
                     .collect(Collectors.toList());
     }
 
