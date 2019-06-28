@@ -169,6 +169,7 @@ public class Gui extends Application implements UserInterface {
                     retryLogin = false;
                     break;
 
+
                 default:
                     header = s.substring(0, 10);
                     msg = s;
