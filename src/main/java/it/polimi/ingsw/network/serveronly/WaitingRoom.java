@@ -29,7 +29,7 @@ public class WaitingRoom {
     private static final int TIMER = 2;
     private int timerCount = TIMER;
 
-    public static final int DEFAULT_MIN_PLAYERS = 1;
+    public static final int DEFAULT_MIN_PLAYERS = 2;
     private static final int DEFAULT_MAX_PLAYERS = 5;
 
     private int skulls = 1;
@@ -80,11 +80,17 @@ public class WaitingRoom {
 
         activeGame = Parser.addGame();
 
+
+        //TODO uncomment this to ask map and skulls instead of random
+        //List<Integer> mapAndSkulls = Server.getClient(0).askMapAndSkulls();
+        //this.mapType = mapAndSkulls.get(0);
+        //this.skulls = mapAndSkulls.get(1);
+
         if(this.mapType == 0) {
-            Server.setController(new Controller(this.players, this.colors, this.activeGame, skulls));
+            Server.setController(new Controller(this.players, this.colors, this.activeGame, this.skulls));
             Server.getController().handleTurnPhase();
         } else{
-            Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType, skulls));
+            Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType, this.skulls));
             Server.getController().handleTurnPhase();
         }
 

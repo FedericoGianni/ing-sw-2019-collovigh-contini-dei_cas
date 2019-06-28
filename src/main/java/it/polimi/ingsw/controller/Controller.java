@@ -130,7 +130,6 @@ public class Controller {
 
         this.observers = new Observers(this, nameList.size()); // needs to stay first
 
-        this.model = new Model(nameList,playerColors,mapType,skulls);
 
         this.roundNumber = 0;
         this.gameId = gameId;
@@ -143,6 +142,7 @@ public class Controller {
         }
 
         sendInitialUpdate( nameList, playerColors, gameId, mapType);
+        this.model = new Model(nameList,playerColors,mapType,skulls);
 
         LOGGER.log(level,"[CONTROLLER] Initialized Model with chosen MapType");
     }
@@ -266,6 +266,8 @@ public class Controller {
                 .map(Player::getPlayerName)
                 .collect(Collectors.toList());
 
+        System.out.println("DEBUG nameList: " + nameList);
+
         try {
 
             return nameList
@@ -299,18 +301,34 @@ public class Controller {
     }
 
 
-    public void setPlayerOnline(int playerId){ Model.getPlayer(playerId).getStats().setOnline(true); }
+    public void setPlayerOnline(int playerId){
+
+        getVirtualView(playerId).sendUpdates(new InitialUpdate(Model.getGame().getPlayers().
+                stream()
+                .map(Player::getPlayerName)
+                .collect(Collectors.toList()), Model.getGame().getPlayers().
+                stream()
+                .map(Player::getColor)
+                .collect(Collectors.toList()), gameId, Model.getMap().getMapType()));
+
+        Model.getPlayer(playerId).getStats().setOnline(true);
+
+    }
 
     public void setPlayerOffline(int playerId){
+
+        System.out.println("[DEBUG] chiamato setPlayerOffline");
 
         Model.getPlayer(playerId).getStats().setOnline(false);
 
         if ((playerId == getCurrentPlayer()) && (expectingAnswer)){
 
-            timer.stopTimer();
+            //TODO fix this with min players connected
+            //timer.stopTimer();
 
             defaultAnswer();
         }
+
     }
 
     public Boolean isPlayerOnline(int playerId){ return Model.getPlayer(playerId).getStats().getOnline(); }

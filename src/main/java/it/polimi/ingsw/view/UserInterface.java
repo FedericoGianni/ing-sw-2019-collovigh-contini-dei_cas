@@ -3,12 +3,20 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 
+import java.util.List;
+
 public interface UserInterface {
 
     /**
      *  This function starts the ui and ask the user which protocol wants to use
      */
     void startUI();
+
+    /**
+     * Ask mapType and number of skulls to place in the killshotTrack (only to the first player connected)
+     * @return a list of 2 integers, the first one is the chosen mapType, the second one the chosen number of skulls
+     */
+    List<Integer> askMapAndSkulls();
 
     // Utils
 
@@ -17,6 +25,11 @@ public interface UserInterface {
      * @param s string to show
      */
     void show(String s);
+
+    /**
+     * Close the UserInterface, after a timer of the current action phase expires
+     */
+    void close();
 
     /**
      * Notify that a local client class has been updated inside the cachemodel

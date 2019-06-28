@@ -44,7 +44,15 @@ public class VortexCannon extends SpecialWeapons{
      * {@inheritDoc}
      */
     @Override
-    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, UncorrectDistanceException, UncorrectEffectsException, NotCorrectPlayerNumberException, NotEnoughAmmoException {
+    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws PlayerAlreadyDeadException, WeaponNotLoadedException, UncorrectDistanceException, UncorrectEffectsException, NotCorrectPlayerNumberException, NotEnoughAmmoException {
+
+        for (int i = 0; i < effects.size(); i++) {
+            for(Player p : targetLists.get(i)){
+                if(p.getStats().getDmgTaken().size() > KILL_DMG){
+                    throw new PlayerAlreadyDeadException();
+                }
+            }
+        }
 
         // if the player shoot with effect 2 but no effect 1 throw exception
 
@@ -120,7 +128,7 @@ public class VortexCannon extends SpecialWeapons{
      * {@inheritDoc}
      */
     @Override
-    public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException {
+    public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws PlayerAlreadyDeadException, WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException {
 
         if (preShoot(targetLists,effects,cells)) {
 

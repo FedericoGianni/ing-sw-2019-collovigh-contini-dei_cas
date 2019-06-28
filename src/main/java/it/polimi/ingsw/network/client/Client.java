@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -72,4 +71,5 @@ public abstract class Client {
      */
     public abstract void doAction(JsonAction jsonAction);
     public abstract boolean askMoveValid(int row, int column, Directions direction);
+
 }

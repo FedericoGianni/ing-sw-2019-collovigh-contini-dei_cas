@@ -18,6 +18,7 @@ import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
 import it.polimi.ingsw.view.updates.otherplayerturn.GrabTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.MoveTurnUpdate;
 import it.polimi.ingsw.view.updates.otherplayerturn.ShootTurnUpdate;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -95,6 +96,8 @@ public class ActionPhase {
 
         } else {
 
+            controller.getTimer().startTimer(TIMER_ACTION);
+
             // sends the startPhase command to the virtual view
 
             controller.getVirtualView(currentPlayer).startAction(controller.getFrenzy(), frenzyEnhanced);
@@ -103,7 +106,6 @@ public class ActionPhase {
 
             controller.setExpectingAnswer(true);
 
-            controller.getTimer().startTimer(TIMER_ACTION);
 
         }
     }
@@ -706,6 +708,19 @@ public class ActionPhase {
             handleAction();
 
             return;
+
+        } catch (PlayerAlreadyDeadException e){
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " PlayerAlreadyDeadException ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_ALREADY_DEAD);
+
+            restoreSellPowerUp();
+
+            handleAction();
+
+            return;
+
         }
 
 
@@ -721,7 +736,7 @@ public class ActionPhase {
      * @param shootAction is the class containing the list of moves
      * @throws ArgsNotValidatedException if the controller checks fails
      */
-    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException, CellNonExistentException, PrecedentPlayerNeededException {
+    private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerAlreadyDeadException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException, CellNonExistentException, PrecedentPlayerNeededException {
 
         // perform pre-check
 
@@ -761,7 +776,8 @@ public class ActionPhase {
                 targets.add(temp);
             }
 
-
+            //TODO @Dav check if ok, I've added PlayerAlreadyDeadException to Alessandro's shoot
+            //TODO write todo's in italian because it has no sense to use english here
             selected.shoot(targets, shootAction.getEffects(), cells);
 
             // apply targeting Scope if requested
@@ -1485,6 +1501,16 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " PrecedentPlayerNeededException ");
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PRECEDENT_PLAYER_NEEDED);
+
+            restoreSellPowerUp();
+
+            handleAction();
+
+        } catch (PlayerAlreadyDeadException e){
+
+            LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " PlayerAlreadyDeadException ");
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_ALREADY_DEAD);
 
             restoreSellPowerUp();
 

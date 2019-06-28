@@ -12,6 +12,8 @@ import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -359,6 +361,14 @@ public class View implements ViewInterface {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() {
+        userInterface.close();
+    }
+
+    /**
      * This method reconnect the player to an active Game
      * @param name is the name the player used to log in
      * @return -1 if the name was not found or the player id if found
@@ -377,6 +387,17 @@ public class View implements ViewInterface {
         }
 
         return playerId;
+    }
+
+    /**
+     *{@inheritDoc}
+     */
+    public List<Integer> askMapAndSkulls(){
+
+        // pos 0 -> mapType pos 1 -> skull number
+        List<Integer> mapAndSkulls = new ArrayList<>();
+
+        return userInterface.askMapAndSkulls();
     }
 
 

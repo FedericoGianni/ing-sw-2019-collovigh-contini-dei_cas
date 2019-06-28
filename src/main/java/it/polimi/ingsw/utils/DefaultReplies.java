@@ -82,4 +82,10 @@ public class DefaultReplies {
             "[!] Arma già carica!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_PRECEDENT_PLAYER_NEEDED = "PRECEDENT_PLAYER_NEEDED";
+
+    public static final String DEFAULT_PLAYER_ALREADY_DEAD = ANSI_YELLOW.escape() +
+            "[!] Uno dei giocatori è già morto, non puoi sparargli!" + ANSI_RESET.escape();
+
+    //timer expires
+    public static final String DEFAULT_TIMER_EXPIRED = ANSI_YELLOW.escape() + "[!] Tempo scaduto! Verrai disconnesso" + ANSI_RESET.escape();
 }

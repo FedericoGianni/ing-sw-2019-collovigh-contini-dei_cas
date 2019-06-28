@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public interface ToClient extends  Remote {
 
@@ -107,5 +108,9 @@ public interface ToClient extends  Remote {
      * @throws RemoteException
      */
     void endGame() throws RemoteException;
+
+    void close() throws RemoteException;
+
+    List<Integer> askMapAndSkulls() throws RemoteException;
 
 }

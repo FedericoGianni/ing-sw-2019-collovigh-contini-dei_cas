@@ -2,6 +2,8 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.view.updates.UpdateClass;
 
+import java.util.List;
+
 public interface ToView  {
 
     // Update Logic
@@ -52,5 +54,9 @@ public interface ToView  {
      * This method will show the end game screen
      */
     void endGame();
+
+    void close();
+
+    List<Integer> askMapAndSkulls();
 
 }

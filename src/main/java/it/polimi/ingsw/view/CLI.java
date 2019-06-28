@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_TIMER_EXPIRED;
 import static it.polimi.ingsw.utils.PowerUpType.TAG_BACK_GRENADE;
 import static it.polimi.ingsw.utils.PowerUpType.TARGETING_SCOPE;
 import static it.polimi.ingsw.view.UiHelpers.*;
@@ -207,6 +208,81 @@ public class CLI implements UserInterface {
 
 
         view.joinGame(playerName, UiHelpers.colorTranslator(playerColor.toUpperCase()));
+
+    }
+
+    /**
+     *{@inheritDoc}
+     */
+    @Override
+    public List<Integer> askMapAndSkulls() {
+
+        List<Integer> mapAndSkulls = new ArrayList<>();
+        int mapChoice = -1;
+        int skullChoice = -1;
+        boolean valid = false;
+
+        for (int i = 1; i <= 3; i++) {
+            System.out.println("Mappa " + i);
+
+            try {
+                FileRead.populateMatrixFromFile(i);
+                FileRead.showBattlefield();
+            } catch (InvalidMapTypeException e){
+
+            }
+
+            System.out.println("");
+        }
+
+        System.out.println("Seleziona il tipo di mappa che vuoi usare: 1/2/3");
+
+        do{
+
+            try{
+
+                mapChoice = scanner.nextInt();
+
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
+            }
+
+            if(mapChoice > 0 && mapChoice < 4){
+                valid = true;
+                mapAndSkulls.add(mapChoice);
+            } else {
+                System.out.println("Scelta non valida! Riprova: ");
+            }
+
+        } while(!valid);
+
+        valid = false;
+
+        do{
+
+            System.out.println("Seleziona il numero di teschi che vuoi posizionare sulla plancia: ");
+
+            try{
+
+                skullChoice = scanner.nextInt();
+
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
+            }
+
+            if(skullChoice > 0 && skullChoice < 9){
+                valid = true;
+                mapAndSkulls.add(skullChoice);
+            } else {
+                System.out.println("Scelta non valida! Riprova: ");
+            }
+
+
+        } while (!valid);
+
+        return mapAndSkulls;
     }
 
     /**
@@ -259,6 +335,7 @@ public class CLI implements UserInterface {
         view.reconnect(name);
 
     }
+
 
     /**
      * {@inheritDoc}
@@ -322,6 +399,9 @@ public class CLI implements UserInterface {
                 if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
                     show(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
                 }
+
+                //players reconnected
+                //TODO inform the player of other player reconnection
 
                 //damage taken
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null) {
@@ -1751,12 +1831,11 @@ public class CLI implements UserInterface {
 
                     try {
 
-                        if(cont >= 1){
+                        if(cont > 0){
                             System.out.println("9 -> per selezionare solo questi bersagli.");
                         }
 
                         scanner.reset();
-                        System.out.println("debug fin qui arrivo dio cristo!!!!!!!!!!!!!!!");
                         read = scanner.nextInt();
 
                         if(read >= 0 && read <= view.getCacheModel().getCachedPlayers().size() && read != view.getPlayerId()){
@@ -1865,7 +1944,7 @@ public class CLI implements UserInterface {
                 }
 
 
-                //TODO check if effects are exclusive/concatenable
+                //TODO check if effects are exclousive/concatenable
                 try {
                     read = scanner.nextInt();
                     //scanner.nextLine();
@@ -2208,7 +2287,7 @@ public class CLI implements UserInterface {
 
         for(Player p : players){
             if(p.getStats().getScore() == maxScore) {
-                System.out.println(UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +
+                System.out.println("\n" + "\t" + UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +
                         "Vincitore: " + p.getPlayerId() + " : " + p.getName());
             }
         }
@@ -2278,5 +2357,12 @@ public class CLI implements UserInterface {
                 }
             }
         }
+    }
+
+    @Override
+    public void close() {
+
+        System.out.println(DEFAULT_TIMER_EXPIRED);
+        System.exit(0);
     }
 }

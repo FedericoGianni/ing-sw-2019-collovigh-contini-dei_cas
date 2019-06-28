@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.serveronly.Socket;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.ToView;
+import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.socket.SocketPing;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
@@ -10,6 +10,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +36,8 @@ public class SocketConnectionWriter extends Thread implements ToView {
     private static final String SHOW = "showMessage";
     private static final String SET_INT_ANSWER = "setIntAnswer";
     private static final String REDO_FRENZY_SHOOT = "reDoFrenzyAtomicShoot";
+    private static final String CLOSE = "close";
+    private static final String ASK_MAP_AND_SKULLS = "askMapAndSkulls";
 
     /**
      * Reference to the socket representing the communication stream, passed as a parameter to the constructor
@@ -45,6 +50,8 @@ public class SocketConnectionWriter extends Thread implements ToView {
     private BufferedWriter output;
 
     private final Object lock = new Object();
+
+    List<Integer> mapAndSkullsAnswer = new ArrayList<>();
 
     /**
      * Constructor
@@ -64,6 +71,10 @@ public class SocketConnectionWriter extends Thread implements ToView {
         synchronized (lock) {
             lock.wait();
         }
+    }
+
+    public void setMapAndSkullsAnswer(List<Integer> mapAndSkullsAnswer) {
+        this.mapAndSkullsAnswer = mapAndSkullsAnswer;
     }
 
     /**
@@ -210,5 +221,43 @@ public class SocketConnectionWriter extends Thread implements ToView {
         } catch (IOException e){
             LOGGER.log(WARNING, "ERROR when trying to close socket stream");
         }
+    }
+
+    @Override
+    public void close() {
+
+        LOGGER.log(level,"sending close to connected client");
+
+        send(CLOSE);
+
+    }
+
+    private List<Integer> waitIntAnswer(){
+
+        while (mapAndSkullsAnswer.isEmpty()){
+
+            try{
+
+                TimeUnit.SECONDS.sleep(50);
+
+            }catch (InterruptedException e){
+
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
+            }
+        }
+
+        System.out.println(mapAndSkullsAnswer);
+
+        return mapAndSkullsAnswer;
+    }
+
+    @Override
+    public List<Integer> askMapAndSkulls() {
+
+        mapAndSkullsAnswer = new ArrayList<>();
+
+        send(ASK_MAP_AND_SKULLS);
+
+        return waitIntAnswer();
     }
 }

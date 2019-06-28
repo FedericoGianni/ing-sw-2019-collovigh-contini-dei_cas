@@ -7,6 +7,7 @@ import it.polimi.ingsw.view.updates.UpdateClass;
 
 import java.net.SocketException;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -209,5 +210,33 @@ public class ToViewImpl implements ToView {
 
         }
 
+    }
+
+    @Override
+    public void close() {
+
+        try{
+
+            client.close();
+
+        } catch (RemoteException e){
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
+
+    }
+
+    @Override
+    public List<Integer> askMapAndSkulls() {
+        try{
+
+            return  client.askMapAndSkulls();
+
+        } catch (RemoteException e){
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
+
+        return null;
     }
 }

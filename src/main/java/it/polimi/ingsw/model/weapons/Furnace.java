@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.CellColor;
 import it.polimi.ingsw.utils.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class Furnace  extends SpecialWeapons{
      * {@inheritDoc}
      */
     @Override
-    public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CardNotPossessedException, DifferentPlayerNeededException, CellNonExistentException {
+    public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws PlayerAlreadyDeadException, WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CardNotPossessedException, DifferentPlayerNeededException, CellNonExistentException {
 
         if (preShoot(targetLists,effects,cells)){
 
@@ -91,7 +92,15 @@ public class Furnace  extends SpecialWeapons{
      * {@inheritDoc}
      */
     @Override
-    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CellNonExistentException {
+    public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws PlayerAlreadyDeadException, WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CellNonExistentException {
+
+        for (int i = 0; i < effects.size(); i++) {
+            for(Player p : targetLists.get(i)){
+                if(p.getStats().getDmgTaken().size() > KILL_DMG){
+                    throw new PlayerAlreadyDeadException();
+                }
+            }
+        }
 
         if (cells.isEmpty()) throw new CellNonExistentException();
 
