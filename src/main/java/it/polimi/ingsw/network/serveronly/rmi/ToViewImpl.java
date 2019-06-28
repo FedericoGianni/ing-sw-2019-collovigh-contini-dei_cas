@@ -2,10 +2,7 @@ package it.polimi.ingsw.network.serveronly.rmi;
 
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.rmi.ToClient;
-import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.view.updates.UpdateClass;
-
-import java.net.SocketException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
@@ -31,6 +28,14 @@ public class ToViewImpl implements ToView {
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public String getRemoteName() {
+        return remoteName;
     }
 
     // Updates
@@ -112,6 +117,9 @@ public class ToViewImpl implements ToView {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reDoFrenzyAtomicShoot() {
 

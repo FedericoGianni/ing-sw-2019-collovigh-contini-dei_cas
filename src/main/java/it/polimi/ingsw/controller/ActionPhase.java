@@ -61,6 +61,10 @@ public class ActionPhase {
     private static final int MAX_FRENZY_SHOOT_ENHANCED_MOVES = 1;
     private static final int MAX_FRENZY_SHOOT_MOVES = 2;
 
+    //strings
+
+    private static final String NO_DIRECTION_SPECIFIED = " player tried to move but did not specify any direction ";
+    private static final String MOVE_MORE_THAN = " player tried to move more than ";
 
     private final Controller controller;
 
@@ -128,7 +132,7 @@ public class ActionPhase {
 
             //log
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move but did not specify any direction ");
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + NO_DIRECTION_SPECIFIED );
 
             // show
 
@@ -1076,7 +1080,7 @@ public class ActionPhase {
 
             //log
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move but did not specify any direction ");
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + NO_DIRECTION_SPECIFIED);
 
             // show
 
@@ -1088,7 +1092,7 @@ public class ActionPhase {
 
             //log
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_MOVE + " player tried to move more than " + MAX_FRENZY_MOVES + " in frenzy ");
+            LOGGER.log(Level.WARNING, () -> LOG_START_MOVE + MOVE_MORE_THAN + MAX_FRENZY_MOVES + " in frenzy ");
 
             // show
 
@@ -1103,7 +1107,7 @@ public class ActionPhase {
 
             //log
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_MOVE + " player tried to move more than " + MAX_MOVES + " in frenzy, but was after first player ");
+            LOGGER.log(Level.WARNING, () -> LOG_START_MOVE + MOVE_MORE_THAN + MAX_MOVES + " in frenzy, but was after first player ");
 
             // show
 
@@ -1261,7 +1265,7 @@ public class ActionPhase {
 
             //log
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move but did not specify any direction ");
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + NO_DIRECTION_SPECIFIED);
 
             // show
 
@@ -1273,7 +1277,7 @@ public class ActionPhase {
 
             //log
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move more than " + MAX_FRENZY_SHOOT_MOVES + " in frenzy ");
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + MOVE_MORE_THAN + MAX_FRENZY_SHOOT_MOVES + " in frenzy ");
 
             // show
 
@@ -1285,7 +1289,7 @@ public class ActionPhase {
 
             //log
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + " player tried to move more than " + MAX_FRENZY_SHOOT_ENHANCED_MOVES + " in frenzy but was before first player ");
+            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + MOVE_MORE_THAN + MAX_FRENZY_SHOOT_ENHANCED_MOVES + " in frenzy but was before first player ");
 
             // show
 

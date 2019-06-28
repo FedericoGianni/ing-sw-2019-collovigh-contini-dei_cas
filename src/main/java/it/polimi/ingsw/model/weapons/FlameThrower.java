@@ -47,6 +47,8 @@ public class FlameThrower extends SpecialWeapons{
 
         if ( ! playerAreInLine(isPossessedBy(),targetLists.get(0)) ) throw new UncorrectDistanceException();
 
+        if (effects.contains(1) && !isPossessedBy().canPay(costSecondEffect)) throw new NotEnoughAmmoException();
+
         return true;
     }
 
@@ -55,6 +57,15 @@ public class FlameThrower extends SpecialWeapons{
      */
     @Override
     public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CardNotPossessedException, DifferentPlayerNeededException, CellNonExistentException, PrecedentPlayerNeededException {
+
+        if (preShoot(targetLists, effects, cells)){
+
+            if (effects.contains(0)) baseEffect(targetLists.get(0));
+        }
+    }
+
+    private void baseEffect(List<Player> targets){
+
 
     }
 

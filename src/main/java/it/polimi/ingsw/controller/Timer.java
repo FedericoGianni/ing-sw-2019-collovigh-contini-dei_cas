@@ -47,10 +47,17 @@ public class Timer {
 
         // stop the thread
 
-        thread.stopTimer();
+        if (isActive()) {
+
+            thread.stopTimer();
+
+        }
 
     }
 
+    /**
+     * This method will be called when the timer expires
+     */
     public void defaultAnswer(){
 
         LOGGER.log(level, () -> LOG_START + " would have called default Answer");
@@ -58,5 +65,16 @@ public class Timer {
         //TODO uncomment this to activate timer disconnections
         //controller.getVirtualView(controller.getCurrentPlayer()).close();
 
+    }
+
+    /**
+     * This method will check is the timer is running
+     * @return true if the timer is running false otherwise
+     */
+    public Boolean isActive(){
+
+        if (thread != null) return thread.isActive();
+
+        else return false;
     }
 }
