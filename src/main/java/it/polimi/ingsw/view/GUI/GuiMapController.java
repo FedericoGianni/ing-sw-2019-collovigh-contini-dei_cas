@@ -2104,6 +2104,8 @@ public class GuiMapController {
      */
     private  void checkPayWithPowerUp(List<Color> cost, List<CachedPowerUp> powerUps, List<Color> ammo,int costCount,List <String> weaponNames, List<CachedPowerUp> powerUpsToDiscard,List <Directions> dir,String actionType,List <Integer> effects) {
 
+        System.out.println("Seconda fase del pagamento, vero pagamento");
+        System.out.println("Contronto: "+costCount+" --!-- "+cost.size());
         if (costCount == cost.size() && actionType.equals("BUY"))// i need to buy at this point!
         {//if it's a grab here dir is empty
             System.out.println("Provo ad acquistare una arma con queste robe: "+dir+" Acquisto: "+ weaponNames.get(1)+" uso questi pup: "+powerUpsToDiscard+" scarto: "+weaponNames.get(0));
@@ -2143,10 +2145,12 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        int cc=costCount;
+                                        cc++;
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir,actionType,effects);
+                                        checkPayWithPowerUp(cost, powerUps, ammo, cc, weaponNames, powerUpsToDiscard,dir,actionType,effects);
 
                                     }
                                 });
@@ -2160,7 +2164,9 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir,actionType,effects);
+                                        int cc=costCount;
+                                        cc++;
+                                        checkPayWithPowerUp(cost, powerUps, ammo, cc, weaponNames, powerUpsToDiscard,dir,actionType,effects);
                                     }
                                 });
                                 break;
@@ -2173,7 +2179,9 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir,actionType,effects);
+                                        int cc=costCount;
+                                        cc++;
+                                        checkPayWithPowerUp(cost, powerUps, ammo, cc, weaponNames, powerUpsToDiscard,dir,actionType,effects);
                                     }
                                 });
                                 break;
@@ -2214,7 +2222,9 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir,actionType,effects);
+                                        int cc=costCount;
+                                        cc++;
+                                        checkPayWithPowerUp(cost, powerUps, ammo, cc, weaponNames, powerUpsToDiscard,dir,actionType,effects);
 
                                     }
                                 });
@@ -2228,7 +2238,9 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir,actionType,effects);
+                                        int cc=costCount;
+                                        cc++;
+                                        checkPayWithPowerUp(cost, powerUps, ammo, cc, weaponNames, powerUpsToDiscard,dir,actionType,effects);
 
                                     }
                                 });
@@ -2242,7 +2254,9 @@ public class GuiMapController {
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
-                                        checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir,actionType,effects);
+                                        int cc=costCount;
+                                        cc++;
+                                        checkPayWithPowerUp(cost, powerUps, ammo, cc, weaponNames, powerUpsToDiscard,dir,actionType,effects);
 
                                     }
                                 });
@@ -2377,6 +2391,7 @@ public class GuiMapController {
         public void handle(MouseEvent mouseEvent) {
             String name=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(0);
             try {
+                mapEventDeleter();
                 CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo( name);
                 shootEffectsChooser(w,dir);
             } catch (WeaponNotFoundException e) {
@@ -2390,6 +2405,7 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 String name=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1);
                 try {
+                    mapEventDeleter();
                     CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo( name);
                     shootEffectsChooser(w,dir);
                 } catch (WeaponNotFoundException e) {
@@ -2402,6 +2418,7 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 String name=gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2);
                 try {
+                    mapEventDeleter();
                     CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo( name);
                     shootEffectsChooser(w,dir);
                 } catch (WeaponNotFoundException e) {
@@ -2466,7 +2483,7 @@ public class GuiMapController {
                 shootEffectPay(w,effects,dir);
             }
         }
-        else if(w.getEffectTypes().size()==2 && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE))
+        else if(w.getThirdEffectCost()==null && w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE))
         {//2 effects
             //ask if first and second or only second
             //scegli effetti da usare in ordine di utilizzo
@@ -2569,7 +2586,6 @@ public class GuiMapController {
             switch(item)//check null here!!!
             {
                 case 0:
-                    cost.addAll(w.getFirstEffectCost());
                     break;
                 case 1:
                     cost.addAll(w.getSecondEffectCost());
@@ -2581,6 +2597,7 @@ public class GuiMapController {
         }
         List <String> weaponName=new ArrayList<>();
         weaponName.add(w.getName());
+        System.out.println("Andiamo al pagameto");
         checkPayWithPowerUp(cost,weaponName,dir,"SHOOT",effects);
 
     }
@@ -2590,10 +2607,11 @@ public class GuiMapController {
         try {
             CachedFullWeapon weapon =gui.getView().getCacheModel().getWeaponInfo(w);//-------------------weapon name
 
-            if(weapon.getEffectRequirements().get(0).getNumberOfTargets().size()==0)//movement
+            if(weapon.getEffectRequirements().get(effects.get(0)).getNumberOfTargets().size()==0)//movement
             {
                 //no target needed so it's a movement
                     //movement of the shooter effect exactly
+                System.out.println("begin with 0 targets and a movemet effect");
                 List <Integer> targets=new ArrayList<>();
                 List <List<Integer>> targetsLists=new ArrayList<>();
                 List <Point> p=new ArrayList<>();
@@ -2718,6 +2736,9 @@ public class GuiMapController {
         }
     }
 
+    //-------- attenzione alle armi con effetto esclusivo!
+    // se :effectNum== effects.size() ----> usa ultimo effetto disponibile!
+    //-----------------------!!!!!!!!!!!------------------------------------
 
     private void shootTargetIterator(String w, List <Integer> effects, List <CachedPowerUp> pUp, List <Directions> dir, List<List<Integer>> targetLists, int effectNum, int targetNum, List <Point> cells)
     {
@@ -2731,7 +2752,7 @@ public class GuiMapController {
                 @Override
                 public void handle(MouseEvent mouseevent) {
                     mapEventDeleter();
-                    if(!weapon.getEffectRequirements().get(0).getCellRequired()) {
+                    if(!weapon.getEffectRequirements().get(effects.get(eeeffectNum)).getCellRequired()) {
 
                         shootTargetIterator(w, effects, pUp, dir, targetLists, eeeffectNum + 1, 0,cells);
                     }
@@ -2745,7 +2766,7 @@ public class GuiMapController {
             });
 
 
-            if(targetNum==weapon.getEffectRequirements().get(0).getNumberOfTargets().size())//--------------------finsihed to take this effect's targets, then control things
+            if(targetNum==weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size())//--------------------finsihed to take this effect's targets, then control things
             {
 
                 //1)-----this effect requires also a cell. So at the end of this effect it can take it
@@ -2760,7 +2781,7 @@ public class GuiMapController {
                     targetNum = 0;
 
                     //--------2.1) next effect need only cell
-                    if (weapon.getEffectRequirements().get(0).getNumberOfTargets().size() == 0 && weapon.getEffectRequirements().get(0).getCellRequired() == true) {//it's a move effect!
+                    if (weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size() == 0 && weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired() == true) {//it's a move effect!
                         shootCell(w,effects,pUp,dir,targetLists,effectNum,0,cells);//not invented yet lol
                         return;
                     }//--------------2.2) effects finished
@@ -2781,7 +2802,7 @@ public class GuiMapController {
             a=new Alert(Alert.AlertType.CONFIRMATION,"Clicca STOP a sinistra per finire questo effetto");
             a.show();}
             else{
-                int aa=weapon.getEffectRequirements().get(0).getNumberOfTargets().size()-targetNum;
+                int aa=weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size()-targetNum;
                 Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Seleziona un altro bersaglio te ne restano: "+aa);
                 a.show();
             }
@@ -2902,9 +2923,10 @@ public class GuiMapController {
     {
         //various options : 1) do and next 2) do and do action
         //-------do cell things
+        mapEventDeleter();
         Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Ti serve selezionare una cella,cliccala ");
         a.showAndWait();
-        mapEventDeleter();
+
         for(int x=0;x<rows;x++)
         {
             for (int y = 0; y < col; y++)
@@ -2913,15 +2935,19 @@ public class GuiMapController {
                 map[x][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
                     @Override
                     public void handle(MouseEvent mouseEvent) {
-                        int eN=effectNum+1;
+                        int eN=effectNum;
+                        eN++;
                         mapEventDeleter();
                         cells.add(new Point(xx,yy));
 
                         if(eN==effects.size())
                         {
+                            System.out.println("Abbiamo finito i bersagli");
                             checkScope(w,effects,pUp,dir,targetLists,cells);
+
                         }
                         else{
+                            System.out.println("Andiamo con altri bersagli");
                             shootTargetIterator(w,effects,pUp,dir,targetLists,eN,targetNum,cells);
                         }
 
@@ -2934,12 +2960,19 @@ public class GuiMapController {
 
 
     private void checkScope(String w, List <Integer> effects, List <CachedPowerUp> pUp, List <Directions> dir, List<List<Integer>> targetLists, List <Point> cells)
-    {
+    {System.out.println("Sparo con arma "+w+" a questi bersagli:"+targetLists+" con questi effetti "+effects+" In queste celle "+cells);
         //if player has a scope powerUP he can use it, otherwise shoot
         if(isFrenzy){
+
             gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, null)));
         } else {
             gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
         }
+    }
+
+    public void show(String error)
+    {
+        System.out.println(error);
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,error);
     }
 }

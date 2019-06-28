@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUI;
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.GrabAction;
+import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
@@ -173,6 +174,7 @@ public class Gui extends Application implements UserInterface {
                 default:
                     header = s.substring(0, 10);
                     msg = s;
+                    guiMapController.show(msg);
             }
 
             if(retryLogin) {
@@ -328,7 +330,7 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void startReload() {
-
+        view.doAction(new SkipAction());
     }
 
     @Override
