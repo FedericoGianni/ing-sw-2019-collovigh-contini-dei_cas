@@ -37,13 +37,7 @@ public class Hellion extends SpecialWeapons {
     @Override
     public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws PlayerAlreadyDeadException, WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CellNonExistentException {
 
-        for (int i = 0; i < effects.size(); i++) {
-            for(Player p : targetLists.get(i)){
-                if(p.getStats().getDmgTaken().size() > KILL_DMG){
-                    throw new PlayerAlreadyDeadException();
-                }
-            }
-        }
+        checkPlayerAlreadyDead(targetLists);
 
         if ( (effects == null ) || (effects.size() != 1) || (!Arrays.asList(0,1).containsAll(effects)) ) throw new UncorrectEffectsException();
 

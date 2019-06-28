@@ -5,10 +5,12 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.utils.Directions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class SpecialWeapons extends Weapon{
 
@@ -23,36 +25,6 @@ public abstract class SpecialWeapons extends Weapon{
     }
 
     /**
-     * {@inheritDoc} //TODO delete if works
-     */
-    @Override
-    public void reload() throws NotAbleToReloadException {
-
-        // checks if the player who owns the weapon can pay the reload
-
-        if (!this.isPossessedBy().canPay(this.getReloadCost())) throw new NotAbleToReloadException();
-
-        else {
-
-            try {
-
-                // the player pays
-
-                this.isPossessedBy().pay(this.getReloadCost());
-
-                // the weapon is set to loaded
-
-                setLoaded(true);
-
-            }catch (CardNotPossessedException e){
-
-                throw new NotAbleToReloadException();
-            }
-        }
-
-    }
-
-    /**
      * This method will check if the player can shoot
      *
      * @param targetLists is a list of list of target for each effect of the weapon
@@ -60,7 +32,7 @@ public abstract class SpecialWeapons extends Weapon{
      * @param cells is a list of cell
      * @return true if the shoot can be preformed, false otherwise
      */
-    public abstract Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerAlreadyDeadException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException, CellNonExistentException;
+    public abstract Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws DifferentPlayerNeededException, WeaponNotLoadedException, PlayerAlreadyDeadException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException,NotEnoughAmmoException, CellNonExistentException;
 
 
 
@@ -90,6 +62,26 @@ public abstract class SpecialWeapons extends Weapon{
 
 
     //Utils
+
+    /**
+     *  This method checks if the targets are already dead
+     * @param targetList is the list of list of Player
+     * @throws PlayerAlreadyDeadException if the player is already dead
+     */
+    public static void checkPlayerAlreadyDead(List<List<Player>> targetList) throws PlayerAlreadyDeadException{
+
+        if (targetList != null ) {
+
+            for (Player player : targetList.stream().flatMap(List::stream).collect(Collectors.toList())) {
+
+                if (player.getDmg().size() >= Stats.MAX_DMG - 1) {
+
+                    throw new PlayerAlreadyDeadException();
+                }
+            }
+
+        }
+    }
 
     /**
      * This method will target all the player in a given cell and give them dmg / marks

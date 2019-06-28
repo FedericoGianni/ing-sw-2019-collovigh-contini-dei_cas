@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class Stats extends Subject implements Serializable {
 
-    private static final int MAX_DMG = 12;
+    public static final int MAX_DMG = 12;
     private static final int MAX_MARKS = 3;
 
     private int score;
