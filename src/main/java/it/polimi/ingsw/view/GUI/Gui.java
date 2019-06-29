@@ -226,14 +226,14 @@ public class Gui extends Application implements UserInterface {
             case STATS: //possibilità: cambio pos,danni subiti, spostmanto e marchi, disconnessioni
                 if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
                     wasOnline.set(playerId, false);
-                    Alert a=new Alert(Alert.AlertType.INFORMATION,"Il giocatore "+playerId+" si è disconnesso");
-                    a.show();
+                    String msg="Il giocatore "+playerId+" si è disconnesso";
+                    guiMapController.onlineStateSignal( msg);
                 } else if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline() &&
                         !wasOnline.get(playerId)){
                     //player reconnected
-                    Alert a=new Alert(Alert.AlertType.INFORMATION,"Il giocatore "+playerId+" si è ricollegato");
-                    a.show();
+                    String msg="Il giocatore "+playerId+" si è disconnesso";
                     wasOnline.set(playerId, true);
+                    guiMapController.onlineStateSignal(msg);
                 }
                 guiMapController.statsUpdater(playerId);
                 break;
@@ -360,7 +360,7 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startReload() {
         //view.doAction(new SkipAction());
-        Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi ricaricare qualche arma?", ButtonType.YES, ButtonType.NO);
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi ricaricare qualche arma?", ButtonType.YES, ButtonType.NO);//non credo vada
         a.showAndWait();
         if (a.getResult().equals(ButtonType.NO)) {
             view.doAction(new SkipAction());

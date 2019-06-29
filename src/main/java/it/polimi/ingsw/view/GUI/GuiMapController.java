@@ -524,6 +524,14 @@ public class GuiMapController {
     public void spawnCellWeaponsUpdate() {
     }
 
+    public void onlineStateSignal(String msg)
+    {
+        System.out.println(msg);
+
+        Platform.runLater(() -> { Alert a=new Alert(Alert.AlertType.INFORMATION,msg);
+        a.show();
+        log.appendText("\n"+msg);});
+    }
     //------------------------------------------------------------Weapons show methods
     private void spawnCellWeaponShow(int r, int c) {
         //prima di tutto quali sono le immagini
