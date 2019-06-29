@@ -13,7 +13,6 @@ import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.EffectType;
-import it.polimi.ingsw.view.cachemodel.cachedmap.CachedCell;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
@@ -392,6 +391,13 @@ public class GuiMapController {
             for(int j=0;j<col;j++)
             {
                 map[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseevent) {
+
+                    }
+
+                });
+                map[i][j].setOnMousePressed(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseevent) {
 
@@ -1547,6 +1553,7 @@ public class GuiMapController {
         mapEventDeleter();
         System.out.println("Hai selezionato di newtonare il player: "+id);
         Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Ora seleziona la cella dove vuoi muoverlo");
+        a.show();
         //----------ask NORTH
         if(moveValidator("NORTH",x,y)){//check id i can go north
             map[x-1][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -2017,6 +2024,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
+                    mapEventDeleter();
                     if(weapons.size()==0)//no discard
                     {
                         weapons.add(null);
@@ -2035,6 +2043,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
+                    mapEventDeleter();
                     System.out.println("Stai cercndo di acquistare :"+((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
                     if(weapons.size()==0)//no discard
                     {
@@ -2052,6 +2061,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
+                    mapEventDeleter();
                     System.out.println("Stai cercndo di acquistare :"+((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
                     if(weapons.size()==0)//no discard
                     {
@@ -2145,6 +2155,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         int cc=costCount;
                                         cc++;
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
@@ -2161,6 +2172,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2176,6 +2188,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2219,6 +2232,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2235,6 +2249,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2251,6 +2266,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2269,6 +2285,7 @@ public class GuiMapController {
             }
         }
         else if (ammo.contains(c)) {
+            System.out.println("Paga tutto in ammo");
                 ammo.remove(c);
                 checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir,actionType,effects);
         }
@@ -2607,7 +2624,7 @@ public class GuiMapController {
         try {
             CachedFullWeapon weapon =gui.getView().getCacheModel().getWeaponInfo(w);//-------------------weapon name
 
-            if(weapon.getEffectRequirements().get(effects.get(0)).getNumberOfTargets().size()==0)//movement
+             if(effects.get(0)== effects.size() || weapon.getEffectRequirements().get(effects.get(0)).getNumberOfTargets().size()==0)//movement
             {
                 //no target needed so it's a movement
                     //movement of the shooter effect exactly
@@ -2617,8 +2634,6 @@ public class GuiMapController {
                 List <Point> p=new ArrayList<>();
                     shootCell(w,effects,pUp,dir,targetsLists,0,0,p);
                     return;
-
-
             }
 
 
@@ -2770,7 +2785,7 @@ public class GuiMapController {
             {
 
                 //1)-----this effect requires also a cell. So at the end of this effect it can take it
-                if(weapon.getEffectRequirements().get(0).getCellRequired() )
+                if(weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired() )
                 {
                     shootCell(w,effects,pUp,dir,targetLists,effectNum,0,cells);
                     return;
@@ -2781,15 +2796,16 @@ public class GuiMapController {
                     targetNum = 0;
 
                     //--------2.1) next effect need only cell
-                    if (weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size() == 0 && weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired() == true) {//it's a move effect!
-                        shootCell(w,effects,pUp,dir,targetLists,effectNum,0,cells);//not invented yet lol
-                        return;
-                    }//--------------2.2) effects finished
-                    else if (effectNum == effects.size())
-                    {
+                    if (effectNum == effects.size()) {//effects finished
                         //do the shoot for real
                         //-------!!!!!!------check mirino
                         checkScope(w,effects,pUp,dir,targetLists,cells);
+                        return;
+                    }//--------------2.2) the next one is a move only effect
+                    else if (weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size() == 0 && weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired() == true)
+                    {
+
+                        shootCell(w,effects,pUp,dir,targetLists,effectNum,0,cells);//not invented yet lol
                         return;
                     }
 
@@ -2929,10 +2945,12 @@ public class GuiMapController {
 
         for(int x=0;x<rows;x++)
         {
-            for (int y = 0; y < col; y++)
+            for (int y=0; y<col; y++)
             {
                 int xx=x,yy=y;
-                map[x][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+                System.out.println("Sistemato effetto su cella "+x+y);
+                map[x][y].setOnMousePressed(new EventHandler<MouseEvent>(){
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         int eN=effectNum;
