@@ -101,7 +101,7 @@ public class ReloadPhase {
 
             }catch(Exception e){
 
-                LOGGER.log(Level.WARNING, () -> LOG_START +" [CRITICAL] player passed all controls for reload but finally could not do it ");
+                LOGGER.log(Level.WARNING, () -> LOG_START + " [CRITICAL] player passed all controls for reload but finally could not do it ");
 
                 LOGGER.log(Level.WARNING, e.getMessage(), e);
             }

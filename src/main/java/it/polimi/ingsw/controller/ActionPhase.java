@@ -803,7 +803,7 @@ public class ActionPhase {
             List<Cell> cells = (shootAction.getCells() == null ) ? new ArrayList<>() : shootAction
                     .getCells()
                     .stream()
-                    .map(x -> Model.getMap().getCell(x.x, x.y))
+                    .map(x -> (x == null ) ? null : Model.getMap().getCell(x.x, x.y))
                     .collect(Collectors.toList());
 
             List<List<Player>> targets = new ArrayList<>();
