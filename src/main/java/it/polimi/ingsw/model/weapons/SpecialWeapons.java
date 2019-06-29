@@ -105,14 +105,14 @@ public abstract class SpecialWeapons extends Weapon{
     }
 
     /**
-     * This method will say if the shooter is is in line with other max 2 players
+     * This method will say if the shooter is is in line with other max 2 players considering walls
      * @param shooter is the shooter
      * @param targets is a list of 1 or 2 targets
      * @return true if the specified players are in line, false otherwise
      */
     public static Boolean playerAreInLine(Player shooter, List<Player> targets){
 
-        if (targets.size() == 1) return true;
+        if (targets.size() == 1) return (shooter.getCurrentPosition().getAdjacencienceDirection(targets.get(0).getCurrentPosition()) != null );
 
         if (targets.size()==2) {
 
@@ -120,7 +120,7 @@ public abstract class SpecialWeapons extends Weapon{
 
             if (adjDir == null) return false;
 
-            return  (targets.get(0).getCurrentPosition().getCellAdj(adjDir).equals(targets.get(1).getCurrentPosition())) ;
+            return  ( (targets.get(0).getCurrentPosition().getCellAdj(adjDir).equals(targets.get(1).getCurrentPosition())) && (targets.get(0).getCurrentPosition().getCellAdj(adjDir).getColor().equals(targets.get(1).getCurrentPosition().getColor())) ) ;
 
         }
 
