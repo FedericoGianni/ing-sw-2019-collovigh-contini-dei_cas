@@ -93,7 +93,7 @@ public class CacheModel {
 
                 players.get(updateClass.getPlayerId()).update((CachedStats) updateClass);
 
-                view.getUserInterface().notifyUpdate(UpdateType.STATS, updateClass.getPlayerId(),null);
+                new Thread( () -> view.getUserInterface().notifyUpdate(UpdateType.STATS, updateClass.getPlayerId(),null)).start();
 
                 break;
 

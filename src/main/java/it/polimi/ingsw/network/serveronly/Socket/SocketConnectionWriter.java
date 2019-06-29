@@ -182,7 +182,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
 
         LOGGER.log(level, "[Socket-Conn-Writer] sending setIntAnswer string to client ");
 
-        send(SET_INT_ANSWER + "/f" + intAnswer);
+        send(SET_INT_ANSWER + "\f" + intAnswer);
     }
 
     /**
@@ -204,8 +204,12 @@ public class SocketConnectionWriter extends Thread implements ToView {
 
         for (int i = 0; i < Server.getClients().size() ; i++) {
 
-            if (Server.getClient(i).equals(this)){
-                playerId = i;
+            if(Server.getClient(i) != null) {
+
+                if (Server.getClient(i).equals(this)) {
+                    playerId = i;
+                }
+
             }
 
         }

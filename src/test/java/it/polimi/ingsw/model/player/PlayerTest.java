@@ -112,7 +112,7 @@ class PlayerTest {
 
         for(int i=0;i<shooter.canSee().size();i++)
         {
-            System.out.println(shooter.canSee().get(i).getPlayerName());
+            //System.out.println(shooter.canSee().get(i).getPlayerName());
         }
     }
 

@@ -11,8 +11,6 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.lang.Thread.sleep;
-
 public class RunClient {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
@@ -178,6 +176,11 @@ public class RunClient {
 
     public static View getView() {
         return view;
+    }
+
+    // setter
+    public static void setView(View view) {
+        RunClient.view = view;
     }
 }
 

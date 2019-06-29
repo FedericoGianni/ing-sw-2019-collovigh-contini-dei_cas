@@ -798,7 +798,7 @@ class NormalWeaponTest {
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         shooter.getAmmoBag().addItem(new AmmoCube(Color.BLUE));
         shooter.addWeapon(weapons.get(6));//Heat seeker 1 target you can't see 3 dmg
-        System.out.println("weapon name: "+ weapons.get(6).getName());
+        //System.out.println("weapon name: "+ weapons.get(6).getName());
         List targets0=new ArrayList();
         List targets1=new ArrayList();
         List<List<Player>> targetLists = new ArrayList<>();
@@ -812,7 +812,7 @@ class NormalWeaponTest {
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
             mEf.add(0);
-            mEf.add(1);
+            //mEf.add(1);
             //List<Cell> cells = new ArrayList<>();
             //cells.add(Model.getMap().getCell(1,1));
             shooter.getWeapons().get(0).shoot(targetLists, mEf, null);
@@ -844,8 +844,8 @@ class NormalWeaponTest {
             e.getMessage();
         }
 
-        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
-        System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
+        //System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
         assert(target1.getStats().getDmgTaken().size() ==3);
         //assert(target2.getStats().getDmgTaken().size() ==2);
     }
@@ -993,7 +993,7 @@ class NormalWeaponTest {
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
             mEf.add(0);
-            mEf.add(1);
+            //mEf.add(1);
 
             List<Cell> cells = new ArrayList<>();
             cells.add(Model.getMap().getCell(1,0));
@@ -1026,12 +1026,12 @@ class NormalWeaponTest {
         } catch (Exception e){
             e.getMessage();
         }
-        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
-        System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
-        assert(target1.getStats().getDmgTaken().size() ==1);
+        //System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
+        assertEquals(1, target1.getStats().getDmgTaken().size());
         assert(target1.getCurrentPosition().equals(Model.getMap().getCell(1,0)));
         //assert(shooter.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,0)));
-        assert(target2.getStats().getDmgTaken().size() ==1);
+        //assert(target2.getStats().getDmgTaken().size() ==1);
     }
 
     @Test

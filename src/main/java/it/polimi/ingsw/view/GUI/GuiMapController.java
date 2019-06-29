@@ -9,11 +9,11 @@ import it.polimi.ingsw.view.UiHelpers;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
+import it.polimi.ingsw.view.actions.usepowerup.ScopeAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.EffectType;
-import it.polimi.ingsw.view.cachemodel.cachedmap.CachedCell;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
@@ -398,6 +398,13 @@ public class GuiMapController {
                     }
 
                 });
+                map[i][j].setOnMousePressed(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseevent) {
+
+                    }
+
+                });
             }
         }
 
@@ -461,6 +468,12 @@ public class GuiMapController {
 
                                 }
                             });
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMousePressed(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
                         }
                     }else if(map[x][y].getChildren().size()==2){//primo e secondo HBOX
                         int j=0;
@@ -482,6 +495,12 @@ public class GuiMapController {
                                 public void handle(MouseEvent mouseEvent) {
 
                                 }
+                            });
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMousePressed(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
                             }); continue;
                         }
                         j=0;
@@ -492,6 +511,12 @@ public class GuiMapController {
                         {
 
                             ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+
+                                }
+                            });
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMousePressed(new EventHandler<MouseEvent>(){
                                 @Override
                                 public void handle(MouseEvent mouseEvent) {
 
@@ -1538,6 +1563,120 @@ public class GuiMapController {
             }
         }
     }
+    private void scopeAction(String w, List<List<Integer>> targetLists, List <Integer> effects, List <Point> cells, List <CachedPowerUp> pUp, List <Directions> dir,Color c)
+    {
+        mapEventDeleter();
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Seleziona il bersaglio del mirino");
+        a.showAndWait();
+
+
+        for(int x=0;x<rows;x++)
+        {
+            for(int y=0;y<col;y++)
+            {
+                for (int id = 0; id < gui.getView().getCacheModel().getCachedPlayers().size();id++)//search for every player in every cell
+                {
+                    if (map[x][y].getChildren().size() == 1)//primo HBOX
+                    {
+                        int j = 0;
+                        boolean found = false;
+                        while (j < ((HBox) map[x][y].getChildren().get(0)).getChildren().size())//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
+                        {
+
+
+                            if (((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id)) == 0) {
+                                found = true;
+                                break;
+                            }
+                            j++;
+                        }
+                        if (found)//set the event listener that turn on the moverAction
+                        {
+
+                            int iid=id;
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMousePressed(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    playersEffectRemover();
+                                    mapEventDeleter();
+
+                                    if (isFrenzy) {
+
+                                        gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c,iid))));
+                                    } else {
+                                        gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c,iid)));
+                                    }
+
+
+                                }
+                            });
+                        }
+                    }
+                    else if (map[x][y].getChildren().size() == 2) {//primo e secondo HBOX
+                        int j = 0;
+                        boolean found = false;
+
+                        while (j < ((HBox) map[x][y].getChildren().get(0)).getChildren().size())
+                        {
+
+
+                            if (((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id)) == 0) {
+                                found = true;
+                                break;
+                            }
+                            j++;
+                        }
+                        if (found) {
+
+                            int iid=id;
+                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMousePressed(new EventHandler<MouseEvent>(){
+                                @Override
+                                public void handle(MouseEvent mouseEvent) {
+                                    playersEffectRemover();
+                                    mapEventDeleter();
+
+
+                                    if (isFrenzy) {
+
+                                        gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c,iid))));
+                                    } else {
+                                        gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c,iid)));
+                                    }
+
+
+                                }
+                            }); continue;
+                        }
+                        j = 0;
+                        while (((HBox) map[x][y].getChildren().get(1)).getChildren().get(j).getId().compareTo(Integer.toString(id)) != 0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
+                        {
+                            j++;
+                        }
+
+                        int iid=id;
+                        ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMousePressed(new EventHandler<MouseEvent>(){
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                playersEffectRemover();
+                                mapEventDeleter();
+
+
+                                if (isFrenzy) {
+
+                                    gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c,iid))));
+                                } else {
+                                    gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c,iid)));
+                                }
+
+
+                            }
+                        });
+                    }
+
+                }
+            }
+        }
+    }
 
 
     private void newtonMover(int id,int x,int y,int listNum)//position of this player
@@ -1547,6 +1686,7 @@ public class GuiMapController {
         mapEventDeleter();
         System.out.println("Hai selezionato di newtonare il player: "+id);
         Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Ora seleziona la cella dove vuoi muoverlo");
+        a.show();
         //----------ask NORTH
         if(moveValidator("NORTH",x,y)){//check id i can go north
             map[x-1][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -2017,6 +2157,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
+                    mapEventDeleter();
                     if(weapons.size()==0)//no discard
                     {
                         weapons.add(null);
@@ -2035,6 +2176,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
+                    mapEventDeleter();
                     System.out.println("Stai cercndo di acquistare :"+((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
                     if(weapons.size()==0)//no discard
                     {
@@ -2052,6 +2194,7 @@ public class GuiMapController {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 try {
+                    mapEventDeleter();
                     System.out.println("Stai cercndo di acquistare :"+((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
                     if(weapons.size()==0)//no discard
                     {
@@ -2145,6 +2288,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         int cc=costCount;
                                         cc++;
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
@@ -2161,6 +2305,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2176,6 +2321,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2219,6 +2365,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2235,6 +2382,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2251,6 +2399,7 @@ public class GuiMapController {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
+                                        mapEventDeleter();
                                         CachedPowerUp powerUpToDiscard = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2);
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
@@ -2269,6 +2418,7 @@ public class GuiMapController {
             }
         }
         else if (ammo.contains(c)) {
+            System.out.println("Paga tutto in ammo");
                 ammo.remove(c);
                 checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard,dir,actionType,effects);
         }
@@ -2607,7 +2757,7 @@ public class GuiMapController {
         try {
             CachedFullWeapon weapon =gui.getView().getCacheModel().getWeaponInfo(w);//-------------------weapon name
 
-            if(weapon.getEffectRequirements().get(effects.get(0)).getNumberOfTargets().size()==0)//movement
+             if(effects.get(0)== effects.size() || weapon.getEffectRequirements().get(effects.get(0)).getNumberOfTargets().size()==0)//movement
             {
                 //no target needed so it's a movement
                     //movement of the shooter effect exactly
@@ -2617,8 +2767,6 @@ public class GuiMapController {
                 List <Point> p=new ArrayList<>();
                     shootCell(w,effects,pUp,dir,targetsLists,0,0,p);
                     return;
-
-
             }
 
 
@@ -2770,7 +2918,7 @@ public class GuiMapController {
             {
 
                 //1)-----this effect requires also a cell. So at the end of this effect it can take it
-                if(weapon.getEffectRequirements().get(0).getCellRequired() )
+                if(weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired() )
                 {
                     shootCell(w,effects,pUp,dir,targetLists,effectNum,0,cells);
                     return;
@@ -2781,15 +2929,16 @@ public class GuiMapController {
                     targetNum = 0;
 
                     //--------2.1) next effect need only cell
-                    if (weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size() == 0 && weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired() == true) {//it's a move effect!
-                        shootCell(w,effects,pUp,dir,targetLists,effectNum,0,cells);//not invented yet lol
-                        return;
-                    }//--------------2.2) effects finished
-                    else if (effectNum == effects.size())
-                    {
+                    if (effectNum == effects.size()) {//effects finished
                         //do the shoot for real
                         //-------!!!!!!------check mirino
                         checkScope(w,effects,pUp,dir,targetLists,cells);
+                        return;
+                    }//--------------2.2) the next one is a move only effect
+                    else if (weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size() == 0 && weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired() == true)
+                    {
+
+                        shootCell(w,effects,pUp,dir,targetLists,effectNum,0,cells);//not invented yet lol
                         return;
                     }
 
@@ -2929,10 +3078,12 @@ public class GuiMapController {
 
         for(int x=0;x<rows;x++)
         {
-            for (int y = 0; y < col; y++)
+            for (int y=0; y<col; y++)
             {
                 int xx=x,yy=y;
-                map[x][y].setOnMouseClicked(new EventHandler<MouseEvent>(){
+
+                System.out.println("Sistemato effetto su cella "+x+y);
+                map[x][y].setOnMousePressed(new EventHandler<MouseEvent>(){
                     @Override
                     public void handle(MouseEvent mouseEvent) {
                         int eN=effectNum;
@@ -2962,12 +3113,55 @@ public class GuiMapController {
     private void checkScope(String w, List <Integer> effects, List <CachedPowerUp> pUp, List <Directions> dir, List<List<Integer>> targetLists, List <Point> cells)
     {System.out.println("Sparo con arma "+w+" a questi bersagli:"+targetLists+" con questi effetti "+effects+" In queste celle "+cells);
         //if player has a scope powerUP he can use it, otherwise shoot
-        if(isFrenzy){
+        //controls over the scope target??
+        int found=0;
+        for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size();i++) {
+            if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(i).getType().equals(PowerUpType.TARGETING_SCOPE)) {
+                if (found == 0) {
+                    Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi usare Il miriro?", ButtonType.YES, ButtonType.NO);
+                    a.showAndWait();
+                    if (a.getResult().equals(ButtonType.NO)) {
+                        continue;//--- works??
+                    }
+                }
+                found++;
+                switch (i) {
+                    case 0:
+                        powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                scopeAction(w, targetLists, effects, cells, pUp,dir,gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0).getColor());
+                            }
+                        });
+                        break;
+                    case 1:
+                        powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                scopeAction(w, targetLists, effects, cells, pUp,dir,gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1).getColor());
+                            }
+                        });
+                        break;
+                    case 2:
+                        powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent mouseEvent) {
+                                scopeAction(w, targetLists, effects, cells, pUp,dir,gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2).getColor());
+                            }
+                        });
+                        break;
 
-            gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, null)));
-        } else {
-            gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
+                }
+            } else {
+                if (isFrenzy) {
+
+                    gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, null)));
+                } else {
+                    gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
+                }
+            }
         }
+
     }
 
     public void show(String error)
