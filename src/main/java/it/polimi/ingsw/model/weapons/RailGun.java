@@ -13,6 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RailGun extends SpecialWeapons {
 
@@ -47,6 +48,8 @@ public class RailGun extends SpecialWeapons {
         if ( effects.contains(0)) return preShootBase(targetLists.get(0));
 
         if ( effects.contains(1)) return preShootSecond(targetLists.get(0));
+
+        checkPlayerAlreadyDead(targetLists);
 
         return true;
     }
@@ -154,11 +157,11 @@ public class RailGun extends SpecialWeapons {
 
             if (cellList.indexOf(target2Pos) < cellList.indexOf(target1Pos)) throw new UncorrectDistanceException();
 
-            cellList.subList(0,cellList.indexOf(target2Pos));
+            cellList = cellList.subList(0,cellList.indexOf(target2Pos));
 
         } else {
 
-            cellList.subList(0,cellList.indexOf(target1Pos));
+            cellList = cellList.subList(0,cellList.indexOf(target1Pos));
         }
 
         if (wallCounter(cellList,direction) > walls ) throw new PlayerNotSeeableException();
@@ -288,7 +291,11 @@ public class RailGun extends SpecialWeapons {
 
         for (Cell cell : cellList){
 
-            if ( cell.getCellAdj(direction) == null ) walls++;
+            if ( cell.getCellAdj(direction) == null ){
+
+                walls++;
+
+            }
         }
 
         return walls;
