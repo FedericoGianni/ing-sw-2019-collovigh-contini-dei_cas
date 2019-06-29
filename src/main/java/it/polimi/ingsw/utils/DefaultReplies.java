@@ -53,37 +53,37 @@ public class DefaultReplies {
             ANSI_YELLOW.escape() + "giocatori nella stessa cella!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_PLAYER_IN_DIFFERENT_CELL = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: giocatori in celle diverse!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "giocatori in celle diverse!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_UNCORRECT_DISTANCE = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: distanza non corretta!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "istanza non corretta!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_SEEABLE_PLAYER = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: giocatori visibili!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "giocatori visibili!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_UNCORRECT_EFFECTS = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: Scelta effetti non corretta!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "Scelta effetti non corretta!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_NOT_CORRECT_PLAYER_NUMBER = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: Numero di giocatori non corretto!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "Numero di giocatori non corretto!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_PLAYER_NOT_SEEABLE = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: giocatori non visibili! " + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "giocatori non visibili! " + ANSI_RESET.escape();
 
     public static final String DEFAULT_NO_TARGETS_SPECIFIED = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: Non hai selezionato i bersagli!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "Non hai selezionato i bersagli!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_INEXISTENT_TARGETS =  DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: Bersaglio non esistente!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "Bersaglio non esistente!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_DIFFERENT_PLAYER_NEEDED = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: servono bersagli differenti!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "servono bersagli differenti!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_PRECEDENT_PLAYER_NEEDED = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "[!] Sparo non valido: Il target dell'effetto deve essere lo stesso del precendete!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "Il target dell'effetto deve essere lo stesso del precendete!" + ANSI_RESET.escape();
 
-    public static final String DEFAULT_PLAYER_ALREADY_DEAD = ANSI_YELLOW.escape() +
-            "[!] Sparo non valido: Uno dei giocatori è già morto, non puoi sparargli!" + ANSI_RESET.escape();
+    public static final String DEFAULT_PLAYER_ALREADY_DEAD = DEFAULT_INVALID_SHOOT_HEADER +
+            ANSI_YELLOW.escape() + "Uno dei giocatori è già morto, non puoi sparargli!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_TARGETING_SCOPE_ON_NON_TARGETED_PLAYER = ANSI_YELLOW.escape() +
             "[!] Puoi usare mirino solo su uno dei bersagli dello sparo!" + ANSI_RESET.escape();

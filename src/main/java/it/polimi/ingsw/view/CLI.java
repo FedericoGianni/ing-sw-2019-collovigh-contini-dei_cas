@@ -42,10 +42,30 @@ import static java.lang.Thread.sleep;
 
 public class CLI implements UserInterface {
 
+    /**
+     * default Scanner to get input from user
+     */
     private Scanner scanner = new Scanner(System.in);
+
+    /**
+     * reference to the view linked to this UserInterface
+     */
     private final View view;
+
+    /**
+     * used to ask the server if the specified direction is valid (= no walls), since the cacheModel version
+     * doesn't store the cell adjacences we need to ask the server if a direction is valid or not
+     */
     private int validMove = -1;
-    private Object obj = new Object();
+
+    /**
+     * Object to synchronize System.out.println() with map, without interferences
+     */
+    private Object mapShowSync = new Object();
+
+    /**
+     * true if the action called on the UI by the controller is on frenzy phase
+     */
     boolean isFrenzy = false;
 
     /**
@@ -53,6 +73,12 @@ public class CLI implements UserInterface {
      * same as before
      */
     private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
+
+    /**
+     * used to store a previous version of dmgs and marks, to check, when you receive a STATS update, if it has
+     * changed something from the previous version
+     */
+    int previousDmg = 0, previousMarks = 0;
 
     /**
      * Default constructor
@@ -232,7 +258,9 @@ public class CLI implements UserInterface {
 
             try {
                 FileRead.populateMatrixFromFile(i);
-                FileRead.showBattlefield();
+                synchronized (mapShowSync) {
+                    FileRead.showBattlefield();
+                }
             } catch (InvalidMapTypeException e){
 
             }
@@ -328,6 +356,9 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * reconnect the user, asking him the name used before getting disconnected
+     */
     private void reconnect(){
 
         String name;
@@ -347,16 +378,21 @@ public class CLI implements UserInterface {
      */
     public void show(String s) {
 
-        System.out.println(s);
+        synchronized (mapShowSync) {
 
-        //if weapon buy has failed, re-sync the local cli map with real player position
-        if (s.equals(DEFAULT_CANNOT_BUY_WEAPON) || s.startsWith(DEFAULT_INVALID_SHOOT_HEADER) || s.equals(DEFAULT_NO_ENOUGH_AMMO)) {
-            FileRead.removePlayer(view.getPlayerId());
-            Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
-            FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
-            FileRead.showBattlefield();
+            System.out.println(s);
+
+
+            //if weapon buy has failed, re-sync the local cli map with real player position
+            if (s.equals(DEFAULT_CANNOT_BUY_WEAPON) || s.startsWith(DEFAULT_INVALID_SHOOT_HEADER) || s.equals(DEFAULT_NO_ENOUGH_AMMO)) {
+                FileRead.removePlayer(view.getPlayerId());
+                Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+                FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
+                FileRead.showBattlefield();
+            }
         }
     }
+
 
 
     /**
@@ -398,18 +434,20 @@ public class CLI implements UserInterface {
 
                     FileRead.removePlayer(playerId);
                     FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
-                    FileRead.showBattlefield();
+                    synchronized (mapShowSync) {
+                        FileRead.showBattlefield();
+                    }
                 }
 
                 //player disconnected
                 if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
                     wasOnline.set(playerId, false);
-                    System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
+                    show(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
 
                 } else if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline() &&
                     !wasOnline.get(playerId)){
                     //player reconnected
-                    System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è riconnesso!" + ANSI_RESET.escape());
+                    show(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è riconnesso!" + ANSI_RESET.escape());
                     wasOnline.set(playerId, true);
                 }
 
@@ -425,26 +463,26 @@ public class CLI implements UserInterface {
                 break;
 
             case WEAPON_BAG:
-                System.out.println("[NOTIFICA] WEAPON_BAG update ricevuto!");
+                //System.out.println("[NOTIFICA] WEAPON_BAG update ricevuto!");
                 //show update only on the player who has bought the weapon
                 if (playerId == view.getPlayerId()) {
-                    System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag());
+                    show(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().toString());
                 }
                 break;
 
             case AMMO_BAG:
                 //System.out.println("[NOTIFICA] AMMO_BAG update ricevuto!");
                 if (playerId == view.getPlayerId()) {
-                    System.out.println(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag());
+                    show(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag().toString());
                 }
                 break;
 
             case GAME:
-                System.out.println("[NOTIFICA] GAME update ricevuto!");
+                //System.out.println("[NOTIFICA] GAME update ricevuto!");
                 break;
 
             case SPAWN_CELL:
-                System.out.println("[NOTIFICA] SPAWN_CELL update ricevuto!");
+                //System.out.println("[NOTIFICA] SPAWN_CELL update ricevuto!");
                 break;
 
             case AMMO_CELL:
@@ -496,14 +534,14 @@ public class CLI implements UserInterface {
             case POWERUP:
 
                 powerUpTurnUpdate = (PowerUpTurnUpdate) turnUpdate;
-                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                show(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
                         " ha usato il powerUp " + powerUpTurnUpdate.getPowerUp() + ANSI_RESET.escape());
                 break;
 
             case SHOOT:
 
                 shootTurnUpdate = (ShootTurnUpdate) turnUpdate;
-                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                show(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
                         " ha sparato con l'arma " + UiHelpers.weaponTranslator(shootTurnUpdate.getWeapon()) + " al player con id: " +
                         shootTurnUpdate.getTargetId() + ANSI_RESET.escape());
                 break;
@@ -513,10 +551,10 @@ public class CLI implements UserInterface {
                 grabTurnUpdate = (GrabTurnUpdate) turnUpdate;
 
                 if(grabTurnUpdate.getWeapon() != null){
-                    System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                    show(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
                             " ha raccolto " + UiHelpers.weaponTranslator(grabTurnUpdate.getWeapon()) + ANSI_RESET.escape());
                 } else {
-                    System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                    show(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
                             " ha raccolto " + ANSI_RESET.escape());
                 }
 
@@ -525,7 +563,7 @@ public class CLI implements UserInterface {
             case MOVE:
 
                 moveTurnUpdate = (MoveTurnUpdate) turnUpdate;
-                System.out.println(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
+                show(ANSI_BLUE.escape() + "[!] Il giocatore " + turnUpdate.getPlayerId() +
                         " si è mosso" + ANSI_RESET.escape());
 
                 break;
@@ -558,7 +596,9 @@ public class CLI implements UserInterface {
             System.out.println("[DEBUG] Errore nel caricamento della mappa: \n" + e.getMessage());
         }
 
-        FileRead.showBattlefield();
+        synchronized (mapShowSync) {
+            FileRead.showBattlefield();
+        }
         showInfo();
     }
 
@@ -779,6 +819,10 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     *
+     * @param powerUp CachedPowerUp to be used, only newton and teleporter can be used in the powerup phases
+     */
     private void usePowerUp(CachedPowerUp powerUp) {
 
         switch (powerUp.getType()) {
@@ -791,12 +835,6 @@ public class CLI implements UserInterface {
                 useTeleporter(powerUp);
                 break;
 
-            case TAG_BACK_GRENADE:
-                break;
-
-            case TARGETING_SCOPE:
-                break;
-
             default:
                 break;
 
@@ -804,6 +842,10 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * handle newton requests
+     * @param newton cachedPowerUp chosen to use by the player
+     */
     private void useNewton(CachedPowerUp newton) {
 
         String retryMessage = "Scelta non valida. Riprova.";
@@ -880,6 +922,10 @@ public class CLI implements UserInterface {
         view.doAction(newtonAction);
     }
 
+    /**
+     * handle teleport request to the user
+     * @param teleporter CachedPowerUp teleport to consume
+     */
     private void useTeleporter(CachedPowerUp teleporter) {
 
         Point p = askCell();
@@ -1024,7 +1070,9 @@ public class CLI implements UserInterface {
                 break;
 
             case 6:
-                FileRead.showBattlefield();
+                synchronized (mapShowSync) {
+                    FileRead.showBattlefield();
+                }
                 startAction(isFrenzy, isBeforeFrenzyStarter);
                 break;
 
@@ -1055,7 +1103,11 @@ public class CLI implements UserInterface {
         // TODO
     }
 
-
+    /**
+     * Handle a move request, asking to move to up to maxMoves, or stop before
+     * @param maxMoves max moves which can be done by the user
+     * @return a List of Directions with the choices of the user
+     */
     private List<Directions> handleMove(int maxMoves) {
 
         int moves = 0;
@@ -1122,7 +1174,10 @@ public class CLI implements UserInterface {
                         temp_moves = genPointFromDirections(directionsList, temp_moves);
                         FileRead.removePlayer(view.getPlayerId());
                         FileRead.insertPlayer(temp_moves.x, temp_moves.y, Character.forDigit(view.getPlayerId(), 10));
-                        FileRead.showBattlefield();
+
+                        synchronized (mapShowSync){
+                            FileRead.showBattlefield();
+                        }
 
                     } else if (validMove == 0) {
 
@@ -1537,24 +1592,16 @@ public class CLI implements UserInterface {
         //weapon checks
         int targets = -1; //number of targets needed by the weapons (reads this from json CachedFullWeapons)
         boolean needCell = false; //if this weapon needs a Cell for movements related to the shoot
-        //second and third effect type -> ECLUSIVE/CONCATENABLE need an enum class for thisx
 
 
         //if player has > 5 dmg he can do one movement, otherwise no moves
-        /*
         if(maxMoves > 0){
+            Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
             directionsList = handleMove(maxMoves);
-
-            if(directionsList.isEmpty())
-                directionsList.add(null);
-
+            Point finalPos = genPointFromDirections(directionsList, startingPoint);
         } else {
             directionsList.add(null);
-        }*/
-
-
-        //Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
-        //Point finalPos = genPointFromDirections(directionsList, startingPoint);
+        }
 
         // At this point there are 3 cases:
         // case A -> player hasn't gained enhanced shoot
@@ -1632,8 +1679,8 @@ public class CLI implements UserInterface {
 
         } else {
             System.out.println("[!] Non hai abbastanza munizioni per usare gli effetti selezionati!");
-            //TODO cosa gli faccio fare? per ora skip action
-            view.doAction(new SkipAction());
+            //TODO check if it works, should let him retry shoot from the beginning
+            startShoot(maxMoves);
         }
 
         scanner.nextLine();
@@ -1675,8 +1722,6 @@ public class CLI implements UserInterface {
             System.out.println("Puoi usare un mirino, vuoi farlo? (si/no): ");
             do {
                 String s = scanner.nextLine();
-                //TODO check if this fix is ok, should remove first invalid choice popup
-                scanner.nextLine();
 
                 if(s.equalsIgnoreCase("SI") || s.equalsIgnoreCase("NO")){
                     validScopeChoice = true;
@@ -1703,7 +1748,7 @@ public class CLI implements UserInterface {
         if(isFrenzy){
             view.doAction(new FrenzyShoot(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpsToDiscard, scopeAction)));
         } else {
-            view.doAction(new ShootAction(weapon.getName(), null, targetList, effects, cells, powerUpsToDiscard, scopeAction));
+            view.doAction(new ShootAction(weapon.getName(), directionsList.get(0), targetList, effects, cells, powerUpsToDiscard, scopeAction));
         }
     }
 
@@ -1742,7 +1787,10 @@ public class CLI implements UserInterface {
             System.out.println(i + ": " + scopePowerUps.get(i));
         }
 
+        scanner.nextLine();
+
         do {
+
             try {
                 read = scanner.nextInt();
 
@@ -1983,7 +2031,7 @@ public class CLI implements UserInterface {
                 }
 
 
-                //TODO check if effects are exclousive/concatenable
+                //differentiates valids effect choices
                 try {
                     read = scanner.nextInt();
                     //scanner.nextLine();
@@ -1998,6 +2046,7 @@ public class CLI implements UserInterface {
                                 System.out.println("Scelta effetti non valida! Riprova");
                             }
 
+                        //only base effect or all effects togheter
                         } else if (w.getName().equals("T.H.O.R")) {
 
                             if (read == 0 || read == 12) {
@@ -2016,6 +2065,7 @@ public class CLI implements UserInterface {
                             }
                         }
 
+                    //only exclusive effects -> only base effect or only other effect
                     } else if(w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE)){
 
                         if((read == 0 || read == 1)){
@@ -2024,6 +2074,7 @@ public class CLI implements UserInterface {
                             System.out.println("Scelta effetti non valida! Riprova");
                         }
 
+                    //can choose to do first effect before base effect
                     } else if (w.getEffectTypes().get(0).equals(EffectType.CONCATENABLE_NON_ORD)){
 
                         if(w.getThirdEffectCost() != null) {

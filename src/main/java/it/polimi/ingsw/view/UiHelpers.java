@@ -110,7 +110,7 @@ public class UiHelpers {
 
         Point finalPos = new Point(start);
 
-        if(directions != null || directions.isEmpty()) {
+        if(directions != null && !directions.isEmpty()) {
 
             //generate final point destination to forward to the server
             for (Directions direction : directions) {

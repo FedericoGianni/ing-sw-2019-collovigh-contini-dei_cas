@@ -125,7 +125,7 @@ public class SocketClientReader extends Thread {
                 // if the line starts with a '{' -> json
                 if(msg != null) {
 
-                    LOGGER.log(WARNING,"[SOCKET-CLIENT-READER] received: {0}", msg);
+                    LOGGER.log(level,"[SOCKET-CLIENT-READER] received: {0}", msg);
 
                     if (msg.startsWith("{")) handleJson(msg);
                         // else will be handled by the HashMap
