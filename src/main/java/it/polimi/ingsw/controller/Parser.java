@@ -532,6 +532,8 @@ public class Parser {
 
         specialWeaponList.add(new Hellion());
 
+        specialWeaponList.add(new FlameThrower());
+
         //TODO add all the special weapons
 
         return specialWeaponList;

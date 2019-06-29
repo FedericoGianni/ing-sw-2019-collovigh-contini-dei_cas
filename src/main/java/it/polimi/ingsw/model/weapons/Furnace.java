@@ -94,15 +94,9 @@ public class Furnace  extends SpecialWeapons{
     @Override
     public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws PlayerAlreadyDeadException, WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CellNonExistentException {
 
-        for (int i = 0; i < effects.size(); i++) {
-            for(Player p : targetLists.get(i)){
-                if(p.getStats().getDmgTaken().size() > KILL_DMG){
-                    throw new PlayerAlreadyDeadException();
-                }
-            }
-        }
-
         if (cells.isEmpty()) throw new CellNonExistentException();
+
+        checkPlayerAlreadyDead(targetLists);
 
         if (effects.contains(0) && !effects.contains(1)){
 
@@ -116,6 +110,7 @@ public class Furnace  extends SpecialWeapons{
 
             throw new UncorrectEffectsException();
         }
+
     }
 
     /**

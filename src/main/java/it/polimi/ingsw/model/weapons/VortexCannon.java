@@ -46,13 +46,7 @@ public class VortexCannon extends SpecialWeapons{
     @Override
     public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws PlayerAlreadyDeadException, WeaponNotLoadedException, UncorrectDistanceException, UncorrectEffectsException, NotCorrectPlayerNumberException, NotEnoughAmmoException {
 
-        for (int i = 0; i < effects.size(); i++) {
-            for(Player p : targetLists.get(i)){
-                if(p.getStats().getDmgTaken().size() > KILL_DMG){
-                    throw new PlayerAlreadyDeadException();
-                }
-            }
-        }
+        checkPlayerAlreadyDead(targetLists);
 
         // if the player shoot with effect 2 but no effect 1 throw exception
 

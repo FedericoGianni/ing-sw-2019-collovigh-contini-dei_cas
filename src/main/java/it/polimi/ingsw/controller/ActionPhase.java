@@ -47,6 +47,10 @@ public class ActionPhase {
     private static final int MAX_MOVES = 3;
     private static final int MAX_FRENZY_MOVES = 4;
 
+    // shoot
+
+    private static final int DMG_FOR_MOVE_SHOOT = 2;
+
     //Grab
 
     private static final int MAX_GRAB_MOVES = 1;
@@ -543,6 +547,8 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
+            shootFailed(shootAction);
+
             handleAction();
 
             return;
@@ -554,6 +560,8 @@ public class ActionPhase {
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
 
             restoreSellPowerUp();
+
+            shootFailed(shootAction);
 
             handleAction();
 
@@ -567,6 +575,8 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
+            shootFailed(shootAction);
+
             handleAction();
 
             return;
@@ -578,6 +588,8 @@ public class ActionPhase {
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
 
             restoreSellPowerUp();
+
+            shootFailed(shootAction);
 
             handleAction();
 
@@ -591,6 +603,8 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
+            shootFailed(shootAction);
+
             handleAction();
 
             return;
@@ -602,6 +616,8 @@ public class ActionPhase {
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
 
             restoreSellPowerUp();
+
+            shootFailed(shootAction);
 
             handleAction();
 
@@ -615,6 +631,8 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
+            shootFailed(shootAction);
+
             handleAction();
 
             return;
@@ -626,6 +644,8 @@ public class ActionPhase {
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
 
             restoreSellPowerUp();
+
+            shootFailed(shootAction);
 
             handleAction();
 
@@ -639,6 +659,8 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
+            shootFailed(shootAction);
+
             handleAction();
 
             return;
@@ -650,6 +672,8 @@ public class ActionPhase {
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
             restoreSellPowerUp();
+
+            shootFailed(shootAction);
 
             handleAction();
 
@@ -663,6 +687,8 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
+            shootFailed(shootAction);
+
             handleAction();
 
             return;
@@ -675,6 +701,8 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
+            shootFailed(shootAction);
+
             handleAction();
 
             return;
@@ -684,6 +712,8 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " ArgsNotValidatedException ");
 
             restoreSellPowerUp();
+
+            shootFailed(shootAction);
 
             handleAction();
 
@@ -697,6 +727,8 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
+            shootFailed(shootAction);
+
             handleAction();
 
             return;
@@ -709,6 +741,8 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
+            shootFailed(shootAction);
+
             handleAction();
 
             return;
@@ -720,6 +754,8 @@ public class ActionPhase {
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_ALREADY_DEAD);
 
             restoreSellPowerUp();
+
+            shootFailed(shootAction);
 
             handleAction();
 
@@ -754,6 +790,12 @@ public class ActionPhase {
 
         List<CachedPowerUp> leftToSell = discardPowerUpShoot(shootAction.getPowerUpList());
 
+        if (shootAction.getMove() != null){
+
+            utilityMethods.move(Arrays.asList(shootAction.getMove()));
+
+        }
+
         if (selected != null) {
 
             // translate the list of point in a list of cell
@@ -780,8 +822,6 @@ public class ActionPhase {
                 targets.add(temp);
             }
 
-            //TODO @Dav check if ok, I've added PlayerAlreadyDeadException to Alessandro's shoot
-            //TODO write todo's in italian because it has no sense to use english here
             selected.shoot(targets, shootAction.getEffects(), cells);
 
             // apply targeting Scope if requested
@@ -802,6 +842,16 @@ public class ActionPhase {
         }
     }
 
+    private void shootFailed(ShootAction shootAction){
+
+        if (shootAction.getMove() != null){
+
+            utilityMethods.move(Arrays.asList(shootAction.getMove().getOpposite()));
+
+        }
+
+    }
+
     /**
      * This method will check if the parameter the player specified are suitable for shooting
      * @param shootAction is the class containing the list of moves
@@ -812,6 +862,15 @@ public class ActionPhase {
         // gets the id of the current player
 
         int playerId = controller.getCurrentPlayer();
+
+        // checks the move
+
+        if ( ( !controller.getFrenzy() ) && ( shootAction.getMove() != null ) && ( Model.getPlayer(playerId).getDmg().size() < DMG_FOR_MOVE_SHOOT) ){
+
+            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_TRIED_TO_MOVE_ENHANCED_BUT_CANT);
+
+            return false;
+        }
 
         // gets the specified weapon
 
