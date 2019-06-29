@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUI;
 
+import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.GrabAction;
@@ -19,6 +20,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +42,7 @@ public class Gui extends Application implements UserInterface {
     private static GuiLobbyController guiLobbyController;
     private static GuiMapController guiMapController;
     private int validMove=-1;
+    private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
     public void setGuiLobbyController(GuiLobbyController guic) {
         this.guiLobbyController = guic;
     }
@@ -220,7 +224,18 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case STATS: //possibilità: cambio pos,danni subiti, spostmanto e marchi, disconnessioni
-                    guiMapController.statsUpdater(playerId);
+                if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
+                    wasOnline.set(playerId, false);
+                    String msg="Il giocatore "+playerId+" si è disconnesso";
+                    guiMapController.onlineStateSignal( msg);
+                } else if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline() &&
+                        !wasOnline.get(playerId)){
+                    //player reconnected
+                    String msg="Il giocatore "+playerId+" si è disconnesso";
+                    wasOnline.set(playerId, true);
+                    guiMapController.onlineStateSignal(msg);
+                }
+                guiMapController.statsUpdater(playerId);
                 break;
 
             case INITIAL:
@@ -277,16 +292,17 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void startSpawn() {//pox: 1) rosso e giallo non fanno bene lo spawn 2) blu non fa bene lo spawn
-        while (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList().isEmpty()){
 
-            guiMapController.printLog("Attendi ricezione dei PowerUp pescati...");
+        while (view.getCacheModel().getCachedPlayers().size() <= 0 || view.getPlayerId() == -1) {
+            System.out.println("Attendi ricezione dell'update iniziale...");
+
             try {
                 sleep(200);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
+
 
         //view.spawn(powerUps.get(read));
 
@@ -302,6 +318,13 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startPowerUp() {
         //here i need to let them use power ups, devo eliminare tutti gli effetti all'inziio di start action
+        while(view.getPlayerId() == -1) {
+            try{
+                sleep(200);
+            } catch (InterruptedException e){
+
+            }
+        }
         guiMapController.actionButtonDisable();
         guiMapController.powerUpEnable();
     }
@@ -315,7 +338,13 @@ public class Gui extends Application implements UserInterface {
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
         //this method enables the action buttons to do something
+        while(view.getPlayerId() == -1) {
+            try{
+                sleep(200);
+            } catch (InterruptedException e){
 
+            }
+        }
         guiMapController.actionButtonsEnabler();
 
         //view.doAction(new Move(view.doAction(new Move(directionsList, finalPos));));----->
@@ -330,7 +359,16 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void startReload() {
-        view.doAction(new SkipAction());
+        //view.doAction(new SkipAction());
+        Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi ricaricare qualche arma?", ButtonType.YES, ButtonType.NO);//non credo vada
+        a.showAndWait();
+        if (a.getResult().equals(ButtonType.NO)) {
+            view.doAction(new SkipAction());
+        } else {
+            List <String> weapons=new ArrayList<>();
+            guiMapController.reloadWeaponChooser(weapons);
+
+        }
     }
 
     @Override
