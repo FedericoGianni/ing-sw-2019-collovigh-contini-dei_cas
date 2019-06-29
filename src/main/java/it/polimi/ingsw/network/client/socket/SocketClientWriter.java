@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.client.socket;
 import com.google.gson.Gson;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.client.Client;
+import it.polimi.ingsw.runner.RunClient;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -92,7 +93,12 @@ public class SocketClientWriter extends Client implements Runnable {
 
         send(RECONNECTION_MESSAGE_START + "\f" +  name);
 
-        return waitIntAnswer();
+        int playerId = waitIntAnswer();
+
+        RunClient.getView().setPlayerId(playerId);
+
+        return playerId;
+
     }
 
     @Override
@@ -129,7 +135,7 @@ public class SocketClientWriter extends Client implements Runnable {
 
             try{
 
-                TimeUnit.SECONDS.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(50);
 
             }catch (InterruptedException e){
 

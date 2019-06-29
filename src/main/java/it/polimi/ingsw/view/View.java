@@ -5,6 +5,7 @@ import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.rmi.RMIClient;
 import it.polimi.ingsw.network.client.socket.SocketClient;
+import it.polimi.ingsw.runner.RunClient;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.GUI.Gui;
 import it.polimi.ingsw.view.actions.JsonAction;
@@ -27,7 +28,7 @@ public class View implements ViewInterface {
     private static Level level = Level.INFO;
 
     private UserInterface userInterface;
-    private int playerId;
+    private int playerId = -1;
     private Client clientToVView;
     private CacheModel cacheModel;
 
@@ -78,6 +79,7 @@ public class View implements ViewInterface {
         if (ui.equals("-cli")){
 
             this.userInterface = new CLI(this);
+            RunClient.setView(this);
             this.userInterface.startUI();
         }
 
@@ -167,6 +169,7 @@ public class View implements ViewInterface {
             //SocketClientReader scr = new SocketClientReader(serverIp, port);
             //scr.start();
 
+            /*
             try {
 
                 sleep(1000);
@@ -175,13 +178,13 @@ public class View implements ViewInterface {
 
                 LOGGER.log(Level.WARNING, e.getMessage(), e);
 
-            }
+            }*/
 
             while (sc.getScw() == null){
 
                 try {
 
-                    wait();
+                    sleep(200);
 
                 } catch (Exception e){
 
@@ -375,7 +378,10 @@ public class View implements ViewInterface {
      */
     public int reconnect(String name){
 
+
         playerId = clientToVView.reconnect(name);
+
+        System.out.println("reconnect playerid: " + playerId);
 
         if (playerId != -1){
 

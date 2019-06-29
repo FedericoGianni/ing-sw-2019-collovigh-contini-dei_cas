@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.Thread.sleep;
 import static java.util.logging.Level.INFO;
 
 /**
@@ -104,6 +105,12 @@ public class SocketClient implements Runnable {
             scw = new SocketClientWriter(socket);
             scw.run();
             LOGGER.log(INFO, "Succesfuly started socketClientReader");
+            while(scw == null){
+                try {
+                    sleep(200);
+                } catch (InterruptedException e){
+                }
+            }
             scr.setScw(scw);
 
             while(active){

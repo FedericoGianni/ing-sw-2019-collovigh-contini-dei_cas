@@ -125,7 +125,7 @@ public class SocketClientReader extends Thread {
                 // if the line starts with a '{' -> json
                 if(msg != null) {
 
-                    LOGGER.log(level,"[SOCKET-CLIENT-READER] received: {0}", msg);
+                    LOGGER.log(WARNING,"[SOCKET-CLIENT-READER] received: {0}", msg);
 
                     if (msg.startsWith("{")) handleJson(msg);
                         // else will be handled by the HashMap
@@ -194,7 +194,7 @@ public class SocketClientReader extends Thread {
 
         // LOG the update
 
-        LOGGER.log(level, "[DEBUG] [SOCKET-CLIENT-READER] Received Json {0} : Calling handleJson method. ", update[ update.length - 1 ]);
+        LOGGER.log(WARNING, "[DEBUG] [SOCKET-CLIENT-READER] Received Json {0} : Calling handleJson method. ", update[ update.length - 1 ]);
 
         // creates a new UpdateClass variable ( will be instantiated in the switch )
 
@@ -295,6 +295,9 @@ public class SocketClientReader extends Thread {
                 break;
 
         }
+
+        System.out.println("updateClass: " + updateClass);
+        System.out.println("RunClient.getView " + RunClient.getView());
 
         RunClient.getView().sendUpdates(updateClass);
     }

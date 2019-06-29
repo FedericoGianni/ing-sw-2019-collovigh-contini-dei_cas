@@ -33,8 +33,7 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.model.map.JsonMap.MAP_C;
 import static it.polimi.ingsw.model.map.JsonMap.MAP_R;
-import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_CANNOT_BUY_WEAPON;
-import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_TIMER_EXPIRED;
+import static it.polimi.ingsw.utils.DefaultReplies.*;
 import static it.polimi.ingsw.utils.PowerUpType.TAG_BACK_GRENADE;
 import static it.polimi.ingsw.utils.PowerUpType.TARGETING_SCOPE;
 import static it.polimi.ingsw.view.UiHelpers.*;
@@ -48,6 +47,12 @@ public class CLI implements UserInterface {
     private int validMove = -1;
     private Object obj = new Object();
     boolean isFrenzy = false;
+
+    /**
+     * used to store a previous version of online status, to check if user is reconnecting or the stats updates are the
+     * same as before
+     */
+    private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
 
     /**
      * Default constructor
@@ -340,18 +345,19 @@ public class CLI implements UserInterface {
     /**
      * {@inheritDoc}
      */
-    public synchronized void show(String s) {
+    public void show(String s) {
 
         System.out.println(s);
 
         //if weapon buy has failed, re-sync the local cli map with real player position
-        if (s.equals(DEFAULT_CANNOT_BUY_WEAPON)) {
+        if (s.equals(DEFAULT_CANNOT_BUY_WEAPON) || s.startsWith(DEFAULT_INVALID_SHOOT_HEADER) || s.equals(DEFAULT_NO_ENOUGH_AMMO)) {
             FileRead.removePlayer(view.getPlayerId());
             Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
             FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
             FileRead.showBattlefield();
         }
     }
+
 
     /**
      * {@inheritDoc}
@@ -397,11 +403,15 @@ public class CLI implements UserInterface {
 
                 //player disconnected
                 if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
-                    show(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
-                }
+                    wasOnline.set(playerId, false);
+                    System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è disconnesso!" + ANSI_RESET.escape());
 
-                //players reconnected
-                //TODO inform the player of other player reconnection
+                } else if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline() &&
+                    !wasOnline.get(playerId)){
+                    //player reconnected
+                    System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è riconnesso!" + ANSI_RESET.escape());
+                    wasOnline.set(playerId, true);
+                }
 
                 //damage taken
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null) {
@@ -558,6 +568,7 @@ public class CLI implements UserInterface {
     @Override
     public void startSpawn() {
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
+        scanner.reset();
 
         List<CachedPowerUp> powerUps;
 
@@ -568,7 +579,7 @@ public class CLI implements UserInterface {
 
         do {
 
-            while (view.getCacheModel().getCachedPlayers().size() <= 0) {
+            while (view.getCacheModel().getCachedPlayers().size() <= 0 || view.getPlayerId() == -1) {
                 System.out.println("Attendi ricezione dell'update iniziale...");
 
                 try {
@@ -624,6 +635,14 @@ public class CLI implements UserInterface {
     @Override
     public void startPowerUp() {
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
+
+        while(view.getPlayerId() == -1) {
+            try{
+                sleep(200);
+             } catch (InterruptedException e){
+
+            }
+        }
 
 
         //System.out.println("[DEBUG] startPowerUp");
@@ -876,7 +895,17 @@ public class CLI implements UserInterface {
      */
     @Override
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
+
+        while(view.getPlayerId() == -1) {
+            try{
+                sleep(200);
+            } catch (InterruptedException e){
+
+            }
+        }
+
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
+        scanner.reset();
 
         //TODO check if this works
         if(isFrenzy){
@@ -1513,6 +1542,12 @@ public class CLI implements UserInterface {
         //if player has > 5 dmg he can do one movement, otherwise no moves
         if(maxMoves > 0){
             directionsList = handleMove(maxMoves);
+
+            if(directionsList.isEmpty())
+                directionsList.add(null);
+
+        } else {
+            directionsList.add(null);
         }
 
 
@@ -1638,10 +1673,12 @@ public class CLI implements UserInterface {
             System.out.println("Puoi usare un mirino, vuoi farlo? (si/no): ");
             do {
                 String s = scanner.nextLine();
+                //TODO check if this fix is ok, should remove first invalid choice popup
+                scanner.nextLine();
 
-                if(s.toUpperCase().equals("SI") || s.toUpperCase().equals("NO")){
+                if(s.equalsIgnoreCase("SI") || s.equalsIgnoreCase("NO")){
                     validScopeChoice = true;
-                    if(s.toUpperCase().equals("SI")){
+                    if(s.equalsIgnoreCase("SI")){
                         useScope = true;
                     }
                 } else {
@@ -1664,7 +1701,7 @@ public class CLI implements UserInterface {
         if(isFrenzy){
             view.doAction(new FrenzyShoot(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpsToDiscard, scopeAction)));
         } else {
-            view.doAction(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpsToDiscard, scopeAction));
+            view.doAction(new ShootAction(weapon.getName(), directionsList.get(0), targetList, effects, cells, powerUpsToDiscard, scopeAction));
         }
     }
 
@@ -2285,6 +2322,7 @@ public class CLI implements UserInterface {
             }
         }
 
+        //TODO se vincitori hanno stesso punteggio verificare chi ha piu punti nel killshottrack
         for(Player p : players){
             if(p.getStats().getScore() == maxScore) {
                 System.out.println("\n" + "\t" + UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +

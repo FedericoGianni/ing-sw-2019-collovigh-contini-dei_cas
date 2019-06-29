@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class SpawnCellTest {
 
@@ -43,7 +44,7 @@ class SpawnCellTest {
 
                 if ((Model.getMap().getCell(i,j) != null) && (!Model.getMap().getCell(i,j).isAmmoCell())){
 
-                    System.out.println(" spawn : ( " + i + " , " + j + " ) ");
+                    //System.out.println(" spawn : ( " + i + " , " + j + " ) ");
                 }
             }
         }

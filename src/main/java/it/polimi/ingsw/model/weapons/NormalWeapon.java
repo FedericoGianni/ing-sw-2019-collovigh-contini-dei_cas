@@ -367,7 +367,7 @@ public class NormalWeapon extends Weapon{
           for (int macroCont = 0; macroCont < effect.size(); macroCont++)//iterate macroeffect
           {
 
-              System.out.println("Uso : " +this.getEffects().get(effect.get(macroCont)).getName());
+              //System.out.println("Uso : " +this.getEffects().get(effect.get(macroCont)).getName());
               if (this.getEffects().get(effect.get(macroCont)).getEffectCost() != null)//if the effect costs 0 i don't need to pay
               {
                   if (canPay(this.getEffects().get(effect.get(macroCont)).getEffectCost(), this.isPossessedBy().getAmmoBag()) == true)//----need to add effects as payment

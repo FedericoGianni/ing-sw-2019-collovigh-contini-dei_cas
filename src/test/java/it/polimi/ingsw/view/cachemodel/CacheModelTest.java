@@ -18,7 +18,7 @@ class CacheModelTest {
 
             assertNotNull(weapon);
 
-            System.out.println(weapon.getName());
+            //System.out.println(weapon.getName());
 
         }catch (WeaponNotFoundException e){
 

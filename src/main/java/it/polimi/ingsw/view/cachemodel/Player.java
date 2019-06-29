@@ -90,8 +90,8 @@ public class Player {
             s = s.concat("\nPunti: " + getStats().getScore());
 
         } else {
-            s = s.concat("\nDanni" + "[ ]");
-            s = s.concat("\nMarchi" + "[ ]");
+            s = s.concat("\nDanni" + "[]");
+            s = s.concat("\nMarchi" + "[]");
             s = s.concat("\nOnline: " + " si");
         }
 

@@ -45,11 +45,11 @@ class PlayerTest {
         try {
             visibles=p1.canSee();
         } catch(Exception e) {
-            System.out.println("No players can be seen");
+            //System.out.println("No players can be seen");
             e.printStackTrace();
         }
         for(int i=0;i<visibles.size();i++)
-        System.out.println(visibles.get(i).getPlayerName());
+        //System.out.println(visibles.get(i).getPlayerName());
 
         //tests that there's only p2 as a visible player
         assertTrue(visibles.get(0) == p2);
@@ -99,7 +99,7 @@ class PlayerTest {
         }
         for(int i=0;i<visibles.size();i++)
         {
-            System.out.println(visibles.get(i).getPlayerName());
+            //System.out.println(visibles.get(i).getPlayerName());
         }
 
         assertTrue(visibles.contains(p5));
@@ -152,7 +152,7 @@ class PlayerTest {
         }
         for(int i=0;i<visibles.size();i++)
         {
-            System.out.println(visibles.get(i).getPlayerName());
+            //System.out.println(visibles.get(i).getPlayerName());
         }
 
         assertTrue(visibles.contains(p5));
@@ -204,7 +204,7 @@ class PlayerTest {
         }
         for(int i=0;i<visibles.size();i++)
         {
-            System.out.println(visibles.get(i).getPlayerName());
+            //System.out.println(visibles.get(i).getPlayerName());
         }
 
         assertTrue(visibles.contains(p5));
