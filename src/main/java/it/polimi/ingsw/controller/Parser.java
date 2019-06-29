@@ -536,7 +536,7 @@ public class Parser {
 
         specialWeaponList.add(new RailGun());
 
-        //TODO add all the special weapons
+        specialWeaponList.add(new PowerGlove());
 
         return specialWeaponList;
     }

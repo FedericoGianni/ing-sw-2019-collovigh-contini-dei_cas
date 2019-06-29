@@ -124,7 +124,7 @@ public class PowerGlove extends SpecialWeapons {
 
             isPossessedBy().setPlayerPos(target.getCurrentPosition());
 
-            targets.get(0).addDmg(isPossessedBy().getPlayerId(),DMG_SECOND_EFFECT);
+            target.addDmg(isPossessedBy().getPlayerId(),DMG_SECOND_EFFECT);
         }
     }
 

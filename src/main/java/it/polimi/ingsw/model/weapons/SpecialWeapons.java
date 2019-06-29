@@ -120,7 +120,7 @@ public abstract class SpecialWeapons extends Weapon{
 
             if (adjDir == null) return false;
 
-            return  (targets.get(0).getCurrentPosition().getCellAdj(adjDir).equals(targets.get(1).getCurrentPosition())) ;
+            return  ( (targets.get(0).getCurrentPosition().getCellAdj(adjDir).equals(targets.get(1).getCurrentPosition())) && (targets.get(0).getCurrentPosition().getCellAdj(adjDir).getColor().equals(targets.get(1).getCurrentPosition().getColor())) ) ;
 
         }
 
