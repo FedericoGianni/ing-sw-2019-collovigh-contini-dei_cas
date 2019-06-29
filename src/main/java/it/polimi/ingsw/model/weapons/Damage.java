@@ -1,20 +1,10 @@
 package it.polimi.ingsw.model.weapons;
-import com.google.gson.Gson;
 import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.customsexceptions.*;
-import it.polimi.ingsw.customsexceptions.DeadPlayerException;
-import it.polimi.ingsw.customsexceptions.FrenzyActivatedException;
-import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -178,10 +168,10 @@ public class Damage extends MicroEffect {
            return;
        }
 
-        System.out.println("------------------------------------");
-        System.out.println("Damage Effect! life now: " +playerList.get(0).getStats().getDmgTaken().size());
-        print();
-        System.out.println("------------------------------------");
+        //System.out.println("------------------------------------");
+        //System.out.println("Damage Effect! life now: " +playerList.get(0).getStats().getDmgTaken().size());
+        //print();
+        //System.out.println("------------------------------------");
        for(int i=0;i<playerList.size();i++)//i can't shoot more times to the same target
        {
            for(int j=0;j<playerList.size();j++)
@@ -424,6 +414,7 @@ public class Damage extends MicroEffect {
 
     public void print()
     {
+        /*
         System.out.println("damage: "+damage);
         System.out.println("seeAbletargetneededd: "+seeAbleTargetNeeded);
         System.out.println("alreadyTargetd: "+alreadyTargeted);
@@ -431,5 +422,7 @@ public class Damage extends MicroEffect {
         System.out.println("Minimun distance required:"+distMin);
         System.out.println("Melee:"+melee);
         System.out.println("Player number="+playerNum);
+System
+         */
     }
 }

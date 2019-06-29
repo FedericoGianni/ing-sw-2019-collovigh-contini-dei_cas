@@ -1,18 +1,10 @@
 package it.polimi.ingsw.model.weapons;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.customsexceptions.*;
-import it.polimi.ingsw.customsexceptions.DeadPlayerException;
-import it.polimi.ingsw.customsexceptions.OverKilledPlayerException;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,10 +93,13 @@ public class Marker extends MicroEffect {
 
     @Override
         public void print() {
+        /*
             System.out.println("markers: "+markers);
             System.out.println("mseeable Target: "+seeAbleTargetNeeded);
             System.out.println(": "+playerNum);
             System.out.println("different player: "+differentPlayer);
+
+         */
         }
 
 
@@ -172,7 +167,7 @@ public class Marker extends MicroEffect {
             }
             for(Player item : playerList)
             {
-                System.out.println(w.isPossessedBy().canSee().size());
+                //System.out.println(w.isPossessedBy().canSee().size());
                 if(!w.isPossessedBy().canSee().contains(item))
                 {
 

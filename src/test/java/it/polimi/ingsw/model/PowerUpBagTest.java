@@ -2,7 +2,6 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.ammo.AmmoCube;
-import it.polimi.ingsw.model.map.JsonMap;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -103,7 +102,7 @@ class PowerUpBagTest {
         p.getPowerUpBag().addItem(c1);
         assertEquals(1,p.getPowerUpBag().getList().size());
 
-        System.out.println(p.getPowerUpBag().getList());
+        //System.out.println(p.getPowerUpBag().getList());
 
         AmmoCube a = new AmmoCube(Color.RED);
 

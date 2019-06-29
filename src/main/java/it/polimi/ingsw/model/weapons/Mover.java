@@ -1,19 +1,15 @@
 package it.polimi.ingsw.model.weapons;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.controller.Parser;
-import it.polimi.ingsw.customsexceptions.*;
+import it.polimi.ingsw.customsexceptions.PlayerInDifferentCellException;
+import it.polimi.ingsw.customsexceptions.PlayerInSameCellException;
+import it.polimi.ingsw.customsexceptions.SeeAblePlayerException;
+import it.polimi.ingsw.customsexceptions.UncorrectDistanceException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.view.actions.Move;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,13 +49,16 @@ public class Mover extends MicroEffect {
 
     @Override
     public void print() {
+        /*
        System.out.println("cellNumber: "+cellNumber);
-        System.out.println("beforeShooting"+beforeShooting);
+       System.out.println("beforeShooting"+beforeShooting);
 
-        System.out.println("afterShooting"+afterShooting);
-        System.out.println("facoltative: "+facoltative);
-        System.out.println("target: "+target);
-        System.out.println("myCell: "+myCell);
+       System.out.println("afterShooting"+afterShooting);
+       System.out.println("facoltative: "+facoltative);
+       System.out.println("target: "+target);
+       System.out.println("myCell: "+myCell);
+
+         */
 
 
     }
@@ -105,9 +104,9 @@ public class Mover extends MicroEffect {
                 } else {//cell number is max
                     if (Map.getDist(c, playerList.get(0).getCurrentPosition()) <= cellNumber)//check if the distace is correct
                     {
-                        System.out.println("celle7");
+                        //System.out.println("celle7");
                         if(c== Model.getMap().getCell(1,3))
-                            System.out.println("ssssssssssssssssssssss");
+                            //System.out.println("ssssssssssssssssssssss");
                         playerList.get(0).setPlayerPos(c);
                     } else {
                         throw new UncorrectDistanceException();

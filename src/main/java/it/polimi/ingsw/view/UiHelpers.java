@@ -109,28 +109,32 @@ public class UiHelpers {
     public static Point genPointFromDirections(List<Directions> directions, Point start){
 
         Point finalPos = new Point(start);
-        //generate final point destination to forward to the server
-        for (Directions direction : directions) {
-            switch (direction) {
-                case NORTH:
-                    if (finalPos.x > 0)
-                        finalPos.x--;
-                    break;
 
-                case SOUTH:
-                    if (finalPos.x < MAP_R-1)
-                        finalPos.x++;
-                    break;
+        if(directions != null || directions.isEmpty()) {
 
-                case WEST:
-                    if (finalPos.y > 0)
-                        finalPos.y--;
-                    break;
+            //generate final point destination to forward to the server
+            for (Directions direction : directions) {
+                switch (direction) {
+                    case NORTH:
+                        if (finalPos.x > 0)
+                            finalPos.x--;
+                        break;
 
-                case EAST:
-                    if (finalPos.y < MAP_C-1)
-                        finalPos.y++;
-                    break;
+                    case SOUTH:
+                        if (finalPos.x < MAP_R - 1)
+                            finalPos.x++;
+                        break;
+
+                    case WEST:
+                        if (finalPos.y > 0)
+                            finalPos.y--;
+                        break;
+
+                    case EAST:
+                        if (finalPos.y < MAP_C - 1)
+                            finalPos.y++;
+                        break;
+                }
             }
         }
 

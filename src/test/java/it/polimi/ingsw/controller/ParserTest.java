@@ -25,13 +25,13 @@ class ParserTest {
 
         Cell[][] matrix = savedMap.getRealMap();
 
-        System.out.println( "\nMAP 1 :");
+        //System.out.println( "\nMAP 1 :");
 
         for (int i = 0; i <3; i++) {
 
             for (int j = 0; j < 4; j++) {
 
-                System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
+                //System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
 
             }
         }
@@ -46,13 +46,13 @@ class ParserTest {
 
         Cell[][] matrix = savedMap.getRealMap();
 
-        System.out.println( "\nMAP 2 :");
+        //System.out.println( "\nMAP 2 :");
 
         for (int i = 0; i <3; i++) {
 
             for (int j = 0; j < 4; j++) {
 
-                System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
+                //System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
 
             }
         }
@@ -67,13 +67,13 @@ class ParserTest {
 
         Cell[][] matrix = savedMap.getRealMap();
 
-        System.out.println( "\nMAP 3 :");
+        //System.out.println( "\nMAP 3 :");
 
         for (int i = 0; i <3; i++) {
 
             for (int j = 0; j < 4; j++) {
 
-                System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
+                //System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
 
                 if (matrix[i][j].isAmmoCell()) assertNotNull(matrix[i][j].getAmmoPlaced());
 
@@ -126,16 +126,16 @@ class ParserTest {
 
             for (int j = 0; j < 4; j++) {
 
-                System.out.println((matrix[i][j] == null) ? "[SOURCE] Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
+                //System.out.println((matrix[i][j] == null) ? "[SOURCE] Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
 
-                System.out.println((saved[i][j] == null) ? "[SAVE] Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + saved[i][j].getColor());
+                //System.out.println((saved[i][j] == null) ? "[SAVE] Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + saved[i][j].getColor());
 
 
-                System.out.println("");
+                //System.out.println("");
 
             }
 
-            System.out.println("\n");
+            //System.out.println("\n");
         }
 
         Parser.clearGames();

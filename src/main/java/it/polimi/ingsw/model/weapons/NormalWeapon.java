@@ -464,7 +464,7 @@ public class NormalWeapon extends Weapon{
         }
     }
         public void print()
-    {
+    {   /*
 
             System.out.println(this.getName());
             for(int j = 0; j< this.getEffects().size(); j++)
@@ -481,7 +481,7 @@ public class NormalWeapon extends Weapon{
                     for(int h=0;h<this.getEffects().get(j).getMicroEffects().size()-1;h++)
                         this.getEffects().get(j).getMicroEffects().get(h).print();
                 }
-            }
+            }*/
     }
 
 }

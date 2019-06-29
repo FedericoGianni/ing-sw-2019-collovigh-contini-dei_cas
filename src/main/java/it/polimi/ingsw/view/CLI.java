@@ -1539,7 +1539,9 @@ public class CLI implements UserInterface {
         boolean needCell = false; //if this weapon needs a Cell for movements related to the shoot
         //second and third effect type -> ECLUSIVE/CONCATENABLE need an enum class for thisx
 
+
         //if player has > 5 dmg he can do one movement, otherwise no moves
+        /*
         if(maxMoves > 0){
             directionsList = handleMove(maxMoves);
 
@@ -1548,11 +1550,11 @@ public class CLI implements UserInterface {
 
         } else {
             directionsList.add(null);
-        }
+        }*/
 
 
-        Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
-        Point finalPos = genPointFromDirections(directionsList, startingPoint);
+        //Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+        //Point finalPos = genPointFromDirections(directionsList, startingPoint);
 
         // At this point there are 3 cases:
         // case A -> player hasn't gained enhanced shoot
@@ -1701,7 +1703,7 @@ public class CLI implements UserInterface {
         if(isFrenzy){
             view.doAction(new FrenzyShoot(new ShootAction(weapon.getName(), targetList, effects, cells, powerUpsToDiscard, scopeAction)));
         } else {
-            view.doAction(new ShootAction(weapon.getName(), directionsList.get(0), targetList, effects, cells, powerUpsToDiscard, scopeAction));
+            view.doAction(new ShootAction(weapon.getName(), null, targetList, effects, cells, powerUpsToDiscard, scopeAction));
         }
     }
 

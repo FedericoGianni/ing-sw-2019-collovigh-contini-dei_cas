@@ -4,14 +4,12 @@ import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.model.player.Skull;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PointCounterTest {
 
@@ -175,7 +173,7 @@ class PointCounterTest {
 
         pointCounter.calcGamePoints();
 
-        System.out.println(" points: " + Model.getGame().getPlayers().stream().map( x -> x.getStats().getScore()).collect(Collectors.toList()));
+        //System.out.println(" points: " + Model.getGame().getPlayers().stream().map( x -> x.getStats().getScore()).collect(Collectors.toList()));
 
         assertEquals(8,player01.getStats().getScore());
 

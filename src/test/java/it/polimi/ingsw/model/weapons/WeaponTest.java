@@ -7,8 +7,8 @@ import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.view.cachemodel.CacheModelParser;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.view.cachemodel.CacheModelParser;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import org.junit.jupiter.api.Test;
 
@@ -61,7 +61,7 @@ class WeaponTest {
 
         for (Weapon weapon : weaponList){
 
-            System.out.println(weapon.getName());
+            //System.out.println(weapon.getName());
 
             assertTrue(cachedFullWeaponNames.contains(weapon.getName()));
 
