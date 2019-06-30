@@ -2297,11 +2297,27 @@ public class GuiMapController {
             //reply back that player hasn't got enough ammo
             System.out.println("Provo a ricaricare " + weaponNames + "E scarto " + powerUpsToDiscard);
             System.out.println("NON HO ABBA MUNIZIONI!");
+            Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni ");
+            a.show();
             gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));
+            return;
         }else if(actionType.equals("GRAB")){
                 //this shouldn't do anythign , just forward the choice and then controller will
             //reply back that player hasn't got enough ammo
+            Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni ");
+            a.show();
             System.out.println("Non abba munizie ecc");
+            gui.getView().doAction(new GrabAction(dir,weaponNames.get(0),weaponNames.get(1),powerUpsToDiscard));
+            return;
+        }else if(actionType.equals("SHOOT"))
+        {
+            Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni ");
+            a.show();
+            List<List<Integer>> targetLists=new ArrayList<>();
+            List<Point> cells=new ArrayList<>();
+            gui.getView().doAction(new ShootAction(weaponNames.get(0),targetLists,effects,cells,powerUpsToDiscard,null));
+            return;
+            //new ShootAction(w, targetLists, effects, cells, pUp, null)
         }
 
 
