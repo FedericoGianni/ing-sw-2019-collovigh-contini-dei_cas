@@ -247,11 +247,11 @@ public class Server  {
 
             controller.setPlayerOffline(playerId);
 
-            LOGGER.log(Level.WARNING, "[DEBUG] playerOnline size: " + controller.getPlayerOnline().size());
+            LOGGER.log(Level.WARNING, "[DEBUG] playerOnline size: {0}",  controller.getPlayerOnline().size());
 
             if ( (ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < WaitingRoom.DEFAULT_MIN_PLAYERS) ){
 
-                LOGGER.log(Level.WARNING, () -> LOG_START + "Connected player are less than " + WaitingRoom.DEFAULT_MIN_PLAYERS + " the game will be terminated " );
+                LOGGER.log(Level.WARNING, () -> LOG_START + "Connected player are less than " + WaitingRoom.DEFAULT_MIN_PLAYERS + " the game will be TERMINATED " );
 
                 controller.endGame();
             }

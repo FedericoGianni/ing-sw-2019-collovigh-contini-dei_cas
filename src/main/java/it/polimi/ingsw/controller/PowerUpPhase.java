@@ -118,6 +118,10 @@ public class PowerUpPhase {
 
     public void usePowerUp(PowerUpAction powerUpAction){
 
+        // get current player
+
+        int playerId = controller.getCurrentPlayer();
+
         // stop timer
 
         controller.getTimer().stopTimer();
@@ -156,7 +160,11 @@ public class PowerUpPhase {
 
         // notify the inactive players
 
-        controller.updateInactivePlayers(new PowerUpTurnUpdate(controller.getCurrentPlayer(),new CachedPowerUp(powerUpAction.getPowerUpType(),powerUpAction.getColor())));
+        controller.updateInactivePlayers(new PowerUpTurnUpdate(playerId,new CachedPowerUp(powerUpAction.getPowerUpType(),powerUpAction.getColor())));
+
+        // calls again the handlePowerUp functions in case the player wants to use another
+
+        handlePowerUp();
     }
 
     public void useNewton(NewtonAction newtonAction){
@@ -187,10 +195,6 @@ public class PowerUpPhase {
             // discard the powerUp
 
             discardPowerUp(newtonAction.getPowerUpType(),newtonAction.getColor());
-
-            // calls again the handlePowerUp functions in case the player wants to use another
-
-            handlePowerUp();
 
         } catch(Exception e){
 
@@ -226,10 +230,6 @@ public class PowerUpPhase {
             // discard the powerUp
 
             discardPowerUp( teleporterAction.getPowerUpType(), teleporterAction.getColor());
-
-            // calls again the handlePowerUp functions in case the player wants to use another
-
-            handlePowerUp();
 
 
         } catch (CardNotPossessedException e){

@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.network.serveronly.Server;
+import it.polimi.ingsw.network.serveronly.WaitingRoom;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
@@ -345,85 +346,89 @@ public class Controller {
 
     public void handleTurnPhase(){
 
-        switch(turnPhase){
+        if (getPlayerOnline().size() >= WaitingRoom.DEFAULT_MIN_PLAYERS) {
 
-            //once the virtual wiev has done the action the controller sets the next turnPhase to the next turnphase
-            //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
-            //the last phase (ACTION) will increment roundNumber
+            switch (turnPhase) {
 
-            case SPAWN:
+                //once the virtual wiev has done the action the controller sets the next turnPhase to the next turnphase
+                //so that the next invocation will handle next phase -> this is done by calling incrementPhase()
+                //the last phase (ACTION) will increment roundNumber
 
-                spawnPhase.handleSpawn();
+                case SPAWN:
 
-                // increment phase if virtual view method is called will be done in the answer method
+                    spawnPhase.handleSpawn();
 
-                break;
+                    // increment phase if virtual view method is called will be done in the answer method
 
-            case POWERUP1:
+                    break;
 
-                powerUpPhase.handlePowerUp();
+                case POWERUP1:
 
-                break;
+                    powerUpPhase.handlePowerUp();
 
-            case ACTION1:
+                    break;
 
-                actionPhase.handleAction();
+                case ACTION1:
 
-                break;
+                    actionPhase.handleAction();
 
-            case POWERUP2:
+                    break;
 
-                powerUpPhase.handlePowerUp();
+                case POWERUP2:
 
-                break;
+                    powerUpPhase.handlePowerUp();
 
-            case ACTION2:
+                    break;
 
-                actionPhase.handleAction();
+                case ACTION2:
 
-                break;
+                    actionPhase.handleAction();
 
-            case POWERUP3:
+                    break;
 
-                powerUpPhase.handlePowerUp();
+                case POWERUP3:
 
-                break;
+                    powerUpPhase.handlePowerUp();
 
-            case RELOAD:
+                    break;
 
-                // calls the method on the virtual view
+                case RELOAD:
 
-                reloadPhase.handleReload();
+                    // calls the method on the virtual view
 
-                break;
+                    reloadPhase.handleReload();
 
-            case END:
+                    break;
 
-                // replaces the empty ammoCard
+                case END:
 
-                Model.getMap().replaceAmmoCard();
+                    // replaces the empty ammoCard
 
-                // if someone has died calculates the points
+                    Model.getMap().replaceAmmoCard();
 
-                if(hasSomeoneDied){
+                    // if someone has died calculates the points
 
-                    pointCounter.calculateTurnPoints();
-                }
+                    if (hasSomeoneDied) {
 
-                // if frenzy is activated check if game has ended
+                        pointCounter.calculateTurnPoints();
+                    }
 
-                if (frenzy && frenzyStarter == getCurrentPlayer()) endGame();
+                    // if frenzy is activated check if game has ended
 
-                // if frenzy has been activated enable it
+                    if (frenzy && frenzyStarter == getCurrentPlayer()) endGame();
 
-                if (activateFrenzy){
+                    // if frenzy has been activated enable it
 
-                    activateFrenzy();
+                    if (activateFrenzy) {
 
-                    activateFrenzy = false;
-                }
+                        activateFrenzy();
 
-                incrementPhase();
+                        activateFrenzy = false;
+                    }
+
+                    incrementPhase();
+
+            }
 
         }
     }
