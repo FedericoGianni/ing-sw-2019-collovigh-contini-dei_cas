@@ -89,8 +89,6 @@ public class Controller {
     private boolean gameEnded = false;
 
 
-
-
     /**
      * Constructor
      * @param nameList is a list of player's names
@@ -266,8 +264,6 @@ public class Controller {
                 .map(Player::getPlayerName)
                 .collect(Collectors.toList());
 
-        System.out.println("DEBUG nameList: " + nameList);
-
         try {
 
             return nameList
@@ -317,14 +313,11 @@ public class Controller {
 
     public void setPlayerOffline(int playerId){
 
-        System.out.println("[DEBUG] chiamato setPlayerOffline");
-
         Model.getPlayer(playerId).getStats().setOnline(false);
 
         if ((playerId == getCurrentPlayer()) && (expectingAnswer)){
 
-            //TODO fix this with min players connected
-            //timer.stopTimer();
+            timer.stopTimer();
 
             defaultAnswer();
         }

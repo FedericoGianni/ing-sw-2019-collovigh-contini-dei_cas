@@ -40,7 +40,7 @@ public class ActionPhase {
     private static final String LOG_START_ID = "[CONTROLLER] player id ";
     private static final String LOG_START_FRENZY_S = "[Controller-FrenzyShootAction] ";
 
-    private static final int TIMER_ACTION = 30;
+    private static final int TIMER_ACTION = 90;
 
     //Move
 
@@ -821,6 +821,7 @@ public class ActionPhase {
 
                 targets.add(temp);
             }
+
 
             selected.shoot(targets, shootAction.getEffects(), cells);
 

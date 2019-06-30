@@ -24,7 +24,7 @@ public class Server  {
 
     private static final String LOG_START = "[Server] ";
 
-    private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = false;
+    private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = true;
 
     /**
      * Reference to controller

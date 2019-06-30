@@ -15,7 +15,7 @@ public class SpawnPhase {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
-    private static final int TIMER_SPAWN = 10;
+    private static final int TIMER_SPAWN = 20;
 
     // Controller reference
 

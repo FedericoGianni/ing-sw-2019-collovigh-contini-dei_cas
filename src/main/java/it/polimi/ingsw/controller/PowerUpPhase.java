@@ -34,7 +34,7 @@ public class PowerUpPhase {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
-    private static final int TIMER_POWER_UP = 10;
+    private static final int TIMER_POWER_UP = 15;
 
 
     // Controller reference

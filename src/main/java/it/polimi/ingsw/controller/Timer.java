@@ -9,6 +9,8 @@ public class Timer {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     public static final Level level = Level.INFO;
 
+    private static final boolean TIMER_ACTIVE = false;
+
     private static final String LOG_START = "[Timer]";
 
     private final Controller controller;
@@ -62,9 +64,10 @@ public class Timer {
 
         LOGGER.log(level, () -> LOG_START + " would have called default Answer");
 
-        //TODO uncomment this to activate timer disconnections
-        //controller.getVirtualView(controller.getCurrentPlayer()).close();
+        if (TIMER_ACTIVE) {
 
+            controller.getVirtualView(controller.getCurrentPlayer()).close();
+        }
     }
 
     /**
