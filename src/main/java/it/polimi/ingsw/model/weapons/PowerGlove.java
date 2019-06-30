@@ -99,6 +99,8 @@ public class PowerGlove extends SpecialWeapons {
             if (effects.contains(0)) shootBase(targetLists.get(0));
 
             if (effects.contains(1)) shootSecond(targetLists.get(0));
+
+            this.setLoaded(false);
         }
     }
 
