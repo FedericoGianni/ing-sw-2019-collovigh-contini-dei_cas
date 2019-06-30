@@ -8,6 +8,7 @@ import it.polimi.ingsw.network.client.socket.SocketClient;
 import it.polimi.ingsw.runner.RunClient;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.GUI.Gui;
+import it.polimi.ingsw.view.actions.ActionTypes;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -279,6 +280,14 @@ public class View implements ViewInterface {
      */
     @Override
     public void doAction(JsonAction jsonAction) {
+
+        if (jsonAction.getType().equals(ActionTypes.RELOAD)){
+
+            System.out.println("called reload with : " + jsonAction);
+
+        }
+
+
         clientToVView.doAction(jsonAction);
     }
 

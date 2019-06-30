@@ -71,6 +71,8 @@ public class ReloadPhase {
 
         if (checkIfReloadIsValid(reloadAction)){
 
+            System.out.println("[reload] passed check ");
+
             // gets current player id
 
             int playerId = controller.getCurrentPlayer();
@@ -78,6 +80,8 @@ public class ReloadPhase {
             // sells the specified powerUps
 
             List<CachedPowerUp> toSell = reloadAction.getPowerUps();
+
+            System.out.println("[reload] phase 0, pwup to discard: " + toSell);
 
             try{
 
@@ -92,11 +96,15 @@ public class ReloadPhase {
 
             // actually reload all the weapons
 
+            System.out.println("[reload] phase 1 ");
+
             try {
 
                 for (Weapon weapon : getWeapons(reloadAction.getWeapons())){
 
                     weapon.reload();
+
+                    System.out.println("[reload] reloaded weapon : " + weapon.getName() );
                 }
 
             }catch(Exception e){
@@ -105,6 +113,8 @@ public class ReloadPhase {
 
                 LOGGER.log(Level.WARNING, e.getMessage(), e);
             }
+
+            System.out.println("[reload] phase 2 ");
 
             try{
 
@@ -122,9 +132,12 @@ public class ReloadPhase {
                 LOGGER.log(Level.WARNING,e.getMessage(),e);
             }
 
+            System.out.println("[reload] phase 3 ");
+
             // increment phase
 
             if (controller.getTurnPhase().equals(TurnPhase.RELOAD)) controller.incrementPhase();
+
 
         }else {
 

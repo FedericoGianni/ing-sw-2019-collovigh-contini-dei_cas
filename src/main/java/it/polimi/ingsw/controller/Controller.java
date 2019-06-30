@@ -586,6 +586,21 @@ public class Controller {
     }
 
     /**
+     *
+     * @param turnUpdate is the update to send to the Inactive player
+     */
+    public void updateAllPlayersButOne(TurnUpdate turnUpdate, int playerId){
+
+        for (VirtualView player : players){
+
+            if (isPlayerOnline(player.getPlayerId()) && (player.getPlayerId() != playerId)){
+
+                player.sendUpdates(turnUpdate);
+            }
+        }
+    }
+
+    /**
      * This method will send default answer if the timer for the action ended
      */
     public void defaultAnswer(){

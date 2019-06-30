@@ -158,10 +158,6 @@ public class PowerUpPhase {
 
         }
 
-        // notify the inactive players
-
-        controller.updateInactivePlayers(new PowerUpTurnUpdate(playerId,new CachedPowerUp(powerUpAction.getPowerUpType(),powerUpAction.getColor())));
-
         // calls again the handlePowerUp functions in case the player wants to use another
 
         handlePowerUp();
@@ -195,6 +191,9 @@ public class PowerUpPhase {
             // discard the powerUp
 
             discardPowerUp(newtonAction.getPowerUpType(),newtonAction.getColor());
+
+            controller.updateInactivePlayers(new PowerUpTurnUpdate(currentPlayer,new CachedPowerUp(newtonAction.getPowerUpType(),newtonAction.getColor())));
+
 
         } catch(Exception e){
 
@@ -230,6 +229,8 @@ public class PowerUpPhase {
             // discard the powerUp
 
             discardPowerUp( teleporterAction.getPowerUpType(), teleporterAction.getColor());
+
+            controller.updateInactivePlayers(new PowerUpTurnUpdate(currentPlayer,new CachedPowerUp(teleporterAction.getPowerUpType(),teleporterAction.getColor())));
 
 
         } catch (CardNotPossessedException e){
@@ -288,6 +289,10 @@ public class PowerUpPhase {
                 // Remove the player from the shot list
 
                 controller.getShotPlayerThisTurn().remove(0);
+
+                // notify the other players
+
+                controller.updateAllPlayersButOne(new PowerUpTurnUpdate(grenadeAction.getPossessorId(),new CachedPowerUp(grenadeAction.getPowerUpType(),grenadeAction.getColor())), grenadeAction.getPossessorId() );
 
                 // calls teh function to ask grenade to the next person in the list
 
