@@ -686,7 +686,7 @@ public class CLI implements UserInterface {
 
 
         //System.out.println("[DEBUG] startPowerUp");
-        System.out.println("POWERUP PHASE");
+        show("POWERUP PHASE");
 
 
         List<CachedPowerUp> powerUps;
@@ -717,34 +717,34 @@ public class CLI implements UserInterface {
                     .collect(Collectors.toList());
 
             read = -1;
-            System.out.println("Hai questi PowerUp:");
+            show("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
-                System.out.println(i + " :" + powerUps.get(i).toString());
+                show(i + " :" + powerUps.get(i).toString());
             }
 
-            System.out.println("Puoi usare uno di questi:");
+            show("Puoi usare uno di questi:");
             for (int i = 0; i < usablePowerUps.size(); i++) {
-                System.out.println(i + " :" + usablePowerUps.get(i).toString());
+                show(i + " :" + usablePowerUps.get(i).toString());
             }
 
-            System.out.println("9 -> non usare powerUp");
+            show("9 -> non usare powerUp");
             scanner.reset();
-            System.out.println("Scegli un powerUp da usare: ");
+            show("Scegli un powerUp da usare: ");
 
             while (read == -1) {
                 try {
                     read = scanner.nextInt();
                     scanner.nextLine();
                 } catch (InputMismatchException e) {
-                    System.out.println("Non è un numero! Riprova");
+                    show("Non è un numero! Riprova");
                     scanner.nextLine();
                 }
             }
 
             if ((read >= 0 && read < usablePowerUps.size()) || read == 9) validChoice = true;
             else {
-                System.out.println("Scelta non valida! Riprova");
+                show("Scelta non valida! Riprova");
                 scanner.reset();
                 scanner.nextLine();
             }
@@ -1738,7 +1738,6 @@ public class CLI implements UserInterface {
                 scope = handleScopeRequest(localPowerUps);
                 scopeTarget = handleScopeTarget();
                 scopeAction = new ScopeAction(UiHelpers.genColorFromPowerUp(scope), scopeTarget);
-
             }
         }
 
@@ -2087,7 +2086,7 @@ public class CLI implements UserInterface {
 
                         } else {
 
-                            if ((read == 0 || read == 1 || read == 2 || read == 12)) {
+                            if (read == 0 || read == 1 || read == 3) {
                                 valid = true;
                             } else {
                                 System.out.println("Scelta effetti non valida! Riprova");
@@ -2206,6 +2205,8 @@ public class CLI implements UserInterface {
             scanner.nextLine();
         }
 
+        boolean valid = false;
+
         //TODO user can reload every weapons he can in a single reload phase!
         while(!isDone && reloadCount < weapons.size()) {
 
@@ -2222,20 +2223,31 @@ public class CLI implements UserInterface {
                 }
             }
 
-            if(!weapons.isEmpty() && canReloadAgain){
-                System.out.println("Vuoi ricaricare ancora? si/no");
-                String s = scanner.nextLine();
+            do {
 
-                if(s.toUpperCase().equals("SI")){
-                    isDone = false;
-                } else {
+                valid = false;
+
+                if (!weapons.isEmpty() && canReloadAgain) {
+
+                    System.out.println("Vuoi ricaricare ancora? si/no");
+                    String s = scanner.nextLine();
+
+                    if (s.equalsIgnoreCase("SI")) {
+                        isDone = false;
+                        valid = true;
+                    } else if (s.equalsIgnoreCase("NO")) {
+                        isDone = true;
+                        valid = true;
+                    } else {
+                        valid = false;
+                    }
+                }
+
+                if (!canReloadAgain) {
                     isDone = true;
                 }
-            }
 
-            if(!canReloadAgain){
-                isDone = true;
-            }
+            } while(!valid);
         }
 
         //TODO forward RELOAD action to the view
@@ -2278,7 +2290,7 @@ public class CLI implements UserInterface {
             System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
             try {
                 read = scanner.nextInt();
-                //scanner.nextLine();
+                scanner.nextLine();
 
             } catch (InputMismatchException e) {
                 scanner.nextLine();

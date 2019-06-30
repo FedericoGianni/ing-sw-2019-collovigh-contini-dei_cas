@@ -232,6 +232,10 @@ public class UiHelpers {
                 translate = "MARTELLO IONICO";
                 break;
 
+            case "RAILGUN":
+                translate = "FUCILE LASER";
+                break;
+
             default:
                 translate = weapon;
 
