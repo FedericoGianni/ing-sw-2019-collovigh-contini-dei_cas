@@ -262,7 +262,6 @@ public class Gui extends Application implements UserInterface {
             case TURN:
                 guiMapController.notifyTurnUpdate(turnUpdate);
                 break;
-
             default:
                 break;
         }

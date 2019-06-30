@@ -101,14 +101,14 @@ public class GuiMapController {
             case POWERUP:
 
                 powerUpTurnUpdate = (PowerUpTurnUpdate) turnUpdate;
-                log.appendText("[!] Il giocatore " + turnUpdate.getPlayerId() +
+                printLog("[!] Il giocatore " + turnUpdate.getPlayerId() +
                         " ha usato il powerUp " + powerUpTurnUpdate.getPowerUp());
                 break;
 
             case SHOOT:
 
                 shootTurnUpdate = (ShootTurnUpdate) turnUpdate;
-                log.appendText("[!] Il giocatore " + turnUpdate.getPlayerId() +
+                printLog("[!] Il giocatore " + turnUpdate.getPlayerId() +
                         " ha sparato con l'arma " + UiHelpers.weaponTranslator(shootTurnUpdate.getWeapon()) + " al player con id: " +
                         shootTurnUpdate.getTargetId());
                 break;
@@ -118,10 +118,10 @@ public class GuiMapController {
                 grabTurnUpdate = (GrabTurnUpdate) turnUpdate;
 
                 if (grabTurnUpdate.getWeapon() != null) {
-                    log.appendText("[!] Il giocatore " + turnUpdate.getPlayerId() +
+                    printLog("[!] Il giocatore " + turnUpdate.getPlayerId() +
                             " ha raccolto " + UiHelpers.weaponTranslator(grabTurnUpdate.getWeapon()));
                 } else {
-                    log.appendText("[!] Il giocatore " + turnUpdate.getPlayerId() +
+                    printLog("[!] Il giocatore " + turnUpdate.getPlayerId() +
                             " ha raccolto ");
                 }
 
@@ -130,7 +130,7 @@ public class GuiMapController {
             case MOVE:
 
                 moveTurnUpdate = (MoveTurnUpdate) turnUpdate;
-                log.appendText("[!] Il giocatore " + turnUpdate.getPlayerId() +
+                printLog("[!] Il giocatore " + turnUpdate.getPlayerId() +
                         " si è mosso");
 
                 break;
@@ -375,7 +375,9 @@ public class GuiMapController {
     }
 
     public void printLog(String s) {
-        log.appendText("\n" + s);
+
+        Platform.runLater(() -> { log.appendText("\n" + s);
+        });
     }
 
     private void playersEffectRemover() {
@@ -473,10 +475,7 @@ public class GuiMapController {
     {
         System.out.println(msg);
 
-        Platform.runLater(() -> {
-            //Alert a=new Alert(Alert.AlertType.INFORMATION,msg);
-        //a.show();
-        log.appendText("\n"+msg);});
+        printLog(msg);
     }
     //------------------------------------------------------------Weapons show methods
     private void spawnCellWeaponShow(int r, int c) {
@@ -678,7 +677,8 @@ public class GuiMapController {
             if (found) return;
         }//if the player is already here don't re-put it
         fromIDtoIMG(id, map[r][c]);
-        //log.appendText("\n Placed player " + id + " in cell " + r + c);
+
+        log.appendText("\n Placed player " + id + " in cell " + r + c);
 
 
         //eliminating the powerups effects after the beginning
@@ -1039,12 +1039,13 @@ public class GuiMapController {
         }
 
         if (validMove == 1) {
-            //log.appendText("\n Direzione valida!");
+
+            printLog("direzione valida");
             return true;
 
         } else {//validmove=0
-            Alert a = new Alert(Alert.AlertType.INFORMATION);
-            //log.appendText("\n direzione non vlida");
+
+           printLog("Direzione non valida");
             return false;
         }
 
@@ -1054,7 +1055,7 @@ public class GuiMapController {
     //-------------------------------------------------------------loign methods and match beginning
     @FXML
     public void loginUpdater(String name, int id, PlayerColor color) {
-        log.appendText("\nSi è collegato: " + name + " con l'id: " + id + " ed il colore: " + color);
+        printLog("Si è collegato: " + name + " con l'id: " + id + " ed il colore: " + color);
     }
 
 
@@ -1141,7 +1142,7 @@ public class GuiMapController {
             log.appendText("\nIl giocatore " + id + " si è scollegato.");
             return;
         }*/
-        //log.appendText("\nUpdated stats del player: " + id);
+        printLog("Updated stats del player " +id);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
