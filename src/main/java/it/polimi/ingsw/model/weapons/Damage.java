@@ -267,6 +267,7 @@ public class Damage extends MicroEffect {
             {
                 for(Player p:w.isPossessedBy().getCurrentPosition().getPlayers())
                 {
+                    if(!p.equals(w.isPossessedBy()))
                     p.addDmg(w.isPossessedBy().getPlayerId(),damage);
                 }
                 return;
@@ -280,6 +281,7 @@ public class Damage extends MicroEffect {
 
                 for(Player item : c.getPlayers())
                 {
+                    if(!item.equals(w.isPossessedBy()))
                     item.addDmg(w.isPossessedBy().getPlayerId(),damage);
                 }
                 return;
@@ -292,6 +294,7 @@ public class Damage extends MicroEffect {
 
             for(Player item:playerList)
             {
+                if(!item.equals(w.isPossessedBy()))
                 distance(item,w.isPossessedBy());
             }
         }else if(playerNum>=10 && playerNum <100)

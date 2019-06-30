@@ -368,11 +368,8 @@ public class GuiMapController {
         }
 
         weapon1.setOnMouseClicked(null);
-        weapon1.setOnMousePressed(null);
         weapon2.setOnMouseClicked(null);
-        weapon2.setOnMousePressed(null);
         weapon3.setOnMouseClicked(null);
-        weapon3.setOnMousePressed(null);
 
         weaponSeeEventEnabler();
     }
@@ -799,6 +796,22 @@ public class GuiMapController {
 
 
     private void eventMover(int x, int y, int m, String actionType) {
+        stopMov.setOnAction(new EventHandler<ActionEvent>() {//stop button
+            @Override
+            public void handle(ActionEvent e) {
+                switch (actionType) {
+                    case "MOVE&GRAB":
+                        grabHere(x, y, movementDirections);
+                        break;
+                    case "SHOOT":
+                        System.out.println("SHOOT in hanldemovement e stoppo il moviment, mi muovo così : " + movementDirections);
+                        shootWeaponChooser(x, y, movementDirections);
+                        break;
+
+                }
+
+            }
+        });
         if (m == 0 && actionType.compareTo("MOVE") == 0)//movement
         {
             Alert a = new Alert(Alert.AlertType.INFORMATION);
@@ -2124,11 +2137,10 @@ public class GuiMapController {
             shootTargetChooser(weaponNames.get(0), effects, powerUpsToDiscard, dir);
             return;
         }else if(costCount == cost.size() && actionType.equals("RELOAD")){
-            System.out.println("Provo a ricaricare " + weaponNames + "E scarto " + powerUpsToDiscard);
+            System.out.println("Provo a ricaricare " + weaponNames + "   E scarto " + powerUpsToDiscard);
             gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));
             return;
         }
-
 
         Color c = cost.get(costCount);
         if (ammo.contains(c) && hasPowerUpOfColor(powerUps, c)) {
@@ -2151,7 +2163,7 @@ public class GuiMapController {
                         switch (i) {
                             case 0:
 
-                                powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                powerUp1.setOnMousePressed(new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
@@ -2168,7 +2180,7 @@ public class GuiMapController {
                                 break;
                             case 1:
 
-                                powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                powerUp2.setOnMousePressed(new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
@@ -2184,7 +2196,7 @@ public class GuiMapController {
                                 break;
                             case 2:
 
-                                powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                powerUp3.setOnMousePressed(new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
@@ -2286,9 +2298,10 @@ public class GuiMapController {
             System.out.println("Provo a ricaricare " + weaponNames + "E scarto " + powerUpsToDiscard);
             System.out.println("NON HO ABBA MUNIZIONI!");
             gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));
-        }else{
+        }else if(actionType.equals("GRAB")){
                 //this shouldn't do anythign , just forward the choice and then controller will
             //reply back that player hasn't got enough ammo
+            System.out.println("Non abba munizie ecc");
         }
 
 
@@ -3067,41 +3080,48 @@ public class GuiMapController {
         a.show();
         System.out.println("Sleeziona arma da ricaricare");
         //if arma  non in armi
-
+        myWeapon1.setOnMouseClicked(null);
+        myWeapon2.setOnMouseClicked(null);
+        myWeapon3.setOnMouseClicked(null);
         if(!weapons.contains(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(0))) {
-            weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            myWeapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseevent) {
 
                     weapons.add(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(0));
                     Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Vuoi Ricaricare un'altra arma?",ButtonType.YES,ButtonType.NO);
-                    a.show();
+                    a.showAndWait();
                     if(a.getResult().equals(ButtonType.YES))
                     {
                         reloadWeaponChooser(weapons);
                     }else{
                         reloadCostCalc(weapons);
                     }
-                    mapEventDeleter();
+                    myWeapon1.setOnMouseClicked(null);
+                    myWeapon2.setOnMouseClicked(null);
+                    myWeapon3.setOnMouseClicked(null);
 
                 }
             });
         }
+
         if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size()==2) {
             if (!weapons.contains(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1))) {
-                weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                myWeapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseevent) {
 
                         weapons.add(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1));
                         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi Ricaricare un'altra arma?", ButtonType.YES, ButtonType.NO);
-                        a.show();
+                        a.showAndWait();
                         if (a.getResult().equals(ButtonType.YES)) {
                             reloadWeaponChooser(weapons);
                         } else {
                             reloadCostCalc(weapons);
                         }
-                        mapEventDeleter();
+                        myWeapon1.setOnMouseClicked(null);
+                        myWeapon2.setOnMouseClicked(null);
+                        myWeapon3.setOnMouseClicked(null);
                     }
 
                 });
@@ -3109,7 +3129,7 @@ public class GuiMapController {
         }
         if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size()==3) {
             if (!weapons.contains(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2))) {
-                weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                myWeapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseevent) {
 
@@ -3121,7 +3141,9 @@ public class GuiMapController {
                         } else {
                             reloadCostCalc(weapons);
                         }
-                        mapEventDeleter();
+                        myWeapon1.setOnMouseClicked(null);
+                        myWeapon2.setOnMouseClicked(null);
+                        myWeapon3.setOnMouseClicked(null);
                     }
 
                 });

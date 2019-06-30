@@ -692,6 +692,7 @@ class NormalWeaponTest {
         //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
         assert(target1.getStats().getDmgTaken().size() ==1);
         assert(target2.getStats().getDmgTaken().size() ==1);
+        assert(shooter.getStats().getDmgTaken().size() ==0);
     }
 
     @Test
