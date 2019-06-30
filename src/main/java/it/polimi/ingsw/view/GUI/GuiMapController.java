@@ -349,36 +349,11 @@ public class GuiMapController {
     @FXML
     public void actionButtonDisable()//disable action buttons
     {
-        moveButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
-        stopMov.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
-        grabButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
-        moveGrabButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
-        shootButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-
-            }
-        });
+        moveButton.setOnAction(null);
+        stopMov.setOnAction(null);
+        grabButton.setOnAction(null);
+        moveGrabButton.setOnAction(null);
+        shootButton.setOnAction(null);
         mapEventDeleter();
     }
 
@@ -387,44 +362,14 @@ public class GuiMapController {
         for (int i = 0; i < rows; i++)//reset buttons on the map to do nothing
         {
             for (int j = 0; j < col; j++) {
-                map[i][j].setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseevent) {
-
-                    }
-
-                });
-                map[i][j].setOnMousePressed(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseevent) {
-
-                    }
-
-                });
+                map[i][j].setOnMouseClicked(null);
+                map[i][j].setOnMousePressed(null);
             }
         }
 
-        weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseevent) {
-
-            }
-
-        });
-        weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseevent) {
-
-            }
-
-        });
-        weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseevent) {
-
-            }
-
-        });
+        weapon1.setOnMouseClicked(null);
+        weapon2.setOnMouseClicked(null);
+        weapon3.setOnMouseClicked(null);
 
         weaponSeeEventEnabler();
     }
@@ -528,8 +473,9 @@ public class GuiMapController {
     {
         System.out.println(msg);
 
-        Platform.runLater(() -> { Alert a=new Alert(Alert.AlertType.INFORMATION,msg);
-        a.show();
+        Platform.runLater(() -> {
+            //Alert a=new Alert(Alert.AlertType.INFORMATION,msg);
+        //a.show();
         log.appendText("\n"+msg);});
     }
     //------------------------------------------------------------Weapons show methods
@@ -732,7 +678,7 @@ public class GuiMapController {
             if (found) return;
         }//if the player is already here don't re-put it
         fromIDtoIMG(id, map[r][c]);
-        log.appendText("\n Placed player " + id + " in cell " + r + c);
+        //log.appendText("\n Placed player " + id + " in cell " + r + c);
 
 
         //eliminating the powerups effects after the beginning
@@ -850,6 +796,22 @@ public class GuiMapController {
 
 
     private void eventMover(int x, int y, int m, String actionType) {
+        stopMov.setOnAction(new EventHandler<ActionEvent>() {//stop button
+            @Override
+            public void handle(ActionEvent e) {
+                switch (actionType) {
+                    case "MOVE&GRAB":
+                        grabHere(x, y, movementDirections);
+                        break;
+                    case "SHOOT":
+                        System.out.println("SHOOT in hanldemovement e stoppo il moviment, mi muovo così : " + movementDirections);
+                        shootWeaponChooser(x, y, movementDirections);
+                        break;
+
+                }
+
+            }
+        });
         if (m == 0 && actionType.compareTo("MOVE") == 0)//movement
         {
             Alert a = new Alert(Alert.AlertType.INFORMATION);
@@ -1077,12 +1039,12 @@ public class GuiMapController {
         }
 
         if (validMove == 1) {
-            log.appendText("\n Direzione valida!");
+            //log.appendText("\n Direzione valida!");
             return true;
 
         } else {//validmove=0
             Alert a = new Alert(Alert.AlertType.INFORMATION);
-            log.appendText("\n direzione non vlida");
+            //log.appendText("\n direzione non vlida");
             return false;
         }
 
@@ -1175,11 +1137,11 @@ public class GuiMapController {
 
     public void statsUpdater(int id) {//the player is removed from its postion before the update
 
-        if (!gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getOnline()) {
+        /*if (!gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getOnline()) {
             log.appendText("\nIl giocatore " + id + " si è scollegato.");
             return;
-        }
-        log.appendText("\nUpdated stats del player: " + id);
+        }*/
+        //log.appendText("\nUpdated stats del player: " + id);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -1536,6 +1498,7 @@ public class GuiMapController {
 
     private void scopeAction(String w, List<List<Integer>> targetLists, List<Integer> effects, List<Point> cells, List<CachedPowerUp> pUp, List<Directions> dir, Color c) {
         mapEventDeleter();
+        System.out.println("Stiamo per sparare davvero, bisogna solo selezioanre bersaglio del mirino");
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Seleziona il bersaglio del mirino");
         a.showAndWait();
 
@@ -2025,24 +1988,9 @@ public class GuiMapController {
                             weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
 
                             myWeapon1.setImage(null);
-                            weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-
-                                }
-                            });//remove discard effects
-                            weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-
-                                }
-                            });
-                            weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-
-                                }
-                            });
+                            weapon1.setOnMouseClicked(null);//remove discard effects
+                            weapon2.setOnMouseClicked(null);
+                            weapon3.setOnMouseClicked(null);
                         }
                     });
                     weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -2051,24 +1999,9 @@ public class GuiMapController {
                             weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(1));
                             myWeapon2.setImage(null);
 
-                            weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-
-                                }
-                            });//remove discard effects
-                            weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-
-                                }
-                            });
-                            weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-
-                                }
-                            });
+                            weapon1.setOnMouseClicked(null);//remove discard effects
+                            weapon2.setOnMouseClicked(null);
+                            weapon3.setOnMouseClicked(null);
                         }
                     });
                     weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -2076,24 +2009,9 @@ public class GuiMapController {
                         public void handle(MouseEvent mouseEvent) {
                             weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(2));
                             myWeapon3.setImage(null);
-                            weapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-
-                                }
-                            });//remove discard effects
-                            weapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-
-                                }
-                            });
-                            weapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-
-                                }
-                            });
+                            weapon1.setOnMouseClicked(null);//remove discard effects
+                            weapon2.setOnMouseClicked(null);
+                            weapon3.setOnMouseClicked(null);
                         }
                     });
 
@@ -2206,6 +2124,8 @@ public class GuiMapController {
     private void checkPayWithPowerUp(List<Color> cost, List<CachedPowerUp> powerUps, List<Color> ammo, int costCount, List<String> weaponNames, List<CachedPowerUp> powerUpsToDiscard, List<Directions> dir, String actionType, List<Integer> effects) {
 
         System.out.println("Seconda fase del pagamento, vero pagamento");
+        if(actionType.equals("RELOAD"))
+            System.out.println("Devo pagare di ricarica:"+cost);
         System.out.println("Contronto: " + costCount + " --!-- " + cost.size());
         if (costCount == cost.size() && actionType.equals("BUY"))// i need to buy at this point!
         {//if it's a grab here dir is empty
@@ -2217,11 +2137,10 @@ public class GuiMapController {
             shootTargetChooser(weaponNames.get(0), effects, powerUpsToDiscard, dir);
             return;
         }else if(costCount == cost.size() && actionType.equals("RELOAD")){
-            System.out.println("Provo a ricaricare " + weaponNames + "E scarto " + powerUpsToDiscard);
+            System.out.println("Provo a ricaricare " + weaponNames + "   E scarto " + powerUpsToDiscard);
             gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));
             return;
         }
-
 
         Color c = cost.get(costCount);
         if (ammo.contains(c) && hasPowerUpOfColor(powerUps, c)) {
@@ -2244,7 +2163,7 @@ public class GuiMapController {
                         switch (i) {
                             case 0:
 
-                                powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                powerUp1.setOnMousePressed(new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
@@ -2261,7 +2180,7 @@ public class GuiMapController {
                                 break;
                             case 1:
 
-                                powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                powerUp2.setOnMousePressed(new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
@@ -2277,7 +2196,7 @@ public class GuiMapController {
                                 break;
                             case 2:
 
-                                powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                powerUp3.setOnMousePressed(new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent mouseEvent) {
                                         System.out.println("-----------------------------------------------------------");
@@ -2300,7 +2219,8 @@ public class GuiMapController {
                 ammo.remove(c);
                 checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard, dir, actionType, effects);
             }
-        } else if (hasPowerUpOfColor(powerUps, c) && !ammo.contains(c)) {//answer is no
+        }
+        else if (hasPowerUpOfColor(powerUps, c) && !ammo.contains(c)) {//answer is no
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText("Puoi pagare " + c.toString() + " solamente con un PowerUp: ");
             alert.showAndWait();
@@ -2373,8 +2293,31 @@ public class GuiMapController {
             System.out.println("Paga tutto in ammo");
             ammo.remove(c);
             checkPayWithPowerUp(cost, powerUps, ammo, costCount + 1, weaponNames, powerUpsToDiscard, dir, actionType, effects);
-        } else {//this shouldn't do anythign , just forward the choice and then controller will
+        } else if(actionType.equals("RELOAD")){//this shouldn't do anythign , just forward the choice and then controller will
             //reply back that player hasn't got enough ammo
+            System.out.println("Provo a ricaricare " + weaponNames + "E scarto " + powerUpsToDiscard);
+            System.out.println("NON HO ABBA MUNIZIONI!");
+            Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni ");
+            a.show();
+            gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));
+            return;
+        }else if(actionType.equals("GRAB")){
+                //this shouldn't do anythign , just forward the choice and then controller will
+            //reply back that player hasn't got enough ammo
+            Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni ");
+            a.show();
+            System.out.println("Non abba munizie ecc");
+            gui.getView().doAction(new GrabAction(dir,weaponNames.get(0),weaponNames.get(1),powerUpsToDiscard));
+            return;
+        }else if(actionType.equals("SHOOT"))
+        {
+            Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni ");
+            a.show();
+            List<List<Integer>> targetLists=new ArrayList<>();
+            List<Point> cells=new ArrayList<>();
+            gui.getView().doAction(new ShootAction(weaponNames.get(0),targetLists,effects,cells,powerUpsToDiscard,null));
+            return;
+            //new ShootAction(w, targetLists, effects, cells, pUp, null)
         }
 
 
@@ -2488,9 +2431,10 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 String name = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(0);
                 try {
-                    mapEventDeleter();
+
                     CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo(name);
                     shootEffectsChooser(w, dir);
+                    mapEventDeleter();
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -2502,9 +2446,10 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 String name = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1);
                 try {
-                    mapEventDeleter();
+
                     CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo(name);
                     shootEffectsChooser(w, dir);
+                    mapEventDeleter();
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -2515,9 +2460,10 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 String name = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2);
                 try {
-                    mapEventDeleter();
+
                     CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo(name);
                     shootEffectsChooser(w, dir);
+                    mapEventDeleter();
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -2685,7 +2631,7 @@ public class GuiMapController {
         try {
             CachedFullWeapon weapon = gui.getView().getCacheModel().getWeaponInfo(w);//-------------------weapon name
 
-            if (effects.get(0) == effects.size() || weapon.getEffectRequirements().get(effects.get(0)).getNumberOfTargets().size() == 0)//movement
+            if (effects.get(0) == effects.size() && weapon.getEffectRequirements().get(effects.get(0)).getNumberOfTargets().size() == 0)//movement
             {
                 //no target needed so it's a movement
                 //movement of the shooter effect exactly
@@ -2817,15 +2763,21 @@ public class GuiMapController {
             //here add stop button
             CachedFullWeapon weapon = gui.getView().getCacheModel().getWeaponInfo(w);
             //---need to be done every time for adj things
-            int eeeffectNum = effectNum;
-            stopMov.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            int eeeffectNum = effectNum,tttarget=targetNum;
+            stopMov.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
-                public void handle(MouseEvent mouseevent) {
+                public void handle(ActionEvent event) {
                     mapEventDeleter();
-                    if (!weapon.getEffectRequirements().get(effects.get(eeeffectNum)).getCellRequired()) {
-
+                    System.out.println("Pigiato stopMov in questa situa: effetto: "+eeeffectNum+" bersaglio numero : "+tttarget+" effetti: "+effects.size());
+                    if (!weapon.getEffectRequirements().get(effects.get(eeeffectNum)).getCellRequired() && (effects.size()-1)==eeeffectNum) {
+                        //ouch all ince
                         shootTargetIterator(w, effects, pUp, dir, targetLists, eeeffectNum + 1, 0, cells);
-                    } else {
+                    }
+                    else if(!weapon.getEffectRequirements().get(effects.get(eeeffectNum)).getCellRequired() && effects.size()>eeeffectNum)
+                    {
+                        shootTargetIterator(w, effects, pUp, dir, targetLists, eeeffectNum , tttarget, cells);
+                    }
+                    else {//mov effect
                         shootCell(w, effects, pUp, dir, targetLists, eeeffectNum, 0, cells);
                     }
 
@@ -2833,12 +2785,29 @@ public class GuiMapController {
 
             });
 
+            /*System.out.println("Effetto dell'arma numero : "+effects.get(effectNum));
+            System.out.println("Richiedimento "+weapon.getEffectRequirements().get(effects.get(effectNum)));
+            System.out.println("Disperatamente "+weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets());
+                */
+            if(effectNum>=effects.size())//shouldn't have cell required
+            {
+                stopMov.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {}});
 
+                checkScope(w, effects, pUp, dir, targetLists, cells);
+                return;
+            }
             if (targetNum == weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size())//--------------------finsihed to take this effect's targets, then control things
             {
+                System.out.println("Entrato nei controlli dello shoot");
+                stopMov.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {}});
 
                 //1)-----this effect requires also a cell. So at the end of this effect it can take it
                 if (weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired()) {
+                    System.out.println("Vai a effetto cella ");
                     shootCell(w, effects, pUp, dir, targetLists, effectNum, 0, cells);
                     return;
                 } else //2)----otherwise
@@ -2848,20 +2817,22 @@ public class GuiMapController {
 
                     //--------2.1) next effect need only cell
                     if (effectNum == effects.size()) {//effects finished
-                        //do the shoot for real
+                        System.out.println("Fine della magagna degli effetti");
+                        //do the shoot for real , but before check scope
                         //-------!!!!!!------check mirino
                         checkScope(w, effects, pUp, dir, targetLists, cells);
                         return;
-                    }//--------------2.2) the next one is a move only effect
-                    else if (weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size() == 0 && weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired() == true) {
-
+                    }//--------------2.2) the next one is a move only effect--otherwise goes on
+                    else if (weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().isEmpty() && weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired()) {
+                        System.out.println("");
                         shootCell(w, effects, pUp, dir, targetLists, effectNum, 0, cells);//not invented yet lol
                         return;
                     }
 
                 }
+                System.out.println("Contorolli indenni, ho tutto regular");
             }
-            // --------------------------------------go on tot take othe targets
+            // --------------------------------------go on to taking the targets
             if (targetNum == 0) {
                 Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Seleziona i bersagli per questo effetto");
                 a.showAndWait();
@@ -2993,7 +2964,7 @@ public class GuiMapController {
             for (int y = 0; y < col; y++) {
                 int xx = x, yy = y;
 
-                System.out.println("Sistemato effetto su cella " + x + y);
+
                 map[x][y].setOnMousePressed(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
@@ -3033,9 +3004,17 @@ public class GuiMapController {
                 {
                     Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi usare Il miriro?", ButtonType.YES, ButtonType.NO);
                     a.showAndWait();
+
                     if (a.getResult().equals(ButtonType.NO)) {
-                        continue;//--- works??
+                        System.out.println("Mirino no");
+                        noScope(w,effects,pUp,dir,targetLists,cells);
+                        return;
                     }
+                    else{
+                        a = new Alert(Alert.AlertType.CONFIRMATION, "Seleziona il mirino da usare");
+                        a.show();
+                    }
+
                 }
                 found++;
                 switch (i) {
@@ -3070,18 +3049,24 @@ public class GuiMapController {
                 }
             }
         }
+        if(found==0)
+        {
+            noScope(w,effects,pUp,dir,targetLists,cells);
+        }
 
+
+    }
+
+    public void noScope(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, List<Point> cells)
+    {
         System.out.println("No scope");
+        mapEventDeleter();
         if (isFrenzy) {
             gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, null)));
         } else {
             gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
         }
-
     }
-
-
-
     public void show(String error)
     {
         System.out.println(error);
@@ -3089,67 +3074,96 @@ public class GuiMapController {
     }
 
     //---------------------------------------------------------------------RELOAD
+    public void checkReload()
+    {
+        Platform.runLater(() -> {
+            Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi ricaricare qualche arma?", ButtonType.YES, ButtonType.NO);//non credo vada
+        a.showAndWait();
+        if (a.getResult().equals(ButtonType.NO)) {
+            gui.getView().doAction(new SkipAction());
+            return;
+        } else{
+                List<String> weapons = new ArrayList<>();
+                reloadWeaponChooser(weapons);
+            }
+
+        });
+
+    }
     public void reloadWeaponChooser(List <String> weapons)
     {
         Alert a=new Alert(Alert.AlertType.INFORMATION,"Seleziona un'arma da ricaricare");
         a.show();
-        //if arma n non in armi
+        System.out.println("Sleeziona arma da ricaricare");
+        //if arma  non in armi
+        myWeapon1.setOnMouseClicked(null);
+        myWeapon2.setOnMouseClicked(null);
+        myWeapon3.setOnMouseClicked(null);
         if(!weapons.contains(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(0))) {
-            weapon1.setOnMousePressed(new EventHandler<MouseEvent>() {
+            myWeapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseevent) {
-                    mapEventDeleter();
+
                     weapons.add(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(0));
                     Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Vuoi Ricaricare un'altra arma?",ButtonType.YES,ButtonType.NO);
-                    a.show();
+                    a.showAndWait();
                     if(a.getResult().equals(ButtonType.YES))
                     {
                         reloadWeaponChooser(weapons);
                     }else{
                         reloadCostCalc(weapons);
                     }
-
+                    myWeapon1.setOnMouseClicked(null);
+                    myWeapon2.setOnMouseClicked(null);
+                    myWeapon3.setOnMouseClicked(null);
 
                 }
             });
         }
-        if(!weapons.contains(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1))) {
-            weapon2.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseevent) {
-                    mapEventDeleter();
-                    weapons.add(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1));
-                    Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Vuoi Ricaricare un'altra arma?",ButtonType.YES,ButtonType.NO);
-                    a.show();
-                    if(a.getResult().equals(ButtonType.YES))
-                    {
-                        reloadWeaponChooser(weapons);
-                    }else{
-                        reloadCostCalc(weapons);
+
+        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size()==2) {
+            if (!weapons.contains(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1))) {
+                myWeapon2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseevent) {
+
+                        weapons.add(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1));
+                        Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi Ricaricare un'altra arma?", ButtonType.YES, ButtonType.NO);
+                        a.showAndWait();
+                        if (a.getResult().equals(ButtonType.YES)) {
+                            reloadWeaponChooser(weapons);
+                        } else {
+                            reloadCostCalc(weapons);
+                        }
+                        myWeapon1.setOnMouseClicked(null);
+                        myWeapon2.setOnMouseClicked(null);
+                        myWeapon3.setOnMouseClicked(null);
                     }
 
-                }
-
-            });
+                });
+            }
         }
-        if(!weapons.contains(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2))) {
-            weapon3.setOnMousePressed(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseevent) {
-                    mapEventDeleter();
-                    weapons.add(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2));
-                    Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Vuoi Ricaricare un'altra arma?",ButtonType.YES,ButtonType.NO);
-                    a.show();
-                    if(a.getResult().equals(ButtonType.YES))
-                    {
-                        reloadWeaponChooser(weapons);
-                    }else{
-                        reloadCostCalc(weapons);
+        if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size()==3) {
+            if (!weapons.contains(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2))) {
+                myWeapon3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent mouseevent) {
+
+                        weapons.add(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2));
+                        Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi Ricaricare un'altra arma?", ButtonType.YES, ButtonType.NO);
+                        a.show();
+                        if (a.getResult().equals(ButtonType.YES)) {
+                            reloadWeaponChooser(weapons);
+                        } else {
+                            reloadCostCalc(weapons);
+                        }
+                        myWeapon1.setOnMouseClicked(null);
+                        myWeapon2.setOnMouseClicked(null);
+                        myWeapon3.setOnMouseClicked(null);
                     }
 
-                }
-
-            });
+                });
+            }
         }
     }
     private void reloadCostCalc(List <String> weapons)

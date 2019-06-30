@@ -313,7 +313,7 @@ public class NormalWeapon extends Weapon{
      */
     public void shoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, PlayerAlreadyDeadException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException, PrecedentPlayerNeededException, UncorrectEffectsException {
 
-        //TODO @Conte check if this fix is ok
+
         for (int i = 0; i < targetLists.size(); i++) {
             for(Player p : targetLists.get(i)){
                 if(p.getStats().getDmgTaken().size() > 10){
@@ -322,16 +322,18 @@ public class NormalWeapon extends Weapon{
             }
 
         }
+        Player shooterCopy=new Player(this.isPossessedBy().getPlayerName(),this.isPossessedBy().getPlayerId(),this.isPossessedBy().getColor());
+        for (AmmoCube a : this.isPossessedBy().getAmmoBag().getList()) {
+            shooterCopy.getAmmoBag().addItem(a);
+        }
 
+        shooterCopy.setPlayerPosCopy(this.isPossessedBy().getCurrentPosition());
         List<List<Player>> targetsCopy=new ArrayList<>();
         //now i create the fake players
         for (List<Player> item : targetLists) {
             List<Player> pl=new ArrayList<>();
             for (Player p : item) {
                 Player tmp=new Player(p.getPlayerName(),p.getPlayerId(),p.getColor());
-                for (AmmoCube a : p.getAmmoBag().getList()) {
-                    tmp.getAmmoBag().addItem(a);
-                }
                 tmp.getStats().setDmgTakenCopy(p.getStats().getDmgTaken());
                 tmp.getStats().setMarksCopy(p.getStats().getMarks());
                 tmp.setPlayerPosCopy(p.getCurrentPosition());
@@ -377,7 +379,7 @@ public class NormalWeapon extends Weapon{
                       }
 
                   } else {
-                      restore(targetsCopy,targetLists);
+                      restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
                       throw new NotEnoughAmmoException();
                   }
               }
@@ -400,37 +402,37 @@ public class NormalWeapon extends Weapon{
 
         }
       catch(PlayerInSameCellException e)
-      {   restore(targetsCopy,targetLists);
+      {   restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw  new PlayerInSameCellException();
       } catch (NotEnoughAmmoException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new NotEnoughAmmoException();
       } catch (WeaponNotLoadedException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new WeaponNotLoadedException();
       } catch (PlayerInDifferentCellException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new PlayerInDifferentCellException();
       } catch (CardNotPossessedException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new CardNotPossessedException();
       } catch (UncorrectDistanceException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new UncorrectDistanceException();
       } catch (PlayerNotSeeableException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new PlayerNotSeeableException();
       } catch (NotCorrectPlayerNumberException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new NotCorrectPlayerNumberException();
       } catch (DifferentPlayerNeededException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new DifferentPlayerNeededException();
       } catch (SeeAblePlayerException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new SeeAblePlayerException();
       } catch (PrecedentPlayerNeededException e) {
-          restore(targetsCopy,targetLists);
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
           throw new PrecedentPlayerNeededException();
       }
 
@@ -443,13 +445,20 @@ public class NormalWeapon extends Weapon{
      * @param targetsCopy
      * @param targetLists
      */
-    private void restore(List<List<Player>> targetsCopy,List<List<Player>> targetLists)
+    private void restore(List<List<Player>> targetsCopy,List<List<Player>> targetLists,Player shooterCopy,Player shooter)
     {
+        //for shooter i need to restore position and ammos
+        shooter.setPlayerPos(shooterCopy.getCurrentPositionCopy());
+        for (AmmoCube a : shooterCopy.getAmmoBag().getList()) {
+            shooter.getAmmoBag().addItem(a);
+        }
+        //for target i need to restore life, marks and position
         for (int i=0;i<targetLists.size();i++)
         {
             for(int j=0;j<targetLists.get(i).size();j++)
             {
                 targetLists.get(i).get(j).setPlayerPos(targetsCopy.get(i).get(j).getCurrentPositionCopy());
+
                 try {
                     targetLists.get(i).get(j).getStats().setMarks(targetsCopy.get(i).get(j).getMarks());
                     targetLists.get(i).get(j).getStats().setDmgTaken(targetsCopy.get(i).get(j).getDmg());
@@ -462,6 +471,7 @@ public class NormalWeapon extends Weapon{
 
             }
         }
+
     }
         public void print()
     {   /*
