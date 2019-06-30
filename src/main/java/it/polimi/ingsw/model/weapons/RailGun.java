@@ -65,7 +65,10 @@ public class RailGun extends SpecialWeapons {
             if (effects.contains(0)) baseShoot(targetLists.get(0));
 
             if (effects.contains(1)) secondEffectShoot(targetLists.get(0));
+
+            this.setLoaded(false);
         }
+
     }
 
     /**

@@ -66,6 +66,8 @@ public class Hellion extends SpecialWeapons {
             if ( effects.contains(0) ) baseEffect( targetLists.get(0).get(0) );
 
             else if ( effects.contains(1) ) secondEffect(targetLists.get(0).get(0));
+
+            this.setLoaded(false);
         }
     }
 

@@ -66,6 +66,8 @@ public class FlameThrower extends SpecialWeapons{
             if (effects.contains(0)) baseEffect(targetLists.get(0));
 
             else if (effects.contains(1)) firstEffect(targetLists.get(0));
+
+            this.setLoaded(false);
         }
     }
 
