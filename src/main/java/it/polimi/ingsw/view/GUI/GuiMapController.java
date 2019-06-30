@@ -528,8 +528,9 @@ public class GuiMapController {
     {
         System.out.println(msg);
 
-        Platform.runLater(() -> { Alert a=new Alert(Alert.AlertType.INFORMATION,msg);
-        a.show();
+        Platform.runLater(() -> {
+            //Alert a=new Alert(Alert.AlertType.INFORMATION,msg);
+        //a.show();
         log.appendText("\n"+msg);});
     }
     //------------------------------------------------------------Weapons show methods
@@ -2822,6 +2823,7 @@ public class GuiMapController {
                 @Override
                 public void handle(MouseEvent mouseevent) {
                     mapEventDeleter();
+                    System.out.println("Pigiato stopMov");
                     if (!weapon.getEffectRequirements().get(effects.get(eeeffectNum)).getCellRequired()) {
 
                         shootTargetIterator(w, effects, pUp, dir, targetLists, eeeffectNum + 1, 0, cells);
@@ -3089,6 +3091,19 @@ public class GuiMapController {
     }
 
     //---------------------------------------------------------------------RELOAD
+    public void checkReload()
+    {
+        Platform.runLater(() -> {
+            Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi ricaricare qualche arma?", ButtonType.YES, ButtonType.NO);//non credo vada
+        a.showAndWait();
+        if (a.getResult().equals(ButtonType.NO)) {
+            gui.getView().doAction(new SkipAction());
+        } else {
+            List<String> weapons = new ArrayList<>();
+            reloadWeaponChooser(weapons);
+        }
+        });
+    }
     public void reloadWeaponChooser(List <String> weapons)
     {
         Alert a=new Alert(Alert.AlertType.INFORMATION,"Seleziona un'arma da ricaricare");

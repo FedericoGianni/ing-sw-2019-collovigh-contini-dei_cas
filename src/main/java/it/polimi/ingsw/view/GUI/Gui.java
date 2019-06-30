@@ -360,15 +360,8 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startReload() {
         //view.doAction(new SkipAction());
-        Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi ricaricare qualche arma?", ButtonType.YES, ButtonType.NO);//non credo vada
-        a.showAndWait();
-        if (a.getResult().equals(ButtonType.NO)) {
-            view.doAction(new SkipAction());
-        } else {
-            List <String> weapons=new ArrayList<>();
-            guiMapController.reloadWeaponChooser(weapons);
+        guiMapController.checkReload();
 
-        }
     }
 
     @Override
