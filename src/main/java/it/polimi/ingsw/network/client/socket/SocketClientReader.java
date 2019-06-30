@@ -194,7 +194,7 @@ public class SocketClientReader extends Thread {
 
         // LOG the update
 
-        LOGGER.log(WARNING, "[DEBUG] [SOCKET-CLIENT-READER] Received Json {0} : Calling handleJson method. ", update[ update.length - 1 ]);
+        LOGGER.log(level, "[DEBUG] [SOCKET-CLIENT-READER] Received Json {0} : Calling handleJson method. ", update[ update.length - 1 ]);
 
         // creates a new UpdateClass variable ( will be instantiated in the switch )
 
@@ -295,9 +295,6 @@ public class SocketClientReader extends Thread {
                 break;
 
         }
-
-        System.out.println("updateClass: " + updateClass);
-        System.out.println("RunClient.getView " + RunClient.getView());
 
         RunClient.getView().sendUpdates(updateClass);
     }
