@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
@@ -1275,6 +1277,203 @@ class NormalWeaponTest {
         //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
         assert(target1.getStats().getDmgTaken().size() ==2);
         assert(shooter.getCurrentPosition().equals(Model.getMap().getCell(1,0)));
+        assert(target2.getStats().getDmgTaken().size() ==2);
+    }
+
+    @Test
+    public void cyberBladeTest012(){
+
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target1");
+        playerNames.add("target2");
+
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.GREEN);
+
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2,8);
+
+        //generate a player with a name and its starting position
+
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(0,0));
+
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(0,0));
+
+        Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(0,1));
+
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
+        shooter.addWeapon(Parser.getWeaponByName("CYBERBLADE"));
+
+        Weapon weapon =shooter.getCurrentWeapons().getList().get(0);
+
+        List targets0=new ArrayList();
+        List targets1=new ArrayList();
+        List targets2=new ArrayList();
+
+        List<List<Player>> targetLists = new ArrayList<>();
+
+        targets0.add(target1);
+        targets2.add(target2);
+
+        targetLists.add(targets0);
+        targetLists.add(targets1);
+        targetLists.add(targets2);
+
+        Model.getMap().setUnvisited();
+
+        // cell list
+
+        List<Cell> cellList = new ArrayList<>();
+
+        cellList.add(null);
+
+        cellList.add(Model.getMap().getCell(0,1));
+
+        cellList.add(null);
+
+        try {
+
+            weapon.shoot(targetLists, Arrays.asList(0,1,2), cellList);
+
+        } catch(WeaponNotLoadedException e){
+            e.printStackTrace();
+        }catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (CardNotPossessedException e) {
+            e.printStackTrace();
+        } catch (CellNonExistentException e) {
+            e.printStackTrace();
+        } catch (PrecedentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (PlayerAlreadyDeadException e){
+            e.printStackTrace();
+        }
+
+        assertEquals(2,target1.getDmg().size());
+        assertEquals(2,target2.getDmg().size());
+        assertEquals(target2.getCurrentPosition(), shooter.getCurrentPosition());
+    }
+
+    @Test
+    public void cyberBladeTest021(){
+
+        ArrayList<String> playerNames=new ArrayList<>();
+        playerNames.add("shooter");
+        playerNames.add("target1");
+        playerNames.add("target2");
+
+        ArrayList<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.PURPLE);
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.GREEN);
+
+        //generate the map (type 2)
+        Model m=new Model(playerNames,pc,2,8);
+
+        //generate a player with a name and its starting position
+
+        Player shooter = Model.getPlayer(0);
+        shooter.setPlayerPos(Model.getMap().getCell(0,0));
+
+        Player target1 = Model.getPlayer(1);
+        target1.setPlayerPos(Model.getMap().getCell(0,0));
+
+        Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(0,0));
+
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
+        shooter.getAmmoBag().addItem(new AmmoCube(Color.YELLOW));
+        shooter.addWeapon(Parser.getWeaponByName("CYBERBLADE"));
+
+        Weapon weapon =shooter.getCurrentWeapons().getList().get(0);
+
+        List targets0=new ArrayList();
+        List targets1=new ArrayList();
+        List targets2=new ArrayList();
+
+        List<List<Player>> targetLists = new ArrayList<>();
+
+        targets0.add(target1);
+        targets2.add(target2);
+
+        targetLists.add(targets0);
+        targetLists.add(targets2);
+        targetLists.add(targets1);
+
+        Model.getMap().setUnvisited();
+
+        // cell list
+
+        List<Cell> cellList = new ArrayList<>();
+
+        cellList.add(null);
+
+        cellList.add(null);
+
+        cellList.add(Model.getMap().getCell(0,1));
+
+        try {
+
+            weapon.shoot(targetLists, Arrays.asList(0,2,1), cellList);
+
+        } catch(WeaponNotLoadedException e){
+            e.printStackTrace();
+        }catch (PlayerInSameCellException e) {
+            e.printStackTrace();
+        } catch (UncorrectDistanceException uncorrectDistanceException) {
+            uncorrectDistanceException.printStackTrace();
+        } catch (SeeAblePlayerException e) {
+            e.printStackTrace();
+        } catch (PlayerInDifferentCellException e) {
+            e.printStackTrace();
+        } catch (PlayerNotSeeableException e) {
+            e.printStackTrace();
+        } catch (NotCorrectPlayerNumberException e) {
+            e.printStackTrace();
+        } catch (UncorrectEffectsException e) {
+            e.printStackTrace();
+        } catch (CardNotPossessedException e) {
+            e.printStackTrace();
+        } catch (CellNonExistentException e) {
+            e.printStackTrace();
+        } catch (PrecedentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (NotEnoughAmmoException e) {
+            e.printStackTrace();
+        } catch (DifferentPlayerNeededException e) {
+            e.printStackTrace();
+        } catch (PlayerAlreadyDeadException e){
+            e.printStackTrace();
+        }
+
+        assertEquals(2,target1.getDmg().size());
+        assertEquals(2,target2.getDmg().size());
+        assertEquals(Model.getMap().getCell(0,1), shooter.getCurrentPosition());
     }
 
     @Test

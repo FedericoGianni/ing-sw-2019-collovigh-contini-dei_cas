@@ -8,6 +8,7 @@ import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.virtualView.VirtualView;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class SpawnCellObserver implements Observer {
@@ -50,15 +51,10 @@ public class SpawnCellObserver implements Observer {
 
     private List<String> extractWeaponsNames(SpawnCell spawnCell){
 
-        for (Weapon weapon : spawnCell.getWeapons()){
-
-            if (weapon != null ) System.out.println(weapon.getName());
-        }
-
         return spawnCell
                 .getWeapons()
                 .stream()
-                .filter( x-> x != null )
+                .filter( Objects::nonNull )
                 .map(Weapon::getName)
                 .collect(Collectors.toList());
     }
