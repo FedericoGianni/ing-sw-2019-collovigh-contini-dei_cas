@@ -42,19 +42,19 @@ public class UiHelpers {
         Directions direction;
 
         switch (s){
-            case "NORD":
+            case "N":
                 direction = Directions.NORTH;
                 break;
 
-            case "SUD":
+            case "S":
                 direction = Directions.SOUTH;
                 break;
 
-            case "EST":
+            case "E":
                 direction = Directions.EAST;
                 break;
 
-            case "OVEST":
+            case "O":
                 direction = Directions.WEST;
                 break;
 

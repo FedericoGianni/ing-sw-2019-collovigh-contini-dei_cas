@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.map.JsonMap;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.PlayerColor;
@@ -35,6 +34,12 @@ public class Model {
         if (Observers.isInitialized()) map.updateObserver();
 
         if (Observers.isInitialized()) map.initializeSpawnCell();
+
+
+        //TODO remove this, just to kill faster
+        for(Player p : playerList){
+            p.addDmg(0, 8);
+        }
     }
 
     public static CurrentGame getGame() {
