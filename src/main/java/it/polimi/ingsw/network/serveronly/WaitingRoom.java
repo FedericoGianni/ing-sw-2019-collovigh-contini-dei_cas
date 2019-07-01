@@ -29,7 +29,7 @@ public class WaitingRoom {
     private static final int TIMER = 2;
     private int timerCount = TIMER;
 
-    public static final int DEFAULT_MIN_PLAYERS = 2;
+    public static final int DEFAULT_MIN_PLAYERS = 1;
     private static final int DEFAULT_MAX_PLAYERS = 5;
 
     private int skulls = 1;
