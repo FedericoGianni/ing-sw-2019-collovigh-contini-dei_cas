@@ -293,27 +293,18 @@ public class GuiMapController {
             System.out.println("map creat");
             this.mapCreator();
 
-
-            /*while(gui.getView().getPlayerId()==-1)
-            {
-                System.out.println("aspetto aggiornamneto");
-
-                try {
-                    wait(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }*/
-            if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats()!=null)
-            gui.notifyUpdate(UpdateType.STATS,gui.getView().getPlayerId(),null);
-            System.out.println("superato stats");
-            if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()!=null)
-            gui.notifyUpdate(UpdateType.WEAPON_BAG,gui.getView().getPlayerId(),null);
-            System.out.println("superato weapon bag");
-            if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag()!=null)
-            gui.notifyUpdate(UpdateType.POWERUP_BAG,gui.getView().getPlayerId(),null);
-            System.out.println("superato powerup bag");
-
+            gui.setIsReconnection(false);
+            for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().size();i++) {
+                if (gui.getView().getCacheModel().getCachedPlayers().get(i).getStats() != null)
+                    gui.notifyUpdate(UpdateType.STATS, i, null);
+                System.out.println("superato stats");
+                if (gui.getView().getCacheModel().getCachedPlayers().get(i).getWeaponbag() != null)
+                    gui.notifyUpdate(UpdateType.WEAPON_BAG, i, null);
+                System.out.println("superato weapon bag");
+                if (gui.getView().getCacheModel().getCachedPlayers().get(i).getPowerUpBag() != null)
+                    gui.notifyUpdate(UpdateType.POWERUP_BAG, i, null);
+                System.out.println("superato powerup bag");
+            }
             gui.getGuiLobbyController().openThirdScene(new ActionEvent());
 
         });

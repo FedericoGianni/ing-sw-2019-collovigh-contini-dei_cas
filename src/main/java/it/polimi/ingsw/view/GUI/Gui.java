@@ -43,6 +43,7 @@ public class Gui extends Application implements UserInterface {
     private static GuiMapController guiMapController;
     private static GuiEndController guiEndController;
     private int validMove=-1;
+    private boolean isReconnection=false;
     private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
 
     public void setGuiLobbyController(GuiLobbyController guic) {
@@ -71,7 +72,14 @@ public class Gui extends Application implements UserInterface {
         this.guiEndController = g;
     }
 
-
+    public void setIsReconnection(Boolean b)
+    {
+        this.isReconnection=b;
+    }
+    public boolean getIsReconnection()
+    {
+        return this.isReconnection;
+    }
 
     public Gui(){
     super();
@@ -227,9 +235,7 @@ public class Gui extends Application implements UserInterface {
                     retryLogin = false;
                     break;
 
-                case "reconnectok":
 
-                    System.out.println("reconnection received");
 
                 default:
                     header = s.substring(0, 10);
@@ -280,6 +286,8 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case STATS: //possibilità: cambio pos,danni subiti, spostmanto e marchi, disconnessioni
+                if(isReconnection)
+                    break;
                 if(view.getCacheModel().getCachedPlayers().get(playerId).getStats()!=null) {
                     if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
                         wasOnline.set(playerId, false);
@@ -300,7 +308,7 @@ public class Gui extends Application implements UserInterface {
 
             case INITIAL:
 
-
+                isReconnection=true;
                 guiMapController.initial();
 
                 for(Player item:view.getCacheModel().getCachedPlayers()) {
@@ -310,23 +318,27 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case POWERUP_BAG:
-
+                if(isReconnection)
+                    break;
                 guiMapController.powerUpDisplayer();
                 break;
 
             case AMMO_CELL://remember--- at end turn i need to replace everyCell, even if it has something inside!
                 guiMapController.ammoPlacer();
                 break;
+
             case SPAWN_CELL://weapons changed don't need nothing
                 guiMapController.spawnCellWeaponsUpdate();
                 break;
+
             case WEAPON_BAG:
-
-
+                if(isReconnection)
+                    break;
                 guiMapController.changedWeapons();//display my new weapons
                 break;
             case AMMO_BAG:
-
+                if(isReconnection)
+                    break;
                 guiMapController.changedAmmos();
                 break;
 
