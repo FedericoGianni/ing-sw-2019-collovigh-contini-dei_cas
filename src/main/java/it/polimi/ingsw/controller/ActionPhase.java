@@ -1280,6 +1280,8 @@ public class ActionPhase {
 
         this.frenzyShootTemp = frenzyShootTemp.addPart(frenzyShoot);
 
+        System.out.println(" Frenzy Shoot temp class : [ MOVE: " + frenzyShootTemp.getMoveAction() + " , RELOAD: " + frenzyShootTemp.getReloadAction() + " , SHOOT: " + frenzyShootTemp.getShootAction() );
+
         if ( !frenzyShootTemp.isFull() ) controller.setExpectingAnswer(true);
 
         if (!checkFrenzyShootMove(frenzyShoot.getMoveAction())){
