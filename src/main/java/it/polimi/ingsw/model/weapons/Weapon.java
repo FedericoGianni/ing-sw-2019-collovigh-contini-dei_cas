@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,7 +35,10 @@ public abstract class Weapon implements Serializable {
      * @param loaded is a boolean representing if the weapon is loaded
      */
     public void setLoaded(boolean loaded) {
+
         this.loaded = loaded;
+
+        if (Observers.isInitialized() && isPossessedBy() != null ) isPossessedBy().getCurrentWeapons().updateAll(isPossessedBy().getCurrentWeapons());
     }
 
     /**
