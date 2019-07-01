@@ -1006,10 +1006,22 @@ public class GuiMapController {
                 h.getChildren().add(img);
                 break;
             case 2:
+                image = new Image("/images/player2.png");
+                img.setImage(image);
+                img.setId("2");
+                h.getChildren().add(img);
                 break;
             case 3:
+                image = new Image("/images/player3.png");
+                img.setImage(image);
+                img.setId("3");
+                h.getChildren().add(img);
                 break;
             case 4:
+                image = new Image("/images/player4.png");
+                img.setImage(image);
+                img.setId("4");
+                h.getChildren().add(img);
                 break;
         }
     }
