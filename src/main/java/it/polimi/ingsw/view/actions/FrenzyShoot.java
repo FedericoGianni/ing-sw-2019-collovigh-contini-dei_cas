@@ -133,18 +133,18 @@ public class FrenzyShoot extends JsonAction {
      */
     public FrenzyShoot addPart(FrenzyShoot frenzyShoot){
 
-        Move move = null;
-        ReloadAction reload = null;
-        JsonAction shoot = null;
+        Move move = this.getMoveAction();
+        ReloadAction reload = this.getReloadAction();
+        JsonAction shoot = this.getShootAction();
 
-        if (frenzyShoot.getFieldsNonNull().contains(1)){
+        if (frenzyShoot.getMoveAction() != null ){
 
             if (this.getMoveAction() != null ) throw new IllegalArgumentException();
 
             move = frenzyShoot.getMoveAction();
         }
 
-        if (frenzyShoot.getFieldsNonNull().contains(2)){
+        if (frenzyShoot.getReloadAction() != null ){
 
             if (this.getReloadAction() != null ) throw new IllegalArgumentException();
 
@@ -152,7 +152,7 @@ public class FrenzyShoot extends JsonAction {
 
         }
 
-        if (frenzyShoot.getFieldsNonNull().contains(3)){
+        if (frenzyShoot.getShootAction() != null){
 
             if (this.getShootAction() != null ) throw new IllegalArgumentException();
 
