@@ -366,7 +366,7 @@ public class SocketConnectionReader extends Thread {
 
                 break;
 
-            case "{\"actionType\":\"RELOAD\"}":
+            case "\"actionType\":\"RELOAD\"}":
 
                 jsonAction = gson.fromJson(message,ReloadAction.class);
 
