@@ -41,6 +41,7 @@ public class Gui extends Application implements UserInterface {
     private static GuiController guiController;
     private static GuiLobbyController guiLobbyController;
     private static GuiMapController guiMapController;
+    private static GuiEndController guiEndController;
     private int validMove=-1;
     private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
 
@@ -62,6 +63,10 @@ public class Gui extends Application implements UserInterface {
 
     public void setGuiReconnectionController(GuiReconnectionController g) {
         this.guiReconnectionController = g;
+    }
+
+    public void setGuiEndController(GuiEndController g) {
+        this.guiEndController = g;
     }
 
     public Gui(){
@@ -88,6 +93,7 @@ public class Gui extends Application implements UserInterface {
         GuiController.setGui(this);
         GuiLobbyController.setGui(this);
         GuiMapController.setGui(this);
+        GuiEndController.setGui(this);
 
         Image img = new Image("/images/background_image.png");
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -126,6 +132,10 @@ public class Gui extends Application implements UserInterface {
         Scene thirdScene = new Scene(thirdPane, DEFAULT_MIN_WIDTH_MAP, DEFAULT_MIN_HEIGHT_MAP);
         thirdScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleMap.css").toExternalForm());
 
+        FXMLLoader endPageLoader = new FXMLLoader((getClass().getClassLoader().getResource("end.fxml")));
+        Parent fourhtPane = endPageLoader.load();
+        Scene endScene = new Scene(fourhtPane, DEFAULT_MIN_WIDTH_MAP, DEFAULT_MIN_HEIGHT_MAP);
+
         //injecting reconnect scene into the controller of the start scene
         //injecting login scene into the controller of the start scene
         guiStartController = (GuiStartController) startPaneLoader.getController();
@@ -155,7 +165,11 @@ public class Gui extends Application implements UserInterface {
 
         guiMapController = (GuiMapController) thirdPageLoader.getController();
         setGuiMapController(guiMapController);
-        //TODO guiMapController.setStageAndSetupListeners(stage);
+        guiMapController.setStageAndSetupListeners(stage);
+
+        guiEndController = (GuiEndController) endPageLoader.getController();
+        setGuiEndController(guiEndController);
+        guiEndController.setUp();
 
         //stage.setScene(firstScene);
         stage.setScene(startScene);
@@ -409,6 +423,14 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void endGame() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                guiMapController.openEndScene(new ActionEvent());
+                guiEndController.showPoints(new ActionEvent());
+
+            }
+        });
 
     }
 

@@ -2381,6 +2381,7 @@ public class CLI implements UserInterface {
             s = s.concat("\tID: " + p.getPlayerId());
             s = s.concat("\tNome: " + p.getName());
             s = s.concat("\tPunti: " + p.getStats().getScore());
+            s = s.concat(ANSI_RESET.escape());
 
             System.out.println(s);
 

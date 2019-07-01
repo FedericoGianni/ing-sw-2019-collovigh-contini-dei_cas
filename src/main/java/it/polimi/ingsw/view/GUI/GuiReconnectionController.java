@@ -14,8 +14,6 @@ import static it.polimi.ingsw.network.ProtocolType.SOCKET;
 
 public class GuiReconnectionController {
 
-
-
     private static Gui gui;
 
     private Stage myStage;

@@ -23,6 +23,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -31,6 +32,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -50,6 +52,10 @@ public class GuiMapController {
     public static void setGui(Gui g) {
         gui = g;
     }
+
+    private static Scene endScene;
+
+    private static Stage myStage;
 
     private ArrayList<Directions> movementDirections;
     private int validMove = -1;
@@ -82,6 +88,18 @@ public class GuiMapController {
     @FXML
     public void initialize() {
 
+    }
+
+    public void setEndScene(Scene scene){
+        endScene = scene;
+    }
+
+    public void openEndScene(ActionEvent actionEvent) {
+        myStage.setScene(endScene);
+    }
+
+    public static void setStageAndSetupListeners(Stage stage){
+        myStage = stage;
     }
 
     /**
