@@ -61,6 +61,10 @@ public class GuiMapController {
 
     private ArrayList<Directions> movementDirections;
     private int validMove = -1;
+    private boolean isBeforeFrenzyStarter;
+
+    private List<String> actionTypes;
+    private boolean isFrenzy = false;
     @FXML
     BorderPane pane;
     @FXML
@@ -78,18 +82,16 @@ public class GuiMapController {
     @FXML
     Button stopMov, moveButton, grabButton, moveGrabButton, shootButton;
 
-    private final int NORM_MOV = 3;
-    private final int NORM_MOVGRAB = 1;
-    private final int DMG3_MOVGRAB = 2;
-    private final int NORM_SHOOT = 0;
-    private final int DMG6_SHOOT = 1;
-    private List<String> actionTypes;
-    private boolean isFrenzy = false;
+
 
     //-------------------------------------------------------MAP CREATION and gestion methods
     @FXML
     public void initialize() {
 
+    }
+
+    public void setFrenzy(){
+        isFrenzy=true;
     }
 
     public void setEndScene(Scene scene){
@@ -102,6 +104,11 @@ public class GuiMapController {
 
     public static void setStageAndSetupListeners(Stage stage){
         myStage = stage;
+    }
+
+    public void setBeforeFrenzyStarter()
+    {
+        isBeforeFrenzyStarter=true;
     }
 
     /**
@@ -304,13 +311,12 @@ public class GuiMapController {
             gui.notifyUpdate(UpdateType.WEAPON_BAG,gui.getView().getPlayerId(),null);
             System.out.println("superato weapon bag");
             if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag()!=null)
-                System.out.println("superato powerup bag");
             gui.notifyUpdate(UpdateType.POWERUP_BAG,gui.getView().getPlayerId(),null);
-
+            System.out.println("superato powerup bag");
 
 
             gui.getGuiLobbyController().openThirdScene(new ActionEvent());
-            gui
+
         });
 
     }
@@ -683,19 +689,29 @@ public class GuiMapController {
                 System.out.println("MOVE in move();");
                 //if non frenzy
                 Platform.runLater(() -> {
-                    handleMovement(x, y, NORM_MOV, movementDirections, actionType);
-                });
+                    if(isFrenzy)
+                    {
+                        if(isBeforeFrenzyStarter) {//no
+                            handleMovement(x, y, UiHelpers.DEFAULT_MAX_FRENZY_MOVES, movementDirections, actionType);
+                        }
+                        else{
+                            handleMovement(x, y, UiHelpers.DEFAULT_MAX_NORMAL_MOVES, movementDirections, actionType);
+                        }
+                    }else {
+                        handleMovement(x, y, UiHelpers.DEFAULT_MAX_NORMAL_MOVES, movementDirections, actionType);
+                    }
+                    });
                 //if frenzy cases here--->
                 //Platform.runLater(() ->  {handleMovement(x,y,FRENZY_MOV,movementDirections);});
                 break;
             case "MOVE&GRAB":
-                if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size() < 3) {
+                if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size() < UiHelpers.DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB) {
                     Platform.runLater(() -> {
-                        handleMovement(x, y, NORM_MOVGRAB, movementDirections, actionType);
+                        handleMovement(x, y, UiHelpers.DEFAULT_MOVES_WITH_GRAB, movementDirections, actionType);
                     });
-                } else {//one move more here
+                } else  {//one move more here
                     Platform.runLater(() -> {
-                        handleMovement(x, y, DMG3_MOVGRAB, movementDirections, actionType);
+                        handleMovement(x, y, UiHelpers.DEFAULT_ENHANCED_MOVES_WITH_GRAB, movementDirections, actionType);
                     });
                 }
                 break;
@@ -713,7 +729,7 @@ public class GuiMapController {
                         });
                     } else {
                         Platform.runLater(() -> {
-                            handleMovement(x, y, DMG6_SHOOT, movementDirections, actionType);
+                            handleMovement(x, y, UiHelpers.DEFAULT_ENHANCED_MOVES_WITH_SHOOT, movementDirections, actionType);
                         });
                     }
 

@@ -417,6 +417,12 @@ public class Gui extends Application implements UserInterface {
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
         //this method enables the action buttons to do something
+        if(isFrenzy)
+        {
+            guiMapController.setFrenzy();
+            if(isBeforeFrenzyStarter)
+                guiMapController.setBeforeFrenzyStarter();
+        }
         while(view.getPlayerId() == -1) {
             try{
                 sleep(200);
