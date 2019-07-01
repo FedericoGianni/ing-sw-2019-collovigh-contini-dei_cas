@@ -2152,31 +2152,20 @@ public class CLI implements UserInterface {
         return effects;
     }
 
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void startReload() {
 
-
-        boolean isDone = false;
-        boolean canReloadAgain = false;
-        int reloadCount = 0;
         List<String> weapons = new ArrayList<>();
-
 
         if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag() != null){
             weapons = new ArrayList<>(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons());
         }
 
-        //local copy of the powerups and ammo inside cachemodel, needed to handle local checks if user can pay
-        List<CachedPowerUp> cachedPowerUps = new ArrayList<>(view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
-                .getPowerUpBag().getPowerUpList());
-
-        List<Color> cachedAmmoCubes = new ArrayList<>();
-        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getAmmoBag() != null)
-            cachedAmmoCubes = new ArrayList<>(view.getCacheModel().getCachedPlayers().get(view.getPlayerId())
-                    .getAmmoBag().getAmmoList());
+        List<Color> totalReloadCost = new ArrayList<>();
 
         //powerups and ammocubes needed to forward reload action to the controller
         List<String> weaponsToReload = new ArrayList<>();
@@ -2193,7 +2182,6 @@ public class CLI implements UserInterface {
             choice = scanner.nextInt();
 
             if (choice == 9) {
-                isDone = true;
                 view.doAction(new SkipAction());
                 return;
             }
@@ -2203,51 +2191,92 @@ public class CLI implements UserInterface {
         }
 
         boolean valid = false;
+        int reloadChoice = -1;
 
-        //TODO user can reload every weapons he can in a single reload phase!
-        while(!isDone && reloadCount < weapons.size()) {
+        do{
+            System.out.println("Quali armi vuoi ricaricare?");
+            showCurrWeapons();
+            System.out.println("[0] Ricarica " + weapons.get(0));
 
-            String weapToAdd = handleWeaponReload(weapons, cachedPowerUps, cachedAmmoCubes, powerUpsToDiscard);
-
-            if(weapToAdd != null){
-                weaponsToReload.add(weapToAdd);
-                weapons.remove(weapToAdd);
+            if(weapons.size() >= 2) {
+                System.out.println("[1] Ricarica " + weapons.get(1));
+                System.out.println("[3] Ricarica " + weapons.get(0) + " e " + weapons.get(1));
+            }
+            if(weapons.size() >= 3){
+                System.out.println("[2] Ricarica " + weapons.get(2));
+                System.out.println("[4] Ricarica " + weapons.get(0) + weapons.get(2));
+                System.out.println("[5] Ricarica " + weapons.get(1) + weapons.get(2));
+                System.out.println("[6] Ricarica tutte le armi");
             }
 
-            for(String w : weapons){
-                if (canReload(w, cachedAmmoCubes, cachedPowerUps)) {
-                    canReloadAgain = true;
+            try{
+
+                reloadChoice = scanner.nextInt();
+
+                if((reloadChoice>= 0 && reloadChoice < weapons.size())){
+                    valid = true;
+                } else if(weapons.size() >=2 && reloadChoice == 3){
+                    valid = true;
+                } else if(weapons.size() == 3 && (reloadChoice == 4 || reloadChoice == 5 || reloadChoice == 6)){
+                    valid = true;
                 }
+
+            } catch (InputMismatchException e){
+                System.out.println("Non è un numero! Riprova: ");
+                scanner.nextLine();
             }
 
-            valid = false;
+        } while(!valid);
 
-            do {
+        switch (reloadChoice){
 
-                valid = false;
+            //reload only weap 0
+            case 0:
+                weaponsToReload.add(weapons.get(0));
+                break;
 
-                if (!weapons.isEmpty() && canReloadAgain) {
+            case 1:
+                weaponsToReload.add(weapons.get(1));
+                break;
 
-                    System.out.println("Vuoi ricaricare ancora? si/no");
-                    String s = scanner.nextLine();
+            case 2:
+                weaponsToReload.add(weapons.get(2));
+                break;
 
-                    if (s.equalsIgnoreCase("SI")) {
-                        isDone = false;
-                        valid = true;
-                    } else if (s.equalsIgnoreCase("NO")) {
-                        isDone = true;
-                        valid = true;
-                    } else {
-                        valid = false;
-                    }
-                }
 
-                if (!canReloadAgain) {
-                    isDone = true;
-                }
+            case 3:
+                weaponsToReload.add(weapons.get(0));
+                weaponsToReload.add(weapons.get(1));
+                break;
 
-            } while(!valid);
+            case 4:
+                weaponsToReload.add(weapons.get(0));
+                weaponsToReload.add(weapons.get(2));
+                break;
+
+            case 5:
+                weaponsToReload.add(weapons.get(1));
+                weaponsToReload.add(weapons.get(2));
+                break;
+
+            case 6:
+                weaponsToReload.add(weapons.get(0));
+                weaponsToReload.add(weapons.get(1));
+                weaponsToReload.add(weapons.get(2));
+                break;
         }
+
+        for(String s : weaponsToReload){
+            try{
+                CachedFullWeapon w = view.getCacheModel().getWeaponInfo(s);
+                totalReloadCost.addAll(w.getFirstEffectCost());
+            } catch (WeaponNotFoundException e){
+
+            }
+        }
+
+        //TODO somma dei costi di ricarica delle armi scelte, checkPayWithPowerup e mando al controller
+        powerUpsToDiscard = checkPayWithPowerUp(totalReloadCost);
 
         //TODO forward RELOAD action to the view
         if(isFrenzy) {
@@ -2257,84 +2286,6 @@ public class CLI implements UserInterface {
         }
     }
 
-    /**
-     * Handle a signle weapon reload
-     * @param weapons list of weapons not yet reloaded, which can be reloaded
-     * @param cachedPowerUps list of powerups left in user's hand after previous handleWeaponReload
-     * @param cachedAmmoCubes list of ammo left in user's hand after prevouiouse handleWeaponReload
-     * @param powerUpsToDiscard powerups which the user will use as payment if he wants
-     * @return a String representing the weapon name to be reloaded
-     */
-    private String handleWeaponReload(List<String> weapons, List<CachedPowerUp> cachedPowerUps, List<Color> cachedAmmoCubes,
-                                    List<CachedPowerUp> powerUpsToDiscard){
-
-        int read = -1;
-        boolean validChoice = false;
-
-
-        do {
-            System.out.println("Le tue armi sono: ");
-            for (int i = 0; i < weapons.size(); i++) {
-                try {
-                    CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(i));
-                    System.out.println(i + ": " + UiHelpers.weaponTranslator(weapons.get(i)));
-                    System.out.println("Costo ricarica: " + UiHelpers.ammoTranslator(w.getFirstEffectCost()));
-
-                } catch (WeaponNotFoundException e){
-                    System.out.println("[DEBUG] Weapon Not Found!");
-                }
-            }
-
-
-            try {
-
-                System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
-                System.out.println("9 -> fine");
-                read = scanner.nextInt();
-                //scanner.nextLine();
-
-                //TODO check if this if works correctly with weapon size checks
-                if ((read >= 0 && read < weapons.size()) || read == 9) validChoice = true;
-
-                if(read == 9){
-                    validChoice = true;
-                    return null;
-                }
-
-            } catch (InputMismatchException e) {
-                scanner.nextLine();
-                System.out.println("Non è un numero! Riprova >>> ");
-            }
-
-
-        } while (!validChoice);
-
-        String weaponName = null;
-
-        if(canReload(weapons.get(read), cachedAmmoCubes, cachedPowerUps)){
-            try {
-                CachedFullWeapon w = view.getCacheModel().getWeaponInfo(weapons.get(read));
-                //TODO check if this works
-                //TODO add checks for powerups
-                powerUpsToDiscard = checkPayWithPowerUp(w.getFirstEffectCost());
-
-                //TODO update local powerups and ammo to calc
-                cachedPowerUps.removeAll(powerUpsToDiscard);
-                List<Color> weaponReloadCost = new ArrayList<>(w.getFirstEffectCost());
-                for(Color c : UiHelpers.genColorListFromPowerUps(cachedPowerUps)){
-                    weaponReloadCost.remove(c);
-                }
-                cachedAmmoCubes.removeAll(weaponReloadCost);
-                weaponName = weapons.get(read);
-                weapons.remove(w.getName());
-
-            } catch (WeaponNotFoundException e){
-
-            }
-        }
-
-        return weaponName;
-    }
 
     /**
      *
