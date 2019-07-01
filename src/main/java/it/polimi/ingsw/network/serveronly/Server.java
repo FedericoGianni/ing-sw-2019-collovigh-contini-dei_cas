@@ -201,7 +201,7 @@ public class Server  {
             LOGGER.log(level, () -> LOG_START + "Reconnected player w/ id : " + playerId + " to View: " + toView);
 
         }
-
+        controller.getVirtualView(playerId).show("reconnectok");
         return playerId;
 
     }

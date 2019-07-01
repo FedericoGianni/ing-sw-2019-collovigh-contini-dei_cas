@@ -375,8 +375,13 @@ public class GuiMapController {
             @Override
             public void handle(ActionEvent event) {
                 actionButtonDisable();//i need to disable everything else
-                move("MOVE");
-
+                if(isFrenzy && !isBeforeFrenzyStarter)
+                {
+                    Alert a=new Alert(Alert.AlertType.INFORMATION,"Non è disponibile questa azione");
+                }
+                else {
+                    move("MOVE");
+                }
             }
         });
         shootButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -691,12 +696,10 @@ public class GuiMapController {
                 Platform.runLater(() -> {
                     if(isFrenzy)
                     {
-                        if(isBeforeFrenzyStarter) {//no
+                        if(isBeforeFrenzyStarter) {
                             handleMovement(x, y, UiHelpers.DEFAULT_MAX_FRENZY_MOVES, movementDirections, actionType);
                         }
-                        else{
-                            handleMovement(x, y, UiHelpers.DEFAULT_MAX_NORMAL_MOVES, movementDirections, actionType);
-                        }
+                        //else can't occour
                     }else {
                         handleMovement(x, y, UiHelpers.DEFAULT_MAX_NORMAL_MOVES, movementDirections, actionType);
                     }
@@ -705,7 +708,18 @@ public class GuiMapController {
                 //Platform.runLater(() ->  {handleMovement(x,y,FRENZY_MOV,movementDirections);});
                 break;
             case "MOVE&GRAB":
-                if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size() < UiHelpers.DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB) {
+                if (isFrenzy && isBeforeFrenzyStarter)
+                {
+                    Platform.runLater(() -> {
+                        handleMovement(x, y, UiHelpers.DEFAULT_MOVES_WITH_FRENZY, movementDirections, actionType);
+                    });
+                }
+                else if (isFrenzy && !isBeforeFrenzyStarter) {
+                    Platform.runLater(() -> {
+                        handleMovement(x, y, UiHelpers.DEFAULT_MOVES_WITH_ENHANCED_FRENZY, movementDirections, actionType);
+                    });
+                }
+                else if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size() < UiHelpers.DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB ) {
                     Platform.runLater(() -> {
                         handleMovement(x, y, UiHelpers.DEFAULT_MOVES_WITH_GRAB, movementDirections, actionType);
                     });
@@ -3165,6 +3179,7 @@ public class GuiMapController {
     }
     public void show(String error)
     {
+
         System.out.println(error);
         Alert a=new Alert(Alert.AlertType.CONFIRMATION,error);
     }

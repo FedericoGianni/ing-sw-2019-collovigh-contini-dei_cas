@@ -307,6 +307,9 @@ public class Gui extends Application implements UserInterface {
                     System.out.println("cucu");
                 }
 
+
+
+
                 break;
 
             case POWERUP_BAG:
