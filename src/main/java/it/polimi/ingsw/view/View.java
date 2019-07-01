@@ -418,9 +418,4 @@ public class View implements ViewInterface {
         return userInterface.askMapAndSkulls();
     }
 
-
-
-
-
-
 }

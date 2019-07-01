@@ -311,7 +311,7 @@ public class SocketClientReader extends Thread {
 
         UpdateClass updateClass = null;
 
-        String type = (splitted[ splitted.length - 3 ].startsWith("{")) ? splitted[ splitted.length - 3 ].substring(1,splitted[ splitted.length - 3 ].length()) : splitted[ splitted.length - 3 ];
+        String type = (splitted[ splitted.length - 3 ].startsWith("{")) ? splitted[ splitted.length - 3 ].substring(1) : splitted[ splitted.length - 3 ];
 
 
         switch (type){

@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.model.weapons.Damage;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.actions.Move;
+import it.polimi.ingsw.view.actions.ReloadAction;
 import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
@@ -24,6 +25,7 @@ import it.polimi.ingsw.view.updates.otherplayerturn.*;
 import java.awt.*;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class JsonExampleMaker {
@@ -53,6 +55,8 @@ public class JsonExampleMaker {
         writeGrabTurnUpdate();
         writePowerUpTurnUpdate();
         writeShootTurnUpdate();
+
+        writeReload();
     }
 
     public static void writeWeapons(){
@@ -456,6 +460,27 @@ public class JsonExampleMaker {
             FileWriter writer = new FileWriter("resources/json/maps/map_03.json");
 
             gson.toJson(savedMap, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+    }
+
+    private static void writeReload(){
+
+        ReloadAction reloadAction = new ReloadAction(Arrays.asList("Gun","rifle"),Arrays.asList(new CachedPowerUp(PowerUpType.TELEPORTER,Color.BLUE), new CachedPowerUp(PowerUpType.TELEPORTER,Color.YELLOW)));
+
+        Gson gson = new Gson();
+
+        try{
+
+            FileWriter writer = new FileWriter("resources/json/jsonComunication/reload.json");
+
+            gson.toJson(reloadAction, writer);
 
             writer.flush();
             writer.close();
