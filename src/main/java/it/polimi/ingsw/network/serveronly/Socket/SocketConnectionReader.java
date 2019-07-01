@@ -297,7 +297,9 @@ public class SocketConnectionReader extends Thread {
         JsonAction jsonAction = null;
         Gson gson = new Gson();
 
-        switch (values[values.length - 1]){
+        String type = (values[values.length - 1].startsWith("{")) ? values[values.length - 1].substring(1) : values[values.length - 1];
+
+        switch (type){
 
             case "\"actionType\":\"POWER_UP\"}":
 
@@ -354,13 +356,13 @@ public class SocketConnectionReader extends Thread {
 
                 break;
 
-            case "{\"actionType\":\"SKIP\"}":
+            case "\"actionType\":\"SKIP\"}":
 
                 jsonAction = gson.fromJson(message, SkipAction.class);
 
                 break;
 
-            case "{\"actionType\":\"FRENZY_SHOOT\"}":
+            case "\"actionType\":\"FRENZY_SHOOT\"}":
 
                 jsonAction = gson.fromJson(message,FrenzyShoot.class);
 

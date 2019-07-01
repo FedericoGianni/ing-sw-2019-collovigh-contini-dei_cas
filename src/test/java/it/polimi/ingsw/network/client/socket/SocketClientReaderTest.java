@@ -19,7 +19,7 @@ class SocketClientReaderTest {
 
         String type = update[ update.length - 1 ];
 
-        String expected = "{\"actionType\":\"RELOAD\"}";
+        String expected = "\"actionType\":\"RELOAD\"}";
 
         assertEquals(expected,type);
     }
