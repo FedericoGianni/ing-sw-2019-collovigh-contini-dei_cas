@@ -77,7 +77,7 @@ public class ActionPhase {
     private List<PowerUp> discardedPowerUpForRestore = new ArrayList<>();
     private List<AmmoCube> ammoCubeForRestore = new ArrayList<>();
 
-    private FrenzyShoot frenzyShootTemp = null;
+    private FrenzyShoot frenzyShootTemp = FrenzyShoot.genEmptyFrenzyShootAction();
 
     public ActionPhase(Controller controller) {
 
@@ -1395,6 +1395,8 @@ public class ActionPhase {
 
             }
         }
+
+        this.frenzyShootTemp = FrenzyShoot.genEmptyFrenzyShootAction();
 
         controller.incrementPhase();
     }

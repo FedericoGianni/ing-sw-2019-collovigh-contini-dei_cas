@@ -86,6 +86,11 @@ public class FrenzyShoot extends JsonAction {
         return new FrenzyShoot(null,new ReloadAction(new ArrayList<>(),new ArrayList<>()), null);
     }
 
+    public static FrenzyShoot genEmptyFrenzyShootAction(){
+
+        return new FrenzyShoot(null,null, null);
+    }
+
     public Move getMoveAction() {
         return moveAction;
     }
