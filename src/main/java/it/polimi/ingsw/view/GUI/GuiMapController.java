@@ -14,10 +14,12 @@ import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.EffectType;
+import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
+import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -47,7 +49,7 @@ public class GuiMapController {
 
     private static Gui gui;
     private int rows = 3, col = 4;
-    private VBox map[][] = new VBox[rows][col];
+    private VBox map[][];
 
     public static void setGui(Gui g) {
         gui = g;
@@ -160,12 +162,12 @@ public class GuiMapController {
     }
 
     public void mapCreator() {
-
-
+        System.out.println();
         switch (gui.getView().getCacheModel().getMapType()) {
             case 1: {
                 innerMap.setStyle("-fx-background-image: url('/images/Map1in.png')");//use this for sample fot he
                 buttonCreator();
+                System.out.println("Crea butun, "+map[1][1]);
                 b03.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent mouseEvent) {
@@ -184,6 +186,7 @@ public class GuiMapController {
             }
             case 2: {
                 buttonCreator();
+                System.out.println("Crea butun, "+map[1][1]);
                 innerMap.setStyle("-fx-background-image: url('/images/Map2in.png')");//use this for sample fot he maps everytime
                 b20.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -196,6 +199,7 @@ public class GuiMapController {
             }
             case 3: {
                 buttonCreator();
+                System.out.println("Crea butun, "+map[1][1]);
                 innerMap.setStyle("-fx-background-image: url('/images/Map3in.png')");//use this for sample fot he
                 break;
             }
@@ -273,7 +277,46 @@ public class GuiMapController {
 
     }
 
+
+
+    public void initial()
+    {
+        System.out.println("initial");
+        Platform.runLater( () -> {
+            System.out.println("map creat");
+            this.mapCreator();
+
+            gui.setReconnect(false);
+            /*while(gui.getView().getPlayerId()==-1)
+            {
+                System.out.println("aspetto aggiornamneto");
+
+                try {
+                    wait(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }*/
+            if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats()!=null)
+            gui.notifyUpdate(UpdateType.STATS,gui.getView().getPlayerId(),null);
+            System.out.println("superato stats");
+            if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag()!=null)
+            gui.notifyUpdate(UpdateType.WEAPON_BAG,gui.getView().getPlayerId(),null);
+            System.out.println("superato weapon bag");
+            if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag()!=null)
+                System.out.println("superato powerup bag");
+            gui.notifyUpdate(UpdateType.POWERUP_BAG,gui.getView().getPlayerId(),null);
+
+
+
+            gui.getGuiLobbyController().openThirdScene(new ActionEvent());
+            gui
+        });
+
+    }
+
     private void buttonCreator() {
+        map= new VBox[rows][col];
         for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
             RowConstraints rc = new RowConstraints();
             rc.setVgrow(Priority.ALWAYS); // allow row to grow
@@ -818,6 +861,12 @@ public class GuiMapController {
             @Override
             public void handle(ActionEvent e) {
                 switch (actionType) {
+                    case "MOVE":
+                        System.out.println("MOVE in hanldemovement e stoppo il moviment, mi muovo così : " + movementDirections);
+
+                        gui.getView().doAction(new Move(movementDirections, new Point(x, y)));
+                        actionButtonDisable();
+                        break;
                     case "MOVE&GRAB":
                         grabHere(x, y, movementDirections);
                         break;

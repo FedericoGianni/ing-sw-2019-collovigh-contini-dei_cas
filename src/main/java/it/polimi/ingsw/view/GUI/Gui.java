@@ -44,9 +44,11 @@ public class Gui extends Application implements UserInterface {
     private static GuiEndController guiEndController;
     private int validMove=-1;
     private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
-
+    private boolean reconnect=false;
     public void setGuiLobbyController(GuiLobbyController guic) {
         this.guiLobbyController = guic;
+    }
+    public GuiLobbyController getGuiLobbyController(){return guiLobbyController;
     }
 
     public void setGuiMapController(GuiMapController guic) {
@@ -69,6 +71,7 @@ public class Gui extends Application implements UserInterface {
         this.guiEndController = g;
     }
 
+    public void setReconnect(Boolean b){this.reconnect=b;}
     public Gui(){
     super();
     }
@@ -183,11 +186,11 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void startGame() {
-        Platform.runLater( () -> {
+       /* Platform.runLater( () -> {
             System.out.println("guiLobbyController: " + guiLobbyController);
             guiMapController.mapCreator();
             guiLobbyController.openThirdScene(new ActionEvent());
-        });
+        });*/
     }
 
     @Override
@@ -274,26 +277,41 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case STATS: //possibilità: cambio pos,danni subiti, spostmanto e marchi, disconnessioni
-                if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
-                    wasOnline.set(playerId, false);
-                    String msg="Il giocatore "+playerId+" si è disconnesso";
-                    guiMapController.onlineStateSignal( msg);
-                } else if(view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline() &&
-                        !wasOnline.get(playerId)){
-                    //player reconnected
-                    String msg="Il giocatore "+playerId+" si è disconnesso";
-                    wasOnline.set(playerId, true);
-                    guiMapController.onlineStateSignal(msg);
+
+                if(reconnect)
+                    break;
+                if(view.getCacheModel().getCachedPlayers().get(playerId).getStats()!=null) {
+                    if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
+                        wasOnline.set(playerId, false);
+                        String msg = "Il giocatore " + playerId + " si è disconnesso";
+                        guiMapController.onlineStateSignal(msg);
+                    } else if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline() &&
+                            !wasOnline.get(playerId)) {
+                        //player reconnected
+                        String msg = "Il giocatore " + playerId + " si è riconnesso";
+                        wasOnline.set(playerId, true);
+                        guiMapController.onlineStateSignal(msg);
+                    }
                 }
-                guiMapController.statsUpdater(playerId);
+
+                    guiMapController.statsUpdater(playerId);
+
                 break;
 
             case INITIAL:
-                for(Player item:view.getCacheModel().getCachedPlayers())
-                    guiMapController.loginUpdater(item.getName(),item.getPlayerId(),item.getPlayerColor());
+                reconnect=true;
+                guiMapController.initial();
+
+                for(Player item:view.getCacheModel().getCachedPlayers()) {
+                    guiMapController.loginUpdater(item.getName(), item.getPlayerId(), item.getPlayerColor());
+                    System.out.println("cucu");
+                }
+
                 break;
 
             case POWERUP_BAG:
+                if(reconnect)
+                    break;
                     guiMapController.powerUpDisplayer();
                 break;
             case AMMO_CELL://remember--- at end turn i need to replace everyCell, even if it has something inside!
@@ -303,6 +321,8 @@ public class Gui extends Application implements UserInterface {
                 guiMapController.spawnCellWeaponsUpdate();
                 break;
             case WEAPON_BAG:
+                if(reconnect)
+                    break;
                 guiMapController.changedWeapons();//display my new weapons
                 break;
             case AMMO_BAG:
@@ -311,6 +331,8 @@ public class Gui extends Application implements UserInterface {
 
             case TURN:
                 guiMapController.notifyTurnUpdate(turnUpdate);
+                break;
+            case GAME:
                 break;
             default:
                 break;
