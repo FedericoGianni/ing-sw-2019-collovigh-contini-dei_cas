@@ -182,7 +182,7 @@ public class CLI implements UserInterface {
                 scanner.nextLine();
             }
 
-        } while (!(choice == 1 || choice == 2 || choice == 3));
+        } while (!(choice == 1 || choice == 2));
 
 
         switch (choice) {
@@ -193,10 +193,6 @@ public class CLI implements UserInterface {
 
             case 2:
                 reconnect();
-                break;
-
-            case 3:
-                System.out.println("Still not implemented ;D");
                 break;
 
             default:
@@ -881,12 +877,12 @@ public class CLI implements UserInterface {
 
             validChoice = false;
 
-            System.out.println("In quale direzione vuoi spostare il player selezionato? (Nord, Sud, Ovest, Est) >>> ");
+            System.out.println("In quale direzione vuoi spostare il player selezionato? (N, S, O, E) >>> ");
             direction = scanner.next().toUpperCase();
             scanner.nextLine();
 
-            if (direction.equals("NORD") || direction.equals("SUD")
-                    || direction.equals("EST") || direction.equals("OVEST"))
+            if (direction.equals("N") || direction.equals("S")
+                    || direction.equals("E") || direction.equals("O"))
                 validChoice = true;
             else
                 System.out.println(retryMessage);
@@ -2147,8 +2143,6 @@ public class CLI implements UserInterface {
 
         System.out.println("[DEBUG] RISULTATO: " + effects);
 
-        //TODO check if player can pay for the effects chosen w/ ammo/powerups
-
         return effects;
     }
 
@@ -2275,10 +2269,8 @@ public class CLI implements UserInterface {
             }
         }
 
-        //TODO somma dei costi di ricarica delle armi scelte, checkPayWithPowerup e mando al controller
         powerUpsToDiscard = checkPayWithPowerUp(totalReloadCost);
 
-        //TODO forward RELOAD action to the view
         if(isFrenzy) {
             view.doAction(new FrenzyShoot(new ReloadAction(weaponsToReload, powerUpsToDiscard)));
         } else {
@@ -2326,7 +2318,7 @@ public class CLI implements UserInterface {
         List<Player> winners = new ArrayList<>();
         int maxScore = 0;
 
-        for(Player p : players){
+        for(Player p : players) {
             String s = new String();
             s = s.concat(UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape());
             s = s.concat("\tID: " + p.getPlayerId());
@@ -2335,20 +2327,7 @@ public class CLI implements UserInterface {
             s = s.concat(ANSI_RESET.escape());
 
             System.out.println(s);
-
-            if(p.getStats().getScore() >= maxScore){
-                maxScore = p.getStats().getScore();
-            }
         }
-
-        for(Player p : players){
-            if(p.getStats().getScore() == maxScore) {
-                System.out.println("\n" + "\t" + UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +
-                        "Vincitore: " + p.getPlayerId() + " : " + p.getName());
-                System.out.println("Punti nel Killshot Track: " + calcKillShotTrackPoints(p.getPlayerId()));
-            }
-        }
-
 
         System.exit(0);
     }
