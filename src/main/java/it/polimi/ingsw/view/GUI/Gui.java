@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.view.UserInterface;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.GrabAction;
-import it.polimi.ingsw.view.actions.SkipAction;
 import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
@@ -38,11 +36,14 @@ public class Gui extends Application implements UserInterface {
     public static final float DEFAULT_MIN_WIDTH_MAP = 1000;
     public static final float DEFAULT_MIN_HEIGHT_MAP = 700;
 
+    private static GuiStartController guiStartController;
+    private static GuiReconnectionController guiReconnectionController;
     private static GuiController guiController;
     private static GuiLobbyController guiLobbyController;
     private static GuiMapController guiMapController;
     private int validMove=-1;
     private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
+
     public void setGuiLobbyController(GuiLobbyController guic) {
         this.guiLobbyController = guic;
     }
@@ -53,6 +54,14 @@ public class Gui extends Application implements UserInterface {
 
     public void setGuiController(GuiController guiController) {
         this.guiController = guiController;
+    }
+
+    public void setGuiStartController(GuiStartController g) {
+        this.guiStartController = g;
+    }
+
+    public void setGuiReconnectionController(GuiReconnectionController g) {
+        this.guiReconnectionController = g;
     }
 
     public Gui(){
@@ -74,6 +83,8 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void start(Stage stage) throws Exception {
 
+        GuiStartController.setGui(this);
+        GuiReconnectionController.setGui(this);
         GuiController.setGui(this);
         GuiLobbyController.setGui(this);
         GuiMapController.setGui(this);
@@ -85,6 +96,16 @@ public class Gui extends Application implements UserInterface {
         stage.setMaxWidth(gd.getDisplayMode().getWidth());
         stage.setMaxHeight(gd.getDisplayMode().getHeight());
         stage.setTitle("Adrenalina");
+
+        //start window
+        FXMLLoader startPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("start.fxml"));
+        Parent startPane = startPaneLoader.load();
+        Scene startScene = new Scene(startPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
+
+        //reconnect window
+        FXMLLoader reconnectPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("reconnect.fxml"));
+        Parent reconnectPane = reconnectPaneLoader.load();
+        Scene reconnectScene = new Scene(reconnectPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
 
         // login window
         // loader will then give a possibility to get related controller
@@ -105,6 +126,20 @@ public class Gui extends Application implements UserInterface {
         Scene thirdScene = new Scene(thirdPane, DEFAULT_MIN_WIDTH_MAP, DEFAULT_MIN_HEIGHT_MAP);
         thirdScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleMap.css").toExternalForm());
 
+        //injecting reconnect scene into the controller of the start scene
+        //injecting login scene into the controller of the start scene
+        guiStartController = (GuiStartController) startPaneLoader.getController();
+        setGuiStartController(guiStartController);
+        guiStartController.setLoginScene(firstScene);
+        guiStartController.setReconnectScene(reconnectScene);
+        guiStartController.setStageAndSetupListeners(stage);
+
+        guiReconnectionController = (GuiReconnectionController) reconnectPaneLoader.getController();
+        setGuiReconnectionController(guiReconnectionController);
+        guiReconnectionController.setThirdScene(thirdScene);
+        guiReconnectionController.setStageAndSetupListeners(stage);
+
+
         // injecting second scene into the controller of the first scene
         guiController = (GuiController) firstPaneLoader.getController();
         guiController.setSecondScene(secondScene);
@@ -122,7 +157,8 @@ public class Gui extends Application implements UserInterface {
         setGuiMapController(guiMapController);
         //TODO guiMapController.setStageAndSetupListeners(stage);
 
-        stage.setScene(firstScene);
+        //stage.setScene(firstScene);
+        stage.setScene(startScene);
         stage.show();
     }
 
@@ -269,6 +305,14 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void gameSelection() {
+
+        System.out.println("chiamato gameSelection gui");
+
+        Platform.runLater( () -> {
+            guiMapController.mapCreator();
+            guiLobbyController.openThirdScene(new ActionEvent());
+        });
+
     }
 
     @Override

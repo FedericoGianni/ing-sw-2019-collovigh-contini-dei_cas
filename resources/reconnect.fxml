@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<StackPane fx:id="stackPane" prefHeight="400.0" prefWidth="600.0" stylesheets="Murcielago.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GuiReconnectionController">
+    <children>
+        <VBox fx:id="vBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+            <children>
+
+                <Label text="Inserisci l'username usato :">
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+
+
+                <Separator prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Separator>
+
+
+                <Separator layoutX="10.0" layoutY="130.0" prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Separator>
+
+
+                <HBox alignment="TOP_CENTER" prefHeight="20.0" prefWidth="200.0">
+                    <children>
+
+
+                        <Label text="Username : " />
+
+
+                        <TextField fx:id="name" promptText="Inserisci un username"/>
+
+
+                    </children>
+                </HBox>
+
+                <!-- define a Toggle group for Connection Choice -->
+
+                <fx:define>
+                    <ToggleGroup fx:id="srmi" />
+                </fx:define>
+
+                <Label text="Scegli un tipo di connessione :">
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Label>
+
+                <Separator prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Separator>
+
+                <!-- Radio Button for connection Choice -->
+
+                <VBox prefHeight="41.0" prefWidth="400.0">
+                    <children>
+                        <RadioButton onAction="#chooseConnType" text="Socket" toggleGroup="$srmi" selected="true" />
+                        <RadioButton onAction="#chooseConnType" text="RMI" toggleGroup="$srmi"/>
+                    </children>
+                    <padding>
+                        <Insets left="100.0" right="100.0" />
+                    </padding>
+                </VBox>
+
+
+                <Separator layoutX="10.0" layoutY="125.0" prefWidth="200.0">
+                    <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                    </padding>
+                </Separator>
+
+
+                <Button onAction="#reconnect" text="Riconnetti" />
+
+
+            </children>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="50.0" left="100.0" right="100.0" top="150.0" />
+    </padding>
+</StackPane>

@@ -1426,15 +1426,16 @@ public class CLI implements UserInterface {
                     do {
                         try {
                             powerUpToDiscardChoice = scanner.nextInt();
+
+                            if (powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()) {
+                                valid = true;
+                            } else {
+                                System.out.println("Scelta non valida! Riprova: ");
+                            }
+
                         } catch (InputMismatchException e) {
                             System.out.println("Non è un numero! Riprova: ");
                             scanner.nextLine();
-                        }
-
-                        if (powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()) {
-                            valid = true;
-                        } else {
-                            System.out.println("Scelta non valida! Riprova: ");
                         }
 
                     } while (!valid);
@@ -1618,13 +1619,11 @@ public class CLI implements UserInterface {
 
             try{
 
-                scanner.reset();
                 choice = scanner.nextInt();
 
                 int weaponBagSize = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons().size();
                 if(choice >= 0 && choice < weaponBagSize){
                     valid = true;
-
                 } else {
                     System.out.println("Scelta non valida! Riprova >>> ");
                 }
@@ -1682,8 +1681,6 @@ public class CLI implements UserInterface {
             //TODO check if it works, should let him retry shoot from the beginning
             startShoot(maxMoves);
         }
-
-        scanner.nextLine();
 
         //System.out.println("[DEBUG] Number of targets: " + weapon.getEffectRequirements().get(0).getNumberOfTargets());
         //System.out.println("[DEBUG] Effects size: " + effects.size());
@@ -2223,6 +2220,8 @@ public class CLI implements UserInterface {
                 }
             }
 
+            valid = false;
+
             do {
 
                 valid = false;
@@ -2285,25 +2284,28 @@ public class CLI implements UserInterface {
                     System.out.println("[DEBUG] Weapon Not Found!");
                 }
             }
-            System.out.println("9 -> fine");
 
-            System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
+
             try {
+
+                System.out.println("Seleziona l'arma che vuoi ricaricare: >>> ");
+                System.out.println("9 -> fine");
                 read = scanner.nextInt();
-                scanner.nextLine();
+                //scanner.nextLine();
+
+                //TODO check if this if works correctly with weapon size checks
+                if ((read >= 0 && read < weapons.size()) || read == 9) validChoice = true;
+
+                if(read == 9){
+                    validChoice = true;
+                    return null;
+                }
 
             } catch (InputMismatchException e) {
                 scanner.nextLine();
                 System.out.println("Non è un numero! Riprova >>> ");
             }
 
-            //TODO check if this if works correctly with weapon size checks
-            if ((read >= 0 && read < weapons.size()) || read == 9) validChoice = true;
-
-            if(read == 9){
-                validChoice = true;
-                return null;
-            }
 
         } while (!validChoice);
 
@@ -2387,15 +2389,37 @@ public class CLI implements UserInterface {
             }
         }
 
-        //TODO se vincitori hanno stesso punteggio verificare chi ha piu punti nel killshottrack
         for(Player p : players){
             if(p.getStats().getScore() == maxScore) {
                 System.out.println("\n" + "\t" + UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape() +
                         "Vincitore: " + p.getPlayerId() + " : " + p.getName());
+                System.out.println("Punti nel Killshot Track: " + calcKillShotTrackPoints(p.getPlayerId()));
             }
         }
 
+
         System.exit(0);
+    }
+
+    /**
+     *
+     * @param playerId id of the player to calc points
+     * @return the number of points done inside killShotTrack durig the game
+     */
+    private int calcKillShotTrackPoints(int playerId){
+
+        int points = 0;
+
+        if(view.getCacheModel().getGame() != null){
+            for (int i = 0; i < view.getCacheModel().getGame().getKillShotTrack().size(); i++) {
+                if(view.getCacheModel().getGame().getKillShotTrack().get(i).x == playerId){
+                    points += view.getCacheModel().getGame().getKillShotTrack().get(i).y;
+                }
+            }
+        }
+
+        return points;
+
     }
 
     /**
