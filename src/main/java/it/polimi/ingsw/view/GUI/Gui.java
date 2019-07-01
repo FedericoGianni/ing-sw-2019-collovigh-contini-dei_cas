@@ -305,12 +305,12 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void gameSelection() {
-
-        System.out.println("chiamato gameSelection gui");
-
+        //TODO questo metodo è chiamato all'avvio della view -> va messo qui il codice per cambiare alla schermata
+        //TODO della mappa?  però viene chiamato anche quando non è ancora iniziato gioco e nullpointera
         Platform.runLater( () -> {
+            System.out.println("guiLobbyController: " + guiLobbyController);
             guiMapController.mapCreator();
-            guiLobbyController.openThirdScene(new ActionEvent());
+            guiReconnectionController.openThirdScene(new ActionEvent());
         });
 
     }

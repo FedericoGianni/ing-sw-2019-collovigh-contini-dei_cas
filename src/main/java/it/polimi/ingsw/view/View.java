@@ -195,9 +195,9 @@ public class View implements ViewInterface {
             clientToVView = sc.getScw();
         }
 
-        userInterface.login();
+        //userInterface.login();
         //TODO uncomment this to have game selection
-        //userInterface.gameSelection();
+        userInterface.gameSelection();
     }
 
     public void retryLogin(String error){
