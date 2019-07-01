@@ -14,7 +14,6 @@ import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.EffectType;
-import it.polimi.ingsw.view.cachemodel.Player;
 import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedSpawnCell;
@@ -43,6 +42,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.Directions.*;
+import static java.lang.Thread.sleep;
 
 
 public class GuiMapController {
@@ -293,7 +293,6 @@ public class GuiMapController {
             System.out.println("map creat");
             this.mapCreator();
 
-            gui.setIsReconnection(false);
             for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().size();i++) {
                 if (gui.getView().getCacheModel().getCachedPlayers().get(i).getStats() != null)
                     gui.notifyUpdate(UpdateType.STATS, i, null);
@@ -1241,33 +1240,35 @@ public class GuiMapController {
             log.appendText("\nIl giocatore " + id + " si è scollegato.");
             return;
         }*/
-        printLog("Updated stats del player " +id);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                int r = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX();
-                int c = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY();
+        printLog("Updated stats del player " + id);
+        if (gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosition() != null) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    int r = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosX();
+                    int c = gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getCurrentPosY();
 
-                for (int i = 0; i < rows; i++)//remove player icons from everywhere
-                {
-                    for (int j = 0; j < col; j++) {
-                        playerRemover(id, i, j);
+                    for (int i = 0; i < rows; i++)//remove player icons from everywhere
+                    {
+                        for (int j = 0; j < col; j++) {
+                            playerRemover(id, i, j);
+                        }
                     }
+
+
+                    mapPos(r, c, id);//positions the player
+                    stopMov.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                        }
+                    });
+
+
                 }
-
-
-                mapPos(r, c, id);//positions the player
-                stopMov.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                    }
-                });
-
-
-            }
-        });
-        planciaUpdater();
-        mapEventDeleter();
+            });
+            planciaUpdater();
+            mapEventDeleter();
+        }
     }
 
 
@@ -1321,6 +1322,15 @@ public class GuiMapController {
     }
 
     public void powerUpDisplayer() {
+
+        while(gui.getView().getPlayerId() == -1){
+            try{
+                sleep(200);
+            } catch (InterruptedException e){
+
+            }
+        }
+
         powerUp1.setImage(null);
         powerUp2.setImage(null);
         powerUp3.setImage(null);
@@ -2469,6 +2479,7 @@ public class GuiMapController {
      * Show my weapons. called from updates in gui
      */
     public void changedWeapons() {
+
         //--------display my weapons
         myWeapon1.setImage(null);
         myWeapon2.setImage(null);
@@ -2496,6 +2507,14 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
             }
         });
+
+        while(gui.getView().getPlayerId() == -1){
+            try{
+                sleep(200);
+            } catch (InterruptedException e){
+
+            }
+        }
 
         if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag() != null) {
             for (int i = 0; i < gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().size(); i++) {

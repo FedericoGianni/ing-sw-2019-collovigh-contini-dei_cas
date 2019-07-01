@@ -401,6 +401,9 @@ public class View implements ViewInterface {
             userInterface.show(DEFAULT_NAME_NOT_FOUND);
         }
 
+        //TODO check if it works fix by fed for gui reconnect
+        //this.setPlayerId(playerId);
+
         return playerId;
     }
 

@@ -32,7 +32,9 @@ public class GuiReconnectionController {
     @FXML
     private TextField name;
 
-
+    public String getPlayerName() {
+        return playerName;
+    }
 
     public static void setGui(Gui g) {
         gui = g;

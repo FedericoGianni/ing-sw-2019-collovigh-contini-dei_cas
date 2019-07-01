@@ -43,7 +43,8 @@ public class Gui extends Application implements UserInterface {
     private static GuiMapController guiMapController;
     private static GuiEndController guiEndController;
     private int validMove=-1;
-    private boolean isReconnection=false;
+    private boolean isReconnection=true;
+    private boolean receivedReconnectOk = false;
     private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
 
     public void setGuiLobbyController(GuiLobbyController guic) {
@@ -194,6 +195,7 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void startGame() {
+        isReconnection = false;
        /* Platform.runLater( () -> {
             System.out.println("guiLobbyController: " + guiLobbyController);
             guiMapController.mapCreator();
@@ -248,6 +250,14 @@ public class Gui extends Application implements UserInterface {
                 guiController.openSecondScene(new ActionEvent());
             }
 
+            if(s.equals("reconnectok")){
+                receivedReconnectOk = true;
+                for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
+                    guiMapController.statsUpdater(i);
+                }
+                isReconnection = false;
+            }
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
             alert.setHeaderText(header);
             alert.show();
@@ -286,30 +296,41 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case STATS: //possibilità: cambio pos,danni subiti, spostmanto e marchi, disconnessioni
-                if(isReconnection)
-                    break;
-                if(view.getCacheModel().getCachedPlayers().get(playerId).getStats()!=null) {
-                    if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
-                        wasOnline.set(playerId, false);
-                        String msg = "Il giocatore " + playerId + " si è disconnesso";
-                        guiMapController.onlineStateSignal(msg);
-                    } else if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline() &&
-                            !wasOnline.get(playerId)) {
-                        //player reconnected
-                        String msg = "Il giocatore " + playerId + " si è riconnesso";
-                        wasOnline.set(playerId, true);
-                        guiMapController.onlineStateSignal(msg);
+                if(isReconnection){
+                    System.out.println("STATS RICEVUTO MA SKIPPATO oerchè sono in riconnessione");
+                } else {
+                    if (view.getCacheModel().getCachedPlayers().get(playerId).getStats() != null) {
+                        if (!view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline()) {
+                            wasOnline.set(playerId, false);
+                            String msg = "Il giocatore " + playerId + " si è disconnesso";
+                            guiMapController.onlineStateSignal(msg);
+                        } else if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getOnline() &&
+                                !wasOnline.get(playerId)) {
+                            //player reconnected
+                            String msg = "Il giocatore " + playerId + " si è riconnesso";
+                            wasOnline.set(playerId, true);
+                            guiMapController.onlineStateSignal(msg);
+                        }
                     }
-                }
 
                     guiMapController.statsUpdater(playerId);
+                }
 
                 break;
 
             case INITIAL:
 
-                isReconnection=true;
                 guiMapController.initial();
+
+                if(isReconnection) {
+                    //TODO Devo risettarmi il mio vecchio id nella view
+                    for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
+                        if(view.getCacheModel().getCachedPlayers().get(i).getName().equals(guiReconnectionController.getPlayerName())){
+                            getView().setPlayerId(i);
+                        }
+                    }
+
+                }
 
                 for(Player item:view.getCacheModel().getCachedPlayers()) {
                     guiMapController.loginUpdater(item.getName(), item.getPlayerId(), item.getPlayerColor());
@@ -318,8 +339,8 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case POWERUP_BAG:
-                if(isReconnection)
-                    break;
+                //if(isReconnection)
+                //    break;
                 guiMapController.powerUpDisplayer();
                 break;
 
@@ -332,13 +353,13 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case WEAPON_BAG:
-                if(isReconnection)
-                    break;
+                //if(isReconnection)
+                //    break;
                 guiMapController.changedWeapons();//display my new weapons
                 break;
             case AMMO_BAG:
-                if(isReconnection)
-                    break;
+                //if(isReconnection)
+                //    break;
                 guiMapController.changedAmmos();
                 break;
 
