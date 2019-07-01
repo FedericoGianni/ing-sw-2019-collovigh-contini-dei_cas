@@ -202,6 +202,7 @@ public class Server  {
 
         }
         controller.getVirtualView(playerId).show("reconnectok");
+        System.out.println("recconection sent");
         return playerId;
 
     }

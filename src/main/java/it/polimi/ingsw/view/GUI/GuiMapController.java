@@ -293,7 +293,7 @@ public class GuiMapController {
             System.out.println("map creat");
             this.mapCreator();
 
-            gui.setReconnect(false);
+
             /*while(gui.getView().getPlayerId()==-1)
             {
                 System.out.println("aspetto aggiornamneto");
@@ -313,7 +313,6 @@ public class GuiMapController {
             if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag()!=null)
             gui.notifyUpdate(UpdateType.POWERUP_BAG,gui.getView().getPlayerId(),null);
             System.out.println("superato powerup bag");
-
 
             gui.getGuiLobbyController().openThirdScene(new ActionEvent());
 
