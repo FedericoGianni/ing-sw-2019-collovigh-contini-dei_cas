@@ -8,6 +8,7 @@ import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.UiHelpers;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.*;
+import it.polimi.ingsw.view.actions.usepowerup.GrenadeAction;
 import it.polimi.ingsw.view.actions.usepowerup.NewtonAction;
 import it.polimi.ingsw.view.actions.usepowerup.ScopeAction;
 import it.polimi.ingsw.view.actions.usepowerup.TeleporterAction;
@@ -1410,6 +1411,56 @@ public class GuiMapController {
         }
     }
 
+    public void granade()
+    {
+        Platform.runLater( () ->
+        {
+            Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi usare una granata?", ButtonType.YES, ButtonType.NO);
+            a.showAndWait();
+            if (a.getResult() == ButtonType.NO) {
+                gui.getView().doAction(new GrenadeAction(null, gui.getView().getPlayerId()));
+            } else {
+                 a=new Alert(Alert.AlertType.CONFIRMATION,"Scegli granata da usare sulla destra");
+                a.show();
+                for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size();i++)
+                {
+                    if(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(i).getType().equals(PowerUpType.TAG_BACK_GRENADE))
+                    {
+                        switch (i) {
+                            case 0:
+                                powerUp1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        mapEventDeleter();
+                                        gui.getView().doAction(new GrenadeAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0).getColor(), gui.getView().getPlayerId()));
+                                    }
+                                });
+                                break;
+                            case 1:
+                                powerUp2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        mapEventDeleter();
+                                        gui.getView().doAction(new GrenadeAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1).getColor(), gui.getView().getPlayerId()));
+                                    }
+                                });
+                                break;
+                            case 2:
+                                powerUp3.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent mouseEvent) {
+                                        mapEventDeleter();
+                                        gui.getView().doAction(new GrenadeAction(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2).getColor(), gui.getView().getPlayerId()));
+                                    }
+                                });
+                                break;
+                        }
+                    }
+                }
+
+            }
+        });
+    }
 
     public void powerUpEnable() {
         Platform.runLater(new Runnable() {
@@ -1917,8 +1968,8 @@ public class GuiMapController {
         imageCreator(url, (HBox) b.getChildren().get(1));
     }
 
-    //maybe qui fa casino
-    private String fromAmmoCubetoIMG(List<Color> a)//idea, nome è sigla: crb.png=cartaRossoBlu
+
+    private String fromAmmoCubetoIMG(List<Color> a)
     {
         ArrayList<Color> card = new ArrayList<>();
         card.add(Color.BLUE);
@@ -2473,7 +2524,7 @@ public class GuiMapController {
         }
     }
 
-    //------------------------------------------------------------ move and grab
+    //------------------------------------------------------------ move and grab --> check move
     //-----------------------------------------------------------plancia
 
     /**
@@ -2870,9 +2921,7 @@ public class GuiMapController {
         }
     }
 
-    //-------- attenzione alle armi con effetto esclusivo!
-    // se :effectNum== effects.size() ----> usa ultimo effetto disponibile!
-    //-----------------------!!!!!!!!!!!------------------------------------
+
 
     private void shootTargetIterator(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, int effectNum, int targetNum, List<Point> cells) {
 
