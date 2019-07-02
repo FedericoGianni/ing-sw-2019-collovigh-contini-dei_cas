@@ -766,6 +766,7 @@ public class CLI implements UserInterface {
     @Override
     public void askGrenade() {
 
+        scanner.reset();
         boolean valid;
         int choice = -1;
 
@@ -781,7 +782,6 @@ public class CLI implements UserInterface {
 
         do {
 
-            scanner.reset();
 
             valid = false;
 
@@ -1046,9 +1046,9 @@ public class CLI implements UserInterface {
 
                         if (isFrenzy) {
                             if (isBeforeFrenzyStarter) {
-                                startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
+                                startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT, false);
                             } else {
-                                startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
+                                startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT, false);
                             }
                         } else {
 
@@ -1096,7 +1096,7 @@ public class CLI implements UserInterface {
 
     @Override
     public void reDoFrenzyAtomicShoot() {
-        // TODO
+        startFrenzyShoot(0, true);
     }
 
     /**
@@ -1750,23 +1750,26 @@ public class CLI implements UserInterface {
         }
     }
 
-    private void startFrenzyShoot(int maxMoves){
+    private void startFrenzyShoot(int maxMoves, boolean redoOnlyShoot){
 
-        List<Directions> directionsList = new ArrayList<>();
+        if(!redoOnlyShoot) {
 
-        //FORWARD PART 1: MOVE ACTION
-        directionsList = handleMove(maxMoves);
-        Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
-        Point finalPos = genPointFromDirections(directionsList, startingPoint);
+            List<Directions> directionsList = new ArrayList<>();
 
-        view.doAction(new FrenzyShoot(new Move(directionsList, finalPos)));
+            //FORWARD PART 1: MOVE ACTION
+            directionsList = handleMove(maxMoves);
+            Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+            Point finalPos = genPointFromDirections(directionsList, startingPoint);
 
-        //FORWARD PART 2: RELOAD ACTION
-        //only if has 1 or more weapon to reload
-        List<String> weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
-        for (int i = 0; i < weapons.size(); i++) {
-            if(!view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getLoaded().get(i)){
-                startReload();
+            view.doAction(new FrenzyShoot(new Move(directionsList, finalPos)));
+
+            //FORWARD PART 2: RELOAD ACTION
+            //only if has 1 or more weapon to reload
+            List<String> weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
+            for (int i = 0; i < weapons.size(); i++) {
+                if (!view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getLoaded().get(i)) {
+                    startReload();
+                }
             }
         }
 
@@ -2177,10 +2180,10 @@ public class CLI implements UserInterface {
         List<String> weaponsToReload = new ArrayList<>();
         List<CachedPowerUp> powerUpsToDiscard = new ArrayList<>();
 
-        System.out.println("RICARICA");
-        System.out.println("Digita: ");
-        System.out.println("Un tasto qualsiasi -> per cominciare la fase di ricarica");
-        System.out.println("9 -> per saltare la fase di ricarica");
+        show("RICARICA");
+        show("Digita: ");
+        show("Un tasto qualsiasi -> per cominciare la fase di ricarica");
+        show("9 -> per saltare la fase di ricarica");
 
         int choice = -1;
 
