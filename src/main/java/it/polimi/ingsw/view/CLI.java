@@ -1754,6 +1754,8 @@ public class CLI implements UserInterface {
         if(UiHelpers.genTypeListFromPowerUps(localPowerUps).contains(TARGETING_SCOPE)){
             System.out.println("Puoi usare un mirino, vuoi farlo? (si/no): ");
             do {
+                //TODO check if it works
+                scanner.nextLine();
                 String s = scanner.nextLine();
 
                 if(s.equalsIgnoreCase("SI") || s.equalsIgnoreCase("NO")){
@@ -1815,8 +1817,6 @@ public class CLI implements UserInterface {
         for (int i = 0; i < scopePowerUps.size(); i++) {
             System.out.println(i + ": " + scopePowerUps.get(i));
         }
-
-        scanner.nextLine();
 
         do {
 
@@ -2350,7 +2350,7 @@ public class CLI implements UserInterface {
     @Override
     public void endGame() {
 
-        System.out.println(ANSI_RED.escape() + "[!] GIOCO FINITO" + ANSI_RESET.escape());
+        show(ANSI_RED.escape() + "[!] GIOCO FINITO" + ANSI_RESET.escape());
         List<Player> players = view.getCacheModel().getCachedPlayers();
         List<Player> winners = new ArrayList<>();
         int maxScore = 0;
@@ -2363,7 +2363,7 @@ public class CLI implements UserInterface {
             s = s.concat("\tPunti: " + p.getStats().getScore());
             s = s.concat(ANSI_RESET.escape());
 
-            System.out.println(s);
+            show(s);
         }
 
         System.exit(0);
@@ -2454,6 +2454,10 @@ public class CLI implements UserInterface {
         }
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
 

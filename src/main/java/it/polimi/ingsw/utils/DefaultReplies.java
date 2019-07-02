@@ -56,7 +56,7 @@ public class DefaultReplies {
             ANSI_YELLOW.escape() + "giocatori in celle diverse!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_UNCORRECT_DISTANCE = DEFAULT_INVALID_SHOOT_HEADER +
-            ANSI_YELLOW.escape() + "istanza non corretta!" + ANSI_RESET.escape();
+            ANSI_YELLOW.escape() + "distanza non corretta!" + ANSI_RESET.escape();
 
     public static final String DEFAULT_SEEABLE_PLAYER = DEFAULT_INVALID_SHOOT_HEADER +
             ANSI_YELLOW.escape() + "giocatori visibili!" + ANSI_RESET.escape();

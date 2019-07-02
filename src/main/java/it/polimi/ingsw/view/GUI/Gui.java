@@ -99,7 +99,6 @@ public class Gui extends Application implements UserInterface {
         return view;
     }
 
-
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -192,11 +191,19 @@ public class Gui extends Application implements UserInterface {
         stage.show();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startUI() {
         launch();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame() {
         isReconnection = false;
@@ -207,6 +214,10 @@ public class Gui extends Application implements UserInterface {
         });
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void show(String s) {
 
@@ -277,6 +288,10 @@ public class Gui extends Application implements UserInterface {
         view.doAction(grabAction);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyUpdate(UpdateType updateType, int playerId, TurnUpdate turnUpdate) {
 
@@ -377,6 +392,10 @@ public class Gui extends Application implements UserInterface {
         }
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void gameSelection() {
         //TODO questo metodo è chiamato all'avvio della view -> va messo qui il codice per cambiare alla schermata
@@ -389,10 +408,18 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void login() {
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void retryLogin(String error) {
         Platform.runLater( () -> {
@@ -402,11 +429,19 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void retryLogin(Exception e) {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startSpawn() {//pox: 1) rosso e giallo non fanno bene lo spawn 2) blu non fa bene lo spawn
 
@@ -431,6 +466,9 @@ public class Gui extends Application implements UserInterface {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startPowerUp() {
         //here i need to let them use power ups, devo eliminare tutti gli effetti all'inziio di start action
@@ -445,12 +483,20 @@ public class Gui extends Application implements UserInterface {
         guiMapController.powerUpEnable();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void askGrenade() {
         guiMapController.granade();
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
@@ -476,16 +522,28 @@ public class Gui extends Application implements UserInterface {
         //view.doAction(new ShootAction("LOCK RIFLE", targetList, effects, cells));
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doFrenzyAtomicShoot() {
         //TODO
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doFrenzyReload() {
         //TODO
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startReload() {
         //view.doAction(new SkipAction());
@@ -493,6 +551,10 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void endGame() {
 
@@ -506,6 +568,10 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setValidMove(boolean b) {
         if(b){
@@ -516,12 +582,20 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
         guiMapController.log.appendText(DEFAULT_TIMER_EXPIRED);
         System.exit(0);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Integer> askMapAndSkulls() {
         List<Integer> values = new ArrayList<>();
