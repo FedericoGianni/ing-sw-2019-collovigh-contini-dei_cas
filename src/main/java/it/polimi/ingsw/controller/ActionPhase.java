@@ -1322,46 +1322,48 @@ public class ActionPhase {
         // look if the player is before the first player (0,1,2,3,4)
 
         boolean frenzyEnhanced = controller.getCurrentPlayer() > controller.getFrenzyStarter();
+        if(movePart != null) {
+            if (movePart.getMoves() == null) {
 
-        if (movePart.getMoves() == null){
+                //log
 
-            //log
+                LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + NO_DIRECTION_SPECIFIED);
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + NO_DIRECTION_SPECIFIED);
+                // show
 
-            // show
+                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
 
-            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+                return false;
 
-            return false;
+            } else if (movePart.getMoves().size() > MAX_FRENZY_SHOOT_MOVES) {
 
-        } else if (movePart.getMoves().size() > MAX_FRENZY_SHOOT_MOVES){
+                //log
 
-            //log
+                LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + MOVE_MORE_THAN + MAX_FRENZY_SHOOT_MOVES + " in frenzy ");
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + MOVE_MORE_THAN + MAX_FRENZY_SHOOT_MOVES + " in frenzy ");
+                // show
 
-            // show
+                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
 
-            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
+                return false;
 
-            return false;
+            } else if ((movePart.getMoves().size() > MAX_FRENZY_SHOOT_ENHANCED_MOVES) && (frenzyEnhanced)) {
 
-        } else if ( (movePart.getMoves().size() > MAX_FRENZY_SHOOT_ENHANCED_MOVES) && (frenzyEnhanced)){
+                //log
 
-            //log
+                LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + MOVE_MORE_THAN + MAX_FRENZY_SHOOT_ENHANCED_MOVES + " in frenzy but was before first player ");
 
-            LOGGER.log(Level.WARNING, () -> LOG_START_FRENZY_S + MOVE_MORE_THAN + MAX_FRENZY_SHOOT_ENHANCED_MOVES + " in frenzy but was before first player ");
+                // show
 
-            // show
+                controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
 
-            controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_TRIED_TO_MOVE_MORE_THAN_MAX);
-
-            return false;
+                return false;
+            }
         }
 
         return true;
     }
+
 
     /**
      * This method will perform the first part of the frenzy shoot action ( move + reload )

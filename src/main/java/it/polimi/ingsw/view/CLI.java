@@ -1762,7 +1762,13 @@ public class CLI implements UserInterface {
         view.doAction(new FrenzyShoot(new Move(directionsList, finalPos)));
 
         //FORWARD PART 2: RELOAD ACTION
-        startReload();
+        //only if has 1 or more weapon to reload
+        List<String> weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
+        for (int i = 0; i < weapons.size(); i++) {
+            if(!view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getLoaded().get(i)){
+                startReload();
+            }
+        }
 
         //FORWARD PART 3: SHOOT ACTION
         startShoot(0);
