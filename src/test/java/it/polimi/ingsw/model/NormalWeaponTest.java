@@ -401,16 +401,17 @@ class NormalWeaponTest {
         } catch (PlayerAlreadyDeadException e){
             e.printStackTrace();
         }
-        /*
+
         System.out.println(target1.getPlayerName());
         System.out.println(target1.getStats().getDmgTaken());
         System.out.println(target1.getStats().getMarks());
+
 
         System.out.println(target2.getPlayerName());
         System.out.println(target2.getStats().getDmgTaken());
         System.out.println(target2.getStats().getMarks());
 
-         */
+
 
         assert(target1.getStats().getDmgTaken().size() == 2);
         assert(target1.getStats().getMarks().size() == 1);

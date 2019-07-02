@@ -11,6 +11,7 @@ import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -379,6 +380,22 @@ public class UtilityMethods {
         }
 
         return remainingToSell;
+    }
+
+    /**
+     * This method translate a list of point into a list of cells
+     * @param cells is a list of point
+     * @return the correspondent list of cells
+     */
+    public List<Cell> PointToCell(List<Point> cells){
+
+        return  (cells == null ) ? new ArrayList<>() : cells
+                .stream()
+                .map(x -> {
+                    if (x == null ) return null;
+                    else return Model.getMap().getCell(x.x, x.y);
+                })
+                .collect(Collectors.toList());
     }
 
 }

@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.weapons;
 
 import it.polimi.ingsw.customsexceptions.*;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.Skull;
 import it.polimi.ingsw.utils.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -313,6 +315,7 @@ public class NormalWeapon extends Weapon{
      */
     public void shoot(List<List<Player>> targetLists, List<Integer> effect, List<Cell> cells) throws PlayerInSameCellException, PlayerAlreadyDeadException, DifferentPlayerNeededException, SeeAblePlayerException, PlayerNotSeeableException, PlayerInDifferentCellException, UncorrectDistanceException, NotCorrectPlayerNumberException, CardNotPossessedException, WeaponNotLoadedException, NotEnoughAmmoException, PrecedentPlayerNeededException, UncorrectEffectsException {
 
+        List <Skull> kstCopy =Model.getGame().getKillShotTrack();
 
         for (int i = 0; i < targetLists.size(); i++) {
             for(Player p : targetLists.get(i)){
@@ -320,8 +323,8 @@ public class NormalWeapon extends Weapon{
                     throw new PlayerAlreadyDeadException();
                 }
             }
-
         }
+
         Player shooterCopy=new Player(this.isPossessedBy().getPlayerName(),this.isPossessedBy().getPlayerId(),this.isPossessedBy().getColor());
         for (AmmoCube a : this.isPossessedBy().getAmmoBag().getList()) {
             shooterCopy.getAmmoBag().addItem(a);
@@ -380,7 +383,7 @@ public class NormalWeapon extends Weapon{
                       }
 
                   } else {
-                      restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+                      restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
                       throw new NotEnoughAmmoException();
                   }
               }
@@ -403,37 +406,37 @@ public class NormalWeapon extends Weapon{
 
         }
       catch(PlayerInSameCellException e)
-      {   restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+      {   restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw  new PlayerInSameCellException();
       } catch (NotEnoughAmmoException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new NotEnoughAmmoException();
       } catch (WeaponNotLoadedException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new WeaponNotLoadedException();
       } catch (PlayerInDifferentCellException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new PlayerInDifferentCellException();
       } catch (CardNotPossessedException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new CardNotPossessedException();
       } catch (UncorrectDistanceException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new UncorrectDistanceException();
       } catch (PlayerNotSeeableException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new PlayerNotSeeableException();
       } catch (NotCorrectPlayerNumberException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new NotCorrectPlayerNumberException();
       } catch (DifferentPlayerNeededException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new DifferentPlayerNeededException();
       } catch (SeeAblePlayerException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new SeeAblePlayerException();
       } catch (PrecedentPlayerNeededException e) {
-          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy());
+          restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
           throw new PrecedentPlayerNeededException();
       }
 
@@ -446,8 +449,11 @@ public class NormalWeapon extends Weapon{
      * @param targetsCopy
      * @param targetLists
      */
-    private void restore(List<List<Player>> targetsCopy,List<List<Player>> targetLists,Player shooterCopy,Player shooter)
+    private void restore(List<List<Player>> targetsCopy,List<List<Player>> targetLists,Player shooterCopy,Player shooter,List <Skull> kstCopy)
     {
+
+        Model.getGame().setKillShotTrack(kstCopy);
+
         //for shooter i need to restore position and ammos
         shooter.setPlayerPos(shooterCopy.getCurrentPositionCopy());
         try {

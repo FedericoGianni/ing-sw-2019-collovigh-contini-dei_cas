@@ -196,6 +196,9 @@ public class VirtualView implements ViewInterface {
      */
     @Override
     public void doFrenzyAtomicShoot() {
+
+        LOGGER.log(level,"[Virtual View] id {0} received doFrenzyAtomicShoot and forwarding it to the real view", playerId);
+
         if(view != null)
             view.doFrenzyAtomicShoot();
     }
@@ -206,7 +209,9 @@ public class VirtualView implements ViewInterface {
     @Override
     public void doFrenzyReload() {
 
-        //TODO
+        LOGGER.log(level,"[Virtual View] id {0} received doFrenzyReload and forwarding it to the real view", playerId);
+
+        view.doFrenzyReload();
     }
 
     /**
