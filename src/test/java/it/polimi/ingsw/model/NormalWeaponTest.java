@@ -343,15 +343,15 @@ class NormalWeaponTest {
         pc.add(PlayerColor.BLUE);
         pc.add(PlayerColor.GREEN);
         //generate the map (type 2)
-        Model m=new Model(playerNames,pc,2,8);
+        Model m=new Model(playerNames,pc,3,8);
 
 
         //generate a player with a name and its starting position
         Player shooter = Model.getPlayer(0);
-        shooter.setPlayerPos(Model.getMap().getCell(1,1));
+        shooter.setPlayerPos(Model.getMap().getCell(1,0));
 
         Player target1 = Model.getPlayer(1);
-        target1.setPlayerPos(Model.getMap().getCell(1,1));
+        target1.setPlayerPos(Model.getMap().getCell(1,0));
 
         Player target2 = Model.getPlayer(2);
         target2.setPlayerPos(Model.getMap().getCell(1,1));
@@ -359,18 +359,18 @@ class NormalWeaponTest {
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
         shooter.addWeapon(weapons.get(0));//not how it works but easy
         List targets0=new ArrayList();
-        List targets1=new ArrayList();
+
         List<List<Player>> targetLists = new ArrayList<>();
         targets0.add(target1);
-        targets1.add(target2);
+
         targetLists.add(targets0);
-        targetLists.add(targets1);
+
         Model.getMap().setUnvisited();
 
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
             mEf.add(0);
-            mEf.add(1);
+
 
             shooter.getWeapons().get(0).shoot(targetLists, mEf, null);
 
@@ -414,7 +414,7 @@ class NormalWeaponTest {
 
         assert(target1.getStats().getDmgTaken().size() == 2);
         assert(target1.getStats().getMarks().size() == 1);
-        assert(target2.getStats().getMarks().size() == 1);
+       // assert(target2.getStats().getMarks().size() == 1);
 
     }
 
