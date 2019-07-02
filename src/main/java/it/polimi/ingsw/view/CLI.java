@@ -66,7 +66,7 @@ public class CLI implements UserInterface {
     /**
      * true if the action called on the UI by the controller is on frenzy phase
      */
-    boolean isFrenzy = false;
+    private boolean isFrenzy = false;
 
     /**
      * used to store a previous version of online status, to check if user is reconnecting or the stats updates are the
@@ -81,13 +81,27 @@ public class CLI implements UserInterface {
     int previousDmg = 0, previousMarks = 0;
 
     /**
+     * String to be shown when user tries to input invalid character when expecting intgers
+     */
+    private static final String DEFAULT_INTEGER_MISMATCH_MESSAGE = "Non è un numero! Riprova: ";
+
+    /**
+     * String to be shown when the user inputs an invalid choice
+     */
+    private static final String DEFAULT_INVALID_INPUT_MESSAGE = "Scelta non valida! Riprova: ";
+
+    /**
+     * String to be shown when the user inputs an invalid effect choice for shoot
+     */
+    private static final String DEFAULT_INVALID_EFFECT_CHOICE = "Scelta effetti non valida! Riprova: ";
+
+    /**
      * Default constructor
      *
-     * @param view is the view
+     * @param view reference to the view linked to this interface
      */
     public CLI(View view) {
         this.view = view;
-        //this.socketClientWriter = s.getScw();
     }
 
     /**
@@ -126,7 +140,7 @@ public class CLI implements UserInterface {
             try {
                 connectionType = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Valore non valido. Riprova!");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
             }
 
             scanner.nextLine();
@@ -178,7 +192,7 @@ public class CLI implements UserInterface {
                 choice = scanner.nextInt();
                 scanner.nextLine();
             } catch (InputMismatchException e) {
-                System.out.println("Non è un numero! Riprova: ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
             }
 
@@ -230,10 +244,6 @@ public class CLI implements UserInterface {
 
         } while (!validColorChoice);
 
-        //System.out.println("[DEBUG] PlayerName:  " + playerName);
-        //System.out.println("[DEBUG] PlayerColor: " + playerColor);
-
-
         view.joinGame(playerName, UiHelpers.colorTranslator(playerColor.toUpperCase()));
 
     }
@@ -273,7 +283,7 @@ public class CLI implements UserInterface {
                 mapChoice = scanner.nextInt();
 
             } catch (InputMismatchException e){
-                System.out.println("Non è un numero! Riprova: ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
             }
 
@@ -297,7 +307,7 @@ public class CLI implements UserInterface {
                 skullChoice = scanner.nextInt();
 
             } catch (InputMismatchException e){
-                System.out.println("Non è un numero! Riprova: ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
             }
 
@@ -305,7 +315,7 @@ public class CLI implements UserInterface {
                 valid = true;
                 mapAndSkulls.add(skullChoice);
             } else {
-                System.out.println("Scelta non valida! Riprova: ");
+                System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
             }
 
 
@@ -651,7 +661,7 @@ public class CLI implements UserInterface {
                 read = scanner.nextInt();
                 scanner.nextLine();
             } catch (InputMismatchException e) {
-                System.out.println("Non è un numero! Riprova: ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
                 read = -1;
             }
@@ -733,14 +743,14 @@ public class CLI implements UserInterface {
                     read = scanner.nextInt();
                     scanner.nextLine();
                 } catch (InputMismatchException e) {
-                    show("Non è un numero! Riprova");
+                    show(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                     scanner.nextLine();
                 }
             }
 
             if ((read >= 0 && read < usablePowerUps.size()) || read == 9) validChoice = true;
             else {
-                show("Scelta non valida! Riprova");
+                show(DEFAULT_INVALID_INPUT_MESSAGE);
                 scanner.reset();
                 scanner.nextLine();
             }
@@ -798,11 +808,12 @@ public class CLI implements UserInterface {
             try {
                 choice = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Non è un numero! Riprova: ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
             }
 
             if (choice == 9 || (choice >= 0 && choice < grenades.size())) valid = true;
+            else System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
 
 
         } while (!valid);
@@ -844,9 +855,7 @@ public class CLI implements UserInterface {
      */
     private void useNewton(CachedPowerUp newton) {
 
-        String retryMessage = "Scelta non valida. Riprova.";
-
-        Boolean validChoice = false;
+        boolean validChoice = false;
         int player = -1;
         String direction;
         int amount = 1;
@@ -863,10 +872,10 @@ public class CLI implements UserInterface {
                 if (player >= 0 && player < view.getCacheModel().getCachedPlayers().size())
                     validChoice = true;
                 else
-                    System.out.println(retryMessage);
+                    System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
 
             } catch (InputMismatchException e) {
-                System.out.println("Non è un numero! Riprova >>> ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
             }
 
@@ -885,7 +894,7 @@ public class CLI implements UserInterface {
                     || direction.equals("E") || direction.equals("O"))
                 validChoice = true;
             else
-                System.out.println(retryMessage);
+                System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
         } while (!validChoice);
 
 
@@ -900,10 +909,10 @@ public class CLI implements UserInterface {
                     validChoice = true;
 
                 else
-                    System.out.println(retryMessage);
+                    System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
 
             } catch (InputMismatchException e){
-                System.out.println("Non è un numero! Riprova>>> ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
             }
 
@@ -946,9 +955,6 @@ public class CLI implements UserInterface {
             }
         }
 
-        //TODO consume scanner buffer if user type random numbers when waiting for its turn
-        scanner.reset();
-
         //TODO check if this works
         if(isFrenzy){
             this.isFrenzy = true;
@@ -990,7 +996,7 @@ public class CLI implements UserInterface {
                 scanner.nextLine();
 
             } catch (InputMismatchException e) {
-                System.out.println("Non è un numero: Riprova!");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
             }
 
@@ -999,7 +1005,7 @@ public class CLI implements UserInterface {
                 valid = true;
 
             } else {
-                System.out.println(" Scelta non valida: Riprova");
+                System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
             }
 
         } while (!valid);
@@ -1091,7 +1097,7 @@ public class CLI implements UserInterface {
 
             default:
 
-                System.out.println("Azione non esistente");
+                System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
                 break;
         }
     }
@@ -1183,7 +1189,7 @@ public class CLI implements UserInterface {
 
                     //System.out.println("[DEBUG] controllo valid Move...");
                     if (validMove == 1) {
-                        System.out.println("Direzione valida!");
+                        //System.out.println("Direzione valida!");
                         valid = true;
                         previous.add(d);
                         directionsList.add(directionTranslator(choice));
@@ -1200,12 +1206,12 @@ public class CLI implements UserInterface {
 
                     } else if (validMove == 0) {
 
-                        System.out.println("Direzione non valida! Riprova >>> ");
+                        System.out.println("Direzione non valida! Riprova: ");
                         valid = false;
                     }
 
                 } else {
-                    System.out.println("Scrivi correttamente la direzione dei punti cardinali! Riprova");
+                    System.out.println("Scrivi correttamente la direzione dei punti cardinali! Riprova: ");
                 }
 
             } while (!valid);
@@ -1215,8 +1221,12 @@ public class CLI implements UserInterface {
         return directionsList;
     }
 
-
-    public void startMove(int maxMoves, boolean isFrenzyShoot) {
+    /**
+     * Handle a move action request
+     * @param maxMoves max number of moves
+     * @param isFrenzyShoot true if in frenzy phase, false otherwise
+     */
+    private void startMove(int maxMoves, boolean isFrenzyShoot) {
 
         int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
         int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
@@ -1236,6 +1246,11 @@ public class CLI implements UserInterface {
         }
     }
 
+    /**
+     * Handle a grab requests, note that grab is different between ammo cell and spawn cells, in the latter you can buy
+     * weapons
+     * @param maxMoves max number of moves which can be done before the grab action itself
+     */
     private void startGrab(int maxMoves) {
 
         int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
@@ -1314,12 +1329,12 @@ public class CLI implements UserInterface {
                 if (buy >= 0 && buy < weapons.size()) {
                     valid = true;
                 } else {
-                    System.out.println("Numero non valido! Riprova >>> ");
+                    System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
                 }
 
             } catch (InputMismatchException e) {
                 scanner.nextLine();
-                System.out.println("Non è un numero! Riprova >>> ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
             }
 
         } while (!valid);
@@ -1349,11 +1364,11 @@ public class CLI implements UserInterface {
                     if (discard >= 0 && discard <= currWeap.size()) {
                         valid = true;
                     } else {
-                        System.out.println("Numero non valido! Riprova >>> ");
+                        System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
                     }
 
                 } catch (InputMismatchException e) {
-                    System.out.println("Non è un numero! Riprova >>> ");
+                    System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 }
 
             } while (!valid);
@@ -1399,7 +1414,7 @@ public class CLI implements UserInterface {
 
             default:
                 //this cannot happen since we control valid number before switch case
-                System.out.println("Scelta non valida!");
+                System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
         }
 
         return choice;
@@ -1455,11 +1470,11 @@ public class CLI implements UserInterface {
                             if (powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()) {
                                 valid = true;
                             } else {
-                                System.out.println("Scelta non valida! Riprova: ");
+                                System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
                             }
 
                         } catch (InputMismatchException e) {
-                            System.out.println("Non è un numero! Riprova: ");
+                            System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                             scanner.nextLine();
                         }
 
@@ -1491,14 +1506,14 @@ public class CLI implements UserInterface {
                     try {
                         powerUpToDiscardChoice = scanner.nextInt();
                     } catch (InputMismatchException e) {
-                        System.out.println("Non è un numero! Riprova: ");
+                        System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                         scanner.nextLine();
                     }
 
                     if (powerUpToDiscardChoice >= 0 && powerUpToDiscardChoice < powerUpChoiceList.size()) {
                         valid = true;
                     } else {
-                        System.out.println("Scelta non valida! Riprova: ");
+                        System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
                     }
 
                 } while (!valid);
@@ -1539,7 +1554,6 @@ public class CLI implements UserInterface {
 
         if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag() != null) {
             powerUps = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpList();
-            //powerUpsColor = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getPowerUpBag().getPowerUpColorList();
         }
 
         powerUpsToDiscard = checkPayWithPowerUp(cost, powerUps, ammo);
@@ -1548,6 +1562,12 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     *
+     * @param powerUps list of CachedPowerUps to be checked
+     * @param c color to find
+     * @return true if the powerups list contains a powerup of the specified color, false otherwise
+     */
     private boolean hasPowerUpOfColor(List<CachedPowerUp> powerUps, Color c){
         List<CachedPowerUp> result = powerUps
         .stream()
@@ -1558,7 +1578,9 @@ public class CLI implements UserInterface {
 
     }
 
-
+    /**
+     * Show the weapons which can be bought in spawn cells, with infos such as cost, reload cost, effects description
+     */
     private void showCurrWeapons(){
 
         List<String> currWeap = new ArrayList<>();
@@ -1590,8 +1612,11 @@ public class CLI implements UserInterface {
 
     }
 
-
-
+    /**
+     * Handles a shoot action
+     * @param maxMoves max number of moves which can be done before shooting
+     * @param isFrenzy true if the shoot is in frenzy phase, false otherwise
+     */
     private void startShoot(int maxMoves, boolean isFrenzy){
 
         //INPUT requirements
@@ -1790,6 +1815,10 @@ public class CLI implements UserInterface {
         }
     }
 
+    /**
+     * Handles the move part in frenzy shoot
+     * @param maxMoves max number of moves before reload/shoot
+     */
     private void startFrenzyShootMove(int maxMoves) {
 
         List<Directions> directionsList = new ArrayList<>();
@@ -1802,6 +1831,11 @@ public class CLI implements UserInterface {
         view.doAction(new FrenzyShoot(new Move(directionsList, finalPos)));
     }
 
+    /**
+     * Handles a targeting scope request after the user has chosen to shoot, if he has targeting scope
+     * @param powerUps list of powerups which contains targeting scope
+     * @return the targeting scope chosen to use
+     */
     private CachedPowerUp handleScopeRequest(List<CachedPowerUp> powerUps){
 
         int read = -1;
@@ -1826,11 +1860,11 @@ public class CLI implements UserInterface {
                 if(read >= 0 && read < scopePowerUps.size()){
                     valid = true;
                 } else {
-                    System.out.println("Scelta non valida! Riprova: ");
+                    System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
                 }
 
             } catch (InputMismatchException e) {
-                System.out.println("Non è un numero! Riprova: ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
             }
 
@@ -1839,6 +1873,10 @@ public class CLI implements UserInterface {
         return scopePowerUps.get(read);
     }
 
+    /**
+     * Handle a targeting scope target request
+     * @return id of the player on whom the user wants to consume targeting scope
+     */
     private int handleScopeTarget(){
 
         boolean validChoice = false;
@@ -1849,15 +1887,15 @@ public class CLI implements UserInterface {
             System.out.println("Su quale giocatore vuoi usare il mirino? >>> ");
             try {
                 player = scanner.nextInt();
-                scanner.nextLine();
 
                 if (player >= 0 && player <= view.getCacheModel().getCachedPlayers().size() && player != view.getPlayerId())
                     validChoice = true;
                 else
-                    System.out.println("Scelta non valida! Riprova>>> ");
+                    System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
 
             } catch (InputMismatchException e){
-                System.out.println("Non è un numero! Riprova");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
+                scanner.nextLine();
             }
 
         } while (!validChoice);
@@ -1866,7 +1904,10 @@ public class CLI implements UserInterface {
     }
 
 
-
+    /**
+     * Method to ask a cell from the map, used by both powerups or shoot effects
+     * @return a point representing the x and y coordinates of the cell chosen inside the map
+     */
     private Point askCell(){
 
         boolean validChoice = false;
@@ -1910,6 +1951,12 @@ public class CLI implements UserInterface {
 
     }
 
+    /**
+     * Handle a single askCell request per shoot effect
+     * @param w CachedFullWeapon if additional info about the weapon requests are needed
+     * @param e number of the effect which askCell is hadling
+     * @return a point representing the x and y coordinates of the cell chosen inside the map
+     */
     private Point askCell(CachedFullWeapon w, int e){
         System.out.println("Cella richiesta per effetto " + e);
         Point p = askCell();
@@ -1921,7 +1968,7 @@ public class CLI implements UserInterface {
     /**
      * Helper method needed by startShoot to collect target/s to be shot
      * @return a List of List<Integer> representing the targets for each of the weapon effect
-     * (index 0 -> base effect, index 1 -> second effect, index 2 -> third effect)
+     * (index 0: base effect, index 1: second effect, index 2: third effect)
      */
     private List<List<Integer>> chooseTargets(CachedFullWeapon w, int effectsNum){
 
@@ -1970,7 +2017,7 @@ public class CLI implements UserInterface {
                         }
 
                     } catch (InputMismatchException e) {
-                        System.out.println("Non è un numero! Riprova >>> ");
+                        System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                         scanner.nextLine();
                     }
 
@@ -2119,13 +2166,13 @@ public class CLI implements UserInterface {
                             if (read == 0 || read == 1 || read == 3) {
                                 valid = true;
                             } else {
-                                System.out.println("Scelta effetti non valida! Riprova");
+                                System.out.println(DEFAULT_INVALID_EFFECT_CHOICE);
                             }
                         }
                     }
 
                 } catch (InputMismatchException e){
-                    System.out.println("Non è un numero! Riprova!");
+                    System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                     scanner.nextLine();
                 }
             }
