@@ -1780,8 +1780,7 @@ public class CLI implements UserInterface {
         if(UiHelpers.genTypeListFromPowerUps(localPowerUps).contains(TARGETING_SCOPE)){
             System.out.println("Puoi usare un mirino, vuoi farlo? (si/no): ");
             do {
-                //TODO check if it works
-                scanner.nextLine();
+
                 String s = scanner.nextLine();
 
                 if(s.equalsIgnoreCase("SI") || s.equalsIgnoreCase("NO")){

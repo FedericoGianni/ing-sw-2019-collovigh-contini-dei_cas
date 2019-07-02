@@ -212,4 +212,7 @@ class PlayerTest {
         assertTrue(visibles.contains(p4));
 
     }
+
+    @Test
+    void canSee5(){}
 }
