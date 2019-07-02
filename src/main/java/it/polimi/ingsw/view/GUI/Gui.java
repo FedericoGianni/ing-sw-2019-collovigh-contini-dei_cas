@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -21,6 +22,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_TIMER_EXPIRED;
@@ -46,6 +48,7 @@ public class Gui extends Application implements UserInterface {
     private boolean isReconnection=true;
     private boolean receivedReconnectOk = false;
     private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
+    private  boolean bb=false;
 
     public void setGuiLobbyController(GuiLobbyController guic) {
         this.guiLobbyController = guic;
@@ -197,11 +200,11 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startGame() {
         isReconnection = false;
-       /* Platform.runLater( () -> {
+        Platform.runLater( () -> {
             System.out.println("guiLobbyController: " + guiLobbyController);
-            guiMapController.mapCreator();
+            //guiMapController.mapCreator();
             guiLobbyController.openThirdScene(new ActionEvent());
-        });*/
+        });
     }
 
     @Override
@@ -320,6 +323,7 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case INITIAL:
+                if(view.getPlayerId()!=-1)
                 System.out.println("Giocatore con id= "+view.getPlayerId()+" nome: "+view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getName());
                 guiMapController.initial();
 
@@ -406,15 +410,14 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startSpawn() {//pox: 1) rosso e giallo non fanno bene lo spawn 2) blu non fa bene lo spawn
 
-       /* while (view.getCacheModel().getCachedPlayers().size() <= 0 || view.getPlayerId() == -1) {
+       while (view.getCacheModel().getCachedPlayers().size() <= 0 || view.getPlayerId() == -1) {
             System.out.println("Attendi ricezione dell'update iniziale...");
-
             try {
                 sleep(200);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }*/
+        }
 
 
         //view.spawn(powerUps.get(read));
@@ -520,6 +523,93 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public List<Integer> askMapAndSkulls() {
-        return null;
+        List<Integer> values = new ArrayList<>();
+
+
+        Platform.runLater( () -> {
+            System.out.println("Nel runLater");
+
+            Alert a = new Alert(Alert.AlertType.INFORMATION, "Seleziona quale  mappa usare");
+            a.showAndWait();
+            //platfrm.runlater qui
+            if (view.getCacheModel().getCachedPlayers().size() == 3)//tipo 1 o 2
+            {
+                ButtonType first = new ButtonType("Per 3/4 giocatori");// map 1
+                ButtonType second = new ButtonType("Qualsiasi numero");//map 2
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli una mappa ", first, second);
+                alert.showAndWait();
+                if (alert.getResult() == first) {
+                    values.add(1);
+                } else {
+                    values.add(2);
+                }
+            } else if (view.getCacheModel().getCachedPlayers().size() == 5) //tipo 2 o 3
+            {
+                ButtonType first = new ButtonType("Per 4/5 giocatri");// map 1
+                ButtonType second = new ButtonType("Qualsiasi numero");//map 2
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli una mappa ", first, second);
+                alert.showAndWait();
+                if (alert.getResult() == first) {
+                    values.add(3);
+                } else {
+                    values.add(2);
+                }
+            } else {//tipo 1 o 2 o 3
+                ButtonType first = new ButtonType("Per 3/4 giocatori");// map 1
+                ButtonType third = new ButtonType("Per 4/5 giocatri");// map 1
+                ButtonType second = new ButtonType("Qualsiasi numero");//map 2
+                Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli una mappa ", first, second, third);
+                alert.showAndWait();
+                if (alert.getResult() == first) {
+                    values.add(1);
+                } else if (alert.getResult() == second) {
+                    values.add(2);
+                } else {
+                    values.add(3);
+                }
+            }
+            //-----------------------------------ask for skulls
+            values.add(skullSelector());
+            bb=true;
+        });
+        while(!bb)
+        {
+            try {
+                sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        bb=false;
+        System.out.println(values);
+        return values;
+    }
+
+    private int skullSelector()
+    {
+        List<String> choices = new ArrayList<>();
+        choices.add("1");
+        choices.add("2");
+        choices.add("3");
+        choices.add("4");
+        choices.add("5");
+        choices.add("6");
+        choices.add("7");
+        choices.add("8");
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("8", choices);
+        dialog.setTitle("Teschi");
+        dialog.setContentText("Seleziona il numero di teschi per questa partita:");
+
+// Traditional way to get the response value.
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()){
+            return Integer.parseInt(result.get());
+        }
+        else{
+            return skullSelector();
+        }
+
     }
 }

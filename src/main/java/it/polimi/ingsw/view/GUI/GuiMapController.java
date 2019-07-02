@@ -305,7 +305,7 @@ public class GuiMapController {
                     gui.notifyUpdate(UpdateType.POWERUP_BAG, i, null);
                 System.out.println("superato powerup bag");
             }
-            gui.getGuiLobbyController().openThirdScene(new ActionEvent());
+            //gui.getGuiLobbyController().openThirdScene(new ActionEvent());
 
         });
 

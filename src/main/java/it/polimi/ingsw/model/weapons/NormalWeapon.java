@@ -320,8 +320,8 @@ public class NormalWeapon extends Weapon{
                     throw new PlayerAlreadyDeadException();
                 }
             }
-
         }
+
         Player shooterCopy=new Player(this.isPossessedBy().getPlayerName(),this.isPossessedBy().getPlayerId(),this.isPossessedBy().getColor());
         for (AmmoCube a : this.isPossessedBy().getAmmoBag().getList()) {
             shooterCopy.getAmmoBag().addItem(a);
