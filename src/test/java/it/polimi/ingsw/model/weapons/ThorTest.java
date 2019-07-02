@@ -66,7 +66,7 @@ class ThorTest {
         p2.setPlayerPos(Model.getMap().getCell(0,0));
 
         Player p3=Model.getPlayer(2);
-        p3.setPlayerPos(Model.getMap().getCell(2,3));
+        p3.setPlayerPos(Model.getMap().getCell(0,0));
 
         //se danno >12 in un effetto son cazzi
 
