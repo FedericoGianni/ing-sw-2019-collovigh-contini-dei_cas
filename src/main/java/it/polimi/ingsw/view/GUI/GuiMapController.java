@@ -100,6 +100,7 @@ public class GuiMapController {
 
     public void openEndScene(ActionEvent actionEvent) {
         myStage.setScene(endScene);
+        myStage.show();
     }
 
     public static void setStageAndSetupListeners(Stage stage){

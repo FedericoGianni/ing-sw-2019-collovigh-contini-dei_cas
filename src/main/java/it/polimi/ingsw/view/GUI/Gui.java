@@ -177,6 +177,7 @@ public class Gui extends Application implements UserInterface {
 
         guiMapController = (GuiMapController) thirdPageLoader.getController();
         setGuiMapController(guiMapController);
+        guiMapController.setEndScene(endScene);
         guiMapController.setStageAndSetupListeners(stage);
 
         guiEndController = (GuiEndController) endPageLoader.getController();
@@ -484,12 +485,12 @@ public class Gui extends Application implements UserInterface {
 
     @Override
     public void endGame() {
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 guiMapController.openEndScene(new ActionEvent());
                 guiEndController.showPoints(new ActionEvent());
-
             }
         });
 
