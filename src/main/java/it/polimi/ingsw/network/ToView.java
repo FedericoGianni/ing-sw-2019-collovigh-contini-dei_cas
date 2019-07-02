@@ -8,8 +8,15 @@ public interface ToView  {
 
     // Update Logic
 
+    /**
+     * send an update to inform the UserInterface of a change inside cacheModel
+     * @param update update to be sent to the view
+     */
     void sendUpdate(UpdateClass update);
 
+    /**
+     * Forward startGame call to the UserInterface to inform the players that the game has started
+     */
     void startGame();
 
     // calls the same method on view Class
@@ -60,8 +67,15 @@ public interface ToView  {
      */
     void endGame();
 
+    /**
+     * Close the UserInterface, after a timer of the current action phase expires
+     */
     void close();
 
+    /**
+     * Forward the askMapAndSkulls metod invocation to the UserInterface
+     * @return a list of Integers containing: [0] mapType chosen, [1] number of skulls to place in the KillShotTrack
+     */
     List<Integer> askMapAndSkulls();
 
 }

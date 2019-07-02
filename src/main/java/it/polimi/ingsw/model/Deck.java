@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import java.util.*;
-
 /**
  * This class is an interface that will be implemented by AmmoDeck and PowerUpDeck
  */
@@ -12,6 +10,10 @@ public interface Deck<T> {
      */
     public T getRandomCard();
 
+    /**
+     *
+     * @return integer representing the size of the deck
+     */
     public int getSize();
 
 }
