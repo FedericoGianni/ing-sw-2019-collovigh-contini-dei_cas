@@ -585,7 +585,7 @@ public class CLI implements UserInterface {
      */
     @Override
     public void startGame() {
-        System.out.println("Gioco iniziato!");
+        System.out.println(ANSI_GREEN.escape() + "Gioco iniziato!" + ANSI_RESET.escape());
 
         while (view.getCacheModel().getCachedMap() == null) {
             System.out.println("Attendi ricezione del tipo di mappa...");
@@ -595,6 +595,7 @@ public class CLI implements UserInterface {
 
             }
         }
+
 
         try {
             FileRead.populateMatrixFromFile(view.getCacheModel().getMapType());
@@ -2274,16 +2275,17 @@ public class CLI implements UserInterface {
         do{
             System.out.println("Quali armi vuoi ricaricare?");
             showCurrWeapons();
-            System.out.println("[0] Ricarica " + weapons.get(0));
+            System.out.println("[0] Ricarica " + UiHelpers.weaponTranslator(weapons.get(0)));
 
             if(weapons.size() >= 2) {
-                System.out.println("[1] Ricarica " + weapons.get(1));
-                System.out.println("[3] Ricarica " + weapons.get(0) + " e " + weapons.get(1));
+                System.out.println("[1] Ricarica " + UiHelpers.weaponTranslator(weapons.get(1)));
+                System.out.println("[3] Ricarica " + UiHelpers.weaponTranslator(weapons.get(0)) +
+                        " e " + UiHelpers.weaponTranslator(weapons.get(1)));
             }
             if(weapons.size() >= 3){
-                System.out.println("[2] Ricarica " + weapons.get(2));
-                System.out.println("[4] Ricarica " + weapons.get(0) + weapons.get(2));
-                System.out.println("[5] Ricarica " + weapons.get(1) + weapons.get(2));
+                System.out.println("[2] Ricarica " + UiHelpers.weaponTranslator(weapons.get(2)));
+                System.out.println("[4] Ricarica " + UiHelpers.weaponTranslator(weapons.get(0)) + UiHelpers.weaponTranslator(weapons.get(2)));
+                System.out.println("[5] Ricarica " + UiHelpers.weaponTranslator(weapons.get(1)) + UiHelpers.weaponTranslator(weapons.get(2)));
                 System.out.println("[6] Ricarica tutte le armi");
             }
 
@@ -2489,7 +2491,6 @@ public class CLI implements UserInterface {
                                 System.out.println("Arma " + k + " : " + UiHelpers.weaponTranslator(spawnCell.getWeaponNames().get(k)) +
                                         " Costo: " + UiHelpers.ammoTranslator(w.getBuyEffect()));
                             } catch (WeaponNotFoundException e){
-                                //TODO check if it ever catch this Exception -> means there is a wrong weapon name
                                 System.out.println("[DEBUG] Weapon not found! " + e.getMessage());
                             }
 
