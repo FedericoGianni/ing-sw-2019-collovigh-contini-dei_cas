@@ -103,62 +103,18 @@ public class FrenzyShoot extends JsonAction {
         return shootAction;
     }
 
-    public List<Integer> getFieldsNonNull(){
-
-        List<Integer> fieldList = new ArrayList<>();
-
-        if (shootAction != null) fieldList.add(3);
-
-        if (reloadAction != null) fieldList.add(2);
-
-        if (moveAction != null) fieldList.add(1);
-
-        return fieldList;
-    }
-
-    public Boolean isFirstPartFull(){
-
-        return ( (moveAction != null) && (reloadAction != null) );
-    }
-
-    public Boolean isFull(){
-
-        return ( (moveAction != null) && (reloadAction != null) && (shootAction != null) );
-    }
-
     /**
-     * This method merge two frenzyShoot actions into one with more parameters, allowing the possibility of a modular action
-     * @param frenzyShoot is the source frenzy shoot action
-     * @return a new frenzy action
+     * This method will say which of three fields are null
+     * @return -1 if none, 1 if the move action, 2 for the reload action, 3 for the shoot action
      */
-    public FrenzyShoot addPart(FrenzyShoot frenzyShoot){
+    public Integer getFieldsNonNull(){
 
-        Move move = this.getMoveAction();
-        ReloadAction reload = this.getReloadAction();
-        JsonAction shoot = this.getShootAction();
+        if (shootAction != null) return 3;
 
-        if (frenzyShoot.getMoveAction() != null ){
+        if (reloadAction != null) return 2;
 
-            if (this.getMoveAction() != null ) throw new IllegalArgumentException();
+        if (moveAction != null) return 1;
 
-            move = frenzyShoot.getMoveAction();
-        }
-
-        if (frenzyShoot.getReloadAction() != null ){
-
-            if (this.getReloadAction() != null ) throw new IllegalArgumentException();
-
-            reload = frenzyShoot.getReloadAction();
-
-        }
-
-        if (frenzyShoot.getShootAction() != null){
-
-            if (this.getShootAction() != null ) throw new IllegalArgumentException();
-
-            shoot = frenzyShoot.getShootAction();
-        }
-
-        return new FrenzyShoot(move,reload,shoot);
+        return -1;
     }
 }

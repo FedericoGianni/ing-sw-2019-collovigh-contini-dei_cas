@@ -76,8 +76,6 @@ public class PowerUpPhase {
 
             controller.getTimer().startTimer(TIMER_POWER_UP);
 
-            controller.setExpectingAnswer(true);
-
             // sends the action
 
             controller.getVirtualView(currentPlayer).startPowerUp();

@@ -73,8 +73,6 @@ public class SpawnPhase {
 
             controller.getTimer().startTimer(TIMER_SPAWN);
 
-            controller.setExpectingAnswer(true);
-
             // sends the action
 
             controller.getVirtualView(controller.getCurrentPlayer()).startSpawn();
