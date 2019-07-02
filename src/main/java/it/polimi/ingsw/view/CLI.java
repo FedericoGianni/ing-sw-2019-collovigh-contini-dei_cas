@@ -641,7 +641,7 @@ public class CLI implements UserInterface {
             show("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
-                show(i + " " + powerUps.get(i).toString());f
+                show(i + " " + powerUps.get(i).toString());
 
             }
 
@@ -785,15 +785,15 @@ public class CLI implements UserInterface {
 
             valid = false;
 
-            System.out.println("Ti hanno sparato: vuoi usare una granata ? \n hai queste granate: ");
+            show("Ti hanno sparato: vuoi usare una granata ? \n hai queste granate: ");
 
             for (int i = 0; i < grenades.size(); i++) {
 
-                System.out.println(i + grenades.get(i).toString());
+                show(i + grenades.get(i).toString());
 
             }
 
-            System.out.println("Digita il numero della carta che vuoi usare o '9' per non usarne nessuna: ");
+            show("Digita il numero della carta che vuoi usare o '9' per non usarne nessuna: ");
 
             try {
                 choice = scanner.nextInt();
@@ -970,7 +970,7 @@ public class CLI implements UserInterface {
             //when the controller reply back with a message the showBattlefield method and the startAction method
             //and the map won't be displayed correctly
             if(isFrenzy){
-                show("FASE FRENZY");
+                show(ANSI_GREEN.escape() + "FASE FRENZY" + ANSI_RESET.escape());
             }
             show("SELEZIONA UN AZIONE:");
 
@@ -1643,14 +1643,23 @@ public class CLI implements UserInterface {
 
             System.out.println("Seleziona l'arma con cui vuoi sparare: ");
             showCurrWeapons();
+            System.out.println("9 -> salta la fase di sparo");
 
             try{
 
                 choice = scanner.nextInt();
 
                 int weaponBagSize = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons().size();
-                if(choice >= 0 && choice < weaponBagSize){
+                if(choice >= 0 && choice < weaponBagSize || choice == 9){
                     valid = true;
+                    if(choice == 9){
+                        if(isFrenzy){
+                            view.doAction(FrenzyShoot.genFrenzyShootActionSkipShoot());
+                        } else {
+                            view.doAction(new SkipAction());
+                        }
+                        return;
+                    }
                 } else {
                     System.out.println("Scelta non valida! Riprova >>> ");
                 }
