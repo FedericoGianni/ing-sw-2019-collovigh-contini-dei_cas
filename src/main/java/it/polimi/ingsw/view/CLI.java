@@ -281,7 +281,7 @@ public class CLI implements UserInterface {
                 valid = true;
                 mapAndSkulls.add(mapChoice);
             } else {
-                System.out.println("Scelta non valida! Riprova: ");
+                System.out.println("Tipo di mappa scelto non valido! Riprova: ");
             }
 
         } while(!valid);
@@ -1009,13 +1009,13 @@ public class CLI implements UserInterface {
             case 0:
                 if (isFrenzy) {
                     if (isBeforeFrenzyStarter) {
-                        startMove(DEFAULT_MAX_FRENZY_MOVES);
+                        startMove(DEFAULT_MAX_FRENZY_MOVES, false);
                     } else {
                         System.out.println("[!] Azione non disponibile: sei dopo il Frenzy Starter!");
                         startAction(isFrenzy, isBeforeFrenzyStarter);
                     }
                 } else {
-                    startMove(DEFAULT_MAX_NORMAL_MOVES);
+                    startMove(DEFAULT_MAX_NORMAL_MOVES, false);
                 }
                 break;
 
@@ -1046,9 +1046,11 @@ public class CLI implements UserInterface {
 
                         if (isFrenzy) {
                             if (isBeforeFrenzyStarter) {
-                                startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT, false);
+                                //startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
+                                startMove(DEFAULT_MOVES_WITH_FRENZY, isFrenzy);
                             } else {
-                                startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT, false);
+                                //startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
+                                startMove(DEFAULT_MOVES_WITH_ENHANCED_FRENZY, isFrenzy);
                             }
                         } else {
 
@@ -1096,12 +1098,28 @@ public class CLI implements UserInterface {
 
     @Override
     public void doFrenzyAtomicShoot() {
-        startFrenzyShoot(0, true);
+
+        //FORWARD PART 3: SHOOT ACTION
+        startShoot(0, true);
     }
 
     @Override
     public void doFrenzyReload() {
-        //TODO
+
+        //FORWARD PART 2: RELOAD ACTION
+        //only if has 1 or more weapon to reload
+        List<String> weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
+        for (int i = 0; i < weapons.size(); i++) {
+            if (!view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getLoaded().get(i)) {
+                startReload();
+                return;
+            }
+        }
+
+        //if user wants to skip reload
+        List<String> emptyWeap = new ArrayList<>();
+        List<CachedPowerUp> emptyPowerups = new ArrayList<>();
+        view.doAction(new FrenzyShoot(new ReloadAction(emptyWeap, emptyPowerups)));
     }
 
     /**
@@ -1198,7 +1216,7 @@ public class CLI implements UserInterface {
     }
 
 
-    public void startMove(int maxMoves) {
+    public void startMove(int maxMoves, boolean isFrenzyShoot) {
 
         int x = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
         int y = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
@@ -1209,7 +1227,13 @@ public class CLI implements UserInterface {
         List<Directions> directionsList = handleMove(maxMoves);
         Point finalPos = genPointFromDirections(directionsList, startingPoint);
 
-        view.doAction(new Move(directionsList, finalPos));
+        //NOTE: forward frenzy only if it is part of a frenzy shoot action, use normal action for frenzy move
+        if(isFrenzy){
+            view.doAction(new FrenzyShoot(new Move(directionsList, finalPos)));
+
+        } else {
+            view.doAction(new Move(directionsList, finalPos));
+        }
     }
 
     private void startGrab(int maxMoves) {
@@ -1755,32 +1779,16 @@ public class CLI implements UserInterface {
         }
     }
 
-    private void startFrenzyShoot(int maxMoves, boolean redoOnlyShoot){
+    private void startFrenzyShootMove(int maxMoves) {
 
-        if(!redoOnlyShoot) {
+        List<Directions> directionsList = new ArrayList<>();
 
-            List<Directions> directionsList = new ArrayList<>();
+        //FORWARD PART 1: MOVE ACTION
+        directionsList = handleMove(maxMoves);
+        Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
+        Point finalPos = genPointFromDirections(directionsList, startingPoint);
 
-            //FORWARD PART 1: MOVE ACTION
-            directionsList = handleMove(maxMoves);
-            Point startingPoint = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
-            Point finalPos = genPointFromDirections(directionsList, startingPoint);
-
-            view.doAction(new FrenzyShoot(new Move(directionsList, finalPos)));
-
-            //FORWARD PART 2: RELOAD ACTION
-            //only if has 1 or more weapon to reload
-            List<String> weapons = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getWeapons();
-            for (int i = 0; i < weapons.size(); i++) {
-                if (!view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getWeaponbag().getLoaded().get(i)) {
-                    startReload();
-                }
-            }
-        }
-
-        //FORWARD PART 3: SHOOT ACTION
-        startShoot(0, true);
-
+        view.doAction(new FrenzyShoot(new Move(directionsList, finalPos)));
     }
 
     private CachedPowerUp handleScopeRequest(List<CachedPowerUp> powerUps){

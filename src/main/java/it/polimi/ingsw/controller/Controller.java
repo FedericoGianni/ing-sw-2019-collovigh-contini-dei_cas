@@ -648,7 +648,7 @@ public class Controller {
 
         LOGGER.log(level, "[Controller] Player w/ id {0} has been overKilled ", playerId);
 
-        Model.getPlayer(playerId).setPlayerPos(null);
+        //Model.getPlayer(playerId).setPlayerPos(null);
 
         // add skull to killShotTrack
 
