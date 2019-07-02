@@ -197,11 +197,11 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startGame() {
         isReconnection = false;
-       /* Platform.runLater( () -> {
+       Platform.runLater( () -> {
             System.out.println("guiLobbyController: " + guiLobbyController);
-            guiMapController.mapCreator();
+            //guiMapController.mapCreator();
             guiLobbyController.openThirdScene(new ActionEvent());
-        });*/
+        });
     }
 
     @Override

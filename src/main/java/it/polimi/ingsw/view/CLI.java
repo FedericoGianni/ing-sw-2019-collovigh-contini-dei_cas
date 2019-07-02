@@ -611,7 +611,7 @@ public class CLI implements UserInterface {
         Boolean validChoice = false;
         int read;
 
-        System.out.println("SPAWN PHASE");
+        show("SPAWN PHASE");
 
         do {
 
@@ -638,14 +638,14 @@ public class CLI implements UserInterface {
                     .getPowerUpList();
 
 
-            System.out.println("Hai questi PowerUp:");
+            show("Hai questi PowerUp:");
 
             for (int i = 0; i < powerUps.size(); i++) {
-                System.out.println(i + " " + powerUps.get(i).toString());
+                show(i + " " + powerUps.get(i).toString());f
 
             }
 
-            System.out.println("Scegli un powerUp da scartare: ");
+            show("Scegli un powerUp da scartare: ");
 
             try {
                 read = scanner.nextInt();
@@ -1047,10 +1047,10 @@ public class CLI implements UserInterface {
                         if (isFrenzy) {
                             if (isBeforeFrenzyStarter) {
                                 //startFrenzyShoot(DEFAULT_MOVES_WITH_FRENZY_SHOOT);
-                                startMove(DEFAULT_MOVES_WITH_FRENZY, isFrenzy);
+                                startMove(DEFAULT_MOVES_WITH_FRENZY_SHOOT, isFrenzy);
                             } else {
                                 //startFrenzyShoot(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT);
-                                startMove(DEFAULT_MOVES_WITH_ENHANCED_FRENZY, isFrenzy);
+                                startMove(DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT, isFrenzy);
                             }
                         } else {
 
