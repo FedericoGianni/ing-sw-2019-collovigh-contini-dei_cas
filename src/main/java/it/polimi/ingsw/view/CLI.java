@@ -1053,9 +1053,9 @@ public class CLI implements UserInterface {
                         } else {
 
                             if (playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_SHOOT) {
-                                startShoot(DEFAULT_ENHANCED_MOVES_WITH_SHOOT);
+                                startShoot(DEFAULT_ENHANCED_MOVES_WITH_SHOOT, false);
                             } else {
-                                startShoot(0);
+                                startShoot(0, false);
                             }
                         }
                     }
@@ -1563,7 +1563,7 @@ public class CLI implements UserInterface {
 
 
 
-    private void startShoot(int maxMoves){
+    private void startShoot(int maxMoves, boolean isFrenzy){
 
         //INPUT requirements
         boolean valid = false;
@@ -1774,7 +1774,7 @@ public class CLI implements UserInterface {
         }
 
         //FORWARD PART 3: SHOOT ACTION
-        startShoot(0);
+        startShoot(0, true);
 
     }
 
