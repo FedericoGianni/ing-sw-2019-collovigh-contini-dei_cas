@@ -1207,7 +1207,7 @@ public class GuiMapController {
                         if (gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getDeaths() == 0) {
                             lbl5 = new Label("Numero di morti : 0");
                         } else {
-                            lbl5 = new Label("Marchi ricevuti: " + gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getDeaths());
+                            lbl5 = new Label("Numero di morti : " + gui.getView().getCacheModel().getCachedPlayers().get(i).getStats().getDeaths());
                         }
                         vb.getChildren().add(lbl5);
                     }
@@ -2755,7 +2755,7 @@ public class GuiMapController {
             {
                 //no target needed so it's a movement
                 //movement of the shooter effect exactly
-                System.out.println("begin with 0 targets and a movemet effect");
+                System.out.println("begin with 0 targets and a movement effect");
                 List<Integer> targets = new ArrayList<>();
                 List<List<Integer>> targetsLists = new ArrayList<>();
                 List<Point> p = new ArrayList<>();
@@ -2777,96 +2777,93 @@ public class GuiMapController {
                     {
                         if (map[x][y].getChildren().size() == 1)//primo HBOX
                         {
+                            System.out.println("Cerco bersagi in cella "+x+" "+y);
                             int j = 0;
-                            boolean found = false;
                             while (j < ((HBox) map[x][y].getChildren().get(0)).getChildren().size())//devo rimuovere il giocatore che ha quell'id e allora lo cerco, la sua img ha id=playerId
                             {
 
 
                                 if (((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id)) == 0) {
-                                    found = true;
-                                    break;
+                                    int iid = id;
+                                    System.out.println("Beccato player con id "+iid );
+                                    ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            playersEffectRemover();
+                                            mapEventDeleter();
+                                            List<Integer> targets = new ArrayList<>();
+                                            List<List<Integer>> targetsLists = new ArrayList<>();
+                                            targets.add(iid);
+                                            targetsLists.add(targets);
+                                            List<Point> p = new ArrayList<>();
+                                            shootTargetIterator(w, effects, pUp, dir, targetsLists, effectNum, targetNum + 1, p);
+
+                                        }
+                                    });
                                 }
                                 j++;
                             }
-                            if (found)//set the event listener that turn on the moverAction
-                            {
 
-                                int iid = id;
-                                ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                    @Override
-                                    public void handle(MouseEvent mouseEvent) {
-                                        playersEffectRemover();
-                                        mapEventDeleter();
-                                        List<Integer> targets = new ArrayList<>();
-                                        List<List<Integer>> targetsLists = new ArrayList<>();
-                                        targets.add(iid);
-                                        targetsLists.add(targets);
-                                        List<Point> p = new ArrayList<>();
-                                        shootTargetIterator(w, effects, pUp, dir, targetsLists, effectNum, targetNum + 1, p);
 
-                                    }
-                                });
-                            }
-                        } else if (map[x][y].getChildren().size() == 2) {//primo e secondo HBOX
+                        } else if (map[x][y].getChildren().size() == 2) {
+                            System.out.println("Vado a cercare anche nella seconda riga!");
                             int j = 0;
-                            boolean found = false;
+
 
                             while (j < ((HBox) map[x][y].getChildren().get(0)).getChildren().size()) {
 
+                                if (((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id)) == 0) {
+                                    System.out.println("Trovato nella prima riga player con questo id: " + id);
+                                    int iid = id;
+                                    ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            System.out.println("Parte l'effetto del player " + iid);
+                                            playersEffectRemover();
+                                            mapEventDeleter();
+                                            List<Integer> targets = new ArrayList<>();
+                                            List<List<Integer>> targetsLists = new ArrayList<>();
+                                            targets.add(iid);
+                                            targetsLists.add(targets);
+                                            List<Point> p = new ArrayList<>();
+                                            shootTargetIterator(w, effects, pUp, dir, targetsLists, effectNum, targetNum + 1, p);
+                                        }
+                                    });
+
+                                }
+                                j++;
+                            }
+
+
+                            System.out.println("Ora cerco nella seocnda riga i regaz");
+                            while (j < ((HBox) map[x][y].getChildren().get(1)).getChildren().size()) {
 
                                 if (((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).getId().compareTo(Integer.toString(id)) == 0) {
-                                    found = true;
-                                    break;
+                                    System.out.println("Trovato nella seconda riga player con questo id: " + id);
+                                    int iid = id;
+                                    ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                        @Override
+                                        public void handle(MouseEvent mouseEvent) {
+                                            System.out.println("Parte l'effetto del player " + iid);
+                                            playersEffectRemover();
+                                            mapEventDeleter();
+                                            List<Integer> targets = new ArrayList<>();
+                                            List<List<Integer>> targetsLists = new ArrayList<>();
+                                            targets.add(iid);
+                                            targetsLists.add(targets);
+                                            List<Point> p = new ArrayList<>();
+                                            shootTargetIterator(w, effects, pUp, dir, targetsLists, effectNum, targetNum + 1, p);
+                                        }
+                                    });
+
                                 }
                                 j++;
                             }
-                            if (found) {
 
-                                int iid = id;
-                                ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                    @Override
-                                    public void handle(MouseEvent mouseEvent) {
-                                        playersEffectRemover();
-                                        mapEventDeleter();
-                                        List<Integer> targets = new ArrayList<>();
-                                        List<List<Integer>> targetsLists = new ArrayList<>();
-                                        targets.add(iid);
-                                        targetsLists.add(targets);
-                                        List<Point> p = new ArrayList<>();
-                                        shootTargetIterator(w, effects, pUp, dir, targetsLists, effectNum, targetNum + 1, p);
-
-                                    }
-                                });
-                                continue;
-                            }
-                            j = 0;
-                            while (((HBox) map[x][y].getChildren().get(1)).getChildren().get(j).getId().compareTo(Integer.toString(id)) != 0)//devo rimuovere il giocatore che ha quell'id e allora lo cerco
-                            {
-                                j++;
-                            }
-
-                            int iid = id;
-                            ((HBox) map[x][y].getChildren().get(0)).getChildren().get(j).setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                @Override
-                                public void handle(MouseEvent mouseEvent) {
-                                    playersEffectRemover();
-                                    mapEventDeleter();
-                                    List<Integer> targets = new ArrayList<>();
-                                    List<List<Integer>> targetsLists = new ArrayList<>();
-                                    targets.add(iid);
-                                    targetsLists.add(targets);
-                                    List<Point> p = new ArrayList<>();
-                                    shootTargetIterator(w, effects, pUp, dir, targetsLists, effectNum, targetNum + 1, p);
-
-                                }
-                            });
                         }
-
                     }
                 }
             }
-
 
         } catch (WeaponNotFoundException e) {
             e.printStackTrace();
@@ -2883,21 +2880,18 @@ public class GuiMapController {
             //here add stop button
             CachedFullWeapon weapon = gui.getView().getCacheModel().getWeaponInfo(w);
             //---need to be done every time for adj things
-            int eeeffectNum = effectNum,tttarget=targetNum;
+            int eeeffectNum = effectNum, tttarget = targetNum;
             stopMov.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     mapEventDeleter();
-                    System.out.println("Pigiato stopMov in questa situa: effetto: "+eeeffectNum+" bersaglio numero : "+tttarget+" effetti: "+effects.size());
-                    if (!weapon.getEffectRequirements().get(effects.get(eeeffectNum)).getCellRequired() && (effects.size()-1)==eeeffectNum) {
+                    System.out.println("Pigiato stopMov in questa situa: effetto: " + eeeffectNum + " bersaglio numero : " + tttarget + " effetti: " + effects.size());
+                    if (!weapon.getEffectRequirements().get(effects.get(eeeffectNum)).getCellRequired() && (effects.size() - 1) == eeeffectNum) {
                         //ouch all ince
                         shootTargetIterator(w, effects, pUp, dir, targetLists, eeeffectNum + 1, 0, cells);
-                    }
-                    else if(!weapon.getEffectRequirements().get(effects.get(eeeffectNum)).getCellRequired() && effects.size()>eeeffectNum)
-                    {
-                        shootTargetIterator(w, effects, pUp, dir, targetLists, eeeffectNum , tttarget, cells);
-                    }
-                    else {//mov effect
+                    } else if (!weapon.getEffectRequirements().get(effects.get(eeeffectNum)).getCellRequired() && effects.size() > eeeffectNum) {
+                        shootTargetIterator(w, effects, pUp, dir, targetLists, eeeffectNum, tttarget, cells);
+                    } else {//mov effect
                         shootCell(w, effects, pUp, dir, targetLists, eeeffectNum, 0, cells);
                     }
 
@@ -2909,11 +2903,13 @@ public class GuiMapController {
             System.out.println("Richiedimento "+weapon.getEffectRequirements().get(effects.get(effectNum)));
             System.out.println("Disperatamente "+weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets());
                 */
-            if(effectNum>=effects.size())//shouldn't have cell required
+            if (effectNum >= effects.size())//shouldn't have cell required
             {
                 stopMov.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
-                    public void handle(ActionEvent event) {}});
+                    public void handle(ActionEvent event) {
+                    }
+                });
 
                 checkScope(w, effects, pUp, dir, targetLists, cells);
                 return;
@@ -2923,7 +2919,9 @@ public class GuiMapController {
                 System.out.println("Entrato nei controlli dello shoot");
                 stopMov.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
-                    public void handle(ActionEvent event) {}});
+                    public void handle(ActionEvent event) {
+                    }
+                });
 
                 //1)-----this effect requires also a cell. So at the end of this effect it can take it
                 if (weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired()) {
@@ -3182,7 +3180,8 @@ public class GuiMapController {
         System.out.println("No scope");
         mapEventDeleter();
         if (isFrenzy) {
-            gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, null)));
+            //gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, null)));
+            gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
         } else {
             gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
         }

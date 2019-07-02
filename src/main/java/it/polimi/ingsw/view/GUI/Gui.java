@@ -320,7 +320,7 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case INITIAL:
-
+                System.out.println("Giocatore con id= "+view.getPlayerId()+" nome: "+view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getName());
                 guiMapController.initial();
 
                 if(isReconnection) {
@@ -406,7 +406,7 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void startSpawn() {//pox: 1) rosso e giallo non fanno bene lo spawn 2) blu non fa bene lo spawn
 
-        while (view.getCacheModel().getCachedPlayers().size() <= 0 || view.getPlayerId() == -1) {
+       /* while (view.getCacheModel().getCachedPlayers().size() <= 0 || view.getPlayerId() == -1) {
             System.out.println("Attendi ricezione dell'update iniziale...");
 
             try {
@@ -414,7 +414,7 @@ public class Gui extends Application implements UserInterface {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
 
         //view.spawn(powerUps.get(read));
@@ -453,6 +453,7 @@ public class Gui extends Application implements UserInterface {
         //this method enables the action buttons to do something
         if(isFrenzy)
         {
+            guiMapController.printLog("ATTENZIONE !!! Attivzione della fase di FRENESIA FINALE");
             guiMapController.setFrenzy();
             if(isBeforeFrenzyStarter)
                 guiMapController.setBeforeFrenzyStarter();
