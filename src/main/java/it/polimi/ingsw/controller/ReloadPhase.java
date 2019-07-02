@@ -4,13 +4,11 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
-import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.actions.ReloadAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,6 +23,8 @@ public class ReloadPhase {
     private static final Level level = Level.INFO;
 
     private static final String LOG_START = "[Controller-ReloadPhase]";
+
+    private static final int TIMER_RELOAD = 60;
 
     private final Controller controller;
 
@@ -49,7 +49,7 @@ public class ReloadPhase {
 
                 controller.getVirtualView(playerId).startReload();
 
-                controller.setExpectingAnswer(true);
+                controller.getTimer().startTimer(TIMER_RELOAD);
 
             } else {
 
@@ -318,7 +318,9 @@ public class ReloadPhase {
 
         //check if the player can reload any of his weapon
 
-        if (returnValue == true ) {
+        if (returnValue ) {
+
+            boolean hasAmmoToReload = false;
 
             for (Weapon weapon : Model.getPlayer(playerId).getCurrentWeapons().getList()) {
 
@@ -328,9 +330,11 @@ public class ReloadPhase {
                         .map(AmmoCube::getColor)
                         .collect(Collectors.toList());
 
-                returnValue = returnValue || fullAmmoList.containsAll(required);
+                hasAmmoToReload = hasAmmoToReload || fullAmmoList.containsAll(required);
 
             }
+
+            returnValue = hasAmmoToReload;
 
         }
 

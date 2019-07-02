@@ -481,8 +481,6 @@ public class Controller {
 
         timer.stopTimer();
 
-        expectingAnswer = false;
-
         LOGGER.log(level,"[Controller] Received do action of type: {0}", jsonAction.getType());
 
         switch (jsonAction.getType()){

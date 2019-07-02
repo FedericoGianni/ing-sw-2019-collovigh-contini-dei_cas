@@ -76,8 +76,7 @@ public class ActionPhase {
 
     private List<PowerUp> discardedPowerUpForRestore = new ArrayList<>();
     private List<AmmoCube> ammoCubeForRestore = new ArrayList<>();
-
-    private FrenzyShoot frenzyShootTemp = FrenzyShoot.genEmptyFrenzyShootAction();
+    
 
     public ActionPhase(Controller controller) {
 
@@ -104,16 +103,13 @@ public class ActionPhase {
 
         } else {
 
+            // start the timer
+
             controller.getTimer().startTimer(TIMER_ACTION);
 
             // sends the startPhase command to the virtual view
 
             controller.getVirtualView(currentPlayer).startAction(controller.getFrenzy(), frenzyEnhanced);
-
-            // start the timer
-
-            controller.setExpectingAnswer(true);
-
 
         }
     }
@@ -1276,38 +1272,35 @@ public class ActionPhase {
 
         // logs the action
 
-        LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + " calling Move in frenzy mode ");
+        LOGGER.log(level, () -> LOG_START_ID + controller.getCurrentPlayer() + " calling frenzy shoot ");
 
-        this.frenzyShootTemp = frenzyShootTemp.addPart(frenzyShoot);
+        LOGGER.log(level, () -> LOG_START_FRENZY_S + " received frenzy Shoot : [ MOVE: " + frenzyShoot.getMoveAction() + " , RELOAD " + frenzyShoot.getReloadAction() + " , SHOOT: " + frenzyShoot.getShootAction() );
 
-        System.out.println(" Frenzy Shoot temp class : [ MOVE: " + frenzyShootTemp.getMoveAction() + " , RELOAD: " + frenzyShootTemp.getReloadAction() + " , SHOOT: " + frenzyShootTemp.getShootAction() );
+        // do the action
 
-        if ( !frenzyShootTemp.isFull() ) controller.setExpectingAnswer(true);
+        switch (frenzyShoot.getFieldsNonNull()){
 
-        if (!checkFrenzyShootMove(frenzyShoot.getMoveAction())){
+            case 1:
 
-            handleAction();
+                doFrenzyShootMove(frenzyShoot);
 
-            return;
-        }
+                break;
 
-        if ((this.frenzyShootTemp.isFirstPartFull()) && (!frenzyShootTemp.getFieldsNonNull().contains(3))){
+            case 2:
 
-            if(!controller.getReloadPhase().checkIfReloadIsValid(frenzyShootTemp.getReloadAction())){
+                doFrenzyReload(frenzyShoot);
 
-                handleAction();
+                break;
 
-                return;
+            case 3:
 
-            }else{
+                doShootPartFrenzyShoot(frenzyShoot.getShootAction());
 
-                doFirstPartFrenzyShoot(frenzyShoot);
-            }
-        }
+                break;
 
-        if (this.frenzyShootTemp.isFirstPartFull() && frenzyShootTemp.getFieldsNonNull().contains(3)){
+            default:
 
-            doShootPartFrenzyShoot(frenzyShoot);
+                LOGGER.log(Level.WARNING, ()-> LOG_START_FRENZY_S + " received empty frenzy shoot action ");
         }
     }
 
@@ -1363,25 +1356,60 @@ public class ActionPhase {
         return true;
     }
 
-
     /**
-     * This method will perform the first part of the frenzy shoot action ( move + reload )
+     * This method will do the move part of the frenzy shoot action
      * @param frenzyShoot is a class containing the information needed
      */
-    private void doFirstPartFrenzyShoot(FrenzyShoot frenzyShoot){
+    private void doFrenzyShootMove(FrenzyShoot frenzyShoot){
 
-        // does the move part
+        if (checkFrenzyShootMove(frenzyShoot.getMoveAction())) {
 
-        utilityMethods.move(frenzyShoot.getMoveAction().getMoves());
+            // does the move part
 
-        // does the reload part
+            utilityMethods.move(frenzyShoot.getMoveAction().getMoves());
 
-        controller.getReloadPhase().reload(frenzyShoot.getReloadAction());
+            // starts the timer
 
+            controller.getTimer().startTimer(TIMER_ACTION);
+
+            // calls the reload part
+
+            controller.getVirtualView(controller.getCurrentPlayer()).doFrenzyReload();
+
+        }else {
+
+            handleAction();
+        }
     }
 
     /**
-     * This method will perform the second part of the frenzy shoot action ( shoot )
+     * This method will do the reload part of the frenzy shoot action
+     * @param frenzyShoot is a class containing the information needed
+     */
+    private void doFrenzyReload(FrenzyShoot frenzyShoot){
+
+        if (controller.getReloadPhase().checkIfReloadIsValid(frenzyShoot.getReloadAction())) {
+
+            // does the reload part
+
+            controller.getReloadPhase().reload(frenzyShoot.getReloadAction());
+
+            // starts the timer
+
+            controller.getTimer().startTimer(TIMER_ACTION);
+
+            // calls the shoot part
+
+            controller.getVirtualView(controller.getCurrentPlayer()).doFrenzyAtomicShoot();
+
+        } else {
+
+            controller.getVirtualView(controller.getCurrentPlayer()).doFrenzyReload();
+        }
+    }
+
+    /**
+     * This method will perform the shoot part of the frenzy shoot action
      * @param jsonAction is a class containing the information needed
      */
     private void doShootPartFrenzyShoot(JsonAction jsonAction){
@@ -1398,8 +1426,6 @@ public class ActionPhase {
 
             }
         }
-
-        this.frenzyShootTemp = FrenzyShoot.genEmptyFrenzyShootAction();
 
         controller.incrementPhase();
     }
@@ -1421,9 +1447,6 @@ public class ActionPhase {
             // notify other players
 
             notifyShotToOtherPlayer(shootAction);
-
-            this.frenzyShootTemp = null;
-
 
         }catch (WeaponNotLoadedException weaponNonLoadedException){
 

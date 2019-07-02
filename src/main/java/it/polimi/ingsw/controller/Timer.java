@@ -30,6 +30,8 @@ public class Timer {
 
         LOGGER.log(level, () -> LOG_START + " started timer ");
 
+        controller.setExpectingAnswer(true);
+
         // creates a new thread for the timer
 
         thread = new TimerThread(this, timerTime);
@@ -46,6 +48,8 @@ public class Timer {
      * This method will stop the timer for the actions
      */
     public void stopTimer(){
+
+        controller.setExpectingAnswer(false);
 
         // stop the thread
 
