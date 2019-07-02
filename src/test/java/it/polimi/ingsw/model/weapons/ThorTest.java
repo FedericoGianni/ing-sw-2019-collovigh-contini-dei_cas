@@ -66,7 +66,7 @@ class ThorTest {
         p2.setPlayerPos(Model.getMap().getCell(0,0));
 
         Player p3=Model.getPlayer(2);
-        p3.setPlayerPos(Model.getMap().getCell(0,0));
+        p3.setPlayerPos(Model.getMap().getCell(2,3));
 
 
 
@@ -88,8 +88,8 @@ class ThorTest {
             e.printStackTrace();
         }
 
-        //System.out.println(p2.getStats().getDmgTaken());
-        //System.out.println(p3.getStats().getDmgTaken());
+        System.out.println(p2.getStats().getDmgTaken());
+        System.out.println(p3.getStats().getDmgTaken());
 
 
     }

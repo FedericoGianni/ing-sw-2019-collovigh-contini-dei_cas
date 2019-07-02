@@ -38,47 +38,59 @@ public class Thor extends SpecialWeapons {
     @Override
     public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerAlreadyDeadException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, CellNonExistentException {
 
-        for (int i = 0; i < effects.size(); i++) {
-            for(Player p : targetLists.get(i)){
-                if(p.getStats().getDmgTaken().size() > KILL_DMG){
-                    throw new PlayerAlreadyDeadException();
+        try {
+            if(!isLoaded())
+                throw new WeaponNotLoadedException();
+
+            for (int i = 0; i < effects.size(); i++) {
+                for (Player p : targetLists.get(i)) {
+                    if (p.getStats().getDmgTaken().size() > KILL_DMG) {
+                        throw new PlayerAlreadyDeadException();
+                    }
+                }
+            }
+
+            for (int i = 0; i < effects.size(); i++)//checks that i can actually shoot
+            {
+                if (i == 0) {
+                    if (!isPossessedBy().canSee().contains(targetLists.get(i).get(0)))
+                        throw new PlayerNotSeeableException();
+                }
+                if (i > 0) {
+
+                    if (!targetLists.get(i - 1).get(0).canSee().contains(targetLists.get(i).get(0)))
+                        throw new PlayerNotSeeableException();
+
+                }
+
+                if (effects.get(i) != i)
+                    throw new UncorrectEffectsException();
+            }
+
+            for (int i = 0; i < effects.size(); i++) {
+
+                if (i == 0)//first macroeffect
+                {//TODO modify damage to 2, 10 is just for test purpose
+                    targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 2);
+                } else if (i == 1)//second macroeffect
+                {
+                    targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 1);
+                } else if (i == 2)//third macroeffect
+                {
+                    targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 2);
                 }
             }
         }
-
-        for(int i=0;i<effects.size();i++)//checks that i can actually shoot
+        catch(UncorrectEffectsException e)
         {
-            if(i==0)
-            {
-                if(!isPossessedBy().canSee().contains(targetLists.get(i).get(0)))
-                    throw new PlayerNotSeeableException();
-            }
-            if(i>0)
-            {
+            throw new UncorrectEffectsException();
 
-                if(!targetLists.get(i-1).get(0).canSee().contains(targetLists.get(i).get(0)))
-                    throw new PlayerNotSeeableException();
-
-            }
-
-            if(effects.get(i)!=i)
-                throw new UncorrectEffectsException();
-        }
-
-        for(int i=0;i<effects.size();i++)
-        {
-
-            if(i==0)//first macroeffect
-            {//TODO modify damage to 2, 10 is just for test purpose
-                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),11);
-            }else if(i==1)//second macroeffect
-            {
-                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),1);
-            }
-            else if(i==2)//third macroeffect
-            {
-                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),2);
-            }
+        } catch (PlayerAlreadyDeadException e) {
+            throw new PlayerAlreadyDeadException();
+        } catch (PlayerNotSeeableException e) {
+            throw new PlayerNotSeeableException();
+        } catch(WeaponNotLoadedException e) {
+            throw new WeaponNotLoadedException();
         }
         //TODO uncomment this just to make quicker tests
         //this.setLoaded(false);
