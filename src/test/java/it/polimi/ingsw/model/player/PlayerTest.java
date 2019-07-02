@@ -117,6 +117,28 @@ class PlayerTest {
     }
 
     @Test
+    void canSee2(){
+
+        List<String>  names=new ArrayList<>();
+        names.add("shooter");
+        names.add("target");
+        List<PlayerColor> pc=new ArrayList<>();
+        pc.add(PlayerColor.BLUE);
+        pc.add(PlayerColor.PURPLE);
+        Model m=new Model(names,pc,2,8);
+
+        Player shooter= Model.getGame().getPlayers().get(0);
+        Player target1=Model.getGame().getPlayers().get(1);
+
+        shooter.setPlayerPos(Model.getMap().getCell(2,1));
+        target1.setPlayerPos(Model.getMap().getCell(1,3));
+
+        assert (shooter.canSee().contains(target1));
+
+
+    }
+
+    @Test
     void addDmg() {
 
         Player player = new Player("Frank",0,PlayerColor.BLUE);

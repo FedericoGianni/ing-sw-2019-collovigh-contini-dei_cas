@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,43 +30,16 @@ public class GuiEndController {
         //dovrebbe anche aggiornare la visualizzazione dei nomi sulla gui
 
         List<Player> players = gui.getView().getCacheModel().getCachedPlayers();
-        List<Player> winners = new ArrayList<>();
-        int maxScore = 0;
 
         for(Player p : players){
             String s = new String();
+
             s = s.concat(" ID: " + p.getPlayerId());
-            s = s.concat(" Nome: " + p.getName());
-            s = s.concat(" Punti: " + p.getStats().getScore());
-            s = s.concat(" Punti KillShotTrack: " + calcKillShotTrackPoints(gui.getView().getPlayerId()));
+            s = s.concat("\tNome: " + p.getName());
+            s = s.concat("\tPunti: " + p.getStats().getScore());
 
             pointPlayers.add(s);
-
-            if(p.getStats().getScore() >= maxScore){
-                maxScore = p.getStats().getScore();
-            }
         }
-    }
-
-    /**
-     *
-     * @param playerId id of the player to calc points
-     * @return the number of points done inside killShotTrack durig the game
-     */
-    private int calcKillShotTrackPoints(int playerId){
-
-        int points = 0;
-
-        if(gui.getView().getCacheModel().getGame() != null){
-            for (int i = 0; i < gui.getView().getCacheModel().getGame().getKillShotTrack().size(); i++) {
-                if(gui.getView().getCacheModel().getGame().getKillShotTrack().get(i).x == playerId){
-                    points += gui.getView().getCacheModel().getGame().getKillShotTrack().get(i).y;
-                }
-            }
-        }
-
-        return points;
-
     }
 
     public void setUp(){
