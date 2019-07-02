@@ -1394,7 +1394,7 @@ public class ActionPhase {
 
                 // ask the player to redo only the shooting part
 
-                controller.getVirtualView(controller.getCurrentPlayer()).reDoFrenzyAtomicShoot();
+                controller.getVirtualView(controller.getCurrentPlayer()).doFrenzyAtomicShoot();
 
             }
         }

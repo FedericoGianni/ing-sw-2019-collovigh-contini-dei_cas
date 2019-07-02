@@ -102,7 +102,12 @@ public interface UserInterface {
     /**
      * This method will ask the player to redo just the shoot part of the FrenzyShoot
      */
-    void reDoFrenzyAtomicShoot();
+    void doFrenzyAtomicShoot();
+
+    /**
+     * This method will ask the player to do the reload atomic action for the frenzy shoot
+     */
+    void doFrenzyReload();
 
     /**
      * Last turn phase, in which the user is asked if he wants to reload one or more of his weapons

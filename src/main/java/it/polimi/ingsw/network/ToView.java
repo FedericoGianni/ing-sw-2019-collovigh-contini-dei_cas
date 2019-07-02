@@ -32,7 +32,12 @@ public interface ToView  {
     /**
      * This method will ask the player to redo just the shoot part of the FrenzyShoot
      */
-    void reDoFrenzyAtomicShoot();
+    void doFrenzyAtomicShoot();
+
+    /**
+     * This method will ask the player to do the reload atomic action for the frenzy shoot
+     */
+    void doFrenzyReload();
 
     /**
      * This method starts the reload phase of the turn ( 6)

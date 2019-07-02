@@ -50,7 +50,8 @@ public class SocketClientReader extends Thread {
     private static final String ASK_GRENADE = "askGrenade";
     private static final String SHOW = "showMessage";
     private static final String SET_INT_ANSWER = "setIntAnswer";
-    private static final String REDO_FRENZY_SHOOT = "reDoFrenzyAtomicShoot";
+    private static final String REDO_FRENZY_SHOOT = "doFrenzyAtomicShoot";
+    private static final String DO_FRENZY_SHOOT_RELOAD = "doFrenzyShootReload";
     private static final String CLOSE = "close";
 
     /**
@@ -438,10 +439,10 @@ public class SocketClientReader extends Thread {
             }
         });
 
-        //reDoFrenzyAtomicShoot
+        //doFrenzyAtomicShoot
         headersMap.put(REDO_FRENZY_SHOOT, (commands) -> {
-            LOGGER.log(level,"[Socket-Client-Reader] received reDoFrenzyAtomicShoot by server");
-            RunClient.getView().reDoFrenzyAtomicShoot();
+            LOGGER.log(level,"[Socket-Client-Reader] received doFrenzyAtomicShoot by server");
+            RunClient.getView().doFrenzyAtomicShoot();
         });
 
         //show
@@ -482,6 +483,15 @@ public class SocketClientReader extends Thread {
             List<Integer> mapAndSkulls = RunClient.getView().askMapAndSkulls();
 
             scw.send(ASK_MAP_AND_SKULLS + "\f" + mapAndSkulls.get(0) + "\f" + mapAndSkulls.get(1));
+
+        });
+
+        //do frenzy reload
+        headersMap.put(DO_FRENZY_SHOOT_RELOAD,(commands) -> {
+
+            LOGGER.log(level,() -> "[Socket-Client-Reader] received doFrenzyReload by server ");
+
+            RunClient.getView().doFrenzyReload();
 
         });
     }

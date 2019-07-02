@@ -85,6 +85,11 @@ public interface ToClient extends  Remote {
     void reDoFrenzyAtomicShoot() throws RemoteException;
 
     /**
+     * This method will ask the player to do the reload atomic action for the frenzy shoot
+     */
+    void doFrenzyReload() throws  RemoteException;
+
+    /**
      * This method will start the reload Phase on the client
      * @throws RemoteException
      */
@@ -109,8 +114,17 @@ public interface ToClient extends  Remote {
      */
     void endGame() throws RemoteException;
 
+    /**
+     * This method will kick the client
+     * @throws RemoteException
+     */
     void close() throws RemoteException;
 
+    /**
+     * This method ask the client the mapType and the skull number
+     * @return al ist with in pos 0 the mapType an in pos 1 the skulls number
+     * @throws RemoteException
+     */
     List<Integer> askMapAndSkulls() throws RemoteException;
 
 }

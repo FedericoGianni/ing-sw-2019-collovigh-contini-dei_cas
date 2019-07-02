@@ -124,7 +124,16 @@ public class ToClientImpl implements ToClient {
     @Override
     public void reDoFrenzyAtomicShoot() {
 
-        client.getView().reDoFrenzyAtomicShoot();
+        client.getView().doFrenzyAtomicShoot();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doFrenzyReload() throws RemoteException {
+
+        client.getView().doFrenzyReload();
     }
 
     /**
@@ -173,12 +182,18 @@ public class ToClientImpl implements ToClient {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() throws RemoteException {
 
         client.getView().close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Integer> askMapAndSkulls() throws RemoteException {
         return client.getView().askMapAndSkulls();

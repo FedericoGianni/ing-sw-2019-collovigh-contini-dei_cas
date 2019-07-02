@@ -472,7 +472,12 @@ public class Gui extends Application implements UserInterface {
     }
 
     @Override
-    public void reDoFrenzyAtomicShoot() {
+    public void doFrenzyAtomicShoot() {
+        //TODO
+    }
+
+    @Override
+    public void doFrenzyReload() {
         //TODO
     }
 

@@ -121,11 +121,27 @@ public class ToViewImpl implements ToView {
      * {@inheritDoc}
      */
     @Override
-    public void reDoFrenzyAtomicShoot() {
+    public void doFrenzyAtomicShoot() {
 
         try{
 
             client.reDoFrenzyAtomicShoot();
+
+        }catch (RemoteException e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(),e);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doFrenzyReload() {
+
+        try{
+
+            client.doFrenzyReload();
 
         }catch (RemoteException e){
 
@@ -220,6 +236,9 @@ public class ToViewImpl implements ToView {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
 
@@ -234,6 +253,9 @@ public class ToViewImpl implements ToView {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Integer> askMapAndSkulls() {
         try{

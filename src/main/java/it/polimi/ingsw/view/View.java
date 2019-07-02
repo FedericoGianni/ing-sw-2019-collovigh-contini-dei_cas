@@ -339,9 +339,18 @@ public class View implements ViewInterface {
      * {@inheritDoc}
      */
     @Override
-    public void reDoFrenzyAtomicShoot() {
+    public void doFrenzyAtomicShoot() {
 
-        userInterface.reDoFrenzyAtomicShoot();
+        userInterface.doFrenzyAtomicShoot();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doFrenzyReload() {
+
+        userInterface.doFrenzyReload();
     }
 
     /**

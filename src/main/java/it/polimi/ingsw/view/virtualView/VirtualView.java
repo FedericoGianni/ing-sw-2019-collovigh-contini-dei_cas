@@ -195,9 +195,18 @@ public class VirtualView implements ViewInterface {
      * {@inheritDoc}
      */
     @Override
-    public void reDoFrenzyAtomicShoot() {
+    public void doFrenzyAtomicShoot() {
         if(view != null)
-            view.reDoFrenzyAtomicShoot();
+            view.doFrenzyAtomicShoot();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doFrenzyReload() {
+
+        //TODO
     }
 
     /**

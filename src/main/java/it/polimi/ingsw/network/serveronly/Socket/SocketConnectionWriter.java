@@ -35,7 +35,8 @@ public class SocketConnectionWriter extends Thread implements ToView {
     private static final String ASK_GRENADE = "askGrenade";
     private static final String SHOW = "showMessage";
     private static final String SET_INT_ANSWER = "setIntAnswer";
-    private static final String REDO_FRENZY_SHOOT = "reDoFrenzyAtomicShoot";
+    private static final String REDO_FRENZY_SHOOT = "doFrenzyAtomicShoot";
+    private static final String DO_FRENZY_SHOOT_RELOAD = "doFrenzyShootReload";
     private static final String CLOSE = "close";
     private static final String ASK_MAP_AND_SKULLS = "askMapAndSkulls";
 
@@ -78,7 +79,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
     }
 
     /**
-     * Initialize the output stream and start a SocketPing thread to keep checking if client is still connected
+     * {@inheritDoc}
      */
     @Override
     public void run() {
@@ -120,30 +121,54 @@ public class SocketConnectionWriter extends Thread implements ToView {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startSpawn() {
         LOGGER.info("Sending startSpawn string to connected client");
         send(START_SPAWN);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startPowerUp() {
         LOGGER.info("Sending startPowerUp string to connected client");
         send(START_POWER_UP);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         LOGGER.info("Sending startAction string to connected client");
         send(START_ACTION  + "\f" + isFrenzy + "\f" + isBeforeFrenzyStarter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void reDoFrenzyAtomicShoot() {
-        LOGGER.info("Sending reDoFrenzyAtomicShoot string to connected client");
+    public void doFrenzyAtomicShoot() {
+        LOGGER.info("Sending doFrenzyAtomicShoot string to connected client");
         send(REDO_FRENZY_SHOOT);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doFrenzyReload() {
+        LOGGER.log(level,"sending doFrenzyReload string to connected client");
+        send(DO_FRENZY_SHOOT_RELOAD);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startReload() {
         LOGGER.info("sending startReload string to connected client");
@@ -151,7 +176,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
     }
 
     /**
-     * This method will be called on a player if he/she was shot in the previous phase and has grenades
+     * {@inheritDoc}
      */
     @Override
     public void askGrenade() {
@@ -159,18 +184,27 @@ public class SocketConnectionWriter extends Thread implements ToView {
         send(ASK_GRENADE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendUpdate(UpdateClass update) {
         LOGGER.info("sending update string to connected client of type : " + update.getType());
         send(gson.toJson(update));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame() {
         LOGGER.info("sending initGame to conneted client");
         send(START_GAME);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void show(String s) {
         LOGGER.info("sending show to connected client");
@@ -227,6 +261,9 @@ public class SocketConnectionWriter extends Thread implements ToView {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
 
@@ -255,6 +292,9 @@ public class SocketConnectionWriter extends Thread implements ToView {
         return mapAndSkullsAnswer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Integer> askMapAndSkulls() {
 

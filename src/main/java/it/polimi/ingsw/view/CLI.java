@@ -1095,8 +1095,13 @@ public class CLI implements UserInterface {
     }
 
     @Override
-    public void reDoFrenzyAtomicShoot() {
+    public void doFrenzyAtomicShoot() {
         startFrenzyShoot(0, true);
+    }
+
+    @Override
+    public void doFrenzyReload() {
+        //TODO
     }
 
     /**
