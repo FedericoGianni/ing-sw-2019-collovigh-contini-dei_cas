@@ -328,6 +328,7 @@ public class NormalWeapon extends Weapon{
         }
 
         shooterCopy.setPlayerPosCopy(this.isPossessedBy().getCurrentPosition());
+        shooterCopy.getStats().setMarksCopy(this.isPossessedBy().getMarks());
         List<List<Player>> targetsCopy=new ArrayList<>();
         //now i create the fake players
         for (List<Player> item : targetLists) {
@@ -449,6 +450,11 @@ public class NormalWeapon extends Weapon{
     {
         //for shooter i need to restore position and ammos
         shooter.setPlayerPos(shooterCopy.getCurrentPositionCopy());
+        try {
+            shooter.getStats().setMarks(shooterCopy.getMarks());
+        } catch (OverMaxMarkException e) {//can't occur
+            e.printStackTrace();
+        }
         for (AmmoCube a : shooterCopy.getAmmoBag().getList()) {
             shooter.getAmmoBag().addItem(a);
         }
