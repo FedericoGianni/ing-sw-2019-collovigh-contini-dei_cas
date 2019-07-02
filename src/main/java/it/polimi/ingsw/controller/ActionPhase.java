@@ -1309,7 +1309,6 @@ public class ActionPhase {
 
             doShootPartFrenzyShoot(frenzyShoot);
         }
-
     }
 
     /**

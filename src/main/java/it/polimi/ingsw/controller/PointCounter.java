@@ -84,6 +84,9 @@ public class PointCounter {
 
                 Model.getPlayer(i).getStats().setFrenzyBoard(frenzy);
 
+                // set the pos to null
+
+                Model.getPlayer(i).setPlayerPos(null);
             }
         }
     }

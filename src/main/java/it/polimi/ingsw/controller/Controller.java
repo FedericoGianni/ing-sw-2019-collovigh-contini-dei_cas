@@ -89,6 +89,8 @@ public class Controller {
 
     private boolean gameEnded = false;
 
+    private List<Integer> deadList = new ArrayList<>();
+
 
     /**
      * Constructor
@@ -629,7 +631,7 @@ public class Controller {
 
         LOGGER.log(level, "[Controller] Player w/ id {0} has been killed ", playerId);
 
-        Model.getPlayer(playerId).setPlayerPos(null);
+        //Model.getPlayer(playerId).setPlayerPos(null);
 
         Model.getGame().addkills(getCurrentPlayer(),false);
 
