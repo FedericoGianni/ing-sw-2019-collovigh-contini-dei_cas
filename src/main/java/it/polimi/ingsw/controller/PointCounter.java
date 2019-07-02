@@ -3,6 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.Skull;
+import it.polimi.ingsw.model.player.Stats;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -52,7 +53,7 @@ public class PointCounter {
 
         for (int i = 0; i < Model.getGame().getPlayers().size(); i++) {
 
-            if(Model.getPlayer(i).getStats().getDmgTaken().size() >= 11){
+            if(Model.getPlayer(i).getStats().getDmgTaken().size() >= (Stats.MAX_DMG - 1) ){
 
                 int[] vect = (Model.getPlayer(i).getStats().isFrenzyBoard()) ? pointFrenzyVect : pointVect;
 
