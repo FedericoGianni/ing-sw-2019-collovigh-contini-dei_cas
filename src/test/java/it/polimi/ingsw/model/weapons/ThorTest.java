@@ -68,7 +68,7 @@ class ThorTest {
         Player p3=Model.getPlayer(2);
         p3.setPlayerPos(Model.getMap().getCell(2,3));
 
-
+        //se danno >12 in un effetto son cazzi
 
         List <List<Player>> targetsLists =new ArrayList<>();
         List <Player> targets1=new ArrayList<>();
