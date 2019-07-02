@@ -76,7 +76,7 @@ public class StatsObserver implements Observer {
 
         // if the player died
 
-        if ( (stats.getCurrentPosition() != null ) && (stats.getDmgTaken().size() >= MAX_DMG -1) ) {
+        if ( (previousStats != null ) && ( previousStats.getDmgTaken().size() < MAX_DMG -1 ) && (stats.getDmgTaken().size() >= MAX_DMG -1) ) {
 
             if (stats.getDmgTaken().size() >= MAX_DMG){
 

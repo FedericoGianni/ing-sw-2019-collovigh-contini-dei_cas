@@ -796,11 +796,7 @@ public class ActionPhase {
 
             // translate the list of point in a list of cell
 
-            List<Cell> cells = (shootAction.getCells() == null ) ? new ArrayList<>() : shootAction
-                    .getCells()
-                    .stream()
-                    .map(x -> (x == null ) ? null : Model.getMap().getCell(x.x, x.y))
-                    .collect(Collectors.toList());
+            List<Cell> cells = utilityMethods.PointToCell(shootAction.getCells());
 
             List<List<Player>> targets = new ArrayList<>();
 
@@ -1294,7 +1290,11 @@ public class ActionPhase {
 
             case 3:
 
-                doShootPartFrenzyShoot(frenzyShoot.getShootAction());
+                if (frenzyShoot.getShootAction().getWeaponName() != null) {
+
+                    doShootPartFrenzyShoot(frenzyShoot.getShootAction());
+
+                }
 
                 break;
 

@@ -2,13 +2,11 @@ package it.polimi.ingsw.view.actions;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
-
 public class FrenzyShoot extends JsonAction {
 
     private final Move moveAction;
     private final ReloadAction reloadAction;
-    private final JsonAction shootAction;
+    private final ShootAction shootAction;
 
 
     public FrenzyShoot(Move moveAction) {
@@ -56,24 +54,9 @@ public class FrenzyShoot extends JsonAction {
         this.shootAction = shootAction;
     }
 
-    /**
-     * Constructor to be used in Controller
-     * @param moveAction is the move component of the action
-     * @param reloadAction is the reload component of the action
-     * @param shootAction is the shoot component of the action
-     */
-    private FrenzyShoot( Move moveAction, ReloadAction reloadAction, JsonAction shootAction) {
-
-        super(ActionTypes.FRENZY_SHOOT);
-
-        this.moveAction = moveAction;
-        this.reloadAction = reloadAction;
-        this.shootAction = shootAction;
-    }
-
     public static FrenzyShoot genFrenzyShootActionSkipShoot(){
 
-        return new FrenzyShoot(null,null, new SkipAction());
+        return new FrenzyShoot(null,null, new ShootAction(null,null, null,null,null,null,null));
     }
 
     public static FrenzyShoot genFrenzyShootActionSkipMove(){
@@ -99,7 +82,7 @@ public class FrenzyShoot extends JsonAction {
         return reloadAction;
     }
 
-    public JsonAction getShootAction() {
+    public ShootAction getShootAction() {
         return shootAction;
     }
 
