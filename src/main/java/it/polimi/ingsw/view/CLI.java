@@ -1677,7 +1677,7 @@ public class CLI implements UserInterface {
         } else {
             System.out.println("[!] Non hai abbastanza munizioni per usare gli effetti selezionati!");
             //TODO check if it works, should let him retry shoot from the beginning
-            startShoot(maxMoves);
+            startShoot(maxMoves, false);
         }
 
         //System.out.println("[DEBUG] Number of targets: " + weapon.getEffectRequirements().get(0).getNumberOfTargets());
