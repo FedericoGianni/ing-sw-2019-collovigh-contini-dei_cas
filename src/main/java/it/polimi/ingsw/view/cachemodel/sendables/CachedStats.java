@@ -5,6 +5,7 @@ import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 
 public class CachedStats extends UpdateClass {
 
@@ -48,11 +49,11 @@ public class CachedStats extends UpdateClass {
     }
 
     public int getCurrentPosX() {
-        return  currentPosition.x;
+        return Optional.of(currentPosition.x).orElse(null);
     }
 
     public int getCurrentPosY() {
-        return currentPosition.y;
+        return Optional.of(currentPosition.y).orElse(null);
     }
 
     @Override

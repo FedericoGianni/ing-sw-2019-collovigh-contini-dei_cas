@@ -22,7 +22,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.util.logging.Level.*;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.WARNING;
 
 /**
  * This class handles the socket input stream client-side, allowing to have an async bidirectional communication
@@ -302,7 +303,7 @@ public class SocketClientReader extends Thread {
 
     private UpdateClass handleTurnUpdate(String message){
 
-        LOGGER.log(INFO,() -> "[SOCKET_CLIENT_READER] RECEIVED TURN UPDATE : " + message );
+        LOGGER.log(level,() -> "[SOCKET_CLIENT_READER] RECEIVED TURN UPDATE : " + message );
 
         // split the gson to get the last parameter (GSON can not detect the superclass)
 

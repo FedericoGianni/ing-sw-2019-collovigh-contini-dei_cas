@@ -76,7 +76,7 @@ public class ActionPhase {
 
     private List<PowerUp> discardedPowerUpForRestore = new ArrayList<>();
     private List<AmmoCube> ammoCubeForRestore = new ArrayList<>();
-    
+
 
     public ActionPhase(Controller controller) {
 
@@ -186,45 +186,9 @@ public class ActionPhase {
 
             utilityMethods.move(grabAction.getDirections());
 
-            // sells the specified powerUps
-
-            List<CachedPowerUp> toSell = grabAction.getPowerUpsForPay();
-
-
-            if ( (toSell != null ) && ( !toSell.isEmpty()) ){
-
-                try {
-
-                    toSell = utilityMethods.sellSellablePowerUp(controller.getCurrentPlayer(), toSell);
-
-
-                }catch (CardNotPossessedException e){
-
-                    LOGGER.log(Level.WARNING,e.getMessage(),e);
-
-                }
-            }
-
             // grabs
 
-            grab(grabAction.getNewWeaponName(),grabAction.getDiscardedWeapon());
-
-            // sell the remaining powerUp
-
-            try{
-
-                LOGGER.log( level,  "powerUps to discard: {0} ", toSell);
-
-                toSell = controller.getUtilityMethods().sellSellablePowerUp(controller.getCurrentPlayer(),toSell);
-
-                String message = LOG_START_GRAB + " controller could not sell this powerUp: " + toSell;
-
-                if (!toSell.isEmpty()) LOGGER.log(Level.WARNING, ()-> message );
-
-            }catch (CardNotPossessedException e){
-
-                LOGGER.log(Level.WARNING,e.getMessage(),e);
-            }
+            grab(grabAction.getNewWeaponName(),grabAction.getDiscardedWeapon(), grabAction.getPowerUpsForPay() );
 
         }else {
 
@@ -237,7 +201,26 @@ public class ActionPhase {
         }
     }
 
-    private void grab(String newWeaponName,String discardedWeaponName) {
+    /**
+     * This method does the grab action
+     * @param newWeaponName is the name of the weapon to buy
+     * @param discardedWeaponName is the name of the weapon to discard
+     */
+    private void grab(String newWeaponName,String discardedWeaponName, List<CachedPowerUp> toSell ) {
+
+        // sells the powerUp
+
+        if ( (toSell != null ) && ( !toSell.isEmpty()) ){
+
+            try {
+
+                toSell = utilityMethods.sellSellablePowerUp(controller.getCurrentPlayer(), toSell);
+
+            }catch (CardNotPossessedException e){
+
+                LOGGER.log(Level.WARNING,e.getMessage(),e);
+            }
+        }
 
         // gets the type of the cell the player is in
 
@@ -264,6 +247,23 @@ public class ActionPhase {
             // increment the phase
 
             controller.incrementPhase();
+        }
+
+        // sell the remaining powerUp
+
+        try{
+
+            LOGGER.log( level,  "powerUps to discard: {0} ", toSell);
+
+            toSell = controller.getUtilityMethods().sellSellablePowerUp(controller.getCurrentPlayer(),toSell);
+
+            String message = LOG_START_GRAB + " controller could not sell this powerUp: " + toSell;
+
+            if (!toSell.isEmpty()) LOGGER.log(Level.WARNING, ()-> message );
+
+        }catch (CardNotPossessedException e){
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
         }
     }
 
@@ -1208,7 +1208,7 @@ public class ActionPhase {
 
             // grab
 
-            grab(frenzyGrab.getNewWeaponName(),frenzyGrab.getDiscardedWeapon());
+            grab(frenzyGrab.getNewWeaponName(),frenzyGrab.getDiscardedWeapon(), frenzyGrab.getPowerUpsForPay());
 
         }else {
 
