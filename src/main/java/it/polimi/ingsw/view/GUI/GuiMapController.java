@@ -1694,8 +1694,9 @@ public class GuiMapController {
                                     mapEventDeleter();
 
                                     if (isFrenzy) {
-
-                                        gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid))));
+                                        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"madonna bucchinara sta frenzy");
+                                        a.show();
+                                        //gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid))));
                                     } else {
                                         gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid)));
                                     }

@@ -125,6 +125,7 @@ public class CurrentGame extends Subject{
         return killShotTrack;
     }
 
+
     public void setKillShotTrack(List<Skull> killShotTrack) {
         this.killShotTrack = killShotTrack;
         updateAll(this);

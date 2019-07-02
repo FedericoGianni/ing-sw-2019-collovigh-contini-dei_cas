@@ -93,8 +93,6 @@ public class WaitingRoom {
             Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType, this.skulls));
             Server.getController().handleTurnPhase();
         }
-
-
         this.active = false;
     }
 
