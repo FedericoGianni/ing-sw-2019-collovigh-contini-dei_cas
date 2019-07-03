@@ -226,35 +226,35 @@ public class Gui extends Application implements UserInterface {
         stage.setTitle("Adrenalina");
 
         //start window
-        FXMLLoader startPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("start.fxml"));
+        FXMLLoader startPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/start.fxml"));
         Parent startPane = startPaneLoader.load();
         Scene startScene = new Scene(startPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
 
         //reconnect window
-        FXMLLoader reconnectPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("reconnect.fxml"));
+        FXMLLoader reconnectPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/reconnect.fxml"));
         Parent reconnectPane = reconnectPaneLoader.load();
         Scene reconnectScene = new Scene(reconnectPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
 
         // login window
         // loader will then give a possibility to get related controller
-        FXMLLoader firstPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("Login.fxml"));  // TEST
+        FXMLLoader firstPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/Login.fxml"));  // TEST
         Parent firstPane = firstPaneLoader.load();
         Scene firstScene = new Scene(firstPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
         //firstScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("style.css").toExternalForm());  // non serve : basta specificare nell FXML ( by d)
 
         // game lobby window
-        FXMLLoader secondPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleLobby.fxml"));
+        FXMLLoader secondPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/sampleLobby.fxml"));
         Parent secondPane = secondPageLoader.load();
         Scene secondScene = new Scene(secondPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
         //secondScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleLobby.css").toExternalForm());  // non serve : basta specificare nell FXML ( by d)
 
         // main game window
-        FXMLLoader thirdPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleMap.fxml"));
+        FXMLLoader thirdPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/sampleMap.fxml"));
         Parent thirdPane = thirdPageLoader.load();
         Scene thirdScene = new Scene(thirdPane, DEFAULT_MIN_WIDTH_MAP, DEFAULT_MIN_HEIGHT_MAP);
-        thirdScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleMap.css").toExternalForm());
+        thirdScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("gui/styleMap.css").toExternalForm());
 
-        FXMLLoader endPageLoader = new FXMLLoader((getClass().getClassLoader().getResource("end.fxml")));
+        FXMLLoader endPageLoader = new FXMLLoader((getClass().getClassLoader().getResource("gui/end.fxml")));
         Parent fourhtPane = endPageLoader.load();
         Scene endScene = new Scene(fourhtPane, DEFAULT_MIN_WIDTH_MAP, DEFAULT_MIN_HEIGHT_MAP);
 
@@ -611,6 +611,7 @@ public class Gui extends Application implements UserInterface {
         //this method enables the action buttons to do something
         if(isFrenzy)
         {
+
             guiMapController.printLog("ATTENZIONE !!! Attivzione della fase di FRENESIA FINALE");
             guiMapController.setFrenzy();
             if(isBeforeFrenzyStarter)
@@ -709,7 +710,8 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public List<Integer> askMapAndSkulls() {
-        List<Integer> values = new ArrayList<>();
+        System.out.println("ask skulls");
+        /*List<Integer> values = new ArrayList<>();
 
 
         Platform.runLater( () -> {
@@ -717,33 +719,10 @@ public class Gui extends Application implements UserInterface {
 
             Alert a = new Alert(Alert.AlertType.INFORMATION, "Seleziona quale  mappa usare");
             a.showAndWait();
-            //platfrm.runlater qui
-            if (view.getCacheModel().getCachedPlayers().size() == 3)//tipo 1 o 2
-            {
-                ButtonType first = new ButtonType("Per 3/4 giocatori");// map 1
-                ButtonType second = new ButtonType("Qualsiasi numero");//map 2
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli una mappa ", first, second);
-                alert.showAndWait();
-                if (alert.getResult() == first) {
-                    values.add(1);
-                } else {
-                    values.add(2);
-                }
-            } else if (view.getCacheModel().getCachedPlayers().size() == 5) //tipo 2 o 3
-            {
-                ButtonType first = new ButtonType("Per 4/5 giocatri");// map 1
-                ButtonType second = new ButtonType("Qualsiasi numero");//map 2
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli una mappa ", first, second);
-                alert.showAndWait();
-                if (alert.getResult() == first) {
-                    values.add(3);
-                } else {
-                    values.add(2);
-                }
-            } else {//tipo 1 o 2 o 3
-                ButtonType first = new ButtonType("Per 3/4 giocatori");// map 1
-                ButtonType third = new ButtonType("Per 4/5 giocatri");// map 1
-                ButtonType second = new ButtonType("Qualsiasi numero");//map 2
+
+                ButtonType first = new ButtonType("Tipo 1\nOttima Per 3/4 giocatori");// map 1
+                ButtonType third = new ButtonType("Tipo 3\nOttima Per 4/5 giocatri");// map 1
+                ButtonType second = new ButtonType("tipo 2 \nOttima Qualsiasi numero");//map 2
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli una mappa ", first, second, third);
                 alert.showAndWait();
                 if (alert.getResult() == first) {
@@ -753,7 +732,7 @@ public class Gui extends Application implements UserInterface {
                 } else {
                     values.add(3);
                 }
-            }
+
             //-----------------------------------ask for skulls
             values.add(skullSelector());
             bb=true;
@@ -768,6 +747,10 @@ public class Gui extends Application implements UserInterface {
         }
         bb=false;
         System.out.println(values);
+        return values;*/
+        List<Integer> values = new ArrayList<>();
+        values.add(2);
+        values.add(1);
         return values;
     }
 
