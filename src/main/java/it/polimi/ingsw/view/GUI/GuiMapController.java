@@ -771,18 +771,33 @@ public class GuiMapController {
             case "SHOOT":
                 if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size() < 6) {
                     Platform.runLater(() -> {
-                        shootWeaponChooser(x, y, movementDirections);
+                        shootWeaponChooser( movementDirections);
                     });
-                } else if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size() >= 6) {//one move more here before shoot
+                } else if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size() >= 6 || isFrenzy) {//one move more here before shoot
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi fare un movimento prima di sparare?", ButtonType.YES, ButtonType.NO);
                     alert.showAndWait();
                     if (alert.getResult() == ButtonType.NO) {
                         Platform.runLater(() -> {
-                            shootWeaponChooser(x, y, movementDirections);
+                            if (isFrenzy)//send empty mov
+                            {
+                                List<Directions> dir = new ArrayList<>();
+                                gui.getView().doAction(new FrenzyShoot(new Move(dir, gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosition())));
+                            }
                         });
                     } else {
                         Platform.runLater(() -> {
-                            handleMovement(x, y, UiHelpers.DEFAULT_ENHANCED_MOVES_WITH_SHOOT, movementDirections, actionType);
+                            if(isFrenzy && isBeforeFrenzyStarter)
+                            {
+                                handleMovement(x, y, UiHelpers.DEFAULT_MOVES_WITH_FRENZY_SHOOT, movementDirections, actionType);
+                            }
+                            else if(isFrenzy && !isBeforeFrenzyStarter)
+                            {
+                                handleMovement(x, y, UiHelpers.DEFAULT_MOVES_WITH_ENHANCED_FRENZY_SHOOT, movementDirections, actionType);
+                            }
+                            else{//more tha 6 damages
+                                handleMovement(x, y, UiHelpers.DEFAULT_ENHANCED_MOVES_WITH_SHOOT, movementDirections, actionType);
+                            }
+
                         });
                     }
 
@@ -843,7 +858,6 @@ public class GuiMapController {
                 switch (actionType) {
                     case "MOVE":
                         System.out.println("MOVE in hanldemovement e stoppo il moviment, mi muovo così : " + movementDirections);
-
                         gui.getView().doAction(new Move(movementDirections, new Point(x, y)));
                         actionButtonDisable();
                         break;
@@ -852,7 +866,11 @@ public class GuiMapController {
                         break;
                     case "SHOOT":
                         System.out.println("SHOOT in hanldemovement e stoppo il moviment, mi muovo così : " + movementDirections);
-                        shootWeaponChooser(x, y, movementDirections);
+                        if(!isFrenzy)
+                        {shootWeaponChooser( movementDirections);}
+                        else {
+                            gui.getView().doAction(new FrenzyShoot(new Move(movementDirections, new Point(x,y))));
+                        }
                         break;
 
                 }
@@ -939,9 +957,14 @@ public class GuiMapController {
                     case "MOVE&GRAB":
                         grabHere(x, y, movementDirections);
                         break;
-                    case "SHOOT":
+                    case "SHOOT"://-------------------------if you have more than some damages like 6
                         System.out.println("SHOOT in hanldemovement e stoppo il moviment, mi muovo così : " + movementDirections);
-                        shootWeaponChooser(x, y, movementDirections);
+                        if(!isFrenzy) {
+                            shootWeaponChooser(movementDirections);
+                        }
+                        else{
+                            gui.getView().doAction(new FrenzyShoot(new Move(movementDirections, new Point(x,y))));
+                        }
                         break;
 
                 }
@@ -966,7 +989,12 @@ public class GuiMapController {
             return;
         }
         if (m == 0 && actionType.compareTo("SHOOT") == 0) {
-            shootWeaponChooser(x, y, movementDirections);
+            if(!isFrenzy) {
+                shootWeaponChooser(movementDirections);
+            }
+            else{
+                gui.getView().doAction(new FrenzyShoot(new Move(movementDirections, new Point(x,y))));
+            }
             return;
         }
         for (int i = 0; i < rows; i++)//reset buttons on the map to do nothing
@@ -1782,8 +1810,6 @@ public class GuiMapController {
                                 public void handle(MouseEvent mouseEvent) {
                                     playersEffectRemover();
                                     mapEventDeleter();
-
-
                                     if (isFrenzy) {
 
                                         gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid))));
@@ -2357,7 +2383,13 @@ public class GuiMapController {
             return;
         }else if(costCount == cost.size() && actionType.equals("RELOAD")){
             System.out.println("Provo a ricaricare " + weaponNames + "   E scarto " + powerUpsToDiscard);
-            gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));
+            if(!isFrenzy)
+            {gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));}
+            else
+            {//reload then ask shoot
+                System.out.println("reload frenetico finale");
+                gui.getView().doAction(new FrenzyShoot(new ReloadAction(weaponNames, powerUpsToDiscard)));
+            }
             return;
         }
 
@@ -2445,7 +2477,7 @@ public class GuiMapController {
             alert.showAndWait();
 
 
-            alert.setContentText("Scegli powerUp da scartare: ");//need to wait before iterating---- qui cicla a cacchio
+            alert.setContentText("Scegli powerUp da scartare: ");//need to wait before iterating----
             alert.showAndWait();
 
             for (int i = 0; i < gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size(); i++) {
@@ -2516,9 +2548,15 @@ public class GuiMapController {
             //reply back that player hasn't got enough ammo
             System.out.println("Provo a ricaricare " + weaponNames + "E scarto " + powerUpsToDiscard);
             System.out.println("NON HO ABBA MUNIZIONI!");
-            Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni ");
+            Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni !");
             a.show();
-            gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));
+            if(!isFrenzy)
+            {gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));}
+            else
+            {//reload frenzy
+                System.out.println("reload frenetico finale");
+                gui.getView().doAction(new FrenzyShoot(new ReloadAction(weaponNames, powerUpsToDiscard)));
+            }
             return;
         }else if(actionType.equals("GRAB")){
                 //this shouldn't do anythign , just forward the choice and then controller will
@@ -2654,10 +2692,25 @@ public class GuiMapController {
 
 
     //--------------------------------------------------------------------------shoot things
-    private void shootWeaponChooser(int r, int c, List<Directions> dir) {
+    public void shootWeaponChooser( List<Directions> dir) {
         System.out.println("Now you can choose the weapon you want to use");
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Scegli con quale arma sparare");
+        a.showAndWait();
+        a = new Alert(Alert.AlertType.CONFIRMATION, "STOP annulla lo sparo,solo pre-selezione arma ");
         a.show();
+        if(isFrenzy)
+        {
+            stopMov.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Alert a=new Alert(Alert.AlertType.INFORMATION,"Sparo annullato");
+                    a.show();
+                    mapEventDeleter();
+                    gui.getView().doAction(FrenzyShoot.genFrenzyShootActionSkipShoot());
+                }
+            });
+            //setUp StopMov for interrupting everything-- need new button??
+        }
 
         myWeapon1.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -3291,8 +3344,7 @@ public class GuiMapController {
         System.out.println("No scope");
         mapEventDeleter();
         if (isFrenzy) {
-            //gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, null)));
-            gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
+            gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, null)));
         } else {
             gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
         }
@@ -3300,7 +3352,7 @@ public class GuiMapController {
 
     /**
      * Show a message on the user interface
-     * @param s string to show
+     * @param error string to show
      */
     public void show(String error)
     {
@@ -3417,4 +3469,26 @@ public class GuiMapController {
         checkPayWithPowerUp(cost,weapons,null,"RELOAD",null);//weapNames, dir,actiontype,
 
     }
+
+    //----------------------------------------------------------------------FRENZY
+    public void askFrenzyReload()
+    {//platform.runlater necessario
+        Platform.runLater( () -> {
+        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Vuoi ricaricare ?",ButtonType.YES,ButtonType.NO);
+        a.showAndWait();
+        if(a.getResult().equals(ButtonType.NO))
+        {
+            //send empty action
+            List <CachedPowerUp> pUp=new ArrayList<>();
+            List <String> weapons=new ArrayList<>();
+            gui.getView().doAction(new FrenzyShoot(new ReloadAction(weapons, pUp)));
+        }
+        else{
+            List<String> weapons = new ArrayList<>();
+            reloadWeaponChooser(weapons);
+        }
+        });
+
+    }
+
 }

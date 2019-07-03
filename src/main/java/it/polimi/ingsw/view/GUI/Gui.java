@@ -636,7 +636,9 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void doFrenzyAtomicShoot() {
-        //TODO
+        Platform.runLater( () -> {
+            guiMapController.shootWeaponChooser(null);
+        });
     }
 
 
@@ -645,7 +647,8 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void doFrenzyReload() {
-        //TODO
+        guiMapController.askFrenzyReload();
+
     }
 
 
