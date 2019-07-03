@@ -30,15 +30,15 @@ public class Parser {
 
     // paths
 
-    private static final String DAMAGE_PATH = "resources/json/damageTypes";
-    private static final String MACRO_EFFECT_PATH = "resources/json/macroEffects";
-    private static final String MARKER_PATH = "resources/json/MarkerTypes";
-    private static final String MOVER_PATH = "resources/json/mover";
-    private static final String NORMAL_WEAPON_PATH = "resources/json/Weaponary";
+    private static final String DAMAGE_PATH = "/json/damageTypes";
+    private static final String MACRO_EFFECT_PATH = "/json/macroEffects";
+    private static final String MARKER_PATH = "/json/MarkerTypes";
+    private static final String MOVER_PATH = "/json/mover";
+    private static final String NORMAL_WEAPON_PATH = "/json/Weaponary";
     private static final String SAVED_MAP_RELATIVE_PATH = "_Map.json";
-    private static final String MAP_ONE_PATH = "resources/json/maps/map_01.json";
-    private static final String MAP_TWO_PATH = "resources/json/maps/map_02.json";
-    private static final String MAP_THREE_PATH = "resources/json/maps/map_03.json";
+    private static final String MAP_ONE_PATH = "/json/maps/map_01.json";
+    private static final String MAP_TWO_PATH = "/json/maps/map_02.json";
+    private static final String MAP_THREE_PATH = "/json/maps/map_03.json";
 
     private static final String GAMES_PATH = "resources/json/savegames";
 
@@ -71,11 +71,11 @@ public class Parser {
 
         List<Damage> damageList = new ArrayList<>();
 
-        // Locate the file
+        // gets input stream
 
-        String path = new File(DAMAGE_PATH).getAbsolutePath();
+        InputStream inputStream = Parser.class.getResourceAsStream(DAMAGE_PATH);
 
-        try (FileReader reader = new FileReader(path))
+        try (BufferedReader reader =  new BufferedReader( new InputStreamReader(inputStream)))
 
         {
             //Read JSON file
@@ -159,9 +159,11 @@ public class Parser {
 
         //JSON parser object to parse read file
 
-        String path = new File(MACRO_EFFECT_PATH).getAbsolutePath();
+        // gets input stream
 
-        try (FileReader reader = new FileReader(path)) {  //change to relative files paths
+        InputStream inputStream = Parser.class.getResourceAsStream(MACRO_EFFECT_PATH);
+
+        try (BufferedReader reader =  new BufferedReader( new InputStreamReader(inputStream))) {  //change to relative files paths
 
             //Read JSON file
 
@@ -296,9 +298,11 @@ public class Parser {
 
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
-        String path = new File(MARKER_PATH).getAbsolutePath();
-        try (FileReader reader = new FileReader(path))
-        {
+
+        InputStream inputStream = Parser.class.getResourceAsStream(MARKER_PATH);
+
+        try (BufferedReader reader =  new BufferedReader( new InputStreamReader(inputStream))){
+
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -356,9 +360,11 @@ public class Parser {
 
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
-        String path = new File(MOVER_PATH).getAbsolutePath();
-        try (FileReader reader = new FileReader(path))
-        {
+
+        InputStream inputStream = Parser.class.getResourceAsStream(MOVER_PATH);
+
+        try (BufferedReader reader =  new BufferedReader( new InputStreamReader(inputStream))){
+
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -429,8 +435,11 @@ public class Parser {
         List<NormalWeapon> normalWeapons =new ArrayList<>();
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
-        try (FileReader reader = new FileReader(NORMAL_WEAPON_PATH))
-        {//change to relative files paths
+
+        InputStream inputStream = Parser.class.getResourceAsStream(NORMAL_WEAPON_PATH);
+
+        try (BufferedReader reader =  new BufferedReader( new InputStreamReader(inputStream))){
+
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
@@ -611,11 +620,15 @@ public class Parser {
 
         SavedMap savedMap = null;
 
+        // gets input stream
+
+        InputStream inputStream = Parser.class.getResourceAsStream( path );
+
         try {
 
             // creates a reader for the file
 
-            BufferedReader br = new BufferedReader(new FileReader(new File(path).getAbsolutePath()));
+            BufferedReader br = new BufferedReader( new InputStreamReader(inputStream));
 
             // load the Config File
 
@@ -624,6 +637,8 @@ public class Parser {
             // LOG the load
 
         }catch (Exception e){
+
+            e.printStackTrace();
 
             LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the specified map ");
         }
@@ -658,9 +673,7 @@ public class Parser {
 
             LOGGER.log(Level.WARNING, ()-> LOG_START + " error while trying to load games list ");
 
-            LOGGER.log(Level.WARNING,e.getMessage(),e);
-
-            //TODO create directory if not present
+            //new File(GAMES_PATH).mkdirs();
 
         }
 

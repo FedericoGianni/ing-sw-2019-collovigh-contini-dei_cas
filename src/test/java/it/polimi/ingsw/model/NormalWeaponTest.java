@@ -5,7 +5,7 @@ import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.model.weapons.*;
 import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.cachemodel.cachedmap;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 
@@ -533,13 +533,14 @@ public class FileRead {
         try {
             // Open the file that is the first
             // command line parameter
-            String path;
-            path = new File("resources/map/welcome.txt").getAbsolutePath();
 
-            FileInputStream fstream = new FileInputStream(path);
-            // Get the object of DataInputStream
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            // gets input stream
+
+            InputStream inputStream = FileRead.class.getResourceAsStream("/map/welcome.txt" );
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader( new InputStreamReader(inputStream));
             String strLine;
             //Read File Line By Line
             int r = 0;
@@ -557,7 +558,7 @@ public class FileRead {
             }
 
             //Close the input stream
-            in.close();
+            inputStream.close();
         } catch (Exception e) {//Catch exception if any
             System.err.println("Error: " + e.getMessage());
         }

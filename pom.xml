@@ -77,6 +77,14 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
                 <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -121,6 +129,75 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>build-first</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.openjfx:*</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>it.polimi.ingsw:AM18</artifact>
+                                    <excludes>
+                                        <exclude>images/</exclude>
+                                        <exclude>jsonComunication/</exclude>
+                                        <exclude>it/polimi/ingsw/view/gui/</exclude>
+                                        <exclude>it/polimi/ingsw/network/client/</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>it.polimi.ingsw.runner.RunServer</mainClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>server</finalName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build-second</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.openjfx:*</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>it.polimi.ingsw:AM18</artifact>
+                                    <excludes>
+                                        <exclude>it/polimi/ingsw/network/serveronly/</exclude>
+                                        <exclude>it/polimi/ingsw/model/</exclude>
+                                        <exclude>it/polimi/ingsw/controller/</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>it.polimi.ingsw.runner.RunClient</mainClass>
+                                </transformer>
+                            </transformers>
+                            <finalName>client</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!--JAVA FX-->
             <plugin>
                 <groupId>org.openjfx</groupId>

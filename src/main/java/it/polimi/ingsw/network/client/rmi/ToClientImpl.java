@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.client.rmi;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.rmi.ToClient;
 import it.polimi.ingsw.view.updates.UpdateClass;
 

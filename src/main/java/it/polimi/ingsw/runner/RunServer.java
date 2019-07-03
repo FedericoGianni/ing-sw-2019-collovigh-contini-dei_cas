@@ -13,9 +13,7 @@ public class RunServer {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
-    private static final String CONFIG_PATH = "resources/json/startupConfig/config.json";
-
-    private static final int DEFAULT_SOCKET_PORT = 22222;
+    private static final String CONFIG_PATH = "startUpConfig.json";
 
     private static Server server;
 
@@ -58,9 +56,19 @@ public class RunServer {
 
                 } catch (FileNotFoundException e) {
 
-                    // creates a new config file
+                    LOGGER.log(Level.WARNING, "[RunServer] jsonFile not found, use internal one");
 
-                    config = new Config(DEFAULT_SOCKET_PORT);
+                    // gets input stream
+
+                    InputStream inputStream = RunServer.class.getResourceAsStream("/json/startupConfig/config.json" );
+
+                    // creates a reader for the file
+
+                    BufferedReader br = new BufferedReader( new InputStreamReader(inputStream));
+
+                    // load the Config File
+
+                    Config config = gson.fromJson(br, Config.class);
 
                     // saves it
 
@@ -68,7 +76,7 @@ public class RunServer {
 
                     // starts the server w/ default config
 
-                    server = new Server(DEFAULT_SOCKET_PORT);
+                    server = new Server(config.getSocketPort(),config.getRmiServerPort(),config.getRmiClientPort());
 
                     // log the exception
 
@@ -80,7 +88,7 @@ public class RunServer {
 
             case 1:
 
-                // if the player only specified the socket port
+                // if the player only specified the socket port ( will start locally)
 
                 server = new Server(Integer.parseInt(args[0]));
 

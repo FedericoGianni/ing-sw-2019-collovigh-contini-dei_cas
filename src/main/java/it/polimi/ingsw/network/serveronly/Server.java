@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.serveronly;
 
 import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.network.serveronly.Socket.SocketServer;

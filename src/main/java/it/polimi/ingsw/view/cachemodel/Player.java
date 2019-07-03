@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.cachemodel;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedPowerUpBag;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedStats;

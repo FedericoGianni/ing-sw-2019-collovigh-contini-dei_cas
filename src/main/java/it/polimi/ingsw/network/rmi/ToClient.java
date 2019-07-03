@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.rmi;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ class PlayerTest {
     @Test
     void pay() {
 
-        Player player = new Player("Alex",0,PlayerColor.BLUE);
+        Player player = new Player("Alex",0, PlayerColor.BLUE);
 
         player.addCube(new AmmoCube(Color.RED));
         player.addCube(new AmmoCube(Color.RED));

@@ -295,6 +295,8 @@ public class ReloadPhase {
      */
     private Boolean playerHasReloadPhase(){
 
+        if (controller.getFrenzy()) return false;
+
         // gets the current player id
 
         int playerId = controller.getCurrentPlayer();

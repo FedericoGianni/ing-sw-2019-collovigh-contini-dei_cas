@@ -3,7 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.TagbackGrenade;

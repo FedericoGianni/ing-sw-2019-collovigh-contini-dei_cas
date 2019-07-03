@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.networkexceptions;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 
 public class ColorAlreadyTakenException extends Exception{
 

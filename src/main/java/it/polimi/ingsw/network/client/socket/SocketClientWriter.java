@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.client.socket;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.runner.RunClient;
 import it.polimi.ingsw.utils.Directions;

@@ -1,8 +1,7 @@
 package it.polimi.ingsw.view.updates;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class InitialUpdate extends UpdateClass{

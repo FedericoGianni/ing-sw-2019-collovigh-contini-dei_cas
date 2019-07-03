@@ -1,13 +1,18 @@
 package it.polimi.ingsw.controller;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
+import it.polimi.ingsw.runner.RunClient;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,13 +30,13 @@ class ParserTest {
 
         Cell[][] matrix = savedMap.getRealMap();
 
-        //System.out.println( "\nMAP 1 :");
+        System.out.println( "\nMAP 1 :");
 
         for (int i = 0; i <3; i++) {
 
             for (int j = 0; j < 4; j++) {
 
-                //System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
+                System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
 
             }
         }
@@ -46,13 +51,13 @@ class ParserTest {
 
         Cell[][] matrix = savedMap.getRealMap();
 
-        //System.out.println( "\nMAP 2 :");
+        System.out.println( "\nMAP 2 :");
 
         for (int i = 0; i <3; i++) {
 
             for (int j = 0; j < 4; j++) {
 
-                //System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
+                System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
 
             }
         }
@@ -67,13 +72,13 @@ class ParserTest {
 
         Cell[][] matrix = savedMap.getRealMap();
 
-        //System.out.println( "\nMAP 3 :");
+        System.out.println( "\nMAP 3 :");
 
         for (int i = 0; i <3; i++) {
 
             for (int j = 0; j < 4; j++) {
 
-                //System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
+                System.out.println((matrix[i][j] == null) ? "Cell : " + i + " " + j + " " +"null" : "Cell : " + i + " " + j + " " + matrix[i][j].getColor());
 
                 if (matrix[i][j].isAmmoCell()) assertNotNull(matrix[i][j].getAmmoPlaced());
 
@@ -200,6 +205,53 @@ class ParserTest {
         Parser.clearGames();
 
         assertEquals(0,Parser.getGamesSize());
+
+    }
+
+    @Test
+    void testPath() {
+
+        // gets the internal resources
+
+        Gson gson = new Gson();
+
+        // gets input stream
+
+        InputStream inputStream = RunClient.class.getResourceAsStream("/json/maps/map_01.json" );
+
+        // creates a reader for the file
+
+        BufferedReader br = new BufferedReader( new InputStreamReader(inputStream));
+
+        // load the Config File
+
+        SavedMap config = gson.fromJson(br, SavedMap.class);
+
+        System.out.println(config);
+
+
+        System.out.println("---------------------------");
+
+        inputStream = Parser.class.getResourceAsStream( "/json/maps/map_01.json" );
+
+        try {
+
+            // creates a reader for the file
+
+            br = new BufferedReader( new InputStreamReader(inputStream));
+
+            // load the Config File
+
+            SavedMap savedMap = gson.fromJson(br, SavedMap.class);
+
+            // LOG the load
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+            System.out.println( " could not read the specified map ");
+        }
 
     }
 }

@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.serveronly;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.Parser;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
@@ -52,12 +52,14 @@ public class WaitingRoom {
 
         // -1 = new game
         if (gameId == -1) {
+
             this.colors = new ArrayList<>();
             this.players = new CopyOnWriteArrayList<>();
 
+            LOGGER.log(level,"[OK] Started Waiting Room for new Game");
 
-            LOGGER.log(Level.FINE,"[OK] Started Waiting Room for new Game");
         }else{
+
             if (!Parser.containsGame(gameId)) throw new GameNonExistentException();
             activeGame = gameId;
             // need to catch all saved games and start the correspondent one
@@ -78,7 +80,7 @@ public class WaitingRoom {
      */
     public synchronized void initGame(){
 
-        activeGame = Parser.addGame();
+        //activeGame = Parser.addGame();
 
 
         //TODO uncomment this to ask map and skulls instead of random

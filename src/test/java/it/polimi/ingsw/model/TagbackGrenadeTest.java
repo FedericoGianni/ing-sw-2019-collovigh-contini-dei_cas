@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.model.powerup.TagbackGrenade;
 import it.polimi.ingsw.utils.Color;
 import org.junit.jupiter.api.Test;

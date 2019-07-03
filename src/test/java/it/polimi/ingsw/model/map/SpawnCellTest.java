@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.map;
 
 import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

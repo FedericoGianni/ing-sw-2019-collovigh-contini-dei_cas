@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.util.ArrayList;
@@ -37,9 +37,12 @@ public class Model {
 
 
         //TODO remove this, just to kill faster
+        /*
         for(Player p : playerList){
             p.addDmg(0, 10);
         }
+
+         */
     }
 
     public static CurrentGame getGame() {

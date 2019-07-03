@@ -1,8 +1,7 @@
 package it.polimi.ingsw.network.serveronly.rmi;
 
 
-import it.polimi.ingsw.model.player.PlayerColor;
-import it.polimi.ingsw.network.ToView;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.rmi.ToClient;
 import it.polimi.ingsw.network.rmi.ToServer;
 import it.polimi.ingsw.network.serveronly.Server;

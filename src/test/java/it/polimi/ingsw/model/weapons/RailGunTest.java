@@ -4,7 +4,7 @@ import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

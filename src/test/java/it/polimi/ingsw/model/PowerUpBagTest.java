@@ -4,7 +4,7 @@ import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.model.player.PowerUpBag;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.PowerUpDeck;

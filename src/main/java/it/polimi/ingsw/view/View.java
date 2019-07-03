@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.rmi.RMIClient;

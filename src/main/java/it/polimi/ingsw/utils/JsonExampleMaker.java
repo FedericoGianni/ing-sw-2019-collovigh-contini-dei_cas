@@ -5,7 +5,6 @@ import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.model.player.PlayerColor;
 import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.model.weapons.Damage;
 import it.polimi.ingsw.view.actions.JsonAction;

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.serveronly.Socket;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.socket.FunctionInterface;

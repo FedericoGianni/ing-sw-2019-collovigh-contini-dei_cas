@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

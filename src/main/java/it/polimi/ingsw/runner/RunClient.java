@@ -23,9 +23,10 @@ public class RunClient {
     private static View view;
 
     // for saves
-    private static final String CONFIG_PATH = "resources/json/startupConfig/config.json";
+    private static final String CONFIG_PATH = "startUpConfig.json";
     private static Gson gson = new Gson();
     private static Config config;
+    private static ClassLoader classLoader;
 
 
 
@@ -70,13 +71,23 @@ public class RunClient {
 
                     view = new View(config.getServerIp(), config.getSocketPort(), config.getGui());
 
-                }catch (FileNotFoundException e){
+                }catch ( Exception e){
 
-                    LOGGER.log(Level.WARNING, "[RunClient] jsonFile not found, start client assuming server is local");
+                    LOGGER.log(Level.WARNING, "[RunClient] jsonFile not found, use internal one");
 
-                    // creates a new config file
+                    // gets the internal resources
 
-                    config = new Config(DEFAULT_SERVER_IP, DEFAULT_SOCKET_PORT, DEFAULT_UI_CHOICE);
+                    // gets input stream
+
+                    InputStream inputStream = RunClient.class.getResourceAsStream("/json/startupConfig/config.json" );
+
+                    // creates a reader for the file
+
+                    BufferedReader br = new BufferedReader( new InputStreamReader(inputStream));
+
+                    // load the Config File
+
+                    Config config = gson.fromJson(br, Config.class);
 
                     // saves it
 
@@ -84,7 +95,7 @@ public class RunClient {
 
                     // starts the view w/ default values
 
-                    view = new View(DEFAULT_SERVER_IP, DEFAULT_SOCKET_PORT, DEFAULT_UI_CHOICE);
+                    view = new View(config.getServerIp(), config.getSocketPort(), config.getGui());
 
                 }
 

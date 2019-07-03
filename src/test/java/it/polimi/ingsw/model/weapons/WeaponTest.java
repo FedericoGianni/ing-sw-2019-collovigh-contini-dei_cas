@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.AmmoBag;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.cachemodel.CacheModelParser;
 import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;

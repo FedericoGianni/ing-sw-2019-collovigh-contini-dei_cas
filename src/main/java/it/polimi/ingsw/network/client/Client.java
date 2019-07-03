@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;

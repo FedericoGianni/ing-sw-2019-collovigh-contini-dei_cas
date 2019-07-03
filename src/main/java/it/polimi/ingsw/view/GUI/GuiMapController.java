@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
 
-import it.polimi.ingsw.model.player.PlayerColor;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
