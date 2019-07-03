@@ -179,3 +179,4 @@ public class Config implements Serializable {
         return minPlayer;
     }
 }
+ 

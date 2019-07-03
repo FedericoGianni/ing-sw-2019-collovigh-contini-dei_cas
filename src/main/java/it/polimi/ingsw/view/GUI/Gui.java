@@ -18,7 +18,9 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import javax.print.DocFlavor;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +33,8 @@ import static java.lang.Thread.sleep;
 
 
 public class Gui extends Application implements UserInterface {
+
+    private final static String FX_PATH = "javafx-sdk-11.0.2/lib";
 
     /**
      * default min widht of the start, reconnect, lobby and end scenes
@@ -305,7 +309,14 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void startUI() {
-        launch();
+
+        String pathToJavaFx = new File(FX_PATH).getAbsolutePath();
+
+        String[] args = new String[2];
+        args[0] = "--module-path \"C:\\Program Files\\Java\\javafx-sdk-12.0.1\\lib\"";
+        args[1] = "--add-modules javafx.controls,javafx.fxml";
+
+        launch(args);
     }
 
 
