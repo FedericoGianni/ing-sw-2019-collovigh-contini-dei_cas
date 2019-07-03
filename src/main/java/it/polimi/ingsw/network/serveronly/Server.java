@@ -250,9 +250,9 @@ public class Server  {
 
             LOGGER.log(Level.WARNING, "[DEBUG] playerOnline size: {0}",  controller.getPlayerOnline().size());
 
-            if ( (ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < WaitingRoom.DEFAULT_MIN_PLAYERS) ){
+            if ( (ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < WaitingRoom.DEFAULT_MIN_PLAYER) ){
 
-                LOGGER.log(Level.WARNING, () -> LOG_START + "Connected player are less than " + WaitingRoom.DEFAULT_MIN_PLAYERS + " the game will be TERMINATED " );
+                LOGGER.log(Level.WARNING, () -> LOG_START + "Connected player are less than " + WaitingRoom.DEFAULT_MIN_PLAYER + " the game will be TERMINATED " );
 
                 controller.endGame();
             }

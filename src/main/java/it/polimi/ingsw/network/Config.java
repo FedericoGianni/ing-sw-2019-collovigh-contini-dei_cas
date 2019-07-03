@@ -1,10 +1,11 @@
 package it.polimi.ingsw.network;
 
 import java.io.Serializable;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 
 public class Config implements Serializable {
+
+    private static final int DEFAULT_MIN_PLAYER = 3;
+    private static final int DEFAULT_LOBBY_TIMER = 10;
 
     private final String serverIp;
 
@@ -20,6 +21,12 @@ public class Config implements Serializable {
     // UI
 
     private final String gui;
+
+    // controller
+
+    private final int lobbyTimer;
+
+    private final int minPlayer;
 
     /**
      *  constructor for server w/ no rmi ports
@@ -45,6 +52,10 @@ public class Config implements Serializable {
         this.rmiClientPort = 22221;
 
         this.rmiServerPort = 22220;
+
+        this.lobbyTimer = DEFAULT_LOBBY_TIMER;
+
+        this.minPlayer = DEFAULT_MIN_PLAYER;
 
     }
 
@@ -72,6 +83,10 @@ public class Config implements Serializable {
         this.rmiServerPort = rmiServerPort;
 
         this.rmiClientPort = rmiClientPort;
+
+        this.lobbyTimer = DEFAULT_LOBBY_TIMER;
+
+        this.minPlayer = DEFAULT_MIN_PLAYER;
     }
 
     /**
@@ -98,6 +113,10 @@ public class Config implements Serializable {
         this.rmiClientPort = 22221;
 
         this.rmiServerPort = 22220;
+
+        this.lobbyTimer = DEFAULT_LOBBY_TIMER;
+
+        this.minPlayer = DEFAULT_MIN_PLAYER;
     }
 
     /**
@@ -126,6 +145,10 @@ public class Config implements Serializable {
         this.rmiClientPort = rmiClientPort;
 
         this.rmiServerPort = rmiServerPort;
+
+        this.lobbyTimer = DEFAULT_LOBBY_TIMER;
+
+        this.minPlayer = DEFAULT_MIN_PLAYER;
     }
 
     public int getSocketPort() {
@@ -146,5 +169,13 @@ public class Config implements Serializable {
 
     public String getGui() {
         return gui;
+    }
+
+    public int getLobbyTimer() {
+        return lobbyTimer;
+    }
+
+    public int getMinPlayer() {
+        return minPlayer;
     }
 }

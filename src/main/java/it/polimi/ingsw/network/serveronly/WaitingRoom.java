@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.serveronly;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.Parser;
+import it.polimi.ingsw.network.Config;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
@@ -26,10 +27,10 @@ public class WaitingRoom {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static final Level level = Level.INFO;
 
-    private static final int TIMER = 2;
-    private int timerCount = TIMER;
+    private int timerCount;
+    private final int maxTimer;
 
-    public static final int DEFAULT_MIN_PLAYERS = 2;
+    public static final int DEFAULT_MIN_PLAYER = Parser.readConfigFile().getMinPlayer();
     private static final int DEFAULT_MAX_PLAYERS = 5;
 
     private int skulls = 1;
@@ -49,6 +50,14 @@ public class WaitingRoom {
 
         // things to do for both loaded games and new ones
         this.active = true;
+
+        // reads the timer and the min player from resources
+
+        Config config = Parser.readConfigFile();
+
+        this.maxTimer = config.getLobbyTimer();
+        this.timerCount = maxTimer;
+
 
         // -1 = new game
         if (gameId == -1) {
@@ -125,7 +134,7 @@ public class WaitingRoom {
             colors.add(playerColor);
 
 
-            if (players.size() >= DEFAULT_MIN_PLAYERS) {
+            if (players.size() >= DEFAULT_MIN_PLAYER) {
 
                 LOGGER.info("[Waiting-Room] start timer");
 
@@ -206,7 +215,7 @@ public class WaitingRoom {
             @Override
             public void run() {
 
-                if (players.size() >= DEFAULT_MIN_PLAYERS) {
+                if (players.size() >= DEFAULT_MIN_PLAYER) {
 
                     LOGGER.log(level,() -> "[Waiting-Room] WaitingRoomTimer counter: " + timerCount);
 
@@ -231,7 +240,7 @@ public class WaitingRoom {
 
                     LOGGER.warning("[Waiting-Room] Timer annullato ");
 
-                    timerCount = TIMER;
+                    timerCount = maxTimer;
 
                     this.cancel();
                 }
@@ -257,15 +266,5 @@ public class WaitingRoom {
     public int size(){
 
         return this.players.size();
-    }
-
-    public synchronized void setSkulls(int skulls){
-
-        if (skulls > 0 && skulls < 8) {
-
-            this.skulls = skulls;
-
-            LOGGER.log(level, () -> "[Waiting-Room] a player changed the skulls from default to : " + skulls);
-        }
     }
 }
