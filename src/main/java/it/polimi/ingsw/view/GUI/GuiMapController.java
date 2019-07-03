@@ -48,6 +48,8 @@ import static java.lang.Thread.sleep;
 
 public class GuiMapController {
 
+
+    private static boolean needCell;
     /**
      * Reference to the gui linked to this controller
      */
@@ -481,7 +483,15 @@ public class GuiMapController {
         weapon1.setOnMouseClicked(null);
         weapon2.setOnMouseClicked(null);
         weapon3.setOnMouseClicked(null);
-
+        weapon1.setOnMousePressed(null);
+        weapon2.setOnMousePressed(null);
+        weapon3.setOnMousePressed(null);
+        powerUp1.setOnMouseClicked(null);
+        powerUp2.setOnMouseClicked(null);
+        powerUp3.setOnMouseClicked(null);
+        powerUp1.setOnMousePressed(null);
+        powerUp2.setOnMousePressed(null);
+        powerUp3.setOnMousePressed(null);
         weaponSeeEventEnabler();
     }
 
@@ -769,7 +779,7 @@ public class GuiMapController {
                 }
                 break;
             case "SHOOT":
-                if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size() < 6) {
+                if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getDmgTaken().size() < 6 && !isFrenzy) {
                     Platform.runLater(() -> {
                         shootWeaponChooser( movementDirections);
                     });
@@ -780,6 +790,7 @@ public class GuiMapController {
                         Platform.runLater(() -> {
                             if (isFrenzy)//send empty mov
                             {
+                                System.out.println("Non vuoi fare mov frenzy prima di sparare");
                                 List<Directions> dir = new ArrayList<>();
                                 gui.getView().doAction(new FrenzyShoot(new Move(dir, gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosition())));
                             }else{//standard shoot without moves
@@ -1504,7 +1515,9 @@ public class GuiMapController {
             Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Vuoi usare una granata?", ButtonType.YES, ButtonType.NO);
             a.showAndWait();
             if (a.getResult() == ButtonType.NO) {
+                mapEventDeleter();
                 gui.getView().doAction(new GrenadeAction(null, gui.getView().getPlayerId()));
+
             } else {
                  a=new Alert(Alert.AlertType.CONFIRMATION,"Scegli granata da usare sulla destra");
                 a.show();
@@ -1558,6 +1571,7 @@ public class GuiMapController {
                 alert.showAndWait();
                 if (alert.getResult() == ButtonType.NO) {
                     gui.getView().doAction(new SkipAction());
+                    mapEventDeleter();
                     return;
                 }
                 if (alert.getResult() == ButtonType.YES) {
@@ -1780,11 +1794,12 @@ public class GuiMapController {
                                     mapEventDeleter();
 
                                     if (isFrenzy) {
-                                        Alert a=new Alert(Alert.AlertType.CONFIRMATION,"madonna bucchinara sta frenzy");
-                                        a.show();
-                                        //gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid))));
+
+                                        gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid))));
+                                        mapEventDeleter();
                                     } else {
                                         gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid)));
+                                        mapEventDeleter();
                                     }
 
 
@@ -1815,7 +1830,9 @@ public class GuiMapController {
                                     if (isFrenzy) {
 
                                         gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid))));
+                                        mapEventDeleter();
                                     } else {
+                                        mapEventDeleter();
                                         gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid)));
                                     }
 
@@ -1839,9 +1856,10 @@ public class GuiMapController {
 
 
                                 if (isFrenzy) {
-
+                                    mapEventDeleter();
                                     gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid))));
                                 } else {
+                                    mapEventDeleter();
                                     gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, new ScopeAction(c, iid)));
                                 }
 
@@ -2208,6 +2226,7 @@ public class GuiMapController {
                     //((HBox)b.getChildren().get(i)).getChildren().remove((((HBox)b.getChildren().get(i)).getChildren().get(j)));
                     System.out.println("Sto raccogliendo una muniozione e ho fatto questi spotamenti: " + dir);
                     gui.getView().doAction(new GrabAction(dir));
+                    mapEventDeleter();
                 }
             }
         }
@@ -2378,6 +2397,7 @@ public class GuiMapController {
         {//if it's a grab here dir is empty
             System.out.println("Provo ad acquistare una arma con queste robe: " + dir + " Acquisto: " + weaponNames.get(1) + " uso questi pup: " + powerUpsToDiscard + " scarto: " + weaponNames.get(0));
             gui.getView().doAction(new GrabAction(dir, weaponNames.get(0), weaponNames.get(1), powerUpsToDiscard));
+            mapEventDeleter();
             return;
         } else if (costCount == cost.size() && actionType.equals("SHOOT")) {
             System.out.println("Provo a sparare con " + weaponNames.get(0) + " effetti: " + effects + "E sccarto " + powerUpsToDiscard);
@@ -2386,10 +2406,11 @@ public class GuiMapController {
         }else if(costCount == cost.size() && actionType.equals("RELOAD")){
             System.out.println("Provo a ricaricare " + weaponNames + "   E scarto " + powerUpsToDiscard);
             if(!isFrenzy)
-            {gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));}
+            {gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));mapEventDeleter();}
             else
             {//reload then ask shoot
                 System.out.println("reload frenetico finale");
+                mapEventDeleter();
                 gui.getView().doAction(new FrenzyShoot(new ReloadAction(weaponNames, powerUpsToDiscard)));
             }
             return;
@@ -2553,11 +2574,12 @@ public class GuiMapController {
             Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni !");
             a.show();
             if(!isFrenzy)
-            {gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));}
+            {gui.getView().doAction(new ReloadAction(weaponNames,powerUpsToDiscard));mapEventDeleter();}
             else
             {//reload frenzy
                 System.out.println("reload frenetico finale");
                 gui.getView().doAction(new FrenzyShoot(new ReloadAction(weaponNames, powerUpsToDiscard)));
+                mapEventDeleter();
             }
             return;
         }else if(actionType.equals("BUY")){
@@ -2567,6 +2589,7 @@ public class GuiMapController {
             a.show();
             System.out.println("Non abba munizie ecc");
             gui.getView().doAction(new GrabAction(dir,weaponNames.get(0),weaponNames.get(1),powerUpsToDiscard));
+            mapEventDeleter();
             return;
         }else if(actionType.equals("SHOOT"))
         {
@@ -2575,6 +2598,7 @@ public class GuiMapController {
             List<List<Integer>> targetLists=new ArrayList<>();
             List<Point> cells=new ArrayList<>();
             gui.getView().doAction(new ShootAction(weaponNames.get(0),targetLists,effects,cells,powerUpsToDiscard,null));
+            mapEventDeleter();
             return;
             //new ShootAction(w, targetLists, effects, cells, pUp, null)
         }
@@ -2916,6 +2940,16 @@ public class GuiMapController {
     }
 
     private void shootTargetChooser(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir) {
+       needCell=false;
+        for(int e=0;e<effects.size();e++) {
+            try {
+                if (gui.getView().getCacheModel().getWeaponInfo(w).getEffectRequirements().get(effects.get(e)).getCellRequired()) {
+                    needCell = true;
+                }
+            } catch (WeaponNotFoundException ee) {
+                ee.printStackTrace();
+            }
+        }
         try {
             CachedFullWeapon weapon = gui.getView().getCacheModel().getWeaponInfo(w);//-------------------weapon name
 
@@ -2962,8 +2996,13 @@ public class GuiMapController {
                                             List<Integer> targets = new ArrayList<>();
                                             List<List<Integer>> targetsLists = new ArrayList<>();
                                             targets.add(iid);
-                                            targetsLists.add(targets);
                                             List<Point> p = new ArrayList<>();
+                                            if(needCell)
+                                            {
+                                                p.add(null);
+                                            }
+                                            targetsLists.add(targets);
+
                                             shootTargetIterator(w, effects, pUp, dir, targetsLists, effectNum, targetNum + 1, p);
 
                                         }
@@ -2994,6 +3033,10 @@ public class GuiMapController {
                                             targets.add(iid);
                                             targetsLists.add(targets);
                                             List<Point> p = new ArrayList<>();
+                                            if(needCell)
+                                            {
+                                                p.add(null);
+                                            }
                                             shootTargetIterator(w, effects, pUp, dir, targetsLists, effectNum, targetNum + 1, p);
                                         }
                                     });
@@ -3020,6 +3063,10 @@ public class GuiMapController {
                                             targets.add(iid);
                                             targetsLists.add(targets);
                                             List<Point> p = new ArrayList<>();
+                                            if(needCell)
+                                            {
+                                                p.add(null);
+                                            }
                                             shootTargetIterator(w, effects, pUp, dir, targetsLists, effectNum, targetNum + 1, p);
                                         }
                                     });
@@ -3108,7 +3155,7 @@ public class GuiMapController {
                         return;
                     }//--------------2.2) the next one is a move only effect--otherwise goes on
                     else if (weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().isEmpty() && weapon.getEffectRequirements().get(effects.get(effectNum)).getCellRequired()) {
-                        System.out.println("");
+                        System.out.println("............................................................");
                         shootCell(w, effects, pUp, dir, targetLists, effectNum, 0, cells);//not invented yet lol
                         return;
                     }
@@ -3166,6 +3213,10 @@ public class GuiMapController {
                                         }
 
 
+                                        if(needCell)
+                                        {
+                                            cells.add(null);
+                                        }
                                         shootTargetIterator(w, effects, pUp, dir, targetLists, eeffectNum, ttargetNum + 1, cells);
 
                                     }
@@ -3197,6 +3248,10 @@ public class GuiMapController {
                                         List<List<Integer>> targetsLists = new ArrayList<>();
                                         targets.add(iid);
                                         targetsLists.add(targets);
+                                        if(needCell)
+                                        {
+                                            cells.add(null);
+                                        }
                                         shootTargetIterator(w, effects, pUp, dir, targetsLists, eeffectNum, ttargetNum + 1, cells);
 
                                     }
@@ -3219,6 +3274,10 @@ public class GuiMapController {
                                     List<List<Integer>> targetsLists = new ArrayList<>();
                                     targets.add(iid);
                                     targetsLists.add(targets);
+                                    if(needCell)
+                                    {
+                                        cells.add(null);
+                                    }
                                     shootTargetIterator(w, effects, pUp, dir, targetsLists, eeffectNum, ttargetNum + 1, cells);
 
                                 }
@@ -3256,13 +3315,14 @@ public class GuiMapController {
                         eN++;
                         mapEventDeleter();
                         cells.add(new Point(xx, yy));
-
+                        System.out.println("Sposto bers in cella "+xx+" "+yy);
                         if (eN == effects.size()) {
                             System.out.println("Abbiamo finito i bersagli");
                             checkScope(w, effects, pUp, dir, targetLists, cells);
 
                         } else {
                             System.out.println("Andiamo con altri bersagli");
+                            //-------target nume should be 0?????
                             shootTargetIterator(w, effects, pUp, dir, targetLists, eN, targetNum, cells);
                         }
 
@@ -3347,8 +3407,10 @@ public class GuiMapController {
         mapEventDeleter();
         if (isFrenzy) {
             gui.getView().doAction(new FrenzyShoot(new ShootAction(w, targetLists, effects, cells, pUp, null)));
+            mapEventDeleter();
         } else {
             gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
+            mapEventDeleter();
         }
     }
 
@@ -3371,6 +3433,7 @@ public class GuiMapController {
         a.showAndWait();
         if (a.getResult().equals(ButtonType.NO)) {
             gui.getView().doAction(new SkipAction());
+            mapEventDeleter();
             return;
         } else{
                 List<String> weapons = new ArrayList<>();
@@ -3484,6 +3547,7 @@ public class GuiMapController {
             List <CachedPowerUp> pUp=new ArrayList<>();
             List <String> weapons=new ArrayList<>();
             gui.getView().doAction(new FrenzyShoot(new ReloadAction(weapons, pUp)));
+            mapEventDeleter();
         }
         else{
             List<String> weapons = new ArrayList<>();

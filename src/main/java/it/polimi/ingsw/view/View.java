@@ -26,7 +26,7 @@ import static java.lang.Thread.sleep;
 public class View implements ViewInterface {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.FINE;
+    private static Level level = Level.INFO;
 
     private UserInterface userInterface;
     private int playerId = -1;
