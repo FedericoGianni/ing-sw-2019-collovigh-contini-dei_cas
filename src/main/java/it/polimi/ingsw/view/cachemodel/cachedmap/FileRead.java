@@ -1,11 +1,14 @@
 package it.polimi.ingsw.view.cachemodel.cachedmap;
 
 import it.polimi.ingsw.customsexceptions.InvalidMapTypeException;
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedAmmoCell;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -85,21 +88,22 @@ public class FileRead {
             switch(mapType){
 
                 case 1:
-                    path = new File("resources/map/map1.txt").getAbsolutePath();
+                    path = new File("/map/map1.txt").getAbsolutePath();
                     break;
                 case 2:
-                    path = new File("resources/map/map2.txt").getAbsolutePath();
+                    path = new File("/map/map2.txt").getAbsolutePath();
                     break;
                 case 3:
-                    path = new File("resources/map/map3.txt").getAbsolutePath();
+                    path = new File("/map/map3.txt").getAbsolutePath();
                     break;
                 default:
                     throw new InvalidMapTypeException();
             }
-            FileInputStream fstream = new FileInputStream(path);
+            //FileInputStream fstream = new FileInputStream(path);
+            InputStream inputStream = FileRead.class.getResourceAsStream(path);
             // Get the object of DataInputStream
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            //DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             String strLine;
             //Read File Line By Line
             int r = 0;
@@ -117,7 +121,8 @@ public class FileRead {
             }
 
             //Close the input stream
-            in.close();
+            //in.close();
+            inputStream.close();
         } catch (Exception e) {//Catch exception if any
             System.err.println("Error: " + e.getMessage());
         }
