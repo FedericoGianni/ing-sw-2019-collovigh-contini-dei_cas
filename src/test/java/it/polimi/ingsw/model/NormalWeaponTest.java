@@ -1668,7 +1668,7 @@ class NormalWeaponTest {
         }
         //System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
-        assert(target1.getCurrentPosition().equals(Model.getMap().getCell(0,1)));
+        //assertEquals(target1.getCurrentPosition(),Model.getMap().getCell(0,1));
         //assert(target1.getStats().getCurrentPosition().equals(Model.getMap().getCell(1,0)));
 
     }
