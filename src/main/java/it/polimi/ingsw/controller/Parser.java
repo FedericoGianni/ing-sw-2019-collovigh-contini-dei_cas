@@ -5,8 +5,12 @@ import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.weapons.*;
+import it.polimi.ingsw.network.Config;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
+import it.polimi.ingsw.runner.RunClient;
+import it.polimi.ingsw.runner.RunServer;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.view.View;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -638,8 +642,6 @@ public class Parser {
 
         }catch (Exception e){
 
-            e.printStackTrace();
-
             LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the specified map ");
         }
 
@@ -672,8 +674,6 @@ public class Parser {
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, ()-> LOG_START + " error while trying to load games list ");
-
-            //new File(GAMES_PATH).mkdirs();
 
         }
 
@@ -710,14 +710,11 @@ public class Parser {
      */
     private static void saveGamesList(HashMap<Integer,String> games){
 
-        try {
-
-            FileWriter writer = new FileWriter(GAMES_PATH + "/games.json");
+        try ( FileWriter writer = new FileWriter(GAMES_PATH + "/games.json") ){
 
             gson.toJson(getGameListToSave(games), writer);
 
             writer.flush();
-            writer.close();
 
             int size = games.size() -1;
 
@@ -897,7 +894,47 @@ public class Parser {
         }
     }
 
+    /**
+     * This method will read the config file
+     * @return a config class read from either file or internal resources
+     */
+    public static Config readConfigFile(){
 
+        try{
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader( new FileReader( new File(RunServer.CONFIG_PATH).getAbsolutePath()));
+
+            // load the Config File
+
+            Config config = gson.fromJson(br, Config.class);
+
+            // LOG the load
+
+            LOGGER.log(level,"[Parser] Config successfully loaded ");
+
+            return config;
+
+        }catch ( Exception e){
+
+            LOGGER.log(Level.WARNING, "[RunClient] jsonFile not found, use internal one");
+
+            // gets the internal resources
+
+            // gets input stream
+
+            InputStream inputStream = RunClient.class.getResourceAsStream("/json/startupConfig/config.json" );
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader( new InputStreamReader(inputStream));
+
+            // load the Config File
+
+            return gson.fromJson(br, Config.class);
+        }
+    }
 
 
 }

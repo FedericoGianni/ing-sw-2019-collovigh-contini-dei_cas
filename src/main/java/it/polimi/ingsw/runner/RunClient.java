@@ -23,7 +23,7 @@ public class RunClient {
     private static View view;
 
     // for saves
-    private static final String CONFIG_PATH = "startUpConfig.json";
+    private static final String CONFIG_PATH = "startUpClientConfig.json";
     private static Gson gson = new Gson();
     private static Config config;
     private static ClassLoader classLoader;

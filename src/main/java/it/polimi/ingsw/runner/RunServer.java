@@ -13,7 +13,7 @@ public class RunServer {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.FINE;
 
-    private static final String CONFIG_PATH = "startUpConfig.json";
+    public static final String CONFIG_PATH = "startUpServerConfig.json";
 
     private static Server server;
 
@@ -78,9 +78,6 @@ public class RunServer {
 
                     server = new Server(config.getSocketPort(),config.getRmiServerPort(),config.getRmiClientPort());
 
-                    // log the exception
-
-                    LOGGER.log(Level.WARNING, e.getMessage(),e );
                 }
 
                 break;

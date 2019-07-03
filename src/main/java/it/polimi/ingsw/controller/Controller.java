@@ -348,7 +348,7 @@ public class Controller {
 
     public void handleTurnPhase(){
 
-        if (getPlayerOnline().size() >= WaitingRoom.DEFAULT_MIN_PLAYERS) {
+        if (getPlayerOnline().size() >= WaitingRoom.DEFAULT_MIN_PLAYER) {
 
             switch (turnPhase) {
 
