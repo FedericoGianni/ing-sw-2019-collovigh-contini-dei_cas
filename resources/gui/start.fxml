@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<StackPane fx:id="stackPane" prefHeight="400.0" prefWidth="600.0" stylesheets="Murcielago.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GuiStartController">
+<StackPane fx:id="stackPane" prefHeight="400.0" prefWidth="600.0" stylesheets="/gui/Murcielago.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.GUI.GuiStartController">
 <children>
     <VBox fx:id="vBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
         <children>

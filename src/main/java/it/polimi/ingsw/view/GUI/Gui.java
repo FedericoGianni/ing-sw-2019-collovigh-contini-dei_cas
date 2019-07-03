@@ -226,35 +226,35 @@ public class Gui extends Application implements UserInterface {
         stage.setTitle("Adrenalina");
 
         //start window
-        FXMLLoader startPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("start.fxml"));
+        FXMLLoader startPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/start.fxml"));
         Parent startPane = startPaneLoader.load();
         Scene startScene = new Scene(startPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
 
         //reconnect window
-        FXMLLoader reconnectPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("reconnect.fxml"));
+        FXMLLoader reconnectPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/reconnect.fxml"));
         Parent reconnectPane = reconnectPaneLoader.load();
         Scene reconnectScene = new Scene(reconnectPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
 
         // login window
         // loader will then give a possibility to get related controller
-        FXMLLoader firstPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("Login.fxml"));  // TEST
+        FXMLLoader firstPaneLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/Login.fxml"));  // TEST
         Parent firstPane = firstPaneLoader.load();
         Scene firstScene = new Scene(firstPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
         //firstScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("style.css").toExternalForm());  // non serve : basta specificare nell FXML ( by d)
 
         // game lobby window
-        FXMLLoader secondPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleLobby.fxml"));
+        FXMLLoader secondPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/sampleLobby.fxml"));
         Parent secondPane = secondPageLoader.load();
         Scene secondScene = new Scene(secondPane, DEFAULT_MIN_WIDTH, DEFAULT_MIN_HEIGHT);
         //secondScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleLobby.css").toExternalForm());  // non serve : basta specificare nell FXML ( by d)
 
         // main game window
-        FXMLLoader thirdPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("sampleMap.fxml"));
+        FXMLLoader thirdPageLoader = new FXMLLoader(getClass().getClassLoader().getResource("gui/sampleMap.fxml"));
         Parent thirdPane = thirdPageLoader.load();
         Scene thirdScene = new Scene(thirdPane, DEFAULT_MIN_WIDTH_MAP, DEFAULT_MIN_HEIGHT_MAP);
-        thirdScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("styleMap.css").toExternalForm());
+        thirdScene.getStylesheets().addAll(this.getClass().getClassLoader().getResource("gui/styleMap.css").toExternalForm());
 
-        FXMLLoader endPageLoader = new FXMLLoader((getClass().getClassLoader().getResource("end.fxml")));
+        FXMLLoader endPageLoader = new FXMLLoader((getClass().getClassLoader().getResource("gui/end.fxml")));
         Parent fourhtPane = endPageLoader.load();
         Scene endScene = new Scene(fourhtPane, DEFAULT_MIN_WIDTH_MAP, DEFAULT_MIN_HEIGHT_MAP);
 
