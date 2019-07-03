@@ -76,7 +76,7 @@ public class ActionPhase {
 
     private List<PowerUp> discardedPowerUpForRestore = new ArrayList<>();
     private List<AmmoCube> ammoCubeForRestore = new ArrayList<>();
-    
+
 
     public ActionPhase(Controller controller) {
 

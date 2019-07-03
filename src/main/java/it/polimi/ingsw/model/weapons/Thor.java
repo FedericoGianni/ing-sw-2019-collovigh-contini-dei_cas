@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.weapons;
 
 import it.polimi.ingsw.customsexceptions.*;
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.Skull;
 import it.polimi.ingsw.utils.Color;
 
 import java.util.ArrayList;
@@ -38,47 +40,97 @@ public class Thor extends SpecialWeapons {
     @Override
     public void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerAlreadyDeadException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, CellNonExistentException {
 
-        for (int i = 0; i < effects.size(); i++) {
-            for(Player p : targetLists.get(i)){
-                if(p.getStats().getDmgTaken().size() > KILL_DMG){
-                    throw new PlayerAlreadyDeadException();
+
+        //------------------------------------------restore things
+            List <Skull> kstCopy = Model.getGame().getKillShotTrack();
+
+            for (int i = 0; i < targetLists.size(); i++) {
+                for(Player p : targetLists.get(i)){
+                    if(p.getStats().getDmgTaken().size() > 10){
+                        throw new PlayerAlreadyDeadException();
+                    }
+                }
+            }
+
+            Player shooterCopy=new Player(this.isPossessedBy().getPlayerName(),this.isPossessedBy().getPlayerId(),this.isPossessedBy().getColor());
+            for (AmmoCube a : this.isPossessedBy().getAmmoBag().getList()) {
+                shooterCopy.getAmmoBag().addItem(a);
+            }
+
+            shooterCopy.setPlayerPosCopy(this.isPossessedBy().getCurrentPosition());
+            shooterCopy.getStats().setMarksCopy(this.isPossessedBy().getMarks());
+            List<List<Player>> targetsCopy=new ArrayList<>();
+
+            for (List<Player> item : targetLists) {
+                List<Player> pl=new ArrayList<>();
+                for (Player p : item) {
+                    Player tmp=new Player(p.getPlayerName(),p.getPlayerId(),p.getColor());
+                    tmp.getStats().setDmgTakenCopy(p.getStats().getDmgTaken());
+                    tmp.getStats().setMarksCopy(p.getStats().getMarks());
+                    tmp.setPlayerPosCopy(p.getCurrentPosition());
+                    pl.add(tmp);
+                }
+                //now i sort the players in order with playerID
+                targetsCopy.add(pl);
+            }
+            //--------------------------end restore things
+        try {
+            if(!isLoaded())
+                throw new WeaponNotLoadedException();
+
+            for (int i = 0; i < effects.size(); i++) {
+                for (Player p : targetLists.get(i)) {
+                    if (p.getStats().getDmgTaken().size() > KILL_DMG) {
+                        throw new PlayerAlreadyDeadException();
+                    }
+                }
+            }
+
+            for (int i = 0; i < effects.size(); i++)//checks that i can actually shoot
+            {
+                if (i == 0) {
+                    if (!isPossessedBy().canSee().contains(targetLists.get(i).get(0)))
+                        throw new PlayerNotSeeableException();
+                }
+                if (i > 0) {
+
+                    if (!targetLists.get(i - 1).get(0).canSee().contains(targetLists.get(i).get(0)))
+                        throw new PlayerNotSeeableException();
+
+                }
+
+                if (effects.get(i) != i)
+                    throw new UncorrectEffectsException();
+            }
+
+            for (int i = 0; i < effects.size(); i++) {
+
+                if (i == 0)//first macroeffect
+                {//TODO modify damage to 2, 10 is just for test purpose
+                    targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 2);
+                } else if (i == 1)//second macroeffect
+                {
+                    targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 10);
+                } else if (i == 2)//third macroeffect
+                {
+                    targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 2);
                 }
             }
         }
-
-        for(int i=0;i<effects.size();i++)//checks that i can actually shoot
+        catch(UncorrectEffectsException e)
         {
-            if(i==0)
-            {
-                if(!isPossessedBy().canSee().contains(targetLists.get(i).get(0)))
-                    throw new PlayerNotSeeableException();
-            }
-            if(i>0)
-            {
+            restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+            throw new UncorrectEffectsException();
 
-                if(!targetLists.get(i-1).get(0).canSee().contains(targetLists.get(i).get(0)))
-                    throw new PlayerNotSeeableException();
-
-            }
-
-            if(effects.get(i)!=i)
-                throw new UncorrectEffectsException();
-        }
-
-        for(int i=0;i<effects.size();i++)
-        {
-
-            if(i==0)//first macroeffect
-            {//TODO modify damage to 2, 10 is just for test purpose
-                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),11);
-            }else if(i==1)//second macroeffect
-            {
-                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),1);
-            }
-            else if(i==2)//third macroeffect
-            {
-                targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(),2);
-            }
+        } catch (PlayerAlreadyDeadException e) {
+            restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+            throw new PlayerAlreadyDeadException();
+        } catch (PlayerNotSeeableException e) {
+            restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+            throw new PlayerNotSeeableException();
+        } catch(WeaponNotLoadedException e) {
+            restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+            throw new WeaponNotLoadedException();
         }
         //TODO uncomment this just to make quicker tests
         //this.setLoaded(false);
@@ -99,4 +151,48 @@ public class Thor extends SpecialWeapons {
 
         throw new UnsupportedOperationException();
     }
+
+
+    /**
+     * in case of failed shoot restores everything as before the shoot attempt
+     * @param targetsCopy
+     * @param targetLists
+     */
+    private void restore(List<List<Player>> targetsCopy,List<List<Player>> targetLists,Player shooterCopy,Player shooter,List <Skull> kstCopy)
+    {
+
+        Model.getGame().setKillShotTrack(kstCopy);
+
+        //for shooter i need to restore position and ammos
+        shooter.setPlayerPos(shooterCopy.getCurrentPositionCopy());
+        try {
+            shooter.getStats().setMarks(shooterCopy.getMarks());
+        } catch (OverMaxMarkException e) {//can't occur
+            e.printStackTrace();
+        }
+        for (AmmoCube a : shooterCopy.getAmmoBag().getList()) {
+            shooter.getAmmoBag().addItem(a);
+        }
+        //for target i need to restore life, marks and position
+        for (int i=0;i<targetLists.size();i++)
+        {
+            for(int j=0;j<targetLists.get(i).size();j++)
+            {
+                targetLists.get(i).get(j).setPlayerPos(targetsCopy.get(i).get(j).getCurrentPositionCopy());
+
+                try {
+                    targetLists.get(i).get(j).getStats().setMarks(targetsCopy.get(i).get(j).getMarks());
+                    targetLists.get(i).get(j).getStats().setDmgTaken(targetsCopy.get(i).get(j).getDmg());
+
+                } catch (OverMaxMarkException e) {//this shit can't occur NEVER in this specifial case
+                    e.printStackTrace();
+                } catch (OverMaxDmgException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+    }
+
 }

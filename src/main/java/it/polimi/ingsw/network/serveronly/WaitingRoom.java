@@ -84,10 +84,10 @@ public class WaitingRoom {
 
 
         //TODO uncomment this to ask map and skulls instead of random
-        /*List<Integer> mapAndSkulls = Server.getClient(0).askMapAndSkulls();
+        List<Integer> mapAndSkulls = Server.getClient(0).askMapAndSkulls();
         this.mapType = mapAndSkulls.get(0);
         this.skulls = mapAndSkulls.get(1);
-        */
+
         if(this.mapType == 0) {
             Server.setController(new Controller(this.players, this.colors, this.activeGame, this.skulls));
             Server.getController().handleTurnPhase();
@@ -95,8 +95,6 @@ public class WaitingRoom {
             Server.setController(new Controller(this.players,this.colors,this.activeGame,this.mapType, this.skulls));
             Server.getController().handleTurnPhase();
         }
-
-
         this.active = false;
     }
 

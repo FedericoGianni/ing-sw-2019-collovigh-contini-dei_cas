@@ -32,73 +32,180 @@ import static java.lang.Thread.sleep;
 
 public class Gui extends Application implements UserInterface {
 
+    /**
+     * default min widht of the start, reconnect, lobby and end scenes
+     */
     public static final float DEFAULT_MIN_WIDTH = 920;
+
+    /**
+     * default min height of the start, reconnect, lobby and end scenes
+     */
     public static final float DEFAULT_MIN_HEIGHT = 540;
 
+    /**
+     * default min widht of the main game scene
+     */
     public static final float DEFAULT_MIN_WIDTH_MAP = 1000;
+
+    /**
+     * default min height of the main game scene
+     */
     public static final float DEFAULT_MIN_HEIGHT_MAP = 700;
 
+    /**
+     * Reference to the controller of the first scene
+     */
     private static GuiStartController guiStartController;
+
+    /**
+     * Reference to the controller of the reconnection scene
+     */
     private static GuiReconnectionController guiReconnectionController;
+
+    /**
+     * Reference to the controller of the login scene
+     */
     private static GuiController guiController;
+
+    /**
+     * Reference to the controller of the lobby scene
+     */
     private static GuiLobbyController guiLobbyController;
+
+    /**
+     * Reference to the controller of the main game scene
+     */
     private static GuiMapController guiMapController;
+
+    /**
+     * Reference to the controller of the game end scene
+     */
     private static GuiEndController guiEndController;
+
+    /**
+     * used to ask the server if the specified direction is valid (= no walls), since the cacheModel version
+     * doesn't store the cell adjacences we need to ask the server if a direction is valid or not
+     */
     private int validMove=-1;
+
+    /**
+     * True if it is a reconnection, false if it is a normal game login from the beginning
+     * It will be set to false when gameStart is called, which is being called only at the beginning of the match so
+     * reconnection will have this boolean to true, to manage some specific GUI case in which you need to
+     * ignore first updates after reconnection
+     */
     private boolean isReconnection=true;
+
+    /**
+     * After the GUI receives reconnectok, it means that it can start to handle again stats updates instead of skipping them,
+     * need this only after reconnections
+     */
     private boolean receivedReconnectOk = false;
+
+    /**
+     * used to store a previous version of online status, to check if user is reconnecting or the stats updates are the
+     * same as before
+     */
     private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
+
     private  boolean bb=false;
 
+    /**
+     *
+     * @param guic reference to the gui lobby controller to be set
+     */
     public void setGuiLobbyController(GuiLobbyController guic) {
         this.guiLobbyController = guic;
     }
+
+    /**
+     *
+     * @return the actual reference to the lobby controller
+     */
     public GuiLobbyController getGuiLobbyController(){return guiLobbyController;
     }
 
+    /**
+     * set the reference to the gui map controller
+     * @param guic reference to the gui map controller to set
+     */
     public void setGuiMapController(GuiMapController guic) {
         this.guiMapController = guic;
     }
 
+    /**
+     * set the reference to the gui controller
+     * @param guiController reference to the gui controller to set
+     */
     public void setGuiController(GuiController guiController) {
         this.guiController = guiController;
     }
 
+    /**
+     * set the reference to the gui start controller
+     * @param g reference to the gui start controller to set
+     */
     public void setGuiStartController(GuiStartController g) {
         this.guiStartController = g;
     }
 
+    /**
+     * set the reference to the gui reconnection controller
+     * @param g reference to the gui reconnection controller to set
+     */
     public void setGuiReconnectionController(GuiReconnectionController g) {
         this.guiReconnectionController = g;
     }
 
+    /**
+     * set the reference to the gui end controller
+     * @param g reference to the gui end controller to set
+     */
     public void setGuiEndController(GuiEndController g) {
         this.guiEndController = g;
     }
 
-    public void setIsReconnection(Boolean b)
-    {
+    /**
+     * set the boolean isReconnection to the value passed as parameter
+     * @param b boolean
+     */
+    public void setIsReconnection(Boolean b) {
         this.isReconnection=b;
     }
-    public boolean getIsReconnection()
-    {
+
+    /**
+     * @return isReconnection boolean current value
+     */
+    public boolean getIsReconnection() {
         return this.isReconnection;
     }
 
+    /**
+     * default contructor
+     */
     public Gui(){
     super();
     }
 
+    /**
+     * reference to the view linked to this UserInterface
+     */
     private static View view;
 
+    /**
+     * set the view with the one passed as paramter
+     * @param v view to be set as view
+     */
     public void setView(View v) {
         view = v;
     }
 
+    /**
+     * @return the actual reference to the view
+     */
     public View getView() {
         return view;
     }
-
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -192,11 +299,19 @@ public class Gui extends Application implements UserInterface {
         stage.show();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startUI() {
         launch();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame() {
         isReconnection = false;
@@ -207,6 +322,10 @@ public class Gui extends Application implements UserInterface {
         });
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void show(String s) {
 
@@ -277,6 +396,10 @@ public class Gui extends Application implements UserInterface {
         view.doAction(grabAction);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void notifyUpdate(UpdateType updateType, int playerId, TurnUpdate turnUpdate) {
 
@@ -377,6 +500,10 @@ public class Gui extends Application implements UserInterface {
         }
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void gameSelection() {
         //TODO questo metodo è chiamato all'avvio della view -> va messo qui il codice per cambiare alla schermata
@@ -389,10 +516,18 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void login() {
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void retryLogin(String error) {
         Platform.runLater( () -> {
@@ -402,11 +537,19 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void retryLogin(Exception e) {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startSpawn() {//pox: 1) rosso e giallo non fanno bene lo spawn 2) blu non fa bene lo spawn
 
@@ -431,6 +574,9 @@ public class Gui extends Application implements UserInterface {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startPowerUp() {
         //here i need to let them use power ups, devo eliminare tutti gli effetti all'inziio di start action
@@ -445,12 +591,20 @@ public class Gui extends Application implements UserInterface {
         guiMapController.powerUpEnable();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void askGrenade() {
         guiMapController.granade();
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
@@ -476,16 +630,31 @@ public class Gui extends Application implements UserInterface {
         //view.doAction(new ShootAction("LOCK RIFLE", targetList, effects, cells));
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doFrenzyAtomicShoot() {
-        //TODO
+        Platform.runLater( () -> {
+            guiMapController.shootWeaponChooser(null);
+        });
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doFrenzyReload() {
-        //TODO
+        guiMapController.askFrenzyReload();
+
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startReload() {
         //view.doAction(new SkipAction());
@@ -493,6 +662,10 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void endGame() {
 
@@ -506,6 +679,10 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setValidMove(boolean b) {
         if(b){
@@ -516,12 +693,20 @@ public class Gui extends Application implements UserInterface {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close() {
         guiMapController.log.appendText(DEFAULT_TIMER_EXPIRED);
         System.exit(0);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Integer> askMapAndSkulls() {
         List<Integer> values = new ArrayList<>();

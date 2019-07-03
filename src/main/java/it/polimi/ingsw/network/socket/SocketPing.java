@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.util.logging.Level.*;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.WARNING;
 
 /**
  * This class implements a thread which will send every [DEFAULT_PING_INTERVAL] ms a string "ping" to the client to
@@ -23,7 +24,7 @@ public class SocketPing implements Runnable {
     /**
      * The thread will send a "ping" string every DEFAULT_PING_INTERVAL millisecond
      */
-    public static final int DEFAULT_PING_INTERVAL = 5000;
+    public static final int DEFAULT_PING_INTERVAL = 500;
 
     /**
      * this flag can be set to false to stop the server ping requests, as the while loop continues until active is true

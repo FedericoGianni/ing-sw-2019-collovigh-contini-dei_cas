@@ -279,7 +279,7 @@ public class SocketConnectionWriter extends Thread implements ToView {
 
             try{
 
-                TimeUnit.SECONDS.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(100);
 
             }catch (InterruptedException e){
 

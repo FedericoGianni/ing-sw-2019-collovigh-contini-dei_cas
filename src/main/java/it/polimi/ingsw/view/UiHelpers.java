@@ -106,6 +106,12 @@ public class UiHelpers {
         return playerColor;
     }
 
+    /**
+     * generates the final point from a starting point with the directionList specified
+     * @param directions list of directions to specify
+     * @param start starting point
+     * @return final position after applying in order all direction from start point
+     */
     public static Point genPointFromDirections(List<Directions> directions, Point start){
 
         Point finalPos = new Point(start);
@@ -243,8 +249,13 @@ public class UiHelpers {
 
         return translate;
 
-        }
+    }
 
+    /**
+     * translate player color to ansi color, useful for CLI methods
+     * @param playerColor color of the player to generate ANSI color
+     * @return ANSI color of the specified player color
+     */
     public static AsciiColor colorAsciiTranslator(PlayerColor playerColor){
 
         switch (playerColor){
@@ -268,6 +279,11 @@ public class UiHelpers {
         return AsciiColor.ANSI_WHITE;
     }
 
+    /**
+     * translates the list of color passed as paramter with a nicer version of ammo to display
+     * @param ammoList list of color to display
+     * @return a string representing the ammo view
+     */
     public static String ammoTranslator(List<Color> ammoList){
 
         String s = new String();
@@ -298,6 +314,11 @@ public class UiHelpers {
         return s;
     }
 
+    /**
+     * translate a single ammo, same as ammoTranslator with color list but just with a single color
+     * @param c color to translate
+     * @return string representing a view of the ammo
+     */
     public static String ammoTranslator(Color c){
         List<Color> list = new ArrayList<>();
         list.add(c);
@@ -305,6 +326,11 @@ public class UiHelpers {
         return ammoTranslator(list);
     }
 
+    /**
+     * generates a color list from a list of powerups
+     * @param powerUps list of cached power ups
+     * @return a list of color from the colors of the cached powerups passed as parameters
+     */
     public static List<Color> genColorListFromPowerUps(List<CachedPowerUp> powerUps){
         List<Color> colorList = new ArrayList<>();
 
@@ -315,10 +341,20 @@ public class UiHelpers {
         return  colorList;
     }
 
+    /**
+     * same as genColorLitFromPowerups but with a single CachedPowerUp instead of a list
+     * @param p cachedPowerup whom color has to be extracted
+     * @return color corrispoding to the color of the CachedPowerUp passed as a parameter
+     */
     public static Color genColorFromPowerUp(CachedPowerUp p){
         return p.getColor();
     }
 
+    /**
+     * extract the powerups types form a list of cached power ups
+     * @param powerUps cachedPowerups list
+     * @return a list of enum PowerUpType
+     */
     public static List<PowerUpType> genTypeListFromPowerUps(List<CachedPowerUp> powerUps){
         List<PowerUpType> powerUpTypes = new ArrayList<>();
 

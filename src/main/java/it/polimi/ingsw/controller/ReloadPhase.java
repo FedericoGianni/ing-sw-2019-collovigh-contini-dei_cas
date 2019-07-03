@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.actions.ReloadAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -195,9 +196,9 @@ public class ReloadPhase {
 
             required.addAll(weapon
                     .getReloadCost()
-            .stream()
-            .map(AmmoCube::getColor)
-            .collect(Collectors.toList()));
+                    .stream()
+                    .map(AmmoCube::getColor)
+                    .collect(Collectors.toList()));
 
         }
 

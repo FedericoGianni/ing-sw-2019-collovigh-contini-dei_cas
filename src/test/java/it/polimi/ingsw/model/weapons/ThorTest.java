@@ -68,7 +68,7 @@ class ThorTest {
         Player p3=Model.getPlayer(2);
         p3.setPlayerPos(Model.getMap().getCell(0,0));
 
-
+        //se danno >12 in un effetto son cazzi
 
         List <List<Player>> targetsLists =new ArrayList<>();
         List <Player> targets1=new ArrayList<>();
@@ -88,8 +88,8 @@ class ThorTest {
             e.printStackTrace();
         }
 
-        //System.out.println(p2.getStats().getDmgTaken());
-        //System.out.println(p3.getStats().getDmgTaken());
+        System.out.println(p2.getStats().getDmgTaken());
+        System.out.println(p3.getStats().getDmgTaken());
 
 
     }
