@@ -48,24 +48,92 @@ import static java.lang.Thread.sleep;
 
 public class GuiMapController {
 
+    /**
+     * Reference to the gui linked to this controller
+     */
     private static Gui gui;
+
     private int rows = 3, col = 4;
     private VBox map[][];
 
+    /**
+     * set the gui parameter
+     * @param g gui to set as reference
+     */
     public static void setGui(Gui g) {
         gui = g;
     }
 
+    /**
+     * reference to the end game scene
+     */
     private static Scene endScene;
 
+    /**
+     * reference to the Stage, needed to switch scenes
+     */
     private static Stage myStage;
 
     private ArrayList<Directions> movementDirections;
+
+    /**
+     * used to ask the server if the specified direction is valid (= no walls), since the cacheModel version
+     * doesn't store the cell adjacences we need to ask the server if a direction is valid or not
+     */
     private int validMove = -1;
+
+    /**
+     * true if, in frenzy phase, the current player is before the first player, false otherwise
+     */
     private boolean isBeforeFrenzyStarter;
 
     private List<String> actionTypes;
+
+    /**
+     * true if the action called on the UI by the controller is on frenzy phase
+     */
     private boolean isFrenzy = false;
+
+    /**
+     * set isFrenzy value to true
+     */
+    public void setFrenzy(){
+        isFrenzy=true;
+    }
+
+    /**
+     * set the end scene reference
+     * @param scene reference to the end game scene
+     */
+    public void setEndScene(Scene scene){
+        endScene = scene;
+    }
+
+    /**
+     * open the end game scene after the game has ended
+     * @param actionEvent
+     */
+    public void openEndScene(ActionEvent actionEvent) {
+        myStage.setScene(endScene);
+        myStage.show();
+    }
+
+    /**
+     * Gui Map controller initializer to set the reference to the stage, used to switch scenes
+     * @param stage
+     */
+    public static void setStageAndSetupListeners(Stage stage){
+        myStage = stage;
+    }
+
+    /**
+     * Set the parameter isBeforeFrenzyStarter to true
+     */
+    public void setBeforeFrenzyStarter()
+    {
+        isBeforeFrenzyStarter=true;
+    }
+
     @FXML
     BorderPane pane;
     @FXML
@@ -91,27 +159,7 @@ public class GuiMapController {
 
     }
 
-    public void setFrenzy(){
-        isFrenzy=true;
-    }
 
-    public void setEndScene(Scene scene){
-        endScene = scene;
-    }
-
-    public void openEndScene(ActionEvent actionEvent) {
-        myStage.setScene(endScene);
-        myStage.show();
-    }
-
-    public static void setStageAndSetupListeners(Stage stage){
-        myStage = stage;
-    }
-
-    public void setBeforeFrenzyStarter()
-    {
-        isBeforeFrenzyStarter=true;
-    }
 
     /**
      * Notify update regarding other players actions
@@ -1114,6 +1162,12 @@ public class GuiMapController {
         }
     }
 
+    /**
+     * Method useful for movements. First the client calls askMoveValid, with a single direction, the the
+     * server reply back to the client throught this setter, and it sets validMove to true if the direction is valid
+     * (no walls, nor out of map), otherwise false
+     * @param validMove boolean, true if direction is valid, false otherwise
+     */
     public void setValidMove(int validMove) {
         this.validMove = validMove;
         synchronized (this) {
@@ -1273,7 +1327,9 @@ public class GuiMapController {
         }
     }
 
-
+    /**
+     * Handles the user spawn, asking for a powerUp to discard and forwarding it to the view linked to this UI
+     */
     public void startSpawn() {
         //diplaye the powerUps in the player's screen
         powerUpDisplayer();
@@ -2488,7 +2544,12 @@ public class GuiMapController {
 
     }
 
-
+    /**
+     *
+     * @param powerUps list of CachedPowerUps to be checked
+     * @param c color to find
+     * @return true if the powerups list contains a powerup of the specified color, false otherwise
+     */
     private boolean hasPowerUpOfColor(List<CachedPowerUp> powerUps, Color c) {
         List<CachedPowerUp> result = powerUps
                 .stream()
@@ -3236,6 +3297,11 @@ public class GuiMapController {
             gui.getView().doAction(new ShootAction(w, targetLists, effects, cells, pUp, null));
         }
     }
+
+    /**
+     * Show a message on the user interface
+     * @param s string to show
+     */
     public void show(String error)
     {
 

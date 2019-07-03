@@ -15,20 +15,48 @@ import static it.polimi.ingsw.network.ProtocolType.SOCKET;
 
 public class GuiController {
 
+    /**
+     * Reference to the gui linked to this controller
+     */
     private static Gui gui;
 
+    /**
+     * set the gui parameter
+     * @param g gui to set as reference
+     */
     public static void setGui(Gui g) {
         gui = g;
     }
 
+    /**
+     * Protocol type chosen by the user to connect (default is set to SOCKET)
+     */
     private ProtocolType protocolType = SOCKET;
+
+    /**
+     * Name chosen by the user
+     */
     String playerName;
+
+    /**
+     * Color chosen by the user
+     */
     PlayerColor playerColor;
 
+    /**
+     * Refeerence to the stage
+     */
     private Stage myStage;
 
+    /**
+     * Reference to the Lobby scene to switch windows
+     */
     private Scene secondScene;
 
+    /**
+     * Set the lobby scene
+     * @param scene scene to be set
+     */
     public void setSecondScene(Scene scene) {
         secondScene = scene;
     }
@@ -118,10 +146,18 @@ public class GuiController {
         }
     }
 
+    /**
+     * Open Lobby scene
+     * @param actionEvent any event to trigger this method
+     */
     public void openSecondScene(ActionEvent actionEvent) {
         myStage.setScene(secondScene);
     }
 
+    /**
+     * Controller initializer
+     * @param stage stage to be set
+     */
     public void setStageAndSetupListeners(Stage stage){
         this.myStage = stage;
     }

@@ -14,21 +14,45 @@ import static it.polimi.ingsw.network.ProtocolType.SOCKET;
 
 public class GuiReconnectionController {
 
+    /**
+     * Reference to the gui linked to this controller
+     */
     private static Gui gui;
 
+    /**
+     * Reference to the stage needed to switch scenes
+     */
     private Stage myStage;
 
+    /**
+     * Reference to the main game scene
+     */
     private Scene mainScene;
 
+    /**
+     * Protocol type chosen by the user to connect (default is set to SOCKET)
+     */
     private ProtocolType protocolType = SOCKET;
 
+    /**
+     * Name chosen by the user
+     */
     String playerName;
 
+    /**
+     * Color chosen by the user
+     */
     PlayerColor playerColor;
 
+    /**
+     * Toggle Group to choose the Connection type (socket/rmi)
+     */
     @FXML
     private ToggleGroup srmi;
 
+    /**
+     * Textflied in which user will input its name
+     */
     @FXML
     private TextField name;
 
@@ -52,6 +76,10 @@ public class GuiReconnectionController {
         myStage.setScene(mainScene);
     }
 
+    /**
+     * Reconnect the player using playerName (his old name before disconnecting)
+     * @param actionEvent
+     */
     @FXML
     private void reconnect(ActionEvent actionEvent){
 
@@ -82,6 +110,10 @@ public class GuiReconnectionController {
 
     }
 
+    /**
+     * Choose the connection type from the Toggle Group srmi
+     * @param event
+     */
     @FXML
     private void chooseConnType(ActionEvent event){
 
