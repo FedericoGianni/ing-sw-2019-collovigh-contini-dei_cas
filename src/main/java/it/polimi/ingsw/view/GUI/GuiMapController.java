@@ -338,21 +338,20 @@ public class GuiMapController {
 
     public void initial()
     {
-        System.out.println("initial");
+
         Platform.runLater( () -> {
-            System.out.println("map creat");
             this.mapCreator();
 
             for(int i=0;i<gui.getView().getCacheModel().getCachedPlayers().size();i++) {
                 if (gui.getView().getCacheModel().getCachedPlayers().get(i).getStats() != null)
                     gui.notifyUpdate(UpdateType.STATS, i, null);
-                System.out.println("superato stats");
+
                 if (gui.getView().getCacheModel().getCachedPlayers().get(i).getWeaponbag() != null)
                     gui.notifyUpdate(UpdateType.WEAPON_BAG, i, null);
-                System.out.println("superato weapon bag");
+
                 if (gui.getView().getCacheModel().getCachedPlayers().get(i).getPowerUpBag() != null)
                     gui.notifyUpdate(UpdateType.POWERUP_BAG, i, null);
-                System.out.println("superato powerup bag");
+
             }
             //gui.getGuiLobbyController().openThirdScene(new ActionEvent());
 
@@ -417,6 +416,7 @@ public class GuiMapController {
                 if(isFrenzy && !isBeforeFrenzyStarter)
                 {
                     Alert a=new Alert(Alert.AlertType.INFORMATION,"Non è disponibile questa azione");
+                    a.show();
                 }
                 else {
                     move("MOVE");
@@ -782,6 +782,8 @@ public class GuiMapController {
                             {
                                 List<Directions> dir = new ArrayList<>();
                                 gui.getView().doAction(new FrenzyShoot(new Move(dir, gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getStats().getCurrentPosition())));
+                            }else{//standard shoot without moves
+                                shootWeaponChooser(movementDirections);
                             }
                         });
                     } else {
@@ -2286,7 +2288,7 @@ public class GuiMapController {
                     }
                     weapons.add(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
 
-                    System.out.println("Stai cercndo di acquistare :" + ((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
+                    //System.out.println("Stai cercndo di acquistare :" + ((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
 
                     checkPayWithPowerUp(gui.getView().getCacheModel().getWeaponInfo(((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0)).getBuyEffect(), weapons, dir, "BUY", effects);
                 } catch (WeaponNotFoundException e) {
@@ -2299,7 +2301,7 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 try {
                     mapEventDeleter();
-                    System.out.println("Stai cercndo di acquistare :" + ((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
+                    //System.out.println("Stai cercndo di acquistare :" + ((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
                     if (weapons.size() == 0)//no discard
                     {
                         weapons.add(null);
@@ -2317,7 +2319,7 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 try {
                     mapEventDeleter();
-                    System.out.println("Stai cercndo di acquistare :" + ((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
+                    //System.out.println("Stai cercndo di acquistare :" + ((CachedSpawnCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(x, y)).getWeaponNames().get(0));
                     if (weapons.size() == 0)//no discard
                     {
                         weapons.add(null);
@@ -2558,7 +2560,7 @@ public class GuiMapController {
                 gui.getView().doAction(new FrenzyShoot(new ReloadAction(weaponNames, powerUpsToDiscard)));
             }
             return;
-        }else if(actionType.equals("GRAB")){
+        }else if(actionType.equals("BUY")){
                 //this shouldn't do anythign , just forward the choice and then controller will
             //reply back that player hasn't got enough ammo
             Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni ");

@@ -611,6 +611,7 @@ public class Gui extends Application implements UserInterface {
         //this method enables the action buttons to do something
         if(isFrenzy)
         {
+
             guiMapController.printLog("ATTENZIONE !!! Attivzione della fase di FRENESIA FINALE");
             guiMapController.setFrenzy();
             if(isBeforeFrenzyStarter)
@@ -709,7 +710,8 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public List<Integer> askMapAndSkulls() {
-        List<Integer> values = new ArrayList<>();
+        System.out.println("ask skulls");
+        /*List<Integer> values = new ArrayList<>();
 
 
         Platform.runLater( () -> {
@@ -717,33 +719,10 @@ public class Gui extends Application implements UserInterface {
 
             Alert a = new Alert(Alert.AlertType.INFORMATION, "Seleziona quale  mappa usare");
             a.showAndWait();
-            //platfrm.runlater qui
-            if (view.getCacheModel().getCachedPlayers().size() == 3)//tipo 1 o 2
-            {
-                ButtonType first = new ButtonType("Per 3/4 giocatori");// map 1
-                ButtonType second = new ButtonType("Qualsiasi numero");//map 2
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli una mappa ", first, second);
-                alert.showAndWait();
-                if (alert.getResult() == first) {
-                    values.add(1);
-                } else {
-                    values.add(2);
-                }
-            } else if (view.getCacheModel().getCachedPlayers().size() == 5) //tipo 2 o 3
-            {
-                ButtonType first = new ButtonType("Per 4/5 giocatri");// map 1
-                ButtonType second = new ButtonType("Qualsiasi numero");//map 2
-                Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli una mappa ", first, second);
-                alert.showAndWait();
-                if (alert.getResult() == first) {
-                    values.add(3);
-                } else {
-                    values.add(2);
-                }
-            } else {//tipo 1 o 2 o 3
-                ButtonType first = new ButtonType("Per 3/4 giocatori");// map 1
-                ButtonType third = new ButtonType("Per 4/5 giocatri");// map 1
-                ButtonType second = new ButtonType("Qualsiasi numero");//map 2
+
+                ButtonType first = new ButtonType("Tipo 1\nOttima Per 3/4 giocatori");// map 1
+                ButtonType third = new ButtonType("Tipo 3\nOttima Per 4/5 giocatri");// map 1
+                ButtonType second = new ButtonType("tipo 2 \nOttima Qualsiasi numero");//map 2
                 Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli una mappa ", first, second, third);
                 alert.showAndWait();
                 if (alert.getResult() == first) {
@@ -753,7 +732,7 @@ public class Gui extends Application implements UserInterface {
                 } else {
                     values.add(3);
                 }
-            }
+
             //-----------------------------------ask for skulls
             values.add(skullSelector());
             bb=true;
@@ -768,6 +747,10 @@ public class Gui extends Application implements UserInterface {
         }
         bb=false;
         System.out.println(values);
+        return values;*/
+        List<Integer> values = new ArrayList<>();
+        values.add(2);
+        values.add(1);
         return values;
     }
 
