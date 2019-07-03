@@ -3,12 +3,12 @@ package it.polimi.ingsw.network.serveronly;
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.network.Config;
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.ColorAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.networkexceptions.NameAlreadyTakenException;
 import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedLobby;
 
 import java.util.ArrayList;
@@ -22,7 +22,8 @@ import java.util.logging.Logger;
 /**
  * This Class represents the Lobby for the player to log in before the game starts
  */
-public class WaitingRoom {
+public class
+WaitingRoom {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static final Level level = Level.INFO;
@@ -30,7 +31,7 @@ public class WaitingRoom {
     private int timerCount;
     private final int maxTimer;
 
-    public static final int DEFAULT_MIN_PLAYER = Parser.readConfigFile().getMinPlayer();
+    public static final int DEFAULT_MIN_PLAYERS = Parser.readConfigFile().getMinPlayer();
     private static final int DEFAULT_MAX_PLAYERS = 5;
 
     private int skulls = 1;
@@ -40,6 +41,8 @@ public class WaitingRoom {
     private Boolean active;
     private int activeGame;
     private int mapType = 0;
+
+    private boolean activeTimer;
 
 
     /**
@@ -134,7 +137,7 @@ public class WaitingRoom {
             colors.add(playerColor);
 
 
-            if (players.size() >= DEFAULT_MIN_PLAYER) {
+            if (players.size() >= DEFAULT_MIN_PLAYERS && !activeTimer) {
 
                 LOGGER.info("[Waiting-Room] start timer");
 
@@ -165,7 +168,7 @@ public class WaitingRoom {
      * @param name is the name to check
      * @return true if the name is free
      */
-    public Boolean isNameAlreadyTaken(String name){
+    public boolean isNameAlreadyTaken(String name){
 
         return (players.contains(name));
     }
@@ -180,7 +183,7 @@ public class WaitingRoom {
      * @param color is the color to check
      * @return true if the color is free
      */
-    public Boolean isColorAlreadyTaken(PlayerColor color){
+    public boolean isColorAlreadyTaken(PlayerColor color){
 
         return (colors.contains(color));
     }
@@ -215,9 +218,11 @@ public class WaitingRoom {
             @Override
             public void run() {
 
-                if (players.size() >= DEFAULT_MIN_PLAYER) {
+                if (players.size() >= DEFAULT_MIN_PLAYERS) {
 
-                    LOGGER.log(level,() -> "[Waiting-Room] WaitingRoomTimer counter: " + timerCount);
+                    activeTimer = true;
+
+                    LOGGER.log(level, () -> "[Waiting-Room] WaitingRoomTimer counter: " + timerCount);
 
                     timerCount--;
 
@@ -235,6 +240,7 @@ public class WaitingRoom {
 
                         this.cancel();
                     }
+
 
                 }else {
 
