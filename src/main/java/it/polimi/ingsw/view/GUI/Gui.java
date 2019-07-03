@@ -309,14 +309,7 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void startUI() {
-
-        String pathToJavaFx = new File(FX_PATH).getAbsolutePath();
-
-        String[] args = new String[2];
-        args[0] = "--module-path \"C:\\Program Files\\Java\\javafx-sdk-12.0.1\\lib\"";
-        args[1] = "--add-modules javafx.controls,javafx.fxml";
-
-        launch(args);
+        launch();
     }
 
 
