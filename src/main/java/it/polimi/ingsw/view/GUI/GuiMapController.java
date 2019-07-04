@@ -411,13 +411,16 @@ public class GuiMapController {
 
     @FXML
     public void actionButtonsEnabler() {
+
         moveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                Alert a=new Alert(Alert.AlertType.CONFIRMATION,"Puoi fare un' azione");
+                a.show();
                 actionButtonDisable();//i need to disable everything else
                 if(isFrenzy && !isBeforeFrenzyStarter)
                 {
-                    Alert a=new Alert(Alert.AlertType.INFORMATION,"Non è disponibile questa azione");
+                     a=new Alert(Alert.AlertType.INFORMATION,"Non è disponibile questa azione");
                     a.show();
                 }
                 else {
@@ -486,6 +489,13 @@ public class GuiMapController {
         weapon1.setOnMousePressed(null);
         weapon2.setOnMousePressed(null);
         weapon3.setOnMousePressed(null);
+        myWeapon1.setOnMouseClicked(null);
+        myWeapon2.setOnMouseClicked(null);
+        myWeapon3.setOnMouseClicked(null);
+        myWeapon1.setOnMousePressed(null);
+        myWeapon2.setOnMousePressed(null);
+        myWeapon3.setOnMousePressed(null);
+
         powerUp1.setOnMouseClicked(null);
         powerUp2.setOnMouseClicked(null);
         powerUp3.setOnMouseClicked(null);
@@ -1094,7 +1104,7 @@ public class GuiMapController {
      * @param id
      * @return
      */
-    private void fromIDtoIMG(int id, VBox b) {
+   private void fromIDtoIMG(int id, VBox b) {
         if (b.getChildren().size() == 0) {
 
             b.getChildren().add(new HBox());
@@ -1120,7 +1130,7 @@ public class GuiMapController {
 
     }
 
-    private void playerRemover(int id, int x, int y) {
+    public void playerRemover(int id, int x, int y) {
         // System.out.println("Sto guardando cela :"+x+" "+y);
         if (map[x][y].getChildren().size() == 1)//primo HBOX
         {
@@ -1164,6 +1174,11 @@ public class GuiMapController {
             ((HBox) map[x][y].getChildren().get(1)).getChildren().remove(j);
         }
 
+    }
+
+    public void playerDisplay(int id,int r,int c)
+    {
+        fromIDtoIMG(id,map[r][c]);
     }
 
     private void inserter(int id, HBox h) {
@@ -1379,18 +1394,21 @@ public class GuiMapController {
         a.setContentText("Choose a powerUp (on the right) to discard for the swpawn location");
         a.show();
         powerUp1.setOnMouseClicked((e) -> {//eliminate the effect
+            System.out.println("cliccato pup 1");
             powerUp1.setImage(null);
             Color c = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0).getColor();
             gui.getView().spawn(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(0));
             mapPos(colorToCord(c).x, colorToCord(c).y, gui.getView().getPlayerId());
         });
         powerUp2.setOnMouseClicked((e) -> {
+            System.out.println("cliccato pup 2");
             powerUp2.setImage(null);
             Color c = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1).getColor();
             gui.getView().spawn(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(1));
             mapPos(colorToCord(c).x, colorToCord(c).y, gui.getView().getPlayerId());
         });
         powerUp3.setOnMouseClicked((e) -> {
+            System.out.println("cliccato pup 3");
             powerUp3.setImage(null);
             Color c = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2).getColor();
             gui.getView().spawn(gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(2));
@@ -2612,6 +2630,7 @@ public class GuiMapController {
             Alert a=new Alert(Alert.AlertType.INFORMATION,"Non hai abbastanza munizioni ");
             a.show();
             System.out.println("Non abba munizie ecc");
+            System.out.println("Direzioni: "+dir);
             gui.getView().doAction(new GrabAction(dir,weaponNames.get(0),weaponNames.get(1),powerUpsToDiscard));
             mapEventDeleter();
             return;
@@ -3191,6 +3210,7 @@ public class GuiMapController {
                 a.show();
             } else {
                 int aa = weapon.getEffectRequirements().get(effects.get(effectNum)).getNumberOfTargets().size() - targetNum;
+
                 Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Seleziona un altro bersaglio te ne restano: " + aa);
                 a.show();
             }
