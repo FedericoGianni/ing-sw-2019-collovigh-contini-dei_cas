@@ -80,7 +80,7 @@ public class ToClientImpl implements ToClient {
     @Override
     public void sendUpdate(UpdateClass update) throws RemoteException {
 
-        client.getView().getCacheModel().update(update);
+        client.getView().sendUpdates(update);
     }
 
 

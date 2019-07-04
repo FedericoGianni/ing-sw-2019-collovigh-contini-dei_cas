@@ -522,6 +522,8 @@ public class ActionPhase {
      */
     public void shootAction(ShootAction shootAction) {
 
+        List<Integer> shotPlayerThisTurnBackup = controller.getShotPlayerThisTurn();
+
         // gets the id of the current player
 
         int playerId = controller.getCurrentPlayer();
@@ -543,7 +545,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -557,7 +559,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -571,7 +573,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -585,7 +587,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -599,7 +601,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -613,7 +615,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -627,7 +629,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -641,7 +643,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -655,7 +657,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -669,7 +671,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -683,7 +685,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -697,7 +699,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -709,7 +711,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -723,7 +725,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -737,7 +739,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -751,7 +753,7 @@ public class ActionPhase {
 
             restoreSellPowerUp();
 
-            shootFailed(shootAction);
+            shootFailed(shootAction,shotPlayerThisTurnBackup);
 
             handleAction();
 
@@ -800,6 +802,8 @@ public class ActionPhase {
 
             List<List<Player>> targets = new ArrayList<>();
 
+            System.out.println("[Controller] list of target received : " + shootAction.getTargetIds() );
+
             // translate the lists of Integer in lists of Players
 
             for (int i = 0; i < shootAction.getTargetIds().size(); i++) {
@@ -814,6 +818,15 @@ public class ActionPhase {
                 targets.add(temp);
             }
 
+            //TODO delete
+
+            for (List<Player> list : targets){
+
+                for (Player target : list){
+
+                    System.out.println(target.getPlayerName());
+                }
+            }
 
             selected.shoot(targets, shootAction.getEffects(), cells);
 
@@ -835,13 +848,15 @@ public class ActionPhase {
         }
     }
 
-    private void shootFailed(ShootAction shootAction){
+    private void shootFailed(ShootAction shootAction,List<Integer> shotPlayerThisTurnBackup){
 
         if (shootAction.getMove() != null){
 
             utilityMethods.move(Arrays.asList(shootAction.getMove().getOpposite()));
 
         }
+
+        controller.setShotPlayerThisTurn(shotPlayerThisTurnBackup);
 
     }
 

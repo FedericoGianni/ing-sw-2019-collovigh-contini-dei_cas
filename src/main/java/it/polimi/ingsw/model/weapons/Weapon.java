@@ -38,7 +38,13 @@ public abstract class Weapon implements Serializable {
 
         this.loaded = loaded;
 
-        if (Observers.isInitialized() && isPossessedBy() != null ) isPossessedBy().getCurrentWeapons().updateAll(isPossessedBy().getCurrentWeapons());
+        if (Observers.isInitialized() && isPossessedBy() != null ){
+
+            isPossessedBy().getCurrentWeapons().updateAll(isPossessedBy().getCurrentWeapons());
+
+            System.out.println(" CALLED updateAll for weapon load ");
+
+        }
     }
 
     /**
