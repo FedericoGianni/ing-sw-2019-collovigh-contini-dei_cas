@@ -110,7 +110,7 @@ public class Thor extends SpecialWeapons {
                     targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 2);
                 } else if (i == 1)//second macroeffect
                 {
-                    targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 10);
+                    targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 1);
                 } else if (i == 2)//third macroeffect
                 {
                     targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 2);

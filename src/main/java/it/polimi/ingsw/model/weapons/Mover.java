@@ -104,11 +104,11 @@ public class Mover extends MicroEffect {
                 } else {//cell number is max
                     if (Map.getDist(c, playerList.get(0).getCurrentPosition()) <= cellNumber)//check if the distace is correct
                     {
-                        //System.out.println("celle7");
-                        if(c== Model.getMap().getCell(1,3))
-                            //System.out.println("ssssssssssssssssssssss");
+
                         playerList.get(0).setPlayerPos(c);
                     } else {
+
+                        System.out.println(cellNumber);
                         throw new UncorrectDistanceException();
                     }
                 }

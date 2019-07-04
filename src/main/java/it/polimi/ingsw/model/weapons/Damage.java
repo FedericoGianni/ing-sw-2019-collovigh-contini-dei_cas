@@ -265,6 +265,14 @@ public class Damage extends MicroEffect {
 
             if(melee==true)// only electroshyte I e II
             {
+                for(Player item:playerList)
+                {
+                    if(!item.getCurrentPosition().equals(w.isPossessedBy().getCurrentPosition()))
+                    {
+                        throw new PlayerInDifferentCellException();
+                    }
+                }
+
                 for(Player p:w.isPossessedBy().getCurrentPosition().getPlayers())
                 {
                     if(!p.equals(w.isPossessedBy()))
