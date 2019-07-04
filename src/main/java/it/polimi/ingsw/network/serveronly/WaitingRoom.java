@@ -43,6 +43,7 @@ WaitingRoom {
     private int mapType = 0;
 
     private boolean activeTimer;
+    private boolean newGame;
 
 
     /**
@@ -70,11 +71,15 @@ WaitingRoom {
 
             LOGGER.log(level,"[OK] Started Waiting Room for new Game");
 
+            newGame = true;
+
         }else{
 
             if (!Parser.containsGame(gameId)) throw new GameNonExistentException();
             activeGame = gameId;
             // need to catch all saved games and start the correspondent one
+
+            newGame = false;
 
             LOGGER.log(Level.FINE, "[OK] Started Waiting Room for saved game w/ id: {0}", gameId);
         }
@@ -90,9 +95,11 @@ WaitingRoom {
      * if the players specified a map that will be taken or it will be generated casually
      * @return the new Controller
      */
-    public synchronized void initGame(){
+    private synchronized void initGame(){
 
-        //activeGame = Parser.addGame();
+        if (newGame) activeGame = Parser.addGame();
+
+        else reloadGame(activeGame);
 
         List<Integer> mapAndSkulls = Server.getClient(0).askMapAndSkulls();
         this.mapType = mapAndSkulls.get(0);
@@ -106,6 +113,11 @@ WaitingRoom {
             Server.getController().handleTurnPhase();
         }
         this.active = false;
+    }
+
+    private synchronized void reloadGame(int activeGame){
+
+
     }
 
     /**
