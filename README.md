@@ -28,30 +28,80 @@
 
 
 ## Server
-Server.jar
+server.jar
+
 
 ### without parameters 
-it starts the server with the default configuration: startUpServerConfig.json, placed in the same folder as the jar.
-If this file doesn't exist, it will create one and place it in the same folder. If the file is there, it will read config from the json.
-### with parameters
-java -jar ./server.jar socket_port rmi_server_port rmi_client_port
+```
+java -jar server.jar
+```
 
-the default server ip is set to localhost, default socket port is 22222, rmi default client port is 22220 and client port is 222221.
+it starts the server with the default configuration: startUpServerConfig.json, placed in the same folder as the jar.
+If this file doesn't exist, it will start the game with default args, and export the config in the folder.
+
+This is the only way to init the game with custom min players or/and timer
+
+### with 1 parameter
+```
+java -jar server.jar socket_port
+```
+
+this init takes only the socket port and sets all the other values to default
+
+### with 3 parameters
+```
+java -jar ./server.jar socket_port rmi_server_port rmi_client_port
+```
+
+this init takes the socket port, the rmi register port for server and client, and sets the other parameters to default 
+
 
 
 ## Client
-Client.jar
+client.jar
+
 ### without parameters 
-starts the client with the default config read from startUpClientConfig.json, placed in the same folder as the jar.
-If this file doesn't exist, it will create one and place it in the same folder. If the file is there, it will read config from the json.
+```
+java -jar client.jar
+```
 
-the default server ip is set to localhost, default socket port is 22222, rmi default client port is 22220 and client port is 222221. the default UI is set to gui.
+Starts the client with the default config read from startUpClientConfig.json, placed in the same folder as the jar.
+If this file doesn't exist, it will start the game with default args, and export the config in the folder.
 
-### with parameters
-note that you can specify only port and user interface, then it will read server_ip from the json file
+**WARNING:** this init method, if there is no json file in the folder, will launch the client w/ server ip localhost
 
-#### CLI
-java -jar ./client.jar server_ip port -cli (rmi_server_port) (rmi_client_port)
+### with 1 parameters
+```
+java -jar client.jar server_ip
+```
 
-### GUI 
-java -jar ./client.jar server_ip port -gui (rmi_server_port) (rmi_client_port)
+This method will take only the server ip and sets all the other param to default
+
+### with 3 parameters
+```
+java -jar client.jar server_ip socket_port user_interface
+```
+
+This method will take only server ip, socket port, ( "-cli" for cli, "-gui" for cli ) and sets all the other param to default
+
+### with 5 parameters
+```
+java -jar client.jar server_ip socket_port user_interface rmi_server_port rmi_client_port
+```
+
+This method will take only server ip, socket port, ( "-cli" for cli, "-gui" for cli ), rmi registry port for server and client, and sets all the other param to default
+
+## Note
+
+Whatever init chosen the jar will create a json file in the same folder whit the current config, but this will be read only in the startup process, and every modification done to it will not be effective while the program is running.
+The file will also only be read if the jar is launched with no args, otherwise the non specified parameters will be set to default
+
+The default param are:
+ 
+* server ip is set to localhost
+* default socket port is 22222, 
+* rmi register default server port is 22220
+* rmi register default client port is 22221
+* ui default is gui
+* min player default is 3
+* default timer is 30 sec

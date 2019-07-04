@@ -10,7 +10,7 @@
 
     <name>AM18</name>
     <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <url>https://github.com/FedericoGianni/ing-sw-2019-collovigh-contini-dei_cas</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
