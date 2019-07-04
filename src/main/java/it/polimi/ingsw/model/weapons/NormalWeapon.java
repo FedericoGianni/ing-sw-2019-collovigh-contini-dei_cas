@@ -407,36 +407,47 @@ public class NormalWeapon extends Weapon{
         }
       catch(PlayerInSameCellException e)
       {   restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw  new PlayerInSameCellException();
       } catch (NotEnoughAmmoException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new NotEnoughAmmoException();
       } catch (WeaponNotLoadedException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new WeaponNotLoadedException();
       } catch (PlayerInDifferentCellException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new PlayerInDifferentCellException();
       } catch (CardNotPossessedException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new CardNotPossessedException();
       } catch (UncorrectDistanceException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new UncorrectDistanceException();
       } catch (PlayerNotSeeableException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new PlayerNotSeeableException();
       } catch (NotCorrectPlayerNumberException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new NotCorrectPlayerNumberException();
       } catch (DifferentPlayerNeededException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new DifferentPlayerNeededException();
       } catch (SeeAblePlayerException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new SeeAblePlayerException();
       } catch (PrecedentPlayerNeededException e) {
           restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
+          e.printStackTrace();
           throw new PrecedentPlayerNeededException();
       }
 

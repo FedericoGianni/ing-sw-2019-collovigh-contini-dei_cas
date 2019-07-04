@@ -2451,8 +2451,8 @@ public class GuiMapController {
 
                 alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setContentText("Clicca sul powerUp da scartare a destra: ");
-                alert.showAndWait();
-
+                alert.show();
+                System.out.println("Puoi usare sia pUp che munizie");
                 //here get powerup to discard porcodyo
                 for (int i = 0; i < gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().size(); i++) {
                     if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getPowerUpBag().getPowerUpList().get(i).getColor().equals(c)) {
@@ -2470,7 +2470,7 @@ public class GuiMapController {
                                         powerUps.remove(powerUpToDiscard);
                                         powerUpsToDiscard.add(powerUpToDiscard);
                                         checkPayWithPowerUp(cost, powerUps, ammo, cc, weaponNames, powerUpsToDiscard, dir, actionType, effects);
-
+                                        return;
                                     }
                                 });
                                 break;
@@ -2487,6 +2487,7 @@ public class GuiMapController {
                                         int cc = costCount;
                                         cc++;
                                         checkPayWithPowerUp(cost, powerUps, ammo, cc, weaponNames, powerUpsToDiscard, dir, actionType, effects);
+                                        return;
                                     }
                                 });
                                 break;
@@ -2503,6 +2504,7 @@ public class GuiMapController {
                                         int cc = costCount;
                                         cc++;
                                         checkPayWithPowerUp(cost, powerUps, ammo, cc, weaponNames, powerUpsToDiscard, dir, actionType, effects);
+                                        return;
                                     }
                                 });
                                 break;
@@ -2626,7 +2628,7 @@ public class GuiMapController {
         }
 
 
-        System.out.println("[DEBUG] PowerUp da scartare scelti: " + powerUpsToDiscard);
+        System.out.println("[DEBUG] PowerUp da scartare scelti: -------NON SI DOVREBBE VEDERE MAI_______ " + powerUpsToDiscard);
 
     }
 
@@ -2765,10 +2767,10 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 String name = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(0);
                 try {
-
+                    mapEventDeleter();
                     CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo(name);
                     shootEffectsChooser(w, dir);
-                    mapEventDeleter();
+
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -2780,10 +2782,10 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 String name = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(1);
                 try {
-
+                    mapEventDeleter();
                     CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo(name);
                     shootEffectsChooser(w, dir);
-                    mapEventDeleter();
+
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -2794,10 +2796,10 @@ public class GuiMapController {
             public void handle(MouseEvent mouseEvent) {
                 String name = gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getWeaponbag().getWeapons().get(2);
                 try {
-
+                    mapEventDeleter();
                     CachedFullWeapon w = gui.getView().getCacheModel().getWeaponInfo(name);
                     shootEffectsChooser(w, dir);
-                    mapEventDeleter();
+
                 } catch (WeaponNotFoundException e) {
                     e.printStackTrace();
                 }

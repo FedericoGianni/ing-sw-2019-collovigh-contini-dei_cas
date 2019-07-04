@@ -1606,14 +1606,14 @@ class NormalWeaponTest {
 
         //generate a player with a name and its starting position
         Player shooter = Model.getPlayer(0);
-        shooter.setPlayerPos(Model.getMap().getCell(0,0));
+        shooter.setPlayerPos(Model.getMap().getCell(1,0));
 
         Player target1 = Model.getPlayer(1);
-        target1.setPlayerPos(Model.getMap().getCell(0,0));
+        target1.setPlayerPos(Model.getMap().getCell(1,0));
 
-        Player target2 = Model.getPlayer(2);
-        target2.setPlayerPos(Model.getMap().getCell(1,1));
-
+        /*Player target2 = Model.getPlayer(2);
+        target2.setPlayerPos(Model.getMap().getCell(0,0));
+*/
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
@@ -1635,7 +1635,7 @@ class NormalWeaponTest {
             //mEf.add(1);
 
             List<Cell> cells = new ArrayList<>();
-            cells.add(Model.getMap().getCell(0,1));
+            cells.add(Model.getMap().getCell(0,0));
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             /*
             System.out.println(target1.getPlayerName());
@@ -1667,9 +1667,9 @@ class NormalWeaponTest {
         } catch (Exception e){
             e.getMessage();
         }
-        //System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
+        System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
-        //assertEquals(target1.getCurrentPosition(),Model.getMap().getCell(0,1));
+        assertEquals(target1.getCurrentPosition(),Model.getMap().getCell(0,0));
         //assert(target1.getStats().getCurrentPosition().equals(Model.getMap().getCell(1,0)));
 
     }
