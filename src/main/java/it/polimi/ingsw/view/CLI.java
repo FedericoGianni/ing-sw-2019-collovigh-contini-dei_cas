@@ -453,8 +453,10 @@ public class CLI implements UserInterface {
                     int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 
                     for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
-                        if(!previousPos.get(i).equals(view.getCacheModel().getCachedPlayers().get(i).getStats().getCurrentPosition())){
-                            someOneChangedPos = true;
+                        if(view.getCacheModel().getCachedPlayers().get(i).getStats() != null) {
+                            if (!previousPos.get(i).equals(view.getCacheModel().getCachedPlayers().get(i).getStats().getCurrentPosition())) {
+                                someOneChangedPos = true;
+                            }
                         }
                     }
 
