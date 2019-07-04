@@ -2,8 +2,10 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.controller.saveutils.SavedMap;
+import it.polimi.ingsw.controller.saveutils.SavedPlayer;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.*;
 import it.polimi.ingsw.network.Config;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
@@ -40,6 +42,7 @@ public class Parser {
     private static final String MOVER_PATH = "/json/mover";
     private static final String NORMAL_WEAPON_PATH = "/json/Weaponary";
     private static final String SAVED_MAP_RELATIVE_PATH = "_Map.json";
+    private static final String SAVED_PLAYERS_PATH = "_Players.json";
     private static final String MAP_ONE_PATH = "/json/maps/map_01.json";
     private static final String MAP_TWO_PATH = "/json/maps/map_02.json";
     private static final String MAP_THREE_PATH = "/json/maps/map_03.json";
@@ -933,6 +936,40 @@ public class Parser {
             // load the Config File
 
             return gson.fromJson(br, Config.class);
+        }
+    }
+
+    public void savePlayers(){
+
+        String gamePath = getGames().get(currentGame);
+
+        List<SavedPlayer> players = new ArrayList<>();
+
+        for (Player player : Model.getGame().getPlayers() ){
+
+            players.add(new SavedPlayer(player));
+        }
+
+        try {
+
+            // creates a reader for the file
+
+            FileWriter writer = new FileWriter(gamePath + SAVED_PLAYERS_PATH);
+
+            // write the file
+
+            gson.toJson(players,writer);
+
+            writer.flush();
+            writer.close();
+
+            // LOG the load
+
+        }catch (IOException e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not write the players ");
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
         }
     }
 
