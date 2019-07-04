@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 
+import it.polimi.ingsw.controller.saveutils.SavedController;
 import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
@@ -19,6 +20,7 @@ import it.polimi.ingsw.view.virtualView.VirtualView;
 import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -89,8 +91,6 @@ public class Controller {
 
     private boolean gameEnded = false;
 
-    private List<Integer> deadList = new ArrayList<>();
-
 
     /**
      * Constructor
@@ -148,6 +148,32 @@ public class Controller {
         LOGGER.log(level,"[CONTROLLER] Initialized Model with chosen MapType");
     }
 
+    public Controller( SavedController savedController) {
+
+        this.observers = new Observers(this, savedController.getPlayerSize());
+
+        for (int i = 0; i < savedController.getPlayerSize(); i++) {
+            players.add(new VirtualView(i, this, Server.getClient(i)));
+        }
+
+        List<String> nameList = new ArrayList<>(Collections.nCopies( savedController.getPlayerSize() , "a"));
+
+        List<PlayerColor> playerColors = new ArrayList<>(Collections.nCopies( savedController.getPlayerSize() , PlayerColor.BLUE));
+
+        this.model = new Model(nameList,playerColors,2,2);
+
+        // copy param
+
+        this.gameId =savedController.getGameId();
+        this.roundNumber = savedController.getRoundNumber();
+        this.frenzy =savedController.getFrenzy();
+        this.hasSomeoneDied = savedController.getHasSomeoneDied();
+        this.shotPlayerThisTurn = savedController.getShotPlayerThisTurn();
+        this.turnPhase = savedController.getTurnPhase();
+        this.frenzyStarter = savedController.getFrenzyStarter();
+        this.gameEnded = savedController.isGameEnded();
+
+    }
 
     // Getters
 
@@ -432,6 +458,8 @@ public class Controller {
                         activateFrenzy = false;
                     }
 
+                    //TODO save
+
                     incrementPhase();
 
             }
@@ -707,6 +735,9 @@ public class Controller {
         gameEnded = true;
     }
 
+    public SavedController getSavableController(){
 
+        return new SavedController(gameId,roundNumber,frenzy,hasSomeoneDied,shotPlayerThisTurn,turnPhase,frenzyStarter,players.size(),gameEnded);
+    }
 
 }

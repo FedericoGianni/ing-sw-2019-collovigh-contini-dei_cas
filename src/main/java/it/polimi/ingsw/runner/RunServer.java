@@ -27,6 +27,7 @@ public class RunServer {
      *             arg0 = socket port
      *             arg1 = rmi serverPort (opt)
      *             arg2 = rmi clientPort (opt)
+     *             arg2 = game id
      */
     public static void main(String[] args) {
 

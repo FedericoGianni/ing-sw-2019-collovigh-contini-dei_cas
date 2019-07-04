@@ -28,6 +28,8 @@ public class Config implements Serializable {
 
     private final int minPlayer;
 
+    private final int game = -1;
+
     /**
      *  constructor for server w/ no rmi ports
      *
@@ -178,5 +180,7 @@ public class Config implements Serializable {
     public int getMinPlayer() {
         return minPlayer;
     }
+
+    public int getGame() { return game; }
 }
  

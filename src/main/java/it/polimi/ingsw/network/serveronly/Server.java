@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.serveronly;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.*;
@@ -47,15 +48,7 @@ public class Server  {
      */
     public Server(int socketPort) {
 
-        try {
-
-            waitingRoom = new WaitingRoom(-1);  // TODO this need to be changed: this can only create a new game but load a saved one
-
-
-        }catch (GameNonExistentException e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
-        }
+        startGame();
 
         try {
 
@@ -86,18 +79,8 @@ public class Server  {
      */
     public Server(int socketPort,  int serverPort, int clientPort) {
 
+        startGame();
 
-        try {
-
-            waitingRoom = new WaitingRoom(-1);  // NOTE: this need to be changed: this can only create a new game but load a saved one
-
-
-
-        }catch (GameNonExistentException e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
-
-        }
         try {
 
             String ipAddress = Inet4Address.getLocalHost().getHostAddress();
@@ -112,6 +95,26 @@ public class Server  {
         socketHandler.start();
 
         this.rmiServer = new RMIServer(serverPort,clientPort);
+    }
+
+    private static void startGame(){
+
+        if (Parser.readConfigFile().getGame() == -1){
+
+            try {
+
+                waitingRoom = new WaitingRoom(-1);
+
+            }catch (GameNonExistentException e){
+
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+            }
+
+        }else{
+
+            //TODO load game
+        }
     }
 
     /**
