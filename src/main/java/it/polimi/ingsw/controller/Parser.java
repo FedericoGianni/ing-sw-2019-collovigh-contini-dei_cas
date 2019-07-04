@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.controller.saveutils.SavedPlayer;
 import it.polimi.ingsw.model.Model;
@@ -12,12 +13,12 @@ import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.runner.RunClient;
 import it.polimi.ingsw.runner.RunServer;
 import it.polimi.ingsw.utils.Color;
-import it.polimi.ingsw.view.View;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -939,7 +940,7 @@ public class Parser {
         }
     }
 
-    public void savePlayers(){
+    public static void savePlayers(){
 
         String gamePath = getGames().get(currentGame);
 
@@ -972,6 +973,47 @@ public class Parser {
             LOGGER.log(Level.WARNING,e.getMessage(),e);
         }
     }
+
+    public static List<Player> readPlayers() {
+
+        String gamePath = getGames().get(currentGame);
+
+        List<SavedPlayer> savedPlayers = new ArrayList<>();
+
+        List<Player> players = new ArrayList<>();
+
+        try {
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader(new FileReader(new File(gamePath + SAVED_PLAYERS_PATH).getAbsolutePath()));
+
+            // load the Config File
+
+            Type listType = new TypeToken<ArrayList<SavedPlayer>>(){}.getType();
+
+            savedPlayers = gson.fromJson(br, listType);
+
+            // LOG the load
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved map ");
+        }
+
+
+        for (int i = 0; i < savedPlayers.size(); i++) {
+
+            Player p = savedPlayers.get(i).getRealPlayer();
+            players.add(p);
+        }
+
+        return players;
+
+
+    }
+
+    //TODO player, currentgame
 
 
 }

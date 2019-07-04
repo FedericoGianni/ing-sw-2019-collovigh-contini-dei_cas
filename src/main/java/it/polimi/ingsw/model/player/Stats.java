@@ -7,6 +7,8 @@ import it.polimi.ingsw.customsexceptions.OverMaxMarkException;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.map.Cell;
+import it.polimi.ingsw.view.virtualView.observers.Observer;
+import it.polimi.ingsw.view.virtualView.observers.Observers;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -106,6 +108,7 @@ public class Stats extends Subject implements Serializable {
         this.deaths = deaths;
         updateAll(this);
     }
+
 
     /**
      * this function increase the death count by one,
@@ -354,5 +357,18 @@ public class Stats extends Subject implements Serializable {
 
     public void setFrenzyBoard(boolean frenzyBoard) {
         this.frenzyBoard = frenzyBoard;
+    }
+
+    public void cleanObservers(){
+
+        for(Observer o : getObservers()){
+            this.removeObserver(o);
+        }
+    }
+
+    public void initObservers(){
+
+        if(Observers.isInitialized())
+            this.addObserver(Observers.getStatsObserver(getPlayerId()));
     }
 }

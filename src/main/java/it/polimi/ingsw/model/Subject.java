@@ -10,6 +10,10 @@ public abstract class Subject {
 
     private List<Observer> observers = new ArrayList<>();
 
+    public List<Observer> getObservers() {
+        return observers;
+    }
+
     public void addObserver(Observer observer){
 
         if (Observers.isInitialized()) {
@@ -21,7 +25,7 @@ public abstract class Subject {
 
     public void removeObserver(Observer observer){
 
-        this.observers.add(observer);
+        this.observers.remove(observer);
     }
 
     public void updateAll(Object object){
@@ -47,6 +51,7 @@ public abstract class Subject {
             }
         }
     }
+
 
 
 

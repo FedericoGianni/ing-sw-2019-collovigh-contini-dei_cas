@@ -3,11 +3,15 @@ package it.polimi.ingsw.controller;
 import com.google.gson.Gson;
 import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.runner.RunClient;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -255,4 +259,86 @@ class ParserTest {
 
     }
 
+    @Test
+    void savePlayers() {
+
+        List<String> playerNames = new ArrayList<>();
+        playerNames.add("Player_0");
+        playerNames.add("Player_1");
+        playerNames.add("Player_2");
+
+        List<PlayerColor> playerColors = new ArrayList<>();
+        playerColors.add(PlayerColor.BLUE);
+        playerColors.add(PlayerColor.PURPLE);
+        playerColors.add(PlayerColor.YELLOW);
+
+        //generating model
+        Model currentModel = new Model(playerNames, playerColors, 2,8);
+
+        Player p0 = Model.getPlayer(0);
+        p0.addCube(new AmmoCube(Color.YELLOW));
+        p0.addPowerUp(new Newton(Color.YELLOW));
+
+        Player p1 = Model.getPlayer(1);
+        p1.addCube(new AmmoCube(Color.BLUE));
+        p1.addWeapon(Parser.getWeaponByName("LOCK RIFLE"));
+
+        Player p2 = Model.getPlayer(1);
+        p2.addCube(new AmmoCube(Color.BLUE));
+        p2.addWeapon(Parser.getWeaponByName("LOCK RIFLE"));
+        p2.addDmg(0, 3);
+        p2.addMarks(1, 3);
+        p2.addScore(13);
+
+
+        Parser.savePlayers();
+
+
+
+    }
+
+    @Test
+    void readPlayers() {
+
+        List<String> playerNames = new ArrayList<>();
+        playerNames.add("Player_0");
+        playerNames.add("Player_1");
+        playerNames.add("Player_2");
+
+        List<PlayerColor> playerColors = new ArrayList<>();
+        playerColors.add(PlayerColor.BLUE);
+        playerColors.add(PlayerColor.PURPLE);
+        playerColors.add(PlayerColor.YELLOW);
+
+        //generating model
+        Model currentModel = new Model(playerNames, playerColors, 2,8);
+
+        Player p0 = Model.getPlayer(0);
+        p0.addCube(new AmmoCube(Color.YELLOW));
+        p0.addPowerUp(new Newton(Color.YELLOW));
+        p0.setPlayerPos(Model.getMap().getCell(0,0));
+
+        Player p1 = Model.getPlayer(1);
+        p1.addCube(new AmmoCube(Color.BLUE));
+        p1.addWeapon(Parser.getWeaponByName("LOCK RIFLE"));
+
+        Player p2 = Model.getPlayer(1);
+        p2.addCube(new AmmoCube(Color.BLUE));
+        p2.addWeapon(Parser.getWeaponByName("LOCK RIFLE"));
+        p2.addDmg(0, 3);
+        p2.addMarks(1, 3);
+        p2.addScore(13);
+
+        Parser.savePlayers();
+
+        List<Player> loadedPlayers = Parser.readPlayers();
+
+        System.out.println("p0 from model: " + p0.getStats().getCurrentPosition());
+        System.out.println("p0 read from file: " + loadedPlayers.get(0).getStats().getCurrentPosition());
+
+        //assert(p0.getStats().equals(loadedPlayers.get(0).getStats()));
+        assert(p1.getStats().getMarks().size()==loadedPlayers.get(1).getStats().getMarks().size());
+        assertEquals(Model.getMap().getCell(0,0), p0.getCurrentPosition());
+
+    }
 }

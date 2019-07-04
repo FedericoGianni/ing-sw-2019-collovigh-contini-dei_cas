@@ -3,9 +3,11 @@ package it.polimi.ingsw.controller.saveutils;
 import it.polimi.ingsw.controller.Parser;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.Stats;
 import it.polimi.ingsw.model.powerup.*;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,8 +20,12 @@ public class SavedPlayer implements Serializable {
     private final List<String> weaponList;
     private final List<AmmoCube> ammoCubes;
     private final List<CachedPowerUp> powerUpList;
+    private final Stats stats;
 
     public SavedPlayer(Player player) {
+
+        //REMOVE OBSERVERS
+        player.getStats().cleanObservers();
 
         this.name = player.getPlayerName();
         this.id = player.getPlayerId();
@@ -39,9 +45,11 @@ public class SavedPlayer implements Serializable {
                 .stream()
                 .map( powerUp ->  new CachedPowerUp( powerUp.getType(),powerUp.getColor()) )
                 .collect(Collectors.toList());
+
+        this.stats = player.getStats();
     }
 
-    private Player getRealPlayer(){
+    public Player getRealPlayer(){
 
         Player player = new Player(name,id,color);
 
@@ -60,6 +68,11 @@ public class SavedPlayer implements Serializable {
 
             player.getPowerUpBag().addItem(cachedPowerUpToReal(powerUp));
         }
+
+        player.setStats(stats);
+
+        //RE-INITIALIZE OBSERVERS
+        player.getStats().initObservers();
 
         return player;
     }
@@ -89,4 +102,6 @@ public class SavedPlayer implements Serializable {
                 return null;
         }
     }
+
+
 }
