@@ -453,8 +453,10 @@ public class CLI implements UserInterface {
                     int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 
                     for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
-                        if(!previousPos.get(i).equals(view.getCacheModel().getCachedPlayers().get(i).getStats().getCurrentPosition())){
-                            someOneChangedPos = true;
+                        if(view.getCacheModel().getCachedPlayers().get(i).getStats() != null) {
+                            if (!previousPos.get(i).equals(view.getCacheModel().getCachedPlayers().get(i).getStats().getCurrentPosition())) {
+                                someOneChangedPos = true;
+                            }
                         }
                     }
 
@@ -480,7 +482,8 @@ public class CLI implements UserInterface {
                 }
 
                 //damage taken
-                if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null) {
+                if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats() != null)
+                if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken() != null) {
                     if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() != previousDmg
                             && !view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().isEmpty()) {
                         show(ANSI_BLUE.escape() + "[!] Hai ricevuto " +
@@ -490,6 +493,7 @@ public class CLI implements UserInterface {
                 }
 
                 //marks taken
+                if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats() != null)
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getMarks() != null) {
                     if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getMarks().size() != previousMarks
                             && !view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().isEmpty()) {
@@ -501,13 +505,14 @@ public class CLI implements UserInterface {
 
 
                 //UPDATE previous dmg, marks, position
-                if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null)
-                    previousMarks = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getMarks().size();
-                if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getMarks() != null)
-                    previousDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
-                if(view.getCacheModel().getCachedPlayers().get(playerId).getStats() != null)
-                    previousPos.put(playerId, view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition());
-
+                if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats() != null) {
+                    if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null)
+                        previousMarks = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getMarks().size();
+                    if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getMarks() != null)
+                        previousDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
+                    if (view.getCacheModel().getCachedPlayers().get(playerId).getStats() != null)
+                        previousPos.put(playerId, view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition());
+                }
                 break;
 
             case POWERUP_BAG:

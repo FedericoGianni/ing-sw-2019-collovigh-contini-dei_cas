@@ -33,7 +33,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_TIMER_EXPIRED;
+import static it.polimi.ingsw.utils.DefaultReplies.*;
+import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_NO_ENOUGH_AMMO;
 import static it.polimi.ingsw.utils.Protocol.*;
 import static java.lang.Thread.sleep;
 import static javafx.animation.Animation.INDEFINITE;
@@ -392,7 +393,23 @@ public class Gui extends Application implements UserInterface {
                 isReconnection = false;
             }
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
+            if (s.equals(DEFAULT_CANNOT_BUY_WEAPON) || s.startsWith(DEFAULT_INVALID_SHOOT_HEADER) || s.equals(DEFAULT_NO_ENOUGH_AMMO))
+            {
+                //bisogna rimettere il player al suo posto
+                for(int r=0;r<3;r++)
+                {
+                    for(int c=0;c<4;c++)
+                    {
+                        guiMapController.playerRemover(view.getPlayerId(),r,c);
+                    }
+                }
+                //now i display the player
+                int r=view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosX();
+                int c=view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosY();
+                guiMapController.playerDisplay(view.getPlayerId(),r,c);
+
+            }
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, ButtonType.OK);
             alert.setHeaderText(header);
             alert.show();
 
@@ -460,6 +477,7 @@ public class Gui extends Application implements UserInterface {
 
                 if(view.getPlayerId()!=-1)
                 System.out.println("Giocatore con id= "+view.getPlayerId()+" nome: "+view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getName());
+
                 guiMapController.initial();
 
                 if(isReconnection) {
@@ -564,22 +582,23 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void startSpawn() {//pox: 1) rosso e giallo non fanno bene lo spawn 2) blu non fa bene lo spawn
-
+        System.out.println("Start spawn");
        while (view.getCacheModel().getCachedPlayers().size() <= 0 || view.getPlayerId() == -1) {
             System.out.println("Attendi ricezione dell'update iniziale...");
             try {
-                sleep(200);
+                sleep(50);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
+        System.out.println("superato sleep");
 
         //view.spawn(powerUps.get(read));
 
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                System.out.println("Dentro il runnable");
                 guiMapController.startSpawn();
             }
         });
@@ -621,6 +640,7 @@ public class Gui extends Application implements UserInterface {
     public void startAction(boolean isFrenzy, boolean isBeforeFrenzyStarter) {
         //here i need to validate the buttons
         //this method enables the action buttons to do something
+        System.out.println("start Action called..");
         if(isFrenzy)
         {
 
@@ -681,8 +701,7 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void endGame() {
-            /*String musicFile = "StayTheNight.mp3";     // For example
-                playMusic(musicFile);*/
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -696,22 +715,7 @@ public class Gui extends Application implements UserInterface {
 
     }
 
-    public void playMusic(String string){
-        try {
-            AudioInputStream stream;
-            AudioFormat format;
-            DataLine.Info info;
-            stream = AudioSystem.getAudioInputStream(this.getClass().getResource(string));
-            format = stream.getFormat();
-            info = new DataLine.Info(Clip.class, format);
-            Clip clip = (Clip) AudioSystem.getLine(info);
-            clip.open(stream);
-            clip.start();
-            clip.loop(Clip.LOOP_CONTINUOUSLY);
-        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-            System.err.println(e.getMessage());
-        }
-    }
+
 
 
     /**
