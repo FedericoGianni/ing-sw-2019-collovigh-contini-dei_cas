@@ -8,6 +8,8 @@ import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 import javafx.application.Application;
 import javafx.application.Platform;
+
+import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,8 +21,12 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.print.DocFlavor;
+import javax.print.attribute.standard.Media;
+import javax.sound.sampled.*;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +36,7 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_TIMER_EXPIRED;
 import static it.polimi.ingsw.utils.Protocol.*;
 import static java.lang.Thread.sleep;
+import static javafx.animation.Animation.INDEFINITE;
 
 
 public class Gui extends Application implements UserInterface {
@@ -450,6 +457,7 @@ public class Gui extends Application implements UserInterface {
                 break;
 
             case INITIAL:
+
                 if(view.getPlayerId()!=-1)
                 System.out.println("Giocatore con id= "+view.getPlayerId()+" nome: "+view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getName());
                 guiMapController.initial();
@@ -673,15 +681,36 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void endGame() {
-
+            /*String musicFile = "StayTheNight.mp3";     // For example
+                playMusic(musicFile);*/
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+
                 guiMapController.openEndScene(new ActionEvent());
                 guiEndController.showPoints(new ActionEvent());
+
+
             }
         });
 
+    }
+
+    public void playMusic(String string){
+        try {
+            AudioInputStream stream;
+            AudioFormat format;
+            DataLine.Info info;
+            stream = AudioSystem.getAudioInputStream(this.getClass().getResource(string));
+            format = stream.getFormat();
+            info = new DataLine.Info(Clip.class, format);
+            Clip clip = (Clip) AudioSystem.getLine(info);
+            clip.open(stream);
+            clip.start();
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
 
@@ -715,7 +744,7 @@ public class Gui extends Application implements UserInterface {
     @Override
     public List<Integer> askMapAndSkulls() {
         System.out.println("ask skulls");
-        /*List<Integer> values = new ArrayList<>();
+        List<Integer> values = new ArrayList<>();
 
 
         Platform.runLater( () -> {
@@ -751,11 +780,11 @@ public class Gui extends Application implements UserInterface {
         }
         bb=false;
         System.out.println(values);
-        return values;*/
-        List<Integer> values = new ArrayList<>();
+        return values;
+        /*List<Integer> values = new ArrayList<>();
         values.add(2);
         values.add(1);
-        return values;
+        return values;*/
     }
 
     private int skullSelector()
