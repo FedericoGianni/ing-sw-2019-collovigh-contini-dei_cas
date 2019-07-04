@@ -72,13 +72,20 @@ public class CLI implements UserInterface {
      * used to store a previous version of online status, to check if user is reconnecting or the stats updates are the
      * same as before
      */
-    private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(5, true));
+    private List<Boolean> wasOnline = new ArrayList<>(Collections.nCopies(DEFAULT_MAX_PLAYERS, true));
+
+    /**
+     * Map which links player ids with their previous position, currently initialized to -1, to check if the received
+     * STATS update has moved some player, and therefore show the change in the map
+     */
+    private Map<Integer, Point> previousPos = new HashMap<>();
+
 
     /**
      * used to store a previous version of dmgs and marks, to check, when you receive a STATS update, if it has
      * changed something from the previous version
      */
-    int previousDmg = 0, previousMarks = 0;
+    private int previousDmg = 0, previousMarks = 0;
 
     /**
      * String to be shown when user tries to input invalid character when expecting intgers
@@ -102,6 +109,10 @@ public class CLI implements UserInterface {
      */
     public CLI(View view) {
         this.view = view;
+        for (int i = 0; i < DEFAULT_MAX_PLAYERS; i++) {
+            previousPos.put(i, new Point(-1,-1));
+        }
+
     }
 
     /**
@@ -432,16 +443,27 @@ public class CLI implements UserInterface {
                 //TODO mostrare i cambiamenti di danni subiti e disconnessioni
                 //System.out.println("[DEBUG] Ricevuto STATS update!");
 
+
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
                     //new positions
                     //System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è spostato!" + ANSI_RESET.escape());
+                    boolean someOneChangedPos = false;
+
                     int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                     int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 
-                    FileRead.removePlayer(playerId);
-                    FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
-                    synchronized (mapShowSync) {
-                        FileRead.showBattlefield();
+                    for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
+                        if(!previousPos.get(i).equals(view.getCacheModel().getCachedPlayers().get(i).getStats().getCurrentPosition())){
+                            someOneChangedPos = true;
+                        }
+                    }
+
+                    if(someOneChangedPos) {
+                        FileRead.removePlayer(playerId);
+                        FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
+                        synchronized (mapShowSync) {
+                            FileRead.showBattlefield();
+                        }
                     }
                 }
 
@@ -459,8 +481,32 @@ public class CLI implements UserInterface {
 
                 //damage taken
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null) {
-                    //TODO show dmg updates or let the user sees them from player info?
+                    if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() != previousDmg
+                            && !view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().isEmpty()) {
+                        show(ANSI_BLUE.escape() + "[!] Hai ricevuto " +
+                                (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size() - previousDmg)
+                                + " danni!" + ANSI_RESET.escape());
+                    }
                 }
+
+                //marks taken
+                if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getMarks() != null) {
+                    if (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getMarks().size() != previousMarks
+                            && !view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().isEmpty()) {
+                        show(ANSI_BLUE.escape() + "[!] Hai ricevuto " +
+                                (view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getMarks().size() - previousMarks)
+                                + " marchi!" + ANSI_RESET.escape());
+                    }
+                }
+
+
+                //UPDATE previous dmg, marks, position
+                if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getDmgTaken() != null)
+                    previousMarks = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getMarks().size();
+                if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getMarks() != null)
+                    previousDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
+                if(view.getCacheModel().getCachedPlayers().get(playerId).getStats() != null)
+                    previousPos.put(playerId, view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition());
 
                 break;
 

@@ -5,6 +5,8 @@ import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_YELLOW;
 
 public class DefaultReplies {
 
+    public static final int DEFAULT_MAX_PLAYERS = 5;
+
     //reload
 
     public static final String DEFAULT_GAME_NON_EXISTENT = "GAME_NON_EXISTENT";
