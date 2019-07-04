@@ -9,7 +9,6 @@ import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.actions.ReloadAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -72,8 +71,6 @@ public class ReloadPhase {
 
         if (checkIfReloadIsValid(reloadAction)){
 
-            System.out.println("[reload] passed check ");
-
             // gets current player id
 
             int playerId = controller.getCurrentPlayer();
@@ -81,8 +78,6 @@ public class ReloadPhase {
             // sells the specified powerUps
 
             List<CachedPowerUp> toSell = reloadAction.getPowerUps();
-
-            System.out.println("[reload] phase 0, pwup to discard: " + toSell);
 
             try{
 
@@ -97,25 +92,20 @@ public class ReloadPhase {
 
             // actually reload all the weapons
 
-            System.out.println("[reload] phase 1 ");
-
             try {
 
                 for (Weapon weapon : getWeapons(reloadAction.getWeapons())){
 
                     weapon.reload();
-
-                    System.out.println("[reload] reloaded weapon : " + weapon.getName() );
                 }
 
-            }catch(Exception e){
+            }catch(Exception e) {
 
                 LOGGER.log(Level.WARNING, () -> LOG_START + " [CRITICAL] player passed all controls for reload but finally could not do it ");
 
                 LOGGER.log(Level.WARNING, e.getMessage(), e);
-            }
 
-            System.out.println("[reload] phase 2 ");
+            }
 
             try{
 
@@ -132,8 +122,6 @@ public class ReloadPhase {
 
                 LOGGER.log(Level.WARNING,e.getMessage(),e);
             }
-
-            System.out.println("[reload] phase 3 ");
 
             // increment phase
 

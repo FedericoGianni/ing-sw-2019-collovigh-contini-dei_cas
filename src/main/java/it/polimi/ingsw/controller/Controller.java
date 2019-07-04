@@ -227,6 +227,10 @@ public class Controller {
 
     public void setActivateFrenzy(boolean activateFrenzy) { this.activateFrenzy = activateFrenzy; }
 
+    public void setShotPlayerThisTurn(List<Integer> shotPlayerThisTurn) {
+        this.shotPlayerThisTurn = shotPlayerThisTurn;
+    }
+
     // management Methods
 
     /**
@@ -348,7 +352,7 @@ public class Controller {
 
     public void handleTurnPhase(){
 
-        if (getPlayerOnline().size() >= WaitingRoom.DEFAULT_MIN_PLAYER) {
+        if (getPlayerOnline().size() >= WaitingRoom.DEFAULT_MIN_PLAYERS) {
 
             switch (turnPhase) {
 

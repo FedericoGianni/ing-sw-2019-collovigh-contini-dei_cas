@@ -94,7 +94,7 @@ public class FileRead {
                     path = new File("/map/map2.txt").getAbsolutePath();
                     break;
                 case 3:
-                    path = new File("/map/map3.txt").getAbsolutePath();
+                    path = "/map/map3.txt";
                     break;
                 default:
                     throw new InvalidMapTypeException();

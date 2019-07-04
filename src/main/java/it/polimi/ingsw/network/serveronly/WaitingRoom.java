@@ -94,8 +94,6 @@ WaitingRoom {
 
         //activeGame = Parser.addGame();
 
-
-        //TODO uncomment this to ask map and skulls instead of random
         List<Integer> mapAndSkulls = Server.getClient(0).askMapAndSkulls();
         this.mapType = mapAndSkulls.get(0);
         this.skulls = mapAndSkulls.get(1);
