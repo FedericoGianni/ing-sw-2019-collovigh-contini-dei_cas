@@ -988,10 +988,10 @@ class NormalWeaponTest {
 
         //generate a player with a name and its starting position
         Player shooter = Model.getPlayer(0);
-        shooter.setPlayerPos(Model.getMap().getCell(0,0));
+        shooter.setPlayerPos(Model.getMap().getCell(2,1));
 
         Player target1 = Model.getPlayer(1);
-        target1.setPlayerPos(Model.getMap().getCell(0,0));
+        target1.setPlayerPos(Model.getMap().getCell(2,1));
 
         Player target2 = Model.getPlayer(2);
         target2.setPlayerPos(Model.getMap().getCell(1,1));
@@ -1019,7 +1019,7 @@ class NormalWeaponTest {
             //mEf.add(1);
 
             List<Cell> cells = new ArrayList<>();
-            cells.add(Model.getMap().getCell(1,0));
+            cells.add(Model.getMap().getCell(2,1));
             //cells.add(null);//if cell != null teh second effect fa roba
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             /*
@@ -1054,10 +1054,10 @@ class NormalWeaponTest {
         }
         //System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
-        //assertEquals(1, target1.getStats().getDmgTaken().size());
         //assert(target1.getCurrentPosition().equals(Model.getMap().getCell(1,0)));
-        System.out.println("target1: " + Model.getMap().cellToCoord(target1.getCurrentPosition()));
-        assert(target1.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,2)));
+        //System.out.println("target1: " + Model.getMap().cellToCoord(target1.getCurrentPosition()));
+        assertEquals(1, target1.getStats().getDmgTaken().size());
+        assert(target1.getStats().getCurrentPosition().equals(Model.getMap().getCell(2,1)));
         //assert(target2.getStats().getDmgTaken().size() ==1);
     }
 
