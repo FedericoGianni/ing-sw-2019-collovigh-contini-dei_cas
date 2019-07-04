@@ -5,9 +5,9 @@ import it.polimi.ingsw.customsexceptions.*;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.model.weapons.*;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -901,7 +901,7 @@ class NormalWeaponTest {
         target1.setPlayerPos(Model.getMap().getCell(0,0));
 
         Player target2 = Model.getPlayer(2);
-        target2.setPlayerPos(Model.getMap().getCell(1,1));
+        target2.setPlayerPos(Model.getMap().getCell(0,0));
 
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));
         shooter.getAmmoBag().addItem(new AmmoCube(Color.RED));//one only for evitating null Pointer
@@ -914,25 +914,25 @@ class NormalWeaponTest {
         List targets1=new ArrayList();
         List targets2=new ArrayList();
         List<List<Player>> targetLists = new ArrayList<>();
-        targets0.add(shooter);
+        targets0.add(target1);
         targets1.add(target1);
         targets2.add(target2);
 
         targetLists.add(targets0);
         targetLists.add(targets1);
-        targetLists.add(targets1);
+        //targetLists.add(targets1);
         Model.getMap().setUnvisited();
 
         try {
             ArrayList<Integer> mEf = new ArrayList<>();
             mEf.add(1);
             mEf.add(0);
-            mEf.add(2);
+            //mEf.add(2);
 
             List<Cell> cells = new ArrayList<>();
             cells.add(Model.getMap().getCell(1,0));
             cells.add(null);
-            cells.add(null);
+            //cells.add(null);
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
 
         }
@@ -962,7 +962,7 @@ class NormalWeaponTest {
 
         //System.out.println("target1 danni: " + target1.getStats().getDmgTaken().size());
         assertEquals(Model.getMap().getCell(1,0), shooter.getStats().getCurrentPosition());
-        assertEquals(3, target1.getStats().getDmgTaken().size());
+        assertEquals(2, target1.getStats().getDmgTaken().size());
 
     }
 
@@ -988,10 +988,10 @@ class NormalWeaponTest {
 
         //generate a player with a name and its starting position
         Player shooter = Model.getPlayer(0);
-        shooter.setPlayerPos(Model.getMap().getCell(1,1));
+        shooter.setPlayerPos(Model.getMap().getCell(0,0));
 
         Player target1 = Model.getPlayer(1);
-        target1.setPlayerPos(Model.getMap().getCell(1,1));
+        target1.setPlayerPos(Model.getMap().getCell(0,0));
 
         Player target2 = Model.getPlayer(2);
         target2.setPlayerPos(Model.getMap().getCell(1,1));
@@ -1007,10 +1007,10 @@ class NormalWeaponTest {
         List targets1=new ArrayList();
         List<List<Player>> targetLists = new ArrayList<>();
         targets0.add(target1);
-        targets1.add(target2);
+        //targets1.add(target2);
         //targets0.add(target2);
         targetLists.add(targets0);
-        targetLists.add(targets1);
+        //targetLists.add(targets1);
         Model.getMap().setUnvisited();
 
         try {
@@ -1020,7 +1020,7 @@ class NormalWeaponTest {
 
             List<Cell> cells = new ArrayList<>();
             cells.add(Model.getMap().getCell(1,0));
-            cells.add(Model.getMap().getCell(1,1));//if cell != null teh second effect fa roba
+            //cells.add(null);//if cell != null teh second effect fa roba
             shooter.getWeapons().get(0).shoot(targetLists, mEf, cells);
             /*
             System.out.println(target1.getPlayerName());
@@ -1054,9 +1054,10 @@ class NormalWeaponTest {
         }
         //System.out.println("target1 danni" + target1.getStats().getDmgTaken().size());
         //System.out.println("target2 danni" + target2.getStats().getDmgTaken().size());
-        assertEquals(1, target1.getStats().getDmgTaken().size());
+        //assertEquals(1, target1.getStats().getDmgTaken().size());
         //assert(target1.getCurrentPosition().equals(Model.getMap().getCell(1,0)));
-        //assert(shooter.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,0)));
+        System.out.println("target1: " + Model.getMap().cellToCoord(target1.getCurrentPosition()));
+        assert(target1.getStats().getCurrentPosition().equals(Model.getMap().getCell(0,2)));
         //assert(target2.getStats().getDmgTaken().size() ==1);
     }
 

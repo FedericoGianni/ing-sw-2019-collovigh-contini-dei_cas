@@ -2445,7 +2445,7 @@ public class CLI implements UserInterface {
 
         System.out.println("[INFO PARTITA]");
         if(view.getCacheModel().getGame() != null)
-            System.out.println("Teschi: " + view.getCacheModel().showKillShotTrack(view.getCacheModel().getGame().getKillShotTrack()));
+            System.out.println(view.getCacheModel().showKillShotTrack(view.getCacheModel().getGame().getKillShotTrack()));
 
         System.out.println("Giocatori: ");
 

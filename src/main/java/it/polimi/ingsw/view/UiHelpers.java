@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor;
@@ -202,7 +202,7 @@ public class UiHelpers {
                 translate = "RAGGIO SOLARE";
                 break;
 
-            case "FLAME THROWER":
+            case "FLAMETHROWER":
                 translate = "LANCIAFIAMME";
                 break;
 

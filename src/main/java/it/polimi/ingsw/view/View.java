@@ -1,12 +1,12 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.rmi.RMIClient;
 import it.polimi.ingsw.network.client.socket.SocketClient;
 import it.polimi.ingsw.runner.RunClient;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.GUI.Gui;
 import it.polimi.ingsw.view.actions.ActionTypes;
 import it.polimi.ingsw.view.actions.JsonAction;
@@ -14,7 +14,6 @@ import it.polimi.ingsw.view.cachemodel.CacheModel;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.updates.UpdateClass;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -422,9 +421,9 @@ public class View implements ViewInterface {
     public List<Integer> askMapAndSkulls(){
 
         // pos 0 -> mapType pos 1 -> skull number
-        List<Integer> mapAndSkulls = new ArrayList<>();
+        List<Integer> mapAndSkulls = userInterface.askMapAndSkulls();
 
-        return userInterface.askMapAndSkulls();
+        return mapAndSkulls;
     }
 
 }
