@@ -44,10 +44,10 @@ public class Model {
         //TODO remove this, just to kill faster
 
 
-
+        /*
         for(Player p : playerList){
             p.addDmg(0, 10);
-        }
+        }*/
 
 
 

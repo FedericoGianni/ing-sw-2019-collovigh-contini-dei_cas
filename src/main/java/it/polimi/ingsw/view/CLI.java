@@ -665,7 +665,7 @@ public class CLI implements UserInterface {
     @Override
     public void startSpawn() {
         //TODO consume scanner buffer if user type random numbers when waiting for its turn
-        scanner.reset();
+        //scanner.reset();
 
         List<CachedPowerUp> powerUps;
 
@@ -750,7 +750,7 @@ public class CLI implements UserInterface {
         List<CachedPowerUp> usablePowerUps;
         Boolean validChoice = false;
         int read = -1;
-        scanner.reset();
+        //scanner.reset();
 
         do {
 
@@ -786,7 +786,7 @@ public class CLI implements UserInterface {
             }
 
             show("9 -> non usare powerUp");
-            scanner.reset();
+            //scanner.reset();
             show("Scegli un powerUp da usare: ");
 
             while (read == -1) {
@@ -802,7 +802,7 @@ public class CLI implements UserInterface {
             if ((read >= 0 && read < usablePowerUps.size()) || read == 9) validChoice = true;
             else {
                 show(DEFAULT_INVALID_INPUT_MESSAGE);
-                scanner.reset();
+                //scanner.reset();
                 scanner.nextLine();
             }
 
@@ -827,7 +827,7 @@ public class CLI implements UserInterface {
     @Override
     public void askGrenade() {
 
-        scanner.reset();
+        //scanner.reset();
         boolean valid;
         int choice = -1;
 
@@ -1044,7 +1044,7 @@ public class CLI implements UserInterface {
             show("9: SKIP");
 
             try {
-                scanner.reset();
+                //scanner.reset();
                 if(scanner.hasNextInt()) {
                     choice = scanner.nextInt();
                 }
@@ -1373,11 +1373,11 @@ public class CLI implements UserInterface {
         System.out.println("Digita il numero dell'arma che vuoi acquistare >>> ");
         int buy = -1, discard = -1;
         boolean valid = false;
-        scanner.reset();
+        //scanner.reset();
 
         do {
 
-            scanner.reset();
+            //scanner.reset();
 
             try {
                 buy = scanner.nextInt();
@@ -1412,7 +1412,7 @@ public class CLI implements UserInterface {
             do {
 
                 scanner.nextLine();
-                scanner.reset();
+                //scanner.reset();
 
                 try {
                     discard = scanner.nextInt();
@@ -2053,7 +2053,7 @@ public class CLI implements UserInterface {
                             System.out.println("9 -> per selezionare solo questi bersagli.");
                         }
 
-                        scanner.reset();
+                        //scanner.reset();
                         read = scanner.nextInt();
 
                         if(read >= 0 && read <= view.getCacheModel().getCachedPlayers().size() && read != view.getPlayerId()){
