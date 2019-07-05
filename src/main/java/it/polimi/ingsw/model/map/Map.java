@@ -15,12 +15,24 @@ import static java.lang.Math.abs;
  */
 public class Map {
 
+    /**
+     * const for map row number
+     */
     public static final int MAP_R = 3;
+    /**
+     * const for map column number
+     */
     public static final int MAP_C = 4;
 
-
+    /**
+     * matrix of Cells
+     * @see Cell
+     */
     private Cell[][] matrix;
 
+    /**
+     * Type of the map
+     */
     private int mapType;
 
     public Cell[][] getMatrix() {
@@ -46,6 +58,7 @@ public class Map {
     }
 
     /**
+     * Default constructor
      * Generates a new Map from a jsonMap
      * @param mapType is the mapType specified
      */
@@ -57,6 +70,11 @@ public class Map {
 
     }
 
+    /**
+     * Constructor used for load class from json
+     * @param cells is a martix of cells
+     * @param mapType is the mapType
+     */
     public Map(Cell[][] cells, int mapType){
 
         this.matrix = cells;
@@ -125,6 +143,11 @@ public class Map {
         }
     }
 
+    /**
+     * this method calls populateWeapon on the SpawnCells
+     *
+     * @see SpawnCell#populateWeapon()
+     */
     public void initializeSpawnCell(){
 
         for(Cell[] c : this.matrix){
@@ -142,6 +165,9 @@ public class Map {
 
     }
 
+    /**
+     * this method will replace all the AmmoCard on the AmmoCell if those are null
+     */
     public void replaceAmmoCard(){
 
         AmmoCell cell;
@@ -176,12 +202,12 @@ public class Map {
     }
 
     /**
-     *
-     * @param p1
-     * @param p2
-     * @return
+     * geometrical dstance, the distance in squares, like tractor beam I effect, we need a real method for distances
+     * @param p1 is the first player
+     * @param p2 is the second player
+     * @return the geometrical distance between the player
      */
-    public static int getDist(Player p1, Player p2)//geometrical dstance, the distance in squares, like tractor beam I effect, we need a real method for distances
+    public static int getDist(Player p1, Player p2)//
     {
         Map map= Model.getMap();
         Point d1, d2;
@@ -193,12 +219,12 @@ public class Map {
     }
 
     /**
-     *
-     * @param c1
-     * @param c2
-     * @return
+     * geometrical dstance, the distance in squares, like tractor beam I effect, we need a real method for distances
+     * @param c1 is the first cell
+     * @param c2 is te second cell
+     * @return the geometrical distance between the two
      */
-    public static int getDist(Cell c1, Cell c2)//geometrical dstance, the distance in squares, like tractor beam I effect, we need a real method for distances
+    public static int getDist(Cell c1, Cell c2)//
     {
         Map map= Model.getMap();
         Point d1, d2;

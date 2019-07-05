@@ -4,19 +4,18 @@ import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.model.player.PowerUpBag;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.PowerUpDeck;
 import it.polimi.ingsw.utils.Color;
-import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static it.polimi.ingsw.model.powerup.PowerUpDeck.populatedDeck;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PowerUpBagTest {
 
@@ -42,7 +41,9 @@ class PowerUpBagTest {
 
         //max powerUp bag size == 3. it shouldn't let add a 4th item to the PowerUp bag
         p.getPowerUpBag().addItem(c4);
-        //assertEquals(4, p.getPowerUpBag().getList().size());
+
+        assertThrows(IndexOutOfBoundsException.class,
+                () -> p.getPowerUpBag().getList().get(3));
     }
 
     @Test

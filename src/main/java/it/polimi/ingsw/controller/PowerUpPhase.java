@@ -46,7 +46,7 @@ public class PowerUpPhase {
     /**
      * Timer for the powerUp phase
      */
-    private static final int TIMER_POWER_UP = 15;
+    private static final int TIMER_POWER_UP = 30;
 
 
     // Controller reference
@@ -119,7 +119,7 @@ public class PowerUpPhase {
 
                 controller.getTimer().startTimer(TIMER_POWER_UP);
 
-                controller.setExpectingAnswer(true);
+                controller.setExpectingGrenade(true);
 
             }else {
 
@@ -290,6 +290,8 @@ public class PowerUpPhase {
      */
     public void useGrenade(GrenadeAction grenadeAction){
 
+        controller.setExpectingGrenade(false);
+
         int currentPlayer = controller.getCurrentPlayer();
 
         LOGGER.log(level, "[CONTROLLER - PowerUp] player w/ id: {0} was shot and responded with a grenade", grenadeAction.getPossessorId() );
@@ -347,6 +349,22 @@ public class PowerUpPhase {
 
         }
 
+    }
+
+    /**
+     * This function will be used as default answer if the player timer expires after ask if wants to use a grenade
+     */
+    public void defaultGrenade(){
+
+        controller.setExpectingGrenade(false);
+
+        // Remove the player from the shot list
+
+        controller.getShotPlayerThisTurn().remove(0);
+
+        // calls teh function to ask grenade to the next person in the list
+
+        askGrenadeToShot();
     }
 
 

@@ -9,12 +9,24 @@ import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represent the weapons the player have
+ */
 public class WeaponBag extends Subject implements Bag<Weapon> {
 
+    /**
+     * is the max number of weapons the player has
+     */
     public static int MAX_WEAPONS = 3;
 
+    /**
+     * is the list of the player's weapons
+     */
     private List<Weapon> weapons;
 
+    /**
+     * default constructor
+     */
     public WeaponBag() {
         this.weapons = new ArrayList<>();
     }

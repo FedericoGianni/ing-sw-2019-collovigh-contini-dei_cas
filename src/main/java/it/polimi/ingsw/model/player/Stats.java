@@ -17,23 +17,47 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * this class represent the stats of the player
+ */
 public class Stats extends Subject implements Serializable {
 
+    /**
+     * max dmg contained in the board
+     */
     public static final int MAX_DMG = 12;
+    /**
+     * max marks in the board
+     */
     private static final int MAX_MARKS = 3;
 
+    /**
+     * score of the player
+     */
     private int score;
+    /**
+     * deaths of the player
+     */
     private int deaths;
     /**
-     * this is an arrayList which contains max MAX_MARKS Integer each one representing the id of the offending player
+     * this is an List which contains max MAX_MARKS Integer each one representing the id of the offending player
      */
     private List<Integer> marks = new ArrayList<>();
     /**
-     * this is an ArrayList which contains max MAX_DMG Integer (Overkill) each one representing the id of the offending player
+     * this is an List which contains max MAX_DMG Integer (Overkill) each one representing the id of the offending player
      */
     private List<Integer> dmgTaken = new ArrayList<>();
+    /**
+     * position of the player
+     */
     private Point currentPosition;
+    /**
+     * true if the player is online, false otherwise
+     */
     private Boolean online;
+    /**
+     * true if the player has turned his board in frenzy mode
+     */
     private boolean frenzyBoard = false;
 
     /**
@@ -120,6 +144,10 @@ public class Stats extends Subject implements Serializable {
         updateAll(this);
     }
 
+    /**
+     *
+     * @return the id of the player whose this stats belongs
+     */
     public int getPlayerId(){
 
         return Model.getGame()
@@ -214,9 +242,10 @@ public class Stats extends Subject implements Serializable {
      *
      * @param dmg is the number of damage signals to add
      * @param playerId is the id of the player who gave them
-     * @throws DeadPlayerException if player died
      */
     public void addDmgTaken(int dmg, int playerId){
+
+        boolean isPlayerAlreadydead = dmgTaken.size() >= MAX_DMG - 1;
 
 
         if (marks.indexOf(playerId) != -1) {
@@ -245,13 +274,16 @@ public class Stats extends Subject implements Serializable {
             updateAll(this);
         }
 
-        if ((dmgTaken.size() >= MAX_DMG - 1)){  // if player has more than MAX_DMG -1 (simply dead)
+        if ((dmgTaken.size() >= MAX_DMG - 1) && (!isPlayerAlreadydead) ){  // if player has more than MAX_DMG -1 (simply dead)
 
             this.addDeath();
 
         }
     }
 
+    /**
+     * sets the dmg to 0
+     */
     public void resetDmg(){
 
         this.dmgTaken = new ArrayList<>();
@@ -266,6 +298,10 @@ public class Stats extends Subject implements Serializable {
         return (currentPosition == null) ? null : Model.getMap().getCell(currentPosition.x,currentPosition.y);
     }
 
+    /**
+     *
+     * @return a copy of the player position
+     */
     public Cell getCurrentPositionCopy() {
         return (currentPosition == null) ? null : Model.getMap().getCellCopy(currentPosition.x,currentPosition.y);
     }
@@ -313,6 +349,9 @@ public class Stats extends Subject implements Serializable {
         if (online){ getAllMyData(); }
     }
 
+    /**
+     * notify the observers of all the data that this player needs
+     */
     private void getAllMyData(){
 
         int playerId = getPlayerId();
@@ -359,15 +398,9 @@ public class Stats extends Subject implements Serializable {
         this.frenzyBoard = frenzyBoard;
     }
 
-    public void cleanObservers(){
-
-        List<Observer> observerList = new ArrayList<>(getObservers());
-
-        getObservers().removeAll(observerList);
-
-    }
-
-
+    /**
+     * this method adds the observer to this class
+     */
     public void initObservers(){
 
         if(Observers.isInitialized())

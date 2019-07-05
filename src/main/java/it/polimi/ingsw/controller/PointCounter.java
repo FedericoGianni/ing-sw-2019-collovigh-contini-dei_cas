@@ -65,6 +65,8 @@ public class PointCounter {
      */
     public void calculateTurnPoints(){
 
+        List<Integer> killerId = new ArrayList<>();
+
         boolean frenzy = (controller == null ) ? frenzyForTest : controller.getFrenzy();
 
         //for each player who has died this turn
@@ -80,6 +82,8 @@ public class PointCounter {
         for (int i = 0; i < Model.getGame().getPlayers().size(); i++) {
 
             if(Model.getPlayer(i).getStats().getDmgTaken().size() >= (Stats.MAX_DMG - 1) ){
+
+                killerId.add(Model.getPlayer(i).getStats().getDmgTaken().get(Model.getPlayer(i).getStats().getDmgTaken().size() - 1));
 
                 int[] vect = (Model.getPlayer(i).getStats().isFrenzyBoard()) ? pointFrenzyVect : pointVect;
 
@@ -115,6 +119,15 @@ public class PointCounter {
 
                 Model.getPlayer(i).setPlayerPos(null);
             }
+        }
+
+        // +1 if player killed more people
+
+        HashSet<Integer> set = new HashSet<>(killerId);
+
+        for (Integer id : set){
+
+            if (Collections.frequency(killerId,id) > 1) Model.getPlayer(id).addScore(1);
         }
     }
 

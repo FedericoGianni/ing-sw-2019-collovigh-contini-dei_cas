@@ -988,9 +988,9 @@ public class GuiMapController {
     private void handleMovement(int x, int y, int m, ArrayList<Directions> movementDirections, String actionType)//called from move,do stuff for real
     {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-        a.setContentText("Move the Pawn in an adjacent cell click STOP on the left to stop the movements\n Remembre you have " + m + " moves left");
+        a.setContentText("Muovi la pedina in una cella adicente alla corrente \n hai ancora" + m + " mosse");
         a.showAndWait();
-        a.setContentText(" Remembre you have " + m + " moves left");
+        a.setContentText(" Hai " + m + " altri movimenti");
         a.show();
         int M = m - 1;
         //enable button events
