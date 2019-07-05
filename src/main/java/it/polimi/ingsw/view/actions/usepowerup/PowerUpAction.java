@@ -5,6 +5,9 @@ import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.ActionTypes;
 import it.polimi.ingsw.view.actions.JsonAction;
 
+/**
+ * super cass of the powerUps
+ */
 public class PowerUpAction extends JsonAction {
 
     private final Color color;

@@ -5,6 +5,9 @@ import it.polimi.ingsw.utils.PowerUpType;
 
 import java.awt.*;
 
+/**
+ * teleport class
+ */
 public class TeleporterAction extends PowerUpAction {
 
     private final Point cell;
