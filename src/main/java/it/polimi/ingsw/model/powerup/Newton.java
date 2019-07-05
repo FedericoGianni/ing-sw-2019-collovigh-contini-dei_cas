@@ -13,11 +13,20 @@ import static java.lang.Integer.min;
 
 /**
  * this Class represents the Newton PowerUp
+ *
+ * can move one player in one direction for 1/2 moves
  */
 public class Newton extends PowerUp {
 
+    /**
+     * max moves the newton can perform
+     */
     private static final int MAX_MOVE = 2;
 
+    /**
+     * Constructor
+     * @param color is the color of the powerUp
+     */
     public Newton(Color color) {
 
         super(color);
@@ -26,8 +35,6 @@ public class Newton extends PowerUp {
     }
 
     /**
-     * need to be implemented
-     * this class perform a check to see if the cell distance is under 2 and then moves the player
      *
      * @param p is the player to move
      * @param directions is the cardinal direction the player will be moved

@@ -12,14 +12,31 @@ import it.polimi.ingsw.utils.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This weapon represent the Furnace special weapon
+ *
+ * @see SpecialWeapons
+ */
 public class Furnace  extends SpecialWeapons{
 
+    /**
+     * name of the weapon
+     */
     private static final String FURNACE_NAME = "FURNACE";
 
+    /**
+     * cost of reload
+     */
     private final List<AmmoCube> costBaseEffect;
 
+    /**
+     * cost of second effect
+     */
     private final List<AmmoCube> costSecondEffect;
 
+    /**
+     * Constructor
+     */
     public Furnace() {
 
         super(FURNACE_NAME);

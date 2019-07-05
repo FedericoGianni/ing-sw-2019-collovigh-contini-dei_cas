@@ -10,20 +10,48 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class represent the FlameThrower weapon
+ *
+ * is a specialWeapon
+ *
+ * @see SpecialWeapons
+ */
 public class FlameThrower extends SpecialWeapons{
 
+    /**
+     * name of the weapon
+     */
     private static final String FLAMETHROWER_NAME = "FLAMETHROWER";
 
+    /**
+     * dmg for the base effect
+     */
     private static final int DMG_FIRST_EFFECT = 1;
 
+    /**
+     * dmg given to the first cell players w/ second effect
+     */
     private static final int DMG_SECOND_EFFECT_FIRST_CELL = 2;
 
+    /**
+     * dmg given to the second cell players w/ second effect
+     */
     private static final int DMG_SECOND_EFFECT_SECOND_CELL = 1;
 
+    /**
+     * cost of the reload
+     */
     private final List<AmmoCube> costBaseEffect;
 
+    /**
+     * cost of the second effect
+     */
     private final List<AmmoCube> costSecondEffect;
 
+    /**
+     * constructor
+     */
     public FlameThrower() {
 
         super(FLAMETHROWER_NAME);

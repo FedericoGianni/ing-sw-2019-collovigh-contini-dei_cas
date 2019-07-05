@@ -9,7 +9,9 @@ import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.PowerUpType;
 
 /**
- * 
+ * This class represent the Teleporter PowerUp
+ *
+ * this card  will teleport the player in any other cell of the map
  */
 public class Teleporter extends PowerUp {
 

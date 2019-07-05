@@ -123,7 +123,7 @@ public class CurrentGame extends Subject{
 
 
     /**
-     * @return a randomly picked PowerUp from the current powerUp deck if this is empty it sets the trash one as the good one
+     * @return a randomly picked PowerUp from the current powerUp deck, if this is empty it sets the trash one as the good one
      */
     public PowerUp drawPowerUp() {
 
