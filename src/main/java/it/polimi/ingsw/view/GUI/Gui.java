@@ -373,14 +373,16 @@ public class Gui extends Application implements UserInterface {
                     retryLogin = false;
                     break;
 
-
-
                 default:
                     header = s.substring(0, 10);
                     msg = s;
                     guiMapController.show(msg);
             }
-
+            if(s.equals(DEFAULT_TURN_START))
+            {
+                header="";
+                msg="E' il tuo turno!";
+            }
             if(retryLogin) {
                 System.out.println("guiController: " + guiController);
                 guiController.openSecondScene(new ActionEvent());

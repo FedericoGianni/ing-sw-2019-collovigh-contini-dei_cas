@@ -211,6 +211,6 @@ public class MacroEffect {
      */
     public void applyOn(Player player){
 
-        //TODO
+
     }
 }

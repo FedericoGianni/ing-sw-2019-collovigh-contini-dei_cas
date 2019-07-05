@@ -250,6 +250,9 @@ public class GuiMapController {
         }
     }
 
+    /**
+     * crreate the map and the backgrounds
+     */
     public void mapCreator() {
         System.out.println();
         switch (gui.getView().getCacheModel().getMapType()) {
@@ -337,6 +340,9 @@ public class GuiMapController {
         weaponSeeEventEnabler();
     }
 
+    /**
+     * enable and always keep enabled the event of see weapons in spawn cell
+     */
     private void weaponSeeEventEnabler() {
         b02.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
