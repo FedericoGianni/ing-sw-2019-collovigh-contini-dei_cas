@@ -742,11 +742,15 @@ public class Gui extends Application implements UserInterface {
         guiMapController.log.appendText(DEFAULT_TIMER_EXPIRED);
 
         Platform.runLater( () -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, DEFAULT_TIMER_EXPIRED, ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Rimosso per inattività", ButtonType.OK);
             alert.setHeaderText("TEMPO SCADUTO");
-            alert.show();
+            alert.showAndWait();
 
             if(alert.getResult() == ButtonType.OK){
+                alert.close();
+                System.exit(0);
+            }
+            else{
                 alert.close();
                 System.exit(0);
             }
