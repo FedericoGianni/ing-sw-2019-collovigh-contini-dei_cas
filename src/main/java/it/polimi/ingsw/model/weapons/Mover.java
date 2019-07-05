@@ -27,6 +27,16 @@ public class Mover extends MicroEffect {
     //if something moves before shooting pay attention, you need to calculate if you can shoot him after the move
     //movere delays a lot of things to the other classes so check them, for example in tractor beam 1 the damage checks that i can see the trget after the movement
 
+    /**
+     * construcotr
+     * @param n
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @param e
+     * @param f
+     */
     public Mover(int n,boolean a,boolean b,boolean c,boolean d,boolean e,boolean f){
         this.cellNumber=n;
         this.beforeShooting=a;
@@ -42,11 +52,18 @@ public class Mover extends MicroEffect {
 
     }
 
+    /**
+     *
+     * @return a copy of this object
+     */
     @Override
     public Mover copy() {
         return this;
     }
 
+    /**
+     * print infos
+     */
     @Override
     public void print() {
         /*
@@ -63,6 +80,17 @@ public class Mover extends MicroEffect {
 
     }
 
+    /**
+     * applicate the mover effeccts to player list  , given from weapon w
+     * @param playerList
+     * @param w
+     * @param c requires cell where to move in case you move, is null if you use a non mover microeffect
+     * @param n
+     * @throws PlayerInSameCellException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     */
     @Override
     public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws   PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException {
         print();
