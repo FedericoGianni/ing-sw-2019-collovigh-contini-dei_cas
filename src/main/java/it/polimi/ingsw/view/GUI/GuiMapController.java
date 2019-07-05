@@ -1557,7 +1557,7 @@ public class GuiMapController {
         powerUpDisplayer();
 
         Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-        a.setContentText("Choose a powerUp (on the right) to discard for the swpawn location");
+        a.setContentText("Scegli un PowerUp da scartare nella schermata a destra per fare lo spawn");
         a.show();
         powerUp1.setOnMouseClicked((e) -> {//eliminate the effect
             System.out.println("cliccato pup 1");
