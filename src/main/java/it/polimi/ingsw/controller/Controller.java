@@ -525,11 +525,10 @@ public class Controller {
                         activateFrenzy = false;
                     }
 
-                    System.out.println("calling save game");
+
                     //SAVE THE GAME EVERY TURN
                     new Thread( () -> saveGame()).start();
 
-                    System.out.println("incrementing phase");
                     incrementPhase();
 
             }
@@ -571,6 +570,8 @@ public class Controller {
         //save controller
         Parser.saveController(this);
 
+        LOGGER.log(level,()->"[Controller] saved game at end of round: " + roundNumber);
+
     }
 
     private void waitForMinPlayer(){
@@ -578,10 +579,14 @@ public class Controller {
         LOGGER.log(level, "[CONTROLLER] Waiting for min players to restart loaded game");
 
         while(getPlayerOnline().size() < DEFAULT_MIN_PLAYERS){
+
             try {
+
                 sleep(500);
+
             } catch (InterruptedException e){
 
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
             }
         }
 
@@ -763,8 +768,6 @@ public class Controller {
 
         LOGGER.log(level, "[Controller] Player w/ id {0} has been killed ", playerId);
 
-        //Model.getPlayer(playerId).setPlayerPos(null);
-
         Model.getGame().addkills(getCurrentPlayer(),false);
 
 
@@ -779,8 +782,6 @@ public class Controller {
         hasSomeoneDied = true;
 
         LOGGER.log(level, "[Controller] Player w/ id {0} has been overKilled ", playerId);
-
-        //Model.getPlayer(playerId).setPlayerPos(null);
 
         // add skull to killShotTrack
 

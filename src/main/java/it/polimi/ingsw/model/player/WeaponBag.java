@@ -11,6 +11,7 @@ import java.util.List;
 
 public class WeaponBag extends Subject implements Bag<Weapon> {
 
+    public static int MAX_WEAPONS = 3;
 
     private List<Weapon> weapons;
 

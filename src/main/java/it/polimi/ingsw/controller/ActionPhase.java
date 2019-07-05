@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.map.SpawnCell;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.model.player.WeaponBag;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.weapons.Weapon;
 import it.polimi.ingsw.utils.Color;
@@ -29,55 +30,116 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.DefaultReplies.*;
 
+/**
+ * This class will handle the actions of the players ( Move, Move&Grab, Shoot, frenzyMove, FrenzyGrab, FrenzyShoot)
+ */
 public class ActionPhase {
 
+    /**
+     * Logger reference
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.INFO;
 
+    /**
+     * constants for log incipit
+     */
     private static final String LOG_START_GRAB = "[Controller-GrabAction] Player w/ id: ";
     private static final String LOG_START_SHOOT = "[Controller-ShootAction]";
     private static final String LOG_START_MOVE = "[Controller-MoveAction]";
     private static final String LOG_START_ID = "[CONTROLLER] player id ";
     private static final String LOG_START_FRENZY_S = "[Controller-FrenzyShootAction] ";
+    private static final String NO_DIRECTION_SPECIFIED = " player tried to move but did not specify any direction ";
+    private static final String MOVE_MORE_THAN = " player tried to move more than ";
 
+    /**
+     * timer for the action phase ( amount of seconds the client have to answer the server request)
+     */
     private static final int TIMER_ACTION = 90;
 
     //Move
 
+    /**
+     * max movement that player can do in non frenzy move
+     */
     private static final int MAX_MOVES = 3;
+    /**
+     * max movements that player can do in frenzy
+     */
     private static final int MAX_FRENZY_MOVES = 4;
 
     // shoot
 
+    /**
+     * damage the player has to have to be able to move in a shoot action
+     */
     private static final int DMG_FOR_MOVE_SHOOT = 2;
 
     //Grab
 
+    /**
+     * max moves for vanilla grab action
+     */
     private static final int MAX_GRAB_MOVES = 1;
+    /**
+     * max moves for grab with damage
+     */
     private static final int MAX_GRAB_MOVES_PLUS = 2;
+    /**
+     * max moves for frenzy grab if player is before first player
+     */
     private static final int MAX_GRAB_FRENZY_MOVES_ENHANCED = 2;
+    /**
+     * max moves for frenzy grab if player is after first player
+     */
     private static final int MAX_GRAB_FRENZY_MOVES = 3;
+    /**
+     * damage the player has to have to be able to move more than standard in a grab action
+     */
     private static final int DMG_FOR_PLUS = 2;
-    private static final int MAX_WEAPONS = 3;
+    /**
+     * max weapons a player can have
+     */
+    private static final int MAX_WEAPONS = WeaponBag.MAX_WEAPONS;
 
     // frenzyShoot
 
+    /**
+     * max moves for frenzyShoot if the player is before the first player
+     */
     private static final int MAX_FRENZY_SHOOT_ENHANCED_MOVES = 1;
+    /**
+     * max moves for frenzyShoot if the player is after the first player
+     */
     private static final int MAX_FRENZY_SHOOT_MOVES = 2;
 
-    //strings
-
-    private static final String NO_DIRECTION_SPECIFIED = " player tried to move but did not specify any direction ";
-    private static final String MOVE_MORE_THAN = " player tried to move more than ";
-
+    /**
+     * reference to controller main class
+     * @see it.polimi.ingsw.controller.Controller
+     */
     private final Controller controller;
 
+    /**
+     * reference to
+     * @see it.polimi.ingsw.controller.UtilityMethods
+     */
     private final UtilityMethods utilityMethods;
-
+    /**
+     * this list will be used for powerUp payments in shoot methods for restoring them in case of failed shoot
+     */
     private List<PowerUp> discardedPowerUpForRestore = new ArrayList<>();
+    /**
+     * this list will be used for ammo payments in shoot methods for restoring them in case of failed shoot
+     */
     private List<AmmoCube> ammoCubeForRestore = new ArrayList<>();
 
-
+    /**
+     * default constructor
+     * @param controller is the reference to the controller class
+     */
     public ActionPhase(Controller controller) {
 
         this.controller = controller;
@@ -522,7 +584,7 @@ public class ActionPhase {
      */
     public void shootAction(ShootAction shootAction) {
 
-        List<Integer> shotPlayerThisTurnBackup = controller.getShotPlayerThisTurn();
+        List<Integer> shotPlayerThisTurnBackup = new ArrayList<>(controller.getShotPlayerThisTurn());
 
         // gets the id of the current player
 
@@ -802,7 +864,7 @@ public class ActionPhase {
 
             List<List<Player>> targets = new ArrayList<>();
 
-            System.out.println("[Controller] list of target received : " + shootAction.getTargetIds() );
+            LOGGER.log(level, ()->"[Controller-shoot] list of target received : " + shootAction.getTargetIds() );
 
             // translate the lists of Integer in lists of Players
 
@@ -816,16 +878,6 @@ public class ActionPhase {
                 }
 
                 targets.add(temp);
-            }
-
-            //TODO delete
-
-            for (List<Player> list : targets){
-
-                for (Player target : list){
-
-                    System.out.println(target.getPlayerName());
-                }
             }
 
             selected.shoot(targets, shootAction.getEffects(), cells);
@@ -848,9 +900,14 @@ public class ActionPhase {
         }
     }
 
+    /**
+     * This method will restore the player original position if the shoot failed and restore the shotPlayer list
+     * @param shootAction is the class containing all the details of the shoot requested
+     * @param shotPlayerThisTurnBackup is the backup list of the shotPlayer, saved before the shoot attempt
+     */
     private void shootFailed(ShootAction shootAction,List<Integer> shotPlayerThisTurnBackup){
 
-        if (shootAction.getMove() != null){
+        if (shootAction != null && shootAction.getMove() != null && Model.getPlayer(controller.getCurrentPlayer()).getDmg().size() > DMG_FOR_MOVE_SHOOT ){
 
             utilityMethods.move(Arrays.asList(shootAction.getMove().getOpposite()));
 
@@ -1455,6 +1512,8 @@ public class ActionPhase {
 
         int playerId = controller.getCurrentPlayer();
 
+        List<Integer> playerShotBackup = new ArrayList<>(controller.getShotPlayerThisTurn());
+
         try {
 
             shoot(shootAction);
@@ -1469,6 +1528,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_WEAPON_NOT_LOADED);
 
+            shootFailed(null,playerShotBackup);
+
             restoreSellPowerUp();
 
             return false;
@@ -1478,6 +1539,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_SAME_CELL);
+
+            shootFailed(null,playerShotBackup);
 
             restoreSellPowerUp();
 
@@ -1489,6 +1552,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_IN_DIFFERENT_CELL);
 
+            shootFailed(null,playerShotBackup);
+
             restoreSellPowerUp();
 
             return false;
@@ -1498,6 +1563,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_DISTANCE);
+
+            shootFailed(null,playerShotBackup);
 
             restoreSellPowerUp();
 
@@ -1509,6 +1576,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_SEEABLE_PLAYER);
 
+            shootFailed(null,playerShotBackup);
+
             restoreSellPowerUp();
 
             return false;
@@ -1518,6 +1587,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_UNCORRECT_EFFECTS);
+
+            shootFailed(null,playerShotBackup);
 
             restoreSellPowerUp();
 
@@ -1529,6 +1600,8 @@ public class ActionPhase {
 
             controller.getVirtualView(playerId).show(DEFAULT_NOT_CORRECT_PLAYER_NUMBER);
 
+            shootFailed(null,playerShotBackup);
+
             restoreSellPowerUp();
 
             return false;
@@ -1538,6 +1611,8 @@ public class ActionPhase {
             LOGGER.log( Level.WARNING, e.getMessage(),e);
 
             controller.getVirtualView(playerId).show(DEFAULT_PLAYER_NOT_SEEABLE);
+
+            shootFailed(null,playerShotBackup);
 
             restoreSellPowerUp();
 
@@ -1549,6 +1624,8 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
 
+            shootFailed(null,playerShotBackup);
+
             restoreSellPowerUp();
 
             return false;
@@ -1558,6 +1635,8 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " card not found ");
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_WEAPON_NOT_FOUND_IN_BAG);
+
+            shootFailed(null,playerShotBackup);
 
             restoreSellPowerUp();
 
@@ -1569,6 +1648,8 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_NO_ENOUGH_AMMO);
 
+            shootFailed(null,playerShotBackup);
+
             restoreSellPowerUp();
 
             return false;
@@ -1579,6 +1660,8 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_DIFFERENT_PLAYER_NEEDED);
 
+            shootFailed(null,playerShotBackup);
+
             restoreSellPowerUp();
 
             return false;
@@ -1586,6 +1669,8 @@ public class ActionPhase {
         } catch (ArgsNotValidatedException e){
 
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " ArgsNotValidatedException ");
+
+            shootFailed(null,playerShotBackup);
 
             restoreSellPowerUp();
 
@@ -1596,6 +1681,8 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " cell specified in effect is null in model ");
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_CELL_NOT_EXISTENT);
+
+            shootFailed(null,playerShotBackup);
 
             restoreSellPowerUp();
 
@@ -1609,6 +1696,8 @@ public class ActionPhase {
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PRECEDENT_PLAYER_NEEDED);
 
+            shootFailed(null,playerShotBackup);
+
             restoreSellPowerUp();
 
             handleAction();
@@ -1618,6 +1707,8 @@ public class ActionPhase {
             LOGGER.log(Level.INFO, () -> LOG_START_SHOOT + " PlayerAlreadyDeadException ");
 
             controller.getVirtualView(controller.getCurrentPlayer()).show(DEFAULT_PLAYER_ALREADY_DEAD);
+
+            shootFailed(null,playerShotBackup);
 
             restoreSellPowerUp();
 
