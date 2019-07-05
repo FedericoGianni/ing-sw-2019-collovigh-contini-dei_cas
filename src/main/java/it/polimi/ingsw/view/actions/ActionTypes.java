@@ -1,5 +1,8 @@
 package it.polimi.ingsw.view.actions;
 
+/**
+ * enum of the action types
+ */
 public enum ActionTypes {
 
     MOVE,
