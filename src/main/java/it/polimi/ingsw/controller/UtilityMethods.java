@@ -20,19 +20,46 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP;
 
+/**
+ * This class contains some utility methods that are used by more than one controller's classes
+ */
 public class UtilityMethods {
 
+
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.INFO;
 
+    /**
+     * logger incipit
+     */
     private static final String LOG_START = "[Controller] ";
 
+    /**
+     * Controller instance
+     */
     private final Controller controller;
 
+    /**
+     * Constructor
+     * @param controller is the class that instantiated this
+     */
     public UtilityMethods(Controller controller) {
         this.controller = controller;
     }
 
+    /**
+     *
+     * @param row is the start cell row
+     * @param column is the start cell column
+     * @param direction is the direction the player wants to move
+     * @return true if the player can make a movement in this direction
+     */
     public boolean askMoveValid(int row, int column, Directions direction) {
 
         //LOG

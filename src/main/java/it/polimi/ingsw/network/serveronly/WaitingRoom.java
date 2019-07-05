@@ -43,14 +43,12 @@ WaitingRoom {
     private int mapType = 0;
 
     private boolean activeTimer;
-    private boolean newGame;
 
 
     /**
      * Constructor: creates a new waitingRoom for the player to join both if they want to join a new game or load an old game
-     * @param gameId is -1 if the game will be a new one, or the game id if the game is saved
      */
-    public WaitingRoom(int gameId) throws GameNonExistentException {
+    public WaitingRoom() throws GameNonExistentException {
 
         // things to do for both loaded games and new ones
         this.active = true;
@@ -63,26 +61,12 @@ WaitingRoom {
         this.timerCount = maxTimer;
 
 
-        // -1 = new game
-        if (gameId == -1) {
+        this.colors = new ArrayList<>();
+        this.players = new CopyOnWriteArrayList<>();
 
-            this.colors = new ArrayList<>();
-            this.players = new CopyOnWriteArrayList<>();
+        LOGGER.log(level,"[Waiting Room] Started Waiting Room for new Game");
 
-            LOGGER.log(level,"[OK] Started Waiting Room for new Game");
 
-            newGame = true;
-
-        }else{
-
-            if (!Parser.containsGame(gameId)) throw new GameNonExistentException();
-            activeGame = gameId;
-            // need to catch all saved games and start the correspondent one
-
-            newGame = false;
-
-            LOGGER.log(Level.FINE, "[OK] Started Waiting Room for saved game w/ id: {0}", gameId);
-        }
     }
 
     public Boolean isActive(){
@@ -97,9 +81,7 @@ WaitingRoom {
      */
     private synchronized void initGame(){
 
-        if (newGame) activeGame = Parser.addGame();
-
-        else reloadGame(activeGame);
+        activeGame = Parser.addGame();
 
         List<Integer> mapAndSkulls = Server.getClient(0).askMapAndSkulls();
         this.mapType = mapAndSkulls.get(0);
@@ -113,11 +95,6 @@ WaitingRoom {
             Server.getController().handleTurnPhase();
         }
         this.active = false;
-    }
-
-    private synchronized void reloadGame(int activeGame){
-
-
     }
 
     /**

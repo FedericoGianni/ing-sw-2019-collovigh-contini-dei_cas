@@ -17,17 +17,39 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.DefaultReplies.*;
 
+/**
+ * This class will handle all the method for the reload phase
+ */
 public class ReloadPhase {
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static final Level level = Level.INFO;
 
+    /**
+     * Logger incipit
+     */
     private static final String LOG_START = "[Controller-ReloadPhase]";
 
+    /**
+     * Timer for the reload phase
+     */
     private static final int TIMER_RELOAD = 60;
 
+    /**
+     * Controller instance
+     */
     private final Controller controller;
 
+    /**
+     * Constructor
+     * @param controller is the controller that instantiated this class
+     */
     public ReloadPhase(Controller controller) {
 
         this.controller = controller;

@@ -62,15 +62,15 @@ public class SavedController  implements Serializable {
 
     /**
      * Contructor wich takes paramter of the controller to be saved and places them in the serializable SavedController class
-     * @param gameId
-     * @param roundNumber
-     * @param frenzy
-     * @param hasSomeoneDied
-     * @param shotPlayerThisTurn
-     * @param turnPhase
-     * @param frenzyStarter
-     * @param playerSize
-     * @param gameEnded
+     * @param gameId is the game id
+     * @param roundNumber is the round number
+     * @param frenzy is true if frenzy is active
+     * @param hasSomeoneDied is true if someone in this turn died
+     * @param shotPlayerThisTurn is a list of int of player that have been shot
+     * @param turnPhase is the phase of the turn
+     * @param frenzyStarter is the last player to play
+     * @param playerSize is the number of players
+     * @param gameEnded is true if the current one is the last round
      */
     public SavedController(int gameId, int roundNumber, Boolean frenzy, Boolean hasSomeoneDied, List<Integer> shotPlayerThisTurn, TurnPhase turnPhase, int frenzyStarter, int playerSize, boolean gameEnded) {
         this.gameId = gameId;

@@ -27,20 +27,39 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.utils.PowerUpType.*;
 import static it.polimi.ingsw.utils.DefaultReplies.*;
 
+/**
+ * This class is used for handling the methods in the powerUp phase
+ */
 public class PowerUpPhase {
 
     // LOGGER
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.FINE;
 
+    /**
+     * Timer for the powerUp phase
+     */
     private static final int TIMER_POWER_UP = 15;
 
 
     // Controller reference
 
+    /**
+     * Controller instance
+     */
     private final Controller controller;
 
+    /**
+     * Default caonstructor
+     * @param controller is the controller which instantiated this class
+     */
     public PowerUpPhase(Controller controller) {
         this.controller = controller;
     }
@@ -83,6 +102,9 @@ public class PowerUpPhase {
         }
     }
 
+    /**
+     * This method will ask to all the players who have been shot in this turn if they want to use a grenade on the shooter
+     */
     public void askGrenadeToShot(){
 
         if (!controller.getShotPlayerThisTurn().isEmpty()) {
@@ -114,11 +136,16 @@ public class PowerUpPhase {
 
     // Client -> Server flow
 
+    /**
+     * This method will make the player use a PowerUp by forwarding the request to different methods depending on the type of the powerUp
+     *
+     * TargetingScope powerUps will be handled differently in the shootAction
+     *
+     * @param powerUpAction is the jsonAction class used for powerUp phase actions
+     *
+     * @see it.polimi.ingsw.view.actions.usepowerup.PowerUpAction
+     */
     public void usePowerUp(PowerUpAction powerUpAction){
-
-        // get current player
-
-        int playerId = controller.getCurrentPlayer();
 
         // stop timer
 
@@ -161,6 +188,10 @@ public class PowerUpPhase {
         handlePowerUp();
     }
 
+    /**
+     * This method will make the current player usa a newton powerUp
+     * @param newtonAction is a jsonAction used to handle useNewton action
+     */
     public void useNewton(NewtonAction newtonAction){
 
         int currentPlayer = controller.getCurrentPlayer();
@@ -200,6 +231,10 @@ public class PowerUpPhase {
         }
     }
 
+    /**
+     * This method will make the current player usa a Teleporter powerUp
+     * @param teleporterAction is a jsonAction used to handle useTeleporter action
+     */
     public void useTeleport(TeleporterAction teleporterAction){
 
         int currentPlayer = controller.getCurrentPlayer();
@@ -249,7 +284,10 @@ public class PowerUpPhase {
         }
     }
 
-
+    /**
+     * This method will make the current player usa a grenade powerUp
+     * @param grenadeAction is a jsonAction used to handle useGrenade action
+     */
     public void useGrenade(GrenadeAction grenadeAction){
 
         int currentPlayer = controller.getCurrentPlayer();
@@ -314,6 +352,11 @@ public class PowerUpPhase {
 
     // Utils
 
+    /**
+     * This method will make the current player discard a powerUp
+     * @param type is the powerUp type
+     * @param color is the powerUp Color
+     */
     public void discardPowerUp(PowerUpType type, Color color){
 
         int currentPlayer = controller.getCurrentPlayer();
@@ -323,6 +366,11 @@ public class PowerUpPhase {
 
     }
 
+    /**
+     * This method states if the player specified has grenades or not
+     * @param playerId is the id of the queried player
+     * @return true if has grenades, false otherwise
+     */
     private Boolean hasGrenade(int playerId){
 
         List<PowerUp> list = Model
@@ -336,6 +384,10 @@ public class PowerUpPhase {
         return !(list.isEmpty());
     }
 
+    /**
+     * This method will states if the player has powerUps that can use in the powerUp phase
+     * @return true if he has some, false otherwise
+     */
     private Boolean hasPowerUpPhase(){
 
         List<Player> spawned = Model
@@ -365,6 +417,10 @@ public class PowerUpPhase {
 
     }
 
+    /**
+     * This method states if the currentPlayer has any targetingScope powerup
+     * @return true if he has, false if he doesn't
+     */
     public Boolean hasTargetingScope(){
 
         List<PowerUp> list = Model

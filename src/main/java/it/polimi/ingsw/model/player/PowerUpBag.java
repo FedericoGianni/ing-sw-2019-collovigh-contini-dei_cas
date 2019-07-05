@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 public class PowerUpBag  extends Subject implements Bag<PowerUp> {
 
-    private static final int MAX_POWER_UPS = 3;
+    public static final int MAX_POWER_UPS = 3;
 
     private List<PowerUp> powerUps;
 
@@ -54,7 +54,15 @@ public class PowerUpBag  extends Subject implements Bag<PowerUp> {
     @Override
     public void addItem(PowerUp item) {
 
-        if (this.powerUps.size()<MAX_POWER_UPS){
+        if (this.powerUps.size()<MAX_POWER_UPS) {
+
+            this.powerUps.add(item);
+
+            this.updateAll(this);
+
+        }else {
+
+            Model.getGame().discardPowerUp(powerUps.get(0));
 
             this.powerUps.add(item);
 
