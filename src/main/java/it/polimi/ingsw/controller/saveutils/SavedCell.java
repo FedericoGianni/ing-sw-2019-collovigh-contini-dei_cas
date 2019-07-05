@@ -10,17 +10,28 @@ import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.weapons.Weapon;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class is used to serialize a Cell in a file to be read, allowing game persistence
+ */
 public class SavedCell extends Cell implements Serializable {
 
+    /**
+     * ammo card inside the cell (if the cell contains ammo)
+     */
     private final AmmoCard ammoCard;
 
+    /**
+     * weapon list inside the cell in case it contains weapons
+     */
     private final List<String> weaponList;
 
-
+    /**
+     * Constructor wich takes as paramter a SpawnCell
+     * @param cell cell of Spawn type from Model
+     */
     public SavedCell(SpawnCell cell) {
 
         this.copyParamFrom(cell);
@@ -36,6 +47,10 @@ public class SavedCell extends Cell implements Serializable {
 
     }
 
+    /**
+     * Constructor wich takes as paramter an ammo cell
+     * @param cell cell of ammo type from Model
+     */
     public SavedCell(AmmoCell cell) {
 
         this.copyParamFrom(cell);
@@ -46,32 +61,50 @@ public class SavedCell extends Cell implements Serializable {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean isAmmoCell() {
         return (ammoCard != null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmmoCard getAmmoPlaced() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmmoCard pickAmmoPlaced() {
 
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Weapon> getWeapons() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Weapon buy(Weapon w, Player player) throws NotEnoughAmmoException {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SavedCell getSaveVersionOfCell() {
 
@@ -79,6 +112,10 @@ public class SavedCell extends Cell implements Serializable {
 
     }
 
+    /**
+     *
+     * @return a Cell generated from this savedCell class istance
+     */
     public Cell getRealCell(){
 
         Cell finalCell;

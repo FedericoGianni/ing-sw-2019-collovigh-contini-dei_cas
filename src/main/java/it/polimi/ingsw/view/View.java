@@ -27,9 +27,24 @@ public class View implements ViewInterface {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
+    /**
+     * Reference to the UserInterface linked to this class
+     */
     private UserInterface userInterface;
+
+    /**
+     * Player ID of the player linked to this view
+     */
     private int playerId = -1;
+
+    /**
+     * Reference to the interface Client (which can be both socket or rmi)
+     */
     private Client clientToVView;
+
+    /**
+     * Reference to the cache Model, a lighter version of the model to store local changes
+     */
     private CacheModel cacheModel;
 
     // for net configuration
@@ -199,6 +214,10 @@ public class View implements ViewInterface {
         userInterface.gameSelection();
     }
 
+    /**
+     * Let the user retry login when invalid (i.e. name already taken)
+     * @param error message to display to the user
+     */
     public void retryLogin(String error){
 
         userInterface.retryLogin(error);
@@ -212,6 +231,11 @@ public class View implements ViewInterface {
         new Thread( () -> userInterface.show(msg)).start();
     }
 
+
+    /**
+     *
+     * @return id of the player linked to this view
+     */
     public int getPlayerId() {
         return playerId;
     }
@@ -224,6 +248,11 @@ public class View implements ViewInterface {
         this.clientToVView = clientToVView;
     }
 
+    /**
+     * Forward a login request to the server, with chosen name and color
+     * @param name player name chosen
+     * @param color color chosen
+     */
     public void joinGame(String name, PlayerColor color) {
         clientToVView.joinGame(name, color);
     }

@@ -11,6 +11,11 @@ public class DefaultReplies {
 
     public static final String DEFAULT_GAME_NON_EXISTENT = "GAME_NON_EXISTENT";
 
+    //turn
+
+    public static final String DEFAULT_TURN_START = ANSI_YELLOW.escape() +
+            "[!] E' il tuo turno! " + ANSI_RESET.escape();
+
     // powerUp phase
 
     public static final String DEFAULT_PLAYER_USED_NEWTON_ON_HIMSELF = ANSI_YELLOW.escape() +

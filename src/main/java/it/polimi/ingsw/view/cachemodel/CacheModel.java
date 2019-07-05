@@ -19,6 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Simplified version of the model used to store local updates for clients
+ */
 public class CacheModel {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
@@ -252,7 +255,7 @@ public class CacheModel {
 
     public static String handleSingleIntShow(int t){
 
-        String s = new String();
+        String s = "";
 
         switch (t){
             case 0:

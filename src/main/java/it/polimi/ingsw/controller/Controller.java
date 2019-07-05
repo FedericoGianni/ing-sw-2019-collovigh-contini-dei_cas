@@ -29,8 +29,7 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.controller.TurnPhase.END;
 import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
 import static it.polimi.ingsw.network.serveronly.WaitingRoom.DEFAULT_MIN_PLAYERS;
-import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_RECEIVED_FRENZY_BUT_EXPECTED_NORMAL;
-import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_RECEIVED_NORMAL_BUT_EXPECTED_FRENZY;
+import static it.polimi.ingsw.utils.DefaultReplies.*;
 import static java.lang.Thread.sleep;
 
 
@@ -46,26 +45,54 @@ public class Controller {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
+    /**
+     * ID of the game used to save/load multiple games
+     */
     private int gameId;
 
+    /**
+     * number of the current round, used to determin whose turn is now
+     */
     private int roundNumber;
 
+    /**
+     * true if in frenzy phase, false otherwise
+     */
     private Boolean frenzy = false;
 
+    /**
+     * true if some player has died this turn, to let the controller know it needs to calc points
+     */
     private Boolean hasSomeoneDied = false;
+
 
     private Boolean expectingAnswer = false;
 
     //used for TagBackGrenade (check if it is necessary)
 
+    /**
+     * list of player IDs representing which player has been shot this tunrn
+     */
     private List<Integer> shotPlayerThisTurn = new ArrayList<>();
 
+    /**
+     * current turn phase, initialized by default to spawn
+     */
     private TurnPhase turnPhase = SPAWN;
 
+    /**
+     * ID of the player who started frenzy phase
+     */
     private int frenzyStarter;
 
+    /**
+     * reference to the model
+     */
     private final Model model;
 
+    /**
+     * List of VirtualView, which are seen as real view by the controller by network abstraction
+     */
     private List<VirtualView> players;
 
     private final Observers observers;
@@ -74,24 +101,48 @@ public class Controller {
 
     private UtilityMethods utilityMethods = new UtilityMethods(this);
 
+    /**
+     * SpawnPhase handler
+     */
     private SpawnPhase spawnPhase = new SpawnPhase(this);
 
+    /**
+     * PowerUp phase handler
+     */
     private PowerUpPhase powerUpPhase = new PowerUpPhase(this);
 
+    /**
+     *Action phase handler
+     */
     private ActionPhase actionPhase = new ActionPhase(this);
 
+    /**
+     * Point counter handler
+     */
     private PointCounter pointCounter = new PointCounter(this);
 
+    /**
+     * Reload phase handler
+     */
     private ReloadPhase reloadPhase = new ReloadPhase(this);
 
+    /**
+     * Timer to manage user's turn time limit
+     */
     private Timer timer = new Timer(this);
 
     private boolean activateFrenzy = false;
 
     private Random rand = new Random();
 
+    /**
+     * True if the game has ended to stop the controller
+     */
     private boolean gameEnded = false;
 
+    /**
+     * True if this game has been reloaded, false otherwise
+     */
     private boolean reloadGame = false;
 
 
@@ -402,6 +453,8 @@ public class Controller {
 
                 case SPAWN:
 
+                    getVirtualView(getCurrentPlayer()).show(DEFAULT_TURN_START);
+
                     spawnPhase.handleSpawn();
 
                     // increment phase if virtual view method is called will be done in the answer method
@@ -522,10 +575,11 @@ public class Controller {
 
     private void waitForMinPlayer(){
 
+        LOGGER.log(level, "[CONTROLLER] Waiting for min players to restart loaded game");
+
         while(getPlayerOnline().size() < DEFAULT_MIN_PLAYERS){
             try {
-                sleep(100);
-                LOGGER.log(level, "[CONTROLLER] Waiting for min players to restart loaded game");
+                sleep(500);
             } catch (InterruptedException e){
 
             }

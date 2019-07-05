@@ -60,8 +60,7 @@ public class Observers {
 
     public static Boolean isInitialized(){
 
-        if (playerObservers.isEmpty()) return false;
-        else return true;
+        return !playerObservers.isEmpty();
     }
 
     public static SpawnCellObserver getSpawnCellObserver() {

@@ -23,12 +23,12 @@ public class FileRead {
     public static final int C_W = 52;
 
 
-    private static char battelfield[][] = new char[R][C];
-    private static char welcome[][] = new char[R_W][C_W];
+    private static char[][] battelfield = new char[R][C];
+    private static char[][] welcome = new char[R_W][C_W];
     private static List<AsciiColor> playerColorList = new ArrayList<>();
 
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             populateMatrixFromFile(1);
 

@@ -77,7 +77,7 @@ public class Player {
     @Override
     public String toString() {
 
-        String s = new String();
+        String s = "";
 
         s = s.concat("\nID: " + getPlayerId());
         s = s.concat("\nNome: " + getName());

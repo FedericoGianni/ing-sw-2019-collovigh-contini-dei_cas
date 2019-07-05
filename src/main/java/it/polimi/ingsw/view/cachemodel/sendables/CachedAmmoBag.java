@@ -27,7 +27,7 @@ public class CachedAmmoBag extends UpdateClass {
     @Override
     public String toString(){
 
-        String s = new String();
+        String s = "";
 
         if(ammoList != null) {
 

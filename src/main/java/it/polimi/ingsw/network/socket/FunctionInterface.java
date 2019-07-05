@@ -5,5 +5,5 @@ package it.polimi.ingsw.network.socket;
  */
 public interface FunctionInterface {
 
-    public void execute(String[] commands);
+    void execute(String[] commands);
 }

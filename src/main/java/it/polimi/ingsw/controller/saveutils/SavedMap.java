@@ -9,6 +9,9 @@ import java.io.Serializable;
 
 import static it.polimi.ingsw.utils.CellColor.*;
 
+/**
+ * This class is used to serialize the Model game Map in a file to be read, allowing game persistence
+ */
 public class SavedMap implements Serializable {
 
     private static final int MAP_R = 3;

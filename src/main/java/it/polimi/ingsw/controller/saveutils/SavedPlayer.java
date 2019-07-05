@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class is used to serialize the Players in a file to be read, allowing game persistence
+ */
 public class SavedPlayer implements Serializable {
 
     private final String name;
