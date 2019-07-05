@@ -1351,7 +1351,6 @@ public class CLI implements UserInterface {
      * @param pos current spawn cell from where he wants to buy the weapon
      * @return a List of String representing the name of the weapon to buy and, if needed, the one to discard
      */
-    //TODO i need to check that he buy weap when i have more ammo and that it let me choose one to discard when i have already 3
     private List<String> handleWeaponGrab(Point pos) {
 
         CachedSpawnCell cell = (CachedSpawnCell) view.getCacheModel().getCachedMap().getCachedCell(pos.x, pos.y);
@@ -1544,7 +1543,6 @@ public class CLI implements UserInterface {
 
             } else if (hasPowerUpOfColor(powerUps, c) && !ammo.contains(c)) {
 
-                //TODO tell him if he wants to drop a powerup to buy
                 System.out.println("Puoi pagare " + UiHelpers.ammoTranslator(c) + " solamente con un PowerUp: ");
                 List<CachedPowerUp> powerUpChoiceList = powerUps
                         .stream()
@@ -1770,7 +1768,7 @@ public class CLI implements UserInterface {
         effects = chooseEffects(weapon);
 
         List<Color> totEffectCost = new ArrayList<>();
-        //TODO check if total effect cost is correct, export it in an outside method
+
         for(Integer i : effects){
             switch (i){
                 case 1:
@@ -1795,7 +1793,6 @@ public class CLI implements UserInterface {
 
         } else {
             System.out.println("[!] Non hai abbastanza munizioni per usare gli effetti selezionati!");
-            //TODO check if it works, should let him retry shoot from the beginning
             startShoot(maxMoves, false);
         }
 
@@ -1844,7 +1841,7 @@ public class CLI implements UserInterface {
                         useScope = true;
                     }
                 } else {
-                    System.out.println("Scelta non valida! Riprova: ");
+                    System.out.println(DEFAULT_INVALID_INPUT_MESSAGE);
                 }
 
             } while(!validScopeChoice);
@@ -2061,7 +2058,6 @@ public class CLI implements UserInterface {
                             valid = true;
                             tempTargetList.add(read);
                         } else if(read == 9){
-                            //TODO check if it works, should let him target up to max target (min 1) instead of exactly max
                             valid = true;
                             j = w.getEffectRequirements().get(i).getNumberOfTargets().size();
                         }
@@ -2184,7 +2180,7 @@ public class CLI implements UserInterface {
                                 valid = true;
 
                             } else {
-                                System.out.println("Scelta effetti non valida! Riprova");
+                                System.out.println(DEFAULT_INVALID_EFFECT_CHOICE);
                             }
 
                         } else {
@@ -2192,7 +2188,7 @@ public class CLI implements UserInterface {
                             if ((read >= 0 && read < 2) || read == 12) {
                                 valid = true;
                             } else {
-                                System.out.println("Scelta effetti non valida! Riprova");
+                                System.out.println(DEFAULT_INVALID_EFFECT_CHOICE);
                             }
                         }
 
@@ -2202,7 +2198,7 @@ public class CLI implements UserInterface {
                         if((read == 0 || read == 1)){
                             valid = true;
                         } else{
-                            System.out.println("Scelta effetti non valida! Riprova");
+                            System.out.println(DEFAULT_INVALID_EFFECT_CHOICE);
                         }
 
                     //can choose to do first effect before base effect
@@ -2213,7 +2209,7 @@ public class CLI implements UserInterface {
                             if ((read >= 0 && read < 5) || read == 12) {
                                 valid = true;
                             } else {
-                                System.out.println("Scelta effetti non valida! Riprova");
+                                System.out.println(DEFAULT_INVALID_EFFECT_CHOICE);
                             }
 
                         } else {
@@ -2280,7 +2276,7 @@ public class CLI implements UserInterface {
                 break;
         }
 
-        System.out.println("[DEBUG] RISULTATO: " + effects);
+        //System.out.println("[DEBUG] RISULTATO: " + effects);
 
         return effects;
     }
@@ -2347,16 +2343,25 @@ public class CLI implements UserInterface {
 
                 reloadChoice = scanner.nextInt();
 
-                if((reloadChoice>= 0 && reloadChoice < weapons.size())){
+                //ONLY 1 WEAPON
+                if(weapons.size() < 2 && reloadChoice == 0){
+
                     valid = true;
-                } else if(weapons.size() >=2 && reloadChoice == 3){
-                    valid = true;
-                } else if(weapons.size() == 3 && (reloadChoice == 4 || reloadChoice == 5 || reloadChoice == 6)){
-                    valid = true;
+
+                } else if(weapons.size() < 3){ // 2 WEAPONS
+
+                    if(reloadChoice == 0 || reloadChoice == 1 || reloadChoice == 3)
+                        valid = true;
+
+                } else if(weapons.size() < 4){ // 3 WEAPONS
+
+                    if(reloadChoice >= 0 && reloadChoice < 7){
+                        valid = true;
+                    }
                 }
 
             } catch (InputMismatchException e){
-                System.out.println("Non è un numero! Riprova: ");
+                System.out.println(DEFAULT_INTEGER_MISMATCH_MESSAGE);
                 scanner.nextLine();
             }
 
