@@ -523,7 +523,9 @@ public class Gui extends Application implements UserInterface {
             case TURN:
                 guiMapController.notifyTurnUpdate(turnUpdate);
                 break;
-
+            case GAME:
+                if(view.getCacheModel().getGame() != null)
+                   guiMapController.printLog(view.getCacheModel().showKillShotTrack(view.getCacheModel().getGame().getKillShotTrack()));
             default:
                 break;
         }
