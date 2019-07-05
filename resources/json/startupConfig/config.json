@@ -1,1 +1,1 @@
-{"serverIp":"localhost","socketPort":22222,"rmiServerPort":22220,"rmiClientPort":22221,"gui":"-gui","lobbyTimer":10,"minPlayer":3,"game": -1}
+{"serverIp":"localhost","socketPort":22222,"rmiServerPort":22220,"rmiClientPort":22221,"gui":"-gui","lobbyTimer":30,"minPlayer":3,"game": -1,"enableTimer":true }
