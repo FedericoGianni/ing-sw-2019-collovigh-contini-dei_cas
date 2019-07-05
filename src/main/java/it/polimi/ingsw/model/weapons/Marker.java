@@ -18,6 +18,13 @@ public class Marker extends MicroEffect {
     // the player number is 100 you need to target every player in the traget's square( check hellion
     // if player number is 1000 io need can target up to the number /1000
 
+    /**
+     * constructor
+     * @param a
+     * @param b
+     * @param c
+     * @param dp
+     */
     public Marker(int a,int b,boolean c,boolean dp) {
         this.markers=a;
         this.playerNum=b;
@@ -25,46 +32,23 @@ public class Marker extends MicroEffect {
         this.differentPlayer=dp;
     }
 
+    /**
+     * get marks
+     * @return
+     */
     public static List<Marker> getMarkersArray() {
         return markersArray;
     }
 
+    /**
+     * directly insert marker
+     * @param mA
+     */
     public static void insertMarkerType(Marker mA) {
         markersArray.add(mA);
     }
 
-    public boolean isDifferentPlayer() {
-        return differentPlayer;
-    }
 
-    public void setDifferentPlayer(boolean differenPlayer) {
-        this.differentPlayer = differenPlayer;
-    }
-
-    public void setMarkers(int m)
-    {
-        this.markers=m;
-    }
-
-    public int getMarkers(){
-        return this.markers;
-    }
-
-    public int getPlayerNum() {
-        return playerNum;
-    }
-
-    public void setPlayerNum(int playerNum) {
-        this.playerNum = playerNum;
-    }
-
-    public boolean isSeeAbleTargetNeeded() {
-        return seeAbleTargetNeeded;
-    }
-
-    public void setSeeAbleTargetNeeded(boolean seeAbleTargetNeeded) {
-        this.seeAbleTargetNeeded = seeAbleTargetNeeded;
-    }
 
     /**
      * this method uses the semplified JSON to populate the microeffets-MArker Class that are in a known number
@@ -86,11 +70,18 @@ public class Marker extends MicroEffect {
 
     }
 
+    /**
+     * return thi object
+     * @return
+     */
     @Override
     public Marker copy() {
         return this;
     }
 
+    /**
+     * print infos
+     */
     @Override
         public void print() {
         /*
@@ -105,7 +96,7 @@ public class Marker extends MicroEffect {
 
     //i don't need to check distance because if the distance is ok from the damage here is too obv
     /**
-     *
+     *give the markers to the tragets
      * @param playerList
      * @param w
      * @throws OverKilledPlayerException
@@ -182,13 +173,17 @@ public class Marker extends MicroEffect {
         }
     }
 
+    /**
+     * check if you need to move ebfore
+     * @return
+     */
     @Override
     public boolean moveBefore() {
         return false;
     }
 
     /**
-     *
+     *check if the players are in the same cell
      * @param p
      * @param playerList
      * @throws PlayerInDifferentCellException

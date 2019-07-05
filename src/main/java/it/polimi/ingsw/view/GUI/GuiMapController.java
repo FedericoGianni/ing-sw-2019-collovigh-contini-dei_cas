@@ -2973,6 +2973,12 @@ public class GuiMapController {
 
 
     //--------------------------------------------------------------------------shoot things
+
+    /**
+     * choose the weapon you want to shoot with
+     * dir because you may move before shoot
+     * @param dir
+     */
     public void shootWeaponChooser( List<Directions> dir) {
         System.out.println("Now you can choose the weapon you want to use");
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Scegli con quale arma sparare");
@@ -3038,6 +3044,12 @@ public class GuiMapController {
         });
     }
 
+    /**
+     * choose the effects
+     * dir because you may move before shoot
+     * @param w weapon you want to use
+     * @param dir
+     */
     private void shootEffectsChooser(CachedFullWeapon w, List<Directions> dir) {
         mapEventDeleter();
         System.out.println("------------------SELEZIOANTORE DI EFFETTI---------");
@@ -3170,6 +3182,13 @@ public class GuiMapController {
 
     }
 
+    /**
+     * check if you can pay
+     * uses checkPayWithPowerUP
+     * @param w
+     * @param effects
+     * @param dir
+     */
     private void shootEffectPay(CachedFullWeapon w, List<Integer> effects, List<Directions> dir)//goes to checkpaywithpowerUp
     {
         System.out.println("Ho scelto gli effetti: " + effects);
@@ -3194,6 +3213,13 @@ public class GuiMapController {
 
     }
 
+    /**
+     * choose the targets then call cell if required the go to the shoot target iterator
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     */
     private void shootTargetChooser(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir) {
        needCell=false;
         for(int e=0;e<effects.size();e++) {
@@ -3331,7 +3357,17 @@ public class GuiMapController {
         }
     }
 
-
+    /**
+     * Ietartes trough targets and cells
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     * @param targetLists
+     * @param effectNum
+     * @param targetNum
+     * @param cells
+     */
 
     private void shootTargetIterator(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, int effectNum, int targetNum, List<Point> cells) {
 
@@ -3537,6 +3573,17 @@ public class GuiMapController {
 
     }
 
+    /**
+     * ask for the cells if neeeded
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     * @param targetLists
+     * @param effectNum
+     * @param targetNum
+     * @param cells
+     */
     private void shootCell(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, int effectNum, int targetNum, List<Point> cells)// only one per effect jump always to next effect at the end so increment effectNUM
     {
         //various options : 1) do and next 2) do and do action
@@ -3575,7 +3622,15 @@ public class GuiMapController {
 
     }
 
-
+    /**
+     * check if you want to use the socpe then calls scopeAction
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     * @param targetLists
+     * @param cells
+     */
     private void checkScope(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, List<Point> cells)
     {
         System.out.println("Sparo con arma " + w + " a questi bersagli:" + targetLists + " con questi effetti " + effects + " In queste celle " + cells);
@@ -3643,6 +3698,15 @@ public class GuiMapController {
 
     }
 
+    /**
+     * no scope, do the shoot action
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     * @param targetLists
+     * @param cells
+     */
     public void noScope(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, List<Point> cells)
     {
         System.out.println("No scope");
@@ -3676,6 +3740,10 @@ public class GuiMapController {
     }
 
     //---------------------------------------------------------------------RELOAD
+
+    /**
+     * ask to the player if he wants to reload
+     */
     public void checkReload()
     {
         Platform.runLater(() -> {
@@ -3693,6 +3761,11 @@ public class GuiMapController {
         });
 
     }
+
+    /**
+     * choose weapons to reload
+     * @param weapons
+     */
     public void reloadWeaponChooser(List <String> weapons)
     {
         Alert a=new Alert(Alert.AlertType.INFORMATION,"Seleziona un'arma da ricaricare");
@@ -3769,6 +3842,11 @@ public class GuiMapController {
             }
         }
     }
+
+    /**
+     * calculate the cost needed to reload then call cehckPAyWithPower
+     * @param weapons
+     */
     private void reloadCostCalc(List <String> weapons)
     {
         List <Color> cost=new ArrayList<>();
@@ -3786,6 +3864,10 @@ public class GuiMapController {
     }
 
     //----------------------------------------------------------------------FRENZY
+
+    /**
+     * frenzy reload action
+     */
     public void askFrenzyReload()
     {//platform.runlater necessario
         Platform.runLater( () -> {

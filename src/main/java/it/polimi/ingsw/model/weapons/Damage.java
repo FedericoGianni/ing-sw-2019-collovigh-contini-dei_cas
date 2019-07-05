@@ -38,45 +38,33 @@ public class Damage extends MicroEffect {
     }
 
 
-
-
-    public void setMelee(boolean melee) {
-        this.melee = melee;
-    }
-
-
-    public boolean isDifferentPlayerNeeded() {
-        return differentPlayer;
-    }
-
-    public void setDifferentPlayer(boolean differentPlayer) {
-        this.differentPlayer = differentPlayer;
-    }
-
-    public boolean isAlreadyTargetedNeeded() {
-        return alreadyTargeted;
-    }
-
-    public void setAlreadyTargetd(boolean alreadyTargetd) {
-        this.alreadyTargeted = alreadyTargetd;
-    }
-
-    public int getDistMin() {
-        return distMin;
-    }
-
-    public void setDistMin(int distMin) {
-        this.distMin = distMin;
-    }
+    /**
+     * directly inserts damage
+     * @param dm
+     */
     public static void insertDamage(Damage dm) {
         damages.add(dm);
     }
 
+    /**
+     * get the damage
+     * @return
+     */
     public static List <Damage> getDamagesList()
     {
         return damages;
     }
 
+    /**
+     * contructor
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @param diff
+     * @param dm
+     * @param at
+     */
     public Damage(int a, int b, boolean c, boolean d, boolean diff,int dm,boolean at) {
         this.damage=a;
         this.playerNum=b;
@@ -86,52 +74,15 @@ public class Damage extends MicroEffect {
         this.distMin=dm;
         this.alreadyTargeted=at;
     }
-    public Damage(Damage d)
-    {
-        this.damage=d.getDamage();
-        this.playerNum=d.getPlayerNum();
-        this.seeAbleTargetNeeded=isSeeAbleTargetNeeded();
-        this.melee=d.isMeleeNeeded();
-        this.differentPlayer=d.isDifferentPlayerNeeded();
-        this.distMin=d.getDistMin();
-        this.alreadyTargeted=d.isAlreadyTargetedNeeded();
-    }
 
 
-    public int getDamages()
-    {
-        return this.damage;
-    }
+    /**
+     * set the damage directly 2
+     * @param damages
+     */
     public void setDamage(int damages)
     {
         this.damage=damages;
-    }
-    public int getPlayerNum() {
-        return playerNum;
-    }
-
-    public boolean isMeleeNeeded()
-    {
-        return this.melee;
-    }
-    public void setPlayerNum(int playerNum) {
-        this.playerNum = playerNum;
-    }
-
-    public boolean isSeeAbleTargetNeeded() {
-        return seeAbleTargetNeeded;
-    }
-
-    public void setSeeAbleTargetNeeded(boolean seeAbleTargetNeeded) {
-        this.seeAbleTargetNeeded = seeAbleTargetNeeded;
-    }
-
-    public boolean isMeelee() {
-        return melee;
-    }
-
-    public void setMeelee(boolean meelee) {
-        this.melee = meelee;
     }
 
 
@@ -154,11 +105,31 @@ public class Damage extends MicroEffect {
 
     }
 
+    /**
+     * copy the object
+     * @return
+     */
     @Override
     public Damage copy() {
         return this;
     }
 
+    /**
+     * Thi method do do the damages and the controls , launches excpetions if there are problems somewhere
+     * damage given to player list  , given from weapon w
+     * @param playerList
+     * @param w
+     * @param c requires cell where to move in case you move, is null if you use a non mover microeffect
+     * @param n
+     * @throws PlayerInSameCellException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     * @throws NotCorrectPlayerNumberException
+     * @throws PlayerNotSeeableException
+     * @throws PrecedentPlayerNeededException
+     * @throws DifferentPlayerNeededException
+     */
     @Override
     public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, NotCorrectPlayerNumberException, PlayerNotSeeableException, PrecedentPlayerNeededException, DifferentPlayerNeededException {//w.isPossesedBy.getPlayer mi dice il giocatore che spara
 
@@ -354,11 +325,23 @@ public class Damage extends MicroEffect {
         }
     }
 
+    /**
+     * ask if you need to move before do effects
+     * @return
+     */
     @Override
     public boolean moveBefore() {
         return false;
     }
 
+    /**
+     * check if the distance is correct
+     * @param target
+     * @param shooter
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     * @throws PlayerInDifferentCellException
+     */
     private void distance(Player target,Player shooter) throws UncorrectDistanceException, SeeAblePlayerException, PlayerInDifferentCellException //distance, called for every player
     {
         if(distMin==0)//no more controls neeeded
@@ -403,6 +386,12 @@ public class Damage extends MicroEffect {
         }
     }
 
+    /**
+     * check if player are in the same cell or not
+     * @param p
+     * @param playerList
+     * @throws PlayerInSameCellException
+     */
     private void differentCellsCheck(Player p,List<Player> playerList) throws PlayerInSameCellException
     {
         for(Player item:playerList)
@@ -412,6 +401,13 @@ public class Damage extends MicroEffect {
         }
     }
 
+    /**
+     * check if player are in the same cell or not
+     * @param p
+     * @param playerList
+     * @throws PlayerInDifferentCellException
+     * @throws NotCorrectPlayerNumberException
+     */
     private void sameCellCheck(Player p,List<Player> playerList) throws PlayerInDifferentCellException, NotCorrectPlayerNumberException {
         if(!playerList.containsAll(p.getCurrentPosition().getPlayers())){//non all the player are in the number
             throw new NotCorrectPlayerNumberException();
@@ -423,6 +419,9 @@ public class Damage extends MicroEffect {
         }
     }
 
+    /**
+     * print
+     */
     public void print()
     {
         /*
