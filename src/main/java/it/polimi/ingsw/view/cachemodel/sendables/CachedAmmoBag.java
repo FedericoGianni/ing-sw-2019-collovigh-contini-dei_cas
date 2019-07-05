@@ -7,6 +7,9 @@ import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.util.List;
 
+/**
+ * Simplified version of the ammo bag inside model to store information for clients
+ */
 public class CachedAmmoBag extends UpdateClass {
 
     private final List<Color> ammoList;

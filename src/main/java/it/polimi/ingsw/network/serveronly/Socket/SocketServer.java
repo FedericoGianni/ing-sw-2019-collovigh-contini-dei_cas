@@ -43,7 +43,6 @@ public class SocketServer extends Thread {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             if(Server.getWaitingRoom() != null){
                 while (Server.getWaitingRoom().getTimerCount() > 0 && clients.size() <= DEFAULT_MAX_CLIENTS) {
-                    //TODO need to check the clientsNum part
                     Socket socket = serverSocket.accept();
                     new SocketConnectionReader(socket).start();
                     socketClients.add(socket);

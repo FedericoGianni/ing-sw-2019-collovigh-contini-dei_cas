@@ -26,13 +26,39 @@ import java.util.List;
 
 public class CurrentGame extends Subject{
 
-
+    /**
+     * Number of skulls in the kill shot track of the current game
+     */
     private final int skulls ;
+
+    /**
+     * List of the players in game
+     */
     private List<Player> players;
+
+    /**
+     * Reference to the model Map of the current game
+     */
     private Map currentMap;
+
+    /**
+     * Reference to the Model powerup deck
+     */
     private PowerUpDeck powerUpDeck;
+
+    /**
+     * Reference to the model weapon deck
+     */
     private WeaponDeck weaponDeck;
+
+    /**
+     * Reference to the model trashpowerup deck, needed to switch the thrash with the original when there are no more powerups
+     */
     private PowerUpDeck thrashPowerUpDeck;
+
+    /**
+     * KillShot track of the current game
+     */
     private List<Skull> killShotTrack;
 
 

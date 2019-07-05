@@ -1,7 +1,8 @@
 package it.polimi.ingsw.view.cachemodel.cachedmap;
 
-
-
+/**
+ * ANSI color to have a nicer CLI
+ */
 public enum AsciiColor {
     ANSI_RED("\u001B[31m"),
     ANSI_GREEN("\u001B[32m"),

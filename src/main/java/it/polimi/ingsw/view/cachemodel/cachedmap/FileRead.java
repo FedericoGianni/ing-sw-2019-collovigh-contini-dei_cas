@@ -15,71 +15,54 @@ import java.util.Random;
 
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 
+/**
+ * Helpers Class to read the CLI map from a file using a defined character convetion
+ * The Map is read from a file and populates a matrix of char, which can then be manipulated to update the players and other objects
+ * inside the map to have an interactive version of the CLI map
+ */
 public class FileRead {
 
+    /**
+     * Max row for the map matrix of chars
+     */
     public static final int R = 19;
+
+    /**
+     * Max cols for the map matrix of chars
+     */
     public static final int C = 49;
+
+    /**
+     * Max row for the matrix of chars to store welcome cli message
+     */
     public static final int R_W = 4;
+
+
+    /**
+     * Max cols for the matrix of chars to store welcome cli message
+     */
     public static final int C_W = 52;
 
-
+    /**
+     * matrix of chars representing the cli map
+     */
     private static char[][] battelfield = new char[R][C];
+
+    /**
+     * matrix of chars to represent the cli welcome screen
+     */
     private static char[][] welcome = new char[R_W][C_W];
+
+    /**
+     * list of ascii color to change the player colors accordingly to the color they have chosen at game start
+     */
     private static List<AsciiColor> playerColorList = new ArrayList<>();
 
-
-    public static void main(String[] args) {
-        try {
-            populateMatrixFromFile(1);
-
-        }catch (Exception e){
-            e.getMessage();
-        }
-
-        showWelcome();
-
-        playerColorList.add(ANSI_BLUE);
-        playerColorList.add(ANSI_PURPLE);
-        playerColorList.add(ANSI_WHITE);
-        playerColorList.add(ANSI_YELLOW);
-        playerColorList.add(ANSI_GREEN);
-        insertPlayer(0,0,'1');
-        insertPlayer(0,1,'2');
-        insertPlayer(0,2,'3');
-        insertPlayer(0,3,'4');
-        insertPlayer(1,0,'5');
-        insertPlayer(1,1,'6');
-        insertPlayer(1,2,'7');
-        insertPlayer(1,3,'8');
-        insertPlayer(2,1,'9');
-        insertPlayer(2,2,'@');
-        insertPlayer(2,3, '#');
-        List<Character> v = new ArrayList<>();
-        v.add('à');
-        v.add('ò');
-        v.add('+');
-
-        insertAmmoCard(0,0,v);
-        insertAmmoCard(0, 1, v);
-        removeAmmoCard(0,0, v);
-        insertAmmoCard(0,2, v);
-        removeAmmoCard(0,2,v);
-        insertAmmoCard(0, 3, v);
-        removeAmmoCard(0,3,v);
-        insertAmmoCard(1, 0 ,v);
-        insertAmmoCard(1,1, v);
-        insertAmmoCard(1,2,v);
-        insertAmmoCard(1,3,v);
-        insertAmmoCard(2,1,v);
-        insertAmmoCard(2,2,v);
-        insertAmmoCard(2,3,v);
-
-        removeAmmoCard(2,3,v);
-        showBattlefield();
-    }
-
-
-
+    /**
+     * Read the map matrix from file
+     * @param mapType maptype to be read 1,2,3
+     * @throws InvalidMapTypeException
+     */
     public static void populateMatrixFromFile(int mapType) throws InvalidMapTypeException {
         try {
             // Open the file that is the first
@@ -128,17 +111,31 @@ public class FileRead {
         }
     }
 
+    /**
+     * generate a random int with a lower and upper bound to place the player inside a random position in one cell
+     * of the char matrix
+     * @param lower lower bound of rand int returned
+     * @param upper upper bound of the rand int returned
+     * @return an integer between lower and upper bound
+     */
     private static int genRandInt(int lower, int upper){
         Random rand = new Random();
         return rand.nextInt(upper-lower) + lower;
     }
 
+    /**
+     * insert an ammo card in the specified cell
+     * @param x row of the cell in the map matrix
+     * @param y col of the cell in the map matrix
+     * @param c cached ammo cell to put inside the map
+     */
     //call this function from UPDATE of type AmmoCell
     public static void insertAmmoCard(int x, int y, CachedAmmoCell c){
 
         List<Character> v = generateAmmoCard(c.getAmmoList());
         insertAmmoCard(x, y, v);
     }
+
 
     private static void insertAmmoCard(int x, int y, List<Character> v){
 

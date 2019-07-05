@@ -27,16 +27,34 @@ public class CacheModel {
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
     private static Level level = Level.INFO;
 
+    /**
+     * List of cached Player containing all infos about in game players
+     */
     private static List<Player> players = new ArrayList<>();
+
+    /**
+     * Game infos like killshot track
+     */
     private  CachedGame game = null;
+
+    /**
+     * Referecen to the view
+     */
     private final View view;
+
+    /**
+     * Simplified version of the game map (i.e. without adjacences)
+     */
     private CachedMap cachedMap;
 
     public CacheModel(View view) {
         this.view = view;
     }
 
-
+    /**
+     * Initial update containing the name of the players, maptype
+     * @param update InitialUpdate
+     */
     private void update(InitialUpdate update) {
 
         LOGGER.log(level, " [CACHE-MODEL] Received initial update with players: " + update.getNames());
@@ -52,7 +70,10 @@ public class CacheModel {
         view.getClientToVView().setGameId(update.getGameId());
     }
 
-
+    /**
+     * Handle every other update type
+     * @param updateClass update received by the client
+     */
     public void update(UpdateClass updateClass){
 
         switch (updateClass.getType()){
@@ -182,6 +203,12 @@ public class CacheModel {
         return cachedMap;
     }
 
+    /**
+     *
+     * @param name of the weapon to be returned
+     * @return the CachedFullWeapon passed as with name
+     * @throws WeaponNotFoundException if the weapon is not found inside the CachedFullWeaponList read from json
+     */
     public CachedFullWeapon getWeaponInfo(String name) throws WeaponNotFoundException {
 
         // load the list from the parser

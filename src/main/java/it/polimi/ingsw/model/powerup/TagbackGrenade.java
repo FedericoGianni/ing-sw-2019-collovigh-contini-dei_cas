@@ -21,7 +21,8 @@ public class TagbackGrenade extends PowerUp {
 
     /**
      *
-     * @param p is the player at which the grenade will be applied
+     * @param target is the player at which the grenade will be applied
+     * @param sourcePId is the player from whom the grenade is used
      * @throws CardNotPossessedException if the card is not possessed by anyone
      */
     public void applyOn(Player target, int sourcePId) {

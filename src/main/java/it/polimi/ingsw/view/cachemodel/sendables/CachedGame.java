@@ -1,15 +1,15 @@
 package it.polimi.ingsw.view.cachemodel.sendables;
 
-import it.polimi.ingsw.model.CurrentGame;
-import it.polimi.ingsw.view.updates.Update;
 import it.polimi.ingsw.view.updates.UpdateClass;
 import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.awt.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simplified version of the CurrentGame model class to store the kill shot track informations
+ */
 public class CachedGame extends UpdateClass {
 
     /**

@@ -2,10 +2,10 @@ package it.polimi.ingsw.view.cachemodel;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import it.polimi.ingsw.runner.RunClient;
-import it.polimi.ingsw.view.cachemodel.CachedFullWeapon;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,10 @@ public class CacheModelParser {
 
     private static final Gson gson = new Gson();
 
-
+    /**
+     * Read a CachedFullWeaponList from parser
+     * @return a list of cached full weapons
+     */
     public static List<CachedFullWeapon> readCachedFullWeaponsFromList(){
 
         List<CachedFullWeapon> weaponList = new ArrayList<>();

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.utils;
 
+/**
+ * color of the players
+ */
 public enum PlayerColor  {
 
     GREEN,

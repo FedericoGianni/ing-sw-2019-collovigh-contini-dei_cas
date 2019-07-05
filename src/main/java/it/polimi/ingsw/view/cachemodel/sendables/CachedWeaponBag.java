@@ -9,9 +9,19 @@ import it.polimi.ingsw.view.updates.UpdateType;
 
 import java.util.List;
 
+/**
+ * Simplified version of the WeaponBag model class to store the weapons possesed by players
+ */
 public class CachedWeaponBag extends UpdateClass {
 
+    /**
+     * List of weapon's name of the player who has this weapon bag
+     */
     private final List<String> weapons;
+
+    /**
+     * List of boolean which are true if the corrisponding weapon in the weapons list is loaded or not
+     */
     private final List<Boolean> loaded;
 
     public CachedWeaponBag(List<String> weapons, List<Boolean> loaded, int playerId) {

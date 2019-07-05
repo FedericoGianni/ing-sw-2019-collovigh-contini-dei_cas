@@ -9,8 +9,14 @@ import it.polimi.ingsw.view.updates.UpdateType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Simplified version of the PowerUp bag in Model to store which powerup a player has in hand
+ */
 public class CachedPowerUpBag extends UpdateClass {
 
+    /**
+     * List of CachedPowerUp possesed by the player who has this cachedPowerUpBag
+     */
     private final List<CachedPowerUp> powerUpList ;
 
     public CachedPowerUpBag(List<CachedPowerUp> powerUpList, int playerId) {
@@ -21,6 +27,10 @@ public class CachedPowerUpBag extends UpdateClass {
 
     }
 
+    /**
+     *
+     * @return a copy of the powerup list
+     */
     public List<CachedPowerUp> getPowerUpList() {
         return new ArrayList<>(powerUpList);
     }

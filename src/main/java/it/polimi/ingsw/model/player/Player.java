@@ -278,11 +278,8 @@ public class Player {
         return visibili;//handle a nullPointerExcpetion if you can't see any other player
 
     }
-    /**
-     * @return a list of the players the current player can see
-     */
 
-//useful differentiate because the first check can change the color, after the first one thc eoclor must be all the same
+    //useful differentiate because the first check can change the color, after the first one thc eoclor must be all the same
 
     /**
      * Called by canSee() for cycling through cells

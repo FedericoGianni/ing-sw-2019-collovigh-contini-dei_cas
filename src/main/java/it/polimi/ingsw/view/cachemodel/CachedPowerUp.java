@@ -7,9 +7,19 @@ import java.io.Serializable;
 
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.*;
 
+/**
+ * Simplified version of the PowerUp contained in the Model, needed to store powerups in player's powerups bag
+ */
 public class CachedPowerUp implements Serializable {
 
+    /**
+     * color of the powerup
+     */
     private final Color color;
+
+    /**
+     * type of the powerup
+     */
     private final PowerUpType type;
 
     public CachedPowerUp(PowerUpType type, Color color){

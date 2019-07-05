@@ -1,8 +1,5 @@
 package it.polimi.ingsw.runner;
 
-//qua dovrò avviare il client da terminale passandogli gia come parametro ip del server porta cli/gui rmi/socket
-//inizio direttamente dalla schermata di login del giocatore
-
 import com.google.gson.Gson;
 import it.polimi.ingsw.network.Config;
 import it.polimi.ingsw.view.View;

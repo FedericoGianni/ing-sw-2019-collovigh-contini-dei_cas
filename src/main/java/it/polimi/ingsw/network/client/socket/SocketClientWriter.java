@@ -1,10 +1,10 @@
 package it.polimi.ingsw.network.client.socket;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.runner.RunClient;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
@@ -35,7 +35,11 @@ public class SocketClientWriter extends Client implements Runnable {
 
     private boolean booleanAnswer;
 
+    /**
+     * Used to read return types from method invocation
+     */
     private int intAnswer;
+
     private static final int DEFAULT_INT_ANSWER_VALUE = -5;
 
     private Gson gson = new Gson();
@@ -76,6 +80,9 @@ public class SocketClientWriter extends Client implements Runnable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int joinGame(String name, PlayerColor color) {
 
@@ -86,6 +93,9 @@ public class SocketClientWriter extends Client implements Runnable {
         return -1; //temporary solution
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int reconnect(String name) {
 
@@ -101,12 +111,17 @@ public class SocketClientWriter extends Client implements Runnable {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void spawn(CachedPowerUp powerUp) {
         send("spawn"+"\f"+powerUp.getType()+"\f"+powerUp.getColor());
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doAction(JsonAction jsonAction) {
 
@@ -115,6 +130,9 @@ public class SocketClientWriter extends Client implements Runnable {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean askMoveValid(int row, int column, Directions direction) {
         send("askMoveValid\f" + row + "\f" + column + "\f" + direction);
@@ -129,6 +147,10 @@ public class SocketClientWriter extends Client implements Runnable {
         this.intAnswer = intAnswer;
     }
 
+    /**
+     * wait for the socket client reader to read what the method invocation returns and then returns it
+     * @return
+     */
     private int waitIntAnswer(){
 
         while (intAnswer == DEFAULT_INT_ANSWER_VALUE){

@@ -3,6 +3,9 @@ package it.polimi.ingsw.utils;
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_RESET;
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_YELLOW;
 
+/**
+ * Default replies to be shown when an invalid action is forwarded to the controller
+ */
 public class DefaultReplies {
 
     public static final int DEFAULT_MAX_PLAYERS = 5;

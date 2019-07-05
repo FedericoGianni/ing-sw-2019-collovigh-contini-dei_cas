@@ -8,16 +8,44 @@ import it.polimi.ingsw.view.cachemodel.sendables.CachedWeaponBag;
 
 import static it.polimi.ingsw.view.cachemodel.cachedmap.AsciiColor.ANSI_RESET;
 
+/**
+ * Simplified version of the Model Player class to store local information in clients
+ */
 public class Player {
 
+    /**
+     * integer representing the id of the player
+     */
     private final int playerId;
 
-
+    /**
+     * color chosen by the player
+     */
     private final PlayerColor playerColor;
+
+    /**
+     * name chosen by the player
+     */
     private final String name;
+
+    /**
+     * reference to the player's stats (dmg taken, marks taken, current position)
+     */
     private CachedStats stats;
+
+    /**
+     * reference to the player's CachedPowerUp bag
+     */
     private CachedPowerUpBag powerUpBag;
+
+    /**
+     * reference to the player's Cached Weapon bag
+     */
     private CachedWeaponBag weaponbag;
+
+    /**
+     * reference to the player's CachedAmmo bag
+     */
     private CachedAmmoBag ammoBag;
 
     public Player(int playerId, String name, PlayerColor color) {

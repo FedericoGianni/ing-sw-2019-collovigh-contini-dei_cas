@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
@@ -61,6 +61,11 @@ public abstract class Client {
     // start game logic things
 
     //SPAWN
+
+    /**
+     * Forward the PowerUp chosen by the player to discard to spawn
+     * @param powerUp powerUp chosen by the user to spawn in the same color spawn cell
+     */
     public abstract void spawn(CachedPowerUp powerUp);
 
     //SHOOT
@@ -70,6 +75,15 @@ public abstract class Client {
      * @param jsonAction is the action the client submits
      */
     public abstract void doAction(JsonAction jsonAction);
+
+    /**
+     * This helper method is used to let the client ask if a single direction is valid, so it doesn't have to
+     * know all map adjacences in local, but it just asks the server every time he needs
+     * @param row index of the matrix inside the Map
+     * @param column index of the column inside the Map
+     * @param direction Direction (N,S,E,O) where the player wants to move from his current position
+     * @return true if the direction is valid, false otherwise
+     */
     public abstract boolean askMoveValid(int row, int column, Directions direction);
 
 }
