@@ -48,11 +48,6 @@ public class PointCounter {
     private final Controller controller;
 
     /**
-     * if true the game is in frenzy mode
-     */
-    private boolean frenzy;
-
-    /**
      * used only for tests if controller is not set, will be used instead of frenzy
      */
     private boolean frenzyForTest = false;
@@ -70,7 +65,7 @@ public class PointCounter {
      */
     public void calculateTurnPoints(){
 
-        frenzy = (controller == null ) ? frenzyForTest : controller.getFrenzy();
+        boolean frenzy = (controller == null ) ? frenzyForTest : controller.getFrenzy();
 
         //for each player who has died this turn
         //+1 point for the player who did him the first dmg

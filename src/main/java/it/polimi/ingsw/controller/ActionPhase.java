@@ -860,7 +860,7 @@ public class ActionPhase {
 
             // translate the list of point in a list of cell
 
-            List<Cell> cells = utilityMethods.PointToCell(shootAction.getCells());
+            List<Cell> cells = utilityMethods.pointToCell(shootAction.getCells());
 
             List<List<Player>> targets = new ArrayList<>();
 

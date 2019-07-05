@@ -754,6 +754,7 @@ public class Parser {
 
             } catch (Exception e2){
 
+                LOGGER.log(Level.WARNING, () -> LOG_START + " failed to write games list");
             }
 
             LOGGER.log(Level.WARNING, ()-> LOG_START + " error while trying to load games list ");
@@ -1169,7 +1170,6 @@ public class Parser {
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved controller");
-            e.printStackTrace();
         }
 
         return controller;
@@ -1234,7 +1234,6 @@ public class Parser {
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved current game");
-            e.printStackTrace();
         }
 
         return savedCurrentGame;

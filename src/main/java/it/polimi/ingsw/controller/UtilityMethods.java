@@ -414,7 +414,7 @@ public class UtilityMethods {
      * @param cells is a list of point
      * @return the correspondent list of cells
      */
-    public List<Cell> PointToCell(List<Point> cells){
+    public List<Cell> pointToCell(List<Point> cells){
 
         return  (cells == null ) ? new ArrayList<>() : cells
                 .stream()
