@@ -9,20 +9,46 @@ import it.polimi.ingsw.utils.Color;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class represent the PowerGlove special weapon
+ *
+ * @see SpecialWeapons
+ */
 public class PowerGlove extends SpecialWeapons {
 
+    /**
+     * name of the weapon
+     */
     private static final String POWER_GLOVE_NAME = "POWER GLOVE";
 
+    /**
+     * dmg given by the base effect
+     */
     private static final int DMG_BASE_EFFECT = 1;
 
+    /**
+     * marks given by the base effect
+     */
     private static final int MARK_BASE_EFFECT = 2;
 
+    /**
+     * dmg given by the second effect
+     */
     private static final int DMG_SECOND_EFFECT = 2;
 
+    /**
+     * reload cost
+     */
     private final List<AmmoCube> costBaseEffect;
 
+    /**
+     * first effect cost
+     */
     private final List<AmmoCube> costSecondEffect;
 
+    /**
+     * Constructor
+     */
     public PowerGlove() {
 
         super(POWER_GLOVE_NAME);

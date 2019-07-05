@@ -11,15 +11,32 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * This class represent the VortexCannon special weapon
+ *
+ * @see SpecialWeapons
+ */
 public class VortexCannon extends SpecialWeapons{
 
+    /**
+     * name of the weapon
+     */
     private static final String VORTEX_CANNON = "VORTEX CANNON";
 
+    /**
+     * reload cost
+     */
     private final List<AmmoCube> costBaseEffect;
 
+    /**
+     * second effect cost
+     */
     private final List<AmmoCube> costSecondEffect;
 
 
+    /**
+     * Constuctor
+     */
     public VortexCannon() {
 
         super(VORTEX_CANNON);

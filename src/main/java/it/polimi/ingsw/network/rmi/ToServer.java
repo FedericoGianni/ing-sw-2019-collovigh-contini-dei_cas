@@ -48,8 +48,16 @@ public interface ToServer extends Remote {
 
     //POWERUP
 
+    /**
+     * This method will make the player do the actions
+     * @param jsonAction is the class used to handle the actions
+     * @throws RemoteException
+     */
      void doAction(JsonAction jsonAction) throws RemoteException;
 
+    /**
+     * @see it.polimi.ingsw.controller.UtilityMethods#askMoveValid(int, int, Directions) ;
+     */
      boolean askMoveValid(int row, int column, Directions direction) throws RemoteException;
 
 

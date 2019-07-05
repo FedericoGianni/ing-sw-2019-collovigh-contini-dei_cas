@@ -18,17 +18,43 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * This class extends ToServer and will be loaded on the RMI registry on the server side
+ */
 public class ToServerImpl implements ToServer {
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.FINE;
-
+    /**
+     * rmi server reference
+     */
     private final RMIServer server;
+    /**
+     * rmi client registry port
+     */
     private final int rmiClientPort;
+    /**
+     * client player id
+     */
     private int playerId;
-
+    /**
+     * client rmi registry
+     */
     private Registry remote;
 
+    /**
+     * Constructor
+     * @param server is the RmiServer class
+     * @param rmiClientPort is the rmi client registry port
+     * @throws RemoteException
+     */
     public ToServerImpl(RMIServer server, int rmiClientPort) throws RemoteException{
 
         this.server = server;
@@ -101,8 +127,7 @@ public class ToServerImpl implements ToServer {
     }
 
     /**
-     * @param name is the name chosen
-     * @return the id assigned to it
+     * {@inheritDoc}
      */
     @Override
     public int reconnect(String name, String address, String remoteName) throws RemoteException, GameNonExistentException{
@@ -141,6 +166,9 @@ public class ToServerImpl implements ToServer {
         return -1;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void spawn(CachedPowerUp powerUp) {
 
@@ -150,12 +178,18 @@ public class ToServerImpl implements ToServer {
                 .spawn(powerUp);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doAction(JsonAction jsonAction) throws RemoteException {
 
         Server.getController().doAction(jsonAction);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean askMoveValid(int row, int column, Directions direction) throws RemoteException {
 

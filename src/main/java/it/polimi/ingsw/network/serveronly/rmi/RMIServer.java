@@ -1,8 +1,5 @@
 package it.polimi.ingsw.network.serveronly.rmi;
 
-
-
-
 import java.net.Inet4Address;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -10,26 +7,55 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class represents the server interface for rmi
+ */
 public class RMIServer {
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.INFO;
 
-
-
     //attributes relative to client -> server flow
+    /**
+     * true if the rmi registry has already been created
+     */
     private static Boolean registryCreated = false;
+    /**
+     * name of the ToServer remote object
+     */
     private static final String LOCALNAME = "rmi_server";
+    /**
+     * rmi server registry port
+     */
     private final int serverPort;
+    /**
+     * rmi local registry
+     */
     private Registry local;
+    /**
+     * local toServer instance
+     */
     private ToServerImpl skeleton;
 
     //attributes relative to server -> client flow
-    private static ConcurrentHashMap<Integer, ToViewImpl> remoteViews = new ConcurrentHashMap<>();
+    /**
+     * remote rmi registry
+     */
     private Registry remote;
+    /**
+     * rmi registry client port
+     */
     private final int clientPort;
 
-
+    /**
+     * Constructor
+     */
     public RMIServer() {
 
         // use the default config ports
@@ -45,6 +71,11 @@ public class RMIServer {
 
     }
 
+    /**
+     * Constructor
+     * @param serverPort is the rmi server port
+     * @param clientPort is the rmi client port
+     */
     public RMIServer(int serverPort, int clientPort) {
 
         // use the default config ports
@@ -114,26 +145,6 @@ public class RMIServer {
             LOGGER.log(Level.WARNING, e.getMessage(), e);
 
         }
-    }
-
-
-    /**
-     *
-     * @return the number of clients that are bind to the remote server
-     */
-    public int getClientNumber(){
-
-        return remoteViews.size();
-    }
-
-    /**
-     * Unbinds all the clients previously bound if the client rmi registry is local
-     * function for test uses only
-     */
-    public void resetClients(){
-
-        remoteViews.clear();
-
     }
 
 

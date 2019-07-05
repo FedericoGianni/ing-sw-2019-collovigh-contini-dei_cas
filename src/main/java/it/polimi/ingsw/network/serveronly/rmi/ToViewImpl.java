@@ -8,18 +8,45 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class implements the ToView for the rmi
+ */
 public class ToViewImpl implements ToView {
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.FINE;
 
     //real attributes
 
+    /**
+     * is the ToClient object
+     */
     private final ToClient client;
+    /**
+     * is the address of the client
+     */
     private final String ipAddress;
+    /**
+     * is the remote name of the client
+     */
     private final String remoteName;
+    /**
+     * is the id of the client
+     */
     private int playerId;
 
+    /**
+     * Constructor
+     * @param ipAddress is the address of the client
+     * @param remoteName is the remote name of the client
+     * @param client is the ToClient object
+     */
     public ToViewImpl(String ipAddress, String remoteName, ToClient client ) {
         this.client = client;
         this.ipAddress = ipAddress;

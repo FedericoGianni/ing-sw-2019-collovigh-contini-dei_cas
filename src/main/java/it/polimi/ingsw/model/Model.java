@@ -41,18 +41,6 @@ public class Model {
         if (Observers.isInitialized()) map.initializeSpawnCell();
 
 
-        //TODO remove this, just to kill faster
-
-/*
-
-        for(Player p : playerList){
-            p.addDmg(0, 10);
-        }
-
-
-*/
-
-
     }
 
     /**

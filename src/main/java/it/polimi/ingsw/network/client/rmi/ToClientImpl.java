@@ -10,13 +10,30 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class extends ToClient and will be loaded on the RMI registry on the client side
+ */
 public class ToClientImpl implements ToClient {
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.FINE;
 
+    /**
+     * reference to the rmi client
+     */
     private final RMIClient client;
 
+    /**
+     * Constructor
+     * @param client is the Rmi client reference
+     * @throws RemoteException
+     */
     public ToClientImpl(RMIClient client) throws RemoteException {
 
         this.client = client;

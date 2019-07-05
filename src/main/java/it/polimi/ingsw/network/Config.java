@@ -2,33 +2,71 @@ package it.polimi.ingsw.network;
 
 import java.io.Serializable;
 
+/**
+ * This class is used to save/ load network startup config
+ */
 public class Config implements Serializable {
 
+    /**
+     * default min players
+     */
     private static final int DEFAULT_MIN_PLAYER = 3;
+    /**
+     * default lobby timer
+     */
     private static final int DEFAULT_LOBBY_TIMER = 10;
 
+    /**
+     * ip of the server
+     */
     private final String serverIp;
 
     // Socket
 
+    /**
+     * socket port
+     */
     private final int socketPort;
 
     // RMI
 
+    /**
+     * rmi server registry port
+     */
     private final int rmiServerPort;
+    /**
+     * rmi registry client port
+     */
     private final int rmiClientPort;
 
     // UI
 
+    /**
+     * ui selection ( -cli for cli, -gui for gui )
+     */
     private final String gui;
 
     // controller
 
+    /**
+     * timer for the lobby
+     */
     private final int lobbyTimer;
 
+    /**
+     * min player for the lobby to start
+     */
     private final int minPlayer;
 
+    /**
+     * game id
+     */
     private final int game;
+
+    /**
+     * set the timer to enable or disabled
+     */
+    private final boolean enableTimer;
 
     /**
      *  constructor for server w/ no rmi ports
@@ -61,6 +99,7 @@ public class Config implements Serializable {
 
         this.game = -1;
 
+        this.enableTimer = true;
 
     }
 
@@ -95,6 +134,8 @@ public class Config implements Serializable {
 
         this.game = -1;
 
+        this.enableTimer = true;
+
     }
 
     /**
@@ -127,6 +168,8 @@ public class Config implements Serializable {
         this.minPlayer = DEFAULT_MIN_PLAYER;
 
         this.game = -1;
+
+        this.enableTimer = true;
 
     }
 
@@ -163,6 +206,8 @@ public class Config implements Serializable {
 
         this.game = -1;
 
+        this.enableTimer = true;
+
     }
 
     public int getSocketPort() {
@@ -194,5 +239,9 @@ public class Config implements Serializable {
     }
 
     public int getGame() { return game; }
+
+    public boolean isEnableTimer() {
+        return enableTimer;
+    }
 }
  

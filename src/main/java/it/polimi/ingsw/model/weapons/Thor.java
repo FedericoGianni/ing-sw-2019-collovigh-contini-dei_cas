@@ -11,17 +11,39 @@ import it.polimi.ingsw.utils.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represent the Thor special weapon
+ *
+ * @see SpecialWeapons
+ */
 public class Thor extends SpecialWeapons {
 
+    /**
+     * weapon name
+     */
     private static final String THOR_NAME = "T.H.O.R.";
 
+    /**
+     * reload cost
+     */
     private List<AmmoCube> weaponCost;//cost of the weapon
+
+    /**
+     * second effect cost
+     */
     private List<AmmoCube> effectsCost;//only this beacuse every effects cst 1 ammoCube so get(0)->second effect cost and get(1) is the second
 
-    public  List<AmmoCube> getEffectsCost()
-    {
+    /**
+     *
+     * @return the second effect cost
+     */
+    public  List<AmmoCube> getEffectsCost() {
         return this.effectsCost;
     }
+
+    /**
+     * Constructor
+     */
     public Thor() {
 
         super(THOR_NAME);
@@ -106,7 +128,7 @@ public class Thor extends SpecialWeapons {
             for (int i = 0; i < effects.size(); i++) {
 
                 if (i == 0)//first macroeffect
-                {//TODO modify damage to 2, 10 is just for test purpose
+                {
                     targetLists.get(i).get(0).addDmg(isPossessedBy().getPlayerId(), 2);
                 } else if (i == 1)//second macroeffect
                 {
@@ -132,8 +154,7 @@ public class Thor extends SpecialWeapons {
             restore(targetsCopy,targetLists,shooterCopy,this.isPossessedBy(),kstCopy);
             throw new WeaponNotLoadedException();
         }
-        //TODO uncomment this just to make quicker tests
-        //this.setLoaded(false);
+
     }
 
     /**
@@ -146,6 +167,9 @@ public class Thor extends SpecialWeapons {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean preShoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CellNonExistentException {
 

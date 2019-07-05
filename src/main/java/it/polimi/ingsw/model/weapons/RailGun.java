@@ -13,20 +13,42 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * This class represent the RailGun special weapon
+ *
+ * @see SpecialWeapons
+ */
 public class RailGun extends SpecialWeapons {
 
+    /**
+     * name of the weapon
+     */
     private static final String RAIL_GUN_NAME = "RAILGUN";
 
+    /**
+     * dmg given by the base effect
+     */
     private static final int DMG_FIRST_EFFECT = 3;
 
+    /**
+     * dmg given by the second effect
+     */
     private static final int DMG_SECOND_EFFECT = 2;
 
+    /**
+     * Reload cost
+     */
     private final List<AmmoCube> costBaseEffect;
 
+    /**
+     * Second effect cost
+     */
     private final List<AmmoCube> costSecondEffect;
 
+    /**
+     * Constructor
+     */
     public RailGun( ) {
         super(RAIL_GUN_NAME);
         this.costBaseEffect = Arrays.asList(new AmmoCube(Color.YELLOW), new AmmoCube(Color.YELLOW),new AmmoCube(Color.BLUE));

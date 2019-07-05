@@ -5,9 +5,20 @@ import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
+/**
+ * abstract class that has the methods that will be used for net comunications,
+ *
+ * will be extended by both rmi and socket
+ */
 public abstract class Client {
 
+    /**
+     * is the id of the game
+     */
     private int gameId = -1;
+    /**
+     * is the id of the player
+     */
     private int playerId = -1;
 
 
@@ -20,12 +31,6 @@ public abstract class Client {
      * @return the id of the player if the login was successful, -1 otherwise
      */
     public abstract int joinGame(String name, PlayerColor color);
-
-    /**
-     *
-     * @param mapType is the map the player wants to choose
-     */
-    //public abstract void voteMap(int mapType);
 
 
     /**

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * class that serialize every
+ * class that represent the generic special weapon
  */
 public abstract class SpecialWeapons extends Weapon{
     /**

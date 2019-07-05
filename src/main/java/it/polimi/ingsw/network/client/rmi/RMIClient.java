@@ -19,26 +19,67 @@ import java.util.logging.Logger;
 
 import static it.polimi.ingsw.utils.Protocol.*;
 
+/**
+ * This class is the client extends the client Abstract class for rmi comunication
+ */
 public class RMIClient extends Client {
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.FINE;
 
+    /**
+     * Logger incipit
+     */
     private static final String LOG_START = "[RMI-Client] ";
 
     //attributes relative to client -> server flow
-    private final String remoteObjectName = "rmi_server";
+    /**
+     * rmi server remote object name
+     */
+    private static final String REMOTE_OBJECT_NAME = "rmi_server";
+    /**
+     * remote registry
+     */
     private Registry remoteRegistry;
+    /**
+     * ip of the server
+     */
     private final String serverIp;
+    /**
+     * rmi registry server port
+     */
     private final int serverPort;
 
     //attributes relative to server -> client flow
+    /**
+     * true if the rmi registry has already been created
+     */
     private static Boolean registryCreated = false;
+    /**
+     * name of the ToClient remote object
+     */
     private String localName;
+    /**
+     * is the reference to the view class
+     */
     private View view;
+    /**
+     * is the rmi registry client port
+     */
     private final int clientPort;
 
 
+    /**
+     * Constructor
+     * @param serverIp serverIp is the ip of the server
+     * @param view is the view
+     */
     public RMIClient(String serverIp, View view) {
 
         this.serverIp = serverIp;
@@ -58,6 +99,13 @@ public class RMIClient extends Client {
 
     }
 
+    /**
+     * Constructor
+     * @param serverIp is the ip of the server
+     * @param view is the view
+     * @param serverPort is the rmi registry server port
+     * @param clientPort is the rmi registry port
+     */
     public RMIClient(String serverIp, View view, int serverPort, int clientPort) {
 
         this.serverIp = serverIp;
@@ -140,6 +188,10 @@ public class RMIClient extends Client {
 
     // Getter
 
+    /**
+     *
+     * @return a To server Object read from the rmi server registry
+     */
     private ToServer getServer(){
 
         try {
@@ -151,7 +203,7 @@ public class RMIClient extends Client {
 
             //load the ToServer object from the registry
 
-            return  (ToServer) remoteRegistry.lookup(remoteObjectName);
+            return  (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
 
         }catch (Exception e){
 
@@ -280,7 +332,7 @@ public class RMIClient extends Client {
             remoteRegistry = LocateRegistry.getRegistry(serverIp,serverPort);
             LOGGER.log(level,"[RMI-Client] registry located by client");
 
-            ToServer server = (ToServer) remoteRegistry.lookup(remoteObjectName);
+            ToServer server = (ToServer) remoteRegistry.lookup(REMOTE_OBJECT_NAME);
 
             server.voteMapType(mapType);
 
@@ -346,6 +398,9 @@ public class RMIClient extends Client {
 
     // game handling methods
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void spawn(CachedPowerUp powerUp) {
 
@@ -364,6 +419,9 @@ public class RMIClient extends Client {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void doAction(JsonAction jsonAction) {
 
@@ -379,6 +437,9 @@ public class RMIClient extends Client {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean askMoveValid(int row, int column, Directions direction) {
 
@@ -390,11 +451,7 @@ public class RMIClient extends Client {
 
             answer= server.askMoveValid(row,column,direction);
 
-            System.out.println("chiamo setValidMove...");
             view.setValidMove(answer);
-            System.out.println("setValidMove chiamato " + answer);
-
-            
 
             return true;
 

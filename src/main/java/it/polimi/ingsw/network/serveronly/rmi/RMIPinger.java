@@ -6,17 +6,40 @@ import it.polimi.ingsw.network.serveronly.Server;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class pings the client, used for detect disconnections
+ */
 public class RMIPinger implements Runnable{
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.FINE;
 
+    /**
+     * time interval for ping
+     */
     private static final int WAIT_TIME = 1;
+
+    /**
+     * ToClient object
+     */
     private final ToClient target;
 
+    /**
+     * id of the player
+     */
     private int pId;
 
 
+    /**
+     * Constructor
+     * @param client is the client to ping
+     */
     public RMIPinger(ToClient client) {
 
         this.target = client;
