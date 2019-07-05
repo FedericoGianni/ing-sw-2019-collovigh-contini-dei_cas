@@ -62,7 +62,11 @@ public class PowerUpBag  extends Subject implements Bag<PowerUp> {
 
         }else {
 
-            Model.getGame().discardPowerUp(powerUps.get(0));
+            PowerUp powerUp = powerUps.get(0);
+
+            if (Model.getGame() != null) Model.getGame().discardPowerUp(powerUp);
+
+            powerUps.remove(powerUp);
 
             this.powerUps.add(item);
 

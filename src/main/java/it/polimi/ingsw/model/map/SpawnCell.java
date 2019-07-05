@@ -12,12 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ * this class represent the spawn cell of the map
  */
 public class SpawnCell extends Cell {
 
+    /**
+     * max weapons contained in cell
+     */
+    public static final int WEAPON_IN_CELL = 3;
 
-
+    /**
+     * list of weapon placed in the cell
+     */
     private List<Weapon> weapons = new ArrayList<>();
 
     /**
@@ -69,9 +75,11 @@ public class SpawnCell extends Cell {
 
         int prevSize = weapons.size();
 
-        for (int i = 0; i < ( 3 - prevSize ); i++) {
+        for (int i = 0; i < ( WEAPON_IN_CELL - prevSize ); i++) {
 
-            this.weapons.add(Model.getGame().drawWeapon());
+            Weapon weaponToAdd = Model.getGame().drawWeapon();
+
+            if (weaponToAdd != null ) this.weapons.add(weaponToAdd);
         }
 
         updateAll(this);
@@ -118,6 +126,9 @@ public class SpawnCell extends Cell {
         this.weapons = weapons;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SavedCell getSaveVersionOfCell() {
 

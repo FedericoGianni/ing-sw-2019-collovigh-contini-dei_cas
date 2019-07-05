@@ -37,6 +37,10 @@ public class AmmoCube implements Serializable {
         return color;
     }
 
+    /**
+     *
+     * @return the color of the ammo
+     */
     @Override
     public String toString() {
         return "Color = " + color;

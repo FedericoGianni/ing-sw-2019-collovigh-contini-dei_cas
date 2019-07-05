@@ -12,10 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * This class represent the ammo cell of the map
  */
 public class AmmoCell extends Cell {
 
+    /**
+     * is the ammoCard placed in the cell
+     * @see it.polimi.ingsw.model.ammo.AmmoCard
+     */
     private AmmoCard ammoPlaced;
 
     /**
@@ -35,6 +39,9 @@ public class AmmoCell extends Cell {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Boolean isAmmoCell() {
         return true;
@@ -85,11 +92,17 @@ public class AmmoCell extends Cell {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Weapon buy(Weapon w, Player player) throws NotEnoughAmmoException {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SavedCell getSaveVersionOfCell() {
 
@@ -97,6 +110,10 @@ public class AmmoCell extends Cell {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void generateAmmoCard(){
 
         if (ammoPlaced == null) ammoPlaced = AmmoCard.generateRandCard();

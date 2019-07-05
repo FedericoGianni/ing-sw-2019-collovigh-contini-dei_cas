@@ -19,13 +19,30 @@ import java.util.Random;
  */
 public class AmmoCard implements Serializable {
 
-
+    /**
+     * the first AmmoCube
+     * @see it.polimi.ingsw.model.ammo.AmmoCube
+     */
     private final AmmoCube ammoCube1;
+    /**
+     * the second AmmoCube
+     * @see it.polimi.ingsw.model.ammo.AmmoCube
+     */
     private final AmmoCube ammoCube2;
+    /**
+     * the third AmmoCube (Could be null if the ammoCard has a powerUp on it)
+     * @see it.polimi.ingsw.model.ammo.AmmoCube
+     */
     private final AmmoCube ammoCube3;
 
+    /**
+     * if true the player has to draw a powerUp if grab this
+     */
     private final Boolean powerUp;
 
+    /**
+     * Used for random generation
+     */
     private static Random random;  //don't know why but SonarLint want it to be here even though it have no reason to be
 
 

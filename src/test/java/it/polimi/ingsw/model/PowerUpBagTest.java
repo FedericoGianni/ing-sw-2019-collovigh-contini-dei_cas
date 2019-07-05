@@ -41,6 +41,7 @@ class PowerUpBagTest {
 
         //max powerUp bag size == 3. it shouldn't let add a 4th item to the PowerUp bag
         p.getPowerUpBag().addItem(c4);
+
         assertThrows(IndexOutOfBoundsException.class,
                 () -> p.getPowerUpBag().getList().get(3));
     }

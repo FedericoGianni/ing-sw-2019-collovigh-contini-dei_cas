@@ -9,6 +9,10 @@ import java.io.*;
 
 import static it.polimi.ingsw.utils.CellColor.*;
 
+/**
+ * This class is not used
+ * @deprecated
+ */
 public class JsonMap {
 
     public static final int MAP_R = 3;

@@ -27,8 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.controller.TurnPhase.END;
-import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
+import static it.polimi.ingsw.controller.TurnPhase.*;
 import static it.polimi.ingsw.network.serveronly.WaitingRoom.DEFAULT_MIN_PLAYERS;
 import static it.polimi.ingsw.utils.DefaultReplies.*;
 import static java.lang.Thread.sleep;
@@ -66,8 +65,15 @@ public class Controller {
      */
     private Boolean hasSomeoneDied = false;
 
-
+    /**
+     * if true the controller is waiting for an answer by the client
+     */
     private Boolean expectingAnswer = false;
+
+    /**
+     * if true the controller is waiting for a grenade answer by the client
+     */
+    private Boolean expectingGrenade = false;
 
     //used for TagBackGrenade (check if it is necessary)
 
@@ -96,6 +102,9 @@ public class Controller {
      */
     private List<VirtualView> players;
 
+    /**
+     * is the reference to the observers class that links to all the observers
+     */
     private final Observers observers;
 
     // Methods Classes
@@ -132,8 +141,14 @@ public class Controller {
      */
     private Timer timer = new Timer(this);
 
+    /**
+     * if true frenzy will be enabled at the end of the turn
+     */
     private boolean activateFrenzy = false;
 
+    /**
+     * random
+     */
     private Random rand = new Random();
 
     /**
@@ -332,6 +347,10 @@ public class Controller {
 
     public void setShotPlayerThisTurn(List<Integer> shotPlayerThisTurn) {
         this.shotPlayerThisTurn = shotPlayerThisTurn;
+    }
+
+    public void setExpectingGrenade(Boolean expectingGrenade) {
+        this.expectingGrenade = expectingGrenade;
     }
 
     // management Methods
@@ -747,6 +766,8 @@ public class Controller {
                 break;
 
             case SKIP:
+
+                if (expectingGrenade) powerUpPhase.defaultGrenade();
 
                 incrementPhase();
 

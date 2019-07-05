@@ -7,6 +7,10 @@ import it.polimi.ingsw.view.cachemodel.cachedmap.CellType;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * This class is not used
+ * @deprecated
+ */
 public class JsonCell {
 
     private CellType cellType;

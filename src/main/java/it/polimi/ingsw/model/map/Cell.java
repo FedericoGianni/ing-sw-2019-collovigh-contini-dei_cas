@@ -17,16 +17,38 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *
+ * This class is abstract and represents the generic cell
  */
 public abstract class Cell extends Subject implements Serializable {
 
+    /**
+     * color of the cell
+     */
     private CellColor color;
+    /**
+     * param used by the canSee() method in player true if the cell has been visited by the algorithm
+     * @see Player#canSee()
+     */
     private boolean visit;
+    /**
+     * point of the cell north from this, will be set to null if the cell does not exist or there's a wall between
+     */
     private Point adjNorth;
+    /**
+     * point of the cell south from this, will be set to null if the cell does not exist or there's a wall between
+     */
     private Point adjSouth;
+    /**
+     * point of the cell east from this, will be set to null if the cell does not exist or there's a wall between
+     */
     private Point adjEast;
+    /**
+     * point of the cell west from this, will be set to null if the cell does not exist or there's a wall between
+     */
     private Point adjWest;
+    /**
+     * players in the cell
+     */
     private List<Integer> playersHere;
 
     /**
@@ -68,8 +90,6 @@ public abstract class Cell extends Subject implements Serializable {
         this.playersHere = clone.playersHere;
         this.visit = clone.visit;
     }
-
-
 
 
     public CellColor getColor() {
@@ -189,6 +209,10 @@ public abstract class Cell extends Subject implements Serializable {
         return this.visit;
     }
 
+    /**
+     *
+     * @return the color of the cell
+     */
     @Override
     public String toString(){
          return "Cella: colore: " + color;
@@ -200,6 +224,9 @@ public abstract class Cell extends Subject implements Serializable {
      */
     public abstract Boolean isAmmoCell();
 
+    /**
+     * method used to replace AmmoCard in AmmoCell
+     */
     public void generateAmmoCard(){
 
         if (this.isAmmoCell()){

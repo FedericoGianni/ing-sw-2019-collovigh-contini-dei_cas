@@ -46,12 +46,37 @@ public class Player {
 
     }
 
+    /**
+     * name of the player
+     */
     private String name;
+    /**
+     * id of the player
+     */
     private int id;
+    /**
+     * color of the player
+     */
     private PlayerColor color;
+    /**
+     * class containing all the stats of the player
+     * @see Stats
+     */
     private Stats stats;
+    /**
+     * class containing the player powerUps
+     * @see PowerUpBag
+     */
     private PowerUpBag currentPowerUps;
+    /**
+     * class containing all the player Ammp
+     * @see AmmoBag
+     */
     private AmmoBag ammo;
+    /**
+     * Class containing the player weapons
+     * @see WeaponBag
+     */
     private WeaponBag currentWeapons;
 
 
@@ -142,13 +167,17 @@ public class Player {
         return revenue;
     }
 
+    /**
+     * setter for stats will be used only for loading a saved game
+     * @param stats is the stats Class
+     */
     public void setStats(Stats stats) {
         this.stats = stats;
     }
 
     /**
      * used for the copies
-     * @param c
+     * @param c is a cell
      */
     public void setPlayerPosCopy(Cell c)
     {
@@ -186,11 +215,6 @@ public class Player {
         return color;
     }
 
-    public List<Player> canTarget() {
-        return null;
-    }//requires weapon implemntation
-
-
     public Stats getStats() {
         return stats;
     }
@@ -200,6 +224,10 @@ public class Player {
         return currentWeapons;
     }
 
+    /**
+     *
+     * @return the list of players this can see
+     */
     public List<Player> canSee() {
 
         Cell c=this.getCurrentPosition();
@@ -255,6 +283,13 @@ public class Player {
      */
 
 //useful differentiate because the first check can change the color, after the first one thc eoclor must be all the same
+
+    /**
+     * Called by canSee() for cycling through cells
+     * @param visibili player visibili
+     * @param c is a cell
+     * @return a list of players
+     */
     public List<Player> runner(List<Player> visibili,Cell c)
     {
         if(c.getNorth() !=null && c.getNorth().getColor()==c.getColor() && !c.getNorth().alreadyVisited())//if the color is different you change the room, so you can't see other players
@@ -294,15 +329,6 @@ public class Player {
 
 
     /**
-     * @return visible players at this time of the research
-     */
-
-    public List<Player> canBeTargetedBy() {
-        // TODO implement here
-        return null;
-    }
-
-    /**
      * @param c is the ammo cube to add
      */
     public void addCube(AmmoCube c) {
@@ -318,24 +344,30 @@ public class Player {
         return this.ammo.getList();
     }
 
-
+    /**
+     * pick the ammo from the current cell
+     */
     public void pickAmmoHere(){
 
-        AmmoCard ammoCard = stats.getCurrentPosition().pickAmmoPlaced();
+        if (stats.getCurrentPosition().isAmmoCell()) {
 
-        //if the ammo card has a powerUp the player draws a powerUp
+            AmmoCard ammoCard = stats.getCurrentPosition().pickAmmoPlaced();
 
-        if (ammoCard.getPowerUp()) {
+            //if the ammo card has a powerUp the player draws a powerUp
 
-            drawPowerUp();
+            if (ammoCard.getPowerUp()) {
 
-        }
+                drawPowerUp();
 
-        // adds the ammoCube
+            }
 
-        for (AmmoCube ammoCube : ammoCard.getAmmoList()){
+            // adds the ammoCube
 
-            ammo.addItem(ammoCube);
+            for (AmmoCube ammoCube : ammoCard.getAmmoList()) {
+
+                ammo.addItem(ammoCube);
+
+            }
 
         }
     }
@@ -412,6 +444,11 @@ public class Player {
         this.ammo.getItem(matchingPossessed.get(0));
     }
 
+    /**
+     * This method tries to buy the specified weapon
+     * @param w is the weapon the player wants to buy
+     * @throws NotEnoughAmmoException if the player can not afford to buy it
+     */
     public void buy(Weapon w) throws NotEnoughAmmoException{
 
         try {
@@ -513,12 +550,6 @@ public class Player {
     public void addScore(int value) {
 
         this.stats.addScore(value);
-    }
-
-    public int distance(Player shooter,Player target)
-    {
-        // TODO implementation here
-        return 0;
     }
 
     /**

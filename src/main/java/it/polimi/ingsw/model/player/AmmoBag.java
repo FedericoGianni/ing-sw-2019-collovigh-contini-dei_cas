@@ -11,14 +11,30 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class represent the Ammo the player has on his board
+ *
+ * for each color the player can hame max
+ * @see #MAX_FOR_COLOR
+ *
+ * if he tries to add more than max the add will be ignored
+ */
 public class AmmoBag extends Subject implements Bag<AmmoCube> {
 
+    /**
+     * max Ammo number for each color
+     */
     public static final int MAX_FOR_COLOR = 3;
 
     /**
-     * this is an ArrayList of AmmoCubes sorted by color
+     * this is a List of AmmoCubes sorted by color
+     *
+     * @see AmmoCube
      */
     private List<AmmoCube> ammoCubes;
+    /**
+     * is the player who own this bag
+     */
     private final Player player;
 
 
