@@ -20,11 +20,25 @@ import java.util.List;
 
 
 public class NormalWeapon extends Weapon{
-
+    /**
+     * name of the weapon
+     */
     private String name;
+    /**
+     * is true if the weapon is loaded
+     */
     private boolean isLoaded;
+    /**
+     * costs of the weapon's effects
+     */
     private List<AmmoCube> cost;
+    /**
+     * list of the effects of the weapon
+     */
     private List<MacroEffect> effects;
+    /**
+     * some weapons have exclusive effects, like you can use only one
+     */
     private List <String> exclusiveEffect;
 
 

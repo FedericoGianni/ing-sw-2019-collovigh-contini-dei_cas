@@ -20,13 +20,8 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import javax.print.DocFlavor;
-import javax.print.attribute.standard.Media;
-import javax.sound.sampled.*;
-import java.applet.AudioClip;
+
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,9 +32,10 @@ import static it.polimi.ingsw.utils.DefaultReplies.*;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_NO_ENOUGH_AMMO;
 import static it.polimi.ingsw.utils.Protocol.*;
 import static java.lang.Thread.sleep;
-import static javafx.animation.Animation.INDEFINITE;
 
-
+/**
+ * is the base of the gui, between the various stages change and similar
+ */
 public class Gui extends Application implements UserInterface {
 
     private final static String FX_PATH = "javafx-sdk-11.0.2/lib";
@@ -219,6 +215,11 @@ public class Gui extends Application implements UserInterface {
         return view;
     }
 
+    /**
+     * start the stage
+     * @param stage
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -791,6 +792,10 @@ public class Gui extends Application implements UserInterface {
         return values;*/
     }
 
+    /**
+     * select the number of skulls in this method
+     * @return the number chosen
+     */
     private int skullSelector()
     {
         List<String> choices = new ArrayList<>();

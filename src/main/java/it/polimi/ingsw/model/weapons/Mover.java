@@ -14,14 +14,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mover extends MicroEffect {
-
+    /**
+     * number of cells you have to move
+     */
     private int cellNumber;//number of cells up to cellNumber
+    /**
+     * true if you have to move before shooting
+     */
     private boolean beforeShooting;//if true you need to move before shooting--- done at WeaponLevel
+    /**
+     * true if you have to move after shooting
+     */
     private boolean afterShooting;//if true you can use after shooting the effect---unuseful i think
+    /**
+     * if the movement is facoltative
+     */
     private boolean facoltative;//sometimes you don't have to move, you can choose
+    /**
+     * move to a cell
+     */
     private boolean toCell;//you have to move to a specified cell if this flag is true--must change to a Cell type or to a point type
-    private boolean target;//set true if you need to move the target not the shooter
-    private boolean myCell;//set true if i need to move other players to my cell
+    /**
+     * set true if you need to move the target not the shooter
+     */
+    private boolean target;//
+    /**
+     * set true if i need to move other players to my cell
+     */
+    private boolean myCell;//
+    /**
+     * list of the moves
+     */
     private static List <Mover> weaponMov=new ArrayList<>();
 
     //if something moves before shooting pay attention, you need to calculate if you can shoot him after the move

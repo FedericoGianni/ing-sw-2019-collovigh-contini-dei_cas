@@ -45,17 +45,23 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.utils.Directions.*;
 import static java.lang.Thread.sleep;
 
-
+/**
+ * contains the controller of the gui, alla the methods that works on the gui are here
+ */
 public class GuiMapController {
 
-
+    /**
+     * if an effect need a cell is true
+     */
     private static boolean needCell;
     /**
      * Reference to the gui linked to this controller
      */
     private static Gui gui;
-
-    private int rows = 3, col = 4;
+    /**
+     * define the rows and columns of the map
+     */
+    private final int rows = 3, col = 4;
     private VBox map[][];
 
     /**
@@ -75,7 +81,9 @@ public class GuiMapController {
      * reference to the Stage, needed to switch scenes
      */
     private static Stage myStage;
-
+    /**
+     * cosntains the directions
+     */
     private ArrayList<Directions> movementDirections;
 
     /**
@@ -89,6 +97,9 @@ public class GuiMapController {
      */
     private boolean isBeforeFrenzyStarter;
 
+    /**
+     * current actionType useful for distinguish trough shoot,frenzy shoot , move and grab ecc
+     */
     private List<String> actionTypes;
 
     /**
@@ -136,20 +147,39 @@ public class GuiMapController {
         isBeforeFrenzyStarter=true;
     }
 
+    /**
+     * background pane of the gui
+     */
     @FXML
     BorderPane pane;
+    /**
+     * log of the match
+     */
     @FXML
     TextArea log;
+    /**
+     * map displayed
+     */
     @FXML
     GridPane innerMap;
-
+    /**
+     * cells, all VBoxes
+     */
     @FXML
     VBox b00, b01, b02, b03, b10, b11, b12, b13, b20, b21, b22, b23;
+    /**
+     * the control panel
+     */
     @FXML
     HBox plance;
+    /**
+     * powerUps ,weapons and weapons ofthe current player
+     */
     @FXML
     ImageView powerUp1, powerUp2, powerUp3, weapon1, weapon2, weapon3, myWeapon1, myWeapon2, myWeapon3;
-
+    /**
+     * action buttons on the bottom
+     */
     @FXML
     Button stopMov, moveButton, grabButton, moveGrabButton, shootButton;
 
