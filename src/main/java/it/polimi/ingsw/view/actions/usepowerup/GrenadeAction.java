@@ -3,6 +3,9 @@ package it.polimi.ingsw.view.actions.usepowerup;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.PowerUpType;
 
+/**
+ * action of the grenade
+ */
 public class GrenadeAction extends PowerUpAction {
 
     private final int possessorId;
