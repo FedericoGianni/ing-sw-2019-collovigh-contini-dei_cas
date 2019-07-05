@@ -105,3 +105,14 @@ The default param are:
 * ui default is gui
 * min player default is 3
 * default timer is 30 sec
+
+# Persistence
+## Saved games
+Every game will be saved in the root folder where the executable jar is started, at the end of every turn, with a different ID.
+
+## How to load a saved game
+To load a saved game, edit the StartUpServerConfig file "game" parameter with the ID of the game you wish to reload from file.
+-1 is the default value to start a new game
+Once the server has started, it will wait for all the players in the saved game to reconnect by typing their name. 
+Once every player present in the saved game has reconnected (you can read the saved names in the file: savegamesgame_Id_X_Players.json)
+the game will start again from the point it was at the time of save.
