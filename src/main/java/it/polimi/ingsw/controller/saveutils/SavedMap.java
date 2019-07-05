@@ -2,14 +2,12 @@ package it.polimi.ingsw.controller.saveutils;
 
 import it.polimi.ingsw.model.map.AmmoCell;
 import it.polimi.ingsw.model.map.Cell;
-import it.polimi.ingsw.model.map.JsonCell;
 import it.polimi.ingsw.model.map.SpawnCell;
 
 import java.awt.*;
 import java.io.Serializable;
 
 import static it.polimi.ingsw.utils.CellColor.*;
-import static it.polimi.ingsw.utils.CellColor.YELLOW;
 
 public class SavedMap implements Serializable {
 
@@ -18,7 +16,11 @@ public class SavedMap implements Serializable {
 
     private final SavedCell[][] matrix;
 
+    private final int mapType;
+
     public SavedMap( int mapType ){
+
+        this.mapType = mapType;
 
         this.matrix = new SavedCell[MAP_R][MAP_C];
 
@@ -26,7 +28,9 @@ public class SavedMap implements Serializable {
 
     }
 
-    public SavedMap(Cell[][] map) {
+    public SavedMap(Cell[][] map, int mapType) {
+
+        this.mapType = mapType;
 
         this.matrix = new SavedCell[MAP_R][MAP_C];
 
@@ -38,6 +42,10 @@ public class SavedMap implements Serializable {
 
             }
         }
+    }
+
+    public int getMapType() {
+        return mapType;
     }
 
     public Cell[][] getRealMap(){

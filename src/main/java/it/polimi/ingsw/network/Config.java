@@ -28,7 +28,7 @@ public class Config implements Serializable {
 
     private final int minPlayer;
 
-    private final int game = -1;
+    private final int game;
 
     /**
      *  constructor for server w/ no rmi ports
@@ -58,6 +58,9 @@ public class Config implements Serializable {
         this.lobbyTimer = DEFAULT_LOBBY_TIMER;
 
         this.minPlayer = DEFAULT_MIN_PLAYER;
+
+        this.game = -1;
+
 
     }
 
@@ -89,6 +92,9 @@ public class Config implements Serializable {
         this.lobbyTimer = DEFAULT_LOBBY_TIMER;
 
         this.minPlayer = DEFAULT_MIN_PLAYER;
+
+        this.game = -1;
+
     }
 
     /**
@@ -119,6 +125,9 @@ public class Config implements Serializable {
         this.lobbyTimer = DEFAULT_LOBBY_TIMER;
 
         this.minPlayer = DEFAULT_MIN_PLAYER;
+
+        this.game = -1;
+
     }
 
     /**
@@ -151,6 +160,9 @@ public class Config implements Serializable {
         this.lobbyTimer = DEFAULT_LOBBY_TIMER;
 
         this.minPlayer = DEFAULT_MIN_PLAYER;
+
+        this.game = -1;
+
     }
 
     public int getSocketPort() {

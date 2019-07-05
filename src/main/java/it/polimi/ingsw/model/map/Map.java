@@ -57,6 +57,13 @@ public class Map {
 
     }
 
+    public Map(Cell[][] cells, int mapType){
+
+        this.matrix = cells;
+
+        this.mapType = mapType;
+    }
+
 
 
     /**

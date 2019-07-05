@@ -361,10 +361,12 @@ public class Stats extends Subject implements Serializable {
 
     public void cleanObservers(){
 
-        for(Observer o : getObservers()){
-            this.removeObserver(o);
-        }
+        List<Observer> observerList = new ArrayList<>(getObservers());
+
+        getObservers().removeAll(observerList);
+
     }
+
 
     public void initObservers(){
 

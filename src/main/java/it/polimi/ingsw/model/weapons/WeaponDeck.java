@@ -32,6 +32,14 @@ public class WeaponDeck implements Deck<Weapon> {
      */
     public WeaponDeck(WeaponDeck clone){ this.weaponList = new ArrayList<>(clone.weaponList); }
 
+    public WeaponDeck(List<String> weapons){
+        this.weaponList = new ArrayList<>();
+
+        for(String s : weapons){
+            this.weaponList.add(Parser.getWeaponByName(s));
+        }
+    }
+
 
     /**
      * this function is thought to be called jut once at the beginning of the game

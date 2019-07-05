@@ -5,11 +5,10 @@ import it.polimi.ingsw.controller.saveutils.SavedController;
 import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.serveronly.Server;
-import it.polimi.ingsw.network.serveronly.WaitingRoom;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.actions.*;
 import it.polimi.ingsw.view.actions.usepowerup.PowerUpAction;
@@ -29,8 +28,10 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.controller.TurnPhase.END;
 import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
+import static it.polimi.ingsw.network.serveronly.WaitingRoom.DEFAULT_MIN_PLAYERS;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_RECEIVED_FRENZY_BUT_EXPECTED_NORMAL;
 import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_RECEIVED_NORMAL_BUT_EXPECTED_FRENZY;
+import static java.lang.Thread.sleep;
 
 
 /**
@@ -90,6 +91,8 @@ public class Controller {
     private Random rand = new Random();
 
     private boolean gameEnded = false;
+
+    private boolean reloadGame = false;
 
 
     /**
@@ -152,6 +155,8 @@ public class Controller {
 
         this.observers = new Observers(this, savedController.getPlayerSize());
 
+        this.players = new ArrayList<>();
+
         for (int i = 0; i < savedController.getPlayerSize(); i++) {
             players.add(new VirtualView(i, this, Server.getClient(i)));
         }
@@ -172,6 +177,7 @@ public class Controller {
         this.turnPhase = savedController.getTurnPhase();
         this.frenzyStarter = savedController.getFrenzyStarter();
         this.gameEnded = savedController.isGameEnded();
+        this.reloadGame = savedController.isReloadGame();
 
     }
 
@@ -204,6 +210,10 @@ public class Controller {
         }
 
         return roundNumber % players.size();
+    }
+
+    public int getRoundNumber() {
+        return roundNumber;
     }
 
     public List<Integer> getPlayerOnline(){
@@ -378,7 +388,11 @@ public class Controller {
 
     public void handleTurnPhase(){
 
-        if (getPlayerOnline().size() >= WaitingRoom.DEFAULT_MIN_PLAYERS) {
+        if(reloadGame) {
+            waitForMinPlayer();
+        }
+
+        if (getPlayerOnline().size() >= DEFAULT_MIN_PLAYERS) {
 
             switch (turnPhase) {
 
@@ -458,8 +472,11 @@ public class Controller {
                         activateFrenzy = false;
                     }
 
-                    //TODO save
+                    System.out.println("calling save game");
+                    //SAVE THE GAME EVERY TURN
+                    new Thread( () -> saveGame()).start();
 
+                    System.out.println("incrementing phase");
                     incrementPhase();
 
             }
@@ -485,6 +502,37 @@ public class Controller {
                 handleTurnPhase();
             }
         }
+    }
+
+    private void saveGame(){
+
+        //save actual map
+        Parser.saveMap();
+
+        //save players
+        Parser.savePlayers();
+
+        //save currentgame
+        Parser.saveCurrentGame(Model.getGame());
+
+        //save controller
+        Parser.saveController(this);
+
+    }
+
+    private void waitForMinPlayer(){
+
+        while(getPlayerOnline().size() < DEFAULT_MIN_PLAYERS){
+            try {
+                sleep(100);
+                LOGGER.log(level, "[CONTROLLER] Waiting for min players to restart loaded game");
+            } catch (InterruptedException e){
+
+            }
+        }
+
+        LOGGER.log(level, "[CONTROLLER] Reached min player, restarting saved game...");
+
     }
 
     // Spawn Phase

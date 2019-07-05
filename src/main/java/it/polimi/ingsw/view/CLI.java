@@ -102,6 +102,8 @@ public class CLI implements UserInterface {
      */
     private static final String DEFAULT_INVALID_EFFECT_CHOICE = "Scelta effetti non valida! Riprova: ";
 
+    private String playerName;
+
     /**
      * Default constructor
      *
@@ -233,7 +235,6 @@ public class CLI implements UserInterface {
     @Override
     public void login() {
 
-        String playerName;
         String playerColor;
         boolean validColorChoice = false;
 
@@ -443,29 +444,27 @@ public class CLI implements UserInterface {
                 //TODO mostrare i cambiamenti di danni subiti e disconnessioni
                 //System.out.println("[DEBUG] Ricevuto STATS update!");
 
+                if(view.getPlayerId() == -1){
+                    if(view.getCacheModel().getCachedPlayers() != null){
+                        for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
+                            if(view.getCacheModel().getCachedPlayers().get(i).getName().equals(playerName))
+                                view.setPlayerId(i);
+                        }
+                    }
+                }
+
 
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
                     //new positions
                     //System.out.println(ANSI_GREEN.escape() + "[!] Il giocatore: " + playerId + " si è spostato!" + ANSI_RESET.escape());
-                    boolean someOneChangedPos = false;
 
                     int x = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosX();
                     int y = view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosY();
 
-                    for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
-                        if(view.getCacheModel().getCachedPlayers().get(i).getStats() != null) {
-                            if (!previousPos.get(i).equals(view.getCacheModel().getCachedPlayers().get(i).getStats().getCurrentPosition())) {
-                                someOneChangedPos = true;
-                            }
-                        }
-                    }
-
-                    if(someOneChangedPos) {
-                        FileRead.removePlayer(playerId);
-                        FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
-                        synchronized (mapShowSync) {
-                            FileRead.showBattlefield();
-                        }
+                    FileRead.removePlayer(playerId);
+                    FileRead.insertPlayer(x, y, Character.forDigit(playerId, 10));
+                    synchronized (mapShowSync) {
+                        FileRead.showBattlefield();
                     }
                 }
 
@@ -1016,7 +1015,11 @@ public class CLI implements UserInterface {
 
         boolean valid;
         int choice = -1;
-        int playerDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
+
+        int playerDmg = 0;
+
+        if(view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats() != null)
+            playerDmg = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getDmgTaken().size();
 
         List<String> actions = new ArrayList<>(Arrays.asList("MUOVI", "MUOVI E RACCOGLI", "SPARA"));
 
@@ -1087,6 +1090,7 @@ public class CLI implements UserInterface {
 
                 } else {
                     //grab -> if player has more than 2 dmg -> 2 moves else -> only 1 move
+
                     if (playerDmg >= DEFAULT_DMG_TO_UNLOCK_ENHANCED_GRAB) {
                         startGrab(DEFAULT_ENHANCED_MOVES_WITH_GRAB);
                     } else {

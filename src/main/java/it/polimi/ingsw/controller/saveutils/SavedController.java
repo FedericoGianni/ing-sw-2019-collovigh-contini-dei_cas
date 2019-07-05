@@ -25,6 +25,8 @@ public class SavedController  implements Serializable {
 
     private final boolean gameEnded ;
 
+    private final boolean reloadGame = true;
+
 
     public SavedController(int gameId, int roundNumber, Boolean frenzy, Boolean hasSomeoneDied, List<Integer> shotPlayerThisTurn, TurnPhase turnPhase, int frenzyStarter, int playerSize, boolean gameEnded) {
         this.gameId = gameId;
@@ -36,6 +38,10 @@ public class SavedController  implements Serializable {
         this.frenzyStarter = frenzyStarter;
         this.playerSize = playerSize;
         this.gameEnded = gameEnded;
+    }
+
+    public boolean isReloadGame() {
+        return reloadGame;
     }
 
     public int getGameId() {

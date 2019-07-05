@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class SavedPlayer implements Serializable {
     public SavedPlayer(Player player) {
 
         //REMOVE OBSERVERS
-        player.getStats().cleanObservers();
+        //player.getStats().cleanObservers();
 
         this.name = player.getPlayerName();
         this.id = player.getPlayerId();
@@ -46,7 +47,10 @@ public class SavedPlayer implements Serializable {
                 .map( powerUp ->  new CachedPowerUp( powerUp.getType(),powerUp.getColor()) )
                 .collect(Collectors.toList());
 
-        this.stats = player.getStats();
+        this.stats = new Stats(player.getStats());
+
+        //set player offline since reload is treated like a reconnection
+        this.stats.setOnline(false);
     }
 
     public Player getRealPlayer(){
@@ -71,13 +75,11 @@ public class SavedPlayer implements Serializable {
 
         player.setStats(stats);
 
-        //RE-INITIALIZE OBSERVERS
-        player.getStats().initObservers();
 
         return player;
     }
 
-    private PowerUp cachedPowerUpToReal( CachedPowerUp powerUp ){
+    private static PowerUp cachedPowerUpToReal( CachedPowerUp powerUp ){
 
         switch (powerUp.getType()){
 
@@ -101,6 +103,19 @@ public class SavedPlayer implements Serializable {
 
                 return null;
         }
+    }
+
+    public static List<PowerUp> cachedPowerUpDeckToList(List<CachedPowerUp> cachedPowerUps){
+
+        List<PowerUp> powerUps = new ArrayList<>();
+
+        for(CachedPowerUp c : cachedPowerUps){
+
+            powerUps.add(cachedPowerUpToReal(c));
+        }
+
+        return powerUps;
+
     }
 
 

@@ -2,8 +2,11 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.controller.saveutils.SavedController;
+import it.polimi.ingsw.controller.saveutils.SavedCurrentGame;
 import it.polimi.ingsw.controller.saveutils.SavedMap;
 import it.polimi.ingsw.controller.saveutils.SavedPlayer;
+import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.player.Player;
@@ -44,11 +47,13 @@ public class Parser {
     private static final String NORMAL_WEAPON_PATH = "/json/Weaponary";
     private static final String SAVED_MAP_RELATIVE_PATH = "_Map.json";
     private static final String SAVED_PLAYERS_PATH = "_Players.json";
+    private static final String SAVED_CONTROLLER_PATH = "_Controller.json";
+    private  static final String SAVED_CURRENT_GAME_PATH= "_CurrentGame.json";
     private static final String MAP_ONE_PATH = "/json/maps/map_01.json";
     private static final String MAP_TWO_PATH = "/json/maps/map_02.json";
     private static final String MAP_THREE_PATH = "/json/maps/map_03.json";
 
-    private static final String GAMES_PATH = "resources/json/savegames";
+    private static final String GAMES_PATH = "savegames";
 
 
     // Json Simple
@@ -67,6 +72,9 @@ public class Parser {
 
     }
 
+    public static void setCurrentGame(int currentGame) {
+        Parser.currentGame = currentGame;
+    }
 
     // weapon Methods
 
@@ -667,7 +675,7 @@ public class Parser {
 
         try{
 
-            BufferedReader br = new BufferedReader( new FileReader( new File(GAMES_PATH  + "/games.json").getAbsolutePath()));
+            BufferedReader br = new BufferedReader( new FileReader( new File(GAMES_PATH  + "_games.json").getAbsolutePath()));
 
             // load the HashMap
 
@@ -676,6 +684,23 @@ public class Parser {
             LOGGER.log(level,()-> LOG_START + " [OK] games list loaded");
 
         }catch (Exception e){
+
+            try {
+
+                pathList.add("InitPath");
+
+                gson = new Gson();
+
+                FileWriter writer = new FileWriter(GAMES_PATH);
+
+                gson.toJson(pathList, writer);
+
+                writer.flush();
+                writer.close();
+
+            } catch (Exception e2){
+
+            }
 
             LOGGER.log(Level.WARNING, ()-> LOG_START + " error while trying to load games list ");
 
@@ -714,7 +739,7 @@ public class Parser {
      */
     private static void saveGamesList(HashMap<Integer,String> games){
 
-        try ( FileWriter writer = new FileWriter(GAMES_PATH + "/games.json") ){
+        try ( FileWriter writer = new FileWriter(GAMES_PATH + "_games.json") ){
 
             gson.toJson(getGameListToSave(games), writer);
 
@@ -764,7 +789,7 @@ public class Parser {
      */
     private static String genSavePath(int gameId){
 
-        return GAMES_PATH + "/" + "game_Id_" + gameId;
+        return GAMES_PATH  + "game_Id_" + gameId;
     }
 
     /**
@@ -873,7 +898,7 @@ public class Parser {
 
         String gamePath = getGames().get(currentGame);
 
-        SavedMap savedMap = new SavedMap(Model.getMap().getMatrix());
+        SavedMap savedMap = new SavedMap(Model.getMap().getMatrix(), Model.getMap().getMapType());
 
         try {
 
@@ -1014,6 +1039,124 @@ public class Parser {
     }
 
     //TODO player, currentgame
+
+    public static void saveController(Controller controller){
+
+        String gamePath = getGames().get(currentGame);
+
+        SavedController savedController;
+
+        savedController = controller.getSavableController();
+
+        try {
+
+            // creates a reader for the file
+
+            FileWriter writer = new FileWriter(gamePath + SAVED_CONTROLLER_PATH);
+
+            // write the file
+
+            gson.toJson(savedController,writer);
+
+            writer.flush();
+            writer.close();
+
+            // LOG the load
+
+        }catch (IOException e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not write the controller ");
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
+    }
+
+    public static Controller readController() {
+
+        String gamePath = getGames().get(currentGame);
+
+        Controller controller = null;
+
+        try {
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader(new FileReader(new File(gamePath + SAVED_CONTROLLER_PATH).getAbsolutePath()));
+
+            // load the Config File
+
+            SavedController savedController = gson.fromJson(br, SavedController.class);
+
+            controller = new Controller(savedController);
+
+            // LOG the load
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved controller");
+            e.printStackTrace();
+        }
+
+        return controller;
+
+    }
+
+    public static void saveCurrentGame(CurrentGame c){
+
+        String gamePath = getGames().get(currentGame);
+
+        SavedCurrentGame savedCurrentGame = new SavedCurrentGame(c);
+
+        try {
+
+            // creates a reader for the file
+
+            FileWriter writer = new FileWriter(gamePath + SAVED_CURRENT_GAME_PATH);
+
+            // write the file
+
+            gson.toJson(savedCurrentGame,writer);
+
+            writer.flush();
+            writer.close();
+
+            // LOG the load
+
+        }catch (IOException e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not write the savedCurrentGame ");
+
+            LOGGER.log(Level.WARNING,e.getMessage(),e);
+        }
+    }
+
+    public static SavedCurrentGame readCurrentGame() {
+
+        String gamePath = getGames().get(currentGame);
+
+        SavedCurrentGame savedCurrentGame = null;
+
+        try {
+
+            // creates a reader for the file
+
+            BufferedReader br = new BufferedReader(new FileReader(new File(gamePath + SAVED_CURRENT_GAME_PATH).getAbsolutePath()));
+
+            // load the Config File
+
+            savedCurrentGame = gson.fromJson(br, SavedCurrentGame.class);
+
+            // LOG the load
+
+        }catch (Exception e){
+
+            LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved current game");
+            e.printStackTrace();
+        }
+
+        return savedCurrentGame;
+
+    }
 
 
 

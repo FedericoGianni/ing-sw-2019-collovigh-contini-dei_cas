@@ -1,8 +1,6 @@
 package it.polimi.ingsw.network.serveronly.Socket;
 
 import it.polimi.ingsw.network.serveronly.Server;
-import it.polimi.ingsw.network.serveronly.Socket.SocketConnectionReader;
-import it.polimi.ingsw.network.serveronly.WaitingRoom;
 import it.polimi.ingsw.network.socket.SocketIdentifier;
 
 import java.io.IOException;
@@ -43,20 +41,31 @@ public class SocketServer extends Thread {
     public void run() {
         LOGGER.log(INFO, "Starting SocketServer");
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            while (Server.getWaitingRoom().getTimerCount() > 0 && clients.size() <= DEFAULT_MAX_CLIENTS) {
-                //TODO need to check the clientsNum part
-                Socket socket = serverSocket.accept();
-                new SocketConnectionReader(socket).start();
-                socketClients.add(socket);
-                System.out.println("[DEBUG] aggiunto client alla lista di connessinoi.");
-                for(Socket s : socketClients) {
-                    System.out.println("inet address: " + s.getInetAddress());
-                    System.out.println("local add: " + s.getLocalAddress());
-                    System.out.println(s.getPort());
+            if(Server.getWaitingRoom() != null){
+                while (Server.getWaitingRoom().getTimerCount() > 0 && clients.size() <= DEFAULT_MAX_CLIENTS) {
+                    //TODO need to check the clientsNum part
+                    Socket socket = serverSocket.accept();
+                    new SocketConnectionReader(socket).start();
+                    socketClients.add(socket);
+                    System.out.println("[DEBUG] aggiunto client alla lista di connessinoi.");
+                    for (Socket s : socketClients) {
+                        System.out.println("inet address: " + s.getInetAddress());
+                        System.out.println("local add: " + s.getLocalAddress());
+                        System.out.println(s.getPort());
+                    }
+                    clients.put(clients.size(), new SocketIdentifier(socket.getInetAddress().toString(), socket.getPort()));
                 }
+            } else {
+                while(true) {
+                    Socket socket = serverSocket.accept();
+                    new SocketConnectionReader(socket).start();
+                    socketClients.add(socket);
+                    System.out.println("[DEBUG] aggiunto client alla lista di connessinoi.");
 
-                clients.put(clients.size(), new SocketIdentifier(socket.getInetAddress().toString(), socket.getPort()));
+                    clients.put(clients.size(), new SocketIdentifier(socket.getInetAddress().toString(), socket.getPort()));
+                }
             }
+
         } catch (
                 IOException e) {
             System.out.println("Server exception " + e.getMessage());

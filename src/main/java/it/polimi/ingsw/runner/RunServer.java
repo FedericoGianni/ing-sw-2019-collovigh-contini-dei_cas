@@ -1,8 +1,8 @@
 package it.polimi.ingsw.runner;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.network.Config;
+import it.polimi.ingsw.network.serveronly.Server;
 
 import java.io.*;
 import java.util.logging.Level;
@@ -47,9 +47,11 @@ public class RunServer {
 
                     config = gson.fromJson(br, Config.class);
 
+                    System.out.println("gettato dal file: " + config.getGame());
+
                     // LOG the load
 
-                    LOGGER.log(level, "[RUN-CLIENT] Config successfully loaded ");
+                    LOGGER.log(level, "[RUN-SERVER] Config successfully loaded ");
 
                     // starts the server
 

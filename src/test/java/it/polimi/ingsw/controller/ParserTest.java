@@ -2,25 +2,26 @@ package it.polimi.ingsw.controller;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.controller.saveutils.SavedMap;
+import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.powerup.Newton;
 import it.polimi.ingsw.model.weapons.Weapon;
+import it.polimi.ingsw.network.Config;
 import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.runner.RunClient;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.runner.RunServer.CONFIG_PATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParserTest {
@@ -291,7 +292,7 @@ class ParserTest {
         p2.addScore(13);
 
 
-        Parser.savePlayers();
+        //Parser.savePlayers();
 
 
 
@@ -329,16 +330,120 @@ class ParserTest {
         p2.addMarks(1, 3);
         p2.addScore(13);
 
-        Parser.savePlayers();
+        //Parser.savePlayers();
 
-        List<Player> loadedPlayers = Parser.readPlayers();
+        //List<Player> loadedPlayers = Parser.readPlayers();
 
-        System.out.println("p0 from model: " + p0.getStats().getCurrentPosition());
-        System.out.println("p0 read from file: " + loadedPlayers.get(0).getStats().getCurrentPosition());
+        //System.out.println("p0 from model: " + p0.getStats().getCurrentPosition());
+        //System.out.println("p0 read from file: " + loadedPlayers.get(0).getStats().getCurrentPosition());
 
         //assert(p0.getStats().equals(loadedPlayers.get(0).getStats()));
-        assert(p1.getStats().getMarks().size()==loadedPlayers.get(1).getStats().getMarks().size());
-        assertEquals(Model.getMap().getCell(0,0), p0.getCurrentPosition());
+        //assert(p1.getStats().getMarks().size()==loadedPlayers.get(1).getStats().getMarks().size());
+        //assertEquals(Model.getMap().getCell(0,0), p0.getCurrentPosition());
+
+    }
+
+    @Test
+    void saveController() {
+
+        List<String> playerNames = new ArrayList<>();
+        playerNames.add("Player_0");
+        playerNames.add("Player_1");
+        playerNames.add("Player_2");
+
+        List<PlayerColor> playerColors = new ArrayList<>();
+        playerColors.add(PlayerColor.BLUE);
+        playerColors.add(PlayerColor.PURPLE);
+        playerColors.add(PlayerColor.YELLOW);
+
+        Controller controller = new Controller(playerNames, playerColors, -1, 8);
+
+        //Parser.saveController(controller);
+
+
+    }
+
+    @Test
+    void readController() {
+
+        List<String> playerNames = new ArrayList<>();
+        playerNames.add("Player_0");
+        playerNames.add("Player_1");
+        playerNames.add("Player_2");
+
+        List<PlayerColor> playerColors = new ArrayList<>();
+        playerColors.add(PlayerColor.BLUE);
+        playerColors.add(PlayerColor.PURPLE);
+        playerColors.add(PlayerColor.YELLOW);
+
+        Controller controller = new Controller(playerNames, playerColors, -1, 8);
+
+        //Parser.saveController(controller);
+
+        //Controller controller1 = Parser.readController();
+
+        //assertEquals(controller.getFrenzy(), controller1.getFrenzy());
+        //assertEquals(controller.getGameId(), controller1.getGameId());
+        //assertEquals(controller.getRoundNumber(), controller1.getRoundNumber());
+    }
+
+    @Test
+    void saveCurrentGame() {
+
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("a", 0, PlayerColor.YELLOW));
+
+        CurrentGame currentGame = new CurrentGame(players, null, 3);
+
+        //Parser.saveCurrentGame(currentGame);
+    }
+
+    @Test
+    void readCurrentGame() {
+
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("a", 0, PlayerColor.YELLOW));
+
+        CurrentGame currentGame = new CurrentGame(players, null, 3);
+
+        //Parser.saveCurrentGame(currentGame);
+
+        //SavedCurrentGame loadedCurrentGame = Parser.readCurrentGame();
+
+        //CurrentGame realCurrentGame = new CurrentGame(loadedCurrentGame, players, null);
+
+        //assertEquals(currentGame.getSkulls(), realCurrentGame.getSkulls());
+        //assertEquals(currentGame.getPowerUpDeck().getPowerUpList().get(1).getType(), realCurrentGame.getPowerUpDeck().getPowerUpList().get(1).getType());
+        //assertEquals(currentGame.getKillShotTrack(), realCurrentGame.getKillShotTrack());
+
+    }
+
+    @Test
+    void readConfigFile(){
+
+        Config config = new Config(22222);
+
+        assertEquals(-1, config.getGame());
+
+        try{
+
+            Gson   gson = new Gson();
+
+            FileWriter writer = new FileWriter(CONFIG_PATH);
+
+            gson.toJson(config, writer);
+
+            writer.flush();
+            writer.close();
+
+        }catch (IOException e){
+
+        }
+
+        Config config1 = Parser.readConfigFile();
+
+        assertEquals(config.getGame(), config1.getGame());
+
 
     }
 }

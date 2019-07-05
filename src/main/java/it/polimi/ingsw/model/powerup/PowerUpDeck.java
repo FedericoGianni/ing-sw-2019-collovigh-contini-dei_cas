@@ -24,8 +24,16 @@ public class PowerUpDeck implements Deck<PowerUp> {
         this.powerUpList = new ArrayList<>();
     }
 
+    public PowerUpDeck(List<PowerUp> powerUps){
+        this.powerUpList = powerUps;
+    }
+
     public PowerUpDeck(PowerUpDeck clone){
         this.powerUpList = new ArrayList<>(clone.powerUpList);
+    }
+
+    public List<PowerUp> getPowerUpList() {
+        return new ArrayList<>(powerUpList);
     }
 
     /**

@@ -2,14 +2,19 @@ package it.polimi.ingsw.network.serveronly;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.controller.Parser;
-import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.model.CurrentGame;
+import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.map.Map;
+import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.network.serveronly.Socket.SocketServer;
 import it.polimi.ingsw.network.serveronly.rmi.RMIServer;
+import it.polimi.ingsw.utils.PlayerColor;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
@@ -48,7 +53,6 @@ public class Server  {
      */
     public Server(int socketPort) {
 
-        startGame();
 
         try {
 
@@ -64,6 +68,8 @@ public class Server  {
         socketHandler.start();
 
         this.rmiServer = new RMIServer();
+
+        startGame();
     }
 
     /**
@@ -79,8 +85,6 @@ public class Server  {
      */
     public Server(int socketPort,  int serverPort, int clientPort) {
 
-        startGame();
-
         try {
 
             String ipAddress = Inet4Address.getLocalHost().getHostAddress();
@@ -95,11 +99,16 @@ public class Server  {
         socketHandler.start();
 
         this.rmiServer = new RMIServer(serverPort,clientPort);
+
+        startGame();
     }
 
     private static void startGame(){
 
-        if (Parser.readConfigFile().getGame() == -1){
+        int gameId = Parser.readConfigFile().getGame();
+        System.out.println("gameId: " + gameId);
+
+        if (gameId == -1){
 
             try {
 
@@ -113,7 +122,40 @@ public class Server  {
 
         }else{
 
-            //TODO load game
+            gameId = Parser.readConfigFile().getGame();
+            System.out.println("gameId: " + gameId);
+
+            if(Parser.containsGame(gameId)){
+
+                Parser.setCurrentGame(gameId);
+
+                controller = Parser.readController();
+
+                //TODO sostituisco cose lette da file dentro al model creato dal controller a sua volta lettoda file
+                //currentGame, playrs, mappa
+                Map map = new Map(Parser.readSavedMap().getRealMap(), Parser.readSavedMap().getMapType());
+
+                List<Player> players = Parser.readPlayers();
+
+                CurrentGame currentGame = new CurrentGame(Parser.readCurrentGame(), players, map);
+
+                Model.setGame(currentGame);
+
+
+                //RE-INITIALIZE OBSERVERS
+                for (Player p : players) {
+                    p.getStats().initObservers();
+                }
+
+                //restart the game flow
+                controller.handleTurnPhase();
+
+
+            } else {
+
+                LOGGER.log(Level.WARNING, LOG_START + " game id not found. ");
+
+            }
         }
     }
 

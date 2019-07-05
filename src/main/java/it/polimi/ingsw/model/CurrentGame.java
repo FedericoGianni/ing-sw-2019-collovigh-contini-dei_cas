@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.saveutils.SavedCurrentGame;
+import it.polimi.ingsw.controller.saveutils.SavedPlayer;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
 import it.polimi.ingsw.model.player.Skull;
@@ -62,6 +64,34 @@ public class CurrentGame extends Subject{
         this.thrashPowerUpDeck = new PowerUpDeck(clone.thrashPowerUpDeck);
         this.skulls = clone.skulls;
         this.killShotTrack = new ArrayList<>(clone.killShotTrack);
+    }
+
+
+    public CurrentGame(SavedCurrentGame s, List<Player> players, Map currentMap){
+
+        this.players = players;
+        this.currentMap = currentMap;
+
+        this.powerUpDeck = new PowerUpDeck(SavedPlayer.cachedPowerUpDeckToList(s.getPowerUpDeck()));
+
+        this.thrashPowerUpDeck = new PowerUpDeck(SavedPlayer.cachedPowerUpDeckToList(s.getThrashPowerUpDeck()));
+
+        this.killShotTrack = s.getKillShotTrack();
+        this.skulls = s.getSkulls();
+
+        this.weaponDeck = new WeaponDeck(s.getWeaponDeck());
+    }
+
+    public PowerUpDeck getPowerUpDeck() {
+        return powerUpDeck;
+    }
+
+    public WeaponDeck getWeaponDeck() {
+        return weaponDeck;
+    }
+
+    public PowerUpDeck getThrashPowerUpDeck() {
+        return thrashPowerUpDeck;
     }
 
 
