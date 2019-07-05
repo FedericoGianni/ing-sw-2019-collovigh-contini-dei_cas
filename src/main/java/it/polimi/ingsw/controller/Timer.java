@@ -4,19 +4,48 @@ package it.polimi.ingsw.controller;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class will handle the timer for the clients action, the timer will be started when the action request is sent to the client and will be stop when the answer will be received
+ *
+ * if the answer will not be received in time will be called the :
+ *
+ * @see #defaultAnswer()
+ */
 public class Timer {
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     public static final Level level = Level.INFO;
 
+    /**
+     * this boolean will enable the timer ( if false nothing will happen if it expire)
+     */
     private static final boolean TIMER_ACTIVE = false;
 
+    /**
+     * logger incipit
+     */
     private static final String LOG_START = "[Timer]";
 
+    /**
+     * Controller instance
+     */
     private final Controller controller;
 
+    /**
+     * is the Timer thread
+     */
     private TimerThread thread;
 
+    /**
+     * Constructor
+     * @param controller is the controller that instantiated this class
+     */
     public Timer(Controller controller) {
         this.controller = controller;
     }

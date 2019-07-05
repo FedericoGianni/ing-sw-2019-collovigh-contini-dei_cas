@@ -11,25 +11,51 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * This class is used to handle all the methods for calculating the points
+ */
 public class PointCounter {
 
     // logger
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.INFO;
 
+    /**
+     * const for logger incipit
+     */
     private static final String LOG_START = "[Point-Calc] ";
 
+    /**
+     * vect for points given for players kills
+     */
     private static final int[] pointVect = {8,6,4,2,2,1,1};
 
+    /**
+     * vect for points given for kills of players with frenzy dmg boards
+     */
     private static final int[] pointFrenzyVect = {2,1,1,1};
 
+    /**
+     * Controller reference
+     */
     private final Controller controller;
 
-    private boolean frenzy;
-
+    /**
+     * used only for tests if controller is not set, will be used instead of frenzy
+     */
     private boolean frenzyForTest = false;
 
+    /**
+     * Constructor
+     * @param controller is the instance of the controller
+     */
     public PointCounter(Controller controller) {
         this.controller = controller;
     }
@@ -39,7 +65,7 @@ public class PointCounter {
      */
     public void calculateTurnPoints(){
 
-        frenzy = (controller == null ) ? frenzyForTest : controller.getFrenzy();
+        boolean frenzy = (controller == null ) ? frenzyForTest : controller.getFrenzy();
 
         //for each player who has died this turn
         //+1 point for the player who did him the first dmg
@@ -224,6 +250,10 @@ public class PointCounter {
 
     }
 
+    /**
+     * This setter is used by test
+     * @param frenzyForTest is a boolean
+     */
     public void setFrenzyForTest(boolean frenzyForTest) {
         this.frenzyForTest = frenzyForTest;
     }

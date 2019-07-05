@@ -5,6 +5,7 @@ import it.polimi.ingsw.controller.saveutils.SavedController;
 import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
+import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
@@ -202,6 +203,10 @@ public class Controller {
         LOGGER.log(level,"[CONTROLLER] Initialized Model with chosen MapType");
     }
 
+    /**
+     * this constructor is meant for save loading only
+     * @param savedController is a SavedController class containing all the saved parameters
+     */
     public Controller( SavedController savedController) {
 
         this.observers = new Observers(this, savedController.getPlayerSize());
@@ -234,6 +239,7 @@ public class Controller {
 
     // Getters
 
+
     public Model getModel() {
         return model;
     }
@@ -254,6 +260,10 @@ public class Controller {
 
     public int getGameId() { return gameId; }
 
+    /**
+     *
+     * @return the id of the player whose turn is the current one
+     */
     public int getCurrentPlayer(){
 
         if(roundNumber == 0){
@@ -267,6 +277,10 @@ public class Controller {
         return roundNumber;
     }
 
+    /**
+     *
+     * @return the list of player's id of the clients actually connected
+     */
     public List<Integer> getPlayerOnline(){
 
         return   Model
@@ -309,6 +323,8 @@ public class Controller {
     }
 
     public ReloadPhase getReloadPhase() { return reloadPhase; }
+
+    public Timer getTimer() { return timer; }
 
     public void setExpectingAnswer(Boolean expectingAnswer) { this.expectingAnswer = expectingAnswer; }
 
@@ -390,7 +406,11 @@ public class Controller {
         }
     }
 
-
+    /**
+     * This method sets the player online
+     * Will also send to the afore mentioned payer all the info he needs to rebuild his cacheModel
+     * @param playerId is the id of the player to connect
+     */
     public void setPlayerOnline(int playerId){
 
         getVirtualView(playerId).sendUpdates(new InitialUpdate(Model.getGame().getPlayers().
@@ -405,6 +425,10 @@ public class Controller {
 
     }
 
+    /**
+     * This method sets the player offline
+     * @param playerId is the id of the player to disconnect
+     */
     public void setPlayerOffline(int playerId){
 
         Model.getPlayer(playerId).getStats().setOnline(false);
@@ -418,12 +442,25 @@ public class Controller {
 
     }
 
+    /**
+     *
+     * @param playerId is the id of the queried player
+     * @return true if the player is online, false if not
+     */
     public Boolean isPlayerOnline(int playerId){ return Model.getPlayer(playerId).getStats().getOnline(); }
 
-    public Timer getTimer() { return timer; }
+
 
     // Turn Management
 
+    /**
+     * This method will send to all clients an update of type INITIAL
+     * @see it.polimi.ingsw.view.updates.InitialUpdate
+     * @param nameList is the list of names of the players
+     * @param playerColors is the list of colors of the players
+     * @param gameId is the id of the current game
+     * @param mapType is the type of the map
+     */
     private void sendInitialUpdate(List<String> nameList, List<PlayerColor>playerColors, int gameId, int mapType ){
 
         UpdateClass updateClass = new InitialUpdate(nameList,playerColors, gameId, mapType);
@@ -437,6 +474,17 @@ public class Controller {
         }
     }
 
+    /**
+     * This is the method that will cycle through all the phases of the turn and call the relative methods
+     *
+     * The controller is designed to call for each phase the handlePhase method that will ask the view the param for the action
+     *
+     * the view will answer wit a doAction() method
+     * @see #spawn(PowerUpType, Color) (in case of spawn)
+     * @see #doAction(JsonAction)
+     *
+     * there is also an END phase which is used for point calculation, to enable frenzy, save, and check if game needs to end
+     */
     public void handleTurnPhase(){
 
         if(reloadGame) {
@@ -525,11 +573,10 @@ public class Controller {
                         activateFrenzy = false;
                     }
 
-                    System.out.println("calling save game");
+
                     //SAVE THE GAME EVERY TURN
                     new Thread( () -> saveGame()).start();
 
-                    System.out.println("incrementing phase");
                     incrementPhase();
 
             }
@@ -537,7 +584,12 @@ public class Controller {
         }
     }
 
-
+    /**
+     * This method will increment the TurnPhase and recall the handleTurnPhase
+     * @see #handleTurnPhase()
+     *
+     * for the phases we used an enum, if the phase is set to the last one ( END) will be reset to SPAWN
+     */
     public void incrementPhase(){
 
         if (!gameEnded) {
@@ -557,6 +609,9 @@ public class Controller {
         }
     }
 
+    /**
+     * This method will save the current state, it is called at the end of each turn.
+     */
     private void saveGame(){
 
         //save actual map
@@ -571,17 +626,27 @@ public class Controller {
         //save controller
         Parser.saveController(this);
 
+        LOGGER.log(level,()->"[Controller] saved game at end of round: " + roundNumber);
+
     }
 
+    /**
+     * this method is used after loading a game from file to make the controller wait for the min number of player before starting the handleTurn method
+     * @see #handleTurnPhase()
+     */
     private void waitForMinPlayer(){
 
         LOGGER.log(level, "[CONTROLLER] Waiting for min players to restart loaded game");
 
         while(getPlayerOnline().size() < DEFAULT_MIN_PLAYERS){
+
             try {
+
                 sleep(500);
+
             } catch (InterruptedException e){
 
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
             }
         }
 
@@ -591,6 +656,11 @@ public class Controller {
 
     // Spawn Phase
 
+    /**
+     * This method will be called by the view Class to make the player spawn
+     * @param type is the type of the powerUp to discard
+     * @param color is the color of the PowerUp to discard
+     */
     public void spawn(PowerUpType type, Color color){
 
         // stops the timer
@@ -603,12 +673,25 @@ public class Controller {
 
     // Power Up
 
+    /**
+     * this method will make the current player draw a powerUp
+     */
     public void drawPowerUp(){
         Model.getPlayer(getCurrentPlayer()).drawPowerUp();
     }
 
+    /**
+     * This method will discard a powerUp
+     * @param type is the type of the powerUp to discard
+     * @param color is the color of the powerUp to discard
+     */
     public void discardPowerUp(PowerUpType type, Color color){ powerUpPhase.discardPowerUp(type,color);}
 
+    /**
+     * This method will be called from the view class and will make the player do an action
+     * @param jsonAction is the class containing al the param required to do an action
+     * @see it.polimi.ingsw.view.actions.JsonAction
+     */
     public void doAction(JsonAction jsonAction) {
 
         // stops the timer
@@ -675,6 +758,11 @@ public class Controller {
         }
     }
 
+    /**
+     * this method is used for the frenzyShoot action to ensure that the player will not perform a frenzy shoot while frenzy is not enabled
+     *
+     * is used only in this case because for the others actions the action type is the same so this case will be evaluated internally
+     */
     private void checkActionIsFrenzy(){
 
         if (!frenzy){
@@ -685,6 +773,11 @@ public class Controller {
         }
     }
 
+    /**
+     * this method is used for the shoot action to ensure that the player will not perform a shoot while frenzy is enabled
+     *
+     * is used only in this case because for the others actions the action type is the same so this case will be evaluated internally
+     */
     private void checkActionIsNotFrenzy(){
 
         if (frenzy){
@@ -695,6 +788,13 @@ public class Controller {
         }
     }
 
+    /**
+     *
+     * @param row is the start cell row
+     * @param column is the start cell column
+     * @param direction is the direction the player wants to move
+     * @return true if the player can make a movement in this direction
+     */
     public boolean askMoveValid(int row, int column, Directions direction){
         return utilityMethods.askMoveValid(row,column,direction);
     }
@@ -705,8 +805,10 @@ public class Controller {
 
 
     /**
+     * This method will update the non-playing players of what is going on
      *
      * @param turnUpdate is the update to send to the Inactive player
+     * @see it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate
      */
     public void updateInactivePlayers(TurnUpdate turnUpdate){
 
@@ -720,7 +822,7 @@ public class Controller {
     }
 
     /**
-     *
+     * This method will update all the players but the one specified
      * @param turnUpdate is the update to send to the Inactive player
      */
     public void updateAllPlayersButOne(TurnUpdate turnUpdate, int playerId){
@@ -763,8 +865,6 @@ public class Controller {
 
         LOGGER.log(level, "[Controller] Player w/ id {0} has been killed ", playerId);
 
-        //Model.getPlayer(playerId).setPlayerPos(null);
-
         Model.getGame().addkills(getCurrentPlayer(),false);
 
 
@@ -779,8 +879,6 @@ public class Controller {
         hasSomeoneDied = true;
 
         LOGGER.log(level, "[Controller] Player w/ id {0} has been overKilled ", playerId);
-
-        //Model.getPlayer(playerId).setPlayerPos(null);
 
         // add skull to killShotTrack
 
@@ -835,8 +933,21 @@ public class Controller {
         }
 
         gameEnded = true;
+
+        try {
+
+            Parser.closeGame(gameId);
+
+        }catch (GameNonExistentException e){
+
+            LOGGER.log(Level.WARNING, e.getMessage(), e);
+        }
     }
 
+    /**
+     * This method will return a savable version ( of type SavedController) of this class
+     * @return a SavedController class
+     */
     public SavedController getSavableController(){
 
         return new SavedController(gameId,roundNumber,frenzy,hasSomeoneDied,shotPlayerThisTurn,turnPhase,frenzyStarter,players.size(),gameEnded);

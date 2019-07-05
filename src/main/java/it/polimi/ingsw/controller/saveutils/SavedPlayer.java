@@ -56,6 +56,10 @@ public class SavedPlayer implements Serializable {
         this.stats.setOnline(false);
     }
 
+    /**
+     * This method will rebuild a real Player instance from this save-frendly version
+     * @return a Player instance
+     */
     public Player getRealPlayer(){
 
         Player player = new Player(name,id,color);
@@ -82,6 +86,11 @@ public class SavedPlayer implements Serializable {
         return player;
     }
 
+    /**
+     * This method will turn a cached PowerUp into a real one
+     * @param powerUp is a cached powerUp
+     * @return a PowerUp
+     */
     private static PowerUp cachedPowerUpToReal( CachedPowerUp powerUp ){
 
         switch (powerUp.getType()){
@@ -108,6 +117,11 @@ public class SavedPlayer implements Serializable {
         }
     }
 
+    /**
+     * This method turns a list of Cached PowerUp into a list of correspondent newly generated PowerUp
+     * @param cachedPowerUps is a list of CachedPowerUp
+     * @return a list of PowerUp
+     */
     public static List<PowerUp> cachedPowerUpDeckToList(List<CachedPowerUp> cachedPowerUps){
 
         List<PowerUp> powerUps = new ArrayList<>();

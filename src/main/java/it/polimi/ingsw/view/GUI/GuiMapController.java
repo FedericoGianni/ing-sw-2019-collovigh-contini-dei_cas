@@ -45,17 +45,23 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.utils.Directions.*;
 import static java.lang.Thread.sleep;
 
-
+/**
+ * contains the controller of the gui, alla the methods that works on the gui are here
+ */
 public class GuiMapController {
 
-
+    /**
+     * if an effect need a cell is true
+     */
     private static boolean needCell;
     /**
      * Reference to the gui linked to this controller
      */
     private static Gui gui;
-
-    private int rows = 3, col = 4;
+    /**
+     * define the rows and columns of the map
+     */
+    private final int rows = 3, col = 4;
     private VBox map[][];
 
     /**
@@ -75,7 +81,9 @@ public class GuiMapController {
      * reference to the Stage, needed to switch scenes
      */
     private static Stage myStage;
-
+    /**
+     * cosntains the directions
+     */
     private ArrayList<Directions> movementDirections;
 
     /**
@@ -89,6 +97,9 @@ public class GuiMapController {
      */
     private boolean isBeforeFrenzyStarter;
 
+    /**
+     * current actionType useful for distinguish trough shoot,frenzy shoot , move and grab ecc
+     */
     private List<String> actionTypes;
 
     /**
@@ -136,20 +147,39 @@ public class GuiMapController {
         isBeforeFrenzyStarter=true;
     }
 
+    /**
+     * background pane of the gui
+     */
     @FXML
     BorderPane pane;
+    /**
+     * log of the match
+     */
     @FXML
     TextArea log;
+    /**
+     * map displayed
+     */
     @FXML
     GridPane innerMap;
-
+    /**
+     * cells, all VBoxes
+     */
     @FXML
     VBox b00, b01, b02, b03, b10, b11, b12, b13, b20, b21, b22, b23;
+    /**
+     * the control panel
+     */
     @FXML
     HBox plance;
+    /**
+     * powerUps ,weapons and weapons ofthe current player
+     */
     @FXML
     ImageView powerUp1, powerUp2, powerUp3, weapon1, weapon2, weapon3, myWeapon1, myWeapon2, myWeapon3;
-
+    /**
+     * action buttons on the bottom
+     */
     @FXML
     Button stopMov, moveButton, grabButton, moveGrabButton, shootButton;
 
@@ -337,7 +367,10 @@ public class GuiMapController {
     }
 
 
-
+    /**
+     * Initialize the gui and get updates if reconnecting
+     *
+     */
     public void initial()
     {
 
@@ -361,6 +394,10 @@ public class GuiMapController {
 
     }
 
+    /**
+     * create the buttons for the gui
+     *
+     */
     private void buttonCreator() {
         map= new VBox[rows][col];
         for (int rowIndex = 0; rowIndex < 3; rowIndex++) {
@@ -409,6 +446,11 @@ public class GuiMapController {
         map[2][3] = b23;
     }
 
+
+    /**
+     * enables the action buttons for the gui, like muovi spara ecc
+     *
+     */
     @FXML
     public void actionButtonsEnabler() {
 
@@ -462,6 +504,11 @@ public class GuiMapController {
         });
     }
 
+    /**
+     * disables the gui buttons events
+     *
+     *
+     */
     @FXML
     public void actionButtonDisable()//disable action buttons
     {
@@ -473,6 +520,9 @@ public class GuiMapController {
         mapEventDeleter();
     }
 
+    /**
+     * disables the gui buttons and events, clean everything in the gui
+     */
     private void mapEventDeleter()//disable map events except for spawn see, it renables it
     {
         for (int i = 0; i < rows; i++)//reset buttons on the map to do nothing
@@ -505,12 +555,19 @@ public class GuiMapController {
         weaponSeeEventEnabler();
     }
 
+    /**
+     * print s on the player log
+     * @param s
+     */
     public void printLog(String s) {
 
         Platform.runLater(() -> { log.appendText("\n" + s);
         });
     }
 
+    /**
+     * remove clickable effects form the player---used from mapEventDeleter
+     */
     private void playersEffectRemover() {
         for (int x = 0; x < rows; x++) {
             for (int y = 0; y < col; y++) {
@@ -599,16 +656,31 @@ public class GuiMapController {
         }
     }
 
+    /**
+     * updates the spwan cell weapons
+     * outdated
+     */
     public void spawnCellWeaponsUpdate() {
     }
 
+    /**
+     * Show when someone login/out
+     * @param msg
+     */
     public void onlineStateSignal(String msg)
     {
         System.out.println(msg);
 
         printLog(msg);
     }
+
     //------------------------------------------------------------Weapons show methods
+
+    /**
+     * enable the show of the weapons
+     * @param r
+     * @param c
+     */
     private void spawnCellWeaponShow(int r, int c) {
         //prima di tutto quali sono le immagini
         weapon1.setFitHeight(156);
@@ -623,6 +695,11 @@ public class GuiMapController {
         }
     }
 
+    /**
+     * routine method that thakes the weapon name and turns it into his image
+     * @param name
+     * @return
+     */
     private String fromWNameToUrl(String name) {
 
         switch (name) {
@@ -673,7 +750,11 @@ public class GuiMapController {
         return null;
     }
 
-
+    /**
+     * set the image for real
+     * @param url
+     * @param weapon
+     */
     private void weaponDisplayer(String url, int weapon) {
         Image img = new Image(url);
 
@@ -691,6 +772,11 @@ public class GuiMapController {
 
     }
 
+    /**
+     * show the cost when mouse over
+     * @param x
+     * @param y
+     */
     private void costDisplay(int x, int y)//display in a tootltip the cost of the pointed weapon
     {
         String cost1 = "";
@@ -729,6 +815,11 @@ public class GuiMapController {
 
     }
 
+    /**
+     * translator of the ammo to String
+     * @param c
+     * @return
+     */
     private String fromACtoString(Color c) {
         if (c == Color.RED) {
             return " 1 Ammo rossa";
@@ -743,6 +834,14 @@ public class GuiMapController {
     }
 
     //-------------------------------------------------------------movements things
+
+    /**
+     *
+     * VERY IMPORTANT - Every action with movements passes from this method,
+     * differenciates the movement actions like shoot, move and grab ecc..
+     *
+     * @param actionType
+     */
     @FXML
     private void move(String actionType) {
         movementDirections = new ArrayList<>();
@@ -831,6 +930,12 @@ public class GuiMapController {
 
     }
 
+    /**
+     * gathers the position where i need to place the player in the gui
+     * @param r is the row of the player
+     * @param c is the column of the player
+     * @param id the id of the player
+     */
     private void mapPos(int r, int c, int id) {
 
         boolean found = false;
@@ -865,6 +970,15 @@ public class GuiMapController {
 
     }
 
+    /**
+     * movement handler,get every direction and ask the server if valid
+     * if is valid do the move then call event mover
+     * @param x
+     * @param y
+     * @param m
+     * @param movementDirections
+     * @param actionType
+     */
     private void handleMovement(int x, int y, int m, ArrayList<Directions> movementDirections, String actionType)//called from move,do stuff for real
     {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION);
@@ -965,7 +1079,15 @@ public class GuiMapController {
         }
     }
 
-
+    /**
+     * Moves the movements listeners following the moving player
+     *x and y are the acutal position (x=row y=column)
+     * m is the remaining Moves and actionType is the action type
+     * @param x
+     * @param y
+     * @param m
+     * @param actionType
+     */
     private void eventMover(int x, int y, int m, String actionType) {
         stopMov.setOnAction(new EventHandler<ActionEvent>() {//stop button
             @Override
@@ -1130,6 +1252,14 @@ public class GuiMapController {
 
     }
 
+    /**
+     *  search for the icon of the player with that id and deletes it
+     * x and y are the acutal position (x=row y=column)
+     *   id is
+     * @param id
+     * @param x
+     * @param y
+     */
     public void playerRemover(int id, int x, int y) {
         // System.out.println("Sto guardando cela :"+x+" "+y);
         if (map[x][y].getChildren().size() == 1)//primo HBOX
@@ -1176,11 +1306,22 @@ public class GuiMapController {
 
     }
 
+    /**
+     * same as formIDToImg
+     * @param id
+     * @param r
+     * @param c
+     */
     public void playerDisplay(int id,int r,int c)
     {
         fromIDtoIMG(id,map[r][c]);
     }
 
+    /**
+     * add the ImageView in the selected HBox
+     * @param id
+     * @param h
+     */
     private void inserter(int id, HBox h) {
         ImageView img = new ImageView();
         Image image;
@@ -1231,6 +1372,13 @@ public class GuiMapController {
         }
     }
 
+    /**
+     * directly ask the server if a move is valid
+     * @param dir
+     * @param x
+     * @param y
+     * @return
+     */
     private boolean moveValidator(String dir, int x, int y)//x and y are the arrive postions of the move dir is the direction
     {
         validMove = -1;
@@ -1263,12 +1411,21 @@ public class GuiMapController {
 
 
     //-------------------------------------------------------------loign methods and match beginning
+
+    /**
+     * Update the log about connections
+     * @param name
+     * @param id
+     * @param color
+     */
     @FXML
     public void loginUpdater(String name, int id, PlayerColor color) {
         printLog("Si è collegato: " + name + " con l'id: " + id + " ed il colore: " + color);
     }
 
-
+    /**
+     * updates the control board of the players
+     */
     public void planciaUpdater() {
         Platform.runLater(new Runnable() {
             @Override
@@ -1345,7 +1502,10 @@ public class GuiMapController {
         });
     }
 
-
+    /**
+     * update the stats of the player id
+     * @param id
+     */
     public void statsUpdater(int id) {//the player is removed from its postion before the update
 
         /*if (!gui.getView().getCacheModel().getCachedPlayers().get(id).getStats().getOnline()) {
@@ -1418,6 +1578,12 @@ public class GuiMapController {
 
 
     //------------------------------------------------------------powerUp  gestion
+
+    /**
+     * return the location where a color of powerUp let you spawn
+     * @param c
+     * @return
+     */
     private Point colorToCord(Color c) {
         Point p = new Point();
         if (c == Color.BLUE) {
@@ -1438,6 +1604,9 @@ public class GuiMapController {
         return p;
     }
 
+    /**
+     * display the player's power ups
+     */
     public void powerUpDisplayer() {
 
         while(gui.getView().getPlayerId() == -1){
@@ -1526,6 +1695,9 @@ public class GuiMapController {
         }
     }
 
+    /**
+     * tag back grenade effect activator
+     */
     public void granade()
     {
         Platform.runLater( () ->
@@ -1579,6 +1751,9 @@ public class GuiMapController {
         });
     }
 
+    /**
+     * enable click actions of the power ups
+     */
     public void powerUpEnable() {
         Platform.runLater(new Runnable() {
             @Override
@@ -1660,6 +1835,10 @@ public class GuiMapController {
         });
     }
 
+    /**
+     * teleports the player n
+     * @param n
+     */
     private void teleporterAction(int n) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Teletrasporto! Clicca la cella dove vuoi muoverti");
         a.show();
@@ -1697,6 +1876,10 @@ public class GuiMapController {
         }
     }
 
+    /**
+     * newton effect, moves the player n
+     * @param n
+     */
     private void newtonAction(int n) {
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Raggio traente! Seleziona il giocatore che vuoi spostare.");
         a.show();
@@ -1776,6 +1959,16 @@ public class GuiMapController {
         }
     }
 
+    /**
+     * scope action, all these parameters beacuse do the shootAction, check noScope(..) for other cases
+     * @param w
+     * @param targetLists
+     * @param effects
+     * @param cells
+     * @param pUp
+     * @param dir
+     * @param c
+     */
     private void scopeAction(String w, List<List<Integer>> targetLists, List<Integer> effects, List<Point> cells, List<CachedPowerUp> pUp, List<Directions> dir, Color c) {
         mapEventDeleter();
         System.out.println("Stiamo per sparare davvero, bisogna solo selezioanre bersaglio del mirino");
@@ -1913,7 +2106,13 @@ public class GuiMapController {
         }
     }
 
-
+    /**
+     * Mover part of newton's effect
+     * @param id
+     * @param x
+     * @param y
+     * @param listNum
+     */
     private void newtonMover(int id, int x, int y, int listNum)//position of this player
     {
         //set mover Actions here
@@ -2007,6 +2206,10 @@ public class GuiMapController {
     }
 
     //--------------------------------------------------------------ammo gestion
+
+    /**
+     * navigates the map and call placer if is an ammo Cell
+     */
     public void ammoPlacer() {
         //remove every ammo from the table
         Platform.runLater(new Runnable() {
@@ -2039,9 +2242,6 @@ public class GuiMapController {
 
                                 if (!containsAmmo(map[rr][cc])) {
                                     placer(((CachedAmmoCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(rr, cc)).getAmmoList(), map[rr][cc]);
-                                    if (((CachedAmmoCell) gui.getView().getCacheModel().getCachedMap().getCachedCell(rr, cc)).getAmmoList().isEmpty()) {
-                                        System.out.println("vechiasca");
-                                    }
                                 }
 
 
@@ -2054,6 +2254,11 @@ public class GuiMapController {
         });
     }
 
+    /**
+     * creates the imageView
+     * @param imgUrl
+     * @param h
+     */
     private void imageCreator(String imgUrl, HBox h)//ammo Id="ammo"
     {
 
@@ -2068,6 +2273,11 @@ public class GuiMapController {
 
     }
 
+    /**
+     * check if b have an ammo yet
+     * @param b
+     * @return
+     */
     private boolean containsAmmo(VBox b) {
         for (int i = 0; i < b.getChildren().size(); i++) {
             for (int j = 0; j < ((HBox) b.getChildren().get(i)).getChildren().size(); j++) {
@@ -2079,6 +2289,11 @@ public class GuiMapController {
         return false;
     }
 
+    /**
+     * navigates the Vbox and HBox of every cell and choose where to place the ammo
+     * @param a
+     * @param b
+     */
     private void placer(List<Color> a, VBox b) {
         String url;
         url = fromAmmoCubetoIMG(a);
@@ -2111,7 +2326,11 @@ public class GuiMapController {
         imageCreator(url, (HBox) b.getChildren().get(1));
     }
 
-
+    /**
+     * return a string that contains the url of the image of that type of ammo
+     * @param a
+     * @return
+     */
     private String fromAmmoCubetoIMG(List<Color> a)
     {
         ArrayList<Color> card = new ArrayList<>();
@@ -2223,11 +2442,22 @@ public class GuiMapController {
         return null;
     }
 
+    /**
+     * update the player board after ammo updates
+     */
     public void changedAmmos() {
         planciaUpdater();
     }
 
     //------------------------------------------------------------ grab
+
+    /**
+     * grab something in the cell (x,y)
+     * dir because if you do a move before you have to rememeber it
+     * @param x
+     * @param y
+     * @param dir
+     */
     private void grabHere(int x, int y, List<Directions> dir)//----called from the button grab
     {
         //se questa cella è spawn o ammo
@@ -2252,6 +2482,12 @@ public class GuiMapController {
 
     }
 
+    /**
+     * if ammo celle grab ammo in the cell (x,y)
+     * @param x
+     * @param y
+     * @param dir
+     */
     private void grabAmmoCard(int x, int y, List<Directions> dir) {
         if (!containsAmmo(map[x][y])) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Non ci sono munizioni in questa cella, scegli un'altra azione");//maybe need to be changed??
@@ -2273,6 +2509,12 @@ public class GuiMapController {
 
     }
 
+    /**
+     * if spawnCell you can buy a weapon
+     * @param x
+     * @param y
+     * @param dir
+     */
     private void grabWeapon(int x, int y, List<Directions> dir) {
         if (gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getAmmoBag() != null)
             System.out.println("Tue munizioni: " + gui.getView().getCacheModel().getCachedPlayers().get(gui.getView().getPlayerId()).getAmmoBag().getAmmoList());
@@ -2761,6 +3003,12 @@ public class GuiMapController {
 
 
     //--------------------------------------------------------------------------shoot things
+
+    /**
+     * choose the weapon you want to shoot with
+     * dir because you may move before shoot
+     * @param dir
+     */
     public void shootWeaponChooser( List<Directions> dir) {
         System.out.println("Now you can choose the weapon you want to use");
         Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Scegli con quale arma sparare");
@@ -2826,6 +3074,12 @@ public class GuiMapController {
         });
     }
 
+    /**
+     * choose the effects
+     * dir because you may move before shoot
+     * @param w weapon you want to use
+     * @param dir
+     */
     private void shootEffectsChooser(CachedFullWeapon w, List<Directions> dir) {
         mapEventDeleter();
         System.out.println("------------------SELEZIOANTORE DI EFFETTI---------");
@@ -2958,6 +3212,13 @@ public class GuiMapController {
 
     }
 
+    /**
+     * check if you can pay
+     * uses checkPayWithPowerUP
+     * @param w
+     * @param effects
+     * @param dir
+     */
     private void shootEffectPay(CachedFullWeapon w, List<Integer> effects, List<Directions> dir)//goes to checkpaywithpowerUp
     {
         System.out.println("Ho scelto gli effetti: " + effects);
@@ -2982,6 +3243,13 @@ public class GuiMapController {
 
     }
 
+    /**
+     * choose the targets then call cell if required the go to the shoot target iterator
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     */
     private void shootTargetChooser(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir) {
        needCell=false;
         for(int e=0;e<effects.size();e++) {
@@ -3119,7 +3387,17 @@ public class GuiMapController {
         }
     }
 
-
+    /**
+     * Ietartes trough targets and cells
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     * @param targetLists
+     * @param effectNum
+     * @param targetNum
+     * @param cells
+     */
 
     private void shootTargetIterator(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, int effectNum, int targetNum, List<Point> cells) {
 
@@ -3325,6 +3603,17 @@ public class GuiMapController {
 
     }
 
+    /**
+     * ask for the cells if neeeded
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     * @param targetLists
+     * @param effectNum
+     * @param targetNum
+     * @param cells
+     */
     private void shootCell(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, int effectNum, int targetNum, List<Point> cells)// only one per effect jump always to next effect at the end so increment effectNUM
     {
         //various options : 1) do and next 2) do and do action
@@ -3363,7 +3652,15 @@ public class GuiMapController {
 
     }
 
-
+    /**
+     * check if you want to use the socpe then calls scopeAction
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     * @param targetLists
+     * @param cells
+     */
     private void checkScope(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, List<Point> cells)
     {
         System.out.println("Sparo con arma " + w + " a questi bersagli:" + targetLists + " con questi effetti " + effects + " In queste celle " + cells);
@@ -3431,6 +3728,15 @@ public class GuiMapController {
 
     }
 
+    /**
+     * no scope, do the shoot action
+     * @param w
+     * @param effects
+     * @param pUp
+     * @param dir
+     * @param targetLists
+     * @param cells
+     */
     public void noScope(String w, List<Integer> effects, List<CachedPowerUp> pUp, List<Directions> dir, List<List<Integer>> targetLists, List<Point> cells)
     {
         System.out.println("No scope");
@@ -3464,6 +3770,10 @@ public class GuiMapController {
     }
 
     //---------------------------------------------------------------------RELOAD
+
+    /**
+     * ask to the player if he wants to reload
+     */
     public void checkReload()
     {
         Platform.runLater(() -> {
@@ -3481,6 +3791,11 @@ public class GuiMapController {
         });
 
     }
+
+    /**
+     * choose weapons to reload
+     * @param weapons
+     */
     public void reloadWeaponChooser(List <String> weapons)
     {
         Alert a=new Alert(Alert.AlertType.INFORMATION,"Seleziona un'arma da ricaricare");
@@ -3557,6 +3872,11 @@ public class GuiMapController {
             }
         }
     }
+
+    /**
+     * calculate the cost needed to reload then call cehckPAyWithPower
+     * @param weapons
+     */
     private void reloadCostCalc(List <String> weapons)
     {
         List <Color> cost=new ArrayList<>();
@@ -3574,6 +3894,10 @@ public class GuiMapController {
     }
 
     //----------------------------------------------------------------------FRENZY
+
+    /**
+     * frenzy reload action
+     */
     public void askFrenzyReload()
     {//platform.runlater necessario
         Platform.runLater( () -> {

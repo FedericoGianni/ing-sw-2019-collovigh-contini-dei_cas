@@ -15,7 +15,7 @@ public class StatsObserver implements Observer {
     private static final int MAX_DMG = 12;
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.FINE;
+    private static Level level = Level.INFO;
 
     private final PlayerObserver playerObserver;
     private Stats previousStats;
@@ -104,7 +104,7 @@ public class StatsObserver implements Observer {
 
             // if the player has received dmg or marks in the action phase and is not already in the shotList
 
-            if ((playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION1) || playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION2)) && ((!previousStats.getDmgTaken().equals(stats.getDmgTaken())) || (!previousStats.getMarks().equals(stats.getMarks()))) && (!playerObserver.getTopClass().getController().getShotPlayerThisTurn().contains(stats.getPlayerId()))) {
+            if ((playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION1) || playerObserver.getTopClass().getController().getTurnPhase().equals(TurnPhase.ACTION2)) && ((!previousStats.getDmgTaken().equals(stats.getDmgTaken())) || (!previousStats.getMarks().equals(stats.getMarks()))) && (!playerObserver.getTopClass().getController().getShotPlayerThisTurn().contains(stats.getPlayerId())) ) {
 
                 LOGGER.log(level, "[Stats-Observer] player added to shot list: {0} ", stats.getPlayerId());
 

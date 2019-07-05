@@ -525,7 +525,9 @@ public class Player {
      * Draw a PowerUp from model and assign it to the player who called this function
      */
     public void drawPowerUp() {
+
         this.getPowerUpBag().addItem(Model.getGame().drawPowerUp());
+
     }
 
     /**

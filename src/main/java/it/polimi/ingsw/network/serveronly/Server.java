@@ -30,7 +30,7 @@ public class Server  {
 
     private static final String LOG_START = "[Server] ";
 
-    private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = false;
+    private static final boolean ONLINE_MIN_PLAYER_CHECK_ENABLE = true;
 
     /**
      * Reference to controller
@@ -106,13 +106,16 @@ public class Server  {
     private static void startGame(){
 
         int gameId = Parser.readConfigFile().getGame();
-        System.out.println("gameId: " + gameId);
+
+        String message = "[Server] read gameId: " + gameId;
+
+        LOGGER.log(level,() -> message);
 
         if (gameId == -1){
 
             try {
 
-                waitingRoom = new WaitingRoom(-1);
+                waitingRoom = new WaitingRoom();
 
             }catch (GameNonExistentException e){
 
@@ -122,17 +125,14 @@ public class Server  {
 
         }else{
 
-            gameId = Parser.readConfigFile().getGame();
-            System.out.println("gameId: " + gameId);
-
             if(Parser.containsGame(gameId)){
 
                 Parser.setCurrentGame(gameId);
 
                 controller = Parser.readController();
 
-                //TODO sostituisco cose lette da file dentro al model creato dal controller a sua volta lettoda file
                 //currentGame, playrs, mappa
+
                 Map map = new Map(Parser.readSavedMap().getRealMap(), Parser.readSavedMap().getMapType());
 
                 List<Player> players = Parser.readPlayers();
@@ -143,11 +143,13 @@ public class Server  {
 
 
                 //RE-INITIALIZE OBSERVERS
+
                 for (Player p : players) {
                     p.getStats().initObservers();
                 }
 
                 //restart the game flow
+
                 controller.handleTurnPhase();
 
 

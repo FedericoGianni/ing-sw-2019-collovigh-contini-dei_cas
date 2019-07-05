@@ -8,23 +8,48 @@ import it.polimi.ingsw.utils.PowerUpType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class will handle all the methods for the spawn phase of the turn
+ */
 public class SpawnPhase {
 
     // LOGGER
 
+    /**
+     * Logger instance
+     */
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
+    /**
+     * Logger level
+     */
     private static Level level = Level.FINE;
 
+    /**
+     * Timer for the Spawn Phase
+     */
     private static final int TIMER_SPAWN = 20;
 
     // Controller reference
 
+    /**
+     * controller instance
+     */
     private final Controller controller;
 
+    /**
+     * Constructor
+     * @param controller is the controller that instantiated this class
+     */
     public SpawnPhase(Controller controller) {
         this.controller = controller;
     }
 
+    /**
+     * This method will ask the current player to spawn needed.
+     *
+     * If the player is offline the spawn will be performed automatically:
+     * @see #defaultSpawn()
+     */
     public void handleSpawn(){
 
 
@@ -82,6 +107,9 @@ public class SpawnPhase {
         }
     }
 
+    /**
+     * method for handling the spawn of a disconnected player, the player will draw one or two powerUp and discard the first one
+     */
     public void defaultSpawn(){
 
         // if the player have 0 powerUps draw 2
@@ -101,7 +129,11 @@ public class SpawnPhase {
         spawn(powerUp.getType(), powerUp.getColor());
     }
 
-
+    /**
+     * This method is called by the view class and make the player spawn by discarding the selected powerUp
+     * @param type is the powerUp type
+     * @param color is the powerUp color
+     */
     public void spawn(PowerUpType type, Color color){
 
         int currentPlayer = controller.getCurrentPlayer();

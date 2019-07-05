@@ -1,5 +1,8 @@
 package it.polimi.ingsw.controller;
 
+/**
+ * This enum represent the different phases of the turn
+ */
 public enum TurnPhase {
 
     SPAWN,

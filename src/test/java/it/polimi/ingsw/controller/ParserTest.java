@@ -356,7 +356,7 @@ class ParserTest {
         playerColors.add(PlayerColor.PURPLE);
         playerColors.add(PlayerColor.YELLOW);
 
-        Controller controller = new Controller(playerNames, playerColors, -1, 8);
+        //Controller controller = new Controller(playerNames, playerColors, -1, 8);
 
         //Parser.saveController(controller);
 
@@ -376,7 +376,7 @@ class ParserTest {
         playerColors.add(PlayerColor.PURPLE);
         playerColors.add(PlayerColor.YELLOW);
 
-        Controller controller = new Controller(playerNames, playerColors, -1, 8);
+        //Controller controller = new Controller(playerNames, playerColors, -1, 8);
 
         //Parser.saveController(controller);
 

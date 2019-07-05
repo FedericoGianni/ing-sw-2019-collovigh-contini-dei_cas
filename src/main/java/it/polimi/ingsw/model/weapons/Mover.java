@@ -14,19 +14,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Mover extends MicroEffect {
-
+    /**
+     * number of cells you have to move
+     */
     private int cellNumber;//number of cells up to cellNumber
+    /**
+     * true if you have to move before shooting
+     */
     private boolean beforeShooting;//if true you need to move before shooting--- done at WeaponLevel
+    /**
+     * true if you have to move after shooting
+     */
     private boolean afterShooting;//if true you can use after shooting the effect---unuseful i think
+    /**
+     * if the movement is facoltative
+     */
     private boolean facoltative;//sometimes you don't have to move, you can choose
+    /**
+     * move to a cell
+     */
     private boolean toCell;//you have to move to a specified cell if this flag is true--must change to a Cell type or to a point type
-    private boolean target;//set true if you need to move the target not the shooter
-    private boolean myCell;//set true if i need to move other players to my cell
+    /**
+     * set true if you need to move the target not the shooter
+     */
+    private boolean target;//
+    /**
+     * set true if i need to move other players to my cell
+     */
+    private boolean myCell;//
+    /**
+     * list of the moves
+     */
     private static List <Mover> weaponMov=new ArrayList<>();
 
     //if something moves before shooting pay attention, you need to calculate if you can shoot him after the move
     //movere delays a lot of things to the other classes so check them, for example in tractor beam 1 the damage checks that i can see the trget after the movement
 
+    /**
+     * construcotr
+     * @param n
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     * @param e
+     * @param f
+     */
     public Mover(int n,boolean a,boolean b,boolean c,boolean d,boolean e,boolean f){
         this.cellNumber=n;
         this.beforeShooting=a;
@@ -42,11 +75,18 @@ public class Mover extends MicroEffect {
 
     }
 
+    /**
+     *
+     * @return a copy of this object
+     */
     @Override
     public Mover copy() {
         return this;
     }
 
+    /**
+     * print infos
+     */
     @Override
     public void print() {
         /*
@@ -63,6 +103,17 @@ public class Mover extends MicroEffect {
 
     }
 
+    /**
+     * applicate the mover effeccts to player list  , given from weapon w
+     * @param playerList
+     * @param w
+     * @param c requires cell where to move in case you move, is null if you use a non mover microeffect
+     * @param n
+     * @throws PlayerInSameCellException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     */
     @Override
     public void microEffectApplicator(List<Player> playerList, Weapon w, Cell c,int n) throws   PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException {
         print();

@@ -43,34 +43,85 @@ public class Parser {
 
     // paths
 
+    /**
+     * Path constants
+     */
     private static final String DAMAGE_PATH = "/json/damageTypes";
+    /**
+     * Path constants
+     */
     private static final String MACRO_EFFECT_PATH = "/json/macroEffects";
+    /**
+     * Path constants
+     */
     private static final String MARKER_PATH = "/json/MarkerTypes";
+    /**
+     * Path constants
+     */
     private static final String MOVER_PATH = "/json/mover";
+    /**
+     * Path constants
+     */
     private static final String NORMAL_WEAPON_PATH = "/json/Weaponary";
+    /**
+     * Path constants
+     */
     private static final String SAVED_MAP_RELATIVE_PATH = "_Map.json";
+    /**
+     * Path constant
+     */
     private static final String SAVED_PLAYERS_PATH = "_Players.json";
+    /**
+     * Path constant
+     */
     private static final String SAVED_CONTROLLER_PATH = "_Controller.json";
+    /**
+     * Path constant
+     */
     private  static final String SAVED_CURRENT_GAME_PATH= "_CurrentGame.json";
+    /**
+     * Path constant
+     */
     private static final String MAP_ONE_PATH = "/json/maps/map_01.json";
+    /**
+     * Path constant
+     */
     private static final String MAP_TWO_PATH = "/json/maps/map_02.json";
+    /**
+     * Path constant
+     */
     private static final String MAP_THREE_PATH = "/json/maps/map_03.json";
 
+    /**
+     * Path constant
+     */
     private static final String GAMES_PATH = "savegames";
 
 
     // Json Simple
 
+    /**
+     * Json Parser
+     */
     private static JSONParser jsonParser = new JSONParser();
 
     // GSON
 
+    /**
+     * Gson object
+     */
     private static Gson gson = new Gson();
 
     // saves
 
+    /**
+     * id of the current game, will be used to save/ reload stuff
+     */
     private static int currentGame;
 
+    /**
+     * default constructor: since the class has only static methods will be never instantiated
+     */
     private Parser() {
 
     }
@@ -694,7 +745,7 @@ public class Parser {
 
                 gson = new Gson();
 
-                FileWriter writer = new FileWriter(GAMES_PATH);
+                FileWriter writer = new FileWriter(GAMES_PATH + "_games.json");
 
                 gson.toJson(pathList, writer);
 
@@ -703,6 +754,7 @@ public class Parser {
 
             } catch (Exception e2){
 
+                LOGGER.log(Level.WARNING, () -> LOG_START + " failed to write games list");
             }
 
             LOGGER.log(Level.WARNING, ()-> LOG_START + " error while trying to load games list ");
@@ -761,6 +813,14 @@ public class Parser {
 
     }
 
+    /**
+     * This method will make an hashMap from a list of string
+     *
+     * It is necessary because gson read hashmap could not work
+     *
+     * @param games is the list of strings
+     * @return an hashMap containing the string binded to an index starting from -1
+     */
     private static List<String> getGameListToSave(HashMap<Integer,String> games){
 
         List<String> pathlist = new ArrayList<>();
@@ -792,7 +852,7 @@ public class Parser {
      */
     private static String genSavePath(int gameId){
 
-        return GAMES_PATH  + "game_Id_" + gameId;
+        return GAMES_PATH  + "_game_Id_" + gameId;
     }
 
     /**
@@ -968,6 +1028,9 @@ public class Parser {
         }
     }
 
+    /**
+     * This method will save the players status on a file
+     */
     public static void savePlayers(){
 
         String gamePath = getGames().get(currentGame);
@@ -1002,6 +1065,10 @@ public class Parser {
         }
     }
 
+    /**
+     * This method will read and rebuild a player list from a json file
+     * @return a list of player
+     */
     public static List<Player> readPlayers() {
 
         String gamePath = getGames().get(currentGame);
@@ -1041,8 +1108,10 @@ public class Parser {
 
     }
 
-    //TODO player, currentgame
-
+    /**
+     * this method will save a controller class to file
+     * @param controller is the class to save
+     */
     public static void saveController(Controller controller){
 
         String gamePath = getGames().get(currentGame);
@@ -1074,6 +1143,10 @@ public class Parser {
         }
     }
 
+    /**
+     * this method will read a SavedController class from file and rebuild a full Controller class
+     * @return a controller class from the parameters found on file
+     */
     public static Controller readController() {
 
         String gamePath = getGames().get(currentGame);
@@ -1097,13 +1170,16 @@ public class Parser {
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved controller");
-            e.printStackTrace();
         }
 
         return controller;
 
     }
 
+    /**
+     * This method will save the CurrentGame class to a file
+     * @param c is the CurrentGame class
+     */
     public static void saveCurrentGame(CurrentGame c){
 
         String gamePath = getGames().get(currentGame);
@@ -1133,6 +1209,10 @@ public class Parser {
         }
     }
 
+    /**
+     * This method will read from file a SavedCurrentGame class
+     * @return a SavedCurrentGameClass
+     */
     public static SavedCurrentGame readCurrentGame() {
 
         String gamePath = getGames().get(currentGame);
@@ -1154,7 +1234,6 @@ public class Parser {
         }catch (Exception e){
 
             LOGGER.log(Level.WARNING, () -> LOG_START + " could not read the saved current game");
-            e.printStackTrace();
         }
 
         return savedCurrentGame;
