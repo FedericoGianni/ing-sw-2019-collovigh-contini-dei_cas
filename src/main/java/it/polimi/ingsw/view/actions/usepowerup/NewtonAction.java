@@ -4,10 +4,21 @@ import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
 import it.polimi.ingsw.utils.PowerUpType;
 
+/**
+ * actions of the powerUp Newton
+ */
 public class NewtonAction extends PowerUpAction {
-
+    /**
+     * id of the target
+     */
     private final int targetPlayerId;
+    /**
+     * amount of cells moved
+     */
     private final int amount;
+    /**
+     * directions where you can move
+     */
     private final Directions direction;
 
 

@@ -25,7 +25,7 @@ public class Timer {
     /**
      * this boolean will enable the timer ( if false nothing will happen if it expire)
      */
-    private static final boolean TIMER_ACTIVE = false;
+    private static final boolean TIMER_ACTIVE = true;
 
     /**
      * logger incipit

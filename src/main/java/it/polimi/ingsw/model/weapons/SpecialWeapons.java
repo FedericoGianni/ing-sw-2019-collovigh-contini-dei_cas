@@ -12,10 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * class that serialize every
+ */
 public abstract class SpecialWeapons extends Weapon{
-
+    /**
+     * name of the secial weapon
+     */
     private final String name;
-
+    /**
+     * dmg added for demonstation and test porpouses
+     */
     public static final int KILL_DMG = 10;
 
 

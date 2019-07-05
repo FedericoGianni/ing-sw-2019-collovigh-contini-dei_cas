@@ -8,14 +8,39 @@ import it.polimi.ingsw.model.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * this class give the damages to the targeted players
+ */
 public class Damage extends MicroEffect {
-
+    /**
+     * the damage
+     */
     private int damage;//how much damage you can do
-    private int playerNum;//some effects can deal damage to more than 1 player
+    /**
+     * some effects can deal damage to more than 1 player
+     * so player num have this thing inside
+     *
+     */
+    private int playerNum;
+    /**
+     * if the effect need a a seeable target
+     */
     private boolean seeAbleTargetNeeded; //some effects can target unSeeable players
+    /**
+     * if the weapon is a melee weapon
+     */
     private boolean melee;//some weapons can deal damage to players only in your current cell
+    /**
+     * if you need different players targeted
+     */
     private boolean differentPlayer;//in secondary effects sometimes you need to target different players from the first
+    /**
+     * if you need already targeted players
+     */
     private boolean alreadyTargeted;//sometimes in secondary effects you have to choose between already targeted players of the first effect
+    /**
+     * if you have some kind of distances costraints
+     */
     private int distMin;//some effects require a minimum distance, calculated by moves
     //particuarities: if both differentPlayer and alreadyTargeted are true you can choose to apply one or both effects(check machineGun III)
 

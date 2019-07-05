@@ -8,8 +8,6 @@ import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 import javafx.application.Application;
 import javafx.application.Platform;
-
-import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,13 +18,7 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import javax.print.DocFlavor;
-import javax.print.attribute.standard.Media;
-import javax.sound.sampled.*;
-import java.applet.AudioClip;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,12 +26,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.DefaultReplies.*;
-import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_NO_ENOUGH_AMMO;
 import static it.polimi.ingsw.utils.Protocol.*;
 import static java.lang.Thread.sleep;
-import static javafx.animation.Animation.INDEFINITE;
 
-
+/**
+ * is the base of the gui, between the various stages change and similar
+ */
 public class Gui extends Application implements UserInterface {
 
     private final static String FX_PATH = "javafx-sdk-11.0.2/lib";
@@ -219,6 +211,11 @@ public class Gui extends Application implements UserInterface {
         return view;
     }
 
+    /**
+     * start the stage
+     * @param stage
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -372,14 +369,16 @@ public class Gui extends Application implements UserInterface {
                     retryLogin = false;
                     break;
 
-
-
                 default:
                     header = s.substring(0, 10);
                     msg = s;
                     guiMapController.show(msg);
             }
-
+            if(s.equals(DEFAULT_TURN_START))
+            {
+                header="";
+                msg="E' il tuo turno!";
+            }
             if(retryLogin) {
                 System.out.println("guiController: " + guiController);
                 guiController.openSecondScene(new ActionEvent());
@@ -524,7 +523,9 @@ public class Gui extends Application implements UserInterface {
             case TURN:
                 guiMapController.notifyTurnUpdate(turnUpdate);
                 break;
-
+            case GAME:
+                if(view.getCacheModel().getGame() != null)
+                   guiMapController.printLog(view.getCacheModel().showKillShotTrack(view.getCacheModel().getGame().getKillShotTrack()));
             default:
                 break;
         }
@@ -737,8 +738,24 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void close() {
+
         guiMapController.log.appendText(DEFAULT_TIMER_EXPIRED);
-        System.exit(0);
+
+        Platform.runLater( () -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Rimosso per inattività", ButtonType.OK);
+            alert.setHeaderText("TEMPO SCADUTO");
+            alert.showAndWait();
+
+            if(alert.getResult() == ButtonType.OK){
+                alert.close();
+                System.exit(0);
+            }
+            else{
+                alert.close();
+                System.exit(0);
+            }
+        });
+
     }
 
 
@@ -791,6 +808,10 @@ public class Gui extends Application implements UserInterface {
         return values;*/
     }
 
+    /**
+     * select the number of skulls in this method
+     * @return the number chosen
+     */
     private int skullSelector()
     {
         List<String> choices = new ArrayList<>();

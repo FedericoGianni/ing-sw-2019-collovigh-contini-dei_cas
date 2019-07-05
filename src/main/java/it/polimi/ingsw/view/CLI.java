@@ -444,14 +444,14 @@ public class CLI implements UserInterface {
                 //TODO mostrare i cambiamenti di danni subiti e disconnessioni
                 //System.out.println("[DEBUG] Ricevuto STATS update!");
 
-                if(view.getPlayerId() == -1){
-                    if(view.getCacheModel().getCachedPlayers() != null){
-                        for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
-                            if(view.getCacheModel().getCachedPlayers().get(i).getName().equals(playerName))
-                                view.setPlayerId(i);
-                        }
+                while(view.getPlayerId() == -1) {
+                    try{
+                        sleep(200);
+                    } catch (InterruptedException e){
+
                     }
                 }
+
 
 
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
@@ -2463,7 +2463,10 @@ public class CLI implements UserInterface {
             s = s.concat(UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape());
             s = s.concat("\tID: " + p.getPlayerId());
             s = s.concat("\tNome: " + p.getName());
-            s = s.concat("\tPunti: " + p.getStats().getScore());
+            if(p.getStats() != null)
+                s = s.concat("\tPunti: " + p.getStats().getScore());
+            else
+                s = s.concat("\tPunti: 0");
             s = s.concat(ANSI_RESET.escape());
 
             show(s);
