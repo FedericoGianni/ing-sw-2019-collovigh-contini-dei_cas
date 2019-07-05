@@ -8,8 +8,6 @@ import it.polimi.ingsw.view.updates.UpdateType;
 import it.polimi.ingsw.view.updates.otherplayerturn.TurnUpdate;
 import javafx.application.Application;
 import javafx.application.Platform;
-
-import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,7 +18,6 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +26,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.DefaultReplies.*;
-import static it.polimi.ingsw.utils.DefaultReplies.DEFAULT_NO_ENOUGH_AMMO;
 import static it.polimi.ingsw.utils.Protocol.*;
 import static java.lang.Thread.sleep;
 
@@ -738,8 +734,20 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void close() {
+
         guiMapController.log.appendText(DEFAULT_TIMER_EXPIRED);
-        System.exit(0);
+
+        Platform.runLater( () -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, DEFAULT_TIMER_EXPIRED, ButtonType.OK);
+            alert.setHeaderText("TEMPO SCADUTO");
+            alert.show();
+
+            if(alert.getResult() == ButtonType.OK){
+                alert.close();
+                System.exit(0);
+            }
+        });
+
     }
 
 
