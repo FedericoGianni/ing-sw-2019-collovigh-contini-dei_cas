@@ -10,33 +10,47 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * each weapon have 2 or 3 macroeffects that are the effects of the weapons.
+ * each macroeffect have up to 3 microeffects
+ */
 public class MacroEffect {
-
+    /**
+     * name of the macroeffect
+     */
     private String name;
+    /**
+     * contains the microEffects of this macroeffect
+     */
     private ArrayList<MicroEffect> microEffects;
 
 
-
+    /**
+     *
+     * @return the list of microEffects of this macroeffect
+     */
     public ArrayList<MicroEffect> getMicroEffects() {
         return microEffects;
     }
 
-    public void setMicroEffects(ArrayList<MicroEffect> microEffects) {
-        this.microEffects = microEffects;
-    }
-
+    /**
+     * get the cost of the effects
+     * @return
+     */
     public ArrayList<AmmoCube> getEffectCost() {
         return effectCost;
     }
 
-    public void setEffectCost(ArrayList<AmmoCube> effectCost) {
-        this.effectCost = effectCost;
-    }
-
+    /**
+     * contains the cost of the effect
+     */
     private ArrayList<AmmoCube> effectCost;
+    /**
+     * list of macroEffects
+     */
     private static ArrayList<MacroEffect> macroEffects=new ArrayList<>();
     /**
-     *
+     *constructor
      */
     public MacroEffect (String n,ArrayList <MicroEffect> ef,ArrayList<AmmoCube>a) {
         microEffects=new ArrayList<>();
@@ -46,6 +60,11 @@ public class MacroEffect {
         effectCost.addAll(a);
     }
 
+    /**
+     * constructor
+     * @param n
+     * @param ef
+     */
     public MacroEffect (String n,ArrayList <MicroEffect> ef) {
         microEffects=new ArrayList<>();
         effectCost=new ArrayList<>();//if empty means no cost
@@ -53,21 +72,31 @@ public class MacroEffect {
         this.name=n;
     }
 
+    /**
+     * return effect name
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * set the effects name
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return the list of macroeffects
+     */
     public static ArrayList<MacroEffect> getMacroEffects() {
         return macroEffects;
     }
 
-    public static void setMacroEffects(ArrayList<MacroEffect> macroEffects) {
-        MacroEffect.macroEffects = macroEffects;
-    }
+
 
     /**
      * this method uses the semplified JSON to populate the macroeffets Class that are in a known number
@@ -175,14 +204,6 @@ public class MacroEffect {
         this.microEffects.add(microEffect.copy());
     }
 
-    public boolean moveBeforShooting()
-    {
-
-        if(microEffects.size()!=3) return false;
-        if(microEffects.get(2).moveBefore()==true)
-            return true;
-        return false;
-    }
 
     /**
      *

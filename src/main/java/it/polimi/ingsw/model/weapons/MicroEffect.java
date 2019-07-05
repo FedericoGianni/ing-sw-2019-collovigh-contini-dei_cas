@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * //TODO
+ * the micro effects, the atomic axctions of damages, marks and moving
  */
 public abstract class MicroEffect {
     /**

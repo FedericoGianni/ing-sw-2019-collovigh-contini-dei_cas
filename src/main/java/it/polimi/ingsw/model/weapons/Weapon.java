@@ -14,10 +14,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * the bridge between every kind of weapon
+ */
 public abstract class Weapon implements Serializable {
-
+    /**
+     * first targets of the weapon, must be saved for every shoot for effects that targets different players or the same as before
+     */
     private List<Integer> firstTarget;//first target of every shot , useful for checking  if we need to retarget players or similar
-
+    /**
+     * true if the weapon is loaded
+     */
     private boolean loaded = true;
 
     /**
@@ -89,6 +96,11 @@ public abstract class Weapon implements Serializable {
         }
         return t;
     }//useful when you have to target  different target
+
+    /**
+     * set the first targets
+     * @param f is the list of targets
+     */
     public void setFirstTarget(List<Player> f) {
         firstTarget=new ArrayList<>();
         for(Player item:f)
@@ -97,6 +109,10 @@ public abstract class Weapon implements Serializable {
         }
     }
 
+    /**
+     * remove p from the lisyt
+     * @param p
+     */
     public void removeFromFirstTargets(Player p)
     {
         for(int i=0;i<firstTarget.size();i++)
@@ -106,6 +122,11 @@ public abstract class Weapon implements Serializable {
         }
 
     }
+
+    /**
+     *
+     * @return the player who posses the weapon
+     */
     public final Player isPossessedBy(){
 
         List<Player> list = Model.getGame().getPlayers().stream()
@@ -162,13 +183,21 @@ public abstract class Weapon implements Serializable {
     public abstract void print();
 
     /**
-     * name of the ammo
-     * @return
+     *
+     * @return  name of the ammo
      */
     public abstract String getName();
 
+    /**
+     *
+     * @return the cost
+     */
     public abstract List<AmmoCube> getCost();
 
+    /**
+     *
+     * @return the reload cost
+     */
     public abstract List<AmmoCube> getReloadCost();
 
 }
