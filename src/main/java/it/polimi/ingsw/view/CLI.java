@@ -444,14 +444,14 @@ public class CLI implements UserInterface {
                 //TODO mostrare i cambiamenti di danni subiti e disconnessioni
                 //System.out.println("[DEBUG] Ricevuto STATS update!");
 
-                if(view.getPlayerId() == -1){
-                    if(view.getCacheModel().getCachedPlayers() != null){
-                        for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
-                            if(view.getCacheModel().getCachedPlayers().get(i).getName().equals(playerName))
-                                view.setPlayerId(i);
-                        }
+                while(view.getPlayerId() == -1) {
+                    try{
+                        sleep(200);
+                    } catch (InterruptedException e){
+
                     }
                 }
+
 
 
                 if (view.getCacheModel().getCachedPlayers().get(playerId).getStats().getCurrentPosition() != null) {
