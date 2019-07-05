@@ -21,7 +21,7 @@ public class ReloadAction extends JsonAction {
     /**
      * reload weapons and pay in ammos and with powerUps
      * @param weapons thos eare the weapons i want to reload
-     * @param powerUps
+     * @param powerUps;
      */
     public ReloadAction(List<String> weapons,List<CachedPowerUp> powerUps) {
 

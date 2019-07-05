@@ -13,7 +13,7 @@ import java.util.List;
 public class CachedGame extends UpdateClass {
 
     /**
-     * This list contains Pair with x -> killerId, y -> amount
+     * This list contains Pair with x: killerId, y: amount
      */
     private final List<Point> killShotTrack = new ArrayList<>();
 
@@ -29,7 +29,7 @@ public class CachedGame extends UpdateClass {
     }
 
     /**
-     * return a list containing Pairs with x -> killerId, y -> amount
+     * return a list containing Pairs with x: killerId, y: amount
      */
     public List<Point> getKillShotTrack() {
         return killShotTrack;

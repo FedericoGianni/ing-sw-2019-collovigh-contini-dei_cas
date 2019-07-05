@@ -99,11 +99,7 @@ public class Marker extends MicroEffect {
      *give the markers to the tragets
      * @param playerList
      * @param w
-     * @throws OverKilledPlayerException
-     * @throws DeadPlayerException
-     * @throws PlayerInSameCellException
      * @throws PlayerInDifferentCellException
-     * @throws UncorrectDistanceException
      * @throws SeeAblePlayerException
      * @throws DifferentPlayerNeededException
      * @throws NotCorrectPlayerNumberException

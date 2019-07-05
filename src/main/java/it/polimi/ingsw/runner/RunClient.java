@@ -31,7 +31,7 @@ public class RunClient {
 
     /**
      *
-     * @param args ->
+     * @param args:
      *             arg0 = ip server
      *             arg1 = socket port
      *             arg2 = gui ( -gui for graphical interface or -cli for command line interface)

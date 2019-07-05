@@ -52,8 +52,8 @@ public class Furnace  extends SpecialWeapons{
 
     /**
      * This weapon need:
-     * effect 0 -> a cell of the room targeted
-     * effect 1 -> the cell targeted
+     * effect 0 :  a cell of the room targeted
+     * effect 1 : the cell targeted
      *
      * {@inheritDoc}
      */

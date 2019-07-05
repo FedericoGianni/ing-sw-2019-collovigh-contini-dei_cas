@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.utils.DefaultReplies.*;
 
 /**
- * This class will handle the actions of the players ( Move, Move&Grab, Shoot, frenzyMove, FrenzyGrab, FrenzyShoot)
+ * This class will handle the actions of the players ( Move, Move and Grab, Shoot, frenzyMove, FrenzyGrab, FrenzyShoot)
  */
 public class ActionPhase {
 
@@ -267,6 +267,7 @@ public class ActionPhase {
      * This method does the grab action
      * @param newWeaponName is the name of the weapon to buy
      * @param discardedWeaponName is the name of the weapon to discard
+     * @param toSell list of CachedPowerUps to sell to pay the weapon instead of ammos
      */
     private void grab(String newWeaponName,String discardedWeaponName, List<CachedPowerUp> toSell ) {
 
@@ -369,6 +370,7 @@ public class ActionPhase {
      * @param newWeaponName is the name of the weapon to buy
      * @param discardedWeaponName is the name of the weapon to discard
      * @param cell is the specified cell
+     * @param powerUpList list of powerups list which the user will discard to pay instead of ammos
      * @return true if the player can grab false otherwise
      */
     private Boolean checkGrab(String newWeaponName,String discardedWeaponName, Cell cell, List<CachedPowerUp> powerUpList){
@@ -398,6 +400,7 @@ public class ActionPhase {
      * @param newWeaponName is the name of the weapon to buy
      * @param discardedWeaponName is the name of the weapon to discard
      * @param cell is the specified cell
+     * @param powerUpList list of cachedpowerups which the user wants to discard to pay the weapom buy cost
      * @return true if the player can grab false otherwise
      */
     private Boolean checkWeaponGrab(String newWeaponName,String discardedWeaponName, Cell cell, List<CachedPowerUp> powerUpList){
@@ -443,6 +446,7 @@ public class ActionPhase {
     /**
      *
      * @param weapon is the weapon to buy
+     * @param powerUpList list of cachedpowerups which the user wants to discard to pay the weapom buy cost
      * @return true if the player can buy it
      */
     private Boolean currentPlayerCanBuyWeapon(Weapon weapon, List<CachedPowerUp> powerUpList){
@@ -829,12 +833,40 @@ public class ActionPhase {
 
     }
 
+
+
     /**
-     * This method will do the atomic action shoot
-     * forward exception if them are thrown in shoot
+     *  This method will do the atomic action shoot
+     *  forward exception if them are thrown in shoot
      *
      * @param shootAction is the class containing the list of moves
+     * @throws WeaponNotLoadedException
+     * @throws PlayerAlreadyDeadException
+     * @throws PlayerInSameCellException
+     * @throws PlayerInDifferentCellException
+     * @throws UncorrectDistanceException
+     * @throws SeeAblePlayerException
+     * @throws UncorrectEffectsException
+     * @throws NotCorrectPlayerNumberException
+     * @throws PlayerNotSeeableException
+     * @throws WeaponNotFoundException
+     * @throws DifferentPlayerNeededException
+     * @throws NotEnoughAmmoException
+     * @throws CardNotPossessedException
      * @throws ArgsNotValidatedException if the controller checks fails
+     * @throws CellNonExistentException
+     * @throws PrecedentPlayerNeededException
+     * @throws PlayerAlreadyDeadException
+     * @throws SeeAblePlayerException
+     * @throws UncorrectEffectsException
+     * @throws NotCorrectPlayerNumberException
+     * @throws PlayerNotSeeableException
+     * @throws WeaponNotFoundException
+     * @throws DifferentPlayerNeededException
+     * @throws NotEnoughAmmoException
+     * @throws CardNotPossessedException
+     * @throws CellNonExistentException
+     *
      */
     private void shoot(ShootAction shootAction) throws WeaponNotLoadedException, PlayerAlreadyDeadException, PlayerInSameCellException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, WeaponNotFoundException, DifferentPlayerNeededException, NotEnoughAmmoException, CardNotPossessedException, ArgsNotValidatedException, CellNonExistentException, PrecedentPlayerNeededException {
 
@@ -1457,6 +1489,7 @@ public class ActionPhase {
     /**
      * This method will do the reload part of the frenzy shoot action
      * @param frenzyShoot is a class containing the information needed
+     *
      */
     private void doFrenzyReload(FrenzyShoot frenzyShoot){
 

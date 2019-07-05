@@ -457,7 +457,7 @@ public class Parser {
 
     /**
      * creates a Mover and adds it t the list
-     * @param damages
+     * @param damages;
      */
     private static Mover parseMoverObject(JSONObject damages)
     {
@@ -531,7 +531,7 @@ public class Parser {
 
     /**
      * reads the JSON and creates a NormalWeapon object and adds it to the list
-     * @param micros
+     * @param micros;
      */
     private static NormalWeapon parseWeaponObject(JSONObject micros)
     {

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.view.GUI;
 
 
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.PowerUpType;
 import it.polimi.ingsw.view.UiHelpers;
 import it.polimi.ingsw.view.View;
@@ -979,11 +979,11 @@ public class GuiMapController {
     /**
      * movement handler,get every direction and ask the server if valid
      * if is valid do the move then call event mover
-     * @param x
-     * @param y
-     * @param m
-     * @param movementDirections
-     * @param actionType
+     * @param x;
+     * @param y;
+     * @param m;
+     * @param movementDirections;
+     * @param actionType;
      */
     private void handleMovement(int x, int y, int m, ArrayList<Directions> movementDirections, String actionType)//called from move,do stuff for real
     {
@@ -1230,7 +1230,7 @@ public class GuiMapController {
      * takes the id returns the string of the image
      *
      * @param id
-     * @return
+     *
      */
    private void fromIDtoIMG(int id, VBox b) {
         if (b.getChildren().size() == 0) {
@@ -1314,9 +1314,9 @@ public class GuiMapController {
 
     /**
      * same as formIDToImg
-     * @param id
-     * @param r
-     * @param c
+     * @param id;
+     * @param r;
+     * @param c;
      */
     public void playerDisplay(int id,int r,int c)
     {
@@ -1325,8 +1325,8 @@ public class GuiMapController {
 
     /**
      * add the ImageView in the selected HBox
-     * @param id
-     * @param h
+     * @param id;
+     * @param h;
      */
     private void inserter(int id, HBox h) {
         ImageView img = new ImageView();
@@ -1380,10 +1380,10 @@ public class GuiMapController {
 
     /**
      * directly ask the server if a move is valid
-     * @param dir
-     * @param x
-     * @param y
-     * @return
+     * @param dir;
+     * @param x;
+     * @param y;
+     * @return;
      */
     private boolean moveValidator(String dir, int x, int y)//x and y are the arrive postions of the move dir is the direction
     {
@@ -1420,9 +1420,9 @@ public class GuiMapController {
 
     /**
      * Update the log about connections
-     * @param name
-     * @param id
-     * @param color
+     * @param name;
+     * @param id;
+     * @param color;
      */
     @FXML
     public void loginUpdater(String name, int id, PlayerColor color) {
@@ -1967,13 +1967,13 @@ public class GuiMapController {
 
     /**
      * scope action, all these parameters beacuse do the shootAction, check noScope(..) for other cases
-     * @param w
-     * @param targetLists
-     * @param effects
-     * @param cells
-     * @param pUp
-     * @param dir
-     * @param c
+     * @param w;
+     * @param targetLists;
+     * @param effects;
+     * @param cells;
+     * @param pUp;
+     * @param dir;
+     * @param c;
      */
     private void scopeAction(String w, List<List<Integer>> targetLists, List<Integer> effects, List<Point> cells, List<CachedPowerUp> pUp, List<Directions> dir, Color c) {
         mapEventDeleter();

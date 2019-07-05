@@ -145,13 +145,11 @@ public abstract class Weapon implements Serializable {
      * @param effects
      * @param cells
      * @throws WeaponNotLoadedException
-     * @throws OverKilledPlayerException
-     * @throws DeadPlayerException
      * @throws PlayerInSameCellException
      * @throws PlayerInDifferentCellException
      * @throws UncorrectDistanceException
      * @throws SeeAblePlayerException
-     * @throws FrenzyActivatedException
+     *
      */
     public abstract void shoot(List<List<Player>> targetLists, List<Integer> effects, List<Cell> cells) throws WeaponNotLoadedException, PlayerInSameCellException, PlayerAlreadyDeadException, PlayerInDifferentCellException, UncorrectDistanceException, SeeAblePlayerException, UncorrectEffectsException, NotCorrectPlayerNumberException, PlayerNotSeeableException, NotEnoughAmmoException, CardNotPossessedException, DifferentPlayerNeededException, CellNonExistentException, PrecedentPlayerNeededException;//may need to be changed
 

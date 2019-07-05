@@ -34,7 +34,7 @@ public class GrabAction extends JsonAction {
 
     /**
      * method che do the move and grab action, requires directions
-     * @param directions
+     * @param directions;
      */
     public GrabAction(List<Directions> directions) {
 
@@ -70,8 +70,8 @@ public class GrabAction extends JsonAction {
      * do the grab and move of a wepons
      * @param directions if you move
      * @param discardedWeapon if you have 3 weapons
-     * @param newWeaponName
-     * @param powerUpsForPay
+     * @param newWeaponName;
+     * @param powerUpsForPay;
      */
     public GrabAction( List<Directions> directions, String discardedWeapon, String newWeaponName, List<CachedPowerUp> powerUpsForPay) {
 

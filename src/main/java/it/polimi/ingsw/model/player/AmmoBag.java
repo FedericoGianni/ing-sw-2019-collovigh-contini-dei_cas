@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.player;
 
 import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Subject;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.utils.Color;
@@ -86,7 +85,7 @@ public class AmmoBag extends Subject implements Bag<AmmoCube> {
 
     /**
      *
-     * @return the number of ammos of each type, 0->red,1->blue,->yellow
+     * @return the number of ammos of each type, 0: red,1: blue, 2: yellow
      */
     public int[] getAmount()
     {

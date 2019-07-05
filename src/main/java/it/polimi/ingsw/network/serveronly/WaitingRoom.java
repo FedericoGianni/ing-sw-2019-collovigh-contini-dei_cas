@@ -77,7 +77,7 @@ WaitingRoom {
     /**
      * This method starts a new Game
      * if the players specified a map that will be taken or it will be generated casually
-     * @return the new Controller
+     *
      */
     private synchronized void initGame(){
 

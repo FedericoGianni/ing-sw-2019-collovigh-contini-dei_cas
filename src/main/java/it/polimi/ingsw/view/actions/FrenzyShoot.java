@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.actions;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -14,7 +13,7 @@ public class FrenzyShoot extends JsonAction {
 
     /**
      * do the move of the frenzy atomic
-     * @param moveAction
+     * @param moveAction;
      */
     public FrenzyShoot(Move moveAction) {
 
@@ -28,7 +27,7 @@ public class FrenzyShoot extends JsonAction {
 
     /**
      * do the reaload part of the atomic frezy shoot
-     * @param reloadAction
+     * @param reloadAction;
      */
     public FrenzyShoot(ReloadAction reloadAction) {
 
@@ -42,7 +41,7 @@ public class FrenzyShoot extends JsonAction {
 
     /**
      * shoot part of the amtomic frenzy shoot , do the shoot
-     * @param shootAction
+     * @param shootAction;
      */
     public FrenzyShoot(ShootAction shootAction) {
 
@@ -71,7 +70,7 @@ public class FrenzyShoot extends JsonAction {
 
     /**
      * skip the action if you get stuck in unpayable weapons
-     * @return
+     * @return;
      */
     public static FrenzyShoot genFrenzyShootActionSkipShoot(){
 

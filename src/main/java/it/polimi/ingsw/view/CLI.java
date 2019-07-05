@@ -2019,7 +2019,7 @@ public class CLI implements UserInterface {
 
     /**
      * Helper method needed by startShoot to collect target/s to be shot
-     * @return a List of List<Integer> representing the targets for each of the weapon effect
+     * @return a List of List of Integer representing the targets for each of the weapon effect
      * (index 0: base effect, index 1: second effect, index 2: third effect)
      */
     private List<List<Integer>> chooseTargets(CachedFullWeapon w, int effectsNum){
@@ -2085,7 +2085,7 @@ public class CLI implements UserInterface {
     /**
      * Helper method to retrieve which weapon effect the player wants to use.
      * @param w CachedFullWeapon chosen by the player to shoot (need it to read effect types/cost)
-     * @return a List<Integer> representing which weapon effects the user wants to use
+     * @return a List of Integer representing which weapon effects the user wants to use
      */
     private List<Integer> chooseEffects(CachedFullWeapon w){
 
