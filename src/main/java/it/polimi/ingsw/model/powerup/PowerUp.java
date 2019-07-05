@@ -6,10 +6,21 @@ import it.polimi.ingsw.utils.PowerUpType;
 
 /**
  *  Abstract Class for PowerUps
+ *
+ * @see Newton
+ * @see TargetingScope
+ * @see TagbackGrenade
+ * @see Teleporter
  */
 public abstract class PowerUp {
 
+    /**
+     * color of the powerUp
+     */
     private final Color color;
+    /**
+     * type of the powerUp
+     */
     private PowerUpType type;
 
     /**

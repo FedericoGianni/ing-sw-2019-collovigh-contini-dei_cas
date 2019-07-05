@@ -10,17 +10,42 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class represent the hellion Special weapon
+ * @see SpecialWeapons
+ */
 public class Hellion extends SpecialWeapons {
 
+    /**
+     * name of the weapon
+     */
     private static final String HELLION_NAME = "HELLION";
 
+    /**
+     * base dmg
+     */
     private static final Integer DMG = 1;
+    /**
+     * marks given to the targets in base mode
+     */
     private static final Integer BASIC_MODE_MARKS = 1;
+    /**
+     * marks given to the targets in second effect mode
+     */
     private static final Integer FIRST_MODE_MARKS = 2;
 
+    /**
+     * reload cost
+     */
     private List<AmmoCube> baseCost;
+    /**
+     * second effect cost
+     */
     private List<AmmoCube> secondCost;
 
+    /**
+     * Constructor
+     */
     public Hellion() {
 
         super(HELLION_NAME);

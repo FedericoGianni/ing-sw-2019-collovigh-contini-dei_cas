@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.powerup;
 
+import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Deck;
 import it.polimi.ingsw.utils.Color;
 
@@ -10,10 +11,20 @@ import java.util.Random;
 
 /**
  *  This class will be used to instantiate two decks of power ups one from which player draw cards and one that collect all discarded cards
+ *
+ *  the deck will be swapped by the CurrentGame when one becomes empty
+ *
+ * @see CurrentGame#drawPowerUp()
  */
 public class PowerUpDeck implements Deck<PowerUp> {
 
+    /**
+     * list of powerUp contained in the deck
+     */
     private List<PowerUp> powerUpList;
+    /**
+     * used for randomization of the draw
+     */
     private Random random;
 
     /**
@@ -24,6 +35,10 @@ public class PowerUpDeck implements Deck<PowerUp> {
         this.powerUpList = new ArrayList<>();
     }
 
+    /**
+     * Constructor used for loading the class from saved
+     * @param powerUps is a list of PowerUp
+     */
     public PowerUpDeck(List<PowerUp> powerUps){
         this.powerUpList = powerUps;
     }
@@ -32,6 +47,10 @@ public class PowerUpDeck implements Deck<PowerUp> {
         this.powerUpList = new ArrayList<>(clone.powerUpList);
     }
 
+    /**
+     *  used only for save purposes
+     * @return the list of powerUp
+     */
     public List<PowerUp> getPowerUpList() {
         return new ArrayList<>(powerUpList);
     }
@@ -136,6 +155,9 @@ public class PowerUpDeck implements Deck<PowerUp> {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int getSize() {
         return this.powerUpList.size();
