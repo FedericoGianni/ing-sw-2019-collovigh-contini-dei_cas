@@ -51,7 +51,10 @@ public class GuiEndController {
 
             s = s.concat(" ID: " + p.getPlayerId());
             s = s.concat("\tNome: " + p.getName());
-            s = s.concat("\tPunti: " + p.getStats().getScore());
+            if(p.getStats() != null)
+                s = s.concat("\tPunti: " + p.getStats().getScore());
+            else
+                s = s.concat("\tPunti: 0");
 
             pointPlayers.add(s);
         }

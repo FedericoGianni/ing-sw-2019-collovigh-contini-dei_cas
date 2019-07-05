@@ -2463,7 +2463,10 @@ public class CLI implements UserInterface {
             s = s.concat(UiHelpers.colorAsciiTranslator(p.getPlayerColor()).escape());
             s = s.concat("\tID: " + p.getPlayerId());
             s = s.concat("\tNome: " + p.getName());
-            s = s.concat("\tPunti: " + p.getStats().getScore());
+            if(p.getStats() != null)
+                s = s.concat("\tPunti: " + p.getStats().getScore());
+            else
+                s = s.concat("\tPunti: 0");
             s = s.concat(ANSI_RESET.escape());
 
             show(s);
