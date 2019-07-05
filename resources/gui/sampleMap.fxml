@@ -9,17 +9,16 @@
 
     <top>
         <VBox>
-            <Label text="Log of events" ></Label>
+            <Label text="Console di gioco" ></Label>
             <TextArea fx:id="log" editable="false" focusTraversable="false" wrapText="true" text="Game started" prefHeight="100" prefWidth="200">
             </TextArea>
         </VBox>
     </top>
     <left>
         <VBox>
-            <Label text="Dynamic screen"></Label>
+            <!--<Label text="Dynamic screen"></Label>-->
             <VBox >
                 <children>
-                    <Label text="Weapons "></Label>
                     <ImageView fx:id="weapon1"></ImageView>
                     <ImageView fx:id="weapon2"></ImageView>
                     <ImageView fx:id="weapon3"></ImageView>
@@ -58,7 +57,7 @@
             <children>
 
 
-            <Label text="PowerUps Here"></Label>
+            <!--><Label text="PowerUps Here"></Label><!-->
                 <ImageView fx:id="powerUp1"></ImageView>
                 <ImageView fx:id="powerUp2"></ImageView>
                 <ImageView fx:id="powerUp3"></ImageView>
@@ -68,7 +67,6 @@
                 <children>
 
 
-                    <Label text="My Weapons Here"></Label>
                     <ImageView fx:id="myWeapon1"></ImageView>
                     <ImageView fx:id="myWeapon2"></ImageView>
                     <ImageView fx:id="myWeapon3"></ImageView>
@@ -81,11 +79,10 @@
         <HBox>
             <children>
                 <HBox>
-                    <Button text="Moovi"  fx:id="moveButton"></Button>
+                    <Button text="Muovi"  fx:id="moveButton"></Button>
                     <Button text="Spara" fx:id="shootButton"></Button>
                     <Button text="Muovi e raccogli" fx:id="moveGrabButton"></Button>
                     <Button text="Raccogli dove sei " fx:id="grabButton"></Button>
-                    <Button text="Ricarica"></Button>
                 </HBox>
                 <HBox fx:id="plance">
 
