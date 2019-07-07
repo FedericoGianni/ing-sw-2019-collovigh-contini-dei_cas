@@ -3091,12 +3091,33 @@ public class GuiMapController {
         mapEventDeleter();
         System.out.println("------------------SELEZIOANTORE DI EFFETTI---------");
         List<Integer> effects = new ArrayList<>();
-        if (w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE))//choose one of the exclusive effects
+        if(w.getName().equals("T.H.O.R."))
+        {
+            ButtonType first = new ButtonType("Primo Effetto");
+            ButtonType second = new ButtonType("Tutti gli effetti");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli gli effetti", first, second);
+            alert.showAndWait();
+            if (alert.getResult() == first) {
+                effects.add(0);
+                shootEffectPay(w, effects, dir);
+            } else {
+                effects.add(0);
+                effects.add(1);
+                effects.add(2);
+                shootEffectPay(w, effects, dir);
+            }
+        }
+        else if(w.getEffectTypes()==null)//hetaseekr only one effect so is null
+        {
+            effects.add(0);
+            shootEffectPay(w, effects, dir);
+        }
+        else if (w.getEffectTypes().get(0).equals(EffectType.ESCLUSIVE))//choose one of the exclusive effects
         {
             System.out.println("------------------EFFFETTI ESCLUSIVI---------");
             ButtonType first = new ButtonType("Primo Effetto");
             ButtonType second = new ButtonType("Secondo Effetto");
-            Alert alert = new Alert(Alert.AlertType.WARNING, "Choose one of the effects of " + w.getName(), first, second);
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Scegli che effetti usare di " + w.getName(), first, second);
             alert.showAndWait();
 
             if (alert.getResult() == first) {

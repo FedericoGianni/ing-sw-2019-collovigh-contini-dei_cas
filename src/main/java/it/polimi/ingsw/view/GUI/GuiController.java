@@ -53,6 +53,8 @@ public class GuiController {
      */
     private Scene secondScene;
 
+    private Scene reconnectScene;
+
     /**
      * Set the lobby scene
      * @param scene scene to be set
@@ -61,6 +63,9 @@ public class GuiController {
         secondScene = scene;
     }
 
+    public void setReconnectScene(Scene reconnectScene) {
+        this.reconnectScene = reconnectScene;
+    }
 
     @FXML
     private ToggleGroup color;
@@ -154,8 +159,10 @@ public class GuiController {
      * @param actionEvent any event to trigger this method
      */
     public void openSecondScene(ActionEvent actionEvent) {
-        myStage.setScene(secondScene);
-    }
+        myStage.setScene(secondScene);}
+
+    public void openReconnectScene(ActionEvent actionEvent) {
+        myStage.setScene(reconnectScene);}
 
     /**
      * Controller initializer
