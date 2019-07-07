@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.view.actions.ReloadAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 import it.polimi.ingsw.view.exceptions.WeaponNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,7 +40,7 @@ public class ReloadPhase {
     /**
      * Timer for the reload phase
      */
-    private static final int TIMER_RELOAD = 60;
+    private static final int TIMER_RELOAD = 120;
 
     /**
      * Controller instance

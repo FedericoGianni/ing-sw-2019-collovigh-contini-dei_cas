@@ -131,6 +131,7 @@ public class GuiMapController {
         myStage.show();
     }
 
+
     /**
      * Gui Map controller initializer to set the reference to the stage, used to switch scenes
      * @param stage
@@ -3773,6 +3774,7 @@ public class GuiMapController {
 
         System.out.println(error);
         Alert a=new Alert(Alert.AlertType.CONFIRMATION,error);
+        a.show();
     }
 
     //---------------------------------------------------------------------RELOAD

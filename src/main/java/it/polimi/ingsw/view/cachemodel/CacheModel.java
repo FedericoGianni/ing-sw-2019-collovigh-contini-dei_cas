@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class CacheModel {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.INFO;
+    private static Level level = Level.FINE;
 
     /**
      * List of cached Player containing all infos about in game players

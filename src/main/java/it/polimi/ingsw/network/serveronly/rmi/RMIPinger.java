@@ -40,9 +40,11 @@ public class RMIPinger implements Runnable{
      * Constructor
      * @param client is the client to ping
      */
-    public RMIPinger(ToClient client) {
+    public RMIPinger(ToClient client, int playerId) {
 
         this.target = client;
+
+        this.pId = playerId;
     }
 
     /**
@@ -78,11 +80,9 @@ public class RMIPinger implements Runnable{
 
         }catch (Exception e){
 
-            Server.removePlayer(pId);
-
             LOGGER.log(Level.WARNING, message);
 
-            LOGGER.log(level, e.getMessage(), e);
+            Server.removePlayer(pId);
 
         }
 

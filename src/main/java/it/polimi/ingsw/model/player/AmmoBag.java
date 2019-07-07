@@ -44,6 +44,10 @@ public class AmmoBag extends Subject implements Bag<AmmoCube> {
 
         this.ammoCubes = new ArrayList<>();
         this.player = player;
+
+        this.ammoCubes.add(new AmmoCube(Color.BLUE));
+        this.ammoCubes.add(new AmmoCube(Color.RED));
+        this.ammoCubes.add(new AmmoCube(Color.YELLOW));
     }
 
 
@@ -67,7 +71,7 @@ public class AmmoBag extends Subject implements Bag<AmmoCube> {
 
         List<AmmoCube> list = this.ammoCubes.stream()
                 .filter(ammoCube ->
-                    ammoCube.getColor() == item.getColor()
+                        ammoCube.getColor() == item.getColor()
                 ).collect(Collectors.toList());
 
         if (list.size() < MAX_FOR_COLOR) {

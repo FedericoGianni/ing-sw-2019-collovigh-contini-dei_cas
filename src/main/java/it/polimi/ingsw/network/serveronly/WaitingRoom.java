@@ -11,10 +11,7 @@ import it.polimi.ingsw.network.networkexceptions.OverMaxPlayerException;
 import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.cachemodel.sendables.CachedLobby;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,7 +80,20 @@ WaitingRoom {
 
         activeGame = Parser.addGame();
 
-        List<Integer> mapAndSkulls = Server.getClient(0).askMapAndSkulls();
+        List<Integer> mapAndSkulls = Arrays.asList(2,8);
+
+        try {
+
+            mapAndSkulls = Server.getClient(0).askMapAndSkulls();
+
+        }catch (NullPointerException e){
+
+            LOGGER.log(Level.WARNING, " Player disconnected while asked Map game will be closed ... ");
+
+            System.exit(0);
+
+        }
+
         this.mapType = mapAndSkulls.get(0);
         this.skulls = mapAndSkulls.get(1);
 

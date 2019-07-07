@@ -11,5 +11,8 @@ public class Protocol {
     public static final String DEFAULT_GAME_ALREADY_STARTED_REPLY = "GAME_ALREADY_STARTED";
     public static final String DEFAULT_MAX_PLAYER_REACHED = "MAX_PLAYER_REACHED";
     public static final String DEFAULT_NAME_NOT_FOUND = "NAME_NOT_FOUND";
+    public static final String DEFAULT_RMI_SERVER_NOT_FOUND = "RMI_SERVER_NOT_FOUND";
+    public static final String DEFAULT_SOCKET_SERVER_NOT_FOUND = "SOCKET_SERVER_NOT_FOUND";
+
 
 }

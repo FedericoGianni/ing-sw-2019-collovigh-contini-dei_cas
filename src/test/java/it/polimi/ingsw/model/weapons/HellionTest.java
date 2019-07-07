@@ -5,15 +5,16 @@ import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Cell;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class HellionTest {
 
@@ -110,6 +111,18 @@ class HellionTest {
         player.setPlayerPos(Model.getMap().getCell(0,1));
 
         // check exception if player can not pay effect 2
+
+        for (AmmoCube cube : player.getAmmoBag().getList()){
+
+            try {
+
+                player.pay(cube.getColor());
+
+            }catch (CardNotPossessedException e){
+
+                e.printStackTrace();
+            }
+        }
 
         assertThrows(NotEnoughAmmoException.class, () -> {
 

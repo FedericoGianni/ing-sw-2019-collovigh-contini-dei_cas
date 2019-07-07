@@ -4,11 +4,11 @@ import it.polimi.ingsw.customsexceptions.CardNotPossessedException;
 import it.polimi.ingsw.model.ammo.AmmoCube;
 import it.polimi.ingsw.model.map.Map;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.model.player.PowerUpBag;
 import it.polimi.ingsw.model.powerup.PowerUp;
 import it.polimi.ingsw.model.powerup.PowerUpDeck;
 import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.PlayerColor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ class PowerUpBagTest {
         assertEquals(0,p.getPowerUpBag().getList().size());
         assertTrue(!p.getPowerUpBag().hasItem(c1));
 
-        assertEquals(1,p.getAmmo().size());
+        assertEquals(4,p.getAmmo().size());
     }
 
     @Test

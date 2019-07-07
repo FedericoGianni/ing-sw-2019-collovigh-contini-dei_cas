@@ -27,7 +27,7 @@ public class SpawnPhase {
     /**
      * Timer for the Spawn Phase
      */
-    private static final int TIMER_SPAWN = 20;
+    private static final int TIMER_SPAWN = 60;
 
     // Controller reference
 

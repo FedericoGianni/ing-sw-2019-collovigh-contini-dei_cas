@@ -24,8 +24,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.utils.PowerUpType.*;
 import static it.polimi.ingsw.utils.DefaultReplies.*;
+import static it.polimi.ingsw.utils.PowerUpType.*;
 
 /**
  * This class is used for handling the methods in the powerUp phase
@@ -46,7 +46,7 @@ public class PowerUpPhase {
     /**
      * Timer for the powerUp phase
      */
-    private static final int TIMER_POWER_UP = 30;
+    private static final int TIMER_POWER_UP = 120;
 
 
     // Controller reference

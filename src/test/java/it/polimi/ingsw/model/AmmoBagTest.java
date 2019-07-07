@@ -20,7 +20,7 @@ class AmmoBagTest {
 
         AmmoBag bag= new AmmoBag(null);
 
-        assertTrue(bag.getList().isEmpty());
+        assertEquals(3,bag.getList().size());
 
         List<AmmoCube> list = new ArrayList<>();
         list.add(new AmmoCube(Color.YELLOW));
@@ -33,7 +33,9 @@ class AmmoBagTest {
 
         list.sort(Comparator.comparing(AmmoCube::getColor));
 
-        assertEquals(list, bag.getList());
+        assertTrue(bag.getList().containsAll(list));
+
+        assertEquals(list.size() + 3, bag.getList().size());
     }
 
     @Test
@@ -103,9 +105,6 @@ class AmmoBagTest {
         list.add(new AmmoCube(Color.YELLOW));
         list.add(new AmmoCube(Color.RED));
         list.add(new AmmoCube(Color.BLUE));
-        list.add(new AmmoCube(Color.YELLOW));
-        list.add(new AmmoCube(Color.RED));
-        list.add(new AmmoCube(Color.YELLOW));
 
         for (AmmoCube a: list){
 
@@ -114,22 +113,7 @@ class AmmoBagTest {
 
         list.sort(Comparator.comparing(AmmoCube::getColor));
 
-
-        for (int i = 0; i < bag.getList().size(); i++) {
-
-            try {
-
-                AmmoCube ammoCube = bag.getItem(bag.getList().get(i));
-
-                assertTrue(list.contains(ammoCube));
-
-            }catch (CardNotPossessedException e){
-                e.printStackTrace();
-            }
-
-
-
-        }
+        assertTrue(bag.getList().containsAll(list));
 
         assertThrows(CardNotPossessedException.class,
                 () -> {

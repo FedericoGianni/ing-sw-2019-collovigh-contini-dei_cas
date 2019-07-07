@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.utils.PlayerColor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -106,7 +106,7 @@ public class GuiReconnectionController {
         playerName = name.getText();
 
         gui.getView().createConnection(protocolType);
-        gui.getView().reconnect(playerName);
+        new Thread(() -> gui.getView().reconnect(playerName)).start();
 
     }
 

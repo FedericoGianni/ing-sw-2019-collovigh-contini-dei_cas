@@ -1,12 +1,12 @@
 package it.polimi.ingsw.network.serveronly.rmi;
 
 
-import it.polimi.ingsw.utils.PlayerColor;
+import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.network.rmi.ToClient;
 import it.polimi.ingsw.network.rmi.ToServer;
 import it.polimi.ingsw.network.serveronly.Server;
-import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
 
@@ -73,6 +73,9 @@ public class ToServerImpl implements ToServer {
 
             // connect to the remote registry
 
+            LOGGER.log(level,() ->"[ToServer] ip: " + address);
+            LOGGER.log(level,() ->"[ToServer] port " + rmiClientPort);
+
             remote = LocateRegistry.getRegistry(address, rmiClientPort);
 
             // create the Remote Object
@@ -89,7 +92,7 @@ public class ToServerImpl implements ToServer {
 
             // starts the pinger
 
-            new Thread(new RMIPinger(client)).start();
+            new Thread(new RMIPinger(client, playerId)).start();
 
             // LOG the action
 
@@ -152,7 +155,7 @@ public class ToServerImpl implements ToServer {
 
             // starts the pinger
 
-            new Thread(new RMIPinger(client)).start();
+            new Thread(new RMIPinger(client,playerId)).start();
 
             // Return the id
 

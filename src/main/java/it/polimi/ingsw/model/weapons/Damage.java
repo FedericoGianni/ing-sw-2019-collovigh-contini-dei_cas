@@ -44,7 +44,7 @@ public class Damage extends MicroEffect {
     private int distMin;//some effects require a minimum distance, calculated by moves
     //particuarities: if both differentPlayer and alreadyTargeted are true you can choose to apply one or both effects(check machineGun III)
 
-    // the player number is 100 you need to target every player in the target's square(check electroshyte-melee-  and grenade launcher)
+    // the player number is 100 you need to target every player in the target's square(check electroshyte-melee-  and grenade launcher 2)
     //player num is 10 you must target the number/10 every one from different cell
     //player number pure that number
     //player number 1000 or more up to playerNum/1000
@@ -278,13 +278,15 @@ public class Damage extends MicroEffect {
             }
             if(c!=null)//Granade launcher 2, e rccket launcher has cell different from 0
             {
+                System.out.println("aaaaaa");
                 if(c.getPlayers().size()==0)
                     throw new NotCorrectPlayerNumberException();
-                if(!w.isPossessedBy().canSee().contains(c.getPlayers().get(0)))//you cant see the cella nd the ttagets
+                if(!w.isPossessedBy().canSee().contains(c.getPlayers().get(0)))//you cant see the cella and the ttagets
                     throw new PlayerNotSeeableException();
 
                 for(Player item : c.getPlayers())
                 {
+                    System.out.println("giocatore "+item.getPlayerName());
                     if(!item.equals(w.isPossessedBy()))
                     item.addDmg(w.isPossessedBy().getPlayerId(),damage);
                 }

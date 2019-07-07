@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class SocketClientWriter extends Client implements Runnable {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.INFO;
+    private static Level level = Level.FINE;
 
     private static final String RECONNECTION_MESSAGE_START = "reconnect";
 

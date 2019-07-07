@@ -47,8 +47,6 @@ public class RunServer {
 
                     config = gson.fromJson(br, Config.class);
 
-                    System.out.println("gettato dal file: " + config.getGame());
-
                     // LOG the load
 
                     LOGGER.log(level, "[RUN-SERVER] Config successfully loaded ");

@@ -21,6 +21,18 @@ class PlayerTest {
 
         Player player = new Player("Alex",0, PlayerColor.BLUE);
 
+        for (AmmoCube cube : player.getAmmoBag().getList()){
+
+            try {
+
+                player.pay(cube.getColor());
+
+            }catch (CardNotPossessedException e){
+
+                e.printStackTrace();
+            }
+        }
+
         player.addCube(new AmmoCube(Color.RED));
         player.addCube(new AmmoCube(Color.RED));
 
@@ -55,6 +67,18 @@ class PlayerTest {
     void payShouldThrowException() {
 
         Player player = new Player("Alex",0,PlayerColor.BLUE);
+
+        for (AmmoCube cube : player.getAmmoBag().getList()){
+
+            try {
+
+                player.pay(cube.getColor());
+
+            }catch (CardNotPossessedException e){
+
+                e.printStackTrace();
+            }
+        }
 
         player.addCube(new AmmoCube(Color.RED));
         player.addCube(new AmmoCube(Color.RED));
@@ -176,6 +200,18 @@ class PlayerTest {
         Model model = new Model(names,colors,2,8);
 
         Player player01 = Model.getPlayer(0);
+
+        for (AmmoCube cube : player01.getAmmoBag().getList()){
+
+            try {
+
+                player01.pay(cube.getColor());
+
+            }catch (CardNotPossessedException e){
+
+                e.printStackTrace();
+            }
+        }
 
         assertEquals(0,player01.getAmmo().size());
         assertEquals(0,player01.getPowerUpBag().getList().size());

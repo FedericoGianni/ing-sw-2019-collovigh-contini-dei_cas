@@ -91,8 +91,7 @@ public class GuiLobbyController {
      * Set the third scene
      * @param scene
      */
-    public void setThirdScene(Scene scene){
-        mainScene = scene;
+    public void setThirdScene(Scene scene){ mainScene = scene;
     }
 
     /**
@@ -101,6 +100,7 @@ public class GuiLobbyController {
      */
     public void openThirdScene(ActionEvent actionEvent) {
         myStage.setScene(mainScene);
+        //myStage.show();---?
     }
 
     /**

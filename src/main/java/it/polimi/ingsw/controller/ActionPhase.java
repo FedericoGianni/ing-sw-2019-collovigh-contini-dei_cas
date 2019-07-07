@@ -58,7 +58,7 @@ public class ActionPhase {
     /**
      * timer for the action phase ( amount of seconds the client have to answer the server request)
      */
-    private static final int TIMER_ACTION = 90;
+    private static final int TIMER_ACTION = 180;
 
     //Move
 
@@ -558,7 +558,7 @@ public class ActionPhase {
 
             LOGGER.log(level, () -> LOG_START_GRAB + controller.getCurrentPlayer() + " bought a new weapon: " + newWeaponName );
 
-            if (Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() >= MAX_WEAPONS ){
+            if (Model.getPlayer(controller.getCurrentPlayer()).getCurrentWeapons().getList().size() > MAX_WEAPONS ){
 
                 List<Weapon> weaponList = Model.getPlayer(controller.getCurrentPlayer())
                         .getCurrentWeapons()

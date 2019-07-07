@@ -34,6 +34,8 @@ import static java.lang.Thread.sleep;
  */
 public class Gui extends Application implements UserInterface {
 
+    private boolean firstExecution=true;
+
     private final static String FX_PATH = "javafx-sdk-11.0.2/lib";
 
     /**
@@ -314,7 +316,17 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void startUI() {
-        launch();
+        if(firstExecution) {
+            firstExecution=false;
+            launch();
+
+        } else {
+            System.out.println("Sever non trovato!");
+            System.exit(0);
+        }
+
+        //guiLobbyController.openThirdScene(new ActionEvent());
+
     }
 
 
@@ -338,8 +350,13 @@ public class Gui extends Application implements UserInterface {
     @Override
     public void show(String s) {
 
+        if (s.equals(DEFAULT_SOCKET_SERVER_NOT_FOUND)){
+
+            System.exit(0);
+        }
+
         Platform.runLater( () -> {
-            //System.out.println("DEBUG show chimato con stringa " + s);
+
             String header;
             String msg;
             Boolean retryLogin = false;
@@ -368,7 +385,17 @@ public class Gui extends Application implements UserInterface {
                     msg = "Partita già in corso!";
                     retryLogin = false;
                     break;
-
+                case DEFAULT_NAME_ALREADY_TAKEN_REPLY:
+                    header = "login";
+                    msg = "Nome gia preso!";
+                    retryLogin = false;
+                    break;
+                case DEFAULT_RMI_SERVER_NOT_FOUND:
+                    header = "login";
+                    msg = "Server non trovato!";
+                    System.out.println("aaaaa");
+                    retryLogin = false;
+                    break;
                 default:
                     header = s.substring(0, 10);
                     msg = s;
@@ -480,7 +507,6 @@ public class Gui extends Application implements UserInterface {
                 guiMapController.initial();
 
                 if(isReconnection) {
-                    //TODO Devo risettarmi il mio vecchio id nella view
                     for (int i = 0; i < view.getCacheModel().getCachedPlayers().size(); i++) {
                         if(view.getCacheModel().getCachedPlayers().get(i).getName().equals(guiReconnectionController.getPlayerName())){
                             getView().setPlayerId(i);
@@ -537,14 +563,6 @@ public class Gui extends Application implements UserInterface {
      */
     @Override
     public void gameSelection() {
-        //TODO questo metodo è chiamato all'avvio della view -> va messo qui il codice per cambiare alla schermata
-        //TODO della mappa?  però viene chiamato anche quando non è ancora iniziato gioco e nullpointera
-      /*  Platform.runLater( () -> {
-            System.out.println("guiLobbyController: " + guiLobbyController);
-            guiMapController.mapCreator();
-            guiReconnectionController.openThirdScene(new ActionEvent());
-        });*/
-
     }
 
 

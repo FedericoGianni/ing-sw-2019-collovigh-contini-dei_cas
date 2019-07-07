@@ -5,7 +5,6 @@ import it.polimi.ingsw.controller.saveutils.SavedController;
 import it.polimi.ingsw.model.CurrentGame;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.player.Player;
-import it.polimi.ingsw.network.networkexceptions.GameNonExistentException;
 import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Directions;
@@ -27,7 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.controller.TurnPhase.*;
+import static it.polimi.ingsw.controller.TurnPhase.END;
+import static it.polimi.ingsw.controller.TurnPhase.SPAWN;
 import static it.polimi.ingsw.network.serveronly.WaitingRoom.DEFAULT_MIN_PLAYERS;
 import static it.polimi.ingsw.utils.DefaultReplies.*;
 import static java.lang.Thread.sleep;
@@ -160,6 +160,11 @@ public class Controller {
      * True if this game has been reloaded, false otherwise
      */
     private boolean reloadGame = false;
+
+    /**
+     * true if endGame has already been called, used to prevent recursive calls
+     */
+    private boolean calledEndGame = false;
 
 
     /**
@@ -633,19 +638,23 @@ public class Controller {
      */
     private void saveGame(){
 
-        //save actual map
-        Parser.saveMap();
+        if (!frenzy) {
 
-        //save players
-        Parser.savePlayers();
+            //save actual map
+            Parser.saveMap();
 
-        //save currentgame
-        Parser.saveCurrentGame(Model.getGame());
+            //save players
+            Parser.savePlayers();
 
-        //save controller
-        Parser.saveController(this);
+            //save currentgame
+            Parser.saveCurrentGame(Model.getGame());
 
-        LOGGER.log(level,()->"[Controller] saved game at end of round: " + roundNumber);
+            //save controller
+            Parser.saveController(this);
+
+            LOGGER.log(level, () -> "[Controller] saved game at end of round: " + roundNumber);
+
+        }
 
     }
 
@@ -943,25 +952,26 @@ public class Controller {
      */
     public void endGame(){
 
-        pointCounter.calcGamePoints();
+        if (!calledEndGame) {
 
-        for (int i = 0; i < players.size(); i++) {
+            calledEndGame = true;
 
-            if (isPlayerOnline(i)){
+            pointCounter.calcGamePoints();
 
-                getVirtualView(i).endGame();
+            for (int i = 0; i < players.size(); i++) {
+
+                if (isPlayerOnline(i)) {
+
+                    getVirtualView(i).endGame();
+                }
             }
-        }
 
-        gameEnded = true;
+            gameEnded = true;
 
-        try {
+            LOGGER.log(Level.WARNING, "[CONTROLLER] Game ended. Closing server...");
 
-            Parser.closeGame(gameId);
+            System.exit(0);
 
-        }catch (GameNonExistentException e){
-
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
         }
     }
 

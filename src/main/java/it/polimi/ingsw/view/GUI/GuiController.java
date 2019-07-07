@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.GUI;
 
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.ProtocolType;
+import it.polimi.ingsw.utils.PlayerColor;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -74,10 +74,13 @@ public class GuiController {
     @FXML
     private void login(ActionEvent event){
 
-
-
         // Connection choice
-
+        playerName = name.getText();
+        if(playerName.equals(""))
+        {
+            gui.retryLogin("Nome vuoto!");
+            return;
+        }
         int connectionchoice = 0;
 
         connectionchoice = srmi.getToggles().indexOf(srmi.getSelectedToggle());
@@ -123,7 +126,7 @@ public class GuiController {
 
         // Name Choice
 
-        playerName = name.getText();
+
 
         gui.getView().createConnection(protocolType);
         gui.getView().joinGame(playerName, playerColor);

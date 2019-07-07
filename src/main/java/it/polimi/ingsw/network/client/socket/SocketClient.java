@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network.client.socket;
 
+import it.polimi.ingsw.runner.RunClient;
+import it.polimi.ingsw.utils.Protocol;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -7,6 +10,7 @@ import java.util.logging.Logger;
 
 import static java.lang.Thread.sleep;
 import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
 
 /**
  * This class will start a SocketClient which starts another thread, SocketClientReader, which keep listening to
@@ -118,7 +122,12 @@ public class SocketClient implements Runnable {
             }
 
         } catch(IOException e){
-            e.printStackTrace();
+
+            //e.printStackTrace();
+
+            LOGGER.log(WARNING, "Could not find the server");
+
+            RunClient.getView().show(Protocol.DEFAULT_SOCKET_SERVER_NOT_FOUND);
         }
     }
 }

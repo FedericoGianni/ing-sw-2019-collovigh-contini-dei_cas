@@ -75,14 +75,19 @@ public class SpawnCell extends Cell {
 
         int prevSize = weapons.size();
 
-        for (int i = 0; i < ( WEAPON_IN_CELL - prevSize ); i++) {
+        if (!Model.getGame().getWeaponDeck().getWeaponsList().isEmpty()) {
 
-            Weapon weaponToAdd = Model.getGame().drawWeapon();
+            for (int i = 0; i < (WEAPON_IN_CELL - prevSize); i++) {
 
-            if (weaponToAdd != null ) this.weapons.add(weaponToAdd);
+                Weapon weaponToAdd = Model.getGame().drawWeapon();
+
+                if (weaponToAdd != null) this.weapons.add(weaponToAdd);
+
+                updateAll(this);
+            }
         }
 
-        updateAll(this);
+
 
     }
 

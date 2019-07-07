@@ -2,7 +2,9 @@ package it.polimi.ingsw.network.serveronly.rmi;
 
 import it.polimi.ingsw.network.ToView;
 import it.polimi.ingsw.network.rmi.ToClient;
+import it.polimi.ingsw.network.serveronly.Server;
 import it.polimi.ingsw.view.updates.UpdateClass;
+
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.logging.Level;
@@ -78,7 +80,10 @@ public class ToViewImpl implements ToView {
             client.sendUpdate(update);
 
         } catch (RemoteException e){
+
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+
+            Server.removePlayer(playerId);
         }
 
     }
@@ -104,6 +109,8 @@ public class ToViewImpl implements ToView {
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
 
+            Server.removePlayer(playerId);
+
         }
 
     }
@@ -122,6 +129,7 @@ public class ToViewImpl implements ToView {
 
         }catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+            Server.removePlayer(playerId);
         }
 
     }
@@ -140,6 +148,7 @@ public class ToViewImpl implements ToView {
 
         }catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+            Server.removePlayer(playerId);
         }
 
     }
@@ -157,6 +166,7 @@ public class ToViewImpl implements ToView {
         }catch (RemoteException e){
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+            Server.removePlayer(playerId);
         }
     }
 
@@ -173,6 +183,7 @@ public class ToViewImpl implements ToView {
         }catch (RemoteException e){
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+            Server.removePlayer(playerId);
         }
     }
 
@@ -190,6 +201,7 @@ public class ToViewImpl implements ToView {
 
         }catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+            Server.removePlayer(playerId);
         }
 
     }
@@ -208,6 +220,7 @@ public class ToViewImpl implements ToView {
 
         }catch (RemoteException e){
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+            Server.removePlayer(playerId);
         }
 
     }
@@ -225,6 +238,7 @@ public class ToViewImpl implements ToView {
         }catch (RemoteException e){
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+            Server.removePlayer(playerId);
         }
     }
 
@@ -241,6 +255,7 @@ public class ToViewImpl implements ToView {
         }catch (RemoteException e){
 
             LOGGER.log(Level.WARNING, e.getMessage(),e);
+            Server.removePlayer(playerId);
 
         }
     }
@@ -258,6 +273,7 @@ public class ToViewImpl implements ToView {
         }catch (RemoteException e){
 
             LOGGER.log(Level.WARNING,e.getMessage(),e);
+            Server.removePlayer(playerId);
 
         }
 
@@ -276,6 +292,7 @@ public class ToViewImpl implements ToView {
         } catch (RemoteException e){
 
             LOGGER.log(Level.WARNING,e.getMessage(),e);
+            Server.removePlayer(playerId);
         }
 
     }
@@ -292,6 +309,7 @@ public class ToViewImpl implements ToView {
         } catch (RemoteException e){
 
             LOGGER.log(Level.WARNING,e.getMessage(),e);
+            Server.removePlayer(playerId);
         }
 
         return null;

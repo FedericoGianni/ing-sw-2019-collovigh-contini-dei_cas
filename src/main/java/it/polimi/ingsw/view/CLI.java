@@ -237,9 +237,22 @@ public class CLI implements UserInterface {
 
         String playerColor;
         boolean validColorChoice = false;
+        boolean validNameChoice = false;
 
         System.out.println("Scegli un nome: ");
-        playerName = scanner.nextLine();
+
+        do {
+
+            playerName = scanner.nextLine();
+
+            if(!playerName.equals("")){
+                validNameChoice = true;
+            } else {
+                System.out.println("Nome vuoto! Riprova: ");
+            }
+
+        } while(!validNameChoice);
+
 
         System.out.println("Seleziona un colore (VERDE, GIALLO, GRIGIO, VIOLA, BLU): ");
 
@@ -395,6 +408,12 @@ public class CLI implements UserInterface {
      * {@inheritDoc}
      */
     public void show(String s) {
+
+        if(s.equals(Protocol.DEFAULT_RMI_SERVER_NOT_FOUND) || s.equals(Protocol.DEFAULT_SOCKET_SERVER_NOT_FOUND) || s.equals(DEFAULT_GAME_NON_EXISTENT)) {
+
+            this.startUI();
+            return;
+        }
 
         synchronized (mapShowSync) {
 

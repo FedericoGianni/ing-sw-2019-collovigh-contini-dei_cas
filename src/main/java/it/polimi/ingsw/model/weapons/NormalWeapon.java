@@ -411,8 +411,15 @@ public class NormalWeapon extends Weapon{
               {
                   if (cells != null && !cells.isEmpty())//if you also have mover effects
                   {
+                      if(macroCont>=targetLists.size())
+                      {
+                          List <Player> targeti=new ArrayList<>();
+                          micro.microEffectApplicator(targeti, this, cells.get(macroCont),macroCont);
+                      }
+                      else{
+                          micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont),macroCont);
+                      }
 
-                      micro.microEffectApplicator(targetLists.get(macroCont), this, cells.get(macroCont),macroCont);
                   }//the method that applies the effects
                   else {
                           micro.microEffectApplicator(targetLists.get(macroCont), this, null,macroCont);

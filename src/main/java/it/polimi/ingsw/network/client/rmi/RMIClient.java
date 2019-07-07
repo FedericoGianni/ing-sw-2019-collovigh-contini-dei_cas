@@ -1,11 +1,12 @@
 package it.polimi.ingsw.network.client.rmi;
 
 
-import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.networkexceptions.*;
 import it.polimi.ingsw.network.rmi.ToServer;
+import it.polimi.ingsw.utils.DefaultReplies;
 import it.polimi.ingsw.utils.Directions;
+import it.polimi.ingsw.utils.PlayerColor;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.actions.JsonAction;
 import it.polimi.ingsw.view.cachemodel.CachedPowerUp;
@@ -207,7 +208,7 @@ public class RMIClient extends Client {
 
         }catch (Exception e){
 
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Server non trovato!");
         }
 
         return null;
@@ -311,11 +312,11 @@ public class RMIClient extends Client {
 
             // LOG the exception
 
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Server non trovato!");
 
-            // Retry the login
+            // show
 
-            view.getUserInterface().retryLogin(e);
+            view.show(DEFAULT_RMI_SERVER_NOT_FOUND);
         }
 
         return -1;
@@ -380,12 +381,14 @@ public class RMIClient extends Client {
 
             LOGGER.log(Level.WARNING, () -> LOG_START + "player tried to reconnect but no game is active at the moment ");
 
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
+            view.show(DefaultReplies.DEFAULT_GAME_NON_EXISTENT);
 
 
         } catch (Exception e) {
 
-            LOGGER.log(Level.WARNING, e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Server non trovato!");
+
+            view.show(DEFAULT_RMI_SERVER_NOT_FOUND);
         }
 
         return -1;

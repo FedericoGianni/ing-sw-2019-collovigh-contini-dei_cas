@@ -157,6 +157,8 @@ public class Server  {
 
                 LOGGER.log(Level.WARNING, LOG_START + " game id not found. ");
 
+                System.exit(0);
+
             }
         }
     }
@@ -247,9 +249,11 @@ public class Server  {
 
             LOGGER.log(level, () -> LOG_START + "Reconnected player w/ id : " + playerId + " to View: " + toView);
 
+            controller.getVirtualView(playerId).show("reconnectok");
         }
-        controller.getVirtualView(playerId).show("reconnectok");
-        System.out.println("recconection sent");
+
+        System.out.println("[Server] finished reconnect"); //TODO delete
+
         return playerId;
 
     }
@@ -263,50 +267,54 @@ public class Server  {
      */
     public static void removePlayer(int playerId){
 
-        // removes the player
+        if (clients.containsKey(playerId)) {
 
-        clients.remove(playerId);
+            // removes the player
 
-        if ((waitingRoom.isActive()) && (waitingRoom.getTimerCount() > 1)){
+            clients.remove(playerId);
 
-            // LOG the disconnection
+            if ((waitingRoom.isActive()) && (waitingRoom.getTimerCount() > 1)) {
 
-            LOGGER.log(level, () -> LOG_START + "Player " + waitingRoom.getName(playerId) + " left the game" ) ;
+                // LOG the disconnection
 
-            // remove the player from the waitingRoom
+                LOGGER.log(level, () -> LOG_START + "Player " + waitingRoom.getName(playerId) + " left the game");
 
-            waitingRoom.removePlayer(playerId);
+                // remove the player from the waitingRoom
 
-            //updates the hashmap
+                waitingRoom.removePlayer(playerId);
 
-            updateHashMap();
+                //updates the hashmap
 
-        }else {
+                updateHashMap();
 
-            // wait to the the WaitingRoom to start the model
+            } else {
 
-            do{
+                // wait to the the WaitingRoom to start the model
 
-                LOGGER.log(Level.FINER, () -> LOG_START + "Waiting for waiting room to start the game ");
+                do {
 
-            }while (waitingRoom.isActive());
+                    LOGGER.log(Level.FINER, () -> LOG_START + "Waiting for waiting room to start the game ");
 
-            // sets the player to offline
+                } while (waitingRoom.isActive());
 
-            controller.setPlayerOffline(playerId);
+                // sets the player to offline
 
-            LOGGER.log(Level.WARNING, "[DEBUG] playerOnline size: {0}",  controller.getPlayerOnline().size());
+                controller.setPlayerOffline(playerId);
 
-            if ( (ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < WaitingRoom.DEFAULT_MIN_PLAYERS) ){
+                LOGGER.log(Level.WARNING, "[DEBUG] playerOnline size: {0}", controller.getPlayerOnline().size());
 
-                LOGGER.log(Level.WARNING, () -> LOG_START + "Connected player are less than " + WaitingRoom.DEFAULT_MIN_PLAYERS + " the game will be TERMINATED " );
+                if ((ONLINE_MIN_PLAYER_CHECK_ENABLE) && (controller.getPlayerOnline().size() < WaitingRoom.DEFAULT_MIN_PLAYERS)) {
 
-                controller.endGame();
+                    LOGGER.log(Level.WARNING, () -> LOG_START + "Connected player are less than " + WaitingRoom.DEFAULT_MIN_PLAYERS + " the game will be TERMINATED ");
+
+                    controller.endGame();
+                }
+
+                // LOG the player disconnection
+
+                LOGGER.log(level, () -> LOG_START + "Player " + playerId + " left the game");
+
             }
-
-            // LOG the player disconnection
-
-            LOGGER.log(level, () -> LOG_START + "Player " + playerId + " left the game" ) ;
 
         }
 

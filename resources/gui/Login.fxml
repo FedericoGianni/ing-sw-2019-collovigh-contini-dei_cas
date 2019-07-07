@@ -93,7 +93,7 @@
                         <Label text="Username : " />
 
 
-                        <TextField fx:id="name" promptText="Inserisci un username"/>
+                        <TextField fx:id="name" promptText="Inserisci un username" />
 
 
                     </children>

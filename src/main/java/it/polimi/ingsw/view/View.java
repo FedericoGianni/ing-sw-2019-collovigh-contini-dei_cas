@@ -25,7 +25,7 @@ import static java.lang.Thread.sleep;
 public class View implements ViewInterface {
 
     private static final Logger LOGGER = Logger.getLogger("infoLogging");
-    private static Level level = Level.INFO;
+    private static Level level = Level.FINE;
 
     /**
      * Reference to the UserInterface linked to this class
@@ -167,33 +167,27 @@ public class View implements ViewInterface {
 
                 clientToVView = new RMIClient(serverIp, this);
 
+                userInterface.gameSelection();
+
             } else {
 
                 // if the ports are specified calls the correspondent constructor
 
                 clientToVView = new RMIClient(serverIp,this,rmiServerPort,rmiClientPort);
 
+                userInterface.gameSelection();
+
             }
 
         }
 
         if (type.equals(ProtocolType.SOCKET)){
+
+
             SocketClient sc = new SocketClient(serverIp, port);
             Thread t = new Thread(sc);
             t.start();
-            //SocketClientReader scr = new SocketClientReader(serverIp, port);
-            //scr.start();
 
-            /*
-            try {
-
-                sleep(1000);
-
-            } catch (InterruptedException e){
-
-                LOGGER.log(Level.WARNING, e.getMessage(), e);
-
-            }*/
 
             while (sc.getScw() == null){
 
@@ -206,12 +200,13 @@ public class View implements ViewInterface {
                     LOGGER.log(Level.WARNING, e.getMessage(), e);
                 }
             }
-            clientToVView = sc.getScw();
-        }
 
-        //userInterface.login();
-        //TODO uncomment this to have game selection
-        userInterface.gameSelection();
+            clientToVView = sc.getScw();
+
+            userInterface.gameSelection();
+
+
+        }
     }
 
     /**
@@ -276,7 +271,7 @@ public class View implements ViewInterface {
      */
     @Override
     public void startPowerUp() {
-       userInterface.startPowerUp();
+        userInterface.startPowerUp();
     }
 
     /**
@@ -424,10 +419,9 @@ public class View implements ViewInterface {
      */
     public int reconnect(String name){
 
-
         playerId = clientToVView.reconnect(name);
 
-        System.out.println("reconnect playerid: " + playerId);
+        System.out.println("[View] reconnect playerid: " + playerId);
 
         if (playerId != -1){
 

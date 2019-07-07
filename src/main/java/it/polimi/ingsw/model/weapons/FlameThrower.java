@@ -72,7 +72,7 @@ public class FlameThrower extends SpecialWeapons{
 
         if ( (targetLists == null) || ( (targetLists.stream().flatMap(List::stream).count() != 1) && (targetLists.stream().flatMap(List::stream).count() != 2) ) ) throw new NotCorrectPlayerNumberException();
 
-        if ( targetLists.stream().flatMap(List::stream).collect(Collectors.toList()).get(0).equals(targetLists.stream().flatMap(List::stream).collect(Collectors.toList()).get(1)) ) throw new DifferentPlayerNeededException();
+        if ( (targetLists.stream().flatMap(List::stream).collect(Collectors.toList()).size() > 1 ) && (targetLists.stream().flatMap(List::stream).collect(Collectors.toList()).get(0).equals(targetLists.stream().flatMap(List::stream).collect(Collectors.toList()).get(1))) ) throw new DifferentPlayerNeededException();
 
         if ( ! playerAreInLine(isPossessedBy(),targetLists.get(0)) ) throw new UncorrectDistanceException();
 
