@@ -273,7 +273,7 @@ public class Server  {
 
             clients.remove(playerId);
 
-            if ((waitingRoom.isActive()) && (waitingRoom.getTimerCount() > 1)) {
+            if ((waitingRoom != null ) && (waitingRoom.isActive()) && (waitingRoom.getTimerCount() > 1)) {
 
                 // LOG the disconnection
 

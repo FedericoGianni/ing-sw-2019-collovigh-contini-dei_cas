@@ -73,32 +73,37 @@ public class PowerUpPhase {
 
         // if someone has been shot ask them to use grenades
 
-        askGrenadeToShot();
+        if (!controller.getShotPlayerThisTurn().isEmpty()) {
 
-        int currentPlayer = controller.getCurrentPlayer();
+            askGrenadeToShot();
 
-        if (!controller.isPlayerOnline(currentPlayer)){
+        }else {
 
-            // if the player is not online skips the turn
+            int currentPlayer = controller.getCurrentPlayer();
 
-            controller.incrementPhase();
+            if (!controller.isPlayerOnline(currentPlayer)) {
 
-        }else if(!hasPowerUpPhase()){
+                // if the player is not online skips the turn
 
-            //if current player hasn't got any usable PowerUp in hand  ( Newton or Teleporter ) -> skip this phase
+                controller.incrementPhase();
 
-            controller.incrementPhase();
+            } else if (!hasPowerUpPhase()) {
 
-        }else{
+                //if current player hasn't got any usable PowerUp in hand  ( Newton or Teleporter ) -> skip this phase
 
-            // start the timer
+                controller.incrementPhase();
 
-            controller.getTimer().startTimer(TIMER_POWER_UP);
+            } else {
 
-            // sends the action
+                // start the timer
 
-            controller.getVirtualView(currentPlayer).startPowerUp();
+                controller.getTimer().startTimer(TIMER_POWER_UP);
 
+                // sends the action
+
+                controller.getVirtualView(currentPlayer).startPowerUp();
+
+            }
         }
     }
 
@@ -113,11 +118,15 @@ public class PowerUpPhase {
 
             if ( ( controller.isPlayerOnline(playerId) ) && ( hasGrenade(playerId) && (playerId != controller.getCurrentPlayer())) ) {
 
+                System.out.println(" asked grenade to player : " + playerId);
+
                 controller.getVirtualView(playerId).askGrenade();
 
                 // start the timer
 
-                controller.getTimer().startTimer(TIMER_POWER_UP);
+                //controller.getTimer().startTimer(TIMER_POWER_UP);
+
+                controller.setExpectingAnswer(true);
 
                 controller.setExpectingGrenade(true);
 
@@ -127,7 +136,7 @@ public class PowerUpPhase {
 
                 controller.getShotPlayerThisTurn().remove(0);
 
-                askGrenadeToShot();
+                handlePowerUp();
             }
 
         }
@@ -182,10 +191,6 @@ public class PowerUpPhase {
                 break;
 
         }
-
-        // calls again the handlePowerUp functions in case the player wants to use another
-
-        handlePowerUp();
     }
 
     /**
@@ -222,6 +227,8 @@ public class PowerUpPhase {
             discardPowerUp(newtonAction.getPowerUpType(),newtonAction.getColor());
 
             controller.updateInactivePlayers(new PowerUpTurnUpdate(currentPlayer,new CachedPowerUp(newtonAction.getPowerUpType(),newtonAction.getColor())));
+
+            handlePowerUp();
 
 
         } catch(Exception e){
@@ -265,6 +272,8 @@ public class PowerUpPhase {
 
             controller.updateInactivePlayers(new PowerUpTurnUpdate(currentPlayer,new CachedPowerUp(teleporterAction.getPowerUpType(),teleporterAction.getColor())));
 
+            handlePowerUp();
+
 
         } catch (CardNotPossessedException e){
 
@@ -274,6 +283,8 @@ public class PowerUpPhase {
 
             controller.getVirtualView(currentPlayer).show(DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP);
 
+            handlePowerUp();
+
         } catch (CellNonExistentException e){
 
             LOGGER.log(Level.WARNING, "[CONTROLLER - PowerUp] cell does not exist ");
@@ -281,6 +292,8 @@ public class PowerUpPhase {
             // send show message
 
             controller.getVirtualView(currentPlayer).show(DEFAULT_CELL_NOT_EXISTENT);
+
+            handlePowerUp();
         }
     }
 
@@ -306,7 +319,7 @@ public class PowerUpPhase {
 
             // calls teh function to ask grenade to the next person in the list
 
-            askGrenadeToShot();
+            handlePowerUp();
 
         } else {
 
@@ -334,7 +347,7 @@ public class PowerUpPhase {
 
                 // calls teh function to ask grenade to the next person in the list
 
-                askGrenadeToShot();
+                handlePowerUp();
 
             } catch (Exception e) {
 
@@ -345,6 +358,8 @@ public class PowerUpPhase {
                 controller.getVirtualView(currentPlayer).show(DEFAULT_PLAYER_DOES_NOT_POSSESS_POWERUP);
 
                 LOGGER.log(Level.WARNING, e.getMessage(), e);
+
+                handlePowerUp();
             }
 
         }

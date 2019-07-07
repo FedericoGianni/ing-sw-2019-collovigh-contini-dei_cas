@@ -57,7 +57,7 @@ public class Timer {
      */
     public void startTimer(int timerTime){
 
-        LOGGER.log(level, () -> LOG_START + " started timer ");
+        LOGGER.log(level, () -> LOG_START + " started timer in phase : " + controller.getTurnPhase() );
 
         controller.setExpectingAnswer(true);
 
