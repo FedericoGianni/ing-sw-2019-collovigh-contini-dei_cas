@@ -1819,7 +1819,7 @@ public class CLI implements UserInterface {
         //System.out.println("[DEBUG] Effects size: " + effects.size());
 
         //TARGETS REQUESTS
-        targetList = chooseTargets(weapon, effects.size());
+        targetList = chooseTargets(weapon, effects);
 
         //CELL REQUESTS
         boolean cellRequired = false;
@@ -2041,12 +2041,12 @@ public class CLI implements UserInterface {
      * @return a List of List of Integer representing the targets for each of the weapon effect
      * (index 0: base effect, index 1: second effect, index 2: third effect)
      */
-    private List<List<Integer>> chooseTargets(CachedFullWeapon w, int effectsNum){
+    private List<List<Integer>> chooseTargets(CachedFullWeapon w, List<Integer> effectsNum){
 
         List<List<Integer>> targetsList = new ArrayList<>();
         boolean valid = false;
 
-        for (int i = 0; i < effectsNum; i++) {
+        for (Integer i : effectsNum) {
 
             List<Integer> tempTargetList = new ArrayList<>();
 
@@ -2079,6 +2079,10 @@ public class CLI implements UserInterface {
                         } else if(read == 9){
                             valid = true;
                             j = w.getEffectRequirements().get(i).getNumberOfTargets().size();
+                        } else if(w.getName().equals("PLASMA GUN")){
+                            if(read == view.getPlayerId()){
+                                valid = true;
+                            }
                         }
 
                         if(read == view.getPlayerId()){
