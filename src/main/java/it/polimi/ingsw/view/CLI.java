@@ -426,6 +426,10 @@ public class CLI implements UserInterface {
                 Point p = view.getCacheModel().getCachedPlayers().get(view.getPlayerId()).getStats().getCurrentPosition();
                 FileRead.insertPlayer(p.x, p.y, Character.forDigit(view.getPlayerId(), 10));
                 FileRead.showBattlefield();
+
+            }else if (s.equals(Protocol.DEFAULT_RMI_SERVER_NOT_FOUND) || s.equals(Protocol.DEFAULT_SOCKET_SERVER_NOT_FOUND)){
+
+                this.startUI();
             }
         }
     }
