@@ -116,6 +116,9 @@ The default param are:
 * ui default is gui
 * min player default is 3
 * default timer is 30 sec
+* default timer state is enabled
+
+the timer can be disabled by launching the server jar w/ no args and by setting the relative field in the jar to false
 
 ## Persistence
 
@@ -126,10 +129,10 @@ The game will save 4 json files for game + a sheared file across all to keep the
 
 for each game started in the folder will be written:
 
-* savegamesgame_id_**x**_Map.json
-* savegamesgame_id_**x**_Players.json
-* savegamesgame_id_**x**_Controller.json
-* savegamesgame_id_**x**_CurrentGame.json
+* savegames_game_id_**x**_Map.json
+* savegames_game_id_**x**_Players.json
+* savegames_game_id_**x**_Controller.json
+* savegames_game_id_**x**_CurrentGame.json
 
 **x** will be the game id 
 
