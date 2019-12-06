@@ -1,9 +1,9 @@
 # Prova Finale Ingegneria del Software 2019
 ## Gruppo AM18
 
-- ###   10522289    Davide Collovigh ([@Dav-11](https://github.com/Dav-11))<br>davide.collovigh@mail.polimi.it
-- ###   10538919    Alessandro Contini ([@Contedigital](https://github.com/Contedigital))<br>alessandro3.contini@mail.polimi.it
-- ###   10498291    Federico Dei Cas ([@FedericoGianni](https://github.com/FedericoGianni))<br>federico.deicas@mail.polimi.it
+- ###    Davide Collovigh ([@Dav-11](https://github.com/Dav-11))<br>davide.collovigh@mail.polimi.it
+- ###    Alessandro Contini ([@Contedigital](https://github.com/Contedigital))<br>alessandro3.contini@mail.polimi.it
+- ###    Federico Dei Cas ([@FedericoGianni](https://github.com/FedericoGianni))<br>federico.deicas@mail.polimi.it
 
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
@@ -13,10 +13,10 @@
 | RMI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | GUI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | CLI |[![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
-| Multiple games | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
 | Persistence |[![GREEN](https://placehold.it/15/44bb44/44bb44)](#)|
+<!--| Multiple games | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
 | Domination or Towers modes | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
-| Terminator | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
+| Terminator | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |-->
 
 <!--
 [![RED](https://placehold.it/15/f03c15/f03c15)](#)
