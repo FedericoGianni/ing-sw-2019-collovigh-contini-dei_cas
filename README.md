@@ -5,7 +5,7 @@
 - ###    Alessandro Contini ([@Contedigital](https://github.com/Contedigital))<br>alessandro3.contini@mail.polimi.it
 - ###    Federico Dei Cas ([@FedericoGianni](https://github.com/FedericoGianni))<br>federico.deicas@mail.polimi.it
 
-<h3> evaluatio: 29/30 </h3>
+<h3> evaluation: 29/30 </h3>
 
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
