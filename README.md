@@ -1,6 +1,8 @@
 # Prova Finale Ingegneria del Software 2019
 ## Gruppo AM18
 
+![adrenaline_image](https://raw.githubusercontent.com/FedericoGianni/ing-sw-2019-collovigh-contini-dei_cas/master/resources/images/background_image.png)
+
 - ###    Davide Collovigh ([@Dav-11](https://github.com/Dav-11))<br>davide.collovigh@mail.polimi.it
 - ###    Alessandro Contini ([@Contedigital](https://github.com/Contedigital))<br>alessandro3.contini@mail.polimi.it
 - ###    Federico Dei Cas ([@FedericoGianni](https://github.com/FedericoGianni))<br>federico.deicas@mail.polimi.it
